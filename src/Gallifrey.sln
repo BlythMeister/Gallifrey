@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gallifrey.Model", "Gallifre
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gallifrey.Settings", "Gallifrey.Settings\Gallifrey.Settings.csproj", "{21F68CA2-3410-4A99-86D8-EF247B7F0FA7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gallifrey.JiraIntergration", "Gallifrey.JiraIntergration\Gallifrey.JiraIntergration.csproj", "{159E81CF-91E6-4B85-B363-C0992AFB19F9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gallifrey.Backend", "Gallifrey.Backend\Gallifrey.Backend.csproj", "{BA2142DF-FEE4-4411-B99B-6F701A75BB55}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +29,14 @@ Global
 		{21F68CA2-3410-4A99-86D8-EF247B7F0FA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{21F68CA2-3410-4A99-86D8-EF247B7F0FA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{21F68CA2-3410-4A99-86D8-EF247B7F0FA7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{159E81CF-91E6-4B85-B363-C0992AFB19F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{159E81CF-91E6-4B85-B363-C0992AFB19F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{159E81CF-91E6-4B85-B363-C0992AFB19F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{159E81CF-91E6-4B85-B363-C0992AFB19F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA2142DF-FEE4-4411-B99B-6F701A75BB55}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA2142DF-FEE4-4411-B99B-6F701A75BB55}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA2142DF-FEE4-4411-B99B-6F701A75BB55}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA2142DF-FEE4-4411-B99B-6F701A75BB55}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -6,35 +6,35 @@ using Gallifrey.Settings;
 
 namespace Gallifrey.Model
 {
-    public class TimerCollectionSerializer
+    public static class JiraTimerCollectionSerializer
     {
-        private string path = Path.Combine(FilePathSettings.DataSavePath, "TimerCollection.bin");
+        private readonly static string Path = System.IO.Path.Combine(FilePathSettings.DataSavePath, "TimerCollection.bin");
 
-        public void Serialize(IEnumerable<Timer> timerCollection)
+        public static void Serialize(List<JiraTimer> timerCollection)
         {
             IFormatter formatter = new BinaryFormatter();
-            Stream stream = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.None);
+            Stream stream = new FileStream(Path, FileMode.Create, FileAccess.Write, FileShare.None);
             formatter.Serialize(stream, timerCollection);
             stream.Close();
         }
 
-        public IEnumerable<Timer> DeSerialize()
+        public static List<JiraTimer> DeSerialize()
         {
-            List<Timer> timers;
+            List<JiraTimer> timers;
             IFormatter formatter = new BinaryFormatter();
 
-            if (File.Exists(path))
+            if (File.Exists(Path))
             {
-                Stream stream = new FileStream(path,
+                Stream stream = new FileStream(Path,
                                                FileMode.Open,
                                                FileAccess.Read,
                                                FileShare.Read);
-                timers = (List<Timer>)formatter.Deserialize(stream);
+                timers = (List<JiraTimer>)formatter.Deserialize(stream);
                 stream.Close();
             }
             else
             {
-                timers = new List<Timer>();
+                timers = new List<JiraTimer>();
             }
 
             return timers;

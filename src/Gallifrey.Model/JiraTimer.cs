@@ -2,7 +2,7 @@
 
 namespace Gallifrey.Model
 {
-    public class Timer
+    public class JiraTimer
     {
         public string JiraReference { get; private set; }
         public string JiraProjectName { get; private set; }
@@ -10,7 +10,7 @@ namespace Gallifrey.Model
         public TimeSpan CurrentTime { get; private set; }
         public TimeSpan ExportedTime { get; private set; }
 
-        public Timer(string jiraReference, string jiraProjectName, string jiraName, TimeSpan currentTime, TimeSpan exportedTime)
+        public JiraTimer(string jiraReference, string jiraProjectName, string jiraName, TimeSpan currentTime, TimeSpan exportedTime)
         {
             JiraReference = jiraReference;
             JiraProjectName = jiraProjectName;

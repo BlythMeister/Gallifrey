@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{41B11710-D4FF-4991-9B22-DE28C5CC8B16}</ProjectGuid>
+    <ProjectGuid>{BA2142DF-FEE4-4411-B99B-6F701A75BB55}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Gallifrey.Model</RootNamespace>
-    <AssemblyName>Gallifrey.Model</AssemblyName>
+    <RootNamespace>Gallifrey.Backend</RootNamespace>
+    <AssemblyName>Gallifrey.Backend</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -39,11 +39,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="JiraTimer.cs" />
+    <Compile Include="ComponentContainer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="JiraTimerCollectionSerializer.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Gallifrey.JiraIntergration\Gallifrey.JiraIntergration.csproj">
+      <Project>{159E81CF-91E6-4B85-B363-C0992AFB19F9}</Project>
+      <Name>Gallifrey.JiraIntergration</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Gallifrey.Model\Gallifrey.Model.csproj">
+      <Project>{41B11710-D4FF-4991-9B22-DE28C5CC8B16}</Project>
+      <Name>Gallifrey.Model</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Gallifrey.Settings\Gallifrey.Settings.csproj">
       <Project>{21F68CA2-3410-4A99-86D8-EF247B7F0FA7}</Project>
       <Name>Gallifrey.Settings</Name>
