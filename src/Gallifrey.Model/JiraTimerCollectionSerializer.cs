@@ -8,12 +8,12 @@ namespace Gallifrey.Model
 {
     public static class JiraTimerCollectionSerializer
     {
-        private readonly static string Path = System.IO.Path.Combine(FilePathSettings.DataSavePath, "TimerCollection.bin");
+        private readonly static string SavePath = System.IO.Path.Combine(FilePathSettings.DataSavePath, "TimerCollection.bin");
 
         public static void Serialize(List<JiraTimer> timerCollection)
         {
             IFormatter formatter = new BinaryFormatter();
-            Stream stream = new FileStream(Path, FileMode.Create, FileAccess.Write, FileShare.None);
+            Stream stream = new FileStream(SavePath, FileMode.Create, FileAccess.Write, FileShare.None);
             formatter.Serialize(stream, timerCollection);
             stream.Close();
         }
@@ -23,9 +23,9 @@ namespace Gallifrey.Model
             List<JiraTimer> timers;
             IFormatter formatter = new BinaryFormatter();
 
-            if (File.Exists(Path))
+            if (File.Exists(SavePath))
             {
-                Stream stream = new FileStream(Path,
+                Stream stream = new FileStream(SavePath,
                                                FileMode.Open,
                                                FileAccess.Read,
                                                FileShare.Read);
