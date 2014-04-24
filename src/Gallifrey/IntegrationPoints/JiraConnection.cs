@@ -1,7 +1,7 @@
 ﻿using Atlassian.Jira;
 using Gallifrey.Settings;
 
-namespace Gallifrey.JiraIntergration
+namespace Gallifrey.IntegrationPoints
 {
     public class JiraConnection
     {

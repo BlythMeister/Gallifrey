@@ -1,20 +1,21 @@
 ﻿using System.Collections.Generic;
-using Gallifrey.JiraIntergration;
-using Gallifrey.Model;
+using Gallifrey.IntegrationPoints;
+using Gallifrey.Models;
+using Gallifrey.Serialization;
 using Gallifrey.Settings;
 
-namespace Gallifrey.Backend
+namespace Gallifrey
 {
-    public class ComponentContainer
+    public class Backend
     {
         public List<JiraTimer> TimerList;
         public AppSettings AppSettings;
         public JiraConnection JiraConnection;
 
-        public ComponentContainer()
+        public Backend()
         {
             TimerList = JiraTimerCollectionSerializer.DeSerialize();
-            AppSettings = new AppSettings();
+            AppSettings = AppSettingsSerializer.DeSerialize();
             JiraConnection = new JiraConnection(AppSettings);
         }
     }

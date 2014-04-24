@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Gallifrey.Model
+namespace Gallifrey.Models
 {
     public class JiraTimer
     {

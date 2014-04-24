@@ -2,25 +2,26 @@
 using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
+using Gallifrey.Models;
 using Gallifrey.Settings;
 
-namespace Gallifrey.Model
+namespace Gallifrey.Serialization
 {
-    public static class JiraTimerCollectionSerializer
+    public static class AppSettingsSerializer
     {
-        private readonly static string SavePath = System.IO.Path.Combine(FilePathSettings.DataSavePath, "TimerCollection.bin");
+        private readonly static string SavePath = Path.Combine(FilePathSettings.DataSavePath, "AppSettings.bin");
 
-        public static void Serialize(List<JiraTimer> timerCollection)
+        public static void Serialize(AppSettings appSettings)
         {
             IFormatter formatter = new BinaryFormatter();
             Stream stream = new FileStream(SavePath, FileMode.Create, FileAccess.Write, FileShare.None);
-            formatter.Serialize(stream, timerCollection);
+            formatter.Serialize(stream, appSettings);
             stream.Close();
         }
 
-        public static List<JiraTimer> DeSerialize()
+        public static AppSettings DeSerialize()
         {
-            List<JiraTimer> timers;
+            AppSettings appSettings;
             IFormatter formatter = new BinaryFormatter();
 
             if (File.Exists(SavePath))
@@ -29,15 +30,15 @@ namespace Gallifrey.Model
                                                FileMode.Open,
                                                FileAccess.Read,
                                                FileShare.Read);
-                timers = (List<JiraTimer>)formatter.Deserialize(stream);
+                appSettings = (AppSettings)formatter.Deserialize(stream);
                 stream.Close();
             }
             else
             {
-                timers = new List<JiraTimer>();
+                appSettings = new AppSettings();
             }
 
-            return timers;
+            return appSettings;
         }
     }
 }

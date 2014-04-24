@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Gallifrey.Model")]
+[assembly: AssemblyTitle("Gallifrey")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Gallifrey.Model")]
+[assembly: AssemblyProduct("Gallifrey")]
 [assembly: AssemblyCopyright("Copyright ©  2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("6ed6d19c-66c9-477b-b577-0e1aeab6a6fa")]
+[assembly: Guid("da5f2252-0fe8-47df-af83-0d6ee1d64c9b")]
 
 // Version information for an assembly consists of the following four values:
 //
