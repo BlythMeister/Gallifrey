@@ -22,6 +22,11 @@ Gallifrey is currently under development for the first release, come back soon f
 Gallifrey makes use of the following libraries:
 
 
+Icons
+=========
+
+Button icons provided by VisualPharm (http://www.visualpharm.com)
+App icon provided by Jack Cai (http://www.doublejdesign.co.uk)
 
 Licence
 =========
