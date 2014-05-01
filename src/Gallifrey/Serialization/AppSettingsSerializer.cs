@@ -1,37 +1,30 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
-using Gallifrey.Models;
 using Gallifrey.Settings;
+using Newtonsoft.Json;
 
 namespace Gallifrey.Serialization
 {
     public static class AppSettingsSerializer
     {
-        private readonly static string SavePath = Path.Combine(FilePathSettings.DataSavePath, "AppSettings.bin");
+        private readonly static string SavePath = Path.Combine(FilePathSettings.DataSavePath, "AppSettings.dat");
 
         public static void Serialize(AppSettings appSettings)
         {
-            IFormatter formatter = new BinaryFormatter();
-            Stream stream = new FileStream(SavePath, FileMode.Create, FileAccess.Write, FileShare.None);
-            formatter.Serialize(stream, appSettings);
-            stream.Close();
+            if (!Directory.Exists(FilePathSettings.DataSavePath)) Directory.CreateDirectory(FilePathSettings.DataSavePath);
+            
+            File.WriteAllText(SavePath, JsonConvert.SerializeObject(appSettings));
         }
 
         public static AppSettings DeSerialize()
         {
             AppSettings appSettings;
-            IFormatter formatter = new BinaryFormatter();
-
+            
             if (File.Exists(SavePath))
             {
-                Stream stream = new FileStream(SavePath,
-                                               FileMode.Open,
-                                               FileAccess.Read,
-                                               FileShare.Read);
-                appSettings = (AppSettings)formatter.Deserialize(stream);
-                stream.Close();
+                var text = File.ReadAllText(SavePath);
+                appSettings = JsonConvert.DeserializeObject<AppSettings>(text);
             }
             else
             {

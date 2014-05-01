@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using Gallifrey.IntegrationPoints;
-using Gallifrey.Models;
+using Gallifrey.JiraTimers;
 using Gallifrey.Serialization;
 using Gallifrey.Settings;
 
@@ -8,15 +8,16 @@ namespace Gallifrey
 {
     public class Backend
     {
-        public List<JiraTimer> TimerList;
+        public JiraTimerCollection JiraTimerCollection;
         public AppSettings AppSettings;
         public JiraConnection JiraConnection;
 
         public Backend()
         {
-            TimerList = JiraTimerCollectionSerializer.DeSerialize();
             AppSettings = AppSettingsSerializer.DeSerialize();
+            AppSettings.SaveSettings();
             JiraConnection = new JiraConnection(AppSettings);
+            JiraTimerCollection = new JiraTimerCollection(JiraConnection);
         }
     }
 }

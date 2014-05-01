@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Atlassian.Jira;
-using Gallifrey.JiraIntegration;
+using Gallifrey.Exceptions.IntergrationPoints;
 using Gallifrey.Settings;
 
 namespace Gallifrey.IntegrationPoints
@@ -10,22 +10,45 @@ namespace Gallifrey.IntegrationPoints
     public class JiraConnection
     {
         private readonly AppSettings appSettings;
-        private readonly Jira jira;
+        private Jira jira;
 
         public JiraConnection(AppSettings appSettings)
         {
             this.appSettings = appSettings;
-            jira = new Jira(appSettings.JiraUrl, appSettings.JiraUsername, appSettings.JiraPassword);
+            CheckAndConnectJira();
+        }
+
+        private void CheckAndConnectJira()
+        {
+            if (jira == null)
+            {
+                if (string.IsNullOrWhiteSpace(appSettings.JiraUrl) ||
+                    string.IsNullOrWhiteSpace(appSettings.JiraUsername) ||
+                    string.IsNullOrWhiteSpace(appSettings.JiraPassword))
+                {
+                    throw new MissingJiraConfigException("Required settings to create connection to jira are missing");
+                }
+
+                try
+                {
+                    jira = new Jira(appSettings.JiraUrl, appSettings.JiraUsername, appSettings.JiraPassword);
+                }
+                catch (Exception ex)
+                {
+                    throw new JiraConnectionException("Error creating instance of Jira", ex);
+                }
+            }
         }
 
         public bool DoesJiraExist(string jiraRef)
         {
             try
             {
+                CheckAndConnectJira();
                 var issue = GetJiraIssue(jiraRef);
                 if (issue != null)
                 {
-                    return issue.Result && issue.Issues.Any();
+                    return true;
                 }
             }
             catch (Exception)
@@ -36,67 +59,57 @@ namespace Gallifrey.IntegrationPoints
             return false;
         }
 
-        public GetIssueResult GetJiraIssue(string jiraRef)
+        public Issue GetJiraIssue(string jiraRef)
         {
-            var issues = new List<Issue>();
-
             try
             {
-                issues.Add(jira.GetIssue(jiraRef));
+                CheckAndConnectJira();
+                return jira.GetIssue(jiraRef);
             }
             catch (Exception ex)
             {
-                return new GetIssueResult(false, null, ex.Message);
+                throw new NoResultsFoundException(string.Format("Unable to locate Jira {0}", jiraRef), ex);
             }
-
-            return new GetIssueResult(true, issues, string.Empty);
         }
 
-        public GetFilterResult GetJiraFilters()
+        public IEnumerable<string> GetJiraFilters()
         {
-            var filters = new List<JiraNamedEntity>();
             try
             {
-                filters.AddRange(jira.GetFilters());
+                CheckAndConnectJira();
+                var returnedFilters = jira.GetFilters();
+                return returnedFilters.Select(returned => returned.Name);
             }
             catch (Exception ex)
             {
-                return new GetFilterResult(false, null, ex.Message);
+                throw new NoResultsFoundException("Error loading filters", ex);
             }
-
-            return new GetFilterResult(true, filters, string.Empty);
         }
 
-        public GetIssueResult GetJiraIssuesFromFilter(string filterName)
+        public IEnumerable<Issue> GetJiraIssuesFromFilter(string filterName)
         {
-            var issues = new List<Issue>();
-
             try
             {
-                issues.AddRange(jira.GetIssuesFromFilter(filterName, 0, 999));
+                CheckAndConnectJira();
+                return jira.GetIssuesFromFilter(filterName, 0, 999);
             }
             catch (Exception ex)
             {
-                return new GetIssueResult(false, null, ex.Message);
+                throw new NoResultsFoundException("Error loading jiras from filter", ex);
             }
-
-            return new GetIssueResult(true, issues, string.Empty);
         }
 
-        public GetIssueResult GetJiraIssuesFromSearchText(string searchText)
+        public IEnumerable<Issue> GetJiraIssuesFromSearchText(string searchText)
         {
-            var issues = new List<Issue>();
-
             try
             {
-                issues.AddRange(jira.GetIssuesFromJql(GetJql(searchText), 0, 999));
+                CheckAndConnectJira();
+                return jira.GetIssuesFromJql(GetJql(searchText), 0, 999);
             }
             catch (Exception ex)
             {
-                return new GetIssueResult(false, null, ex.Message);
+                throw new NoResultsFoundException("Error loading jiras from search text", ex);
             }
-
-            return new GetIssueResult(true, issues, string.Empty);
         }
 
         public TimeSpan GetCurrentLoggedTimeForDate(Issue jiraIssue, DateTime date)
@@ -113,10 +126,8 @@ namespace Gallifrey.IntegrationPoints
             return loggedTime;
         }
 
-        public LogWorkResult LogTime(Issue jiraIssue, DateTime exportTimeStamp, TimeSpan exportTime, WorklogStrategy strategy, string comment = "", TimeSpan? remainingTime = null)
+        public void LogTime(Issue jiraIssue, DateTime exportTimeStamp, TimeSpan exportTime, WorklogStrategy strategy, string comment = "", TimeSpan? remainingTime = null)
         {
-            var result = false;
-            var resultMessage = string.Empty;
             var wasClosed = TryReopenJira(jiraIssue);
             comment = "Gallifrey: " + comment;
             if (string.IsNullOrWhiteSpace(comment)) comment = "No Comment Entered";
@@ -130,12 +141,10 @@ namespace Gallifrey.IntegrationPoints
             try
             {
                 jiraIssue.AddWorklog(worklog, strategy, remaining);
-                result = true;
             }
             catch (Exception ex)
             {
-                result = false;
-                resultMessage = ex.Message;
+                throw new WorkLogException("Error logging work", ex);
             }
 
 
@@ -145,15 +154,11 @@ namespace Gallifrey.IntegrationPoints
                 {
                     ReCloseJira(jiraIssue);
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    if (!string.IsNullOrWhiteSpace(resultMessage)) resultMessage += "\n";
-
-                    resultMessage += "Error Trying To Re-Close Jira";
+                    throw new StateChangedException("Time Logged, but state is now open", ex);
                 }
             }
-
-            return new LogWorkResult(result, resultMessage);
         }
 
         private void ReCloseJira(Issue jiraIssue)

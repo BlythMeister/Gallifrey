@@ -1,37 +1,41 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
-using Gallifrey.Models;
+using Gallifrey.JiraTimers;
 using Gallifrey.Settings;
+using Newtonsoft.Json;
 
 namespace Gallifrey.Serialization
 {
     public static class JiraTimerCollectionSerializer
     {
-        private readonly static string SavePath = System.IO.Path.Combine(FilePathSettings.DataSavePath, "TimerCollection.bin");
+        private readonly static string SavePath = System.IO.Path.Combine(FilePathSettings.DataSavePath, "TimerCollection.dat");
 
         public static void Serialize(List<JiraTimer> timerCollection)
         {
-            IFormatter formatter = new BinaryFormatter();
-            Stream stream = new FileStream(SavePath, FileMode.Create, FileAccess.Write, FileShare.None);
-            formatter.Serialize(stream, timerCollection);
-            stream.Close();
+            if (!Directory.Exists(FilePathSettings.DataSavePath)) Directory.CreateDirectory(FilePathSettings.DataSavePath);
+            
+            File.WriteAllText(SavePath, JsonConvert.SerializeObject(timerCollection));
         }
 
         public static List<JiraTimer> DeSerialize()
         {
             List<JiraTimer> timers;
-            IFormatter formatter = new BinaryFormatter();
-
+            
             if (File.Exists(SavePath))
             {
-                Stream stream = new FileStream(SavePath,
-                                               FileMode.Open,
-                                               FileAccess.Read,
-                                               FileShare.Read);
-                timers = (List<JiraTimer>)formatter.Deserialize(stream);
-                stream.Close();
+                try
+                {
+                    var text = File.ReadAllText(SavePath);
+                    timers = JsonConvert.DeserializeObject<List<JiraTimer>>(text);
+                }
+                catch (Exception)
+                {
+                    timers = new List<JiraTimer>();
+                }
+
             }
             else
             {
