@@ -1,4 +1,4 @@
-﻿namespace Gallifrey.UI
+﻿namespace Gallifrey.MockupUI
 {
     partial class AddTimerWindow
     {

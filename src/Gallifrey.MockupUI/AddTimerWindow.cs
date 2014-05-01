@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace Gallifrey.UI
+namespace Gallifrey.MockupUI
 {
     public partial class AddTimerWindow : Form
     {

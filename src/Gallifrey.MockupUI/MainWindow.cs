@@ -4,7 +4,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Gallifrey.JiraTimers;
 
-namespace Gallifrey.UI
+namespace Gallifrey.MockupUI
 {
     public partial class MainWindow : Form
     {
