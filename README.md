@@ -25,8 +25,8 @@ Gallifrey makes use of the following libraries:
 Icons
 =========
 
-Button icons provided by VisualPharm (http://www.visualpharm.com)
-App icon provided by Jack Cai (http://www.doublejdesign.co.uk)
+* Button icons provided by VisualPharm (http://www.visualpharm.com)
+* App icon provided by Jack Cai (http://www.doublejdesign.co.uk)
 
 Licence
 =========
