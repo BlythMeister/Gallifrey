@@ -132,7 +132,7 @@
             // 
             // btnRemoveTimer
             // 
-            this.btnRemoveTimer.Image = global::Gallifrey.UI.Properties.Resources.Cancel_48x48;
+            this.btnRemoveTimer.Image = global::Gallifrey.MockupUI.Properties.Resources.Cancel_48x48;
             this.btnRemoveTimer.Location = new System.Drawing.Point(186, 150);
             this.btnRemoveTimer.Name = "btnRemoveTimer";
             this.btnRemoveTimer.Size = new System.Drawing.Size(65, 65);
@@ -143,7 +143,7 @@
             // 
             // btnAddTimer
             // 
-            this.btnAddTimer.Image = global::Gallifrey.UI.Properties.Resources.Check_48x48;
+            this.btnAddTimer.Image = global::Gallifrey.MockupUI.Properties.Resources.Check_48x48;
             this.btnAddTimer.Location = new System.Drawing.Point(73, 150);
             this.btnAddTimer.Name = "btnAddTimer";
             this.btnAddTimer.Size = new System.Drawing.Size(65, 65);
