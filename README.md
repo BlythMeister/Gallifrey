@@ -14,7 +14,15 @@ Gallifrey is the home of the time lords in the hit BBC TV show Dr Who....Need i 
 Downloads
 =========
 
-Gallifrey is currently under development for the first release, come back soon for more information.
+Gallifrey is currently under development.
+We are aiming to maintain a Beta & Stable version of the app.
+
+###Download Links
+
+* [Stable Release - Click Here](https://github.com/BlythMeister/Gallifrey/raw/master/releases/setup.exe)
+* [Beta Release - Click Here](https://github.com/BlythMeister/Gallifrey/raw/develop/releases/setup.exe)
+*Warning: Use the Beta at your own risk!*
+
 
 3rd Party Libraries
 =========
