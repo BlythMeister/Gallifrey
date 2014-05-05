@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Gallifrey.Exceptions.JiraTimers
 {
-    class DuplicateTimerException : Exception
+    public class DuplicateTimerException : Exception
     {
         public DuplicateTimerException(string message)
             : base(message)

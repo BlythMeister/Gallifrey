@@ -28,6 +28,14 @@ namespace Gallifrey.MockupUI
 
         private void RefreshTimerPages()
         {
+            var selectedTab = tabTimerDays.SelectedTab;
+            Guid? selectedTimerId = null;
+            if (selectedTab != null)
+            {
+                var selectedTimer = (JiraTimer)((ListBox)selectedTab.Controls[string.Format("lst_{0}", selectedTab.Name)]).SelectedItem;
+                selectedTimerId = selectedTimer.UniqueId;
+            }
+
             var timers = galifrey.JiraTimerCollection;
             var validDates = timers.GetValidTimerDates().OrderByDescending(x => x.Date).ToList();
 
@@ -71,11 +79,25 @@ namespace Gallifrey.MockupUI
                 timerList.DataSource = timersForDate;
                 itteration++;
             }
+
+            if (selectedTab != null && tabTimerDays.TabPages.ContainsKey(selectedTab.Name))
+            {
+                tabTimerDays.SelectedTab = selectedTab;
+                if (selectedTimerId.HasValue)
+                {
+                    var tabList = (ListBox)selectedTab.Controls[string.Format("lst_{0}", selectedTab.Name)];
+                    foreach (JiraTimer item in tabList.Items.Cast<JiraTimer>().Where(item => item.UniqueId == selectedTimerId.Value))
+                    {
+                        tabList.SelectedItem = item;
+                        break;
+                    }
+                }
+            }
         }
 
         private void DoubleClickListBox(object sender, EventArgs e)
         {
-            var timerClicked = (JiraTimer) ((ListBox) sender).SelectedItem;
+            var timerClicked = (JiraTimer)((ListBox)sender).SelectedItem;
             var runningTimers = galifrey.JiraTimerCollection.GetRunningTimers();
 
             var wasRunning = runningTimers.Any(timer => timer.UniqueId == timerClicked.UniqueId);
@@ -105,6 +127,7 @@ namespace Gallifrey.MockupUI
         private void btnRemoveTimer_Click(object sender, EventArgs e)
         {
             var selectedTab = tabTimerDays.SelectedTab;
+            if (selectedTab == null) return;
             var selectedTimer = (JiraTimer)((ListBox)selectedTab.Controls[string.Format("lst_{0}", selectedTab.Name)]).SelectedItem;
             galifrey.JiraTimerCollection.RemoveTimer(selectedTimer.UniqueId);
             RefreshTimerPages();

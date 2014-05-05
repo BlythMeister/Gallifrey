@@ -35,7 +35,7 @@ namespace Gallifrey.JiraTimers
         {
             JiraReference = jiraIssue.Key.Value;
             JiraProjectName = jiraIssue.Project;
-            JiraName = jiraIssue.Description;
+            JiraName = jiraIssue.Summary;
             DateStarted = dateStarted;
             CurrentTime = currentTime;
             ExportedTime = exportedTime;
