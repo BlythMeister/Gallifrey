@@ -58,6 +58,12 @@ namespace Gallifrey.JiraTimers
             timerList.Remove(timerList.First(timer => timer.UniqueId == uniqueId));
         }
 
+        public bool IsTimerForToday(Guid uniqueId)
+        {
+            var timerForInteration = timerList.First(timer => timer.UniqueId == uniqueId);
+            return timerForInteration.DateStarted.Date == DateTime.Now.Date;
+        }
+
         public void StartTimer(Guid uniqueId)
         {
             var timerForInteration = timerList.First(timer => timer.UniqueId == uniqueId);

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -36,6 +37,7 @@
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.btnAddTimer = new System.Windows.Forms.Button();
             this.tabTimerDays = new System.Windows.Forms.TabControl();
+            this.formTimer = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -113,6 +115,11 @@
             this.tabTimerDays.Size = new System.Drawing.Size(784, 414);
             this.tabTimerDays.TabIndex = 6;
             // 
+            // formTimer
+            // 
+            this.formTimer.Interval = 500;
+            this.formTimer.Tick += new System.EventHandler(this.formTimer_Tick);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -146,6 +153,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button btnRemoveTimer;
         private System.Windows.Forms.TabControl tabTimerDays;
+        private System.Windows.Forms.Timer formTimer;
     }
 }
 
