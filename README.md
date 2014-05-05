@@ -19,8 +19,8 @@ We are aiming to maintain a Beta & Stable version of the app.
 
 ###Download Links
 
-* [Stable Release - Click Here](https://github.com/BlythMeister/Gallifrey/raw/master/releases/setup.exe)
-* [Beta Release - Click Here](https://github.com/BlythMeister/Gallifrey/raw/develop/releases/setup.exe)
+* [Stable Release - Click Here](https://github.com/BlythMeister/Gallifrey/raw/master/deploy/setup.exe)
+* [Beta Release - Click Here](https://github.com/BlythMeister/Gallifrey/raw/develop/deploy/setup.exe)
 *Warning: Use the Beta at your own risk!*
 
 
