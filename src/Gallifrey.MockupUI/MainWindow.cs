@@ -19,6 +19,7 @@ namespace Gallifrey.MockupUI
         private void MainWindow_Load(object sender, EventArgs e)
         {
             RefreshTimerPages();
+            formTimer.Enabled = true;
         }
 
         private void MainWindow_FormClosed(object sender, FormClosedEventArgs e)
@@ -28,11 +29,10 @@ namespace Gallifrey.MockupUI
 
         private void RefreshTimerPages()
         {
-            var selectedTab = tabTimerDays.SelectedTab;
             Guid? selectedTimerId = null;
-            if (selectedTab != null)
+            if (tabTimerDays.SelectedTab != null)
             {
-                var selectedTimer = (JiraTimer)((ListBox)selectedTab.Controls[string.Format("lst_{0}", selectedTab.Name)]).SelectedItem;
+                var selectedTimer = (JiraTimer)((ListBox)tabTimerDays.SelectedTab.Controls[string.Format("lst_{0}", tabTimerDays.SelectedTab.Name)]).SelectedItem;
                 selectedTimerId = selectedTimer.UniqueId;
             }
 
@@ -80,17 +80,29 @@ namespace Gallifrey.MockupUI
                 itteration++;
             }
 
-            if (selectedTab != null && tabTimerDays.TabPages.ContainsKey(selectedTab.Name))
+            if (selectedTimerId.HasValue)
+            { 
+                SelectTimer(selectedTimerId.Value); 
+            }
+
+        }
+
+        private void SelectTimer(Guid selectedTimerId)
+        {
+            foreach (TabPage tabPage in tabTimerDays.TabPages)
             {
-                tabTimerDays.SelectedTab = selectedTab;
-                if (selectedTimerId.HasValue)
+                var foundMatch = false;
+                var tabList = (ListBox)tabPage.Controls[string.Format("lst_{0}", tabPage.Name)];
+                foreach (JiraTimer item in tabList.Items.Cast<JiraTimer>().Where(item => item.UniqueId == selectedTimerId))
                 {
-                    var tabList = (ListBox)selectedTab.Controls[string.Format("lst_{0}", selectedTab.Name)];
-                    foreach (JiraTimer item in tabList.Items.Cast<JiraTimer>().Where(item => item.UniqueId == selectedTimerId.Value))
-                    {
-                        tabList.SelectedItem = item;
-                        break;
-                    }
+                    tabList.SelectedItem = item;
+                    foundMatch = true;
+                    break;
+                }
+
+                if (foundMatch)
+                {
+                    tabTimerDays.SelectedTab = tabPage;
                 }
             }
         }
@@ -112,7 +124,14 @@ namespace Gallifrey.MockupUI
                 {
                     galifrey.JiraTimerCollection.StopTimer(runningTimer.UniqueId);
                 }
-                galifrey.JiraTimerCollection.StartTimer(timerClicked.UniqueId);
+                if (galifrey.JiraTimerCollection.IsTimerForToday(timerClicked.UniqueId))
+                {
+                    galifrey.JiraTimerCollection.StartTimer(timerClicked.UniqueId);    
+                }
+                else
+                {
+                    MessageBox.Show("Cannot Start as not valid for today!", "Wrong Day!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
             RefreshTimerPages();
         }
@@ -130,6 +149,11 @@ namespace Gallifrey.MockupUI
             if (selectedTab == null) return;
             var selectedTimer = (JiraTimer)((ListBox)selectedTab.Controls[string.Format("lst_{0}", selectedTab.Name)]).SelectedItem;
             galifrey.JiraTimerCollection.RemoveTimer(selectedTimer.UniqueId);
+            RefreshTimerPages();
+        }
+
+        private void formTimer_Tick(object sender, EventArgs e)
+        {
             RefreshTimerPages();
         }
     }

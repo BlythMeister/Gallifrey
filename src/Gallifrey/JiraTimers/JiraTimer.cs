@@ -51,7 +51,7 @@ namespace Gallifrey.JiraTimers
 
         public TimeSpan TimeToExport
         {
-            get { return CurrentTime.Subtract(ExportedTime); }
+            get { return ExactCurrentTime.Subtract(ExportedTime); }
         }
 
         public TimeSpan ExactCurrentTime
