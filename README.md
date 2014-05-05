@@ -29,6 +29,7 @@ We are aiming to maintain a Beta & Stable version of the app.
 
 Gallifrey makes use of the following libraries:
 
+* Atlassian .Net SDK (https://bitbucket.org/farmas/atlassian.net-sdk/wiki/Home)
 
 Icons
 =========
