@@ -151,7 +151,6 @@
     <None Include="Icons\Add_48x48.png" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="clock_blue.ico" />
     <None Include="Icons\Settings_48x48.png" />
     <None Include="Icons\Check_48x48.png" />
     <None Include="Icons\Cancel_48x48.png" />
@@ -180,6 +179,9 @@
       <Project>{4C344D86-4086-4F87-BD0F-4F8E23610CD7}</Project>
       <Name>Gallifrey</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="clock_blue.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
