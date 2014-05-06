@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace Gallifrey.MockupUI
+namespace Gallifrey.UI.Classic
 {
     static class Program
     {

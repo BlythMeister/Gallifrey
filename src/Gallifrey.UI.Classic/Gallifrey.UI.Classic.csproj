@@ -67,7 +67,7 @@
     <SignManifests>false</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>Gallifrey.MockupUI.Program</StartupObject>
+    <StartupObject>Gallifrey.UI.Classic.Program</StartupObject>
   </PropertyGroup>
   <PropertyGroup />
   <ItemGroup>

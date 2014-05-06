@@ -1,4 +1,4 @@
-﻿namespace Gallifrey.MockupUI
+﻿namespace Gallifrey.UI.Classic
 {
     partial class SettingsWindow
     {
@@ -101,7 +101,7 @@
             // 
             // btnCancelEditSettings
             // 
-            this.btnCancelEditSettings.Image = global::Gallifrey.MockupUI.Properties.Resources.Cancel_48x48;
+            this.btnCancelEditSettings.Image = global::Gallifrey.UI.Classic.Properties.Resources.Cancel_48x48;
             this.btnCancelEditSettings.Location = new System.Drawing.Point(172, 150);
             this.btnCancelEditSettings.Name = "btnCancelEditSettings";
             this.btnCancelEditSettings.Size = new System.Drawing.Size(65, 65);
@@ -112,7 +112,7 @@
             // 
             // btnSaveSettings
             // 
-            this.btnSaveSettings.Image = global::Gallifrey.MockupUI.Properties.Resources.Check_48x48;
+            this.btnSaveSettings.Image = global::Gallifrey.UI.Classic.Properties.Resources.Check_48x48;
             this.btnSaveSettings.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnSaveSettings.Location = new System.Drawing.Point(91, 150);
             this.btnSaveSettings.Name = "btnSaveSettings";

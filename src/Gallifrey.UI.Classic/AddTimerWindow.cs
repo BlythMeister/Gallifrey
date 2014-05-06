@@ -4,7 +4,7 @@ using Atlassian.Jira;
 using Gallifrey.Exceptions.IntergrationPoints;
 using Gallifrey.Exceptions.JiraTimers;
 
-namespace Gallifrey.MockupUI
+namespace Gallifrey.UI.Classic
 {
     public partial class AddTimerWindow : Form
     {
