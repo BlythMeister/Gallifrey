@@ -39,7 +39,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
-            this.btnRemoveTimer = new System.Windows.Forms.Button();
+            this.btnCancelAddTimer = new System.Windows.Forms.Button();
             this.btnAddTimer = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
@@ -130,16 +130,16 @@
             this.label6.TabIndex = 9;
             this.label6.Text = "Mins";
             // 
-            // btnRemoveTimer
+            // btnCancelAddTimer
             // 
-            this.btnRemoveTimer.Image = global::Gallifrey.MockupUI.Properties.Resources.Cancel_48x48;
-            this.btnRemoveTimer.Location = new System.Drawing.Point(186, 150);
-            this.btnRemoveTimer.Name = "btnRemoveTimer";
-            this.btnRemoveTimer.Size = new System.Drawing.Size(65, 65);
-            this.btnRemoveTimer.TabIndex = 11;
-            this.btnRemoveTimer.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.btnRemoveTimer.UseVisualStyleBackColor = true;
-            this.btnRemoveTimer.Click += new System.EventHandler(this.btnRemoveTimer_Click);
+            this.btnCancelAddTimer.Image = global::Gallifrey.MockupUI.Properties.Resources.Cancel_48x48;
+            this.btnCancelAddTimer.Location = new System.Drawing.Point(186, 150);
+            this.btnCancelAddTimer.Name = "btnCancelAddTimer";
+            this.btnCancelAddTimer.Size = new System.Drawing.Size(65, 65);
+            this.btnCancelAddTimer.TabIndex = 11;
+            this.btnCancelAddTimer.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.btnCancelAddTimer.UseVisualStyleBackColor = true;
+            this.btnCancelAddTimer.Click += new System.EventHandler(this.btnCancelAddTimer_Click);
             // 
             // btnAddTimer
             // 
@@ -157,7 +157,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(296, 227);
-            this.Controls.Add(this.btnRemoveTimer);
+            this.Controls.Add(this.btnCancelAddTimer);
             this.Controls.Add(this.btnAddTimer);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label5);
@@ -172,6 +172,8 @@
             this.Font = new System.Drawing.Font("Segoe UI", 9.75F);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.MaximumSize = new System.Drawing.Size(312, 265);
+            this.MinimumSize = new System.Drawing.Size(312, 265);
             this.Name = "AddTimerWindow";
             this.Text = "Gallifrey - Add Timer";
             this.ResumeLayout(false);
@@ -192,6 +194,6 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Button btnAddTimer;
-        private System.Windows.Forms.Button btnRemoveTimer;
+        private System.Windows.Forms.Button btnCancelAddTimer;
     }
 }
