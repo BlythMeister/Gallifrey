@@ -60,7 +60,7 @@ namespace Gallifrey.MockupUI
             return true;
         }
 
-        private void btnRemoveTimer_Click(object sender, EventArgs e)
+        private void btnCancelAddTimer_Click(object sender, EventArgs e)
         {
             Close();
         }

@@ -100,6 +100,12 @@
     <Compile Include="AddTimerWindow.Designer.cs">
       <DependentUpon>AddTimerWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="SettingsWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SettingsWindow.Designer.cs">
+      <DependentUpon>SettingsWindow.cs</DependentUpon>
+    </Compile>
     <Compile Include="MainWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -115,6 +121,9 @@
     </Compile>
     <EmbeddedResource Include="AddTimerWindow.resx">
       <DependentUpon>AddTimerWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SettingsWindow.resx">
+      <DependentUpon>SettingsWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainWindow.resx">
       <DependentUpon>MainWindow.cs</DependentUpon>
@@ -143,6 +152,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="clock_blue.ico" />
+    <None Include="Icons\Settings_48x48.png" />
     <None Include="Icons\Check_48x48.png" />
     <None Include="Icons\Cancel_48x48.png" />
     <None Include="Icons\Delete_48x48.png" />

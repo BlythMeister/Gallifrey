@@ -1,19 +1,37 @@
 ﻿using System;
+using System.Deployment.Application;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
+using Gallifrey.Exceptions.IntergrationPoints;
 using Gallifrey.JiraTimers;
 
 namespace Gallifrey.MockupUI
 {
     public partial class MainWindow : Form
     {
-        private readonly Backend galifrey;
+        private Backend galifrey;
 
         public MainWindow()
         {
             InitializeComponent();
-            galifrey = new Backend();
+            SetupGallifrey();
+        }
+
+        private void SetupGallifrey(bool retry = false)
+        {
+            try
+            {
+                galifrey = new Backend();
+            }
+            catch (MissingJiraConfigException)
+            {
+                if (!retry)
+                {
+                    btnSettings_Click(null, null);
+                    SetupGallifrey(true);
+                }
+            }
         }
 
         private void MainWindow_Load(object sender, EventArgs e)
@@ -32,6 +50,7 @@ namespace Gallifrey.MockupUI
             if (!networkDeploy) myVersion = string.Format("{0} (beta)", myVersion);
             lblVersion.Text = myVersion;
         }
+
         private void MainWindow_FormClosed(object sender, FormClosedEventArgs e)
         {
             galifrey.JiraTimerCollection.SaveTimers();
@@ -94,7 +113,6 @@ namespace Gallifrey.MockupUI
             { 
                 SelectTimer(selectedTimerId.Value); 
             }
-
         }
 
         private void SelectTimer(Guid selectedTimerId)
@@ -165,6 +183,12 @@ namespace Gallifrey.MockupUI
         private void formTimer_Tick(object sender, EventArgs e)
         {
             RefreshTimerPages();
+        }
+
+        private void btnSettings_Click(object sender, EventArgs e)
+        {
+            var settingsWindow = new SettingsWindow(galifrey);
+            settingsWindow.ShowDialog();
         }
     }
 }

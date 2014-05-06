@@ -33,11 +33,12 @@
             this.label1 = new System.Windows.Forms.Label();
             this.lblVersion = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
+            this.tabTimerDays = new System.Windows.Forms.TabControl();
+            this.formTimer = new System.Windows.Forms.Timer(this.components);
+            this.btnSettings = new System.Windows.Forms.Button();
             this.btnRemoveTimer = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.btnAddTimer = new System.Windows.Forms.Button();
-            this.tabTimerDays = new System.Windows.Forms.TabControl();
-            this.formTimer = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -71,6 +72,34 @@
             this.label3.TabIndex = 4;
             this.label3.Text = "Jira Time Logging Companion";
             // 
+            // tabTimerDays
+            // 
+            this.tabTimerDays.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tabTimerDays.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tabTimerDays.Location = new System.Drawing.Point(12, 169);
+            this.tabTimerDays.Name = "tabTimerDays";
+            this.tabTimerDays.SelectedIndex = 0;
+            this.tabTimerDays.Size = new System.Drawing.Size(784, 414);
+            this.tabTimerDays.TabIndex = 6;
+            // 
+            // formTimer
+            // 
+            this.formTimer.Interval = 500;
+            this.formTimer.Tick += new System.EventHandler(this.formTimer_Tick);
+            // 
+            // btnSettings
+            // 
+            this.btnSettings.Image = global::Gallifrey.MockupUI.Properties.Resources.Settings_48x48;
+            this.btnSettings.Location = new System.Drawing.Point(154, 98);
+            this.btnSettings.Name = "btnSettings";
+            this.btnSettings.Size = new System.Drawing.Size(65, 65);
+            this.btnSettings.TabIndex = 7;
+            this.btnSettings.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.btnSettings.UseVisualStyleBackColor = true;
+            this.btnSettings.Click += new System.EventHandler(this.btnSettings_Click);
+            // 
             // btnRemoveTimer
             // 
             this.btnRemoveTimer.Image = global::Gallifrey.MockupUI.Properties.Resources.Delete_48x48;
@@ -103,28 +132,12 @@
             this.btnAddTimer.UseVisualStyleBackColor = true;
             this.btnAddTimer.Click += new System.EventHandler(this.btnAddTimer_Click);
             // 
-            // tabTimerDays
-            // 
-            this.tabTimerDays.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tabTimerDays.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tabTimerDays.Location = new System.Drawing.Point(12, 169);
-            this.tabTimerDays.Name = "tabTimerDays";
-            this.tabTimerDays.SelectedIndex = 0;
-            this.tabTimerDays.Size = new System.Drawing.Size(784, 414);
-            this.tabTimerDays.TabIndex = 6;
-            // 
-            // formTimer
-            // 
-            this.formTimer.Interval = 500;
-            this.formTimer.Tick += new System.EventHandler(this.formTimer_Tick);
-            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(808, 595);
+            this.Controls.Add(this.btnSettings);
             this.Controls.Add(this.tabTimerDays);
             this.Controls.Add(this.btnRemoveTimer);
             this.Controls.Add(this.label3);
@@ -154,6 +167,7 @@
         private System.Windows.Forms.Button btnRemoveTimer;
         private System.Windows.Forms.TabControl tabTimerDays;
         private System.Windows.Forms.Timer formTimer;
+        private System.Windows.Forms.Button btnSettings;
     }
 }
 
