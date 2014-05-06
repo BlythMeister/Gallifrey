@@ -9,7 +9,7 @@ namespace Gallifrey.IntegrationPoints
 {
     public class JiraConnection
     {
-        private readonly AppSettings appSettings;
+        private AppSettings appSettings;
         private Jira jira;
 
         public JiraConnection(AppSettings appSettings)
@@ -32,12 +32,20 @@ namespace Gallifrey.IntegrationPoints
                 try
                 {
                     jira = new Jira(appSettings.JiraUrl, appSettings.JiraUsername, appSettings.JiraPassword);
+                    jira.GetIssuePriorities();
                 }
                 catch (Exception ex)
                 {
                     throw new JiraConnectionException("Error creating instance of Jira", ex);
                 }
             }
+        }
+
+        public void ReConnect(AppSettings newAppSettings)
+        {
+            appSettings = newAppSettings;
+            jira = null;
+            CheckAndConnectJira();
         }
 
         public bool DoesJiraExist(string jiraRef)

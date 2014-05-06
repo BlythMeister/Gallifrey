@@ -15,22 +15,32 @@ namespace Gallifrey.UI.Classic
         public MainWindow()
         {
             InitializeComponent();
-            SetupGallifrey();
-        }
-
-        private void SetupGallifrey(bool retry = false)
-        {
+            galifrey = new Backend();
             try
             {
-                galifrey = new Backend();
+                galifrey.Initialise();
             }
             catch (MissingJiraConfigException)
             {
-                if (!retry)
-                {
-                    btnSettings_Click(null, null);
-                    SetupGallifrey(true);
-                }
+                ReConfigAndConnectToJira();
+            }
+            catch (JiraConnectionException)
+            {
+                ReConfigAndConnectToJira();
+            }
+        }
+
+        private void ReConfigAndConnectToJira()
+        {
+            try
+            {
+                btnSettings_Click(null, null);
+                galifrey.Initialise();
+            }
+            catch (JiraConnectionException)
+            {
+                MessageBox.Show("Unable to connect to Jira with these settings!", "Unable to connect");
+                ReConfigAndConnectToJira();
             }
         }
 
@@ -110,8 +120,8 @@ namespace Gallifrey.UI.Classic
             }
 
             if (selectedTimerId.HasValue)
-            { 
-                SelectTimer(selectedTimerId.Value); 
+            {
+                SelectTimer(selectedTimerId.Value);
             }
         }
 
@@ -154,7 +164,7 @@ namespace Gallifrey.UI.Classic
                 }
                 if (galifrey.JiraTimerCollection.IsTimerForToday(timerClicked.UniqueId))
                 {
-                    galifrey.JiraTimerCollection.StartTimer(timerClicked.UniqueId);    
+                    galifrey.JiraTimerCollection.StartTimer(timerClicked.UniqueId);
                 }
                 else
                 {

@@ -11,13 +11,21 @@ namespace Gallifrey.UI.Classic
         {
             this.galifrey = galifrey;
             InitializeComponent();
-            txtJiraUrl.Text = galifrey.AppSettings.JiraUrl;
-            txtJiraUsername.Text = galifrey.AppSettings.JiraUsername;
-            txtJiraPassword.Text = galifrey.AppSettings.JiraPassword;
+           
+            if (galifrey.AppSettings.JiraUrl != null) txtJiraUrl.Text = galifrey.AppSettings.JiraUrl;
+            if (galifrey.AppSettings.JiraUsername != null) txtJiraUsername.Text = galifrey.AppSettings.JiraUsername;
+            if (galifrey.AppSettings.JiraPassword != null) txtJiraPassword.Text = galifrey.AppSettings.JiraPassword;
         }
 
         private void btnCancelEditSettings_Click(object sender, EventArgs e)
         {
+            if (string.IsNullOrWhiteSpace(galifrey.AppSettings.JiraUrl) ||
+                    string.IsNullOrWhiteSpace(galifrey.AppSettings.JiraUsername) ||
+                    string.IsNullOrWhiteSpace(galifrey.AppSettings.JiraPassword))
+            {
+                MessageBox.Show("You have to populate the Jira Credentials!", "Missing Config");
+                return;
+            }
             Close();
         }
 
@@ -26,7 +34,17 @@ namespace Gallifrey.UI.Classic
             galifrey.AppSettings.JiraUrl = txtJiraUrl.Text;
             galifrey.AppSettings.JiraUsername = txtJiraUsername.Text;
             galifrey.AppSettings.JiraPassword = txtJiraPassword.Text;
-            galifrey.AppSettings.SaveSettings();
+
+            if (string.IsNullOrWhiteSpace(galifrey.AppSettings.JiraUrl) ||
+                    string.IsNullOrWhiteSpace(galifrey.AppSettings.JiraUsername) ||
+                    string.IsNullOrWhiteSpace(galifrey.AppSettings.JiraPassword))
+            {
+                MessageBox.Show("You have to populate the Jira Credentials!", "Missing Config");
+                return;
+            }
+
+            galifrey.SaveAppSettings();
+            Close();
         }
     }
 }
