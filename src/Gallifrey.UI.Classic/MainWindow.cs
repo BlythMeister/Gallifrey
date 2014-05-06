@@ -22,25 +22,11 @@ namespace Gallifrey.UI.Classic
             }
             catch (MissingJiraConfigException)
             {
-                ReConfigAndConnectToJira();
+                btnSettings_Click(null, null);
             }
             catch (JiraConnectionException)
-            {
-                ReConfigAndConnectToJira();
-            }
-        }
-
-        private void ReConfigAndConnectToJira()
-        {
-            try
             {
                 btnSettings_Click(null, null);
-                galifrey.Initialise();
-            }
-            catch (JiraConnectionException)
-            {
-                MessageBox.Show("Unable to connect to Jira with these settings!", "Unable to connect");
-                ReConfigAndConnectToJira();
             }
         }
 

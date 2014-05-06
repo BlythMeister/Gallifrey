@@ -11,9 +11,13 @@ namespace Gallifrey
         public AppSettings AppSettings;
         public JiraConnection JiraConnection;
 
-        public void Initialise()
+        public Backend()
         {
             AppSettings = AppSettingsSerializer.DeSerialize();
+        }
+
+        public void Initialise()
+        {
             JiraConnection = new JiraConnection(AppSettings);
             JiraTimerCollection = new JiraTimerCollection(JiraConnection);
         }
@@ -21,7 +25,14 @@ namespace Gallifrey
         public void SaveAppSettings()
         {
             AppSettings.SaveSettings();
-            if(JiraConnection != null) JiraConnection.ReConnect(AppSettings);
+            if (JiraConnection == null)
+            {
+                Initialise();
+            }
+            else
+            {
+                JiraConnection.ReConnect(AppSettings);
+            }
         }
     }
 }
