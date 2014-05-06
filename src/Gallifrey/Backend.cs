@@ -1,5 +1,4 @@
-﻿using System;
-using Gallifrey.IntegrationPoints;
+﻿using Gallifrey.IntegrationPoints;
 using Gallifrey.JiraTimers;
 using Gallifrey.Serialization;
 using Gallifrey.Settings;
@@ -12,12 +11,17 @@ namespace Gallifrey
         public AppSettings AppSettings;
         public JiraConnection JiraConnection;
 
-        public Backend()
+        public void Initialise()
         {
             AppSettings = AppSettingsSerializer.DeSerialize();
-            AppSettings.SaveSettings();
             JiraConnection = new JiraConnection(AppSettings);
             JiraTimerCollection = new JiraTimerCollection(JiraConnection);
+        }
+
+        public void SaveAppSettings()
+        {
+            AppSettings.SaveSettings();
+            if(JiraConnection != null) JiraConnection.ReConnect(AppSettings);
         }
     }
 }

@@ -8,7 +8,7 @@ namespace Gallifrey.Settings
         public string JiraUsername { get; set; }
         public string JiraPassword { get; set; }
 
-        public void SaveSettings()
+        internal void SaveSettings()
         {
             AppSettingsSerializer.Serialize(this);    
         }
