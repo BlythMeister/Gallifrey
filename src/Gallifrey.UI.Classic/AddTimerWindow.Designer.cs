@@ -1,4 +1,4 @@
-﻿namespace Gallifrey.MockupUI
+﻿namespace Gallifrey.UI.Classic
 {
     partial class AddTimerWindow
     {
@@ -132,7 +132,7 @@
             // 
             // btnCancelAddTimer
             // 
-            this.btnCancelAddTimer.Image = global::Gallifrey.MockupUI.Properties.Resources.Cancel_48x48;
+            this.btnCancelAddTimer.Image = global::Gallifrey.UI.Classic.Properties.Resources.Cancel_48x48;
             this.btnCancelAddTimer.Location = new System.Drawing.Point(186, 150);
             this.btnCancelAddTimer.Name = "btnCancelAddTimer";
             this.btnCancelAddTimer.Size = new System.Drawing.Size(65, 65);
@@ -143,7 +143,7 @@
             // 
             // btnAddTimer
             // 
-            this.btnAddTimer.Image = global::Gallifrey.MockupUI.Properties.Resources.Check_48x48;
+            this.btnAddTimer.Image = global::Gallifrey.UI.Classic.Properties.Resources.Check_48x48;
             this.btnAddTimer.Location = new System.Drawing.Point(73, 150);
             this.btnAddTimer.Name = "btnAddTimer";
             this.btnAddTimer.Size = new System.Drawing.Size(65, 65);

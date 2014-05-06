@@ -6,7 +6,7 @@ using System.Windows.Forms;
 using Gallifrey.Exceptions.IntergrationPoints;
 using Gallifrey.JiraTimers;
 
-namespace Gallifrey.MockupUI
+namespace Gallifrey.UI.Classic
 {
     public partial class MainWindow : Form
     {
@@ -47,7 +47,7 @@ namespace Gallifrey.MockupUI
             var networkDeploy = ApplicationDeployment.IsNetworkDeployed;
             myVersion = networkDeploy ? ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString() : Application.ProductVersion;
             myVersion = string.Format("v{0}", myVersion);
-            if (!networkDeploy) myVersion = string.Format("{0} (beta)", myVersion);
+            if (!networkDeploy) myVersion = string.Format("{0} (manual)", myVersion);
             lblVersion.Text = myVersion;
         }
 
