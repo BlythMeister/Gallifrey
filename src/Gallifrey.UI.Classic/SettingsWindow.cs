@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using Gallifrey.Exceptions.IntergrationPoints;
 
 namespace Gallifrey.UI.Classic
 {
@@ -26,7 +27,7 @@ namespace Gallifrey.UI.Classic
                 MessageBox.Show("You have to populate the Jira Credentials!", "Missing Config");
                 return;
             }
-            Close();
+            CloseWindow();
         }
 
         private void btnSaveSettings_Click(object sender, EventArgs e)
@@ -42,9 +43,24 @@ namespace Gallifrey.UI.Classic
                 MessageBox.Show("You have to populate the Jira Credentials!", "Missing Config");
                 return;
             }
+            
+            CloseWindow();
+        }
 
-            galifrey.SaveAppSettings();
+        private void CloseWindow()
+        {
+            try
+            {
+                galifrey.SaveAppSettings();
+            }
+            catch (JiraConnectionException)
+            {
+                MessageBox.Show("Unable to connect to Jira with these settings!", "Unable to connect");
+                return;
+            }
+
             Close();
         }
+
     }
 }
