@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gallifrey", "Gallifrey\Gallifrey.csproj", "{4C344D86-4086-4F87-BD0F-4F8E23610CD7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gallifrey.MockupUI", "Gallifrey.MockupUI\Gallifrey.MockupUI.csproj", "{22A3FE08-499A-4818-8B1D-292FD11998B3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gallifrey.UI.Classic", "Gallifrey.UI.Classic\Gallifrey.UI.Classic.csproj", "{22A3FE08-499A-4818-8B1D-292FD11998B3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gallifrey.UI.Classic.Beta", "Gallifrey.UI.Classic.Beta\Gallifrey.UI.Classic.Beta.csproj", "{262B6082-A86E-4989-96FC-7EB72B05C675}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,6 +21,10 @@ Global
 		{22A3FE08-499A-4818-8B1D-292FD11998B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{22A3FE08-499A-4818-8B1D-292FD11998B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{22A3FE08-499A-4818-8B1D-292FD11998B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{262B6082-A86E-4989-96FC-7EB72B05C675}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{262B6082-A86E-4989-96FC-7EB72B05C675}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{262B6082-A86E-4989-96FC-7EB72B05C675}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{262B6082-A86E-4989-96FC-7EB72B05C675}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
