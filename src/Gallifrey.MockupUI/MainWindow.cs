@@ -18,10 +18,20 @@ namespace Gallifrey.MockupUI
 
         private void MainWindow_Load(object sender, EventArgs e)
         {
+            SetVersionNumber();
             RefreshTimerPages();
             formTimer.Enabled = true;
         }
 
+        private void SetVersionNumber()
+        {
+            var myVersion = string.Empty;
+            var networkDeploy = ApplicationDeployment.IsNetworkDeployed;
+            myVersion = networkDeploy ? ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString() : Application.ProductVersion;
+            myVersion = string.Format("v{0}", myVersion);
+            if (!networkDeploy) myVersion = string.Format("{0} (beta)", myVersion);
+            lblVersion.Text = myVersion;
+        }
         private void MainWindow_FormClosed(object sender, FormClosedEventArgs e)
         {
             galifrey.JiraTimerCollection.SaveTimers();
