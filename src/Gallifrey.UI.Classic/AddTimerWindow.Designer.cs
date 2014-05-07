@@ -41,6 +41,8 @@
             this.label6 = new System.Windows.Forms.Label();
             this.btnCancelAddTimer = new System.Windows.Forms.Button();
             this.btnAddTimer = new System.Windows.Forms.Button();
+            this.chkStartNow = new System.Windows.Forms.CheckBox();
+            this.label7 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // txtJiraRef
@@ -65,6 +67,7 @@
             this.calStartDate.Name = "calStartDate";
             this.calStartDate.Size = new System.Drawing.Size(157, 25);
             this.calStartDate.TabIndex = 2;
+            this.calStartDate.ValueChanged += new System.EventHandler(this.calStartDate_ValueChanged);
             // 
             // txtStartHours
             // 
@@ -133,7 +136,7 @@
             // btnCancelAddTimer
             // 
             this.btnCancelAddTimer.Image = global::Gallifrey.UI.Classic.Properties.Resources.Cancel_48x48;
-            this.btnCancelAddTimer.Location = new System.Drawing.Point(186, 150);
+            this.btnCancelAddTimer.Location = new System.Drawing.Point(173, 172);
             this.btnCancelAddTimer.Name = "btnCancelAddTimer";
             this.btnCancelAddTimer.Size = new System.Drawing.Size(65, 65);
             this.btnCancelAddTimer.TabIndex = 11;
@@ -144,7 +147,7 @@
             // btnAddTimer
             // 
             this.btnAddTimer.Image = global::Gallifrey.UI.Classic.Properties.Resources.Check_48x48;
-            this.btnAddTimer.Location = new System.Drawing.Point(73, 150);
+            this.btnAddTimer.Location = new System.Drawing.Point(60, 172);
             this.btnAddTimer.Name = "btnAddTimer";
             this.btnAddTimer.Size = new System.Drawing.Size(65, 65);
             this.btnAddTimer.TabIndex = 10;
@@ -152,11 +155,31 @@
             this.btnAddTimer.UseVisualStyleBackColor = true;
             this.btnAddTimer.Click += new System.EventHandler(this.btnAddTimer_Click);
             // 
+            // chkStartNow
+            // 
+            this.chkStartNow.AutoSize = true;
+            this.chkStartNow.Location = new System.Drawing.Point(123, 140);
+            this.chkStartNow.Name = "chkStartNow";
+            this.chkStartNow.Size = new System.Drawing.Size(15, 14);
+            this.chkStartNow.TabIndex = 12;
+            this.chkStartNow.UseVisualStyleBackColor = true;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(45, 138);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(72, 17);
+            this.label7.TabIndex = 13;
+            this.label7.Text = "Start Now?";
+            // 
             // AddTimerWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(296, 227);
+            this.ClientSize = new System.Drawing.Size(296, 251);
+            this.Controls.Add(this.label7);
+            this.Controls.Add(this.chkStartNow);
             this.Controls.Add(this.btnCancelAddTimer);
             this.Controls.Add(this.btnAddTimer);
             this.Controls.Add(this.label6);
@@ -172,8 +195,8 @@
             this.Font = new System.Drawing.Font("Segoe UI", 9.75F);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.MaximumSize = new System.Drawing.Size(312, 265);
-            this.MinimumSize = new System.Drawing.Size(312, 265);
+            this.MaximumSize = new System.Drawing.Size(312, 289);
+            this.MinimumSize = new System.Drawing.Size(312, 289);
             this.Name = "AddTimerWindow";
             this.Text = "Gallifrey - Add Timer";
             this.ResumeLayout(false);
@@ -195,5 +218,7 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Button btnAddTimer;
         private System.Windows.Forms.Button btnCancelAddTimer;
+        private System.Windows.Forms.CheckBox chkStartNow;
+        private System.Windows.Forms.Label label7;
     }
 }

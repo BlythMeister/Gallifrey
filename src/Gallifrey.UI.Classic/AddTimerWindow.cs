@@ -49,7 +49,7 @@ namespace Gallifrey.UI.Classic
 
             try
             {
-                galifrey.JiraTimerCollection.AddTimer(jiraIssue, startDate, seedTime);
+                galifrey.JiraTimerCollection.AddTimer(jiraIssue, startDate, seedTime, chkStartNow.Checked);
             }
             catch (DuplicateTimerException)
             {
@@ -63,6 +63,19 @@ namespace Gallifrey.UI.Classic
         private void btnCancelAddTimer_Click(object sender, EventArgs e)
         {
             Close();
+        }
+
+        private void calStartDate_ValueChanged(object sender, EventArgs e)
+        {
+            if (calStartDate.Value.Date != DateTime.Now.Date)
+            {
+                chkStartNow.Checked = false;
+                chkStartNow.Enabled = false;
+            }
+            else
+            {
+                chkStartNow.Enabled = true;
+            }
         }
     }
 }
