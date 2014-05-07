@@ -31,15 +31,28 @@ namespace Gallifrey.JiraTimers
             currentRunningTime = new Stopwatch();
         }
 
-        public JiraTimer(Issue jiraIssue, DateTime dateStarted, TimeSpan currentTime, TimeSpan exportedTime, Guid uniqueId)
+        public JiraTimer(Issue jiraIssue, DateTime dateStarted, TimeSpan currentTime)
         {
             JiraReference = jiraIssue.Key.Value;
             JiraProjectName = jiraIssue.Project;
             JiraName = jiraIssue.Summary;
             DateStarted = dateStarted;
             CurrentTime = currentTime;
-            ExportedTime = exportedTime;
-            UniqueId = uniqueId;
+            ExportedTime = new TimeSpan();
+            UniqueId = Guid.NewGuid();
+            IsRunning = false;
+            currentRunningTime = new Stopwatch();
+        }
+
+        public JiraTimer(JiraTimer previousTimer, DateTime dateStarted)
+        {
+            JiraReference = previousTimer.JiraReference;
+            JiraProjectName = previousTimer.JiraReference;
+            JiraName = previousTimer.JiraReference;
+            DateStarted = dateStarted;
+            CurrentTime = new TimeSpan();
+            ExportedTime = new TimeSpan();
+            UniqueId = Guid.NewGuid();
             IsRunning = false;
             currentRunningTime = new Stopwatch();
         }

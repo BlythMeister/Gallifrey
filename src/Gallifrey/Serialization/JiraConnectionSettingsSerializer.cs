@@ -6,7 +6,7 @@ namespace Gallifrey.Serialization
 {
     public static class JiraConnectionSettingsSerializer
     {
-        private readonly static string SavePath = Path.Combine(FilePathSettings.DataSavePath, "AppSettings.dat");
+        private readonly static string SavePath = Path.Combine(FilePathSettings.DataSavePath, "JiraConnectionSettings.dat");
 
         public static void Serialize(JiraConnnectionSettings appSettings)
         {
