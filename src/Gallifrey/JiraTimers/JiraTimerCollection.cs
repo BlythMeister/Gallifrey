@@ -41,10 +41,14 @@ namespace Gallifrey.JiraTimers
             timerList.Add(newTimer);
         }
 
-        public void AddTimer(Issue jiraIssue, DateTime startDate, TimeSpan seedTime)
+        public void AddTimer(Issue jiraIssue, DateTime startDate, TimeSpan seedTime, bool startNow)
         {
             var newTimer = new JiraTimer(jiraIssue, startDate, seedTime);
             AddTimer(newTimer);
+            if (startNow)
+            {
+                StartTimer(newTimer.UniqueId);
+            }
         }
 
         public void RemoveTimer(Guid uniqueId)
