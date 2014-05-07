@@ -59,6 +59,7 @@
     <Compile Include="Exceptions\IntergrationPoints\NoResultsFoundException.cs" />
     <Compile Include="Exceptions\IntergrationPoints\JiraConnectionException.cs" />
     <Compile Include="Exceptions\JiraTimers\DuplicateTimerException.cs" />
+    <Compile Include="InactiveMonitor\ActivityChecker.cs" />
     <Compile Include="IntegrationPoints\JiraConnection.cs" />
     <Compile Include="JiraTimers\JiraTimer.cs" />
     <Compile Include="JiraTimers\JiraTimerCollection.cs" />

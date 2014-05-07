@@ -1,4 +1,6 @@
-﻿using Gallifrey.IdleTimers;
+﻿using System;
+using Gallifrey.IdleTimers;
+using Gallifrey.InactiveMonitor;
 using Gallifrey.IntegrationPoints;
 using Gallifrey.JiraTimers;
 using Gallifrey.Serialization;
@@ -13,6 +15,8 @@ namespace Gallifrey
         public AppSettings AppSettings;
         public JiraConnnectionSettings JiraConnnectionSettings;
         public JiraConnection JiraConnection;
+        public event EventHandler NoActivityEvent;
+        internal ActivityChecker ActivityChecker;
         
         public Backend()
         {
@@ -20,6 +24,14 @@ namespace Gallifrey
             JiraConnnectionSettings = JiraConnectionSettingsSerializer.DeSerialize();
             JiraTimerCollection = new JiraTimerCollection();
             IdleTimerCollection = new IdleTimerCollection();
+            ActivityChecker = new ActivityChecker(JiraTimerCollection, AppSettings);
+            ActivityChecker.NoActivityEvent += OnNoActivityEvent;
+        }
+
+        internal void OnNoActivityEvent(object sender, EventArgs e)
+        {
+            var handler = NoActivityEvent;
+            if (handler != null) handler(sender, e);
         }
 
         public void Initialise()
@@ -46,6 +58,12 @@ namespace Gallifrey
             {
                 JiraConnection.ReConnect(JiraConnnectionSettings);
             }
+        }
+
+        public void SaveAppSettings()
+        {
+            AppSettings.SaveSettings();
+            ActivityChecker.UpdateAppSettings(AppSettings);
         }
 
         public void StartIdleTimer()
