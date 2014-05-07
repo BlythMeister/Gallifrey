@@ -11,12 +11,12 @@ namespace Gallifrey.JiraTimers
     {
         private readonly List<JiraTimer> timerList;
 
-        public JiraTimerCollection()
+        internal JiraTimerCollection()
         {
             timerList = JiraTimerCollectionSerializer.DeSerialize();
         }
 
-        public void SaveTimers()
+        internal void SaveTimers()
         {
             JiraTimerCollectionSerializer.Serialize(timerList);
         }

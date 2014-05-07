@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Gallifrey.JiraTimers
+namespace Gallifrey.ExtensionMethods
 {
     public static class TimeSpanExtensionMethods
     {
