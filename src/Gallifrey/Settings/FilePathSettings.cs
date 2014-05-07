@@ -3,9 +3,9 @@ using System.IO;
 
 namespace Gallifrey.Settings
 {
-    public static class FilePathSettings
+    internal static class FilePathSettings
     {
-        public static string DataSavePath
+        internal static string DataSavePath
         {
             get { return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Gallifrey"); }
         }

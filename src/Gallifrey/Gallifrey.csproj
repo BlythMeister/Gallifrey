@@ -61,6 +61,7 @@
     <Compile Include="JiraTimers\TimespanExtensionMethods.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Serialization\AppSettingsSerializer.cs" />
+    <Compile Include="Serialization\DataEncryption.cs" />
     <Compile Include="Serialization\JiraConnectionSettingsSerializer.cs" />
     <Compile Include="Serialization\JiraTimerCollectionSerializer.cs" />
     <Compile Include="Settings\AppSettings.cs" />
