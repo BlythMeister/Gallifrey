@@ -1,22 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using Atlassian.Jira;
 using Gallifrey.Exceptions.JiraTimers;
-using Gallifrey.IntegrationPoints;
 using Gallifrey.Serialization;
 
 namespace Gallifrey.JiraTimers
 {
     public class JiraTimerCollection
     {
-        private readonly JiraConnection jiraConnection;
         private readonly List<JiraTimer> timerList;
 
-        public JiraTimerCollection(JiraConnection jiraConnection)
+        public JiraTimerCollection()
         {
-            this.jiraConnection = jiraConnection;
             timerList = JiraTimerCollectionSerializer.DeSerialize();
         }
 
@@ -34,13 +30,7 @@ namespace Gallifrey.JiraTimers
         {
             return timerList.Where(timer => timer.DateStarted.Date == timerDate.Date).OrderBy(timer => timer.JiraReference);
         }
-
-        public void AddTimer(string jiraRef, DateTime startDate, TimeSpan seedTime)
-        {
-            var jiraIssue = jiraConnection.GetJiraIssue(jiraRef);
-            AddTimer(jiraIssue, startDate, seedTime);
-        }
-
+        
         public void AddTimer(Issue jiraIssue, DateTime startDate, TimeSpan seedTime)
         {
             var newTimer = new JiraTimer(jiraIssue, startDate, seedTime, new TimeSpan(), Guid.NewGuid());
