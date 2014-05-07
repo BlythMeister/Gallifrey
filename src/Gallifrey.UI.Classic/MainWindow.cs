@@ -50,7 +50,7 @@ namespace Gallifrey.UI.Classic
 
         private void MainWindow_FormClosed(object sender, FormClosedEventArgs e)
         {
-            galifrey.JiraTimerCollection.SaveTimers();
+            galifrey.Close();
         }
 
         private void RefreshTimerPages()

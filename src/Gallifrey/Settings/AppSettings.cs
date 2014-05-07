@@ -11,7 +11,7 @@ namespace Gallifrey.Settings
         public bool UiAlwaysOnTop { get; set; }
         public UiAnimationLevel UiAnimationLevel { get; set; }
 
-        public void SaveSettings()
+        internal void SaveSettings()
         {
             AppSettingsSerializer.Serialize(this);    
         }

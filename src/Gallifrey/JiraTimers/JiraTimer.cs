@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
 using Atlassian.Jira;
+using Gallifrey.Exceptions.JiraTimers;
+using Gallifrey.ExtensionMethods;
+using Gallifrey.IdleTimers;
 using Newtonsoft.Json;
 
 namespace Gallifrey.JiraTimers
@@ -84,6 +87,16 @@ namespace Gallifrey.JiraTimers
             IsRunning = false;
             CurrentTime = CurrentTime.Add(currentRunningTime.Elapsed);
             currentRunningTime.Reset();
+        }
+
+        public void AddIdleTimer(IdleTimer idleTimer)
+        {
+            if (idleTimer.isRunning)
+            {
+                throw new IdleTimerRunningException("Cannot add time from a running idle timer!");
+            }
+
+            CurrentTime.Add(idleTimer.CurrentTime);
         }
 
         public override string ToString()
