@@ -30,11 +30,9 @@ namespace Gallifrey.JiraTimers
         {
             return timerList.Where(timer => timer.DateStarted.Date == timerDate.Date).OrderBy(timer => timer.JiraReference);
         }
-        
-        public void AddTimer(Issue jiraIssue, DateTime startDate, TimeSpan seedTime)
-        {
-            var newTimer = new JiraTimer(jiraIssue, startDate, seedTime, new TimeSpan(), Guid.NewGuid());
 
+        private void AddTimer(JiraTimer newTimer)
+        {
             if (timerList.Any(timer => timer.JiraReference == newTimer.JiraReference && timer.DateStarted.Date == newTimer.DateStarted.Date))
             {
                 throw new DuplicateTimerException("Already have a timer for this task on this day!");
@@ -43,25 +41,33 @@ namespace Gallifrey.JiraTimers
             timerList.Add(newTimer);
         }
 
+        public void AddTimer(Issue jiraIssue, DateTime startDate, TimeSpan seedTime)
+        {
+            var newTimer = new JiraTimer(jiraIssue, startDate, seedTime);
+            AddTimer(newTimer);
+        }
+
         public void RemoveTimer(Guid uniqueId)
         {
             timerList.Remove(timerList.First(timer => timer.UniqueId == uniqueId));
         }
 
-        public bool IsTimerForToday(Guid uniqueId)
-        {
-            var timerForInteration = timerList.First(timer => timer.UniqueId == uniqueId);
-            return timerForInteration.DateStarted.Date == DateTime.Now.Date;
-        }
-
         public void StartTimer(Guid uniqueId)
         {
             var timerForInteration = timerList.First(timer => timer.UniqueId == uniqueId);
+            if (timerForInteration.DateStarted.Date != DateTime.Now.Date)
+            {
+                timerForInteration = new JiraTimer(timerForInteration, DateTime.Now);
+                AddTimer(timerForInteration);
+                uniqueId = timerForInteration.UniqueId;
+            }
+
             timerForInteration.StartTimer();
 
-            foreach (var runningTimer in GetRunningTimers().Where(timer => timer.UniqueId != uniqueId))
+            var runningTimerId = GetRunningTimerId();
+            if (runningTimerId.HasValue && runningTimerId.Value != uniqueId)
             {
-                runningTimer.StopTimer();
+                timerList.First(timer => timer.UniqueId == runningTimerId.Value).StopTimer();
             }
         }
 
@@ -71,9 +77,17 @@ namespace Gallifrey.JiraTimers
             timerForInteration.StopTimer();
         }
 
-        public IEnumerable<JiraTimer> GetRunningTimers()
+        public Guid? GetRunningTimerId()
         {
-            return timerList.Where(timer => timer.IsRunning);
+            var runningTimer = timerList.FirstOrDefault(timer => timer.IsRunning);
+            if (runningTimer == null)
+            {
+                return null;
+            }
+            else
+            {
+                return runningTimer.UniqueId;
+            }
         }
     }
 }

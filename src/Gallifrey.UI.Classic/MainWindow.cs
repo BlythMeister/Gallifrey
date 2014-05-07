@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
 using Gallifrey.Exceptions.IntergrationPoints;
+using Gallifrey.Exceptions.JiraTimers;
 using Gallifrey.JiraTimers;
 
 namespace Gallifrey.UI.Classic
@@ -134,27 +135,21 @@ namespace Gallifrey.UI.Classic
         private void DoubleClickListBox(object sender, EventArgs e)
         {
             var timerClicked = (JiraTimer)((ListBox)sender).SelectedItem;
-            var runningTimers = galifrey.JiraTimerCollection.GetRunningTimers();
+            var runningTimer = galifrey.JiraTimerCollection.GetRunningTimerId();
 
-            var wasRunning = runningTimers.Any(timer => timer.UniqueId == timerClicked.UniqueId);
-
-            if (wasRunning)
+            if (runningTimer.HasValue && runningTimer.Value == timerClicked.UniqueId)
             {
                 galifrey.JiraTimerCollection.StopTimer(timerClicked.UniqueId);
             }
             else
             {
-                foreach (var runningTimer in runningTimers)
-                {
-                    galifrey.JiraTimerCollection.StopTimer(runningTimer.UniqueId);
-                }
-                if (galifrey.JiraTimerCollection.IsTimerForToday(timerClicked.UniqueId))
+                try
                 {
                     galifrey.JiraTimerCollection.StartTimer(timerClicked.UniqueId);
                 }
-                else
+                catch (DuplicateTimerException)
                 {
-                    MessageBox.Show("Cannot Start as not valid for today!", "Wrong Day!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Use the version of this timer for today!", "Wrong Day!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             RefreshTimerPages();
