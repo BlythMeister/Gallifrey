@@ -12,17 +12,17 @@ namespace Gallifrey.UI.Classic
         {
             this.galifrey = galifrey;
             InitializeComponent();
-           
-            if (galifrey.AppSettings.JiraUrl != null) txtJiraUrl.Text = galifrey.AppSettings.JiraUrl;
-            if (galifrey.AppSettings.JiraUsername != null) txtJiraUsername.Text = galifrey.AppSettings.JiraUsername;
-            if (galifrey.AppSettings.JiraPassword != null) txtJiraPassword.Text = galifrey.AppSettings.JiraPassword;
+
+            if (galifrey.JiraConnnectionSettings.JiraUrl != null) txtJiraUrl.Text = galifrey.JiraConnnectionSettings.JiraUrl;
+            if (galifrey.JiraConnnectionSettings.JiraUsername != null) txtJiraUsername.Text = galifrey.JiraConnnectionSettings.JiraUsername;
+            if (galifrey.JiraConnnectionSettings.JiraPassword != null) txtJiraPassword.Text = galifrey.JiraConnnectionSettings.JiraPassword;
         }
 
         private void btnCancelEditSettings_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(galifrey.AppSettings.JiraUrl) ||
-                    string.IsNullOrWhiteSpace(galifrey.AppSettings.JiraUsername) ||
-                    string.IsNullOrWhiteSpace(galifrey.AppSettings.JiraPassword))
+            if (string.IsNullOrWhiteSpace(galifrey.JiraConnnectionSettings.JiraUrl) ||
+                    string.IsNullOrWhiteSpace(galifrey.JiraConnnectionSettings.JiraUsername) ||
+                    string.IsNullOrWhiteSpace(galifrey.JiraConnnectionSettings.JiraPassword))
             {
                 MessageBox.Show("You have to populate the Jira Credentials!", "Missing Config");
                 return;
@@ -32,13 +32,13 @@ namespace Gallifrey.UI.Classic
 
         private void btnSaveSettings_Click(object sender, EventArgs e)
         {
-            galifrey.AppSettings.JiraUrl = txtJiraUrl.Text;
-            galifrey.AppSettings.JiraUsername = txtJiraUsername.Text;
-            galifrey.AppSettings.JiraPassword = txtJiraPassword.Text;
+            galifrey.JiraConnnectionSettings.JiraUrl = txtJiraUrl.Text;
+            galifrey.JiraConnnectionSettings.JiraUsername = txtJiraUsername.Text;
+            galifrey.JiraConnnectionSettings.JiraPassword = txtJiraPassword.Text;
 
-            if (string.IsNullOrWhiteSpace(galifrey.AppSettings.JiraUrl) ||
-                    string.IsNullOrWhiteSpace(galifrey.AppSettings.JiraUsername) ||
-                    string.IsNullOrWhiteSpace(galifrey.AppSettings.JiraPassword))
+            if (string.IsNullOrWhiteSpace(galifrey.JiraConnnectionSettings.JiraUrl) ||
+                    string.IsNullOrWhiteSpace(galifrey.JiraConnnectionSettings.JiraUsername) ||
+                    string.IsNullOrWhiteSpace(galifrey.JiraConnnectionSettings.JiraPassword))
             {
                 MessageBox.Show("You have to populate the Jira Credentials!", "Missing Config");
                 return;
@@ -51,7 +51,7 @@ namespace Gallifrey.UI.Classic
         {
             try
             {
-                galifrey.SaveAppSettings();
+                galifrey.SaveJiraConnectionSettings();
             }
             catch (JiraConnectionException)
             {

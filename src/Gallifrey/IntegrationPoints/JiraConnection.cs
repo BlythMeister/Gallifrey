@@ -9,12 +9,19 @@ namespace Gallifrey.IntegrationPoints
 {
     public class JiraConnection
     {
-        private AppSettings appSettings;
+        private JiraConnnectionSettings jiraConnnectionSettings;
         private Jira jira;
 
-        public JiraConnection(AppSettings appSettings)
+        public JiraConnection(JiraConnnectionSettings jiraConnnectionSettings)
         {
-            this.appSettings = appSettings;
+            this.jiraConnnectionSettings = jiraConnnectionSettings;
+            CheckAndConnectJira();
+        }
+
+        public void ReConnect(JiraConnnectionSettings newJiraConnnectionSettings)
+        {
+            jiraConnnectionSettings = newJiraConnnectionSettings;
+            jira = null;
             CheckAndConnectJira();
         }
 
@@ -22,16 +29,16 @@ namespace Gallifrey.IntegrationPoints
         {
             if (jira == null)
             {
-                if (string.IsNullOrWhiteSpace(appSettings.JiraUrl) ||
-                    string.IsNullOrWhiteSpace(appSettings.JiraUsername) ||
-                    string.IsNullOrWhiteSpace(appSettings.JiraPassword))
+                if (string.IsNullOrWhiteSpace(jiraConnnectionSettings.JiraUrl) ||
+                    string.IsNullOrWhiteSpace(jiraConnnectionSettings.JiraUsername) ||
+                    string.IsNullOrWhiteSpace(jiraConnnectionSettings.JiraPassword))
                 {
                     throw new MissingJiraConfigException("Required settings to create connection to jira are missing");
                 }
 
                 try
                 {
-                    jira = new Jira(appSettings.JiraUrl, appSettings.JiraUsername, appSettings.JiraPassword);
+                    jira = new Jira(jiraConnnectionSettings.JiraUrl, jiraConnnectionSettings.JiraUsername, jiraConnnectionSettings.JiraPassword);
                     jira.GetIssuePriorities();
                 }
                 catch (Exception ex)
@@ -39,13 +46,6 @@ namespace Gallifrey.IntegrationPoints
                     throw new JiraConnectionException("Error creating instance of Jira", ex);
                 }
             }
-        }
-
-        public void ReConnect(AppSettings newAppSettings)
-        {
-            appSettings = newAppSettings;
-            jira = null;
-            CheckAndConnectJira();
         }
 
         public bool DoesJiraExist(string jiraRef)
@@ -126,7 +126,7 @@ namespace Gallifrey.IntegrationPoints
 
             foreach (var worklog in jiraIssue.GetWorklogs().Where(worklog => worklog.StartDate.HasValue &&
                                                                              worklog.StartDate.Value.Date == date.Date &&
-                                                                             worklog.Author.ToLower() == appSettings.JiraUsername.ToLower()))
+                                                                             worklog.Author.ToLower() == jiraConnnectionSettings.JiraUsername.ToLower()))
             {
                 loggedTime = loggedTime.Add(new TimeSpan(0, 0, (int)worklog.TimeSpentInSeconds));
             }

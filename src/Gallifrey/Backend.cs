@@ -9,29 +9,31 @@ namespace Gallifrey
     {
         public JiraTimerCollection JiraTimerCollection;
         public AppSettings AppSettings;
+        public JiraConnnectionSettings JiraConnnectionSettings;
         public JiraConnection JiraConnection;
 
         public Backend()
         {
             AppSettings = AppSettingsSerializer.DeSerialize();
+            JiraConnnectionSettings = JiraConnectionSettingsSerializer.DeSerialize();
+            JiraTimerCollection = new JiraTimerCollection();
         }
 
         public void Initialise()
         {
-            JiraConnection = new JiraConnection(AppSettings);
-            JiraTimerCollection = new JiraTimerCollection(JiraConnection);
+            JiraConnection = new JiraConnection(JiraConnnectionSettings);
         }
 
-        public void SaveAppSettings()
+        public void SaveJiraConnectionSettings()
         {
-            AppSettings.SaveSettings();
+            JiraConnnectionSettings.SaveSettings();
             if (JiraConnection == null)
             {
-                Initialise();
+                JiraConnection = new JiraConnection(JiraConnnectionSettings);
             }
             else
             {
-                JiraConnection.ReConnect(AppSettings);
+                JiraConnection.ReConnect(JiraConnnectionSettings);
             }
         }
     }
