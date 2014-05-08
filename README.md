@@ -26,6 +26,12 @@ We are aiming to maintain a Beta & Stable version of the app.
 
 *Although the "stable" can also be downloaded from the "develop" branch & the "beta" from the "master" branch, i strongly recommend using the links above to guarantee correct updates!*
 
+Donate
+=========
+
+Please help us keep this project up and running by donating.
+We hope to get a domain up and running with a nice GitHub Pages website, but this all costs money.
+[Click Here to donate](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=G3MWL8E6UG4RS)
 
 3rd Party Libraries
 =========
