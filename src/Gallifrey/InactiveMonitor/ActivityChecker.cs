@@ -15,23 +15,18 @@ namespace Gallifrey.InactiveMonitor
         public event EventHandler NoActivityEvent;
         private readonly JiraTimerCollection timerCollection;
         private readonly Timer hearbeat;
+        private readonly Stopwatch noTimerRunning;
         private  AppSettings appSettings;
-        private Stopwatch noTimerRunning;
-
+        
         internal ActivityChecker(JiraTimerCollection timerCollection, AppSettings appSettings)
         {
-            this.timerCollection = timerCollection;
-            this.appSettings = appSettings;
-            
+            this.timerCollection = timerCollection;           
             noTimerRunning = new Stopwatch();
 
             hearbeat = new Timer(500);
             hearbeat.Elapsed += HearbeatOnElapsed;
 
-            if (appSettings.AlertWhenNotRunning)
-            {
-                hearbeat.Start();    
-            }            
+            UpdateAppSettings(appSettings);
         }
 
         internal void UpdateAppSettings(AppSettings newAppSettings)
