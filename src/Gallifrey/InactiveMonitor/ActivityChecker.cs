@@ -12,12 +12,13 @@ namespace Gallifrey.InactiveMonitor
 {
     public class ActivityChecker
     {
-        public event EventHandler NoActivityEvent;
+        public event EventHandler<int> NoActivityEvent;
         private readonly JiraTimerCollection timerCollection;
         private readonly Timer hearbeat;
         private readonly Stopwatch noTimerRunning;
         private  AppSettings appSettings;
-        
+        private int eventsSent;
+
         internal ActivityChecker(JiraTimerCollection timerCollection, AppSettings appSettings)
         {
             this.timerCollection = timerCollection;           
@@ -50,14 +51,16 @@ namespace Gallifrey.InactiveMonitor
             {
                 noTimerRunning.Stop();
                 noTimerRunning.Reset();
+                eventsSent = 0;
             }
             else
             {
                 if (noTimerRunning.ElapsedMilliseconds >= appSettings.AlertTimeMilliseconds)
                 {
+                    eventsSent++;
                     noTimerRunning.Reset();
                     var handler = NoActivityEvent;
-                    if (handler != null) handler(this, EventArgs.Empty);
+                    if (handler != null) handler(this, eventsSent * appSettings.AlertTimeMilliseconds);
                 }
             }
         }
