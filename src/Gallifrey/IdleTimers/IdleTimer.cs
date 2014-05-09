@@ -10,7 +10,7 @@ namespace Gallifrey.IdleTimers
         public DateTime? DateFinished { get; private set; }
         public TimeSpan CurrentTime { get; private set; }
         public Guid UniqueId { get; private set; }
-        public bool isRunning { get; private set; }
+        public bool IsRunning { get; private set; }
         private readonly Stopwatch currentRunningTime;
 
         [JsonConstructor]
@@ -21,7 +21,7 @@ namespace Gallifrey.IdleTimers
             CurrentTime = currentTime;
             UniqueId = uniqueId;
             currentRunningTime = new Stopwatch();
-            isRunning = false;
+            IsRunning = false;
         }
 
         public IdleTimer()
@@ -32,7 +32,7 @@ namespace Gallifrey.IdleTimers
             UniqueId = Guid.NewGuid();
             currentRunningTime = new Stopwatch();
             currentRunningTime.Start();
-            isRunning = true;
+            IsRunning = true;
         }
 
         public TimeSpan ExactCurrentTime
@@ -45,7 +45,7 @@ namespace Gallifrey.IdleTimers
             currentRunningTime.Stop();
             CurrentTime = CurrentTime.Add(currentRunningTime.Elapsed);
             currentRunningTime.Reset();
-            isRunning = false;
+            IsRunning = false;
         }
     }
 }

@@ -40,9 +40,8 @@ namespace Gallifrey.UI.Classic
 
         private void SetVersionNumber()
         {
-            var myVersion = string.Empty;
             var networkDeploy = ApplicationDeployment.IsNetworkDeployed;
-            myVersion = networkDeploy ? ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString() : Application.ProductVersion;
+            var myVersion = networkDeploy ? ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString() : Application.ProductVersion;
             myVersion = string.Format("v{0}", myVersion);
             if (!networkDeploy) myVersion = string.Format("{0} (manual)", myVersion);
             lblVersion.Text = myVersion;
@@ -118,7 +117,7 @@ namespace Gallifrey.UI.Classic
             {
                 var foundMatch = false;
                 var tabList = (ListBox)tabPage.Controls[string.Format("lst_{0}", tabPage.Name)];
-                foreach (JiraTimer item in tabList.Items.Cast<JiraTimer>().Where(item => item.UniqueId == selectedTimerId))
+                foreach (var item in tabList.Items.Cast<JiraTimer>().Where(item => item.UniqueId == selectedTimerId))
                 {
                     tabList.SelectedItem = item;
                     foundMatch = true;

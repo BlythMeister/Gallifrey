@@ -4,28 +4,7 @@ namespace Gallifrey.ExtensionMethods
 {
     public static class TimeSpanExtensionMethods
     {
-        public static string FormatAsString(this TimeSpan value)
-        {
-            var txt = FormatAsStringWithoutSeconds(value);
-            txt += ":";
-
-            if (value.Seconds > 0)
-            {
-                if (value.Seconds.ToString().Length == 1)
-                {
-                    txt += "0";
-                }
-                txt += value.Seconds.ToString();
-            }
-            else
-            {
-                txt += "00";
-            }
-
-            return txt;
-        }
-
-        public static string FormatAsStringWithoutSeconds(this TimeSpan value)
+        public static string FormatAsString(this TimeSpan value, bool withSeconds = true)
         {
             var txt = "";
 
@@ -69,6 +48,24 @@ namespace Gallifrey.ExtensionMethods
             else
             {
                 txt += "00";
+            }
+
+            if (withSeconds)
+            {
+                txt += ":";
+
+                if (value.Seconds > 0)
+                {
+                    if (value.Seconds.ToString().Length == 1)
+                    {
+                        txt += "0";
+                    }
+                    txt += value.Seconds.ToString();
+                }
+                else
+                {
+                    txt += "00";
+                }
             }
 
             return txt;

@@ -88,10 +88,8 @@ namespace Gallifrey.JiraTimers
             {
                 return null;
             }
-            else
-            {
-                return runningTimer.UniqueId;
-            }
+
+            return runningTimer.UniqueId;
         }
 
         public void RemoveTimersOlderThanDays(int keepTimersForDays)

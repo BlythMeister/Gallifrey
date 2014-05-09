@@ -9,7 +9,7 @@ namespace Gallifrey.Serialization
 {
     internal static class JiraTimerCollectionSerializer
     {
-        private readonly static string SavePath = System.IO.Path.Combine(FilePathSettings.DataSavePath, "TimerCollection.dat");
+        private readonly static string SavePath = Path.Combine(FilePathSettings.DataSavePath, "TimerCollection.dat");
 
         internal static void Serialize(List<JiraTimer> timerCollection)
         {

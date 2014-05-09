@@ -1,7 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
 using Gallifrey.Settings;
 using Newtonsoft.Json;
 
@@ -10,7 +8,7 @@ namespace Gallifrey.Serialization
     internal static class AppSettingsSerializer
     {
         private readonly static string SavePath = Path.Combine(FilePathSettings.DataSavePath, "AppSettings.dat");
-
+        
         internal static void Serialize(AppSettings appSettings)
         {
             if (!Directory.Exists(FilePathSettings.DataSavePath)) Directory.CreateDirectory(FilePathSettings.DataSavePath);
