@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Gallifrey.Exceptions.IdleTimers;
 using Gallifrey.Serialization;
@@ -34,6 +35,24 @@ namespace Gallifrey.IdleTimers
             foreach (var lockTimer in lockTimerList.Where(timer => timer.isRunning))
             {
                 lockTimer.StopTimer();
+            }
+        }
+
+        public void RemoveTimer(Guid uniqueId)
+        {
+            lockTimerList.Remove(lockTimerList.First(timer => timer.UniqueId == uniqueId));
+        }
+
+        public IEnumerable<IdleTimer> GetUnusedLockTimers()
+        {
+            return lockTimerList.Where(timer => timer.isRunning == false);
+        }
+
+        public void RemoveOldTimers()
+        {
+            foreach (var idleTimer in lockTimerList.Where(idleTimer => idleTimer.DateStarted >= DateTime.Now.AddDays(-1)))
+            {
+                lockTimerList.Remove(idleTimer);
             }
         }
     }

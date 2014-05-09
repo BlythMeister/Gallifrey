@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Timers;
 using Gallifrey.IdleTimers;
 using Gallifrey.InactiveMonitor;
 using Gallifrey.IntegrationPoints;
@@ -17,6 +18,7 @@ namespace Gallifrey
         public JiraConnection JiraConnection;
         public event EventHandler NoActivityEvent;
         internal ActivityChecker ActivityChecker;
+        private readonly Timer hearbeat;
         
         public Backend()
         {
@@ -26,12 +28,21 @@ namespace Gallifrey
             IdleTimerCollection = new IdleTimerCollection();
             ActivityChecker = new ActivityChecker(JiraTimerCollection, AppSettings);
             ActivityChecker.NoActivityEvent += OnNoActivityEvent;
+            hearbeat = new Timer(3600000);
+            hearbeat.Elapsed += HearbeatOnElapsed;
+            hearbeat.Start();
         }
 
-        internal void OnNoActivityEvent(object sender, EventArgs e)
+        private void OnNoActivityEvent(object sender, EventArgs e)
         {
             var handler = NoActivityEvent;
             if (handler != null) handler(sender, e);
+        }
+
+        private void HearbeatOnElapsed(object sender, ElapsedEventArgs e)
+        {
+            JiraTimerCollection.RemoveTimersOlderThanDays(AppSettings.KeepTimersForDays);
+            IdleTimerCollection.RemoveOldTimers();
         }
 
         public void Initialise()
