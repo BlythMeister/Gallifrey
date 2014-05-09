@@ -16,7 +16,7 @@ namespace Gallifrey
         public AppSettings AppSettings;
         public JiraConnnectionSettings JiraConnnectionSettings;
         public JiraConnection JiraConnection;
-        public event EventHandler NoActivityEvent;
+        public event EventHandler<int> NoActivityEvent;
         internal ActivityChecker ActivityChecker;
         private readonly Timer hearbeat;
         
@@ -33,10 +33,10 @@ namespace Gallifrey
             hearbeat.Start();
         }
 
-        private void OnNoActivityEvent(object sender, EventArgs e)
+        private void OnNoActivityEvent(object sender, int millisecondsSinceActivity)
         {
             var handler = NoActivityEvent;
-            if (handler != null) handler(sender, e);
+            if (handler != null) handler(sender, millisecondsSinceActivity);
         }
 
         private void HearbeatOnElapsed(object sender, ElapsedEventArgs e)
