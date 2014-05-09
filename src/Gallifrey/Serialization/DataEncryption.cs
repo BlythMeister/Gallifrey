@@ -19,8 +19,7 @@ namespace Gallifrey.Serialization
             var plainTextBytes = Encoding.UTF8.GetBytes(plainText);
             var password = new PasswordDeriveBytes(PassPhrase, null);
             var keyBytes = password.GetBytes(Keysize / 8);
-            var symmetricKey = new RijndaelManaged();
-            symmetricKey.Mode = CipherMode.CBC;
+            var symmetricKey = new RijndaelManaged { Mode = CipherMode.CBC };
             var encryptor = symmetricKey.CreateEncryptor(keyBytes, initVectorBytes);
             var memoryStream = new MemoryStream();
             var cryptoStream = new CryptoStream(memoryStream, encryptor, CryptoStreamMode.Write);
@@ -38,8 +37,7 @@ namespace Gallifrey.Serialization
             var cipherTextBytes = Convert.FromBase64String(cipherText);
             var password = new PasswordDeriveBytes(PassPhrase, null);
             var keyBytes = password.GetBytes(Keysize / 8);
-            var symmetricKey = new RijndaelManaged();
-            symmetricKey.Mode = CipherMode.CBC;
+            var symmetricKey = new RijndaelManaged { Mode = CipherMode.CBC };
             var decryptor = symmetricKey.CreateDecryptor(keyBytes, initVectorBytes);
             var memoryStream = new MemoryStream(cipherTextBytes);
             var cryptoStream = new CryptoStream(memoryStream, decryptor, CryptoStreamMode.Read);

@@ -27,12 +27,12 @@ namespace Gallifrey.IdleTimers
 
         internal void StopLockedTimers()
         {
-            if (!lockTimerList.Any(x => x.isRunning))
+            if (!lockTimerList.Any(x => x.IsRunning))
             {
                 throw new NoIdleTimerRunningException("Cannot find any idle timers running!");
             }
 
-            foreach (var lockTimer in lockTimerList.Where(timer => timer.isRunning))
+            foreach (var lockTimer in lockTimerList.Where(timer => timer.IsRunning))
             {
                 lockTimer.StopTimer();
             }
@@ -45,7 +45,7 @@ namespace Gallifrey.IdleTimers
 
         public IEnumerable<IdleTimer> GetUnusedLockTimers()
         {
-            return lockTimerList.Where(timer => timer.isRunning == false);
+            return lockTimerList.Where(timer => timer.IsRunning == false);
         }
 
         public void RemoveOldTimers()

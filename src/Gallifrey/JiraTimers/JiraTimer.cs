@@ -91,12 +91,12 @@ namespace Gallifrey.JiraTimers
 
         public void AddIdleTimer(IdleTimer idleTimer)
         {
-            if (idleTimer.isRunning)
+            if (idleTimer.IsRunning)
             {
                 throw new IdleTimerRunningException("Cannot add time from a running idle timer!");
             }
 
-            CurrentTime.Add(idleTimer.CurrentTime);
+            CurrentTime = CurrentTime.Add(idleTimer.CurrentTime);
         }
 
         public override string ToString()

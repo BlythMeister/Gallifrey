@@ -9,7 +9,7 @@ namespace Gallifrey.Serialization
 {
     internal static class IdleTimerCollectionSerializer
     {
-        private readonly static string SavePath = System.IO.Path.Combine(FilePathSettings.DataSavePath, "IdleTimerCollection.dat");
+        private readonly static string SavePath = Path.Combine(FilePathSettings.DataSavePath, "IdleTimerCollection.dat");
 
         internal static void Serialize(List<IdleTimer> timerCollection)
         {
