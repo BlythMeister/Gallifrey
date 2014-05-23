@@ -100,6 +100,12 @@
     <Compile Include="AddTimerWindow.Designer.cs">
       <DependentUpon>AddTimerWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="RenameTimerWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="RenameTimerWindow.Designer.cs">
+      <DependentUpon>RenameTimerWindow.cs</DependentUpon>
+    </Compile>
     <Compile Include="SettingsWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -122,6 +128,9 @@
     <EmbeddedResource Include="AddTimerWindow.resx">
       <DependentUpon>AddTimerWindow.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="RenameTimerWindow.resx">
+      <DependentUpon>RenameTimerWindow.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="SettingsWindow.resx">
       <DependentUpon>SettingsWindow.cs</DependentUpon>
     </EmbeddedResource>
@@ -132,6 +141,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Font\digital7.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -182,6 +194,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="clock_blue.ico" />
+    <None Include="Icons\Rename_48x48.png" />
+    <None Include="Icons\Search_48x48.png" />
+    <None Include="Icons\Edit_48x48.png" />
+    <None Include="Icons\Synchronize_48x48.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

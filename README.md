@@ -40,11 +40,12 @@ Gallifrey makes use of the following libraries:
 
 * Atlassian .Net SDK (https://bitbucket.org/farmas/atlassian.net-sdk/wiki/Home)
 
-Icons
+3rd Party Resources
 =========
 
 * Button icons provided by VisualPharm (http://www.visualpharm.com)
 * App icon provided by Jack Cai (http://www.doublejdesign.co.uk)
+* Digital-7 font by Style7 (http://www.styleseven.com/)
 
 Licence
 =========

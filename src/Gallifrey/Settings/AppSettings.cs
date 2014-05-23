@@ -2,7 +2,17 @@
 
 namespace Gallifrey.Settings
 {
-    public class AppSettings
+    public interface IAppSettings
+    {
+        bool AlertWhenNotRunning { get; set; }
+        int AlertTimeMilliseconds { get; set; }
+        int KeepTimersForDays { get; set; }
+        int TargetLogHoursPerDay { get; set; }
+        bool UiAlwaysOnTop { get; set; }
+        UiAnimationLevel UiAnimationLevel { get; set; }
+    }
+
+    public class AppSettings : IAppSettings
     {
         public bool AlertWhenNotRunning { get; set; }
         public int AlertTimeMilliseconds { get; set; }

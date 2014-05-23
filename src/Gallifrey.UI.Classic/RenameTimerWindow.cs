@@ -3,33 +3,29 @@ using System.Windows.Forms;
 using Atlassian.Jira;
 using Gallifrey.Exceptions.IntergrationPoints;
 using Gallifrey.Exceptions.JiraTimers;
+using Gallifrey.JiraTimers;
 
 namespace Gallifrey.UI.Classic
 {
-    public partial class AddTimerWindow : Form
+    public partial class RenameTimerWindow : Form
     {
         private readonly IBackend gallifrey;
+        private readonly JiraTimer timerToShow;
 
-        public AddTimerWindow(IBackend gallifrey)
+        public RenameTimerWindow(IBackend gallifrey, Guid timerGuid)
         {
             this.gallifrey = gallifrey;
+            timerToShow = gallifrey.JiraTimerCollection.GetTimers(timerGuid);
             InitializeComponent();
+            
+            txtJiraRef.Text = timerToShow.JiraReference;
+            calStartDate.Value = timerToShow.DateStarted.Date;
+            txtJiraRef.Enabled = timerToShow.HasExportedTime();
         }
-
-        private void btnAddTimer_Click(object sender, EventArgs e)
-        {
-            if (AddJira()) Close();
-        }
-
-        private bool AddJira()
+        
+        private bool RenameTimer()
         {
             var jiraReference = txtJiraRef.Text;
-            var startDate = calStartDate.Value.Date;
-            int hours, minutes;
-            int.TryParse(txtStartHours.Text, out hours);
-            int.TryParse(txtStartMins.Text, out minutes);
-
-            var seedTime = new TimeSpan(hours, minutes, 0);
 
             Issue jiraIssue;
             try
@@ -49,7 +45,7 @@ namespace Gallifrey.UI.Classic
 
             try
             {
-                gallifrey.JiraTimerCollection.AddTimer(jiraIssue, startDate, seedTime, chkStartNow.Checked);
+                gallifrey.JiraTimerCollection.RenameTimer(timerToShow.UniqueId, jiraIssue);
             }
             catch (DuplicateTimerException)
             {
@@ -60,22 +56,14 @@ namespace Gallifrey.UI.Classic
             return true;
         }
 
-        private void btnCancelAddTimer_Click(object sender, EventArgs e)
+        private void btnCancel_Click(object sender, EventArgs e)
         {
             Close();
         }
 
-        private void calStartDate_ValueChanged(object sender, EventArgs e)
+        private void btnOK_Click(object sender, EventArgs e)
         {
-            if (calStartDate.Value.Date != DateTime.Now.Date)
-            {
-                chkStartNow.Checked = false;
-                chkStartNow.Enabled = false;
-            }
-            else
-            {
-                chkStartNow.Enabled = true;
-            }
+            if (RenameTimer()) Close();
         }
     }
 }

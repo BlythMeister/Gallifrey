@@ -9,13 +9,13 @@ namespace Gallifrey.InactiveMonitor
     public class ActivityChecker
     {
         public event EventHandler<int> NoActivityEvent;
-        private readonly JiraTimerCollection timerCollection;
+        private readonly IJiraTimerCollection timerCollection;
         private readonly Timer hearbeat;
         private readonly Stopwatch noTimerRunning;
-        private  AppSettings appSettings;
+        private  IAppSettings appSettings;
         private int eventsSent;
 
-        internal ActivityChecker(JiraTimerCollection timerCollection, AppSettings appSettings)
+        internal ActivityChecker(IJiraTimerCollection timerCollection, IAppSettings appSettings)
         {
             this.timerCollection = timerCollection;           
             noTimerRunning = new Stopwatch();
@@ -26,7 +26,7 @@ namespace Gallifrey.InactiveMonitor
             UpdateAppSettings(appSettings);
         }
 
-        internal void UpdateAppSettings(AppSettings newAppSettings)
+        internal void UpdateAppSettings(IAppSettings newAppSettings)
         {
             appSettings = newAppSettings;
             if (appSettings.AlertWhenNotRunning)

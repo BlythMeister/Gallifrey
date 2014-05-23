@@ -6,23 +6,27 @@ namespace Gallifrey.UI.Classic
 {
     public partial class SettingsWindow : Form
     {
-        private readonly Backend galifrey;
+        private readonly IBackend gallifrey;
 
-        public SettingsWindow(Backend galifrey)
+        public SettingsWindow(IBackend gallifrey)
         {
-            this.galifrey = galifrey;
+            this.gallifrey = gallifrey;
             InitializeComponent();
 
-            if (galifrey.JiraConnnectionSettings.JiraUrl != null) txtJiraUrl.Text = galifrey.JiraConnnectionSettings.JiraUrl;
-            if (galifrey.JiraConnnectionSettings.JiraUsername != null) txtJiraUsername.Text = galifrey.JiraConnnectionSettings.JiraUsername;
-            if (galifrey.JiraConnnectionSettings.JiraPassword != null) txtJiraPassword.Text = galifrey.JiraConnnectionSettings.JiraPassword;
+            if (gallifrey.JiraConnectionSettings.JiraUrl != null) txtJiraUrl.Text = gallifrey.JiraConnectionSettings.JiraUrl;
+            if (gallifrey.JiraConnectionSettings.JiraUsername != null) txtJiraUsername.Text = gallifrey.JiraConnectionSettings.JiraUsername;
+            if (gallifrey.JiraConnectionSettings.JiraPassword != null) txtJiraPassword.Text = gallifrey.JiraConnectionSettings.JiraPassword;
+            
+            chkAlert.Checked = gallifrey.AppSettings.AlertWhenNotRunning;
+            txtAlertMins.Text = ((gallifrey.AppSettings.AlertTimeMilliseconds/1000)/60).ToString();
+            txtTimerDays.Text = gallifrey.AppSettings.KeepTimersForDays.ToString();
         }
 
         private void btnCancelEditSettings_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(galifrey.JiraConnnectionSettings.JiraUrl) ||
-                    string.IsNullOrWhiteSpace(galifrey.JiraConnnectionSettings.JiraUsername) ||
-                    string.IsNullOrWhiteSpace(galifrey.JiraConnnectionSettings.JiraPassword))
+            if (string.IsNullOrWhiteSpace(gallifrey.JiraConnectionSettings.JiraUrl) ||
+                    string.IsNullOrWhiteSpace(gallifrey.JiraConnectionSettings.JiraUsername) ||
+                    string.IsNullOrWhiteSpace(gallifrey.JiraConnectionSettings.JiraPassword))
             {
                 MessageBox.Show("You have to populate the Jira Credentials!", "Missing Config");
                 return;
@@ -32,13 +36,21 @@ namespace Gallifrey.UI.Classic
 
         private void btnSaveSettings_Click(object sender, EventArgs e)
         {
-            galifrey.JiraConnnectionSettings.JiraUrl = txtJiraUrl.Text;
-            galifrey.JiraConnnectionSettings.JiraUsername = txtJiraUsername.Text;
-            galifrey.JiraConnnectionSettings.JiraPassword = txtJiraPassword.Text;
+            int keepTimerDays, alertTime;
+            if (!int.TryParse(txtAlertMins.Text, out alertTime)) alertTime = 0;
+            if (!int.TryParse(txtTimerDays.Text, out keepTimerDays)) keepTimerDays = 28;
 
-            if (string.IsNullOrWhiteSpace(galifrey.JiraConnnectionSettings.JiraUrl) ||
-                    string.IsNullOrWhiteSpace(galifrey.JiraConnnectionSettings.JiraUsername) ||
-                    string.IsNullOrWhiteSpace(galifrey.JiraConnnectionSettings.JiraPassword))
+            gallifrey.AppSettings.AlertWhenNotRunning = chkAlert.Checked;
+            gallifrey.AppSettings.AlertTimeMilliseconds = (alertTime * 60) * 1000;
+            gallifrey.AppSettings.KeepTimersForDays = keepTimerDays;
+            
+            gallifrey.JiraConnectionSettings.JiraUrl = txtJiraUrl.Text;
+            gallifrey.JiraConnectionSettings.JiraUsername = txtJiraUsername.Text;
+            gallifrey.JiraConnectionSettings.JiraPassword = txtJiraPassword.Text;
+
+            if (string.IsNullOrWhiteSpace(gallifrey.JiraConnectionSettings.JiraUrl) ||
+                    string.IsNullOrWhiteSpace(gallifrey.JiraConnectionSettings.JiraUsername) ||
+                    string.IsNullOrWhiteSpace(gallifrey.JiraConnectionSettings.JiraPassword))
             {
                 MessageBox.Show("You have to populate the Jira Credentials!", "Missing Config");
                 return;
@@ -51,7 +63,8 @@ namespace Gallifrey.UI.Classic
         {
             try
             {
-                galifrey.SaveJiraConnectionSettings();
+                gallifrey.SaveJiraConnectionSettings();
+                gallifrey.SaveAppSettings();
             }
             catch (JiraConnectionException)
             {

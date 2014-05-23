@@ -1,25 +1,31 @@
 ﻿using System;
 using System.Deployment.Application;
+using System.Drawing;
+using System.Drawing.Text;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Gallifrey.Exceptions.IntergrationPoints;
 using Gallifrey.Exceptions.JiraTimers;
+using Gallifrey.ExtensionMethods;
 using Gallifrey.JiraTimers;
 
 namespace Gallifrey.UI.Classic
 {
     public partial class MainWindow : Form
     {
-        private Backend galifrey;
+        private readonly IBackend gallifrey;
 
         public MainWindow()
         {
             InitializeComponent();
-            galifrey = new Backend();
+            gallifrey = new Backend();
             try
             {
-                galifrey.Initialise();
+                gallifrey.Initialise();
             }
             catch (MissingJiraConfigException)
             {
@@ -35,7 +41,31 @@ namespace Gallifrey.UI.Classic
         {
             SetVersionNumber();
             RefreshTimerPages();
+            SetupDisplayFont();
             formTimer.Enabled = true;
+        }
+
+        private void SetupDisplayFont()
+        {
+            var privateFonts = new PrivateFontCollection();
+            
+            var resource = string.Empty;
+            foreach (var name in GetType().Assembly.GetManifestResourceNames().Where(name => name.Contains("digital7.ttf")))
+            {
+                resource = name;
+                break;
+            }
+
+            var fontStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resource);
+            var data = Marshal.AllocCoTaskMem((int)fontStream.Length);
+            var fontdata = new byte[fontStream.Length];
+            fontStream.Read(fontdata, 0, (int)fontStream.Length);
+            Marshal.Copy(fontdata, 0, data, (int)fontStream.Length);
+            privateFonts.AddMemoryFont(data, (int)fontStream.Length);
+            fontStream.Close();
+            Marshal.FreeCoTaskMem(data);
+            
+            lblCurrentTime.Font = new Font(privateFonts.Families[0], 50);
         }
 
         private void SetVersionNumber()
@@ -49,7 +79,7 @@ namespace Gallifrey.UI.Classic
 
         private void MainWindow_FormClosed(object sender, FormClosedEventArgs e)
         {
-            galifrey.Close();
+            gallifrey.Close();
         }
 
         private void RefreshTimerPages()
@@ -61,7 +91,7 @@ namespace Gallifrey.UI.Classic
                 selectedTimerId = selectedTimer.UniqueId;
             }
 
-            var timers = galifrey.JiraTimerCollection;
+            var timers = gallifrey.JiraTimerCollection;
             var validDates = timers.GetValidTimerDates().OrderByDescending(x => x.Date).ToList();
 
             foreach (TabPage tabPage in tabTimerDays.TabPages)
@@ -134,17 +164,17 @@ namespace Gallifrey.UI.Classic
         private void DoubleClickListBox(object sender, EventArgs e)
         {
             var timerClicked = (JiraTimer)((ListBox)sender).SelectedItem;
-            var runningTimer = galifrey.JiraTimerCollection.GetRunningTimerId();
+            var runningTimer = gallifrey.JiraTimerCollection.GetRunningTimerId();
 
             if (runningTimer.HasValue && runningTimer.Value == timerClicked.UniqueId)
             {
-                galifrey.JiraTimerCollection.StopTimer(timerClicked.UniqueId);
+                gallifrey.JiraTimerCollection.StopTimer(timerClicked.UniqueId);
             }
             else
             {
                 try
                 {
-                    galifrey.JiraTimerCollection.StartTimer(timerClicked.UniqueId);
+                    gallifrey.JiraTimerCollection.StartTimer(timerClicked.UniqueId);
                 }
                 catch (DuplicateTimerException)
                 {
@@ -156,7 +186,7 @@ namespace Gallifrey.UI.Classic
 
         private void btnAddTimer_Click(object sender, EventArgs e)
         {
-            var addForm = new AddTimerWindow(galifrey);
+            var addForm = new AddTimerWindow(gallifrey);
             addForm.ShowDialog();
             RefreshTimerPages();
         }
@@ -166,19 +196,36 @@ namespace Gallifrey.UI.Classic
             var selectedTab = tabTimerDays.SelectedTab;
             if (selectedTab == null) return;
             var selectedTimer = (JiraTimer)((ListBox)selectedTab.Controls[string.Format("lst_{0}", selectedTab.Name)]).SelectedItem;
-            galifrey.JiraTimerCollection.RemoveTimer(selectedTimer.UniqueId);
+            gallifrey.JiraTimerCollection.RemoveTimer(selectedTimer.UniqueId);
             RefreshTimerPages();
         }
 
         private void formTimer_Tick(object sender, EventArgs e)
         {
-            RefreshTimerPages();
+            if (gallifrey.JiraTimerCollection.GetRunningTimerId().HasValue)
+            {
+                RefreshTimerPages();
+            }
+            var selectedTab = tabTimerDays.SelectedTab;
+            if (selectedTab == null) return;
+            var selectedTimer = (JiraTimer)((ListBox)selectedTab.Controls[string.Format("lst_{0}", selectedTab.Name)]).SelectedItem;
+            lblCurrentTime.Text = selectedTimer.ExactCurrentTime.FormatAsString();
         }
 
         private void btnSettings_Click(object sender, EventArgs e)
         {
-            var settingsWindow = new SettingsWindow(galifrey);
+            var settingsWindow = new SettingsWindow(gallifrey);
             settingsWindow.ShowDialog();
+        }
+
+        private void btnRename_Click(object sender, EventArgs e)
+        {
+            var selectedTab = tabTimerDays.SelectedTab;
+            if (selectedTab == null) return;
+            var selectedTimer = (JiraTimer)((ListBox)selectedTab.Controls[string.Format("lst_{0}", selectedTab.Name)]).SelectedItem;
+            var renameWindow = new RenameTimerWindow(gallifrey, selectedTimer.UniqueId);
+            renameWindow.ShowDialog();
+            RefreshTimerPages();
         }
     }
 }

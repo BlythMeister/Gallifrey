@@ -7,20 +7,32 @@ using Gallifrey.Settings;
 
 namespace Gallifrey.IntegrationPoints
 {
-    public class JiraConnection
+    public interface IJiraConnection
     {
-        private JiraConnnectionSettings jiraConnnectionSettings;
+        void ReConnect(JiraConnectionSettings newJiraConnectionSettings);
+        bool DoesJiraExist(string jiraRef);
+        Issue GetJiraIssue(string jiraRef);
+        IEnumerable<string> GetJiraFilters();
+        IEnumerable<Issue> GetJiraIssuesFromFilter(string filterName);
+        IEnumerable<Issue> GetJiraIssuesFromSearchText(string searchText);
+        TimeSpan GetCurrentLoggedTimeForDate(Issue jiraIssue, DateTime date);
+        void LogTime(Issue jiraIssue, DateTime exportTimeStamp, TimeSpan exportTime, WorklogStrategy strategy, string comment = "", TimeSpan? remainingTime = null);
+    }
+
+    public class JiraConnection : IJiraConnection
+    {
+        private JiraConnectionSettings jiraConnectionSettings;
         private Jira jira;
 
-        public JiraConnection(JiraConnnectionSettings jiraConnnectionSettings)
+        public JiraConnection(JiraConnectionSettings jiraConnectionSettings)
         {
-            this.jiraConnnectionSettings = jiraConnnectionSettings;
+            this.jiraConnectionSettings = jiraConnectionSettings;
             CheckAndConnectJira();
         }
 
-        public void ReConnect(JiraConnnectionSettings newJiraConnnectionSettings)
+        public void ReConnect(JiraConnectionSettings newJiraConnectionSettings)
         {
-            jiraConnnectionSettings = newJiraConnnectionSettings;
+            jiraConnectionSettings = newJiraConnectionSettings;
             jira = null;
             CheckAndConnectJira();
         }
@@ -29,16 +41,16 @@ namespace Gallifrey.IntegrationPoints
         {
             if (jira == null)
             {
-                if (string.IsNullOrWhiteSpace(jiraConnnectionSettings.JiraUrl) ||
-                    string.IsNullOrWhiteSpace(jiraConnnectionSettings.JiraUsername) ||
-                    string.IsNullOrWhiteSpace(jiraConnnectionSettings.JiraPassword))
+                if (string.IsNullOrWhiteSpace(jiraConnectionSettings.JiraUrl) ||
+                    string.IsNullOrWhiteSpace(jiraConnectionSettings.JiraUsername) ||
+                    string.IsNullOrWhiteSpace(jiraConnectionSettings.JiraPassword))
                 {
                     throw new MissingJiraConfigException("Required settings to create connection to jira are missing");
                 }
 
                 try
                 {
-                    jira = new Jira(jiraConnnectionSettings.JiraUrl, jiraConnnectionSettings.JiraUsername, jiraConnnectionSettings.JiraPassword);
+                    jira = new Jira(jiraConnectionSettings.JiraUrl, jiraConnectionSettings.JiraUsername, jiraConnectionSettings.JiraPassword);
                     jira.GetIssuePriorities();
                 }
                 catch (Exception ex)
@@ -126,7 +138,7 @@ namespace Gallifrey.IntegrationPoints
 
             foreach (var worklog in jiraIssue.GetWorklogs().Where(worklog => worklog.StartDate.HasValue &&
                                                                              worklog.StartDate.Value.Date == date.Date &&
-                                                                             worklog.Author.ToLower() == jiraConnnectionSettings.JiraUsername.ToLower()))
+                                                                             worklog.Author.ToLower() == jiraConnectionSettings.JiraUsername.ToLower()))
             {
                 loggedTime = loggedTime.Add(new TimeSpan(0, 0, (int)worklog.TimeSpentInSeconds));
             }
