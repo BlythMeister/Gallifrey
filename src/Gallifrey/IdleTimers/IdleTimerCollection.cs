@@ -6,7 +6,14 @@ using Gallifrey.Serialization;
 
 namespace Gallifrey.IdleTimers
 {
-    public class IdleTimerCollection
+    public interface IIdleTimerCollection
+    {
+        void RemoveTimer(Guid uniqueId);
+        IEnumerable<IdleTimer> GetUnusedLockTimers();
+        void RemoveOldTimers();
+    }
+
+    public class IdleTimerCollection : IIdleTimerCollection
     {
         private readonly List<IdleTimer> lockTimerList;
 

@@ -35,6 +35,11 @@
             this.label3 = new System.Windows.Forms.Label();
             this.tabTimerDays = new System.Windows.Forms.TabControl();
             this.formTimer = new System.Windows.Forms.Timer(this.components);
+            this.lblCurrentTime = new System.Windows.Forms.Label();
+            this.btnRename = new System.Windows.Forms.Button();
+            this.btnTimeEdit = new System.Windows.Forms.Button();
+            this.btnSearch = new System.Windows.Forms.Button();
+            this.btnExport = new System.Windows.Forms.Button();
             this.btnSettings = new System.Windows.Forms.Button();
             this.btnRemoveTimer = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
@@ -89,10 +94,63 @@
             this.formTimer.Interval = 500;
             this.formTimer.Tick += new System.EventHandler(this.formTimer_Tick);
             // 
+            // lblCurrentTime
+            // 
+            this.lblCurrentTime.BackColor = System.Drawing.Color.Black;
+            this.lblCurrentTime.Font = new System.Drawing.Font("Stencil", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblCurrentTime.ForeColor = System.Drawing.Color.Red;
+            this.lblCurrentTime.Location = new System.Drawing.Point(510, 98);
+            this.lblCurrentTime.Name = "lblCurrentTime";
+            this.lblCurrentTime.Size = new System.Drawing.Size(286, 65);
+            this.lblCurrentTime.TabIndex = 12;
+            this.lblCurrentTime.Text = "00:00:00";
+            this.lblCurrentTime.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // btnRename
+            // 
+            this.btnRename.Image = global::Gallifrey.UI.Classic.Properties.Resources.Rename_48x48;
+            this.btnRename.Location = new System.Drawing.Point(296, 98);
+            this.btnRename.Name = "btnRename";
+            this.btnRename.Size = new System.Drawing.Size(65, 65);
+            this.btnRename.TabIndex = 11;
+            this.btnRename.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.btnRename.UseVisualStyleBackColor = true;
+            this.btnRename.Click += new System.EventHandler(this.btnRename_Click);
+            // 
+            // btnTimeEdit
+            // 
+            this.btnTimeEdit.Image = global::Gallifrey.UI.Classic.Properties.Resources.Edit_48x48;
+            this.btnTimeEdit.Location = new System.Drawing.Point(225, 98);
+            this.btnTimeEdit.Name = "btnTimeEdit";
+            this.btnTimeEdit.Size = new System.Drawing.Size(65, 65);
+            this.btnTimeEdit.TabIndex = 10;
+            this.btnTimeEdit.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.btnTimeEdit.UseVisualStyleBackColor = true;
+            // 
+            // btnSearch
+            // 
+            this.btnSearch.Image = global::Gallifrey.UI.Classic.Properties.Resources.Search_48x48;
+            this.btnSearch.Location = new System.Drawing.Point(154, 98);
+            this.btnSearch.Name = "btnSearch";
+            this.btnSearch.Size = new System.Drawing.Size(65, 65);
+            this.btnSearch.TabIndex = 9;
+            this.btnSearch.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.btnSearch.UseVisualStyleBackColor = true;
+            // 
+            // btnExport
+            // 
+            this.btnExport.Image = global::Gallifrey.UI.Classic.Properties.Resources.Synchronize_48x48;
+            this.btnExport.Location = new System.Drawing.Point(367, 98);
+            this.btnExport.Name = "btnExport";
+            this.btnExport.Size = new System.Drawing.Size(65, 65);
+            this.btnExport.TabIndex = 8;
+            this.btnExport.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.btnExport.UseVisualStyleBackColor = true;
+            // 
             // btnSettings
             // 
             this.btnSettings.Image = global::Gallifrey.UI.Classic.Properties.Resources.Settings_48x48;
-            this.btnSettings.Location = new System.Drawing.Point(154, 98);
+            this.btnSettings.Location = new System.Drawing.Point(438, 98);
             this.btnSettings.Name = "btnSettings";
             this.btnSettings.Size = new System.Drawing.Size(65, 65);
             this.btnSettings.TabIndex = 7;
@@ -137,6 +195,11 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(808, 595);
+            this.Controls.Add(this.lblCurrentTime);
+            this.Controls.Add(this.btnRename);
+            this.Controls.Add(this.btnTimeEdit);
+            this.Controls.Add(this.btnSearch);
+            this.Controls.Add(this.btnExport);
             this.Controls.Add(this.btnSettings);
             this.Controls.Add(this.tabTimerDays);
             this.Controls.Add(this.btnRemoveTimer);
@@ -168,6 +231,11 @@
         private System.Windows.Forms.TabControl tabTimerDays;
         private System.Windows.Forms.Timer formTimer;
         private System.Windows.Forms.Button btnSettings;
+        private System.Windows.Forms.Button btnExport;
+        private System.Windows.Forms.Button btnSearch;
+        private System.Windows.Forms.Button btnTimeEdit;
+        private System.Windows.Forms.Button btnRename;
+        private System.Windows.Forms.Label lblCurrentTime;
     }
 }
 

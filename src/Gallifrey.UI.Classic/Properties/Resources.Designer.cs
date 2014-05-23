@@ -9,6 +9,9 @@
 //------------------------------------------------------------------------------
 
 namespace Gallifrey.UI.Classic.Properties {
+    using System;
+    
+    
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>
@@ -110,9 +113,49 @@ namespace Gallifrey.UI.Classic.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Edit_48x48 {
+            get {
+                object obj = ResourceManager.GetObject("Edit_48x48", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Rename_48x48 {
+            get {
+                object obj = ResourceManager.GetObject("Rename_48x48", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Search_48x48 {
+            get {
+                object obj = ResourceManager.GetObject("Search_48x48", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Settings_48x48 {
             get {
                 object obj = ResourceManager.GetObject("Settings_48x48", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Synchronize_48x48 {
+            get {
+                object obj = ResourceManager.GetObject("Synchronize_48x48", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

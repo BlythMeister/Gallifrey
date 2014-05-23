@@ -9,35 +9,35 @@ namespace Gallifrey.Serialization
     {
         private readonly static string SavePath = Path.Combine(FilePathSettings.DataSavePath, "JiraConnectionSettings.dat");
 
-        internal static void Serialize(JiraConnnectionSettings appSettings)
+        internal static void Serialize(JiraConnectionSettings appSettings)
         {
             if (!Directory.Exists(FilePathSettings.DataSavePath)) Directory.CreateDirectory(FilePathSettings.DataSavePath);
             
             File.WriteAllText(SavePath, DataEncryption.Encrypt(JsonConvert.SerializeObject(appSettings)));
         }
 
-        internal static JiraConnnectionSettings DeSerialize()
+        internal static JiraConnectionSettings DeSerialize()
         {
-            JiraConnnectionSettings jiraConnnectionSettings;
+            JiraConnectionSettings jiraConnectionSettings;
             
             if (File.Exists(SavePath))
             {
                 try
                 {
                     var text = DataEncryption.Decrypt(File.ReadAllText(SavePath));
-                    jiraConnnectionSettings = JsonConvert.DeserializeObject<JiraConnnectionSettings>(text);
+                    jiraConnectionSettings = JsonConvert.DeserializeObject<JiraConnectionSettings>(text);
                 }
                 catch (Exception)
                 {
-                    jiraConnnectionSettings = new JiraConnnectionSettings();
+                    jiraConnectionSettings = new JiraConnectionSettings();
                 }
             }
             else
             {
-                jiraConnnectionSettings = new JiraConnnectionSettings();
+                jiraConnectionSettings = new JiraConnectionSettings();
             }
 
-            return jiraConnnectionSettings;
+            return jiraConnectionSettings;
         }
     }
 }
