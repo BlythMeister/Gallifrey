@@ -22,6 +22,8 @@ namespace Gallifrey.JiraTimers
         Tuple<int, int> GetNumberExported();
         TimeSpan GetTotalUnexportedTime();
         void AdjustTime(Guid uniqueId, int hours, int minutes, bool addTime);
+        void SetJiraExportedTime(Guid uniqueId, TimeSpan loggedTime);
+        void AddJiraExportedTime(Guid uniqueId, int hours, int minutes);
     }
 
     public class JiraTimerCollection : IJiraTimerCollection
@@ -154,6 +156,18 @@ namespace Gallifrey.JiraTimers
             var timer = GetTimer(uniqueId);
             timer.ManualAdjustment(hours, minutes, addTime);
 
+        }
+
+        public void SetJiraExportedTime(Guid uniqueId, TimeSpan loggedTime)
+        {
+            var timer = GetTimer(uniqueId);
+            timer.SetJiraExportedTime(loggedTime);
+        }
+
+        public void AddJiraExportedTime(Guid uniqueId, int hours, int minutes)
+        {
+            var timer = GetTimer(uniqueId);
+            timer.AddJiraExportedTime(new TimeSpan(hours, minutes, 0));
         }
     }
 }

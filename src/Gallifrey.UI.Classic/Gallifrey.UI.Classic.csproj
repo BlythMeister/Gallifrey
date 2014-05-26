@@ -106,6 +106,12 @@
     <Compile Include="AdjustTimerWindow.Designer.cs">
       <DependentUpon>AdjustTimerWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="ExportTimerWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ExportTimerWindow.Designer.cs">
+      <DependentUpon>ExportTimerWindow.cs</DependentUpon>
+    </Compile>
     <Compile Include="RenameTimerWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -136,6 +142,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="AdjustTimerWindow.resx">
       <DependentUpon>AdjustTimerWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ExportTimerWindow.resx">
+      <DependentUpon>ExportTimerWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="RenameTimerWindow.resx">
       <DependentUpon>RenameTimerWindow.cs</DependentUpon>

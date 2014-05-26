@@ -35,6 +35,8 @@ namespace Gallifrey.UI.Classic
             {
                 btnSettings_Click(null, null);
             }
+
+            gallifrey.NoActivityEvent += GallifreyOnNoActivityEvent;
         }
 
         private void MainWindow_Load(object sender, EventArgs e)
@@ -44,7 +46,7 @@ namespace Gallifrey.UI.Classic
             SetupDisplayFont();
             formTimer.Enabled = true;
         }
-     
+
         private void MainWindow_FormClosed(object sender, FormClosedEventArgs e)
         {
             gallifrey.Close();
@@ -60,7 +62,7 @@ namespace Gallifrey.UI.Classic
             SetDisplayClock();
             SetExportStats();
         }
-        
+
         private void DoubleClickListBox(object sender, EventArgs e)
         {
             var timerClicked = (JiraTimer)((ListBox)sender).SelectedItem;
@@ -121,10 +123,58 @@ namespace Gallifrey.UI.Classic
             var selectedTab = tabTimerDays.SelectedTab;
             if (selectedTab == null) return;
             var selectedTimer = (JiraTimer)((ListBox)selectedTab.Controls[string.Format("lst_{0}", selectedTab.Name)]).SelectedItem;
-            var renameWindow = new AdjustTimerWindow(gallifrey, selectedTimer.UniqueId);
-            renameWindow.ShowDialog();
+            var adjustTimerWindow = new AdjustTimerWindow(gallifrey, selectedTimer.UniqueId);
+            adjustTimerWindow.ShowDialog();
             RefreshTimerPages();
         }
+
+        private void btnExport_Click(object sender, EventArgs e)
+        {
+            var selectedTab = tabTimerDays.SelectedTab;
+            if (selectedTab == null) return;
+            var selectedTimer = (JiraTimer)((ListBox)selectedTab.Controls[string.Format("lst_{0}", selectedTab.Name)]).SelectedItem;
+            var exportTimerWindow = new ExportTimerWindow(gallifrey, selectedTimer.UniqueId);
+            if (exportTimerWindow.DisplayForm)
+            {
+                exportTimerWindow.ShowDialog();
+            }
+            RefreshTimerPages();
+        }
+
+        #region "Tray Icon"
+
+        private void GallifreyOnNoActivityEvent(object sender, int millisecondsSinceActivity)
+        {
+            var minutesSinceActivity = (millisecondsSinceActivity / 1000) / 60;
+            var minutesPlural = string.Empty;
+            if (minutesSinceActivity > 1)
+            {
+                minutesPlural = "s";
+            }
+
+            notifyAlert.BalloonTipText = string.Format("No Timer Running For {0} Minute{1}", minutesSinceActivity, minutesPlural);
+            notifyAlert.ShowBalloonTip(3000);
+        }
+
+        private void notifyAlert_BalloonTipClicked(object sender, EventArgs e)
+        {
+            switch (WindowState)
+            {
+                case FormWindowState.Minimized:
+                    WindowState = FormWindowState.Normal;
+                    break;
+                default:
+                    BringToFront();
+                    break;
+            }
+        }
+
+        private void notifyAlert_DoubleClick(object sender, EventArgs e)
+        {
+            notifyAlert.ShowBalloonTip(5000);
+        }
+
+        #endregion
 
         #region "UI Hlpers"
 
@@ -272,5 +322,7 @@ namespace Gallifrey.UI.Classic
         }
 
         #endregion
+
+        
     }
 }

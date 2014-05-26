@@ -12,13 +12,15 @@ namespace Gallifrey.InactiveMonitor
         private readonly IJiraTimerCollection timerCollection;
         private readonly Timer hearbeat;
         private readonly Stopwatch noTimerRunning;
-        private  IAppSettings appSettings;
+        private readonly object lockObject;
+        private IAppSettings appSettings;
         private int eventsSent;
-
+        
         internal ActivityChecker(IJiraTimerCollection timerCollection, IAppSettings appSettings)
         {
-            this.timerCollection = timerCollection;           
+            this.timerCollection = timerCollection;
             noTimerRunning = new Stopwatch();
+            lockObject = new object();
 
             hearbeat = new Timer(500);
             hearbeat.Elapsed += HearbeatOnElapsed;
@@ -43,20 +45,24 @@ namespace Gallifrey.InactiveMonitor
 
         private void HearbeatOnElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
         {
-            if (timerCollection.GetRunningTimerId().HasValue)
+            lock (lockObject)
             {
-                noTimerRunning.Stop();
-                noTimerRunning.Reset();
-                eventsSent = 0;
-            }
-            else
-            {
-                if (noTimerRunning.ElapsedMilliseconds >= appSettings.AlertTimeMilliseconds)
+                if (timerCollection.GetRunningTimerId().HasValue)
                 {
-                    eventsSent++;
+                    noTimerRunning.Stop();
                     noTimerRunning.Reset();
-                    var handler = NoActivityEvent;
-                    if (handler != null) handler(this, eventsSent * appSettings.AlertTimeMilliseconds);
+                    eventsSent = 0;
+                }
+                else
+                {
+                    if (!noTimerRunning.IsRunning) noTimerRunning.Start();
+                    if (noTimerRunning.ElapsedMilliseconds >= appSettings.AlertTimeMilliseconds)
+                    {
+                        eventsSent++;
+                        noTimerRunning.Reset();
+                        var handler = NoActivityEvent;
+                        if (handler != null) handler(this, eventsSent * appSettings.AlertTimeMilliseconds);
+                    }
                 }
             }
         }
