@@ -25,8 +25,8 @@
     <InstallUrl>https://raw.githubusercontent.com/BlythMeister/Gallifrey/master/deploy/stable/</InstallUrl>
     <ProductName>Gallifrey</ProductName>
     <PublisherName>Gallifrey</PublisherName>
-    <ApplicationRevision>1</ApplicationRevision>
-    <ApplicationVersion>0.0.1.%2a</ApplicationVersion>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>0.1.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -106,6 +106,12 @@
     <Compile Include="AdjustTimerWindow.Designer.cs">
       <DependentUpon>AdjustTimerWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="IdleTimerWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="IdleTimerWindow.Designer.cs">
+      <DependentUpon>IdleTimerWindow.cs</DependentUpon>
+    </Compile>
     <Compile Include="ExportTimerWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -142,6 +148,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="AdjustTimerWindow.resx">
       <DependentUpon>AdjustTimerWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IdleTimerWindow.resx">
+      <DependentUpon>IdleTimerWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ExportTimerWindow.resx">
       <DependentUpon>ExportTimerWindow.cs</DependentUpon>
@@ -212,6 +221,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="clock_blue.ico" />
+    <None Include="Icons\Log Out_48x48.png" />
     <None Include="Icons\Rename_48x48.png" />
     <None Include="Icons\Search_48x48.png" />
     <None Include="Icons\Edit_48x48.png" />

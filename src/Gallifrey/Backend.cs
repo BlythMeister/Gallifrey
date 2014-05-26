@@ -22,7 +22,7 @@ namespace Gallifrey
         void SaveJiraConnectionSettings();
         void SaveAppSettings();
         void StartIdleTimer();
-        void StopIdleTimer();
+        Guid StopIdleTimer();
     }
 
     public class Backend : IBackend
@@ -98,9 +98,9 @@ namespace Gallifrey
             idleTimerCollection.NewLockTimer();
         }
 
-        public void StopIdleTimer()
+        public Guid StopIdleTimer()
         {
-            idleTimerCollection.StopLockedTimers();
+            return idleTimerCollection.StopLockedTimers();
         }
 
         public IJiraTimerCollection JiraTimerCollection

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using Gallifrey.ExtensionMethods;
 using Newtonsoft.Json;
 
 namespace Gallifrey.IdleTimers
@@ -41,11 +42,19 @@ namespace Gallifrey.IdleTimers
         }
 
        public void StopTimer()
-        {
+       {
+           DateFinished = DateTime.Now;
             currentRunningTime.Stop();
             CurrentTime = CurrentTime.Add(currentRunningTime.Elapsed);
             currentRunningTime.Reset();
             IsRunning = false;
         }
+
+       public override string ToString()
+       {
+           return DateFinished.HasValue ? 
+               string.Format("Date - {0} - From [ {1} ] To [ {2} ] - Time [ {3} ]", DateStarted.ToString("ddd, dd MMM"), DateStarted.ToString("HH:mm:ss"), DateFinished.Value.ToString("HH:mm:ss"), ExactCurrentTime.FormatAsString()) : 
+               string.Format("Date - {0} - From [ {1} ] To [ IN PROGRESS ] - Time [ {2} ]", DateStarted.ToString("ddd, dd MMM"), DateStarted.ToString("HH:mm:ss"), ExactCurrentTime.FormatAsString());
+       }
     }
 }

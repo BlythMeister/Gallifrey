@@ -11,6 +11,7 @@ namespace Gallifrey.IdleTimers
         void RemoveTimer(Guid uniqueId);
         IEnumerable<IdleTimer> GetUnusedLockTimers();
         void RemoveOldTimers();
+        IdleTimer GetTimer(Guid uniqueId);
     }
 
     public class IdleTimerCollection : IIdleTimerCollection
@@ -30,24 +31,32 @@ namespace Gallifrey.IdleTimers
         internal void NewLockTimer()
         {
             lockTimerList.Add(new IdleTimer());
+            SaveTimers();
         }
 
-        internal void StopLockedTimers()
+        internal Guid StopLockedTimers()
         {
             if (!lockTimerList.Any(x => x.IsRunning))
             {
                 throw new NoIdleTimerRunningException("Cannot find any idle timers running!");
             }
 
+            var lastStop = Guid.NewGuid();//Should never return this, as we know there is something running.
             foreach (var lockTimer in lockTimerList.Where(timer => timer.IsRunning))
             {
                 lockTimer.StopTimer();
+                lastStop = lockTimer.UniqueId;
             }
+
+            SaveTimers();
+
+            return lastStop;
         }
 
         public void RemoveTimer(Guid uniqueId)
         {
-            lockTimerList.Remove(lockTimerList.First(timer => timer.UniqueId == uniqueId));
+            lockTimerList.Remove(GetTimer(uniqueId));
+            SaveTimers();
         }
 
         public IEnumerable<IdleTimer> GetUnusedLockTimers()
@@ -61,6 +70,12 @@ namespace Gallifrey.IdleTimers
             {
                 lockTimerList.Remove(idleTimer);
             }
+            SaveTimers();
+        }
+
+        public IdleTimer GetTimer(Guid uniqueId)
+        {
+            return lockTimerList.First(timer => timer.UniqueId == uniqueId);
         }
     }
 }

@@ -12,6 +12,7 @@ using Gallifrey.Exceptions.IntergrationPoints;
 using Gallifrey.Exceptions.JiraTimers;
 using Gallifrey.ExtensionMethods;
 using Gallifrey.JiraTimers;
+using Microsoft.Win32;
 
 namespace Gallifrey.UI.Classic
 {
@@ -37,10 +38,14 @@ namespace Gallifrey.UI.Classic
             }
 
             gallifrey.NoActivityEvent += GallifreyOnNoActivityEvent;
+            SystemEvents.SessionSwitch += SessionSwitchHandler;
         }
 
         private void MainWindow_Load(object sender, EventArgs e)
         {
+            Height = gallifrey.AppSettings.UiHeight;
+            Width = gallifrey.AppSettings.UiWidth;
+
             SetVersionNumber();
             RefreshTimerPages();
             SetupDisplayFont();
@@ -49,6 +54,8 @@ namespace Gallifrey.UI.Classic
 
         private void MainWindow_FormClosed(object sender, FormClosedEventArgs e)
         {
+            gallifrey.AppSettings.UiHeight = Height;
+            gallifrey.AppSettings.UiWidth = Width;
             gallifrey.Close();
         }
 
@@ -141,6 +148,16 @@ namespace Gallifrey.UI.Classic
             RefreshTimerPages();
         }
 
+        private void btnIdle_Click(object sender, EventArgs e)
+        {
+            var idleTimerWindow = new IdleTimerWindow(gallifrey);
+            if (idleTimerWindow.DisplayForm)
+            {
+                idleTimerWindow.ShowDialog();
+                RefreshTimerPages();
+            }
+        }
+
         #region "Tray Icon"
 
         private void GallifreyOnNoActivityEvent(object sender, int millisecondsSinceActivity)
@@ -172,6 +189,38 @@ namespace Gallifrey.UI.Classic
         private void notifyAlert_DoubleClick(object sender, EventArgs e)
         {
             notifyAlert.ShowBalloonTip(5000);
+        }
+
+        #endregion
+
+        #region "Session Management"
+
+        private void SessionSwitchHandler(object sender, SessionSwitchEventArgs e)
+        {
+            switch (e.Reason)
+            {
+                case SessionSwitchReason.SessionLock:
+                    gallifrey.StartIdleTimer();
+                    break;
+                case SessionSwitchReason.SessionUnlock:
+                    var idleTimerId = gallifrey.StopIdleTimer();
+                    var idleTimer = gallifrey.IdleTimerCollection.GetTimer(idleTimerId);
+                    if (idleTimer.ExactCurrentTime.TotalSeconds < 15)
+                    {
+                        MessageBox.Show("Machine Locked For Less Than 15 Seconds.\nIf Your Machine Went Into Screensaver Without Being Locked The Idle Time Cannot Be Captured", "Short Idle Time", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        gallifrey.IdleTimerCollection.RemoveTimer(idleTimerId);
+                    }
+                    else
+                    {
+                        var idleTimerWindow = new IdleTimerWindow(gallifrey);
+                        if (idleTimerWindow.DisplayForm)
+                        {
+                            idleTimerWindow.ShowDialog();
+                            RefreshTimerPages();
+                        }  
+                    }
+                    break;
+            }
         }
 
         #endregion
@@ -323,6 +372,6 @@ namespace Gallifrey.UI.Classic
 
         #endregion
 
-        
+
     }
 }
