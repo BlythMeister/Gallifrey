@@ -14,6 +14,8 @@ namespace Gallifrey.UI.Classic
         {
             this.gallifrey = gallifrey;
             InitializeComponent();
+            calStartDate.MinDate = DateTime.Now.AddDays(gallifrey.AppSettings.KeepTimersForDays*-1);
+            calStartDate.MaxDate = DateTime.Now.AddDays(gallifrey.AppSettings.KeepTimersForDays);
         }
 
         private void btnAddTimer_Click(object sender, EventArgs e)

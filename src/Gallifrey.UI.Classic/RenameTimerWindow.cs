@@ -15,7 +15,7 @@ namespace Gallifrey.UI.Classic
         public RenameTimerWindow(IBackend gallifrey, Guid timerGuid)
         {
             this.gallifrey = gallifrey;
-            timerToShow = gallifrey.JiraTimerCollection.GetTimers(timerGuid);
+            timerToShow = gallifrey.JiraTimerCollection.GetTimer(timerGuid);
             InitializeComponent();
             
             txtJiraRef.Text = timerToShow.JiraReference;

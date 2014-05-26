@@ -100,6 +100,12 @@
     <Compile Include="AddTimerWindow.Designer.cs">
       <DependentUpon>AddTimerWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="AdjustTimerWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AdjustTimerWindow.Designer.cs">
+      <DependentUpon>AdjustTimerWindow.cs</DependentUpon>
+    </Compile>
     <Compile Include="RenameTimerWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -127,6 +133,9 @@
     </Compile>
     <EmbeddedResource Include="AddTimerWindow.resx">
       <DependentUpon>AddTimerWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AdjustTimerWindow.resx">
+      <DependentUpon>AdjustTimerWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="RenameTimerWindow.resx">
       <DependentUpon>RenameTimerWindow.cs</DependentUpon>

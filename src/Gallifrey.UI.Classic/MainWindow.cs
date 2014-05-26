@@ -44,11 +44,94 @@ namespace Gallifrey.UI.Classic
             SetupDisplayFont();
             formTimer.Enabled = true;
         }
+     
+        private void MainWindow_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            gallifrey.Close();
+        }
+
+        private void formTimer_Tick(object sender, EventArgs e)
+        {
+            if (gallifrey.JiraTimerCollection.GetRunningTimerId().HasValue)
+            {
+                RefreshTimerPages();
+            }
+
+            SetDisplayClock();
+            SetExportStats();
+        }
+        
+        private void DoubleClickListBox(object sender, EventArgs e)
+        {
+            var timerClicked = (JiraTimer)((ListBox)sender).SelectedItem;
+            var runningTimer = gallifrey.JiraTimerCollection.GetRunningTimerId();
+
+            if (runningTimer.HasValue && runningTimer.Value == timerClicked.UniqueId)
+            {
+                gallifrey.JiraTimerCollection.StopTimer(timerClicked.UniqueId);
+            }
+            else
+            {
+                try
+                {
+                    gallifrey.JiraTimerCollection.StartTimer(timerClicked.UniqueId);
+                }
+                catch (DuplicateTimerException)
+                {
+                    MessageBox.Show("Use the version of this timer for today!", "Wrong Day!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            RefreshTimerPages();
+        }
+
+        private void btnAddTimer_Click(object sender, EventArgs e)
+        {
+            var addForm = new AddTimerWindow(gallifrey);
+            addForm.ShowDialog();
+            RefreshTimerPages();
+        }
+
+        private void btnRemoveTimer_Click(object sender, EventArgs e)
+        {
+            var selectedTab = tabTimerDays.SelectedTab;
+            if (selectedTab == null) return;
+            var selectedTimer = (JiraTimer)((ListBox)selectedTab.Controls[string.Format("lst_{0}", selectedTab.Name)]).SelectedItem;
+            gallifrey.JiraTimerCollection.RemoveTimer(selectedTimer.UniqueId);
+            RefreshTimerPages();
+        }
+
+        private void btnSettings_Click(object sender, EventArgs e)
+        {
+            var settingsWindow = new SettingsWindow(gallifrey);
+            settingsWindow.ShowDialog();
+        }
+
+        private void btnRename_Click(object sender, EventArgs e)
+        {
+            var selectedTab = tabTimerDays.SelectedTab;
+            if (selectedTab == null) return;
+            var selectedTimer = (JiraTimer)((ListBox)selectedTab.Controls[string.Format("lst_{0}", selectedTab.Name)]).SelectedItem;
+            var renameWindow = new RenameTimerWindow(gallifrey, selectedTimer.UniqueId);
+            renameWindow.ShowDialog();
+            RefreshTimerPages();
+        }
+
+        private void btnTimeEdit_Click(object sender, EventArgs e)
+        {
+            var selectedTab = tabTimerDays.SelectedTab;
+            if (selectedTab == null) return;
+            var selectedTimer = (JiraTimer)((ListBox)selectedTab.Controls[string.Format("lst_{0}", selectedTab.Name)]).SelectedItem;
+            var renameWindow = new AdjustTimerWindow(gallifrey, selectedTimer.UniqueId);
+            renameWindow.ShowDialog();
+            RefreshTimerPages();
+        }
+
+        #region "UI Hlpers"
 
         private void SetupDisplayFont()
         {
             var privateFonts = new PrivateFontCollection();
-            
+
             var resource = string.Empty;
             foreach (var name in GetType().Assembly.GetManifestResourceNames().Where(name => name.Contains("digital7.ttf")))
             {
@@ -64,7 +147,7 @@ namespace Gallifrey.UI.Classic
             privateFonts.AddMemoryFont(data, (int)fontStream.Length);
             fontStream.Close();
             Marshal.FreeCoTaskMem(data);
-            
+
             lblCurrentTime.Font = new Font(privateFonts.Families[0], 50);
         }
 
@@ -75,11 +158,6 @@ namespace Gallifrey.UI.Classic
             myVersion = string.Format("v{0}", myVersion);
             if (!networkDeploy) myVersion = string.Format("{0} (manual)", myVersion);
             lblVersion.Text = myVersion;
-        }
-
-        private void MainWindow_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            gallifrey.Close();
         }
 
         private void RefreshTimerPages()
@@ -161,71 +239,38 @@ namespace Gallifrey.UI.Classic
             }
         }
 
-        private void DoubleClickListBox(object sender, EventArgs e)
+        private void SetDisplayClock()
         {
-            var timerClicked = (JiraTimer)((ListBox)sender).SelectedItem;
-            var runningTimer = gallifrey.JiraTimerCollection.GetRunningTimerId();
-
-            if (runningTimer.HasValue && runningTimer.Value == timerClicked.UniqueId)
-            {
-                gallifrey.JiraTimerCollection.StopTimer(timerClicked.UniqueId);
-            }
-            else
-            {
-                try
-                {
-                    gallifrey.JiraTimerCollection.StartTimer(timerClicked.UniqueId);
-                }
-                catch (DuplicateTimerException)
-                {
-                    MessageBox.Show("Use the version of this timer for today!", "Wrong Day!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-            RefreshTimerPages();
-        }
-
-        private void btnAddTimer_Click(object sender, EventArgs e)
-        {
-            var addForm = new AddTimerWindow(gallifrey);
-            addForm.ShowDialog();
-            RefreshTimerPages();
-        }
-
-        private void btnRemoveTimer_Click(object sender, EventArgs e)
-        {
-            var selectedTab = tabTimerDays.SelectedTab;
-            if (selectedTab == null) return;
-            var selectedTimer = (JiraTimer)((ListBox)selectedTab.Controls[string.Format("lst_{0}", selectedTab.Name)]).SelectedItem;
-            gallifrey.JiraTimerCollection.RemoveTimer(selectedTimer.UniqueId);
-            RefreshTimerPages();
-        }
-
-        private void formTimer_Tick(object sender, EventArgs e)
-        {
-            if (gallifrey.JiraTimerCollection.GetRunningTimerId().HasValue)
-            {
-                RefreshTimerPages();
-            }
             var selectedTab = tabTimerDays.SelectedTab;
             if (selectedTab == null) return;
             var selectedTimer = (JiraTimer)((ListBox)selectedTab.Controls[string.Format("lst_{0}", selectedTab.Name)]).SelectedItem;
             lblCurrentTime.Text = selectedTimer.ExactCurrentTime.FormatAsString();
+
+            if (gallifrey.JiraTimerCollection.GetRunningTimerId().HasValue)
+            {
+                if (selectedTimer.IsRunning)
+                {
+                    lblCurrentTime.ForeColor = Color.LimeGreen;
+                }
+                else
+                {
+                    lblCurrentTime.ForeColor = Color.Orange;
+                }
+            }
+            else
+            {
+                lblCurrentTime.ForeColor = Color.Red;
+            }
         }
 
-        private void btnSettings_Click(object sender, EventArgs e)
+        private void SetExportStats()
         {
-            var settingsWindow = new SettingsWindow(gallifrey);
-            settingsWindow.ShowDialog();
+            var numbersExported = gallifrey.JiraTimerCollection.GetNumberExported();
+            lblExportStat.Text = string.Format("Exported: {0}/{1}", numbersExported.Item1, numbersExported.Item2);
+
+            lblUnexportedTime.Text = string.Format("Un-Exported Time: {0}", gallifrey.JiraTimerCollection.GetTotalUnexportedTime().FormatAsString(false));
         }
 
-        private void btnRename_Click(object sender, EventArgs e)
-        {
-            var selectedTab = tabTimerDays.SelectedTab;
-            if (selectedTab == null) return;
-            var selectedTimer = (JiraTimer)((ListBox)selectedTab.Controls[string.Format("lst_{0}", selectedTab.Name)]).SelectedItem;
-            var renameWindow = new RenameTimerWindow(gallifrey, selectedTimer.UniqueId);
-            renameWindow.ShowDialog();
-            RefreshTimerPages();
-        }
+        #endregion
     }
 }
