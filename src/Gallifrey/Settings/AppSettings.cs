@@ -8,6 +8,8 @@ namespace Gallifrey.Settings
         int AlertTimeMilliseconds { get; set; }
         int KeepTimersForDays { get; set; }
         int TargetLogHoursPerDay { get; set; }
+        int UiHeight { get; set; }
+        int UiWidth { get; set; }
         bool UiAlwaysOnTop { get; set; }
         UiAnimationLevel UiAnimationLevel { get; set; }
     }
@@ -18,6 +20,8 @@ namespace Gallifrey.Settings
         public int AlertTimeMilliseconds { get; set; }
         public int KeepTimersForDays { get; set; }
         public int TargetLogHoursPerDay { get; set; }
+        public int UiHeight { get; set; }
+        public int UiWidth { get; set; }
         public bool UiAlwaysOnTop { get; set; }
         public UiAnimationLevel UiAnimationLevel { get; set; }
 

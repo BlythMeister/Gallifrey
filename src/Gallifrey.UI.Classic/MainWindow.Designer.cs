@@ -43,6 +43,8 @@
             this.grpExportStats = new System.Windows.Forms.GroupBox();
             this.lblUnexportedTime = new System.Windows.Forms.Label();
             this.lblExportStat = new System.Windows.Forms.Label();
+            this.notifyAlert = new System.Windows.Forms.NotifyIcon(this.components);
+            this.btnIdle = new System.Windows.Forms.Button();
             this.btnRename = new System.Windows.Forms.Button();
             this.btnTimeEdit = new System.Windows.Forms.Button();
             this.btnSearch = new System.Windows.Forms.Button();
@@ -51,7 +53,6 @@
             this.btnRemoveTimer = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.btnAddTimer = new System.Windows.Forms.Button();
-            this.notifyAlert = new System.Windows.Forms.NotifyIcon(this.components);
             this.grpTarget.SuspendLayout();
             this.grpExportStats.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -96,7 +97,7 @@
             this.tabTimerDays.Location = new System.Drawing.Point(12, 169);
             this.tabTimerDays.Name = "tabTimerDays";
             this.tabTimerDays.SelectedIndex = 0;
-            this.tabTimerDays.Size = new System.Drawing.Size(784, 414);
+            this.tabTimerDays.Size = new System.Drawing.Size(830, 414);
             this.tabTimerDays.TabIndex = 6;
             // 
             // formTimer
@@ -106,33 +107,39 @@
             // 
             // lblCurrentTime
             // 
+            this.lblCurrentTime.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.lblCurrentTime.BackColor = System.Drawing.Color.Black;
             this.lblCurrentTime.Font = new System.Drawing.Font("Stencil", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblCurrentTime.ForeColor = System.Drawing.Color.Red;
-            this.lblCurrentTime.Location = new System.Drawing.Point(510, 98);
+            this.lblCurrentTime.Location = new System.Drawing.Point(580, 98);
             this.lblCurrentTime.Name = "lblCurrentTime";
-            this.lblCurrentTime.Size = new System.Drawing.Size(286, 65);
+            this.lblCurrentTime.Size = new System.Drawing.Size(262, 65);
             this.lblCurrentTime.TabIndex = 12;
             this.lblCurrentTime.Text = "00:00:00";
             this.lblCurrentTime.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // grpTarget
             // 
+            this.grpTarget.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.grpTarget.Controls.Add(this.progExportTarget);
             this.grpTarget.Controls.Add(this.lblExportedWeek);
             this.grpTarget.Controls.Add(this.lblExportTargetWeek);
-            this.grpTarget.Location = new System.Drawing.Point(511, 9);
+            this.grpTarget.Location = new System.Drawing.Point(580, 9);
             this.grpTarget.Name = "grpTarget";
-            this.grpTarget.Size = new System.Drawing.Size(285, 83);
+            this.grpTarget.Size = new System.Drawing.Size(262, 83);
             this.grpTarget.TabIndex = 13;
             this.grpTarget.TabStop = false;
             this.grpTarget.Text = "Target Export Week To Date";
             // 
             // progExportTarget
             // 
+            this.progExportTarget.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.progExportTarget.Location = new System.Drawing.Point(9, 42);
             this.progExportTarget.Name = "progExportTarget";
-            this.progExportTarget.Size = new System.Drawing.Size(270, 35);
+            this.progExportTarget.Size = new System.Drawing.Size(247, 35);
             this.progExportTarget.TabIndex = 16;
             // 
             // lblExportedWeek
@@ -159,7 +166,7 @@
             // 
             this.grpExportStats.Controls.Add(this.lblUnexportedTime);
             this.grpExportStats.Controls.Add(this.lblExportStat);
-            this.grpExportStats.Location = new System.Drawing.Point(296, 12);
+            this.grpExportStats.Location = new System.Drawing.Point(367, 12);
             this.grpExportStats.Name = "grpExportStats";
             this.grpExportStats.Size = new System.Drawing.Size(207, 80);
             this.grpExportStats.TabIndex = 14;
@@ -185,6 +192,28 @@
             this.lblExportStat.Size = new System.Drawing.Size(87, 17);
             this.lblExportStat.TabIndex = 17;
             this.lblExportStat.Text = "Exported: 0/0";
+            // 
+            // notifyAlert
+            // 
+            this.notifyAlert.BalloonTipIcon = System.Windows.Forms.ToolTipIcon.Info;
+            this.notifyAlert.BalloonTipText = "No Previous Alert";
+            this.notifyAlert.BalloonTipTitle = "Timer Not Running";
+            this.notifyAlert.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyAlert.Icon")));
+            this.notifyAlert.Text = "Gallifrey";
+            this.notifyAlert.Visible = true;
+            this.notifyAlert.BalloonTipClicked += new System.EventHandler(this.notifyAlert_BalloonTipClicked);
+            this.notifyAlert.DoubleClick += new System.EventHandler(this.notifyAlert_DoubleClick);
+            // 
+            // btnIdle
+            // 
+            this.btnIdle.Image = global::Gallifrey.UI.Classic.Properties.Resources.Log_Out_48x48;
+            this.btnIdle.Location = new System.Drawing.Point(438, 98);
+            this.btnIdle.Name = "btnIdle";
+            this.btnIdle.Size = new System.Drawing.Size(65, 65);
+            this.btnIdle.TabIndex = 15;
+            this.btnIdle.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.btnIdle.UseVisualStyleBackColor = true;
+            this.btnIdle.Click += new System.EventHandler(this.btnIdle_Click);
             // 
             // btnRename
             // 
@@ -232,7 +261,7 @@
             // btnSettings
             // 
             this.btnSettings.Image = global::Gallifrey.UI.Classic.Properties.Resources.Settings_48x48;
-            this.btnSettings.Location = new System.Drawing.Point(438, 98);
+            this.btnSettings.Location = new System.Drawing.Point(509, 98);
             this.btnSettings.Name = "btnSettings";
             this.btnSettings.Size = new System.Drawing.Size(65, 65);
             this.btnSettings.TabIndex = 7;
@@ -272,22 +301,12 @@
             this.btnAddTimer.UseVisualStyleBackColor = true;
             this.btnAddTimer.Click += new System.EventHandler(this.btnAddTimer_Click);
             // 
-            // notifyAlert
-            // 
-            this.notifyAlert.BalloonTipIcon = System.Windows.Forms.ToolTipIcon.Info;
-            this.notifyAlert.BalloonTipText = "No Previous Alert";
-            this.notifyAlert.BalloonTipTitle = "Timer Not Running";
-            this.notifyAlert.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyAlert.Icon")));
-            this.notifyAlert.Text = "Gallifrey";
-            this.notifyAlert.Visible = true;
-            this.notifyAlert.BalloonTipClicked += new System.EventHandler(this.notifyAlert_BalloonTipClicked);
-            this.notifyAlert.DoubleClick += new System.EventHandler(this.notifyAlert_DoubleClick);
-            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(808, 595);
+            this.ClientSize = new System.Drawing.Size(854, 595);
+            this.Controls.Add(this.btnIdle);
             this.Controls.Add(this.grpExportStats);
             this.Controls.Add(this.grpTarget);
             this.Controls.Add(this.lblCurrentTime);
@@ -305,6 +324,7 @@
             this.Controls.Add(this.btnAddTimer);
             this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MinimumSize = new System.Drawing.Size(870, 633);
             this.Name = "MainWindow";
             this.Text = "Gallifrey";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainWindow_FormClosed);
@@ -343,6 +363,7 @@
         private System.Windows.Forms.Label lblUnexportedTime;
         private System.Windows.Forms.Label lblExportStat;
         private System.Windows.Forms.NotifyIcon notifyAlert;
+        private System.Windows.Forms.Button btnIdle;
     }
 }
 

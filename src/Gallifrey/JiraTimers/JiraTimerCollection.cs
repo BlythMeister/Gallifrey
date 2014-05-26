@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Atlassian.Jira;
 using Gallifrey.Exceptions.JiraTimers;
+using Gallifrey.IdleTimers;
 using Gallifrey.Serialization;
 
 namespace Gallifrey.JiraTimers
@@ -24,6 +25,7 @@ namespace Gallifrey.JiraTimers
         void AdjustTime(Guid uniqueId, int hours, int minutes, bool addTime);
         void SetJiraExportedTime(Guid uniqueId, TimeSpan loggedTime);
         void AddJiraExportedTime(Guid uniqueId, int hours, int minutes);
+        void AddIdleTimer(Guid uniqueId, IdleTimer idleTimer);
     }
 
     public class JiraTimerCollection : IJiraTimerCollection
@@ -58,6 +60,7 @@ namespace Gallifrey.JiraTimers
             }
 
             timerList.Add(newTimer);
+            SaveTimers();
         }
 
         public void AddTimer(Issue jiraIssue, DateTime startDate, TimeSpan seedTime, bool startNow)
@@ -73,6 +76,7 @@ namespace Gallifrey.JiraTimers
         public void RemoveTimer(Guid uniqueId)
         {
             timerList.Remove(GetTimer(uniqueId));
+            SaveTimers();
         }
 
         public void StartTimer(Guid uniqueId)
@@ -92,12 +96,16 @@ namespace Gallifrey.JiraTimers
             {
                 GetTimer(runningTimerId.Value).StopTimer();
             }
+
+            SaveTimers();
         }
 
         public void StopTimer(Guid uniqueId)
         {
             var timerForInteration = GetTimer(uniqueId);
             timerForInteration.StopTimer();
+
+            SaveTimers();
         }
 
         public Guid? GetRunningTimerId()
@@ -118,6 +126,7 @@ namespace Gallifrey.JiraTimers
             {
                 timerList.Remove(timer);
             }
+            SaveTimers();
         }
 
         public JiraTimer GetTimer(Guid timerGuid)
@@ -138,6 +147,7 @@ namespace Gallifrey.JiraTimers
 
             RemoveTimer(timerGuid);
             AddTimer(newTimer);
+            SaveTimers();
         }
 
         public Tuple<int, int> GetNumberExported()
@@ -155,19 +165,28 @@ namespace Gallifrey.JiraTimers
         {
             var timer = GetTimer(uniqueId);
             timer.ManualAdjustment(hours, minutes, addTime);
-
+            SaveTimers();
         }
 
         public void SetJiraExportedTime(Guid uniqueId, TimeSpan loggedTime)
         {
             var timer = GetTimer(uniqueId);
             timer.SetJiraExportedTime(loggedTime);
+            SaveTimers();
         }
 
         public void AddJiraExportedTime(Guid uniqueId, int hours, int minutes)
         {
             var timer = GetTimer(uniqueId);
             timer.AddJiraExportedTime(new TimeSpan(hours, minutes, 0));
+            SaveTimers();
+        }
+
+        public void AddIdleTimer(Guid uniqueId, IdleTimer idleTimer)
+        {
+            var timer = GetTimer(uniqueId);
+            timer.AddIdleTimer(idleTimer);
+            SaveTimers();
         }
     }
 }
