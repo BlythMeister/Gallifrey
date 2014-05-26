@@ -110,5 +110,12 @@ namespace Gallifrey.JiraTimers
         {
             return ExportedTime.TotalSeconds == 0;
         }
+
+        public void ManualAdjustment(int hours, int minutes, bool addTime)
+        {
+            var changeTimespan = new TimeSpan(hours, minutes, 0);
+
+            CurrentTime = addTime ? CurrentTime.Add(changeTimespan) : CurrentTime.Subtract(changeTimespan);
+        }
     }
 }

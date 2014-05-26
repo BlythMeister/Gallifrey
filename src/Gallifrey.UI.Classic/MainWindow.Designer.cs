@@ -36,6 +36,13 @@
             this.tabTimerDays = new System.Windows.Forms.TabControl();
             this.formTimer = new System.Windows.Forms.Timer(this.components);
             this.lblCurrentTime = new System.Windows.Forms.Label();
+            this.grpTarget = new System.Windows.Forms.GroupBox();
+            this.progExportTarget = new System.Windows.Forms.ProgressBar();
+            this.lblExportedWeek = new System.Windows.Forms.Label();
+            this.lblExportTargetWeek = new System.Windows.Forms.Label();
+            this.grpExportStats = new System.Windows.Forms.GroupBox();
+            this.lblUnexportedTime = new System.Windows.Forms.Label();
+            this.lblExportStat = new System.Windows.Forms.Label();
             this.btnRename = new System.Windows.Forms.Button();
             this.btnTimeEdit = new System.Windows.Forms.Button();
             this.btnSearch = new System.Windows.Forms.Button();
@@ -44,16 +51,9 @@
             this.btnRemoveTimer = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.btnAddTimer = new System.Windows.Forms.Button();
-            this.grpTarget = new System.Windows.Forms.GroupBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.progressBar1 = new System.Windows.Forms.ProgressBar();
-            this.grpExportStats = new System.Windows.Forms.GroupBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.grpTarget.SuspendLayout();
             this.grpExportStats.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -115,6 +115,76 @@
             this.lblCurrentTime.Text = "00:00:00";
             this.lblCurrentTime.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // grpTarget
+            // 
+            this.grpTarget.Controls.Add(this.progExportTarget);
+            this.grpTarget.Controls.Add(this.lblExportedWeek);
+            this.grpTarget.Controls.Add(this.lblExportTargetWeek);
+            this.grpTarget.Location = new System.Drawing.Point(511, 9);
+            this.grpTarget.Name = "grpTarget";
+            this.grpTarget.Size = new System.Drawing.Size(285, 83);
+            this.grpTarget.TabIndex = 13;
+            this.grpTarget.TabStop = false;
+            this.grpTarget.Text = "Target Export Week To Date";
+            // 
+            // progExportTarget
+            // 
+            this.progExportTarget.Location = new System.Drawing.Point(9, 42);
+            this.progExportTarget.Name = "progExportTarget";
+            this.progExportTarget.Size = new System.Drawing.Size(270, 35);
+            this.progExportTarget.TabIndex = 16;
+            // 
+            // lblExportedWeek
+            // 
+            this.lblExportedWeek.AutoSize = true;
+            this.lblExportedWeek.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblExportedWeek.Location = new System.Drawing.Point(107, 18);
+            this.lblExportedWeek.Name = "lblExportedWeek";
+            this.lblExportedWeek.Size = new System.Drawing.Size(92, 17);
+            this.lblExportedWeek.TabIndex = 15;
+            this.lblExportedWeek.Text = "Exported: 0:00";
+            // 
+            // lblExportTargetWeek
+            // 
+            this.lblExportTargetWeek.AutoSize = true;
+            this.lblExportTargetWeek.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblExportTargetWeek.Location = new System.Drawing.Point(6, 18);
+            this.lblExportTargetWeek.Name = "lblExportTargetWeek";
+            this.lblExportTargetWeek.Size = new System.Drawing.Size(84, 17);
+            this.lblExportTargetWeek.TabIndex = 14;
+            this.lblExportTargetWeek.Text = "Target: 10:00";
+            // 
+            // grpExportStats
+            // 
+            this.grpExportStats.Controls.Add(this.lblUnexportedTime);
+            this.grpExportStats.Controls.Add(this.lblExportStat);
+            this.grpExportStats.Location = new System.Drawing.Point(296, 12);
+            this.grpExportStats.Name = "grpExportStats";
+            this.grpExportStats.Size = new System.Drawing.Size(207, 80);
+            this.grpExportStats.TabIndex = 14;
+            this.grpExportStats.TabStop = false;
+            this.grpExportStats.Text = "Export Stats";
+            // 
+            // lblUnexportedTime
+            // 
+            this.lblUnexportedTime.AutoSize = true;
+            this.lblUnexportedTime.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblUnexportedTime.Location = new System.Drawing.Point(6, 47);
+            this.lblUnexportedTime.Name = "lblUnexportedTime";
+            this.lblUnexportedTime.Size = new System.Drawing.Size(145, 17);
+            this.lblUnexportedTime.TabIndex = 18;
+            this.lblUnexportedTime.Text = "Un-Exported Time: 0:00";
+            // 
+            // lblExportStat
+            // 
+            this.lblExportStat.AutoSize = true;
+            this.lblExportStat.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblExportStat.Location = new System.Drawing.Point(6, 23);
+            this.lblExportStat.Name = "lblExportStat";
+            this.lblExportStat.Size = new System.Drawing.Size(87, 17);
+            this.lblExportStat.TabIndex = 17;
+            this.lblExportStat.Text = "Exported: 0/0";
+            // 
             // btnRename
             // 
             this.btnRename.Image = global::Gallifrey.UI.Classic.Properties.Resources.Rename_48x48;
@@ -135,6 +205,7 @@
             this.btnTimeEdit.TabIndex = 10;
             this.btnTimeEdit.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnTimeEdit.UseVisualStyleBackColor = true;
+            this.btnTimeEdit.Click += new System.EventHandler(this.btnTimeEdit_Click);
             // 
             // btnSearch
             // 
@@ -199,76 +270,6 @@
             this.btnAddTimer.UseVisualStyleBackColor = true;
             this.btnAddTimer.Click += new System.EventHandler(this.btnAddTimer_Click);
             // 
-            // grpTarget
-            // 
-            this.grpTarget.Controls.Add(this.progressBar1);
-            this.grpTarget.Controls.Add(this.label4);
-            this.grpTarget.Controls.Add(this.label2);
-            this.grpTarget.Location = new System.Drawing.Point(511, 9);
-            this.grpTarget.Name = "grpTarget";
-            this.grpTarget.Size = new System.Drawing.Size(285, 83);
-            this.grpTarget.TabIndex = 13;
-            this.grpTarget.TabStop = false;
-            this.grpTarget.Text = "Target Export Week To Date";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(6, 18);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(84, 17);
-            this.label2.TabIndex = 14;
-            this.label2.Text = "Target: 10:00";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(107, 18);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(92, 17);
-            this.label4.TabIndex = 15;
-            this.label4.Text = "Exported: 0:00";
-            // 
-            // progressBar1
-            // 
-            this.progressBar1.Location = new System.Drawing.Point(9, 42);
-            this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(270, 35);
-            this.progressBar1.TabIndex = 16;
-            // 
-            // grpExportStats
-            // 
-            this.grpExportStats.Controls.Add(this.label6);
-            this.grpExportStats.Controls.Add(this.label5);
-            this.grpExportStats.Location = new System.Drawing.Point(296, 12);
-            this.grpExportStats.Name = "grpExportStats";
-            this.grpExportStats.Size = new System.Drawing.Size(207, 80);
-            this.grpExportStats.TabIndex = 14;
-            this.grpExportStats.TabStop = false;
-            this.grpExportStats.Text = "Export Stats";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(6, 23);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(87, 17);
-            this.label5.TabIndex = 17;
-            this.label5.Text = "Exported: 0/0";
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(6, 47);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(145, 17);
-            this.label6.TabIndex = 18;
-            this.label6.Text = "Un-Exported Time: 0:00";
-            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -295,11 +296,11 @@
             this.Text = "Gallifrey";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainWindow_FormClosed);
             this.Load += new System.EventHandler(this.MainWindow_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.grpTarget.ResumeLayout(false);
             this.grpTarget.PerformLayout();
             this.grpExportStats.ResumeLayout(false);
             this.grpExportStats.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -322,12 +323,12 @@
         private System.Windows.Forms.Button btnRename;
         private System.Windows.Forms.Label lblCurrentTime;
         private System.Windows.Forms.GroupBox grpTarget;
-        private System.Windows.Forms.ProgressBar progressBar1;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.ProgressBar progExportTarget;
+        private System.Windows.Forms.Label lblExportedWeek;
+        private System.Windows.Forms.Label lblExportTargetWeek;
         private System.Windows.Forms.GroupBox grpExportStats;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label lblUnexportedTime;
+        private System.Windows.Forms.Label lblExportStat;
     }
 }
 
