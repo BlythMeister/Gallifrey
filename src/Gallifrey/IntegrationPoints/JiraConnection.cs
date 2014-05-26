@@ -149,8 +149,9 @@ namespace Gallifrey.IntegrationPoints
         public void LogTime(Issue jiraIssue, DateTime exportTimeStamp, TimeSpan exportTime, WorklogStrategy strategy, string comment = "", TimeSpan? remainingTime = null)
         {
             var wasClosed = TryReopenJira(jiraIssue);
-            comment = "Gallifrey: " + comment;
+            
             if (string.IsNullOrWhiteSpace(comment)) comment = "No Comment Entered";
+            comment = "Gallifrey: " + comment;
 
             var worklog = new Worklog(string.Format("{0}h {1}m", exportTime.Hours, exportTime.Minutes), DateTime.SpecifyKind(exportTimeStamp, DateTimeKind.Local), comment);
             string remaining = null;

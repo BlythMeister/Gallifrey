@@ -51,6 +51,7 @@
             this.btnRemoveTimer = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.btnAddTimer = new System.Windows.Forms.Button();
+            this.notifyAlert = new System.Windows.Forms.NotifyIcon(this.components);
             this.grpTarget.SuspendLayout();
             this.grpExportStats.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -226,6 +227,7 @@
             this.btnExport.TabIndex = 8;
             this.btnExport.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnExport.UseVisualStyleBackColor = true;
+            this.btnExport.Click += new System.EventHandler(this.btnExport_Click);
             // 
             // btnSettings
             // 
@@ -269,6 +271,17 @@
             this.btnAddTimer.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnAddTimer.UseVisualStyleBackColor = true;
             this.btnAddTimer.Click += new System.EventHandler(this.btnAddTimer_Click);
+            // 
+            // notifyAlert
+            // 
+            this.notifyAlert.BalloonTipIcon = System.Windows.Forms.ToolTipIcon.Info;
+            this.notifyAlert.BalloonTipText = "No Previous Alert";
+            this.notifyAlert.BalloonTipTitle = "Timer Not Running";
+            this.notifyAlert.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyAlert.Icon")));
+            this.notifyAlert.Text = "Gallifrey";
+            this.notifyAlert.Visible = true;
+            this.notifyAlert.BalloonTipClicked += new System.EventHandler(this.notifyAlert_BalloonTipClicked);
+            this.notifyAlert.DoubleClick += new System.EventHandler(this.notifyAlert_DoubleClick);
             // 
             // MainWindow
             // 
@@ -329,6 +342,7 @@
         private System.Windows.Forms.GroupBox grpExportStats;
         private System.Windows.Forms.Label lblUnexportedTime;
         private System.Windows.Forms.Label lblExportStat;
+        private System.Windows.Forms.NotifyIcon notifyAlert;
     }
 }
 

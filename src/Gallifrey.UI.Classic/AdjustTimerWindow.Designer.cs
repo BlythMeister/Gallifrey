@@ -194,7 +194,7 @@
             this.MaximumSize = new System.Drawing.Size(279, 331);
             this.MinimumSize = new System.Drawing.Size(279, 331);
             this.Name = "AdjustTimerWindow";
-            this.Text = "Gallifrey - Add Timer";
+            this.Text = "Gallifrey - Adjust Time";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.ResumeLayout(false);

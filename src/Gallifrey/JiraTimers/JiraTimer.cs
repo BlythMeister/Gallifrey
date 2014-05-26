@@ -50,8 +50,8 @@ namespace Gallifrey.JiraTimers
         public JiraTimer(JiraTimer previousTimer, DateTime dateStarted)
         {
             JiraReference = previousTimer.JiraReference;
-            JiraProjectName = previousTimer.JiraReference;
-            JiraName = previousTimer.JiraReference;
+            JiraProjectName = previousTimer.JiraProjectName;
+            JiraName = previousTimer.JiraName;
             DateStarted = dateStarted;
             CurrentTime = new TimeSpan();
             ExportedTime = new TimeSpan();
@@ -116,6 +116,16 @@ namespace Gallifrey.JiraTimers
             var changeTimespan = new TimeSpan(hours, minutes, 0);
 
             CurrentTime = addTime ? CurrentTime.Add(changeTimespan) : CurrentTime.Subtract(changeTimespan);
+        }
+
+        public void SetJiraExportedTime(TimeSpan loggedTime)
+        {
+            ExportedTime = loggedTime;
+        }
+
+        public void AddJiraExportedTime(TimeSpan loggedTime)
+        {
+            ExportedTime = ExportedTime.Add(loggedTime);
         }
     }
 }

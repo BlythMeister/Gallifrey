@@ -121,7 +121,7 @@
             this.MaximumSize = new System.Drawing.Size(312, 236);
             this.MinimumSize = new System.Drawing.Size(312, 236);
             this.Name = "RenameTimerWindow";
-            this.Text = "Gallifrey - Add Timer";
+            this.Text = "Gallifrey - Rename Timer";
             this.ResumeLayout(false);
             this.PerformLayout();
 
