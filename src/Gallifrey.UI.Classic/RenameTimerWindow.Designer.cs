@@ -43,7 +43,7 @@
             this.txtJiraRef.Location = new System.Drawing.Point(123, 47);
             this.txtJiraRef.Name = "txtJiraRef";
             this.txtJiraRef.Size = new System.Drawing.Size(157, 25);
-            this.txtJiraRef.TabIndex = 0;
+            this.txtJiraRef.TabIndex = 2;
             // 
             // label1
             // 
@@ -60,7 +60,7 @@
             this.calStartDate.Location = new System.Drawing.Point(123, 78);
             this.calStartDate.Name = "calStartDate";
             this.calStartDate.Size = new System.Drawing.Size(157, 25);
-            this.calStartDate.TabIndex = 2;
+            this.calStartDate.TabIndex = 4;
             // 
             // label2
             // 
@@ -69,7 +69,7 @@
             this.label2.Location = new System.Drawing.Point(12, 9);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(136, 25);
-            this.label2.TabIndex = 5;
+            this.label2.TabIndex = 0;
             this.label2.Text = "Rename Timer";
             // 
             // label3
@@ -78,7 +78,7 @@
             this.label3.Location = new System.Drawing.Point(35, 84);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(84, 17);
-            this.label3.TabIndex = 6;
+            this.label3.TabIndex = 3;
             this.label3.Text = "Starting Date";
             // 
             // btnCancel
@@ -87,7 +87,7 @@
             this.btnCancel.Location = new System.Drawing.Point(168, 118);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(65, 65);
-            this.btnCancel.TabIndex = 11;
+            this.btnCancel.TabIndex = 6;
             this.btnCancel.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
@@ -98,7 +98,7 @@
             this.btnOK.Location = new System.Drawing.Point(55, 118);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(65, 65);
-            this.btnOK.TabIndex = 10;
+            this.btnOK.TabIndex = 5;
             this.btnOK.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnOK.UseVisualStyleBackColor = true;
             this.btnOK.Click += new System.EventHandler(this.btnOK_Click);

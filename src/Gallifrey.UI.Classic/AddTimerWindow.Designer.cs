@@ -50,7 +50,7 @@
             this.txtJiraRef.Location = new System.Drawing.Point(123, 47);
             this.txtJiraRef.Name = "txtJiraRef";
             this.txtJiraRef.Size = new System.Drawing.Size(157, 25);
-            this.txtJiraRef.TabIndex = 0;
+            this.txtJiraRef.TabIndex = 2;
             // 
             // label1
             // 
@@ -66,7 +66,7 @@
             this.calStartDate.Location = new System.Drawing.Point(123, 78);
             this.calStartDate.Name = "calStartDate";
             this.calStartDate.Size = new System.Drawing.Size(157, 25);
-            this.calStartDate.TabIndex = 2;
+            this.calStartDate.TabIndex = 4;
             this.calStartDate.ValueChanged += new System.EventHandler(this.calStartDate_ValueChanged);
             // 
             // txtStartHours
@@ -74,7 +74,7 @@
             this.txtStartHours.Location = new System.Drawing.Point(123, 109);
             this.txtStartHours.Name = "txtStartHours";
             this.txtStartHours.Size = new System.Drawing.Size(30, 25);
-            this.txtStartHours.TabIndex = 3;
+            this.txtStartHours.TabIndex = 6;
             this.txtStartHours.Text = "00";
             this.txtStartHours.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -83,7 +83,7 @@
             this.txtStartMins.Location = new System.Drawing.Point(208, 109);
             this.txtStartMins.Name = "txtStartMins";
             this.txtStartMins.Size = new System.Drawing.Size(30, 25);
-            this.txtStartMins.TabIndex = 4;
+            this.txtStartMins.TabIndex = 8;
             this.txtStartMins.Text = "00";
             this.txtStartMins.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -94,7 +94,7 @@
             this.label2.Location = new System.Drawing.Point(12, 9);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(105, 25);
-            this.label2.TabIndex = 5;
+            this.label2.TabIndex = 0;
             this.label2.Text = "New Timer";
             // 
             // label3
@@ -103,7 +103,7 @@
             this.label3.Location = new System.Drawing.Point(35, 84);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(84, 17);
-            this.label3.TabIndex = 6;
+            this.label3.TabIndex = 3;
             this.label3.Text = "Starting Date";
             // 
             // label4
@@ -112,7 +112,7 @@
             this.label4.Location = new System.Drawing.Point(12, 112);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(107, 17);
-            this.label4.TabIndex = 7;
+            this.label4.TabIndex = 5;
             this.label4.Text = "Pre Loaded Time";
             // 
             // label5
@@ -121,7 +121,7 @@
             this.label5.Location = new System.Drawing.Point(159, 112);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(43, 17);
-            this.label5.TabIndex = 8;
+            this.label5.TabIndex = 7;
             this.label5.Text = "Hours";
             // 
             // label6
@@ -139,7 +139,7 @@
             this.btnCancelAddTimer.Location = new System.Drawing.Point(173, 172);
             this.btnCancelAddTimer.Name = "btnCancelAddTimer";
             this.btnCancelAddTimer.Size = new System.Drawing.Size(65, 65);
-            this.btnCancelAddTimer.TabIndex = 11;
+            this.btnCancelAddTimer.TabIndex = 13;
             this.btnCancelAddTimer.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnCancelAddTimer.UseVisualStyleBackColor = true;
             this.btnCancelAddTimer.Click += new System.EventHandler(this.btnCancelAddTimer_Click);
@@ -150,7 +150,7 @@
             this.btnAddTimer.Location = new System.Drawing.Point(60, 172);
             this.btnAddTimer.Name = "btnAddTimer";
             this.btnAddTimer.Size = new System.Drawing.Size(65, 65);
-            this.btnAddTimer.TabIndex = 10;
+            this.btnAddTimer.TabIndex = 12;
             this.btnAddTimer.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnAddTimer.UseVisualStyleBackColor = true;
             this.btnAddTimer.Click += new System.EventHandler(this.btnAddTimer_Click);
@@ -161,7 +161,7 @@
             this.chkStartNow.Location = new System.Drawing.Point(123, 140);
             this.chkStartNow.Name = "chkStartNow";
             this.chkStartNow.Size = new System.Drawing.Size(15, 14);
-            this.chkStartNow.TabIndex = 12;
+            this.chkStartNow.TabIndex = 11;
             this.chkStartNow.UseVisualStyleBackColor = true;
             // 
             // label7
@@ -170,7 +170,7 @@
             this.label7.Location = new System.Drawing.Point(45, 138);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(72, 17);
-            this.label7.TabIndex = 13;
+            this.label7.TabIndex = 10;
             this.label7.Text = "Start Now?";
             // 
             // AddTimerWindow
