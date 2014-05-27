@@ -35,11 +35,11 @@
             this.lstIdleTimers = new System.Windows.Forms.ListBox();
             this.btnCancel = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.radDelete = new System.Windows.Forms.RadioButton();
-            this.radRunning = new System.Windows.Forms.RadioButton();
-            this.radSelected = new System.Windows.Forms.RadioButton();
-            this.cmbDayTimers = new System.Windows.Forms.ComboBox();
             this.lblRunning = new System.Windows.Forms.Label();
+            this.cmbDayTimers = new System.Windows.Forms.ComboBox();
+            this.radSelected = new System.Windows.Forms.RadioButton();
+            this.radRunning = new System.Windows.Forms.RadioButton();
+            this.radDelete = new System.Windows.Forms.RadioButton();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -59,7 +59,7 @@
             this.label2.Location = new System.Drawing.Point(12, 9);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(106, 25);
-            this.label2.TabIndex = 5;
+            this.label2.TabIndex = 0;
             this.label2.Text = "Idle Timers";
             // 
             // btnOK
@@ -68,7 +68,7 @@
             this.btnOK.Location = new System.Drawing.Point(167, 341);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(65, 65);
-            this.btnOK.TabIndex = 10;
+            this.btnOK.TabIndex = 4;
             this.btnOK.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnOK.UseVisualStyleBackColor = true;
             this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
@@ -80,7 +80,7 @@
             this.lstIdleTimers.Location = new System.Drawing.Point(94, 50);
             this.lstIdleTimers.Name = "lstIdleTimers";
             this.lstIdleTimers.Size = new System.Drawing.Size(573, 157);
-            this.lstIdleTimers.TabIndex = 12;
+            this.lstIdleTimers.TabIndex = 2;
             this.lstIdleTimers.SelectedIndexChanged += new System.EventHandler(this.lstIdleTimers_SelectedIndexChanged);
             // 
             // btnCancel
@@ -89,7 +89,7 @@
             this.btnCancel.Location = new System.Drawing.Point(272, 341);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(65, 65);
-            this.btnCancel.TabIndex = 11;
+            this.btnCancel.TabIndex = 5;
             this.btnCancel.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
@@ -104,9 +104,46 @@
             this.groupBox1.Location = new System.Drawing.Point(13, 225);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(654, 110);
-            this.groupBox1.TabIndex = 13;
+            this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Idle Time Destination";
+            // 
+            // lblRunning
+            // 
+            this.lblRunning.AutoSize = true;
+            this.lblRunning.Location = new System.Drawing.Point(162, 54);
+            this.lblRunning.Name = "lblRunning";
+            this.lblRunning.Size = new System.Drawing.Size(31, 17);
+            this.lblRunning.TabIndex = 2;
+            this.lblRunning.Text = "N/A";
+            // 
+            // cmbDayTimers
+            // 
+            this.cmbDayTimers.FormattingEnabled = true;
+            this.cmbDayTimers.Location = new System.Drawing.Point(135, 78);
+            this.cmbDayTimers.Name = "cmbDayTimers";
+            this.cmbDayTimers.Size = new System.Drawing.Size(513, 25);
+            this.cmbDayTimers.TabIndex = 4;
+            // 
+            // radSelected
+            // 
+            this.radSelected.AutoSize = true;
+            this.radSelected.Location = new System.Drawing.Point(4, 79);
+            this.radSelected.Name = "radSelected";
+            this.radSelected.Size = new System.Drawing.Size(125, 21);
+            this.radSelected.TabIndex = 3;
+            this.radSelected.Text = "Add To Selected:";
+            this.radSelected.UseVisualStyleBackColor = true;
+            // 
+            // radRunning
+            // 
+            this.radRunning.AutoSize = true;
+            this.radRunning.Location = new System.Drawing.Point(7, 52);
+            this.radRunning.Name = "radRunning";
+            this.radRunning.Size = new System.Drawing.Size(160, 21);
+            this.radRunning.TabIndex = 1;
+            this.radRunning.Text = "Add To Running Timer:";
+            this.radRunning.UseVisualStyleBackColor = true;
             // 
             // radDelete
             // 
@@ -119,43 +156,6 @@
             this.radDelete.TabStop = true;
             this.radDelete.Text = "Delete Idle Time";
             this.radDelete.UseVisualStyleBackColor = true;
-            // 
-            // radRunning
-            // 
-            this.radRunning.AutoSize = true;
-            this.radRunning.Location = new System.Drawing.Point(7, 52);
-            this.radRunning.Name = "radRunning";
-            this.radRunning.Size = new System.Drawing.Size(160, 21);
-            this.radRunning.TabIndex = 1;
-            this.radRunning.Text = "Add To Running Timer:";
-            this.radRunning.UseVisualStyleBackColor = true;
-            // 
-            // radSelected
-            // 
-            this.radSelected.AutoSize = true;
-            this.radSelected.Location = new System.Drawing.Point(4, 79);
-            this.radSelected.Name = "radSelected";
-            this.radSelected.Size = new System.Drawing.Size(125, 21);
-            this.radSelected.TabIndex = 2;
-            this.radSelected.Text = "Add To Selected:";
-            this.radSelected.UseVisualStyleBackColor = true;
-            // 
-            // cmbDayTimers
-            // 
-            this.cmbDayTimers.FormattingEnabled = true;
-            this.cmbDayTimers.Location = new System.Drawing.Point(135, 78);
-            this.cmbDayTimers.Name = "cmbDayTimers";
-            this.cmbDayTimers.Size = new System.Drawing.Size(513, 25);
-            this.cmbDayTimers.TabIndex = 3;
-            // 
-            // lblRunning
-            // 
-            this.lblRunning.AutoSize = true;
-            this.lblRunning.Location = new System.Drawing.Point(162, 54);
-            this.lblRunning.Name = "lblRunning";
-            this.lblRunning.Size = new System.Drawing.Size(31, 17);
-            this.lblRunning.TabIndex = 4;
-            this.lblRunning.Text = "N/A";
             // 
             // IdleTimerWindow
             // 

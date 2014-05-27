@@ -40,8 +40,8 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.radAdd = new System.Windows.Forms.RadioButton();
             this.radSubtract = new System.Windows.Forms.RadioButton();
+            this.radAdd = new System.Windows.Forms.RadioButton();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -51,7 +51,7 @@
             this.txtJiraRef.Location = new System.Drawing.Point(108, 47);
             this.txtJiraRef.Name = "txtJiraRef";
             this.txtJiraRef.Size = new System.Drawing.Size(140, 25);
-            this.txtJiraRef.TabIndex = 0;
+            this.txtJiraRef.TabIndex = 2;
             // 
             // label1
             // 
@@ -69,7 +69,7 @@
             this.label2.Location = new System.Drawing.Point(12, 9);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(236, 25);
-            this.label2.TabIndex = 5;
+            this.label2.TabIndex = 0;
             this.label2.Text = "Manual Timer Adjustment";
             // 
             // btnCancel
@@ -78,7 +78,7 @@
             this.btnCancel.Location = new System.Drawing.Point(138, 215);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(65, 65);
-            this.btnCancel.TabIndex = 11;
+            this.btnCancel.TabIndex = 10;
             this.btnCancel.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
@@ -89,7 +89,7 @@
             this.btnOK.Location = new System.Drawing.Point(33, 215);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(65, 65);
-            this.btnOK.TabIndex = 10;
+            this.btnOK.TabIndex = 9;
             this.btnOK.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnOK.UseVisualStyleBackColor = true;
             this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
@@ -100,7 +100,7 @@
             this.label3.Location = new System.Drawing.Point(14, 87);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(96, 17);
-            this.label3.TabIndex = 12;
+            this.label3.TabIndex = 3;
             this.label3.Text = "Adjust Time By:";
             // 
             // txtHours
@@ -108,7 +108,7 @@
             this.txtHours.Location = new System.Drawing.Point(17, 110);
             this.txtHours.Name = "txtHours";
             this.txtHours.Size = new System.Drawing.Size(39, 25);
-            this.txtHours.TabIndex = 13;
+            this.txtHours.TabIndex = 4;
             this.txtHours.Text = "00";
             this.txtHours.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -117,7 +117,7 @@
             this.txtMinutes.Location = new System.Drawing.Point(104, 110);
             this.txtMinutes.Name = "txtMinutes";
             this.txtMinutes.Size = new System.Drawing.Size(39, 25);
-            this.txtMinutes.TabIndex = 14;
+            this.txtMinutes.TabIndex = 6;
             this.txtMinutes.Text = "00";
             this.txtMinutes.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -127,7 +127,7 @@
             this.label4.Location = new System.Drawing.Point(55, 113);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(43, 17);
-            this.label4.TabIndex = 15;
+            this.label4.TabIndex = 5;
             this.label4.Text = "Hours";
             // 
             // label5
@@ -136,7 +136,7 @@
             this.label5.Location = new System.Drawing.Point(149, 113);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(54, 17);
-            this.label5.TabIndex = 16;
+            this.label5.TabIndex = 7;
             this.label5.Text = "Minutes";
             // 
             // groupBox1
@@ -146,9 +146,19 @@
             this.groupBox1.Location = new System.Drawing.Point(15, 151);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(233, 58);
-            this.groupBox1.TabIndex = 17;
+            this.groupBox1.TabIndex = 8;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Adjustment Direction";
+            // 
+            // radSubtract
+            // 
+            this.radSubtract.AutoSize = true;
+            this.radSubtract.Location = new System.Drawing.Point(112, 25);
+            this.radSubtract.Name = "radSubtract";
+            this.radSubtract.Size = new System.Drawing.Size(112, 21);
+            this.radSubtract.TabIndex = 1;
+            this.radSubtract.Text = "Substract Time";
+            this.radSubtract.UseVisualStyleBackColor = true;
             // 
             // radAdd
             // 
@@ -161,16 +171,6 @@
             this.radAdd.TabStop = true;
             this.radAdd.Text = "Add Time";
             this.radAdd.UseVisualStyleBackColor = true;
-            // 
-            // radSubtract
-            // 
-            this.radSubtract.AutoSize = true;
-            this.radSubtract.Location = new System.Drawing.Point(112, 25);
-            this.radSubtract.Name = "radSubtract";
-            this.radSubtract.Size = new System.Drawing.Size(112, 21);
-            this.radSubtract.TabIndex = 1;
-            this.radSubtract.Text = "Substract Time";
-            this.radSubtract.UseVisualStyleBackColor = true;
             // 
             // AdjustTimerWindow
             // 

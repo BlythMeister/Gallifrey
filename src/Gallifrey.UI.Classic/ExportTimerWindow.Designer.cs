@@ -50,6 +50,8 @@
             this.label6 = new System.Windows.Forms.Label();
             this.txtDescription = new System.Windows.Forms.TextBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.label15 = new System.Windows.Forms.Label();
+            this.calExportDate = new System.Windows.Forms.DateTimePicker();
             this.label10 = new System.Windows.Forms.Label();
             this.txtExportHours = new System.Windows.Forms.TextBox();
             this.txtExportMins = new System.Windows.Forms.TextBox();
@@ -60,8 +62,6 @@
             this.txtExportedMins = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
-            this.calExportDate = new System.Windows.Forms.DateTimePicker();
-            this.label15 = new System.Windows.Forms.Label();
             this.label16 = new System.Windows.Forms.Label();
             this.txtComment = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
@@ -74,7 +74,7 @@
             this.txtJiraRef.Location = new System.Drawing.Point(108, 47);
             this.txtJiraRef.Name = "txtJiraRef";
             this.txtJiraRef.Size = new System.Drawing.Size(173, 25);
-            this.txtJiraRef.TabIndex = 0;
+            this.txtJiraRef.TabIndex = 2;
             // 
             // label1
             // 
@@ -92,7 +92,7 @@
             this.label2.Location = new System.Drawing.Point(12, 9);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(122, 25);
-            this.label2.TabIndex = 5;
+            this.label2.TabIndex = 0;
             this.label2.Text = "Export Timer";
             // 
             // btnCancel
@@ -101,7 +101,7 @@
             this.btnCancel.Location = new System.Drawing.Point(153, 583);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(65, 65);
-            this.btnCancel.TabIndex = 11;
+            this.btnCancel.TabIndex = 10;
             this.btnCancel.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
@@ -112,7 +112,7 @@
             this.btnOK.Location = new System.Drawing.Point(54, 583);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(65, 65);
-            this.btnOK.TabIndex = 10;
+            this.btnOK.TabIndex = 9;
             this.btnOK.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnOK.UseVisualStyleBackColor = true;
             this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
@@ -123,7 +123,7 @@
             this.label3.Location = new System.Drawing.Point(39, 31);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(40, 17);
-            this.label3.TabIndex = 12;
+            this.label3.TabIndex = 0;
             this.label3.Text = "Total:";
             // 
             // txtTotalHours
@@ -132,7 +132,7 @@
             this.txtTotalHours.Location = new System.Drawing.Point(85, 28);
             this.txtTotalHours.Name = "txtTotalHours";
             this.txtTotalHours.Size = new System.Drawing.Size(39, 25);
-            this.txtTotalHours.TabIndex = 13;
+            this.txtTotalHours.TabIndex = 1;
             this.txtTotalHours.Text = "00";
             this.txtTotalHours.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -142,7 +142,7 @@
             this.txtTotalMinutes.Location = new System.Drawing.Point(172, 28);
             this.txtTotalMinutes.Name = "txtTotalMinutes";
             this.txtTotalMinutes.Size = new System.Drawing.Size(39, 25);
-            this.txtTotalMinutes.TabIndex = 14;
+            this.txtTotalMinutes.TabIndex = 3;
             this.txtTotalMinutes.Text = "00";
             this.txtTotalMinutes.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -152,7 +152,7 @@
             this.label4.Location = new System.Drawing.Point(123, 31);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(43, 17);
-            this.label4.TabIndex = 15;
+            this.label4.TabIndex = 2;
             this.label4.Text = "Hours";
             // 
             // label5
@@ -161,7 +161,7 @@
             this.label5.Location = new System.Drawing.Point(217, 31);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(54, 17);
-            this.label5.TabIndex = 16;
+            this.label5.TabIndex = 4;
             this.label5.Text = "Minutes";
             // 
             // groupBox1
@@ -176,7 +176,7 @@
             this.groupBox1.Location = new System.Drawing.Point(7, 344);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(274, 146);
-            this.groupBox1.TabIndex = 17;
+            this.groupBox1.TabIndex = 6;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Remaining Time";
             // 
@@ -185,7 +185,7 @@
             this.txtSetValueHours.Location = new System.Drawing.Point(31, 53);
             this.txtSetValueHours.Name = "txtSetValueHours";
             this.txtSetValueHours.Size = new System.Drawing.Size(39, 25);
-            this.txtSetValueHours.TabIndex = 27;
+            this.txtSetValueHours.TabIndex = 1;
             this.txtSetValueHours.Text = "00";
             this.txtSetValueHours.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -195,7 +195,7 @@
             this.radAutoAdjust.Location = new System.Drawing.Point(8, 85);
             this.radAutoAdjust.Name = "radAutoAdjust";
             this.radAutoAdjust.Size = new System.Drawing.Size(143, 21);
-            this.radAutoAdjust.TabIndex = 2;
+            this.radAutoAdjust.TabIndex = 5;
             this.radAutoAdjust.Text = "Automatically Adjust";
             this.radAutoAdjust.UseVisualStyleBackColor = true;
             // 
@@ -204,7 +204,7 @@
             this.txtSetValueMins.Location = new System.Drawing.Point(118, 53);
             this.txtSetValueMins.Name = "txtSetValueMins";
             this.txtSetValueMins.Size = new System.Drawing.Size(39, 25);
-            this.txtSetValueMins.TabIndex = 28;
+            this.txtSetValueMins.TabIndex = 3;
             this.txtSetValueMins.Text = "00";
             this.txtSetValueMins.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -214,7 +214,7 @@
             this.radLeaveRemaining.Location = new System.Drawing.Point(8, 112);
             this.radLeaveRemaining.Name = "radLeaveRemaining";
             this.radLeaveRemaining.Size = new System.Drawing.Size(124, 21);
-            this.radLeaveRemaining.TabIndex = 1;
+            this.radLeaveRemaining.TabIndex = 6;
             this.radLeaveRemaining.Text = "Leave Remaining";
             this.radLeaveRemaining.UseVisualStyleBackColor = true;
             // 
@@ -224,7 +224,7 @@
             this.label13.Location = new System.Drawing.Point(69, 56);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(43, 17);
-            this.label13.TabIndex = 29;
+            this.label13.TabIndex = 2;
             this.label13.Text = "Hours";
             // 
             // label14
@@ -233,7 +233,7 @@
             this.label14.Location = new System.Drawing.Point(163, 56);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(54, 17);
-            this.label14.TabIndex = 30;
+            this.label14.TabIndex = 4;
             this.label14.Text = "Minutes";
             // 
             // radSetValue
@@ -255,7 +255,7 @@
             this.label6.Location = new System.Drawing.Point(4, 81);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(98, 17);
-            this.label6.TabIndex = 19;
+            this.label6.TabIndex = 3;
             this.label6.Text = "Jira Description";
             // 
             // txtDescription
@@ -265,7 +265,7 @@
             this.txtDescription.Multiline = true;
             this.txtDescription.Name = "txtDescription";
             this.txtDescription.Size = new System.Drawing.Size(173, 81);
-            this.txtDescription.TabIndex = 18;
+            this.txtDescription.TabIndex = 4;
             // 
             // groupBox2
             // 
@@ -289,9 +289,27 @@
             this.groupBox2.Location = new System.Drawing.Point(7, 172);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(274, 166);
-            this.groupBox2.TabIndex = 20;
+            this.groupBox2.TabIndex = 5;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = " Export Info";
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(-1, 127);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(80, 17);
+            this.label15.TabIndex = 15;
+            this.label15.Text = "Export Date:";
+            // 
+            // calExportDate
+            // 
+            this.calExportDate.CustomFormat = "dd/MM/yyyy HH:mm";
+            this.calExportDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.calExportDate.Location = new System.Drawing.Point(85, 121);
+            this.calExportDate.Name = "calExportDate";
+            this.calExportDate.Size = new System.Drawing.Size(183, 25);
+            this.calExportDate.TabIndex = 16;
             // 
             // label10
             // 
@@ -299,7 +317,7 @@
             this.label10.Location = new System.Drawing.Point(11, 93);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(68, 17);
-            this.label10.TabIndex = 22;
+            this.label10.TabIndex = 10;
             this.label10.Text = "To Export:";
             // 
             // txtExportHours
@@ -307,7 +325,7 @@
             this.txtExportHours.Location = new System.Drawing.Point(85, 90);
             this.txtExportHours.Name = "txtExportHours";
             this.txtExportHours.Size = new System.Drawing.Size(39, 25);
-            this.txtExportHours.TabIndex = 23;
+            this.txtExportHours.TabIndex = 11;
             this.txtExportHours.Text = "00";
             this.txtExportHours.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -316,7 +334,7 @@
             this.txtExportMins.Location = new System.Drawing.Point(172, 90);
             this.txtExportMins.Name = "txtExportMins";
             this.txtExportMins.Size = new System.Drawing.Size(39, 25);
-            this.txtExportMins.TabIndex = 24;
+            this.txtExportMins.TabIndex = 13;
             this.txtExportMins.Text = "00";
             this.txtExportMins.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -326,7 +344,7 @@
             this.label11.Location = new System.Drawing.Point(123, 93);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(43, 17);
-            this.label11.TabIndex = 25;
+            this.label11.TabIndex = 12;
             this.label11.Text = "Hours";
             // 
             // label12
@@ -335,7 +353,7 @@
             this.label12.Location = new System.Drawing.Point(217, 93);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(54, 17);
-            this.label12.TabIndex = 26;
+            this.label12.TabIndex = 14;
             this.label12.Text = "Minutes";
             // 
             // label7
@@ -344,7 +362,7 @@
             this.label7.Location = new System.Drawing.Point(15, 62);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(64, 17);
-            this.label7.TabIndex = 17;
+            this.label7.TabIndex = 5;
             this.label7.Text = "Exported:";
             // 
             // txtExportedHours
@@ -353,7 +371,7 @@
             this.txtExportedHours.Location = new System.Drawing.Point(85, 59);
             this.txtExportedHours.Name = "txtExportedHours";
             this.txtExportedHours.Size = new System.Drawing.Size(39, 25);
-            this.txtExportedHours.TabIndex = 18;
+            this.txtExportedHours.TabIndex = 6;
             this.txtExportedHours.Text = "00";
             this.txtExportedHours.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -363,7 +381,7 @@
             this.txtExportedMins.Location = new System.Drawing.Point(172, 59);
             this.txtExportedMins.Name = "txtExportedMins";
             this.txtExportedMins.Size = new System.Drawing.Size(39, 25);
-            this.txtExportedMins.TabIndex = 19;
+            this.txtExportedMins.TabIndex = 8;
             this.txtExportedMins.Text = "00";
             this.txtExportedMins.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -373,7 +391,7 @@
             this.label8.Location = new System.Drawing.Point(123, 62);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(43, 17);
-            this.label8.TabIndex = 20;
+            this.label8.TabIndex = 7;
             this.label8.Text = "Hours";
             // 
             // label9
@@ -382,26 +400,8 @@
             this.label9.Location = new System.Drawing.Point(217, 62);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(54, 17);
-            this.label9.TabIndex = 21;
+            this.label9.TabIndex = 9;
             this.label9.Text = "Minutes";
-            // 
-            // calExportDate
-            // 
-            this.calExportDate.CustomFormat = "dd/MM/yyyy HH:mm";
-            this.calExportDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.calExportDate.Location = new System.Drawing.Point(85, 121);
-            this.calExportDate.Name = "calExportDate";
-            this.calExportDate.Size = new System.Drawing.Size(183, 25);
-            this.calExportDate.TabIndex = 27;
-            // 
-            // label15
-            // 
-            this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(-1, 127);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(80, 17);
-            this.label15.TabIndex = 28;
-            this.label15.Text = "Export Date:";
             // 
             // label16
             // 
@@ -409,7 +409,7 @@
             this.label16.Location = new System.Drawing.Point(6, 493);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(67, 17);
-            this.label16.TabIndex = 29;
+            this.label16.TabIndex = 7;
             this.label16.Text = "Comment:";
             // 
             // txtComment
@@ -418,7 +418,7 @@
             this.txtComment.Multiline = true;
             this.txtComment.Name = "txtComment";
             this.txtComment.Size = new System.Drawing.Size(202, 81);
-            this.txtComment.TabIndex = 30;
+            this.txtComment.TabIndex = 8;
             // 
             // ExportTimerWindow
             // 

@@ -62,7 +62,7 @@
             this.txtJiraUrl.Location = new System.Drawing.Point(102, 30);
             this.txtJiraUrl.Name = "txtJiraUrl";
             this.txtJiraUrl.Size = new System.Drawing.Size(194, 25);
-            this.txtJiraUrl.TabIndex = 0;
+            this.txtJiraUrl.TabIndex = 1;
             // 
             // label1
             // 
@@ -70,7 +70,7 @@
             this.label1.Location = new System.Drawing.Point(41, 33);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(55, 17);
-            this.label1.TabIndex = 1;
+            this.label1.TabIndex = 0;
             this.label1.Text = "Jira URL";
             // 
             // label2
@@ -80,7 +80,7 @@
             this.label2.Location = new System.Drawing.Point(12, 9);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(81, 25);
-            this.label2.TabIndex = 5;
+            this.label2.TabIndex = 0;
             this.label2.Text = "Settings";
             // 
             // txtJiraUsername
@@ -88,7 +88,7 @@
             this.txtJiraUsername.Location = new System.Drawing.Point(102, 61);
             this.txtJiraUsername.Name = "txtJiraUsername";
             this.txtJiraUsername.Size = new System.Drawing.Size(194, 25);
-            this.txtJiraUsername.TabIndex = 12;
+            this.txtJiraUsername.TabIndex = 3;
             // 
             // label3
             // 
@@ -96,7 +96,7 @@
             this.label3.Location = new System.Drawing.Point(5, 64);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(91, 17);
-            this.label3.TabIndex = 13;
+            this.label3.TabIndex = 2;
             this.label3.Text = "Jira Username";
             // 
             // label4
@@ -105,7 +105,7 @@
             this.label4.Location = new System.Drawing.Point(8, 95);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(88, 17);
-            this.label4.TabIndex = 15;
+            this.label4.TabIndex = 4;
             this.label4.Text = "Jira Password";
             // 
             // txtJiraPassword
@@ -113,7 +113,7 @@
             this.txtJiraPassword.Location = new System.Drawing.Point(102, 92);
             this.txtJiraPassword.Name = "txtJiraPassword";
             this.txtJiraPassword.Size = new System.Drawing.Size(194, 25);
-            this.txtJiraPassword.TabIndex = 14;
+            this.txtJiraPassword.TabIndex = 5;
             this.txtJiraPassword.UseSystemPasswordChar = true;
             // 
             // grpJira
@@ -127,7 +127,7 @@
             this.grpJira.Location = new System.Drawing.Point(12, 247);
             this.grpJira.Name = "grpJira";
             this.grpJira.Size = new System.Drawing.Size(302, 130);
-            this.grpJira.TabIndex = 16;
+            this.grpJira.TabIndex = 2;
             this.grpJira.TabStop = false;
             this.grpJira.Text = "Jira Connection Settings";
             // 
@@ -149,7 +149,7 @@
             this.grpAppSettings.Location = new System.Drawing.Point(12, 46);
             this.grpAppSettings.Name = "grpAppSettings";
             this.grpAppSettings.Size = new System.Drawing.Size(302, 195);
-            this.grpAppSettings.TabIndex = 17;
+            this.grpAppSettings.TabIndex = 1;
             this.grpAppSettings.TabStop = false;
             this.grpAppSettings.Text = "App Settings";
             // 
@@ -158,7 +158,7 @@
             this.txtTargetHours.Location = new System.Drawing.Point(158, 106);
             this.txtTargetHours.Name = "txtTargetHours";
             this.txtTargetHours.Size = new System.Drawing.Size(39, 25);
-            this.txtTargetHours.TabIndex = 18;
+            this.txtTargetHours.TabIndex = 7;
             this.txtTargetHours.Text = "00";
             this.txtTargetHours.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -167,7 +167,7 @@
             this.txtTargetMins.Location = new System.Drawing.Point(158, 137);
             this.txtTargetMins.Name = "txtTargetMins";
             this.txtTargetMins.Size = new System.Drawing.Size(39, 25);
-            this.txtTargetMins.TabIndex = 19;
+            this.txtTargetMins.TabIndex = 9;
             this.txtTargetMins.Text = "00";
             this.txtTargetMins.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -177,7 +177,7 @@
             this.label9.Location = new System.Drawing.Point(196, 109);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(43, 17);
-            this.label9.TabIndex = 20;
+            this.label9.TabIndex = 8;
             this.label9.Text = "Hours";
             // 
             // label10
@@ -186,7 +186,7 @@
             this.label10.Location = new System.Drawing.Point(203, 140);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(54, 17);
-            this.label10.TabIndex = 21;
+            this.label10.TabIndex = 10;
             this.label10.Text = "Minutes";
             // 
             // label8
@@ -195,7 +195,7 @@
             this.label8.Location = new System.Drawing.Point(16, 106);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(135, 17);
-            this.label8.TabIndex = 17;
+            this.label8.TabIndex = 6;
             this.label8.Text = "Taget Export Per Day:";
             // 
             // chkAlert
@@ -204,7 +204,7 @@
             this.chkAlert.Location = new System.Drawing.Point(158, 24);
             this.chkAlert.Name = "chkAlert";
             this.chkAlert.Size = new System.Drawing.Size(15, 14);
-            this.chkAlert.TabIndex = 16;
+            this.chkAlert.TabIndex = 1;
             this.chkAlert.UseVisualStyleBackColor = true;
             // 
             // txtTimerDays
@@ -212,7 +212,7 @@
             this.txtTimerDays.Location = new System.Drawing.Point(158, 75);
             this.txtTimerDays.Name = "txtTimerDays";
             this.txtTimerDays.Size = new System.Drawing.Size(138, 25);
-            this.txtTimerDays.TabIndex = 14;
+            this.txtTimerDays.TabIndex = 5;
             // 
             // label5
             // 
@@ -220,7 +220,7 @@
             this.label5.Location = new System.Drawing.Point(16, 78);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(136, 17);
-            this.label5.TabIndex = 15;
+            this.label5.TabIndex = 4;
             this.label5.Text = "Keep Timers For Days";
             // 
             // txtAlertMins
@@ -228,7 +228,7 @@
             this.txtAlertMins.Location = new System.Drawing.Point(158, 44);
             this.txtAlertMins.Name = "txtAlertMins";
             this.txtAlertMins.Size = new System.Drawing.Size(138, 25);
-            this.txtAlertMins.TabIndex = 0;
+            this.txtAlertMins.TabIndex = 3;
             // 
             // label6
             // 
@@ -236,7 +236,7 @@
             this.label6.Location = new System.Drawing.Point(4, 51);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(150, 17);
-            this.label6.TabIndex = 1;
+            this.label6.TabIndex = 2;
             this.label6.Text = "Idle Time Alert (Minutes)";
             // 
             // label7
@@ -245,7 +245,7 @@
             this.label7.Location = new System.Drawing.Point(49, 21);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(103, 17);
-            this.label7.TabIndex = 13;
+            this.label7.TabIndex = 0;
             this.label7.Text = "Alert When Idle?";
             // 
             // btnCancelEditSettings
@@ -254,7 +254,7 @@
             this.btnCancelEditSettings.Location = new System.Drawing.Point(170, 383);
             this.btnCancelEditSettings.Name = "btnCancelEditSettings";
             this.btnCancelEditSettings.Size = new System.Drawing.Size(65, 65);
-            this.btnCancelEditSettings.TabIndex = 11;
+            this.btnCancelEditSettings.TabIndex = 4;
             this.btnCancelEditSettings.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnCancelEditSettings.UseVisualStyleBackColor = true;
             this.btnCancelEditSettings.Click += new System.EventHandler(this.btnCancelEditSettings_Click);
@@ -266,7 +266,7 @@
             this.btnSaveSettings.Location = new System.Drawing.Point(89, 383);
             this.btnSaveSettings.Name = "btnSaveSettings";
             this.btnSaveSettings.Size = new System.Drawing.Size(65, 65);
-            this.btnSaveSettings.TabIndex = 10;
+            this.btnSaveSettings.TabIndex = 3;
             this.btnSaveSettings.UseVisualStyleBackColor = true;
             this.btnSaveSettings.Click += new System.EventHandler(this.btnSaveSettings_Click);
             // 
@@ -276,7 +276,7 @@
             this.chkAlwaysTop.Location = new System.Drawing.Point(158, 168);
             this.chkAlwaysTop.Name = "chkAlwaysTop";
             this.chkAlwaysTop.Size = new System.Drawing.Size(15, 14);
-            this.chkAlwaysTop.TabIndex = 23;
+            this.chkAlwaysTop.TabIndex = 12;
             this.chkAlwaysTop.UseVisualStyleBackColor = true;
             // 
             // label11
@@ -285,7 +285,7 @@
             this.label11.Location = new System.Drawing.Point(2, 166);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(150, 17);
-            this.label11.TabIndex = 22;
+            this.label11.TabIndex = 11;
             this.label11.Text = "Pop-Up Always On Top?";
             // 
             // SettingsWindow

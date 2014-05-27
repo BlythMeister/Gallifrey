@@ -47,7 +47,7 @@
             this.txtJiraRef.Location = new System.Drawing.Point(95, 24);
             this.txtJiraRef.Name = "txtJiraRef";
             this.txtJiraRef.Size = new System.Drawing.Size(280, 25);
-            this.txtJiraRef.TabIndex = 0;
+            this.txtJiraRef.TabIndex = 1;
             // 
             // label1
             // 
@@ -55,7 +55,7 @@
             this.label1.Location = new System.Drawing.Point(8, 27);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(81, 17);
-            this.label1.TabIndex = 1;
+            this.label1.TabIndex = 0;
             this.label1.Text = "Search Term";
             // 
             // label2
@@ -65,7 +65,7 @@
             this.label2.Location = new System.Drawing.Point(12, 9);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(104, 25);
-            this.label2.TabIndex = 5;
+            this.label2.TabIndex = 0;
             this.label2.Text = "Jira Search";
             // 
             // btnCancelAddTimer
@@ -74,7 +74,7 @@
             this.btnCancelAddTimer.Location = new System.Drawing.Point(234, 399);
             this.btnCancelAddTimer.Name = "btnCancelAddTimer";
             this.btnCancelAddTimer.Size = new System.Drawing.Size(65, 65);
-            this.btnCancelAddTimer.TabIndex = 11;
+            this.btnCancelAddTimer.TabIndex = 4;
             this.btnCancelAddTimer.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnCancelAddTimer.UseVisualStyleBackColor = true;
             this.btnCancelAddTimer.Click += new System.EventHandler(this.btnCancelAddTimer_Click);
@@ -85,7 +85,7 @@
             this.btnAddTimer.Location = new System.Drawing.Point(121, 399);
             this.btnAddTimer.Name = "btnAddTimer";
             this.btnAddTimer.Size = new System.Drawing.Size(65, 65);
-            this.btnAddTimer.TabIndex = 10;
+            this.btnAddTimer.TabIndex = 3;
             this.btnAddTimer.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnAddTimer.UseVisualStyleBackColor = true;
             this.btnAddTimer.Click += new System.EventHandler(this.btnAddTimer_Click);
@@ -100,7 +100,7 @@
             this.groupBox1.Location = new System.Drawing.Point(17, 49);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(381, 163);
-            this.groupBox1.TabIndex = 12;
+            this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Search Details";
             // 
@@ -110,7 +110,7 @@
             this.btnRefresh.Location = new System.Drawing.Point(157, 86);
             this.btnRefresh.Name = "btnRefresh";
             this.btnRefresh.Size = new System.Drawing.Size(65, 65);
-            this.btnRefresh.TabIndex = 13;
+            this.btnRefresh.TabIndex = 4;
             this.btnRefresh.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnRefresh.UseVisualStyleBackColor = true;
             this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
@@ -121,7 +121,7 @@
             this.label3.Location = new System.Drawing.Point(8, 58);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(85, 17);
-            this.label3.TabIndex = 3;
+            this.label3.TabIndex = 2;
             this.label3.Text = "Search Filters";
             // 
             // cmbUserFilters
@@ -130,7 +130,7 @@
             this.cmbUserFilters.Location = new System.Drawing.Point(95, 55);
             this.cmbUserFilters.Name = "cmbUserFilters";
             this.cmbUserFilters.Size = new System.Drawing.Size(280, 25);
-            this.cmbUserFilters.TabIndex = 2;
+            this.cmbUserFilters.TabIndex = 3;
             // 
             // lstResults
             // 
@@ -139,7 +139,7 @@
             this.lstResults.Location = new System.Drawing.Point(12, 219);
             this.lstResults.Name = "lstResults";
             this.lstResults.Size = new System.Drawing.Size(386, 174);
-            this.lstResults.TabIndex = 13;
+            this.lstResults.TabIndex = 2;
             // 
             // SearchWindow
             // 
