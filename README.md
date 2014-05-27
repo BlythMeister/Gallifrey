@@ -21,7 +21,7 @@ We are aiming to maintain a Beta & Stable version of the app.
 
 **Please note**, the Beta is the current work in progress & I cannot guarantee that it is 100% stable! 
 
-*Installing on Windows 8 will alert with SmartScreen, you should be able to "Run Anyway" until I can afford a proper certificate, there is no way around this!*
+**Installing on Windows 8 will alert with SmartScreen, you should be able to "Run Anyway" until I can afford a proper certificate, there is no way around this!**
 
 * Stable Release comming soon!
 * [Beta Release - Click Here](https://github.com/BlythMeister/Gallifrey/raw/develop/deploy/beta/setup.exe)
