@@ -23,6 +23,10 @@ namespace Gallifrey.UI.Classic
 
             txtTargetHours.Text = gallifrey.AppSettings.TargetLogPerDay.Hours.ToString();
             txtTargetMins.Text = gallifrey.AppSettings.TargetLogPerDay.Minutes.ToString();
+
+            chkAlwaysTop.Checked = gallifrey.AppSettings.UiAlwaysOnTop;
+
+            TopMost = gallifrey.AppSettings.UiAlwaysOnTop;
         }
 
         private void btnCancelEditSettings_Click(object sender, EventArgs e)
@@ -46,6 +50,7 @@ namespace Gallifrey.UI.Classic
             gallifrey.AppSettings.AlertWhenNotRunning = chkAlert.Checked;
             gallifrey.AppSettings.AlertTimeMilliseconds = (alertTime * 60) * 1000;
             gallifrey.AppSettings.KeepTimersForDays = keepTimerDays;
+            gallifrey.AppSettings.UiAlwaysOnTop = chkAlwaysTop.Checked;
 
             int hours, minutes;
 

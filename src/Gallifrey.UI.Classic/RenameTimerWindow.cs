@@ -21,6 +21,8 @@ namespace Gallifrey.UI.Classic
             txtJiraRef.Text = timerToShow.JiraReference;
             calStartDate.Value = timerToShow.DateStarted.Date;
             txtJiraRef.Enabled = timerToShow.HasExportedTime();
+
+            TopMost = gallifrey.AppSettings.UiAlwaysOnTop;
         }
         
         private bool RenameTimer()

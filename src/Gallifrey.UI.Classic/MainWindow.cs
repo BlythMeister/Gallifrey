@@ -227,6 +227,7 @@ namespace Gallifrey.UI.Classic
                         var idleTimerWindow = new IdleTimerWindow(gallifrey);
                         if (idleTimerWindow.DisplayForm)
                         {
+                            idleTimerWindow.BringToFront();
                             idleTimerWindow.ShowDialog();
                             RefreshTimerPages();
                         }  

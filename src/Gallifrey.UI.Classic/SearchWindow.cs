@@ -38,12 +38,15 @@ namespace Gallifrey.UI.Classic
             {
                 lstResults.Enabled = false;
             }
+
+            TopMost = gallifrey.AppSettings.UiAlwaysOnTop;
         }
 
         private void btnAddTimer_Click(object sender, EventArgs e)
         {
             var selectedIssue = (JiraSearchResult) lstResults.SelectedItem;
 
+            TopMost = false;
             var addForm = new AddTimerWindow(gallifrey);
             addForm.PreLoadData(selectedIssue.JiraRef);
             addForm.ShowDialog();
