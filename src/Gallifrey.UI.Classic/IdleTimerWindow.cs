@@ -33,6 +33,8 @@ namespace Gallifrey.UI.Classic
                 lblRunning.Text = "N/A";
                 radRunning.Enabled = false;
             }
+
+            TopMost = gallifrey.AppSettings.UiAlwaysOnTop;
         }
         
         private void BindIdleTimers()
@@ -45,7 +47,7 @@ namespace Gallifrey.UI.Classic
                 DisplayForm = false;
                 Close();
             }
-
+            
             lstIdleTimers.DataSource = idleTimers;
             lstIdleTimers.Refresh();
 

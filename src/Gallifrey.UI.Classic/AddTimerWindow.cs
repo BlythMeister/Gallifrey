@@ -16,6 +16,8 @@ namespace Gallifrey.UI.Classic
             InitializeComponent();
             calStartDate.MinDate = DateTime.Now.AddDays(gallifrey.AppSettings.KeepTimersForDays*-1);
             calStartDate.MaxDate = DateTime.Now.AddDays(gallifrey.AppSettings.KeepTimersForDays);
+
+            TopMost = gallifrey.AppSettings.UiAlwaysOnTop;
         }
 
         public void PreLoadData(string jiraRef)

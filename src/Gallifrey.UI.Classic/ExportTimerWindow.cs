@@ -56,6 +56,8 @@ namespace Gallifrey.UI.Classic
             {
                 calExportDate.Value = DateTime.Now;
             }
+
+            TopMost = gallifrey.AppSettings.UiAlwaysOnTop;
         }
 
         private bool ExportTime()
