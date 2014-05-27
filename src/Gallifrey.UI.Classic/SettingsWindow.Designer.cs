@@ -38,14 +38,19 @@
             this.txtJiraPassword = new System.Windows.Forms.TextBox();
             this.grpJira = new System.Windows.Forms.GroupBox();
             this.grpAppSettings = new System.Windows.Forms.GroupBox();
+            this.chkAlert = new System.Windows.Forms.CheckBox();
             this.txtTimerDays = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.txtAlertMins = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
-            this.chkAlert = new System.Windows.Forms.CheckBox();
             this.btnCancelEditSettings = new System.Windows.Forms.Button();
             this.btnSaveSettings = new System.Windows.Forms.Button();
+            this.label8 = new System.Windows.Forms.Label();
+            this.txtTargetHours = new System.Windows.Forms.TextBox();
+            this.txtTargetMins = new System.Windows.Forms.TextBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
             this.grpJira.SuspendLayout();
             this.grpAppSettings.SuspendLayout();
             this.SuspendLayout();
@@ -117,7 +122,7 @@
             this.grpJira.Controls.Add(this.label1);
             this.grpJira.Controls.Add(this.label3);
             this.grpJira.Controls.Add(this.txtJiraUsername);
-            this.grpJira.Location = new System.Drawing.Point(12, 166);
+            this.grpJira.Location = new System.Drawing.Point(12, 223);
             this.grpJira.Name = "grpJira";
             this.grpJira.Size = new System.Drawing.Size(302, 130);
             this.grpJira.TabIndex = 16;
@@ -126,6 +131,11 @@
             // 
             // grpAppSettings
             // 
+            this.grpAppSettings.Controls.Add(this.txtTargetHours);
+            this.grpAppSettings.Controls.Add(this.txtTargetMins);
+            this.grpAppSettings.Controls.Add(this.label9);
+            this.grpAppSettings.Controls.Add(this.label10);
+            this.grpAppSettings.Controls.Add(this.label8);
             this.grpAppSettings.Controls.Add(this.chkAlert);
             this.grpAppSettings.Controls.Add(this.txtTimerDays);
             this.grpAppSettings.Controls.Add(this.label5);
@@ -134,10 +144,19 @@
             this.grpAppSettings.Controls.Add(this.label7);
             this.grpAppSettings.Location = new System.Drawing.Point(12, 46);
             this.grpAppSettings.Name = "grpAppSettings";
-            this.grpAppSettings.Size = new System.Drawing.Size(302, 114);
+            this.grpAppSettings.Size = new System.Drawing.Size(302, 171);
             this.grpAppSettings.TabIndex = 17;
             this.grpAppSettings.TabStop = false;
             this.grpAppSettings.Text = "App Settings";
+            // 
+            // chkAlert
+            // 
+            this.chkAlert.AutoSize = true;
+            this.chkAlert.Location = new System.Drawing.Point(158, 24);
+            this.chkAlert.Name = "chkAlert";
+            this.chkAlert.Size = new System.Drawing.Size(15, 14);
+            this.chkAlert.TabIndex = 16;
+            this.chkAlert.UseVisualStyleBackColor = true;
             // 
             // txtTimerDays
             // 
@@ -180,19 +199,10 @@
             this.label7.TabIndex = 13;
             this.label7.Text = "Alert When Idle?";
             // 
-            // chkAlert
-            // 
-            this.chkAlert.AutoSize = true;
-            this.chkAlert.Location = new System.Drawing.Point(158, 24);
-            this.chkAlert.Name = "chkAlert";
-            this.chkAlert.Size = new System.Drawing.Size(15, 14);
-            this.chkAlert.TabIndex = 16;
-            this.chkAlert.UseVisualStyleBackColor = true;
-            // 
             // btnCancelEditSettings
             // 
             this.btnCancelEditSettings.Image = global::Gallifrey.UI.Classic.Properties.Resources.Cancel_48x48;
-            this.btnCancelEditSettings.Location = new System.Drawing.Point(156, 320);
+            this.btnCancelEditSettings.Location = new System.Drawing.Point(170, 359);
             this.btnCancelEditSettings.Name = "btnCancelEditSettings";
             this.btnCancelEditSettings.Size = new System.Drawing.Size(65, 65);
             this.btnCancelEditSettings.TabIndex = 11;
@@ -204,18 +214,63 @@
             // 
             this.btnSaveSettings.Image = global::Gallifrey.UI.Classic.Properties.Resources.Check_48x48;
             this.btnSaveSettings.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.btnSaveSettings.Location = new System.Drawing.Point(75, 320);
+            this.btnSaveSettings.Location = new System.Drawing.Point(89, 359);
             this.btnSaveSettings.Name = "btnSaveSettings";
             this.btnSaveSettings.Size = new System.Drawing.Size(65, 65);
             this.btnSaveSettings.TabIndex = 10;
             this.btnSaveSettings.UseVisualStyleBackColor = true;
             this.btnSaveSettings.Click += new System.EventHandler(this.btnSaveSettings_Click);
             // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(16, 106);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(135, 17);
+            this.label8.TabIndex = 17;
+            this.label8.Text = "Taget Export Per Day:";
+            // 
+            // txtTargetHours
+            // 
+            this.txtTargetHours.Location = new System.Drawing.Point(158, 106);
+            this.txtTargetHours.Name = "txtTargetHours";
+            this.txtTargetHours.Size = new System.Drawing.Size(39, 25);
+            this.txtTargetHours.TabIndex = 18;
+            this.txtTargetHours.Text = "00";
+            this.txtTargetHours.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // txtTargetMins
+            // 
+            this.txtTargetMins.Location = new System.Drawing.Point(158, 137);
+            this.txtTargetMins.Name = "txtTargetMins";
+            this.txtTargetMins.Size = new System.Drawing.Size(39, 25);
+            this.txtTargetMins.TabIndex = 19;
+            this.txtTargetMins.Text = "00";
+            this.txtTargetMins.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(196, 109);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(43, 17);
+            this.label9.TabIndex = 20;
+            this.label9.Text = "Hours";
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(203, 140);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(54, 17);
+            this.label10.TabIndex = 21;
+            this.label10.Text = "Minutes";
+            // 
             // SettingsWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(331, 399);
+            this.ClientSize = new System.Drawing.Size(331, 435);
             this.Controls.Add(this.grpAppSettings);
             this.Controls.Add(this.grpJira);
             this.Controls.Add(this.btnCancelEditSettings);
@@ -224,8 +279,8 @@
             this.Font = new System.Drawing.Font("Segoe UI", 9.75F);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.MaximumSize = new System.Drawing.Size(347, 437);
-            this.MinimumSize = new System.Drawing.Size(347, 437);
+            this.MaximumSize = new System.Drawing.Size(347, 473);
+            this.MinimumSize = new System.Drawing.Size(347, 473);
             this.Name = "SettingsWindow";
             this.Text = "Gallifrey - Settings";
             this.grpJira.ResumeLayout(false);
@@ -256,5 +311,10 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.CheckBox chkAlert;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.TextBox txtTargetHours;
+        private System.Windows.Forms.TextBox txtTargetMins;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label label10;
     }
 }

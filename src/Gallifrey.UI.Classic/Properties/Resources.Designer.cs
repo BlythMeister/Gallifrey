@@ -123,9 +123,19 @@ namespace Gallifrey.UI.Classic.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Log_Out_48x48 {
+        internal static System.Drawing.Bitmap Key_48x48 {
             get {
-                object obj = ResourceManager.GetObject("Log Out_48x48", resourceCulture);
+                object obj = ResourceManager.GetObject("Key_48x48", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Refresh_48x48 {
+            get {
+                object obj = ResourceManager.GetObject("Refresh_48x48", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

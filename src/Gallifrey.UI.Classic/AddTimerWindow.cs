@@ -18,6 +18,11 @@ namespace Gallifrey.UI.Classic
             calStartDate.MaxDate = DateTime.Now.AddDays(gallifrey.AppSettings.KeepTimersForDays);
         }
 
+        public void PreLoadData(string jiraRef)
+        {
+            txtJiraRef.Text = jiraRef;
+        }
+
         private void btnAddTimer_Click(object sender, EventArgs e)
         {
             if (AddJira()) Close();

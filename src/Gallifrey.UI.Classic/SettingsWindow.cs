@@ -16,10 +16,13 @@ namespace Gallifrey.UI.Classic
             if (gallifrey.JiraConnectionSettings.JiraUrl != null) txtJiraUrl.Text = gallifrey.JiraConnectionSettings.JiraUrl;
             if (gallifrey.JiraConnectionSettings.JiraUsername != null) txtJiraUsername.Text = gallifrey.JiraConnectionSettings.JiraUsername;
             if (gallifrey.JiraConnectionSettings.JiraPassword != null) txtJiraPassword.Text = gallifrey.JiraConnectionSettings.JiraPassword;
-            
+
             chkAlert.Checked = gallifrey.AppSettings.AlertWhenNotRunning;
-            txtAlertMins.Text = ((gallifrey.AppSettings.AlertTimeMilliseconds/1000)/60).ToString();
+            txtAlertMins.Text = ((gallifrey.AppSettings.AlertTimeMilliseconds / 1000) / 60).ToString();
             txtTimerDays.Text = gallifrey.AppSettings.KeepTimersForDays.ToString();
+
+            txtTargetHours.Text = gallifrey.AppSettings.TargetLogPerDay.Hours.ToString();
+            txtTargetMins.Text = gallifrey.AppSettings.TargetLogPerDay.Minutes.ToString();
         }
 
         private void btnCancelEditSettings_Click(object sender, EventArgs e)
@@ -43,11 +46,19 @@ namespace Gallifrey.UI.Classic
             gallifrey.AppSettings.AlertWhenNotRunning = chkAlert.Checked;
             gallifrey.AppSettings.AlertTimeMilliseconds = (alertTime * 60) * 1000;
             gallifrey.AppSettings.KeepTimersForDays = keepTimerDays;
-            
+
+            int hours, minutes;
+
+            if (!int.TryParse(txtTargetHours.Text, out hours)) { hours = 7; }
+            if (!int.TryParse(txtTargetMins.Text, out minutes)) { minutes = 30; }
+
+            gallifrey.AppSettings.TargetLogPerDay = new TimeSpan(hours, minutes, 0);
+
+
             gallifrey.JiraConnectionSettings.JiraUrl = txtJiraUrl.Text;
             gallifrey.JiraConnectionSettings.JiraUsername = txtJiraUsername.Text;
             gallifrey.JiraConnectionSettings.JiraPassword = txtJiraPassword.Text;
-
+            
             if (string.IsNullOrWhiteSpace(gallifrey.JiraConnectionSettings.JiraUrl) ||
                     string.IsNullOrWhiteSpace(gallifrey.JiraConnectionSettings.JiraUsername) ||
                     string.IsNullOrWhiteSpace(gallifrey.JiraConnectionSettings.JiraPassword))
@@ -55,7 +66,7 @@ namespace Gallifrey.UI.Classic
                 MessageBox.Show("You have to populate the Jira Credentials!", "Missing Config");
                 return;
             }
-            
+
             CloseWindow();
         }
 

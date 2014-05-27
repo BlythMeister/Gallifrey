@@ -206,7 +206,7 @@
             // 
             // btnIdle
             // 
-            this.btnIdle.Image = global::Gallifrey.UI.Classic.Properties.Resources.Log_Out_48x48;
+            this.btnIdle.Image = global::Gallifrey.UI.Classic.Properties.Resources.Key_48x48;
             this.btnIdle.Location = new System.Drawing.Point(438, 98);
             this.btnIdle.Name = "btnIdle";
             this.btnIdle.Size = new System.Drawing.Size(65, 65);
@@ -246,6 +246,7 @@
             this.btnSearch.TabIndex = 9;
             this.btnSearch.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnSearch.UseVisualStyleBackColor = true;
+            this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
             // 
             // btnExport
             // 
