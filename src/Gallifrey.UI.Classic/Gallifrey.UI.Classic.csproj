@@ -106,6 +106,12 @@
     <Compile Include="AdjustTimerWindow.Designer.cs">
       <DependentUpon>AdjustTimerWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="SearchWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SearchWindow.Designer.cs">
+      <DependentUpon>SearchWindow.cs</DependentUpon>
+    </Compile>
     <Compile Include="IdleTimerWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -148,6 +154,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="AdjustTimerWindow.resx">
       <DependentUpon>AdjustTimerWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SearchWindow.resx">
+      <DependentUpon>SearchWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="IdleTimerWindow.resx">
       <DependentUpon>IdleTimerWindow.cs</DependentUpon>
@@ -221,6 +230,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="clock_blue.ico" />
+    <None Include="Icons\Refresh_48x48.png" />
+    <None Include="Icons\Key_48x48.png" />
     <None Include="Icons\Log Out_48x48.png" />
     <None Include="Icons\Rename_48x48.png" />
     <None Include="Icons\Search_48x48.png" />

@@ -22,6 +22,7 @@ namespace Gallifrey.JiraTimers
         void RenameTimer(Guid timerGuid, Issue newIssue);
         Tuple<int, int> GetNumberExported();
         TimeSpan GetTotalUnexportedTime();
+        TimeSpan GetTotalExportedTimeThisWeek();
         void AdjustTime(Guid uniqueId, int hours, int minutes, bool addTime);
         void SetJiraExportedTime(Guid uniqueId, TimeSpan loggedTime);
         void AddJiraExportedTime(Guid uniqueId, int hours, int minutes);
@@ -159,6 +160,12 @@ namespace Gallifrey.JiraTimers
         {
             var unexportedTime = new TimeSpan();
             return timerList.Aggregate(unexportedTime, (current, jiraTimer) => current.Add(jiraTimer.TimeToExport));
+        }
+
+        public TimeSpan GetTotalExportedTimeThisWeek()
+        {
+            var exportedTime = new TimeSpan();
+            return timerList.Where(jiraTimer => jiraTimer.IsThisWeek).Aggregate(exportedTime, (current, jiraTimer) => current.Add(jiraTimer.ExportedTime));
         }
 
         public void AdjustTime(Guid uniqueId, int hours, int minutes, bool addTime)

@@ -17,6 +17,7 @@ namespace Gallifrey.IntegrationPoints
         IEnumerable<Issue> GetJiraIssuesFromSearchText(string searchText);
         TimeSpan GetCurrentLoggedTimeForDate(Issue jiraIssue, DateTime date);
         void LogTime(Issue jiraIssue, DateTime exportTimeStamp, TimeSpan exportTime, WorklogStrategy strategy, string comment = "", TimeSpan? remainingTime = null);
+        IEnumerable<Issue> GetJiraCurrentUserOpenIssues();
     }
 
     public class JiraConnection : IJiraConnection
@@ -144,6 +145,21 @@ namespace Gallifrey.IntegrationPoints
             }
 
             return loggedTime;
+        }
+
+
+
+        public IEnumerable<Issue> GetJiraCurrentUserOpenIssues()
+        {
+            try
+            {
+                CheckAndConnectJira();
+                return jira.GetIssuesFromJql("assignee in (currentUser()) AND status not in (Closed,Resolved)", 0, 999);
+            }
+            catch (Exception ex)
+            {
+                throw new NoResultsFoundException("Error loading jiras from search text", ex);
+            }
         }
 
         public void LogTime(Issue jiraIssue, DateTime exportTimeStamp, TimeSpan exportTime, WorklogStrategy strategy, string comment = "", TimeSpan? remainingTime = null)

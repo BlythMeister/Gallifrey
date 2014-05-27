@@ -68,6 +68,7 @@ namespace Gallifrey.UI.Classic
 
             SetDisplayClock();
             SetExportStats();
+            SetExportTargetStats();
         }
 
         private void DoubleClickListBox(object sender, EventArgs e)
@@ -92,6 +93,8 @@ namespace Gallifrey.UI.Classic
             }
             RefreshTimerPages();
         }
+
+        #region "Button Handlers
 
         private void btnAddTimer_Click(object sender, EventArgs e)
         {
@@ -157,6 +160,15 @@ namespace Gallifrey.UI.Classic
                 RefreshTimerPages();
             }
         }
+
+        private void btnSearch_Click(object sender, EventArgs e)
+        {
+            var searchForm = new SearchWindow(gallifrey);
+            searchForm.ShowDialog();
+            RefreshTimerPages();
+        }
+
+        #endregion
 
         #region "Tray Icon"
 
@@ -370,8 +382,23 @@ namespace Gallifrey.UI.Classic
             lblUnexportedTime.Text = string.Format("Un-Exported Time: {0}", gallifrey.JiraTimerCollection.GetTotalUnexportedTime().FormatAsString(false));
         }
 
-        #endregion
+        private void SetExportTargetStats()
+        {
+            var exportedTime = gallifrey.JiraTimerCollection.GetTotalExportedTimeThisWeek();
+            var target = new TimeSpan();
+            var n = 0;
+            while (n++ < (int)DateTime.Today.DayOfWeek)
+            {
+                target = target.Add(gallifrey.AppSettings.TargetLogPerDay);
+            }
 
+            lblExportedWeek.Text = string.Format("Exported: {0}", exportedTime.FormatAsString(false));
+            lblExportTargetWeek.Text = string.Format("Target: {0}", target.FormatAsString(false));
+            progExportTarget.Maximum = (int)target.TotalMinutes;
+            progExportTarget.Value = (int)exportedTime.TotalMinutes;
+        }
+
+        #endregion
 
     }
 }

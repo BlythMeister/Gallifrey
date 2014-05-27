@@ -1,4 +1,5 @@
-﻿using Gallifrey.Serialization;
+﻿using System;
+using Gallifrey.Serialization;
 
 namespace Gallifrey.Settings
 {
@@ -7,7 +8,7 @@ namespace Gallifrey.Settings
         bool AlertWhenNotRunning { get; set; }
         int AlertTimeMilliseconds { get; set; }
         int KeepTimersForDays { get; set; }
-        int TargetLogHoursPerDay { get; set; }
+        TimeSpan TargetLogPerDay { get; set; }
         int UiHeight { get; set; }
         int UiWidth { get; set; }
         bool UiAlwaysOnTop { get; set; }
@@ -19,7 +20,7 @@ namespace Gallifrey.Settings
         public bool AlertWhenNotRunning { get; set; }
         public int AlertTimeMilliseconds { get; set; }
         public int KeepTimersForDays { get; set; }
-        public int TargetLogHoursPerDay { get; set; }
+        public TimeSpan TargetLogPerDay { get; set; }
         public int UiHeight { get; set; }
         public int UiWidth { get; set; }
         public bool UiAlwaysOnTop { get; set; }
