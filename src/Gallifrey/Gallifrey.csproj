@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{4C344D86-4086-4F87-BD0F-4F8E23610CD7}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Gallifrey</RootNamespace>
+    <AssemblyName>Gallifrey</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Atlassian.Jira">
+      <HintPath>..\packages\Atlassian.SDK.3.0.0-beta1\lib\Atlassian.Jira.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.4.5.3\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="RestSharp">
+      <HintPath>..\packages\RestSharp.103.4\lib\net4\RestSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Backend.cs" />
+    <Compile Include="Exceptions\IdleTimers\NoIdleTimerRunningException.cs" />
+    <Compile Include="Exceptions\JiraTimers\IdleTimerRunningException.cs" />
+    <Compile Include="IdleTimers\IdleTimer.cs" />
+    <Compile Include="IdleTimers\IdleTimerCollection.cs" />
+    <Compile Include="Exceptions\IntergrationPoints\MissingJiraConfigException.cs" />
+    <Compile Include="Exceptions\IntergrationPoints\WorkLogException.cs" />
+    <Compile Include="Exceptions\IntergrationPoints\StateChangedException.cs" />
+    <Compile Include="Exceptions\IntergrationPoints\NoResultsFoundException.cs" />
+    <Compile Include="Exceptions\IntergrationPoints\JiraConnectionException.cs" />
+    <Compile Include="Exceptions\JiraTimers\DuplicateTimerException.cs" />
+    <Compile Include="InactiveMonitor\ActivityChecker.cs" />
+    <Compile Include="IntegrationPoints\JiraConnection.cs" />
+    <Compile Include="JiraTimers\JiraTimer.cs" />
+    <Compile Include="JiraTimers\JiraTimerCollection.cs" />
+    <Compile Include="ExtensionMethods\TimespanExtensionMethods.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Serialization\AppSettingsSerializer.cs" />
+    <Compile Include="Serialization\IdleTimerCollectionSerializer.cs" />
+    <Compile Include="Serialization\DataEncryption.cs" />
+    <Compile Include="Serialization\JiraConnectionSettingsSerializer.cs" />
+    <Compile Include="Serialization\JiraTimerCollectionSerializer.cs" />
+    <Compile Include="Settings\AppSettings.cs" />
+    <Compile Include="Settings\JiraConnnectionSettings.cs" />
+    <Compile Include="Settings\FilePathSettings.cs" />
+    <Compile Include="Settings\UiAnimationLevel.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
