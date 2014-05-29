@@ -100,7 +100,7 @@ namespace Gallifrey.JiraTimers
                 GetTimer(runningTimerId.Value).StopTimer();
             }
 
-
+            timerForInteration.StartTimer();
 
             SaveTimers();
             return runningTimerId;
@@ -176,7 +176,7 @@ namespace Gallifrey.JiraTimers
         public TimeSpan GetTotalTimeForDate(DateTime timerDate)
         {
             var time = new TimeSpan();
-            return timerList.Where(jiraTimer => jiraTimer.DateStarted.Date == timerDate.Date).Aggregate(time, (current, jiraTimer) => current.Add(jiraTimer.ExactCurrentTime));
+            return timerList.Where(jiraTimer => jiraTimer.DateStarted.Date == timerDate.Date).Aggregate(time, (current, jiraTimer) => current.Add(new TimeSpan(jiraTimer.ExactCurrentTime.Hours, jiraTimer.ExactCurrentTime.Minutes, jiraTimer.ExactCurrentTime.Seconds)));
         }
 
         public void AdjustTime(Guid uniqueId, int hours, int minutes, bool addTime)
