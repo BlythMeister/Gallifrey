@@ -40,6 +40,7 @@
             this.radSelected = new System.Windows.Forms.RadioButton();
             this.radRunning = new System.Windows.Forms.RadioButton();
             this.radDelete = new System.Windows.Forms.RadioButton();
+            this.radNew = new System.Windows.Forms.RadioButton();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -65,7 +66,7 @@
             // btnOK
             // 
             this.btnOK.Image = global::Gallifrey.UI.Classic.Properties.Resources.Check_48x48;
-            this.btnOK.Location = new System.Drawing.Point(167, 341);
+            this.btnOK.Location = new System.Drawing.Point(215, 368);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(65, 65);
             this.btnOK.TabIndex = 4;
@@ -86,7 +87,7 @@
             // btnCancel
             // 
             this.btnCancel.Image = global::Gallifrey.UI.Classic.Properties.Resources.Cancel_48x48;
-            this.btnCancel.Location = new System.Drawing.Point(272, 341);
+            this.btnCancel.Location = new System.Drawing.Point(320, 368);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(65, 65);
             this.btnCancel.TabIndex = 5;
@@ -96,6 +97,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.radNew);
             this.groupBox1.Controls.Add(this.lblRunning);
             this.groupBox1.Controls.Add(this.cmbDayTimers);
             this.groupBox1.Controls.Add(this.radSelected);
@@ -103,7 +105,7 @@
             this.groupBox1.Controls.Add(this.radDelete);
             this.groupBox1.Location = new System.Drawing.Point(13, 225);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(654, 110);
+            this.groupBox1.Size = new System.Drawing.Size(654, 137);
             this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Idle Time Destination";
@@ -128,7 +130,7 @@
             // radSelected
             // 
             this.radSelected.AutoSize = true;
-            this.radSelected.Location = new System.Drawing.Point(4, 79);
+            this.radSelected.Location = new System.Drawing.Point(7, 79);
             this.radSelected.Name = "radSelected";
             this.radSelected.Size = new System.Drawing.Size(125, 21);
             this.radSelected.TabIndex = 3;
@@ -138,7 +140,7 @@
             // radRunning
             // 
             this.radRunning.AutoSize = true;
-            this.radRunning.Location = new System.Drawing.Point(7, 52);
+            this.radRunning.Location = new System.Drawing.Point(7, 54);
             this.radRunning.Name = "radRunning";
             this.radRunning.Size = new System.Drawing.Size(160, 21);
             this.radRunning.TabIndex = 1;
@@ -153,15 +155,24 @@
             this.radDelete.Name = "radDelete";
             this.radDelete.Size = new System.Drawing.Size(120, 21);
             this.radDelete.TabIndex = 0;
-            this.radDelete.TabStop = true;
             this.radDelete.Text = "Delete Idle Time";
             this.radDelete.UseVisualStyleBackColor = true;
             // 
-            // IdleTimerWindow
+            // radNew
+            // 
+            this.radNew.AutoSize = true;
+            this.radNew.Location = new System.Drawing.Point(7, 106);
+            this.radNew.Name = "radNew";
+            this.radNew.Size = new System.Drawing.Size(136, 21);
+            this.radNew.TabIndex = 5;
+            this.radNew.Text = "Add To New Timer";
+            this.radNew.UseVisualStyleBackColor = true;
+            // 
+            // LockedTimerWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(679, 418);
+            this.ClientSize = new System.Drawing.Size(679, 449);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.lstIdleTimers);
             this.Controls.Add(this.btnCancel);
@@ -171,7 +182,9 @@
             this.Font = new System.Drawing.Font("Segoe UI", 9.75F);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.Name = "IdleTimerWindow";
+            this.MaximumSize = new System.Drawing.Size(695, 487);
+            this.MinimumSize = new System.Drawing.Size(695, 487);
+            this.Name = "LockedTimerWindow";
             this.Text = "Gallifrey - Idle Timers";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
@@ -193,5 +206,6 @@
         private System.Windows.Forms.RadioButton radSelected;
         private System.Windows.Forms.RadioButton radRunning;
         private System.Windows.Forms.RadioButton radDelete;
+        private System.Windows.Forms.RadioButton radNew;
     }
 }

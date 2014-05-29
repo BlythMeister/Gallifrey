@@ -35,6 +35,7 @@ namespace Gallifrey
         public event EventHandler<int> NoActivityEvent;
         internal ActivityChecker ActivityChecker;
         private readonly Timer hearbeat;
+        private Guid? runningTimerWhenIdle;
         
         public Backend()
         {
@@ -95,11 +96,21 @@ namespace Gallifrey
 
         public void StartIdleTimer()
         {
+            runningTimerWhenIdle = JiraTimerCollection.GetRunningTimerId();
+            if (runningTimerWhenIdle.HasValue)
+            {
+                jiraTimerCollection.StopTimer(runningTimerWhenIdle.Value);
+            }
             idleTimerCollection.NewLockTimer();
         }
 
         public Guid StopIdleTimer()
         {
+            if (runningTimerWhenIdle.HasValue)
+            {
+                jiraTimerCollection.StartTimer(runningTimerWhenIdle.Value);
+                runningTimerWhenIdle = null;
+            }
             return idleTimerCollection.StopLockedTimers();
         }
 

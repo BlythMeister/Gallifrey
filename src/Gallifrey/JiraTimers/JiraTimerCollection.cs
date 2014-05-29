@@ -12,9 +12,9 @@ namespace Gallifrey.JiraTimers
     {
         IEnumerable<DateTime> GetValidTimerDates();
         IEnumerable<JiraTimer> GetTimersForADate(DateTime timerDate);
-        void AddTimer(Issue jiraIssue, DateTime startDate, TimeSpan seedTime, bool startNow);
+        Guid AddTimer(Issue jiraIssue, DateTime startDate, TimeSpan seedTime, bool startNow);
         void RemoveTimer(Guid uniqueId);
-        void StartTimer(Guid uniqueId);
+        Guid? StartTimer(Guid uniqueId);
         void StopTimer(Guid uniqueId);
         Guid? GetRunningTimerId();
         void RemoveTimersOlderThanDays(int keepTimersForDays);
@@ -23,6 +23,7 @@ namespace Gallifrey.JiraTimers
         Tuple<int, int> GetNumberExported();
         TimeSpan GetTotalUnexportedTime();
         TimeSpan GetTotalExportedTimeThisWeek();
+        TimeSpan GetTotalTimeForDate(DateTime timerDate);
         void AdjustTime(Guid uniqueId, int hours, int minutes, bool addTime);
         void SetJiraExportedTime(Guid uniqueId, TimeSpan loggedTime);
         void AddJiraExportedTime(Guid uniqueId, int hours, int minutes);
@@ -64,7 +65,7 @@ namespace Gallifrey.JiraTimers
             SaveTimers();
         }
 
-        public void AddTimer(Issue jiraIssue, DateTime startDate, TimeSpan seedTime, bool startNow)
+        public Guid AddTimer(Issue jiraIssue, DateTime startDate, TimeSpan seedTime, bool startNow)
         {
             var newTimer = new JiraTimer(jiraIssue, startDate, seedTime);
             AddTimer(newTimer);
@@ -72,6 +73,7 @@ namespace Gallifrey.JiraTimers
             {
                 StartTimer(newTimer.UniqueId);
             }
+            return newTimer.UniqueId;
         }
 
         public void RemoveTimer(Guid uniqueId)
@@ -80,7 +82,7 @@ namespace Gallifrey.JiraTimers
             SaveTimers();
         }
 
-        public void StartTimer(Guid uniqueId)
+        public Guid? StartTimer(Guid uniqueId)
         {
             var timerForInteration = GetTimer(uniqueId);
             if (timerForInteration.DateStarted.Date != DateTime.Now.Date)
@@ -90,7 +92,7 @@ namespace Gallifrey.JiraTimers
                 uniqueId = timerForInteration.UniqueId;
             }
 
-            timerForInteration.StartTimer();
+            
 
             var runningTimerId = GetRunningTimerId();
             if (runningTimerId.HasValue && runningTimerId.Value != uniqueId)
@@ -98,7 +100,10 @@ namespace Gallifrey.JiraTimers
                 GetTimer(runningTimerId.Value).StopTimer();
             }
 
+
+
             SaveTimers();
+            return runningTimerId;
         }
 
         public void StopTimer(Guid uniqueId)
@@ -166,6 +171,12 @@ namespace Gallifrey.JiraTimers
         {
             var exportedTime = new TimeSpan();
             return timerList.Where(jiraTimer => jiraTimer.IsThisWeek).Aggregate(exportedTime, (current, jiraTimer) => current.Add(jiraTimer.ExportedTime));
+        }
+
+        public TimeSpan GetTotalTimeForDate(DateTime timerDate)
+        {
+            var time = new TimeSpan();
+            return timerList.Where(jiraTimer => jiraTimer.DateStarted.Date == timerDate.Date).Aggregate(time, (current, jiraTimer) => current.Add(jiraTimer.ExactCurrentTime));
         }
 
         public void AdjustTime(Guid uniqueId, int hours, int minutes, bool addTime)

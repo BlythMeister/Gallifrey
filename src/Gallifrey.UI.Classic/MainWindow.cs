@@ -75,22 +75,37 @@ namespace Gallifrey.UI.Classic
         {
             var timerClicked = (JiraTimer)((ListBox)sender).SelectedItem;
             var runningTimer = gallifrey.JiraTimerCollection.GetRunningTimerId();
+            Guid? timerStopped = null;
 
             if (runningTimer.HasValue && runningTimer.Value == timerClicked.UniqueId)
             {
                 gallifrey.JiraTimerCollection.StopTimer(timerClicked.UniqueId);
+                timerStopped = timerClicked.UniqueId;
             }
             else
             {
                 try
                 {
-                    gallifrey.JiraTimerCollection.StartTimer(timerClicked.UniqueId);
+                    timerStopped = gallifrey.JiraTimerCollection.StartTimer(timerClicked.UniqueId);
                 }
                 catch (DuplicateTimerException)
                 {
                     MessageBox.Show("Use the version of this timer for today!", "Wrong Day!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
+
+            if (timerStopped.HasValue)
+            {
+                if (MessageBox.Show("Do You Want To Log This Time To Jira?", "Log Time?", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    var exportTimerWindow = new ExportTimerWindow(gallifrey, timerStopped.Value);
+                    if (exportTimerWindow.DisplayForm)
+                    {
+                        exportTimerWindow.ShowDialog();
+                    }
+                }
+            }
+
             RefreshTimerPages();
         }
 
@@ -99,6 +114,13 @@ namespace Gallifrey.UI.Classic
         private void btnAddTimer_Click(object sender, EventArgs e)
         {
             var addForm = new AddTimerWindow(gallifrey);
+            var selectedTab = tabTimerDays.SelectedTab;
+            if (selectedTab != null)
+            {
+                var tabDate = DateTime.ParseExact(selectedTab.Name, "yyyyMMdd", CultureInfo.InvariantCulture);
+                addForm.PreLoadDate(tabDate);
+            }
+
             addForm.ShowDialog();
             RefreshTimerPages();
         }
@@ -108,8 +130,12 @@ namespace Gallifrey.UI.Classic
             var selectedTab = tabTimerDays.SelectedTab;
             if (selectedTab == null) return;
             var selectedTimer = (JiraTimer)((ListBox)selectedTab.Controls[string.Format("lst_{0}", selectedTab.Name)]).SelectedItem;
-            gallifrey.JiraTimerCollection.RemoveTimer(selectedTimer.UniqueId);
-            RefreshTimerPages();
+
+            if (MessageBox.Show(string.Format("Are you sure you want to remove timer for '{0}'?", selectedTimer.JiraReference), "Are You Sure", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                gallifrey.JiraTimerCollection.RemoveTimer(selectedTimer.UniqueId);
+                RefreshTimerPages();
+            }
         }
 
         private void btnSettings_Click(object sender, EventArgs e)
@@ -217,9 +243,9 @@ namespace Gallifrey.UI.Classic
                 case SessionSwitchReason.SessionUnlock:
                     var idleTimerId = gallifrey.StopIdleTimer();
                     var idleTimer = gallifrey.IdleTimerCollection.GetTimer(idleTimerId);
-                    if (idleTimer.ExactCurrentTime.TotalSeconds < 15)
+                    if (idleTimer.ExactCurrentTime.TotalSeconds < 60)
                     {
-                        MessageBox.Show("Machine Locked For Less Than 15 Seconds.\nIf Your Machine Went Into Screensaver Without Being Locked The Idle Time Cannot Be Captured", "Short Idle Time", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show("Machine Locked For Less Than 1 Minute.\nLocked Time Was Not Captured", "Short Lock Time", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         gallifrey.IdleTimerCollection.RemoveTimer(idleTimerId);
                     }
                     else
@@ -230,7 +256,7 @@ namespace Gallifrey.UI.Classic
                             idleTimerWindow.BringToFront();
                             idleTimerWindow.ShowDialog();
                             RefreshTimerPages();
-                        }  
+                        }
                     }
                     break;
             }
@@ -300,13 +326,17 @@ namespace Gallifrey.UI.Classic
 
                 var tabName = timerDate.Date.ToString("yyyyMMdd");
                 var tabListName = string.Format("lst_{0}", tabName);
-                var tabDisplay = timerDate.Date.ToString("ddd, dd MMM");
+                var tabDisplay = string.Format("{0} - [ {1} ]", timerDate.Date.ToString("ddd, dd MMM"), timers.GetTotalTimeForDate(timerDate).FormatAsString());
                 var page = tabTimerDays.TabPages[tabName];
 
                 if (page == null)
                 {
                     page = new TabPage(tabName) { Name = tabName, Text = tabDisplay };
                     tabTimerDays.TabPages.Insert(itteration, page);
+                }
+                else
+                {
+                    page.Text = tabDisplay;
                 }
 
                 ListBox timerList;
@@ -396,7 +426,9 @@ namespace Gallifrey.UI.Classic
             lblExportedWeek.Text = string.Format("Exported: {0}", exportedTime.FormatAsString(false));
             lblExportTargetWeek.Text = string.Format("Target: {0}", target.FormatAsString(false));
             progExportTarget.Maximum = (int)target.TotalMinutes;
-            progExportTarget.Value = (int)exportedTime.TotalMinutes;
+
+            var exportedMinutes = (int)exportedTime.TotalMinutes;
+            progExportTarget.Value = exportedMinutes > progExportTarget.Maximum ? progExportTarget.Maximum : exportedMinutes;
         }
 
         #endregion
