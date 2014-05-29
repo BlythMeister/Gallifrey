@@ -153,7 +153,7 @@ namespace Gallifrey.UI.Classic
 
         private void btnIdle_Click(object sender, EventArgs e)
         {
-            var idleTimerWindow = new IdleTimerWindow(gallifrey);
+            var idleTimerWindow = new LockedTimerWindow(gallifrey);
             if (idleTimerWindow.DisplayForm)
             {
                 idleTimerWindow.ShowDialog();
@@ -224,7 +224,7 @@ namespace Gallifrey.UI.Classic
                     }
                     else
                     {
-                        var idleTimerWindow = new IdleTimerWindow(gallifrey);
+                        var idleTimerWindow = new LockedTimerWindow(gallifrey);
                         if (idleTimerWindow.DisplayForm)
                         {
                             idleTimerWindow.BringToFront();

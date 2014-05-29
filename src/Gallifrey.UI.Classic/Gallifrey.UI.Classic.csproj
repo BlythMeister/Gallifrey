@@ -112,11 +112,11 @@
     <Compile Include="SearchWindow.Designer.cs">
       <DependentUpon>SearchWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="IdleTimerWindow.cs">
+    <Compile Include="LockedTimerWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="IdleTimerWindow.Designer.cs">
-      <DependentUpon>IdleTimerWindow.cs</DependentUpon>
+    <Compile Include="LockedTimerWindow.Designer.cs">
+      <DependentUpon>LockedTimerWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="ExportTimerWindow.cs">
       <SubType>Form</SubType>
@@ -158,8 +158,8 @@
     <EmbeddedResource Include="SearchWindow.resx">
       <DependentUpon>SearchWindow.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="IdleTimerWindow.resx">
-      <DependentUpon>IdleTimerWindow.cs</DependentUpon>
+    <EmbeddedResource Include="LockedTimerWindow.resx">
+      <DependentUpon>LockedTimerWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ExportTimerWindow.resx">
       <DependentUpon>ExportTimerWindow.cs</DependentUpon>

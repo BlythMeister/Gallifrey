@@ -9,13 +9,13 @@ using Gallifrey.JiraTimers;
 
 namespace Gallifrey.UI.Classic
 {
-    public partial class IdleTimerWindow : Form
+    public partial class LockedTimerWindow : Form
     {
         private readonly IBackend gallifrey;
         public bool DisplayForm = true;
         private Guid? runningTimerId;
 
-        public IdleTimerWindow(IBackend gallifrey)
+        public LockedTimerWindow(IBackend gallifrey)
         {
             this.gallifrey = gallifrey;
             InitializeComponent();
@@ -32,6 +32,7 @@ namespace Gallifrey.UI.Classic
             {
                 lblRunning.Text = "N/A";
                 radRunning.Enabled = false;
+                lblRunning.Enabled = false;
             }
 
             TopMost = gallifrey.AppSettings.UiAlwaysOnTop;
