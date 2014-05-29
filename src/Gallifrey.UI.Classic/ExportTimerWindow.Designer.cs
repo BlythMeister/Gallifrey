@@ -439,6 +439,8 @@
             this.Font = new System.Drawing.Font("Segoe UI", 9.75F);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.MaximumSize = new System.Drawing.Size(309, 695);
+            this.MinimumSize = new System.Drawing.Size(309, 695);
             this.Name = "ExportTimerWindow";
             this.Text = "Gallifrey - Export Time";
             this.groupBox1.ResumeLayout(false);

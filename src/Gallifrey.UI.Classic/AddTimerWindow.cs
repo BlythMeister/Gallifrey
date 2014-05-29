@@ -9,6 +9,7 @@ namespace Gallifrey.UI.Classic
     public partial class AddTimerWindow : Form
     {
         private readonly IBackend gallifrey;
+        public bool TimerAdded { get; private set; }
 
         public AddTimerWindow(IBackend gallifrey)
         {
@@ -19,15 +20,30 @@ namespace Gallifrey.UI.Classic
 
             TopMost = gallifrey.AppSettings.UiAlwaysOnTop;
         }
-
-        public void PreLoadData(string jiraRef)
+        
+        public void PreLoadJira(string jiraRef)
         {
             txtJiraRef.Text = jiraRef;
+        }
+        
+        public void PreLoadDate(DateTime startDate)
+        {
+            calStartDate.Value = startDate;
+        }
+
+        public void PreLoadTime(TimeSpan time)
+        {
+            txtStartHours.Text = time.Hours.ToString();
+            txtStartMins.Text = time.Minutes.ToString();
         }
 
         private void btnAddTimer_Click(object sender, EventArgs e)
         {
-            if (AddJira()) Close();
+            if (AddJira())
+            {
+                TimerAdded = true;
+                Close();
+            }
         }
 
         private bool AddJira()
@@ -56,9 +72,10 @@ namespace Gallifrey.UI.Classic
                 return false;
             }
 
+            Guid newTimerId;
             try
             {
-                gallifrey.JiraTimerCollection.AddTimer(jiraIssue, startDate, seedTime, chkStartNow.Checked);
+                newTimerId = gallifrey.JiraTimerCollection.AddTimer(jiraIssue, startDate, seedTime, chkStartNow.Checked);
             }
             catch (DuplicateTimerException)
             {
@@ -66,11 +83,24 @@ namespace Gallifrey.UI.Classic
                 return false;
             }
 
+            if (!chkStartNow.Checked && seedTime.TotalMinutes > 0)
+            {
+                if (MessageBox.Show("Do You Want To Log This Time To Jira?", "Log Time?", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    var exportTimerWindow = new ExportTimerWindow(gallifrey, newTimerId);
+                    if (exportTimerWindow.DisplayForm)
+                    {
+                        exportTimerWindow.ShowDialog();
+                    }
+                }
+            }
+
             return true;
         }
 
         private void btnCancelAddTimer_Click(object sender, EventArgs e)
         {
+            TimerAdded = false;
             Close();
         }
 

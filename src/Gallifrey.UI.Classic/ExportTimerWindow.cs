@@ -33,7 +33,7 @@ namespace Gallifrey.UI.Classic
 
             timerToShow = gallifrey.JiraTimerCollection.GetTimer(timerGuid);
 
-            if (timerToShow.TimeToExport.TotalMinutes <= 0)
+            if (timerToShow.TimeToExport.TotalMinutes < 1)
             {
                 MessageBox.Show("There Is No Time To Export", "Nothing To Export", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 DisplayForm = false;

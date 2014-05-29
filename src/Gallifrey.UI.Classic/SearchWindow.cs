@@ -48,7 +48,7 @@ namespace Gallifrey.UI.Classic
 
             TopMost = false;
             var addForm = new AddTimerWindow(gallifrey);
-            addForm.PreLoadData(selectedIssue.JiraRef);
+            addForm.PreLoadJira(selectedIssue.JiraRef);
             addForm.ShowDialog();
             Close();
         }

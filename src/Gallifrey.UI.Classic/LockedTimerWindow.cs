@@ -24,7 +24,7 @@ namespace Gallifrey.UI.Classic
 
             runningTimerId = gallifrey.JiraTimerCollection.GetRunningTimerId();
 
-            if(runningTimerId.HasValue)
+            if (runningTimerId.HasValue)
             {
                 lblRunning.Text = gallifrey.JiraTimerCollection.GetTimer(runningTimerId.Value).ToString();
             }
@@ -37,7 +37,7 @@ namespace Gallifrey.UI.Classic
 
             TopMost = gallifrey.AppSettings.UiAlwaysOnTop;
         }
-        
+
         private void BindIdleTimers()
         {
             var idleTimers = gallifrey.IdleTimerCollection.GetUnusedLockTimers().ToList();
@@ -48,13 +48,13 @@ namespace Gallifrey.UI.Classic
                 DisplayForm = false;
                 Close();
             }
-            
+
             lstIdleTimers.DataSource = idleTimers;
             lstIdleTimers.Refresh();
 
             SetDayTimers();
         }
-        
+
         private void SetDayTimers()
         {
             var selectedTimer = (IdleTimer)lstIdleTimers.SelectedItem;
@@ -70,7 +70,7 @@ namespace Gallifrey.UI.Classic
                 radSelected.Enabled = true;
                 cmbDayTimers.Enabled = true;
                 cmbDayTimers.DataSource = gallifrey.JiraTimerCollection.GetTimersForADate(selectedTimer.DateStarted.Date).ToList();
-                cmbDayTimers.Refresh();    
+                cmbDayTimers.Refresh();
             }
         }
 
@@ -81,6 +81,7 @@ namespace Gallifrey.UI.Classic
 
         private void btnOK_Click(object sender, EventArgs e)
         {
+            bool removeTimer = true;
             var idleTimer = (IdleTimer)lstIdleTimers.SelectedItem;
 
             if (radSelected.Checked)
@@ -92,9 +93,24 @@ namespace Gallifrey.UI.Classic
             {
                 gallifrey.JiraTimerCollection.AddIdleTimer(runningTimerId.Value, idleTimer);
             }
+            else if (radNew.Checked)
+            {
+                TopMost = false;
+                var addForm = new AddTimerWindow(gallifrey);
+                addForm.PreLoadTime(idleTimer.ExactCurrentTime);
+                addForm.ShowDialog();
+                if (!addForm.TimerAdded)
+                {
+                    removeTimer = false;
+                }
+                TopMost = gallifrey.AppSettings.UiAlwaysOnTop;
+            }
 
-            gallifrey.IdleTimerCollection.RemoveTimer(idleTimer.UniqueId);
-            BindIdleTimers();
+            if (removeTimer)
+            {
+                gallifrey.IdleTimerCollection.RemoveTimer(idleTimer.UniqueId);
+                BindIdleTimers();
+            }
         }
 
         private void lstIdleTimers_SelectedIndexChanged(object sender, EventArgs e)
