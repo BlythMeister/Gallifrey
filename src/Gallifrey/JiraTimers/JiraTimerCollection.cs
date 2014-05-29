@@ -123,7 +123,7 @@ namespace Gallifrey.JiraTimers
         public void RemoveTimersOlderThanDays(int keepTimersForDays)
         {
             if (keepTimersForDays > 0) keepTimersForDays = keepTimersForDays * -1;
-            foreach (var timer in timerList.Where(timer => timer.DateStarted >= DateTime.Now.AddDays(keepTimersForDays)))
+            foreach (var timer in timerList.Where(timer => timer.DateStarted <= DateTime.Now.AddDays(keepTimersForDays)))
             {
                 timerList.Remove(timer);
             }
