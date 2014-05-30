@@ -97,6 +97,11 @@ namespace Gallifrey.UI.Classic
             }
 
             RefreshTimerPages();
+            var runningId = gallifrey.JiraTimerCollection.GetRunningTimerId();
+            if (runningId.HasValue)
+            {
+                SelectTimer(runningId.Value);
+            }
         }
 
         private void lblCurrentTime_DoubleClick(object sender, EventArgs e)
@@ -119,12 +124,13 @@ namespace Gallifrey.UI.Classic
                 if (gallifrey.JiraTimerCollection.GetTimersForADate(DateTime.Now.Date).Any())
                 {
                     var tabDate = DateTime.ParseExact(selectedTab.Name, "yyyyMMdd", CultureInfo.InvariantCulture);
-                    addForm.PreLoadDate(tabDate);    
+                    addForm.PreLoadDate(tabDate);
                 }
             }
 
             addForm.ShowDialog();
             RefreshTimerPages();
+            if (addForm.NewTimerId.HasValue) SelectTimer(addForm.NewTimerId.Value);
         }
 
         private void btnRemoveTimer_Click(object sender, EventArgs e)

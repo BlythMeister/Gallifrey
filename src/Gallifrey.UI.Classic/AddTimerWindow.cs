@@ -9,7 +9,7 @@ namespace Gallifrey.UI.Classic
     public partial class AddTimerWindow : Form
     {
         private readonly IBackend gallifrey;
-        public bool TimerAdded { get; private set; }
+        public Guid? NewTimerId { get; private set; }
 
         public AddTimerWindow(IBackend gallifrey)
         {
@@ -39,11 +39,7 @@ namespace Gallifrey.UI.Classic
 
         private void btnAddTimer_Click(object sender, EventArgs e)
         {
-            if (AddJira())
-            {
-                TimerAdded = true;
-                Close();
-            }
+            if (AddJira()) Close();
         }
 
         private bool AddJira()
@@ -72,10 +68,9 @@ namespace Gallifrey.UI.Classic
                 return false;
             }
 
-            Guid newTimerId;
             try
             {
-                newTimerId = gallifrey.JiraTimerCollection.AddTimer(jiraIssue, startDate, seedTime, chkStartNow.Checked);
+                NewTimerId = gallifrey.JiraTimerCollection.AddTimer(jiraIssue, startDate, seedTime, chkStartNow.Checked);
             }
             catch (DuplicateTimerException)
             {
@@ -88,7 +83,6 @@ namespace Gallifrey.UI.Classic
 
         private void btnCancelAddTimer_Click(object sender, EventArgs e)
         {
-            TimerAdded = false;
             Close();
         }
 
