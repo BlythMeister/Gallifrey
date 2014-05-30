@@ -99,10 +99,9 @@
             // 
             // lblRunning
             // 
-            this.lblRunning.AutoSize = true;
             this.lblRunning.Location = new System.Drawing.Point(161, 33);
             this.lblRunning.Name = "lblRunning";
-            this.lblRunning.Size = new System.Drawing.Size(31, 17);
+            this.lblRunning.Size = new System.Drawing.Size(360, 21);
             this.lblRunning.TabIndex = 2;
             this.lblRunning.Text = "N/A";
             // 
@@ -128,7 +127,7 @@
             // radRunning
             // 
             this.radRunning.AutoSize = true;
-            this.radRunning.Location = new System.Drawing.Point(6, 33);
+            this.radRunning.Location = new System.Drawing.Point(6, 31);
             this.radRunning.Name = "radRunning";
             this.radRunning.Size = new System.Drawing.Size(160, 21);
             this.radRunning.TabIndex = 1;
