@@ -98,7 +98,7 @@
             this.tabTimerDays.Location = new System.Drawing.Point(12, 169);
             this.tabTimerDays.Name = "tabTimerDays";
             this.tabTimerDays.SelectedIndex = 0;
-            this.tabTimerDays.Size = new System.Drawing.Size(830, 414);
+            this.tabTimerDays.Size = new System.Drawing.Size(912, 414);
             this.tabTimerDays.TabIndex = 14;
             // 
             // formTimer
@@ -115,7 +115,7 @@
             this.lblCurrentTime.ForeColor = System.Drawing.Color.Red;
             this.lblCurrentTime.Location = new System.Drawing.Point(580, 98);
             this.lblCurrentTime.Name = "lblCurrentTime";
-            this.lblCurrentTime.Size = new System.Drawing.Size(262, 65);
+            this.lblCurrentTime.Size = new System.Drawing.Size(344, 65);
             this.lblCurrentTime.TabIndex = 13;
             this.lblCurrentTime.Text = "00:00:00";
             this.lblCurrentTime.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -130,7 +130,7 @@
             this.grpTarget.Controls.Add(this.lblExportTargetWeek);
             this.grpTarget.Location = new System.Drawing.Point(580, 9);
             this.grpTarget.Name = "grpTarget";
-            this.grpTarget.Size = new System.Drawing.Size(262, 83);
+            this.grpTarget.Size = new System.Drawing.Size(344, 83);
             this.grpTarget.TabIndex = 4;
             this.grpTarget.TabStop = false;
             this.grpTarget.Text = "Target Export Week To Date";
@@ -141,7 +141,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.progExportTarget.Location = new System.Drawing.Point(9, 42);
             this.progExportTarget.Name = "progExportTarget";
-            this.progExportTarget.Size = new System.Drawing.Size(247, 35);
+            this.progExportTarget.Size = new System.Drawing.Size(329, 35);
             this.progExportTarget.TabIndex = 2;
             // 
             // lblExportedWeek
@@ -308,7 +308,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(854, 595);
+            this.ClientSize = new System.Drawing.Size(936, 595);
             this.Controls.Add(this.btnIdle);
             this.Controls.Add(this.grpExportStats);
             this.Controls.Add(this.grpTarget);
@@ -327,7 +327,7 @@
             this.Controls.Add(this.btnAddTimer);
             this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(870, 633);
+            this.MinimumSize = new System.Drawing.Size(952, 633);
             this.Name = "MainWindow";
             this.Text = "Gallifrey";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainWindow_FormClosed);
