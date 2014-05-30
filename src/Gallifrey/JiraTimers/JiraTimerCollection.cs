@@ -161,7 +161,7 @@ namespace Gallifrey.JiraTimers
         public TimeSpan GetTotalUnexportedTime()
         {
             var unexportedTime = new TimeSpan();
-            return timerList.Aggregate(unexportedTime, (current, jiraTimer) => current.Add(jiraTimer.TimeToExport));
+            return timerList.Aggregate(unexportedTime, (current, jiraTimer) => current.Add(new TimeSpan(jiraTimer.TimeToExport.Hours, jiraTimer.TimeToExport.Minutes, 0)));
         }
 
         public TimeSpan GetTotalExportedTimeThisWeek()

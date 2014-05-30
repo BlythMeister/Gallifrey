@@ -74,6 +74,7 @@
             // 
             // btnCancel
             // 
+            this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancel.Image = global::Gallifrey.UI.Classic.Properties.Resources.Cancel_48x48;
             this.btnCancel.Location = new System.Drawing.Point(138, 215);
             this.btnCancel.Name = "btnCancel";
@@ -174,8 +175,10 @@
             // 
             // AdjustTimerWindow
             // 
+            this.AcceptButton = this.btnOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(263, 293);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.label5);

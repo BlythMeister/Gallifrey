@@ -135,6 +135,7 @@
             // 
             // btnCancelAddTimer
             // 
+            this.btnCancelAddTimer.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancelAddTimer.Image = global::Gallifrey.UI.Classic.Properties.Resources.Cancel_48x48;
             this.btnCancelAddTimer.Location = new System.Drawing.Point(173, 172);
             this.btnCancelAddTimer.Name = "btnCancelAddTimer";
@@ -175,8 +176,10 @@
             // 
             // AddTimerWindow
             // 
+            this.AcceptButton = this.btnAddTimer;
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CancelButton = this.btnCancelAddTimer;
             this.ClientSize = new System.Drawing.Size(296, 251);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.chkStartNow);

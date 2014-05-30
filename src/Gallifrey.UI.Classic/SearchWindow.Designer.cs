@@ -70,6 +70,7 @@
             // 
             // btnCancelAddTimer
             // 
+            this.btnCancelAddTimer.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancelAddTimer.Image = global::Gallifrey.UI.Classic.Properties.Resources.Cancel_48x48;
             this.btnCancelAddTimer.Location = new System.Drawing.Point(234, 399);
             this.btnCancelAddTimer.Name = "btnCancelAddTimer";
@@ -81,6 +82,7 @@
             // 
             // btnAddTimer
             // 
+            this.btnAddTimer.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnAddTimer.Image = global::Gallifrey.UI.Classic.Properties.Resources.Check_48x48;
             this.btnAddTimer.Location = new System.Drawing.Point(121, 399);
             this.btnAddTimer.Name = "btnAddTimer";
@@ -143,8 +145,10 @@
             // 
             // SearchWindow
             // 
+            this.AcceptButton = this.btnAddTimer;
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CancelButton = this.btnCancelAddTimer;
             this.ClientSize = new System.Drawing.Size(410, 474);
             this.Controls.Add(this.lstResults);
             this.Controls.Add(this.groupBox1);

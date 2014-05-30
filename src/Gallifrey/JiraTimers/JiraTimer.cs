@@ -133,8 +133,7 @@ namespace Gallifrey.JiraTimers
         public void ManualAdjustment(int hours, int minutes, bool addTime)
         {
             var changeTimespan = new TimeSpan(hours, minutes, 0);
-
-            CurrentTime = addTime ? CurrentTime.Add(changeTimespan) : CurrentTime.Subtract(changeTimespan);
+            CurrentTime = addTime ? CurrentTime.Add(changeTimespan) : CurrentTime.Subtract(changeTimespan > ExactCurrentTime ? ExactCurrentTime : changeTimespan);
         }
 
         public void SetJiraExportedTime(TimeSpan loggedTime)
