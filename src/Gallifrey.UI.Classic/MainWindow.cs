@@ -249,6 +249,7 @@ namespace Gallifrey.UI.Classic
                     gallifrey.StartIdleTimer();
                     break;
                 case SessionSwitchReason.SessionUnlock:
+                    BringToFront();
                     var idleTimerId = gallifrey.StopIdleTimer();
                     var idleTimer = gallifrey.IdleTimerCollection.GetTimer(idleTimerId);
                     if (idleTimer.ExactCurrentTime.TotalSeconds < 60)

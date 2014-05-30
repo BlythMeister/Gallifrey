@@ -32,8 +32,6 @@
             this.txtJiraRef = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.btnCancel = new System.Windows.Forms.Button();
-            this.btnOK = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.txtTotalHours = new System.Windows.Forms.TextBox();
             this.txtTotalMinutes = new System.Windows.Forms.TextBox();
@@ -64,6 +62,8 @@
             this.label9 = new System.Windows.Forms.Label();
             this.label16 = new System.Windows.Forms.Label();
             this.txtComment = new System.Windows.Forms.TextBox();
+            this.btnOK = new System.Windows.Forms.Button();
+            this.btnCancel = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -94,29 +94,6 @@
             this.label2.Size = new System.Drawing.Size(122, 25);
             this.label2.TabIndex = 0;
             this.label2.Text = "Export Timer";
-            // 
-            // btnCancel
-            // 
-            this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Image = global::Gallifrey.UI.Classic.Properties.Resources.Cancel_48x48;
-            this.btnCancel.Location = new System.Drawing.Point(153, 583);
-            this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(65, 65);
-            this.btnCancel.TabIndex = 10;
-            this.btnCancel.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.btnCancel.UseVisualStyleBackColor = true;
-            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
-            // 
-            // btnOK
-            // 
-            this.btnOK.Image = global::Gallifrey.UI.Classic.Properties.Resources.Check_48x48;
-            this.btnOK.Location = new System.Drawing.Point(54, 583);
-            this.btnOK.Name = "btnOK";
-            this.btnOK.Size = new System.Drawing.Size(65, 65);
-            this.btnOK.TabIndex = 9;
-            this.btnOK.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.btnOK.UseVisualStyleBackColor = true;
-            this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
             // 
             // label3
             // 
@@ -421,9 +398,31 @@
             this.txtComment.Size = new System.Drawing.Size(202, 81);
             this.txtComment.TabIndex = 8;
             // 
+            // btnOK
+            // 
+            this.btnOK.Image = global::Gallifrey.UI.Classic.Properties.Resources.Check_48x48;
+            this.btnOK.Location = new System.Drawing.Point(54, 583);
+            this.btnOK.Name = "btnOK";
+            this.btnOK.Size = new System.Drawing.Size(65, 65);
+            this.btnOK.TabIndex = 9;
+            this.btnOK.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.btnOK.UseVisualStyleBackColor = true;
+            this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
+            // 
+            // btnCancel
+            // 
+            this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnCancel.Image = global::Gallifrey.UI.Classic.Properties.Resources.Cancel_48x48;
+            this.btnCancel.Location = new System.Drawing.Point(153, 583);
+            this.btnCancel.Name = "btnCancel";
+            this.btnCancel.Size = new System.Drawing.Size(65, 65);
+            this.btnCancel.TabIndex = 10;
+            this.btnCancel.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+            // 
             // ExportTimerWindow
             // 
-            this.AcceptButton = this.btnOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
@@ -446,6 +445,7 @@
             this.MinimumSize = new System.Drawing.Size(309, 695);
             this.Name = "ExportTimerWindow";
             this.Text = "Gallifrey - Export Time";
+            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.ExportTimerWindow_KeyUp);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
