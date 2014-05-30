@@ -230,9 +230,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="clock_blue.ico" />
+    <None Include="Icons\Save_48x48.png" />
+    <None Include="Icons\Upload_48x48.png" />
     <None Include="Icons\Refresh_48x48.png" />
     <None Include="Icons\Key_48x48.png" />
-    <None Include="Icons\Log Out_48x48.png" />
     <None Include="Icons\Rename_48x48.png" />
     <None Include="Icons\Search_48x48.png" />
     <None Include="Icons\Edit_48x48.png" />

@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Windows.Forms;
-using Atlassian.Jira;
-using Gallifrey.Exceptions.IntergrationPoints;
-using Gallifrey.Exceptions.JiraTimers;
 using Gallifrey.IdleTimers;
 using Gallifrey.JiraTimers;
 
@@ -49,15 +46,15 @@ namespace Gallifrey.UI.Classic
                 Close();
             }
 
-            lstIdleTimers.DataSource = idleTimers;
-            lstIdleTimers.Refresh();
+            lstLockedTimers.DataSource = idleTimers;
+            lstLockedTimers.Refresh();
 
             SetDayTimers();
         }
 
         private void SetDayTimers()
         {
-            var selectedTimer = (IdleTimer)lstIdleTimers.SelectedItem;
+            var selectedTimer = (IdleTimer)lstLockedTimers.SelectedItem;
             if (selectedTimer == null)
             {
                 cmbDayTimers.DataSource = null;
@@ -82,7 +79,7 @@ namespace Gallifrey.UI.Classic
         private void btnOK_Click(object sender, EventArgs e)
         {
             bool removeTimer = true;
-            var idleTimer = (IdleTimer)lstIdleTimers.SelectedItem;
+            var idleTimer = (IdleTimer)lstLockedTimers.SelectedItem;
 
             if (radSelected.Checked)
             {
@@ -104,6 +101,11 @@ namespace Gallifrey.UI.Classic
                     removeTimer = false;
                 }
                 TopMost = gallifrey.AppSettings.UiAlwaysOnTop;
+            }
+            else
+            {
+                MessageBox.Show("Please Choose One Of The Locked Timer Destinations", "No Action Selected", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                removeTimer = false;
             }
 
             if (removeTimer)

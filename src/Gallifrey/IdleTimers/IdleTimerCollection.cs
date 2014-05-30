@@ -61,7 +61,7 @@ namespace Gallifrey.IdleTimers
 
         public IEnumerable<IdleTimer> GetUnusedLockTimers()
         {
-            return lockTimerList.Where(timer => timer.IsRunning == false);
+            return lockTimerList.Where(timer => timer.IsRunning == false).OrderByDescending(timer=>timer.DateFinished);
         }
 
         public void RemoveOldTimers()
