@@ -83,18 +83,6 @@ namespace Gallifrey.UI.Classic
                 return false;
             }
 
-            if (!chkStartNow.Checked && seedTime.TotalMinutes > 0)
-            {
-                if (MessageBox.Show("Do You Want To Log This Time To Jira?", "Log Time?", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                {
-                    var exportTimerWindow = new ExportTimerWindow(gallifrey, newTimerId);
-                    if (exportTimerWindow.DisplayForm)
-                    {
-                        exportTimerWindow.ShowDialog();
-                    }
-                }
-            }
-
             return true;
         }
 
