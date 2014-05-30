@@ -169,5 +169,12 @@ namespace Gallifrey.UI.Classic
             txtSetValueMins.Enabled = radSetValue.Checked;
         }
 
+        private void ExportTimerWindow_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Alt && e.KeyCode == Keys.Enter)
+            {
+                btnOK_Click(sender, null);
+            }
+        }
     }
 }
