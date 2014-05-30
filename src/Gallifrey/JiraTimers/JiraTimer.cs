@@ -62,7 +62,7 @@ namespace Gallifrey.JiraTimers
 
         public bool FullyExported
         {
-            get { return ExportedTime.TotalMinutes >= CurrentTime.TotalMinutes; }
+            get { return TimeToExport.TotalMinutes < 1; }
         }
 
         public TimeSpan TimeToExport
@@ -87,7 +87,7 @@ namespace Gallifrey.JiraTimers
                 }
 
                 var dateDiff = dayIndex - DayOfWeek.Monday;
-                var mondayThisWeek = today.AddDays(dateDiff*-1);
+                var mondayThisWeek = today.AddDays(dateDiff * -1);
                 var mondayNextWeek = mondayThisWeek.AddDays(7);
 
                 return DateStarted.Date >= mondayThisWeek.Date && DateStarted.Date < mondayNextWeek.Date;
@@ -120,7 +120,7 @@ namespace Gallifrey.JiraTimers
 
         public override string ToString()
         {
-            return TimeToExport.TotalMinutes >= 1 ? 
+            return TimeToExport.TotalMinutes >= 1 ?
                 string.Format("{0} - Time [ {1} ] - To Export [ {2} ] - Desc [ {3} ]", JiraReference, ExactCurrentTime.FormatAsString(), TimeToExport.FormatAsString(), JiraName) :
                 string.Format("{0} - Time [ {1} ] - Desc [ {2} ]", JiraReference, ExactCurrentTime.FormatAsString(), JiraName);
         }
@@ -140,6 +140,11 @@ namespace Gallifrey.JiraTimers
         public void SetJiraExportedTime(TimeSpan loggedTime)
         {
             ExportedTime = loggedTime;
+            var exportedvsActual = ExportedTime.Subtract(ExactCurrentTime);
+            if (exportedvsActual.TotalMinutes >= 1)
+            {
+                ManualAdjustment(exportedvsActual.Hours, exportedvsActual.Minutes, true);
+            }
         }
 
         public void AddJiraExportedTime(TimeSpan loggedTime)

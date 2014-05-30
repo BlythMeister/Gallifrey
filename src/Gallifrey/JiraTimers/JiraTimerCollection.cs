@@ -14,7 +14,7 @@ namespace Gallifrey.JiraTimers
         IEnumerable<JiraTimer> GetTimersForADate(DateTime timerDate);
         Guid AddTimer(Issue jiraIssue, DateTime startDate, TimeSpan seedTime, bool startNow);
         void RemoveTimer(Guid uniqueId);
-        Guid? StartTimer(Guid uniqueId);
+        void StartTimer(Guid uniqueId);
         void StopTimer(Guid uniqueId);
         Guid? GetRunningTimerId();
         void RemoveTimersOlderThanDays(int keepTimersForDays);
@@ -82,7 +82,7 @@ namespace Gallifrey.JiraTimers
             SaveTimers();
         }
 
-        public Guid? StartTimer(Guid uniqueId)
+        public void StartTimer(Guid uniqueId)
         {
             var timerForInteration = GetTimer(uniqueId);
             if (timerForInteration.DateStarted.Date != DateTime.Now.Date)
@@ -91,8 +91,6 @@ namespace Gallifrey.JiraTimers
                 AddTimer(timerForInteration);
                 uniqueId = timerForInteration.UniqueId;
             }
-
-            
 
             var runningTimerId = GetRunningTimerId();
             if (runningTimerId.HasValue && runningTimerId.Value != uniqueId)
@@ -103,7 +101,6 @@ namespace Gallifrey.JiraTimers
             timerForInteration.StartTimer();
 
             SaveTimers();
-            return runningTimerId;
         }
 
         public void StopTimer(Guid uniqueId)
