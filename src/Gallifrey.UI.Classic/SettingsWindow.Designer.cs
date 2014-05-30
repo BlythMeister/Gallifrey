@@ -38,6 +38,8 @@
             this.txtJiraPassword = new System.Windows.Forms.TextBox();
             this.grpJira = new System.Windows.Forms.GroupBox();
             this.grpAppSettings = new System.Windows.Forms.GroupBox();
+            this.chkAlwaysTop = new System.Windows.Forms.CheckBox();
+            this.label11 = new System.Windows.Forms.Label();
             this.txtTargetHours = new System.Windows.Forms.TextBox();
             this.txtTargetMins = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
@@ -51,8 +53,6 @@
             this.label7 = new System.Windows.Forms.Label();
             this.btnCancelEditSettings = new System.Windows.Forms.Button();
             this.btnSaveSettings = new System.Windows.Forms.Button();
-            this.chkAlwaysTop = new System.Windows.Forms.CheckBox();
-            this.label11 = new System.Windows.Forms.Label();
             this.grpJira.SuspendLayout();
             this.grpAppSettings.SuspendLayout();
             this.SuspendLayout();
@@ -153,6 +153,24 @@
             this.grpAppSettings.TabStop = false;
             this.grpAppSettings.Text = "App Settings";
             // 
+            // chkAlwaysTop
+            // 
+            this.chkAlwaysTop.AutoSize = true;
+            this.chkAlwaysTop.Location = new System.Drawing.Point(158, 168);
+            this.chkAlwaysTop.Name = "chkAlwaysTop";
+            this.chkAlwaysTop.Size = new System.Drawing.Size(15, 14);
+            this.chkAlwaysTop.TabIndex = 12;
+            this.chkAlwaysTop.UseVisualStyleBackColor = true;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(2, 166);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(150, 17);
+            this.label11.TabIndex = 11;
+            this.label11.Text = "Pop-Up Always On Top?";
+            // 
             // txtTargetHours
             // 
             this.txtTargetHours.Location = new System.Drawing.Point(158, 106);
@@ -250,6 +268,7 @@
             // 
             // btnCancelEditSettings
             // 
+            this.btnCancelEditSettings.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancelEditSettings.Image = global::Gallifrey.UI.Classic.Properties.Resources.Cancel_48x48;
             this.btnCancelEditSettings.Location = new System.Drawing.Point(170, 383);
             this.btnCancelEditSettings.Name = "btnCancelEditSettings";
@@ -270,28 +289,12 @@
             this.btnSaveSettings.UseVisualStyleBackColor = true;
             this.btnSaveSettings.Click += new System.EventHandler(this.btnSaveSettings_Click);
             // 
-            // chkAlwaysTop
-            // 
-            this.chkAlwaysTop.AutoSize = true;
-            this.chkAlwaysTop.Location = new System.Drawing.Point(158, 168);
-            this.chkAlwaysTop.Name = "chkAlwaysTop";
-            this.chkAlwaysTop.Size = new System.Drawing.Size(15, 14);
-            this.chkAlwaysTop.TabIndex = 12;
-            this.chkAlwaysTop.UseVisualStyleBackColor = true;
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(2, 166);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(150, 17);
-            this.label11.TabIndex = 11;
-            this.label11.Text = "Pop-Up Always On Top?";
-            // 
             // SettingsWindow
             // 
+            this.AcceptButton = this.btnSaveSettings;
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CancelButton = this.btnCancelEditSettings;
             this.ClientSize = new System.Drawing.Size(331, 464);
             this.Controls.Add(this.grpAppSettings);
             this.Controls.Add(this.grpJira);

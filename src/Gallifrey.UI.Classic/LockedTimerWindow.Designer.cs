@@ -35,12 +35,12 @@
             this.lstIdleTimers = new System.Windows.Forms.ListBox();
             this.btnCancel = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.radNew = new System.Windows.Forms.RadioButton();
             this.lblRunning = new System.Windows.Forms.Label();
             this.cmbDayTimers = new System.Windows.Forms.ComboBox();
             this.radSelected = new System.Windows.Forms.RadioButton();
             this.radRunning = new System.Windows.Forms.RadioButton();
             this.radDelete = new System.Windows.Forms.RadioButton();
-            this.radNew = new System.Windows.Forms.RadioButton();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -86,6 +86,7 @@
             // 
             // btnCancel
             // 
+            this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancel.Image = global::Gallifrey.UI.Classic.Properties.Resources.Cancel_48x48;
             this.btnCancel.Location = new System.Drawing.Point(320, 368);
             this.btnCancel.Name = "btnCancel";
@@ -109,6 +110,16 @@
             this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Idle Time Destination";
+            // 
+            // radNew
+            // 
+            this.radNew.AutoSize = true;
+            this.radNew.Location = new System.Drawing.Point(7, 106);
+            this.radNew.Name = "radNew";
+            this.radNew.Size = new System.Drawing.Size(136, 21);
+            this.radNew.TabIndex = 5;
+            this.radNew.Text = "Add To New Timer";
+            this.radNew.UseVisualStyleBackColor = true;
             // 
             // lblRunning
             // 
@@ -155,23 +166,16 @@
             this.radDelete.Name = "radDelete";
             this.radDelete.Size = new System.Drawing.Size(120, 21);
             this.radDelete.TabIndex = 0;
+            this.radDelete.TabStop = true;
             this.radDelete.Text = "Delete Idle Time";
             this.radDelete.UseVisualStyleBackColor = true;
             // 
-            // radNew
-            // 
-            this.radNew.AutoSize = true;
-            this.radNew.Location = new System.Drawing.Point(7, 106);
-            this.radNew.Name = "radNew";
-            this.radNew.Size = new System.Drawing.Size(136, 21);
-            this.radNew.TabIndex = 5;
-            this.radNew.Text = "Add To New Timer";
-            this.radNew.UseVisualStyleBackColor = true;
-            // 
             // LockedTimerWindow
             // 
+            this.AcceptButton = this.btnOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(679, 449);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.lstIdleTimers);

@@ -49,6 +49,7 @@ namespace Gallifrey.UI.Classic
             SetVersionNumber();
             RefreshTimerPages();
             SetupDisplayFont();
+            SetToolTips();
             formTimer.Enabled = true;
         }
 
@@ -103,8 +104,11 @@ namespace Gallifrey.UI.Classic
             var selectedTab = tabTimerDays.SelectedTab;
             if (selectedTab != null)
             {
-                var tabDate = DateTime.ParseExact(selectedTab.Name, "yyyyMMdd", CultureInfo.InvariantCulture);
-                addForm.PreLoadDate(tabDate);
+                if (gallifrey.JiraTimerCollection.GetTimersForADate(DateTime.Now.Date).Any())
+                {
+                    var tabDate = DateTime.ParseExact(selectedTab.Name, "yyyyMMdd", CultureInfo.InvariantCulture);
+                    addForm.PreLoadDate(tabDate);    
+                }
             }
 
             addForm.ShowDialog();
@@ -417,7 +421,28 @@ namespace Gallifrey.UI.Classic
             progExportTarget.Value = exportedMinutes > progExportTarget.Maximum ? progExportTarget.Maximum : exportedMinutes;
         }
 
+        private void SetToolTips()
+        {
+            toolTip.SetToolTip(btnAddTimer, "Add New Timer");
+            toolTip.SetToolTip(btnRemoveTimer, "Remove Selected Timer");
+            toolTip.SetToolTip(btnSearch, "Search Jira");
+            toolTip.SetToolTip(btnTimeEdit, "Edit Current Time");
+            toolTip.SetToolTip(btnRename, "Change Jira For Timer");
+            toolTip.SetToolTip(btnExport, "Export Time To Jira");
+            toolTip.SetToolTip(btnIdle, "View Machine Locked Timers");
+            toolTip.SetToolTip(btnSettings, "Settings");
+        }
+
         #endregion
+
+        private void lblCurrentTime_DoubleClick(object sender, EventArgs e)
+        {
+            var runningId = gallifrey.JiraTimerCollection.GetRunningTimerId();
+            if (runningId.HasValue)
+            {
+                SelectTimer(runningId.Value);
+            }
+        }
 
     }
 }

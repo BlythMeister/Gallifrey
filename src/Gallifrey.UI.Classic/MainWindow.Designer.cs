@@ -53,6 +53,7 @@
             this.btnRemoveTimer = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.btnAddTimer = new System.Windows.Forms.Button();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.grpTarget.SuspendLayout();
             this.grpExportStats.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -118,6 +119,7 @@
             this.lblCurrentTime.TabIndex = 13;
             this.lblCurrentTime.Text = "00:00:00";
             this.lblCurrentTime.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblCurrentTime.DoubleClick += new System.EventHandler(this.lblCurrentTime_DoubleClick);
             // 
             // grpTarget
             // 
@@ -365,6 +367,7 @@
         private System.Windows.Forms.Label lblExportStat;
         private System.Windows.Forms.NotifyIcon notifyAlert;
         private System.Windows.Forms.Button btnIdle;
+        private System.Windows.Forms.ToolTip toolTip;
     }
 }
 
