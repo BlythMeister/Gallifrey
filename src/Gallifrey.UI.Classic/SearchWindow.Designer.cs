@@ -108,7 +108,7 @@
             // 
             // btnRefresh
             // 
-            this.btnRefresh.Image = global::Gallifrey.UI.Classic.Properties.Resources.Refresh_48x48;
+            this.btnRefresh.Image = global::Gallifrey.UI.Classic.Properties.Resources.Search_48x48;
             this.btnRefresh.Location = new System.Drawing.Point(157, 86);
             this.btnRefresh.Name = "btnRefresh";
             this.btnRefresh.Size = new System.Drawing.Size(65, 65);
@@ -145,7 +145,7 @@
             // 
             // SearchWindow
             // 
-            this.AcceptButton = this.btnAddTimer;
+            this.AcceptButton = this.btnRefresh;
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancelAddTimer;

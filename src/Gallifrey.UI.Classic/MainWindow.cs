@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Windows.Forms;
 using Gallifrey.Exceptions.IntergrationPoints;
 using Gallifrey.Exceptions.JiraTimers;
@@ -50,6 +51,7 @@ namespace Gallifrey.UI.Classic
             RefreshTimerPages();
             SetupDisplayFont();
             SetToolTips();
+            HandleUnexpectedErrors();
             formTimer.Enabled = true;
         }
 
@@ -58,6 +60,7 @@ namespace Gallifrey.UI.Classic
             gallifrey.AppSettings.UiHeight = Height;
             gallifrey.AppSettings.UiWidth = Width;
             gallifrey.Close();
+            notifyAlert.Visible = false;
         }
 
         private void formTimer_Tick(object sender, EventArgs e)
@@ -94,6 +97,15 @@ namespace Gallifrey.UI.Classic
             }
 
             RefreshTimerPages();
+        }
+
+        private void lblCurrentTime_DoubleClick(object sender, EventArgs e)
+        {
+            var runningId = gallifrey.JiraTimerCollection.GetRunningTimerId();
+            if (runningId.HasValue)
+            {
+                SelectTimer(runningId.Value);
+            }
         }
 
         #region "Button Handlers
@@ -435,14 +447,35 @@ namespace Gallifrey.UI.Classic
 
         #endregion
 
-        private void lblCurrentTime_DoubleClick(object sender, EventArgs e)
+        #region "Unhandled Errors"
+
+        private void HandleUnexpectedErrors()
         {
-            var runningId = gallifrey.JiraTimerCollection.GetRunningTimerId();
-            if (runningId.HasValue)
-            {
-                SelectTimer(runningId.Value);
-            }
+            Application.ThreadException += ThreadExceptionHandler;
+            AppDomain.CurrentDomain.UnhandledException += UnhanhdledExceptionHandler;
         }
 
+        private void UnhanhdledExceptionHandler(object sender, UnhandledExceptionEventArgs e)
+        {
+            HandleUnexpectedError();
+        }
+
+        private void ThreadExceptionHandler(object sender, ThreadExceptionEventArgs e)
+        {
+            HandleUnexpectedError();
+        }
+
+        private void HandleUnexpectedError()
+        {
+            if (MessageBox.Show("Sorry An Unexpected Error Has Occured!\n\nDo You Want To Restart The App?", "Unexpected Error", MessageBoxButtons.YesNo, MessageBoxIcon.Error) == DialogResult.Yes)
+            {
+                System.Diagnostics.Process.Start(Application.ExecutablePath);
+            }
+
+            MainWindow_FormClosed(null, null);
+            Application.ExitThread();
+        }
+
+        #endregion
     }
 }

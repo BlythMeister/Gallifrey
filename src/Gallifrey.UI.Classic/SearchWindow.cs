@@ -19,15 +19,18 @@ namespace Gallifrey.UI.Classic
 
             try
             {
-                cmbUserFilters.DataSource = gallifrey.JiraConnection.GetJiraFilters().ToList();
+                cmbUserFilters.Items.Add(string.Empty);
+                foreach (var jiraFilter in gallifrey.JiraConnection.GetJiraFilters())
+                {
+                    cmbUserFilters.Items.Add(jiraFilter);
+                }
                 cmbUserFilters.Enabled = true;
             }
             catch (NoResultsFoundException)
             {
                 cmbUserFilters.Enabled = false;
             }
-
-
+            
             try
             {
                 var currentUserIssues = gallifrey.JiraConnection.GetJiraCurrentUserOpenIssues();

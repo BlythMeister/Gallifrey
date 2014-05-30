@@ -153,6 +153,16 @@ namespace Gallifrey.UI.Classic.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Save_48x48 {
+            get {
+                object obj = ResourceManager.GetObject("Save_48x48", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Search_48x48 {
             get {
                 object obj = ResourceManager.GetObject("Search_48x48", resourceCulture);
@@ -176,6 +186,16 @@ namespace Gallifrey.UI.Classic.Properties {
         internal static System.Drawing.Bitmap Synchronize_48x48 {
             get {
                 object obj = ResourceManager.GetObject("Synchronize_48x48", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Upload_48x48 {
+            get {
+                object obj = ResourceManager.GetObject("Upload_48x48", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -252,7 +252,7 @@
             // 
             // btnExport
             // 
-            this.btnExport.Image = global::Gallifrey.UI.Classic.Properties.Resources.Synchronize_48x48;
+            this.btnExport.Image = global::Gallifrey.UI.Classic.Properties.Resources.Upload_48x48;
             this.btnExport.Location = new System.Drawing.Point(367, 98);
             this.btnExport.Name = "btnExport";
             this.btnExport.Size = new System.Drawing.Size(65, 65);
