@@ -35,13 +35,16 @@ namespace Gallifrey.UI.Classic
             TopMost = gallifrey.AppSettings.UiAlwaysOnTop;
         }
 
-        private void BindIdleTimers()
+        private void BindIdleTimers(bool showNoTimers = true)
         {
             var idleTimers = gallifrey.IdleTimerCollection.GetUnusedLockTimers().ToList();
 
             if (!idleTimers.Any())
             {
-                MessageBox.Show("No Idle Timers To Show!", "Nothing To See Here", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                if (showNoTimers)
+                {
+                    MessageBox.Show("No Idle Timers To Show!", "Nothing To See Here", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
                 DisplayForm = false;
                 Close();
             }
@@ -111,7 +114,7 @@ namespace Gallifrey.UI.Classic
             if (removeTimer)
             {
                 gallifrey.IdleTimerCollection.RemoveTimer(idleTimer.UniqueId);
-                BindIdleTimers();
+                BindIdleTimers(false);
             }
         }
 
