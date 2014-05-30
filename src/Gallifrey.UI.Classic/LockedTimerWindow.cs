@@ -96,7 +96,7 @@ namespace Gallifrey.UI.Classic
                 var addForm = new AddTimerWindow(gallifrey);
                 addForm.PreLoadTime(idleTimer.ExactCurrentTime);
                 addForm.ShowDialog();
-                if (!addForm.TimerAdded)
+                if (!addForm.NewTimerId.HasValue)
                 {
                     removeTimer = false;
                 }
