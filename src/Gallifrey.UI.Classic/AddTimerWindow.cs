@@ -15,13 +15,13 @@ namespace Gallifrey.UI.Classic
 
         public AddTimerWindow(IBackend gallifrey)
         {
+            DisplayForm = true;
             this.gallifrey = gallifrey;
             InitializeComponent();
             calStartDate.MinDate = DateTime.Now.AddDays(gallifrey.Settings.AppSettings.KeepTimersForDays * -1);
             calStartDate.MaxDate = DateTime.Now.AddDays(gallifrey.Settings.AppSettings.KeepTimersForDays);
 
-            TopMost = gallifrey.Settings.UiSettings.AlwaysOnTop;
-            DisplayForm = true;
+            TopMost = gallifrey.Settings.UiSettings.AlwaysOnTop;           
         }
 
         public void PreLoadJira(string jiraRef)
