@@ -14,6 +14,7 @@ namespace Gallifrey.UI.Classic
 
         public LockedTimerWindow(IBackend gallifrey)
         {
+            DisplayForm = true;
             this.gallifrey = gallifrey;
             InitializeComponent();
 
