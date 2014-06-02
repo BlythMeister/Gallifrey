@@ -44,6 +44,7 @@
             this.lblUnexportedTime = new System.Windows.Forms.Label();
             this.lblExportStat = new System.Windows.Forms.Label();
             this.notifyAlert = new System.Windows.Forms.NotifyIcon(this.components);
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.btnIdle = new System.Windows.Forms.Button();
             this.btnRename = new System.Windows.Forms.Button();
             this.btnTimeEdit = new System.Windows.Forms.Button();
@@ -53,7 +54,6 @@
             this.btnRemoveTimer = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.btnAddTimer = new System.Windows.Forms.Button();
-            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.grpTarget.SuspendLayout();
             this.grpExportStats.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -327,11 +327,13 @@
             this.Controls.Add(this.btnAddTimer);
             this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.KeyPreview = true;
             this.MinimumSize = new System.Drawing.Size(952, 633);
             this.Name = "MainWindow";
             this.Text = "Gallifrey";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainWindow_FormClosed);
             this.Load += new System.EventHandler(this.MainWindow_Load);
+            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.MainWindow_KeyUp);
             this.grpTarget.ResumeLayout(false);
             this.grpTarget.PerformLayout();
             this.grpExportStats.ResumeLayout(false);

@@ -55,6 +55,51 @@ namespace Gallifrey.UI.Classic
             formTimer.Enabled = true;
         }
 
+        private void MainWindow_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Control)
+            {
+                switch (e.KeyCode)
+                {
+                    case Keys.A:
+                        btnAddTimer_Click(sender, null);
+                        break;
+
+                    case Keys.D:
+                        btnRemoveTimer_Click(sender, null);
+                        break;
+
+                    case Keys.F:
+                        btnSearch_Click(sender, null);
+                        break;
+
+                    case Keys.C:
+                        btnTimeEdit_Click(sender, null);
+                        break;
+
+                    case Keys.R:
+                        btnRename_Click(sender, null);
+                        break;
+
+                    case Keys.E:
+                        btnExport_Click(sender, null);
+                        break;
+
+                    case Keys.L:
+                        btnIdle_Click(sender, null);
+                        break;
+
+                    case Keys.S:
+                        btnSettings_Click(sender, null);
+                        break;
+
+                    case Keys.J:
+                        lblCurrentTime_DoubleClick(sender, null);
+                        break;
+                }
+            }
+        }
+
         private void MainWindow_FormClosed(object sender, FormClosedEventArgs e)
         {
             gallifrey.Settings.UiSettings.Height = Height;
@@ -445,16 +490,17 @@ namespace Gallifrey.UI.Classic
 
         private void SetToolTips()
         {
-            toolTip.SetToolTip(btnAddTimer, "Add New Timer");
-            toolTip.SetToolTip(btnRemoveTimer, "Remove Selected Timer");
-            toolTip.SetToolTip(btnSearch, "Search Jira");
-            toolTip.SetToolTip(btnTimeEdit, "Edit Current Time");
-            toolTip.SetToolTip(btnRename, "Change Jira For Timer");
-            toolTip.SetToolTip(btnExport, "Export Time To Jira");
-            toolTip.SetToolTip(btnIdle, "View Machine Locked Timers");
-            toolTip.SetToolTip(btnSettings, "Settings");
+            toolTip.SetToolTip(btnAddTimer, "Add New Timer (CTRL+A)");
+            toolTip.SetToolTip(btnRemoveTimer, "Remove Selected Timer (CTRL+D)");
+            toolTip.SetToolTip(btnSearch, "Search Jira (CTRL+F)");
+            toolTip.SetToolTip(btnTimeEdit, "Edit Current Time (CTRL+C)");
+            toolTip.SetToolTip(btnRename, "Change Jira For Timer (CTRL+R)");
+            toolTip.SetToolTip(btnExport, "Export Time To Jira (CTRL+E)");
+            toolTip.SetToolTip(btnIdle, "View Machine Locked Timers (CTRL+L)");
+            toolTip.SetToolTip(btnSettings, "Settings (CTRL+S)");
+            toolTip.SetToolTip(lblCurrentTime, "Double Click Jump To Running (CTRL+J)");
         }
-
+        
         #endregion
 
         #region "Unhandled Errors"
@@ -487,5 +533,6 @@ namespace Gallifrey.UI.Classic
         }
 
         #endregion
+
     }
 }

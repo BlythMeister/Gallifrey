@@ -32,13 +32,13 @@
             this.txtJiraRef = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.btnCancelAddTimer = new System.Windows.Forms.Button();
-            this.btnAddTimer = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.btnRefresh = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.cmbUserFilters = new System.Windows.Forms.ComboBox();
             this.lstResults = new System.Windows.Forms.ListBox();
+            this.btnRefresh = new System.Windows.Forms.Button();
+            this.btnCancelAddTimer = new System.Windows.Forms.Button();
+            this.btnAddTimer = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -68,30 +68,6 @@
             this.label2.TabIndex = 0;
             this.label2.Text = "Jira Search";
             // 
-            // btnCancelAddTimer
-            // 
-            this.btnCancelAddTimer.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancelAddTimer.Image = global::Gallifrey.UI.Classic.Properties.Resources.Cancel_48x48;
-            this.btnCancelAddTimer.Location = new System.Drawing.Point(234, 399);
-            this.btnCancelAddTimer.Name = "btnCancelAddTimer";
-            this.btnCancelAddTimer.Size = new System.Drawing.Size(65, 65);
-            this.btnCancelAddTimer.TabIndex = 4;
-            this.btnCancelAddTimer.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.btnCancelAddTimer.UseVisualStyleBackColor = true;
-            this.btnCancelAddTimer.Click += new System.EventHandler(this.btnCancelAddTimer_Click);
-            // 
-            // btnAddTimer
-            // 
-            this.btnAddTimer.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnAddTimer.Image = global::Gallifrey.UI.Classic.Properties.Resources.Check_48x48;
-            this.btnAddTimer.Location = new System.Drawing.Point(121, 399);
-            this.btnAddTimer.Name = "btnAddTimer";
-            this.btnAddTimer.Size = new System.Drawing.Size(65, 65);
-            this.btnAddTimer.TabIndex = 3;
-            this.btnAddTimer.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.btnAddTimer.UseVisualStyleBackColor = true;
-            this.btnAddTimer.Click += new System.EventHandler(this.btnAddTimer_Click);
-            // 
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.btnRefresh);
@@ -105,17 +81,6 @@
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Search Details";
-            // 
-            // btnRefresh
-            // 
-            this.btnRefresh.Image = global::Gallifrey.UI.Classic.Properties.Resources.Search_48x48;
-            this.btnRefresh.Location = new System.Drawing.Point(157, 86);
-            this.btnRefresh.Name = "btnRefresh";
-            this.btnRefresh.Size = new System.Drawing.Size(65, 65);
-            this.btnRefresh.TabIndex = 4;
-            this.btnRefresh.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.btnRefresh.UseVisualStyleBackColor = true;
-            this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
             // 
             // label3
             // 
@@ -143,6 +108,41 @@
             this.lstResults.Size = new System.Drawing.Size(386, 174);
             this.lstResults.TabIndex = 2;
             // 
+            // btnRefresh
+            // 
+            this.btnRefresh.Image = global::Gallifrey.UI.Classic.Properties.Resources.Search_48x48;
+            this.btnRefresh.Location = new System.Drawing.Point(157, 86);
+            this.btnRefresh.Name = "btnRefresh";
+            this.btnRefresh.Size = new System.Drawing.Size(65, 65);
+            this.btnRefresh.TabIndex = 4;
+            this.btnRefresh.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.btnRefresh.UseVisualStyleBackColor = true;
+            this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
+            // 
+            // btnCancelAddTimer
+            // 
+            this.btnCancelAddTimer.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnCancelAddTimer.Image = global::Gallifrey.UI.Classic.Properties.Resources.Cancel_48x48;
+            this.btnCancelAddTimer.Location = new System.Drawing.Point(234, 399);
+            this.btnCancelAddTimer.Name = "btnCancelAddTimer";
+            this.btnCancelAddTimer.Size = new System.Drawing.Size(65, 65);
+            this.btnCancelAddTimer.TabIndex = 4;
+            this.btnCancelAddTimer.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.btnCancelAddTimer.UseVisualStyleBackColor = true;
+            this.btnCancelAddTimer.Click += new System.EventHandler(this.btnCancelAddTimer_Click);
+            // 
+            // btnAddTimer
+            // 
+            this.btnAddTimer.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnAddTimer.Image = global::Gallifrey.UI.Classic.Properties.Resources.Check_48x48;
+            this.btnAddTimer.Location = new System.Drawing.Point(121, 399);
+            this.btnAddTimer.Name = "btnAddTimer";
+            this.btnAddTimer.Size = new System.Drawing.Size(65, 65);
+            this.btnAddTimer.TabIndex = 3;
+            this.btnAddTimer.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.btnAddTimer.UseVisualStyleBackColor = true;
+            this.btnAddTimer.Click += new System.EventHandler(this.btnAddTimer_Click);
+            // 
             // SearchWindow
             // 
             this.AcceptButton = this.btnRefresh;
@@ -157,11 +157,13 @@
             this.Controls.Add(this.label2);
             this.Font = new System.Drawing.Font("Segoe UI", 9.75F);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.KeyPreview = true;
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.MaximumSize = new System.Drawing.Size(426, 512);
             this.MinimumSize = new System.Drawing.Size(426, 512);
             this.Name = "SearchWindow";
             this.Text = "Gallifrey - Jira Search";
+            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.SearchWindow_KeyUp);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.ResumeLayout(false);

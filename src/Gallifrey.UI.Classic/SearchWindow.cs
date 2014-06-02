@@ -55,7 +55,14 @@ namespace Gallifrey.UI.Classic
             addForm.PreLoadJira(selectedIssue.JiraRef);
             addForm.ShowDialog();
             NewTimerId = addForm.NewTimerId;
-            Close();
+            if (NewTimerId.HasValue)
+            {
+                Close();
+            }
+            else
+            {
+                DialogResult = DialogResult.None;
+            }
         }
 
         private void btnCancelAddTimer_Click(object sender, EventArgs e)
@@ -115,6 +122,14 @@ namespace Gallifrey.UI.Classic
             public override string ToString()
             {
                 return string.Format("[ {0} ] - {1}", JiraRef, JiraDesc);
+            }
+        }
+
+        private void SearchWindow_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Alt && e.KeyCode == Keys.Enter)
+            {
+                btnAddTimer_Click(sender, null);
             }
         }
     }
