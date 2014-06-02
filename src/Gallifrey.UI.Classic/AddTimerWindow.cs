@@ -3,6 +3,7 @@ using System.Windows.Forms;
 using Atlassian.Jira;
 using Gallifrey.Exceptions.IntergrationPoints;
 using Gallifrey.Exceptions.JiraTimers;
+using Gallifrey.ExtensionMethods;
 
 namespace Gallifrey.UI.Classic
 {
@@ -10,6 +11,7 @@ namespace Gallifrey.UI.Classic
     {
         private readonly IBackend gallifrey;
         public Guid? NewTimerId { get; private set; }
+        internal bool DisplayForm { get; private set; }
 
         public AddTimerWindow(IBackend gallifrey)
         {
@@ -19,6 +21,7 @@ namespace Gallifrey.UI.Classic
             calStartDate.MaxDate = DateTime.Now.AddDays(gallifrey.AppSettings.KeepTimersForDays);
 
             TopMost = gallifrey.AppSettings.UiAlwaysOnTop;
+            DisplayForm = true;
         }
         
         public void PreLoadJira(string jiraRef)
@@ -28,7 +31,17 @@ namespace Gallifrey.UI.Classic
         
         public void PreLoadDate(DateTime startDate)
         {
-            calStartDate.Value = startDate;
+            if (!startDate.Between(calStartDate.MinDate, calStartDate.MaxDate))
+            {
+                MessageBox.Show(
+                    "New timer start date is not valid for the minimum and maximum duration of timers to keep.\nHave you updated the days to keep in settings?",
+                    "New timer date invalid", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                DisplayForm = false;
+            }
+            else
+            {
+                calStartDate.Value = startDate;    
+            }
         }
 
         public void PreLoadTime(TimeSpan time)
