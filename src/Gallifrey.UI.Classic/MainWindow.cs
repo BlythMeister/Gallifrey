@@ -250,6 +250,12 @@ namespace Gallifrey.UI.Classic
             if (searchForm.NewTimerId.HasValue) SelectTimer(searchForm.NewTimerId.Value);
         }
 
+        private void btnAbout_Click(object sender, EventArgs e)
+        {
+            var aboutForm = new AboutWindow();
+            aboutForm.ShowDialog();
+        }
+
         #endregion
 
         #region "Tray Icon"

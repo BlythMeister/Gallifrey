@@ -45,6 +45,7 @@
             this.lblExportStat = new System.Windows.Forms.Label();
             this.notifyAlert = new System.Windows.Forms.NotifyIcon(this.components);
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.btnAbout = new System.Windows.Forms.Button();
             this.btnIdle = new System.Windows.Forms.Button();
             this.btnRename = new System.Windows.Forms.Button();
             this.btnTimeEdit = new System.Windows.Forms.Button();
@@ -98,7 +99,7 @@
             this.tabTimerDays.Location = new System.Drawing.Point(12, 169);
             this.tabTimerDays.Name = "tabTimerDays";
             this.tabTimerDays.SelectedIndex = 0;
-            this.tabTimerDays.Size = new System.Drawing.Size(912, 414);
+            this.tabTimerDays.Size = new System.Drawing.Size(951, 414);
             this.tabTimerDays.TabIndex = 14;
             // 
             // formTimer
@@ -113,9 +114,9 @@
             this.lblCurrentTime.BackColor = System.Drawing.Color.Black;
             this.lblCurrentTime.Font = new System.Drawing.Font("Stencil", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblCurrentTime.ForeColor = System.Drawing.Color.Red;
-            this.lblCurrentTime.Location = new System.Drawing.Point(580, 98);
+            this.lblCurrentTime.Location = new System.Drawing.Point(651, 98);
             this.lblCurrentTime.Name = "lblCurrentTime";
-            this.lblCurrentTime.Size = new System.Drawing.Size(344, 65);
+            this.lblCurrentTime.Size = new System.Drawing.Size(312, 65);
             this.lblCurrentTime.TabIndex = 13;
             this.lblCurrentTime.Text = "00:00:00";
             this.lblCurrentTime.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -130,7 +131,7 @@
             this.grpTarget.Controls.Add(this.lblExportTargetWeek);
             this.grpTarget.Location = new System.Drawing.Point(580, 9);
             this.grpTarget.Name = "grpTarget";
-            this.grpTarget.Size = new System.Drawing.Size(344, 83);
+            this.grpTarget.Size = new System.Drawing.Size(383, 83);
             this.grpTarget.TabIndex = 4;
             this.grpTarget.TabStop = false;
             this.grpTarget.Text = "Target Export Week To Date";
@@ -141,7 +142,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.progExportTarget.Location = new System.Drawing.Point(9, 42);
             this.progExportTarget.Name = "progExportTarget";
-            this.progExportTarget.Size = new System.Drawing.Size(329, 35);
+            this.progExportTarget.Size = new System.Drawing.Size(368, 35);
             this.progExportTarget.TabIndex = 2;
             // 
             // lblExportedWeek
@@ -206,6 +207,17 @@
             this.notifyAlert.BalloonTipClicked += new System.EventHandler(this.notifyAlert_BalloonTipClicked);
             this.notifyAlert.DoubleClick += new System.EventHandler(this.notifyAlert_DoubleClick);
             // 
+            // btnAbout
+            // 
+            this.btnAbout.Image = global::Gallifrey.UI.Classic.Properties.Resources.Information_48x48;
+            this.btnAbout.Location = new System.Drawing.Point(509, 98);
+            this.btnAbout.Name = "btnAbout";
+            this.btnAbout.Size = new System.Drawing.Size(65, 65);
+            this.btnAbout.TabIndex = 15;
+            this.btnAbout.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.btnAbout.UseVisualStyleBackColor = true;
+            this.btnAbout.Click += new System.EventHandler(this.btnAbout_Click);
+            // 
             // btnIdle
             // 
             this.btnIdle.Image = global::Gallifrey.UI.Classic.Properties.Resources.Key_48x48;
@@ -264,7 +276,7 @@
             // btnSettings
             // 
             this.btnSettings.Image = global::Gallifrey.UI.Classic.Properties.Resources.Settings_48x48;
-            this.btnSettings.Location = new System.Drawing.Point(509, 98);
+            this.btnSettings.Location = new System.Drawing.Point(580, 98);
             this.btnSettings.Name = "btnSettings";
             this.btnSettings.Size = new System.Drawing.Size(65, 65);
             this.btnSettings.TabIndex = 12;
@@ -308,7 +320,8 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(936, 595);
+            this.ClientSize = new System.Drawing.Size(975, 595);
+            this.Controls.Add(this.btnAbout);
             this.Controls.Add(this.btnIdle);
             this.Controls.Add(this.grpExportStats);
             this.Controls.Add(this.grpTarget);
@@ -370,6 +383,7 @@
         private System.Windows.Forms.NotifyIcon notifyAlert;
         private System.Windows.Forms.Button btnIdle;
         private System.Windows.Forms.ToolTip toolTip;
+        private System.Windows.Forms.Button btnAbout;
     }
 }
 
