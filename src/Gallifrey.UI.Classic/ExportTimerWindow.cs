@@ -16,6 +16,7 @@ namespace Gallifrey.UI.Classic
 
         public ExportTimerWindow(IBackend gallifrey, Guid timerGuid)
         {
+            DisplayForm = true;
             this.gallifrey = gallifrey;
             timerToShow = gallifrey.JiraTimerCollection.GetTimer(timerGuid);
             InitializeComponent();
