@@ -51,6 +51,7 @@
     <Compile Include="Backend.cs" />
     <Compile Include="Exceptions\IdleTimers\NoIdleTimerRunningException.cs" />
     <Compile Include="Exceptions\JiraTimers\IdleTimerRunningException.cs" />
+    <Compile Include="ExtensionMethods\DateTimeExtensionMethods.cs" />
     <Compile Include="IdleTimers\IdleTimer.cs" />
     <Compile Include="IdleTimers\IdleTimerCollection.cs" />
     <Compile Include="Exceptions\IntergrationPoints\MissingJiraConfigException.cs" />
