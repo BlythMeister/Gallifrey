@@ -64,35 +64,30 @@ namespace Gallifrey.UI.Classic
                     case Keys.A:
                         btnAddTimer_Click(sender, null);
                         break;
-
                     case Keys.D:
                         btnRemoveTimer_Click(sender, null);
                         break;
-
                     case Keys.F:
                         btnSearch_Click(sender, null);
                         break;
-
                     case Keys.C:
                         btnTimeEdit_Click(sender, null);
                         break;
-
                     case Keys.R:
                         btnRename_Click(sender, null);
                         break;
-
                     case Keys.E:
                         btnExport_Click(sender, null);
                         break;
-
                     case Keys.L:
                         btnIdle_Click(sender, null);
                         break;
-
+                    case Keys.I:
+                        btnAbout_Click(sender, null);
+                        break;
                     case Keys.S:
                         btnSettings_Click(sender, null);
                         break;
-
                     case Keys.J:
                         lblCurrentTime_DoubleClick(sender, null);
                         break;
@@ -503,6 +498,7 @@ namespace Gallifrey.UI.Classic
             toolTip.SetToolTip(btnRename, "Change Jira For Timer (CTRL+R)");
             toolTip.SetToolTip(btnExport, "Export Time To Jira (CTRL+E)");
             toolTip.SetToolTip(btnIdle, "View Machine Locked Timers (CTRL+L)");
+            toolTip.SetToolTip(btnAbout, "About (CTRL+I)");
             toolTip.SetToolTip(btnSettings, "Settings (CTRL+S)");
             toolTip.SetToolTip(lblCurrentTime, "Double Click Jump To Running (CTRL+J)");
         }
