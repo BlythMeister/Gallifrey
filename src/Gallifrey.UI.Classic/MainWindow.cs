@@ -127,10 +127,12 @@ namespace Gallifrey.UI.Classic
                     addForm.PreLoadDate(tabDate);
                 }
             }
-
-            addForm.ShowDialog();
-            RefreshTimerPages();
-            if (addForm.NewTimerId.HasValue) SelectTimer(addForm.NewTimerId.Value);
+            if (addForm.DisplayForm)
+            {
+                addForm.ShowDialog();
+                RefreshTimerPages();
+                if (addForm.NewTimerId.HasValue) SelectTimer(addForm.NewTimerId.Value);
+            }
         }
 
         private void btnRemoveTimer_Click(object sender, EventArgs e)
@@ -459,10 +461,10 @@ namespace Gallifrey.UI.Classic
         private void HandleUnexpectedErrors()
         {
             Application.ThreadException += ThreadExceptionHandler;
-            AppDomain.CurrentDomain.UnhandledException += UnhanhdledExceptionHandler;
+            AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionHandler;
         }
 
-        private void UnhanhdledExceptionHandler(object sender, UnhandledExceptionEventArgs e)
+        private void UnhandledExceptionHandler(object sender, UnhandledExceptionEventArgs e)
         {
             HandleUnexpectedError();
         }
