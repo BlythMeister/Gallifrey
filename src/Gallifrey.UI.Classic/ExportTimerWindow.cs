@@ -12,7 +12,7 @@ namespace Gallifrey.UI.Classic
         private readonly IBackend gallifrey;
         private readonly JiraTimer timerToShow;
         private readonly Issue jiraIssue;
-        internal readonly bool DisplayForm = true;
+        internal bool DisplayForm { get; private set; }
 
         public ExportTimerWindow(IBackend gallifrey, Guid timerGuid)
         {
@@ -24,7 +24,7 @@ namespace Gallifrey.UI.Classic
             var loggedTime = new TimeSpan();
             foreach (var worklog in jiraIssue.GetWorklogs())
             {
-                if (worklog.StartDate.HasValue && worklog.StartDate.Value.Date == timerToShow.DateStarted.Date && worklog.Author.ToLower() == gallifrey.JiraConnectionSettings.JiraUsername.ToLower())
+                if (worklog.StartDate.HasValue && worklog.StartDate.Value.Date == timerToShow.DateStarted.Date && worklog.Author.ToLower() == gallifrey.Settings.JiraConnectionSettings.JiraUsername.ToLower())
                 {
                     loggedTime = loggedTime.Add(new TimeSpan(0, 0, (int)worklog.TimeSpentInSeconds));
                 }
@@ -57,7 +57,7 @@ namespace Gallifrey.UI.Classic
                 calExportDate.Value = DateTime.Now;
             }
 
-            TopMost = gallifrey.AppSettings.UiAlwaysOnTop;
+            TopMost = gallifrey.Settings.UiSettings.AlwaysOnTop;
         }
 
         private bool ExportTime()

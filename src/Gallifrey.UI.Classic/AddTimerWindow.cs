@@ -17,18 +17,19 @@ namespace Gallifrey.UI.Classic
         {
             this.gallifrey = gallifrey;
             InitializeComponent();
-            calStartDate.MinDate = DateTime.Now.AddDays(gallifrey.AppSettings.KeepTimersForDays*-1);
-            calStartDate.MaxDate = DateTime.Now.AddDays(gallifrey.AppSettings.KeepTimersForDays);
+            calStartDate.MinDate = DateTime.Now.AddDays(gallifrey.Settings.AppSettings.KeepTimersForDays * -1);
+            calStartDate.MaxDate = DateTime.Now.AddDays(gallifrey.Settings.AppSettings.KeepTimersForDays);
 
-            TopMost = gallifrey.AppSettings.UiAlwaysOnTop;
+            TopMost = gallifrey.Settings.UiSettings.AlwaysOnTop;
             DisplayForm = true;
         }
-        
+
         public void PreLoadJira(string jiraRef)
         {
             txtJiraRef.Text = jiraRef;
+            txtJiraRef.Enabled = false;
         }
-        
+
         public void PreLoadDate(DateTime startDate)
         {
             if (!startDate.Between(calStartDate.MinDate, calStartDate.MaxDate))
@@ -40,7 +41,7 @@ namespace Gallifrey.UI.Classic
             }
             else
             {
-                calStartDate.Value = startDate;    
+                calStartDate.Value = startDate;
             }
         }
 
@@ -76,9 +77,12 @@ namespace Gallifrey.UI.Classic
                 return false;
             }
 
-            if (MessageBox.Show(string.Format("Jira found!\n\nRef: {0}\nName: {1}\n\nIs that correct?", jiraIssue.Key, jiraIssue.Summary), "Correct Jira?", MessageBoxButtons.YesNo) == DialogResult.No)
+            if (txtJiraRef.Enabled)
             {
-                return false;
+                if (MessageBox.Show(string.Format("Jira found!\n\nRef: {0}\nName: {1}\n\nIs that correct?", jiraIssue.Key, jiraIssue.Summary), "Correct Jira?", MessageBoxButtons.YesNo) == DialogResult.No)
+                {
+                    return false;
+                }
             }
 
             try

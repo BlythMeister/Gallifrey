@@ -22,7 +22,7 @@ namespace Gallifrey.UI.Classic
             calStartDate.Value = timerToShow.DateStarted.Date;
             txtJiraRef.Enabled = timerToShow.HasExportedTime();
 
-            TopMost = gallifrey.AppSettings.UiAlwaysOnTop;
+            TopMost = gallifrey.Settings.UiSettings.AlwaysOnTop;
         }
         
         private bool RenameTimer()

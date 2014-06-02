@@ -66,5 +66,12 @@ namespace Gallifrey.InactiveMonitor
                 }
             }
         }
+
+        public void Reset()
+        {
+            noTimerRunning.Stop();
+            noTimerRunning.Reset();
+            eventsSent = 0;
+        }
     }
 }

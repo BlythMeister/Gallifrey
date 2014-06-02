@@ -9,7 +9,7 @@ namespace Gallifrey.IntegrationPoints
 {
     public interface IJiraConnection
     {
-        void ReConnect(JiraConnectionSettings newJiraConnectionSettings);
+        void ReConnect(IJiraConnectionSettings newJiraConnectionSettings);
         bool DoesJiraExist(string jiraRef);
         Issue GetJiraIssue(string jiraRef);
         IEnumerable<string> GetJiraFilters();
@@ -22,16 +22,16 @@ namespace Gallifrey.IntegrationPoints
 
     public class JiraConnection : IJiraConnection
     {
-        private JiraConnectionSettings jiraConnectionSettings;
+        private IJiraConnectionSettings jiraConnectionSettings;
         private Jira jira;
 
-        public JiraConnection(JiraConnectionSettings jiraConnectionSettings)
+        public JiraConnection(IJiraConnectionSettings jiraConnectionSettings)
         {
             this.jiraConnectionSettings = jiraConnectionSettings;
             CheckAndConnectJira();
         }
 
-        public void ReConnect(JiraConnectionSettings newJiraConnectionSettings)
+        public void ReConnect(IJiraConnectionSettings newJiraConnectionSettings)
         {
             jiraConnectionSettings = newJiraConnectionSettings;
             jira = null;
@@ -51,7 +51,7 @@ namespace Gallifrey.IntegrationPoints
 
                 try
                 {
-                    jira = new Jira(jiraConnectionSettings.JiraUrl, jiraConnectionSettings.JiraUsername, jiraConnectionSettings.JiraPassword);
+                    jira = new Jira(jiraConnectionSettings.JiraUrl.Replace("/secure/Dashboard.jspa", ""), jiraConnectionSettings.JiraUsername, jiraConnectionSettings.JiraPassword);
                     jira.GetIssuePriorities();
                 }
                 catch (Exception ex)
