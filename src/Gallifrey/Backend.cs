@@ -33,7 +33,7 @@ namespace Gallifrey
         internal ActivityChecker ActivityChecker;
         private readonly Timer hearbeat;
         private Guid? runningTimerWhenIdle;
-        
+
         public Backend()
         {
             settingsCollection = SettingsCollectionSerializer.DeSerialize();
@@ -95,7 +95,7 @@ namespace Gallifrey
                 jiraTimerCollection.StopTimer(runningTimerWhenIdle.Value);
             }
             idleTimerCollection.NewLockTimer();
-            }
+        }
 
         public Guid StopIdleTimer()
         {
