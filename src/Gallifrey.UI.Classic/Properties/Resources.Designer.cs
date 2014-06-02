@@ -123,9 +123,39 @@ namespace Gallifrey.UI.Classic.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap GitHub_Mark_32px {
+            get {
+                object obj = ResourceManager.GetObject("GitHub-Mark-32px", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Information_48x48 {
+            get {
+                object obj = ResourceManager.GetObject("Information_48x48", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Key_48x48 {
             get {
                 object obj = ResourceManager.GetObject("Key_48x48", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap pp_logo_100px {
+            get {
+                object obj = ResourceManager.GetObject("pp-logo-100px", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
