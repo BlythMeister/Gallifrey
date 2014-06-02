@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Deployment.Application;
 using System.Drawing;
 using System.Drawing.Text;
@@ -229,10 +230,10 @@ namespace Gallifrey.UI.Classic
 
         private void btnIdle_Click(object sender, EventArgs e)
         {
-            var idleTimerWindow = new LockedTimerWindow(gallifrey);
-            if (idleTimerWindow.DisplayForm)
+            var lockedTimerWindow = new LockedTimerWindow(gallifrey);
+            if (lockedTimerWindow.DisplayForm)
             {
-                idleTimerWindow.ShowDialog();
+                lockedTimerWindow.ShowDialog();
                 RefreshTimerPages();
             }
         }
@@ -295,6 +296,12 @@ namespace Gallifrey.UI.Classic
             switch (e.Reason)
             {
                 case SessionSwitchReason.SessionLock:
+                    var openForms = Application.OpenForms.Cast<Form>().ToList();
+                    foreach (var form in openForms.Where(form => form.Name != "MainWindow"))
+                    {
+                        form.Close();
+                    }
+
                     gallifrey.StartIdleTimer();
                     break;
                 case SessionSwitchReason.SessionUnlock:
@@ -308,12 +315,12 @@ namespace Gallifrey.UI.Classic
                     }
                     else
                     {
-                        var idleTimerWindow = new LockedTimerWindow(gallifrey);
-                        if (idleTimerWindow.DisplayForm)
+                        var lockedTimerWindow = new LockedTimerWindow(gallifrey);
+                        lockedTimerWindow.Closed += (o, args) => RefreshTimerPages();
+                        if (lockedTimerWindow.DisplayForm)
                         {
-                            idleTimerWindow.BringToFront();
-                            idleTimerWindow.ShowDialog();
-                            RefreshTimerPages();
+                            lockedTimerWindow.BringToFront();
+                            lockedTimerWindow.Show();
                         }
                     }
                     break;
@@ -502,7 +509,7 @@ namespace Gallifrey.UI.Classic
             toolTip.SetToolTip(btnSettings, "Settings (CTRL+S)");
             toolTip.SetToolTip(lblCurrentTime, "Double Click Jump To Running (CTRL+J)");
         }
-        
+
         #endregion
 
         #region "Unhandled Errors"
