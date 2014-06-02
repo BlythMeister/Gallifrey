@@ -9,8 +9,8 @@ namespace Gallifrey.UI.Classic
     public partial class LockedTimerWindow : Form
     {
         private readonly IBackend gallifrey;
-        public bool DisplayForm = true;
         private Guid? runningTimerId;
+        internal bool DisplayForm { get; private set; }
 
         public LockedTimerWindow(IBackend gallifrey)
         {
@@ -32,7 +32,7 @@ namespace Gallifrey.UI.Classic
                 lblRunning.Enabled = false;
             }
 
-            TopMost = gallifrey.AppSettings.UiAlwaysOnTop;
+            TopMost = gallifrey.Settings.UiSettings.AlwaysOnTop;
         }
 
         private void BindIdleTimers(bool showNoTimers = true)
@@ -103,7 +103,7 @@ namespace Gallifrey.UI.Classic
                 {
                     removeTimer = false;
                 }
-                TopMost = gallifrey.AppSettings.UiAlwaysOnTop;
+                TopMost = gallifrey.Settings.UiSettings.AlwaysOnTop;
             }
             else
             {

@@ -44,8 +44,8 @@ namespace Gallifrey.UI.Classic
 
         private void MainWindow_Load(object sender, EventArgs e)
         {
-            Height = gallifrey.AppSettings.UiHeight;
-            Width = gallifrey.AppSettings.UiWidth;
+            Height = gallifrey.Settings.UiSettings.Height;
+            Width = gallifrey.Settings.UiSettings.Width;
 
             SetVersionNumber();
             RefreshTimerPages();
@@ -57,8 +57,8 @@ namespace Gallifrey.UI.Classic
 
         private void MainWindow_FormClosed(object sender, FormClosedEventArgs e)
         {
-            gallifrey.AppSettings.UiHeight = Height;
-            gallifrey.AppSettings.UiWidth = Width;
+            gallifrey.Settings.UiSettings.Height = Height;
+            gallifrey.Settings.UiSettings.Width = Width;
             gallifrey.Close();
             notifyAlert.Visible = false;
         }
@@ -202,6 +202,7 @@ namespace Gallifrey.UI.Classic
             var searchForm = new SearchWindow(gallifrey);
             searchForm.ShowDialog();
             RefreshTimerPages();
+            if (searchForm.NewTimerId.HasValue) SelectTimer(searchForm.NewTimerId.Value);
         }
 
         #endregion
@@ -431,7 +432,7 @@ namespace Gallifrey.UI.Classic
             var n = 0;
             while (n++ < (int)DateTime.Today.DayOfWeek)
             {
-                target = target.Add(gallifrey.AppSettings.TargetLogPerDay);
+                target = target.Add(gallifrey.Settings.AppSettings.TargetLogPerDay);
             }
 
             lblExportedWeek.Text = string.Format("Exported: {0}", exportedTime.FormatAsString(false));

@@ -11,6 +11,7 @@ namespace Gallifrey.UI.Classic
     public partial class SearchWindow : Form
     {
         private readonly IBackend gallifrey;
+        public Guid? NewTimerId { get; private set; }
 
         public SearchWindow(IBackend gallifrey)
         {
@@ -42,7 +43,7 @@ namespace Gallifrey.UI.Classic
                 lstResults.Enabled = false;
             }
 
-            TopMost = gallifrey.AppSettings.UiAlwaysOnTop;
+            TopMost = gallifrey.Settings.UiSettings.AlwaysOnTop;
         }
 
         private void btnAddTimer_Click(object sender, EventArgs e)
@@ -53,6 +54,7 @@ namespace Gallifrey.UI.Classic
             var addForm = new AddTimerWindow(gallifrey);
             addForm.PreLoadJira(selectedIssue.JiraRef);
             addForm.ShowDialog();
+            NewTimerId = addForm.NewTimerId;
             Close();
         }
 

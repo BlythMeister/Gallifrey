@@ -20,7 +20,7 @@ namespace Gallifrey.UI.Classic
             
             txtJiraRef.Text = timerToShow.JiraReference;
 
-            TopMost = gallifrey.AppSettings.UiAlwaysOnTop;
+            TopMost = gallifrey.Settings.UiSettings.AlwaysOnTop;
         }
         
         private bool AdjustTime()
