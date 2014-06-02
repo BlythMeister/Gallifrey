@@ -4,6 +4,11 @@ namespace Gallifrey.ExtensionMethods
 {
     public static class TimeSpanExtensionMethods
     {
+        public static bool Between(this DateTime input, DateTime date1, DateTime date2)
+        {
+            return (input > date1 && input < date2);
+        }
+
         public static string FormatAsString(this TimeSpan value, bool withSeconds = true)
         {
             var txt = "";
