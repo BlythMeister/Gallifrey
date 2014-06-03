@@ -56,7 +56,6 @@
             // 
             // calStartDate
             // 
-            this.calStartDate.Enabled = false;
             this.calStartDate.Location = new System.Drawing.Point(123, 78);
             this.calStartDate.Name = "calStartDate";
             this.calStartDate.Size = new System.Drawing.Size(157, 25);

@@ -100,9 +100,9 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(14, 87);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(96, 17);
+            this.label3.Size = new System.Drawing.Size(93, 17);
             this.label3.TabIndex = 3;
-            this.label3.Text = "Adjust Time By:";
+            this.label3.Text = "Adjust Time By";
             // 
             // txtHours
             // 

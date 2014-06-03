@@ -155,9 +155,10 @@
             // 
             this.label9.Location = new System.Drawing.Point(14, 423);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(323, 55);
+            this.label9.Size = new System.Drawing.Size(356, 55);
             this.label9.TabIndex = 12;
-            this.label9.Text = "Help us keep the project alive by donating via PayPal.  To donate, click here ->";
+            this.label9.Text = "Help us keep the project alive by donating via PayPal.                           " +
+    "     To donate, click here ->";
             // 
             // label10
             // 
@@ -221,7 +222,7 @@
             // btnEmail
             // 
             this.btnEmail.Image = global::Gallifrey.UI.Classic.Properties.Resources.Mail_32x32;
-            this.btnEmail.Location = new System.Drawing.Point(268, 355);
+            this.btnEmail.Location = new System.Drawing.Point(259, 355);
             this.btnEmail.Name = "btnEmail";
             this.btnEmail.Size = new System.Drawing.Size(48, 46);
             this.btnEmail.TabIndex = 9;
@@ -243,7 +244,7 @@
             // btnPayPal
             // 
             this.btnPayPal.Image = global::Gallifrey.UI.Classic.Properties.Resources.pp_logo_100px;
-            this.btnPayPal.Location = new System.Drawing.Point(183, 442);
+            this.btnPayPal.Location = new System.Drawing.Point(259, 442);
             this.btnPayPal.Name = "btnPayPal";
             this.btnPayPal.Size = new System.Drawing.Size(111, 36);
             this.btnPayPal.TabIndex = 13;
