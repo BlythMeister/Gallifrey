@@ -53,7 +53,14 @@ namespace Gallifrey.UI.Classic
 
         private void btnAddTimer_Click(object sender, EventArgs e)
         {
-            if (AddJira()) Close();
+            if (AddJira())
+            {
+                Close();
+            }
+            else
+            {
+                DialogResult = DialogResult.None;
+            }
         }
 
         private bool AddJira()

@@ -87,6 +87,10 @@ namespace Gallifrey.UI.Classic
             {
                 Close();
             }
+            else
+            {
+                DialogResult = DialogResult.None;
+            }
 
         }
     }
