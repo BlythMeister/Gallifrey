@@ -52,7 +52,7 @@ namespace Gallifrey.UI.Classic
 
         private void btnEmail_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start("mailto:GallifreyApp[at]gmail.com?subject=Gallifrey App Contact");
+            System.Diagnostics.Process.Start("mailto:GallifreyApp@gmail.com?subject=Gallifrey App Contact");
         }
 
         private void btnTwitter_Click(object sender, EventArgs e)
