@@ -42,7 +42,7 @@ namespace Gallifrey
             idleTimerCollection = new IdleTimerCollection();
             ActivityChecker = new ActivityChecker(jiraTimerCollection, settingsCollection.AppSettings);
             ActivityChecker.NoActivityEvent += OnNoActivityEvent;
-            hearbeat = new Timer(3600000);
+            hearbeat = new Timer(1800000);
             hearbeat.Elapsed += HearbeatOnElapsed;
             hearbeat.Start();
         }
@@ -59,6 +59,17 @@ namespace Gallifrey
             {
                 jiraTimerCollection.RemoveTimersOlderThanDays(settingsCollection.AppSettings.KeepTimersForDays);
                 idleTimerCollection.RemoveOldTimers();
+
+                var runningTimerId = jiraTimerCollection.GetRunningTimerId();
+                if (runningTimerId.HasValue)
+                {
+                    var runningTimer = jiraTimerCollection.GetTimer(runningTimerId.Value);
+                    if (runningTimer.DateStarted.Date != DateTime.Now.Date)
+                    {
+                        jiraTimerCollection.StopTimer(runningTimerId.Value);
+                        jiraTimerCollection.StartTimer(runningTimerId.Value);
+                    }
+                }
             }
             catch { /*Surpress Errors, if this fails timers won't be removed*/}
         }
