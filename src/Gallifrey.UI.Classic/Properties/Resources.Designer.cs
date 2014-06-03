@@ -125,7 +125,7 @@ namespace Gallifrey.UI.Classic.Properties {
         /// </summary>
         internal static System.Drawing.Bitmap GitHub_Mark_32px {
             get {
-                object obj = ResourceManager.GetObject("GitHub-Mark-32px", resourceCulture);
+                object obj = ResourceManager.GetObject("GitHub_Mark_32px", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -153,9 +153,19 @@ namespace Gallifrey.UI.Classic.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Mail_32x32 {
+            get {
+                object obj = ResourceManager.GetObject("Mail_32x32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap pp_logo_100px {
             get {
-                object obj = ResourceManager.GetObject("pp-logo-100px", resourceCulture);
+                object obj = ResourceManager.GetObject("pp_logo_100px", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -216,6 +226,16 @@ namespace Gallifrey.UI.Classic.Properties {
         internal static System.Drawing.Bitmap Synchronize_48x48 {
             get {
                 object obj = ResourceManager.GetObject("Synchronize_48x48", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Twitter_logo_blue {
+            get {
+                object obj = ResourceManager.GetObject("Twitter_logo_blue", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
