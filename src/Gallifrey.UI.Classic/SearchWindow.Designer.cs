@@ -33,10 +33,10 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnRefresh = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.cmbUserFilters = new System.Windows.Forms.ComboBox();
             this.lstResults = new System.Windows.Forms.ListBox();
-            this.btnRefresh = new System.Windows.Forms.Button();
             this.btnCancelAddTimer = new System.Windows.Forms.Button();
             this.btnAddTimer = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
@@ -82,6 +82,17 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Search Details";
             // 
+            // btnRefresh
+            // 
+            this.btnRefresh.Image = global::Gallifrey.UI.Classic.Properties.Resources.Search_48x48;
+            this.btnRefresh.Location = new System.Drawing.Point(157, 86);
+            this.btnRefresh.Name = "btnRefresh";
+            this.btnRefresh.Size = new System.Drawing.Size(65, 65);
+            this.btnRefresh.TabIndex = 4;
+            this.btnRefresh.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.btnRefresh.UseVisualStyleBackColor = true;
+            this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
+            // 
             // label3
             // 
             this.label3.AutoSize = true;
@@ -107,17 +118,6 @@
             this.lstResults.Name = "lstResults";
             this.lstResults.Size = new System.Drawing.Size(386, 174);
             this.lstResults.TabIndex = 2;
-            // 
-            // btnRefresh
-            // 
-            this.btnRefresh.Image = global::Gallifrey.UI.Classic.Properties.Resources.Search_48x48;
-            this.btnRefresh.Location = new System.Drawing.Point(157, 86);
-            this.btnRefresh.Name = "btnRefresh";
-            this.btnRefresh.Size = new System.Drawing.Size(65, 65);
-            this.btnRefresh.TabIndex = 4;
-            this.btnRefresh.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.btnRefresh.UseVisualStyleBackColor = true;
-            this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
             // 
             // btnCancelAddTimer
             // 

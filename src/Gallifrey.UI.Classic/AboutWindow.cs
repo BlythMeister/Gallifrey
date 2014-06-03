@@ -49,5 +49,15 @@ namespace Gallifrey.UI.Classic
         {
             System.Diagnostics.Process.Start("https://github.com/BlythMeister/Gallifrey");
         }
+
+        private void btnEmail_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("mailto:GallifreyApp[at]gmail.com?subject=Gallifrey App Contact");
+        }
+
+        private void btnTwitter_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://twitter.com/GallifreyApp");
+        }
     }
 }

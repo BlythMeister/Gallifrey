@@ -242,6 +242,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="clock_blue.ico" />
+    <None Include="Icons\pp_logo_100px.png" />
+    <None Include="Icons\pp_log_100px.png" />
+    <None Include="Icons\GitHub_Mark_32px.png" />
+    <None Include="Icons\Twitter_logo_blue.png" />
+    <None Include="Icons\Mail_32x32.png" />
     <None Include="Icons\Information_48x48.png" />
     <None Include="Icons\pp-logo-100px.png" />
     <None Include="Icons\GitHub-Mark-32px.png" />

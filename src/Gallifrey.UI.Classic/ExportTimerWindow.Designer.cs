@@ -41,8 +41,8 @@
             this.txtSetValueHours = new System.Windows.Forms.TextBox();
             this.radAutoAdjust = new System.Windows.Forms.RadioButton();
             this.txtSetValueMins = new System.Windows.Forms.TextBox();
-            this.radLeaveRemaining = new System.Windows.Forms.RadioButton();
             this.label13 = new System.Windows.Forms.Label();
+            this.radLeaveRemaining = new System.Windows.Forms.RadioButton();
             this.label14 = new System.Windows.Forms.Label();
             this.radSetValue = new System.Windows.Forms.RadioButton();
             this.label6 = new System.Windows.Forms.Label();
@@ -163,7 +163,7 @@
             this.txtSetValueHours.Location = new System.Drawing.Point(30, 106);
             this.txtSetValueHours.Name = "txtSetValueHours";
             this.txtSetValueHours.Size = new System.Drawing.Size(39, 25);
-            this.txtSetValueHours.TabIndex = 1;
+            this.txtSetValueHours.TabIndex = 3;
             this.txtSetValueHours.Text = "00";
             this.txtSetValueHours.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -173,7 +173,7 @@
             this.radAutoAdjust.Location = new System.Drawing.Point(6, 24);
             this.radAutoAdjust.Name = "radAutoAdjust";
             this.radAutoAdjust.Size = new System.Drawing.Size(143, 21);
-            this.radAutoAdjust.TabIndex = 5;
+            this.radAutoAdjust.TabIndex = 0;
             this.radAutoAdjust.Text = "Automatically Adjust";
             this.radAutoAdjust.UseVisualStyleBackColor = true;
             // 
@@ -182,19 +182,9 @@
             this.txtSetValueMins.Location = new System.Drawing.Point(117, 106);
             this.txtSetValueMins.Name = "txtSetValueMins";
             this.txtSetValueMins.Size = new System.Drawing.Size(39, 25);
-            this.txtSetValueMins.TabIndex = 3;
+            this.txtSetValueMins.TabIndex = 5;
             this.txtSetValueMins.Text = "00";
             this.txtSetValueMins.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // radLeaveRemaining
-            // 
-            this.radLeaveRemaining.AutoSize = true;
-            this.radLeaveRemaining.Location = new System.Drawing.Point(6, 51);
-            this.radLeaveRemaining.Name = "radLeaveRemaining";
-            this.radLeaveRemaining.Size = new System.Drawing.Size(124, 21);
-            this.radLeaveRemaining.TabIndex = 6;
-            this.radLeaveRemaining.Text = "Leave Remaining";
-            this.radLeaveRemaining.UseVisualStyleBackColor = true;
             // 
             // label13
             // 
@@ -202,8 +192,18 @@
             this.label13.Location = new System.Drawing.Point(68, 109);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(43, 17);
-            this.label13.TabIndex = 2;
+            this.label13.TabIndex = 4;
             this.label13.Text = "Hours";
+            // 
+            // radLeaveRemaining
+            // 
+            this.radLeaveRemaining.AutoSize = true;
+            this.radLeaveRemaining.Location = new System.Drawing.Point(6, 51);
+            this.radLeaveRemaining.Name = "radLeaveRemaining";
+            this.radLeaveRemaining.Size = new System.Drawing.Size(124, 21);
+            this.radLeaveRemaining.TabIndex = 1;
+            this.radLeaveRemaining.Text = "Leave Remaining";
+            this.radLeaveRemaining.UseVisualStyleBackColor = true;
             // 
             // label14
             // 
@@ -211,7 +211,7 @@
             this.label14.Location = new System.Drawing.Point(162, 109);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(54, 17);
-            this.label14.TabIndex = 4;
+            this.label14.TabIndex = 6;
             this.label14.Text = "Minutes";
             // 
             // radSetValue
@@ -221,7 +221,7 @@
             this.radSetValue.Location = new System.Drawing.Point(6, 78);
             this.radSetValue.Name = "radSetValue";
             this.radSetValue.Size = new System.Drawing.Size(99, 21);
-            this.radSetValue.TabIndex = 0;
+            this.radSetValue.TabIndex = 2;
             this.radSetValue.TabStop = true;
             this.radSetValue.Text = "Set To Value";
             this.radSetValue.UseVisualStyleBackColor = true;

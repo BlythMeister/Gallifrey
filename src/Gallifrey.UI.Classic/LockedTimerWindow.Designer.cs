@@ -36,9 +36,9 @@
             this.radNew = new System.Windows.Forms.RadioButton();
             this.lblRunning = new System.Windows.Forms.Label();
             this.cmbDayTimers = new System.Windows.Forms.ComboBox();
+            this.btnOK = new System.Windows.Forms.Button();
             this.radSelected = new System.Windows.Forms.RadioButton();
             this.radRunning = new System.Windows.Forms.RadioButton();
-            this.btnOK = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -93,7 +93,7 @@
             this.radNew.Location = new System.Drawing.Point(6, 85);
             this.radNew.Name = "radNew";
             this.radNew.Size = new System.Drawing.Size(136, 21);
-            this.radNew.TabIndex = 5;
+            this.radNew.TabIndex = 4;
             this.radNew.Text = "Add To New Timer";
             this.radNew.UseVisualStyleBackColor = true;
             // 
@@ -102,7 +102,7 @@
             this.lblRunning.Location = new System.Drawing.Point(161, 33);
             this.lblRunning.Name = "lblRunning";
             this.lblRunning.Size = new System.Drawing.Size(360, 21);
-            this.lblRunning.TabIndex = 2;
+            this.lblRunning.TabIndex = 1;
             this.lblRunning.Text = "N/A";
             // 
             // cmbDayTimers
@@ -112,7 +112,18 @@
             this.cmbDayTimers.Location = new System.Drawing.Point(134, 57);
             this.cmbDayTimers.Name = "cmbDayTimers";
             this.cmbDayTimers.Size = new System.Drawing.Size(387, 25);
-            this.cmbDayTimers.TabIndex = 4;
+            this.cmbDayTimers.TabIndex = 3;
+            // 
+            // btnOK
+            // 
+            this.btnOK.Image = global::Gallifrey.UI.Classic.Properties.Resources.Save_48x48;
+            this.btnOK.Location = new System.Drawing.Point(527, 33);
+            this.btnOK.Name = "btnOK";
+            this.btnOK.Size = new System.Drawing.Size(65, 65);
+            this.btnOK.TabIndex = 5;
+            this.btnOK.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.btnOK.UseVisualStyleBackColor = true;
+            this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
             // 
             // radSelected
             // 
@@ -120,7 +131,7 @@
             this.radSelected.Location = new System.Drawing.Point(6, 58);
             this.radSelected.Name = "radSelected";
             this.radSelected.Size = new System.Drawing.Size(125, 21);
-            this.radSelected.TabIndex = 3;
+            this.radSelected.TabIndex = 2;
             this.radSelected.Text = "Add To Selected:";
             this.radSelected.UseVisualStyleBackColor = true;
             // 
@@ -130,20 +141,9 @@
             this.radRunning.Location = new System.Drawing.Point(6, 31);
             this.radRunning.Name = "radRunning";
             this.radRunning.Size = new System.Drawing.Size(160, 21);
-            this.radRunning.TabIndex = 1;
+            this.radRunning.TabIndex = 0;
             this.radRunning.Text = "Add To Running Timer:";
             this.radRunning.UseVisualStyleBackColor = true;
-            // 
-            // btnOK
-            // 
-            this.btnOK.Image = global::Gallifrey.UI.Classic.Properties.Resources.Save_48x48;
-            this.btnOK.Location = new System.Drawing.Point(527, 33);
-            this.btnOK.Name = "btnOK";
-            this.btnOK.Size = new System.Drawing.Size(65, 65);
-            this.btnOK.TabIndex = 4;
-            this.btnOK.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.btnOK.UseVisualStyleBackColor = true;
-            this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
             // 
             // btnCancel
             // 
@@ -152,7 +152,7 @@
             this.btnCancel.Location = new System.Drawing.Point(304, 354);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(65, 65);
-            this.btnCancel.TabIndex = 5;
+            this.btnCancel.TabIndex = 4;
             this.btnCancel.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);

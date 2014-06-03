@@ -100,7 +100,7 @@
             this.tabTimerDays.Name = "tabTimerDays";
             this.tabTimerDays.SelectedIndex = 0;
             this.tabTimerDays.Size = new System.Drawing.Size(951, 414);
-            this.tabTimerDays.TabIndex = 14;
+            this.tabTimerDays.TabIndex = 15;
             // 
             // formTimer
             // 
@@ -117,7 +117,7 @@
             this.lblCurrentTime.Location = new System.Drawing.Point(651, 98);
             this.lblCurrentTime.Name = "lblCurrentTime";
             this.lblCurrentTime.Size = new System.Drawing.Size(312, 65);
-            this.lblCurrentTime.TabIndex = 13;
+            this.lblCurrentTime.TabIndex = 14;
             this.lblCurrentTime.Text = "00:00:00";
             this.lblCurrentTime.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.lblCurrentTime.DoubleClick += new System.EventHandler(this.lblCurrentTime_DoubleClick);
@@ -213,7 +213,7 @@
             this.btnAbout.Location = new System.Drawing.Point(509, 98);
             this.btnAbout.Name = "btnAbout";
             this.btnAbout.Size = new System.Drawing.Size(65, 65);
-            this.btnAbout.TabIndex = 15;
+            this.btnAbout.TabIndex = 12;
             this.btnAbout.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnAbout.UseVisualStyleBackColor = true;
             this.btnAbout.Click += new System.EventHandler(this.btnAbout_Click);
@@ -279,7 +279,7 @@
             this.btnSettings.Location = new System.Drawing.Point(580, 98);
             this.btnSettings.Name = "btnSettings";
             this.btnSettings.Size = new System.Drawing.Size(65, 65);
-            this.btnSettings.TabIndex = 12;
+            this.btnSettings.TabIndex = 13;
             this.btnSettings.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnSettings.UseVisualStyleBackColor = true;
             this.btnSettings.Click += new System.EventHandler(this.btnSettings_Click);
