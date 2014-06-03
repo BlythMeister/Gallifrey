@@ -25,12 +25,22 @@ namespace Gallifrey.UI.Classic
             if (runningTimerId.HasValue)
             {
                 lblRunning.Text = gallifrey.JiraTimerCollection.GetTimer(runningTimerId.Value).ToString();
+                radRunning.Checked = true;
             }
             else
             {
                 lblRunning.Text = "N/A";
                 radRunning.Enabled = false;
                 lblRunning.Enabled = false;
+
+                if (cmbDayTimers.Items.Count > 0)
+                {
+                    radSelected.Checked = true;
+                }
+                else
+                {
+                    radNew.Checked = true;
+                }
             }
 
             TopMost = gallifrey.Settings.UiSettings.AlwaysOnTop;
