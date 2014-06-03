@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Timers;
+using Gallifrey.Exceptions.IdleTimers;
 using Gallifrey.IdleTimers;
 using Gallifrey.InactiveMonitor;
 using Gallifrey.IntegrationPoints;
@@ -54,8 +55,12 @@ namespace Gallifrey
 
         private void HearbeatOnElapsed(object sender, ElapsedEventArgs e)
         {
-            jiraTimerCollection.RemoveTimersOlderThanDays(settingsCollection.AppSettings.KeepTimersForDays);
-            idleTimerCollection.RemoveOldTimers();
+            try
+            {
+                jiraTimerCollection.RemoveTimersOlderThanDays(settingsCollection.AppSettings.KeepTimersForDays);
+                idleTimerCollection.RemoveOldTimers();
+            }
+            catch { /*Surpress Errors, if this fails timers won't be removed*/}
         }
 
         public void Initialise()
@@ -65,6 +70,15 @@ namespace Gallifrey
 
         public void Close()
         {
+            var runningTimer = jiraTimerCollection.GetRunningTimerId();
+            if (runningTimer.HasValue) jiraTimerCollection.StopTimer(runningTimer.Value);
+
+            try
+            {
+                idleTimerCollection.StopLockedTimers();
+            }
+            catch (NoIdleTimerRunningException) { /*This being caught is good, there was nothing to stop*/}
+
             jiraTimerCollection.SaveTimers();
             idleTimerCollection.SaveTimers();
             settingsCollection.SaveSettings();
