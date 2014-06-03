@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Deployment.Application;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Text;
 using System.Globalization;
@@ -522,19 +523,26 @@ namespace Gallifrey.UI.Classic
 
         private void UnhandledExceptionHandler(object sender, UnhandledExceptionEventArgs e)
         {
-            HandleUnexpectedError();
+            HandleUnexpectedError(e.ExceptionObject.ToString());
         }
 
         private void ThreadExceptionHandler(object sender, ThreadExceptionEventArgs e)
         {
-            HandleUnexpectedError();
+            HandleUnexpectedError(string.Format("{0}\n{1}", e.Exception.Message, e.Exception.StackTrace));
         }
 
-        private void HandleUnexpectedError()
+        private void HandleUnexpectedError(string message)
         {
+            const string eventSource = "Gallifrey";
+            if (!EventLog.SourceExists(eventSource))
+            {
+                EventLog.CreateEventSource(eventSource, eventSource);
+            }
+            EventLog.WriteEntry(eventSource, message, EventLogEntryType.Error);
+
             if (MessageBox.Show("Sorry An Unexpected Error Has Occured!\n\nDo You Want To Restart The App?", "Unexpected Error", MessageBoxButtons.YesNo, MessageBoxIcon.Error) == DialogResult.Yes)
             {
-                System.Diagnostics.Process.Start(Application.ExecutablePath);
+                Process.Start(Application.ExecutablePath);
             }
 
             MainWindow_FormClosed(null, null);

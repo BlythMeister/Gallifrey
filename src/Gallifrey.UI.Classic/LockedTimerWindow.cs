@@ -59,19 +59,34 @@ namespace Gallifrey.UI.Classic
         private void SetDayTimers()
         {
             var selectedTimer = (IdleTimer)lstLockedTimers.SelectedItem;
+            var disableDayTimers = false;
+            
             if (selectedTimer == null)
+            {
+                disableDayTimers = true;
+            }
+            else
+            {
+                var dayTimers = gallifrey.JiraTimerCollection.GetTimersForADate(selectedTimer.DateStarted.Date).ToList();
+                if (!dayTimers.Any())
+                {
+                    disableDayTimers = true;
+                }
+                else
+                {
+                    radSelected.Enabled = true;
+                    cmbDayTimers.Enabled = true;
+                    cmbDayTimers.DataSource = dayTimers;
+                    cmbDayTimers.Refresh();    
+                }
+            }
+
+            if (disableDayTimers)
             {
                 cmbDayTimers.DataSource = null;
                 cmbDayTimers.Refresh();
                 radSelected.Enabled = false;
                 cmbDayTimers.Enabled = false;
-            }
-            else
-            {
-                radSelected.Enabled = true;
-                cmbDayTimers.Enabled = true;
-                cmbDayTimers.DataSource = gallifrey.JiraTimerCollection.GetTimersForADate(selectedTimer.DateStarted.Date).ToList();
-                cmbDayTimers.Refresh();
             }
         }
 
