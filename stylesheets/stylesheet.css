@@ -124,6 +124,15 @@ aside#sidebar p.repo-owner a {
   font-weight: bold;
 }
 
+aside#sidebar p.title,
+aside#sidebar p.title a {
+  font-weight: bold;
+  font-size: 14px;
+  padding-top: 20px;
+  border-style:solid;
+  border-top:2px double #A6A6A6;
+}
+
 #downloads {
   margin-bottom: 40px;
 }
