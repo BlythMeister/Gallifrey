@@ -147,8 +147,8 @@
             this.groupBox1.Controls.Add(this.txtSetValueHours);
             this.groupBox1.Controls.Add(this.radAutoAdjust);
             this.groupBox1.Controls.Add(this.txtSetValueMins);
-            this.groupBox1.Controls.Add(this.radLeaveRemaining);
             this.groupBox1.Controls.Add(this.label13);
+            this.groupBox1.Controls.Add(this.radLeaveRemaining);
             this.groupBox1.Controls.Add(this.label14);
             this.groupBox1.Controls.Add(this.radSetValue);
             this.groupBox1.Location = new System.Drawing.Point(7, 344);
@@ -160,7 +160,7 @@
             // 
             // txtSetValueHours
             // 
-            this.txtSetValueHours.Location = new System.Drawing.Point(31, 53);
+            this.txtSetValueHours.Location = new System.Drawing.Point(30, 106);
             this.txtSetValueHours.Name = "txtSetValueHours";
             this.txtSetValueHours.Size = new System.Drawing.Size(39, 25);
             this.txtSetValueHours.TabIndex = 1;
@@ -170,7 +170,7 @@
             // radAutoAdjust
             // 
             this.radAutoAdjust.AutoSize = true;
-            this.radAutoAdjust.Location = new System.Drawing.Point(8, 85);
+            this.radAutoAdjust.Location = new System.Drawing.Point(6, 24);
             this.radAutoAdjust.Name = "radAutoAdjust";
             this.radAutoAdjust.Size = new System.Drawing.Size(143, 21);
             this.radAutoAdjust.TabIndex = 5;
@@ -179,7 +179,7 @@
             // 
             // txtSetValueMins
             // 
-            this.txtSetValueMins.Location = new System.Drawing.Point(118, 53);
+            this.txtSetValueMins.Location = new System.Drawing.Point(117, 106);
             this.txtSetValueMins.Name = "txtSetValueMins";
             this.txtSetValueMins.Size = new System.Drawing.Size(39, 25);
             this.txtSetValueMins.TabIndex = 3;
@@ -189,7 +189,7 @@
             // radLeaveRemaining
             // 
             this.radLeaveRemaining.AutoSize = true;
-            this.radLeaveRemaining.Location = new System.Drawing.Point(8, 112);
+            this.radLeaveRemaining.Location = new System.Drawing.Point(6, 51);
             this.radLeaveRemaining.Name = "radLeaveRemaining";
             this.radLeaveRemaining.Size = new System.Drawing.Size(124, 21);
             this.radLeaveRemaining.TabIndex = 6;
@@ -199,7 +199,7 @@
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(69, 56);
+            this.label13.Location = new System.Drawing.Point(68, 109);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(43, 17);
             this.label13.TabIndex = 2;
@@ -208,7 +208,7 @@
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(163, 56);
+            this.label14.Location = new System.Drawing.Point(162, 109);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(54, 17);
             this.label14.TabIndex = 4;
@@ -218,7 +218,7 @@
             // 
             this.radSetValue.AutoSize = true;
             this.radSetValue.Checked = true;
-            this.radSetValue.Location = new System.Drawing.Point(7, 25);
+            this.radSetValue.Location = new System.Drawing.Point(6, 78);
             this.radSetValue.Name = "radSetValue";
             this.radSetValue.Size = new System.Drawing.Size(99, 21);
             this.radSetValue.TabIndex = 0;
