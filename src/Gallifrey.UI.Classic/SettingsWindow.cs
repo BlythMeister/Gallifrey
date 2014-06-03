@@ -69,6 +69,7 @@ namespace Gallifrey.UI.Classic
                     string.IsNullOrWhiteSpace(gallifrey.Settings.JiraConnectionSettings.JiraPassword))
             {
                 MessageBox.Show("You have to populate the Jira Credentials!", "Missing Config");
+                DialogResult = DialogResult.None;
                 return;
             }
 
