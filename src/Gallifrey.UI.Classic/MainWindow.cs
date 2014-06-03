@@ -314,6 +314,10 @@ namespace Gallifrey.UI.Classic
                         MessageBox.Show("Machine Locked For Less Than 1 Minute.\nLocked Time Was Not Captured", "Short Lock Time", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         gallifrey.IdleTimerCollection.RemoveTimer(idleTimerId);
                     }
+                    else if (idleTimer.ExactCurrentTime.TotalHours > 10)
+                    {
+                        gallifrey.IdleTimerCollection.RemoveTimer(idleTimerId);
+                    }
                     else
                     {
                         var lockedTimerWindow = new LockedTimerWindow(gallifrey);
