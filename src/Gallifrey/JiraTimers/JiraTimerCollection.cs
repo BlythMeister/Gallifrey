@@ -20,6 +20,7 @@ namespace Gallifrey.JiraTimers
         void RemoveTimersOlderThanDays(int keepTimersForDays);
         JiraTimer GetTimer(Guid timerGuid);
         void RenameTimer(Guid timerGuid, Issue newIssue);
+        void ChangeTimerDate(Guid timerGuid, DateTime newStartDate);
         Tuple<int, int> GetNumberExported();
         TimeSpan GetTotalUnexportedTime();
         TimeSpan GetTotalExportedTimeThisWeek();
@@ -143,6 +144,22 @@ namespace Gallifrey.JiraTimers
             var currentTimer = GetTimer(timerGuid);
             if (currentTimer.IsRunning) currentTimer.StopTimer();
             var newTimer = new JiraTimer(newIssue, currentTimer.DateStarted, currentTimer.ExactCurrentTime);
+
+            if (timerList.Any(timer => timer.JiraReference == newTimer.JiraReference && timer.DateStarted.Date == newTimer.DateStarted.Date && timer.UniqueId != timerGuid))
+            {
+                throw new DuplicateTimerException("Already have a timer for this task on this day!");
+            }
+
+            RemoveTimer(timerGuid);
+            AddTimer(newTimer);
+            SaveTimers();
+        }
+
+        public void ChangeTimerDate(Guid timerGuid, DateTime newStartDate)
+        {
+            var currentTimer = GetTimer(timerGuid);
+            if (currentTimer.IsRunning) currentTimer.StopTimer();
+            var newTimer = new JiraTimer(currentTimer, newStartDate.Date);
 
             if (timerList.Any(timer => timer.JiraReference == newTimer.JiraReference && timer.DateStarted.Date == newTimer.DateStarted.Date && timer.UniqueId != timerGuid))
             {

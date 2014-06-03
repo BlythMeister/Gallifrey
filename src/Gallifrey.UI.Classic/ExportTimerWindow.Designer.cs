@@ -100,14 +100,14 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(39, 31);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(40, 17);
+            this.label3.Size = new System.Drawing.Size(37, 17);
             this.label3.TabIndex = 0;
-            this.label3.Text = "Total:";
+            this.label3.Text = "Total";
             // 
             // txtTotalHours
             // 
             this.txtTotalHours.Enabled = false;
-            this.txtTotalHours.Location = new System.Drawing.Point(85, 28);
+            this.txtTotalHours.Location = new System.Drawing.Point(86, 28);
             this.txtTotalHours.Name = "txtTotalHours";
             this.txtTotalHours.Size = new System.Drawing.Size(39, 25);
             this.txtTotalHours.TabIndex = 1;
@@ -127,7 +127,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(123, 31);
+            this.label4.Location = new System.Drawing.Point(124, 31);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(43, 17);
             this.label4.TabIndex = 2;
@@ -274,19 +274,19 @@
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(-1, 127);
+            this.label15.Location = new System.Drawing.Point(7, 127);
             this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(80, 17);
+            this.label15.Size = new System.Drawing.Size(77, 17);
             this.label15.TabIndex = 15;
-            this.label15.Text = "Export Date:";
+            this.label15.Text = "Export Date";
             // 
             // calExportDate
             // 
             this.calExportDate.CustomFormat = "dd/MM/yyyy HH:mm";
             this.calExportDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.calExportDate.Location = new System.Drawing.Point(85, 121);
+            this.calExportDate.Location = new System.Drawing.Point(86, 121);
             this.calExportDate.Name = "calExportDate";
-            this.calExportDate.Size = new System.Drawing.Size(183, 25);
+            this.calExportDate.Size = new System.Drawing.Size(182, 25);
             this.calExportDate.TabIndex = 16;
             // 
             // label10
@@ -294,13 +294,13 @@
             this.label10.AutoSize = true;
             this.label10.Location = new System.Drawing.Point(11, 93);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(68, 17);
+            this.label10.Size = new System.Drawing.Size(65, 17);
             this.label10.TabIndex = 10;
-            this.label10.Text = "To Export:";
+            this.label10.Text = "To Export";
             // 
             // txtExportHours
             // 
-            this.txtExportHours.Location = new System.Drawing.Point(85, 90);
+            this.txtExportHours.Location = new System.Drawing.Point(86, 90);
             this.txtExportHours.Name = "txtExportHours";
             this.txtExportHours.Size = new System.Drawing.Size(39, 25);
             this.txtExportHours.TabIndex = 11;
@@ -319,7 +319,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(123, 93);
+            this.label11.Location = new System.Drawing.Point(124, 93);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(43, 17);
             this.label11.TabIndex = 12;
@@ -339,14 +339,14 @@
             this.label7.AutoSize = true;
             this.label7.Location = new System.Drawing.Point(15, 62);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(64, 17);
+            this.label7.Size = new System.Drawing.Size(61, 17);
             this.label7.TabIndex = 5;
-            this.label7.Text = "Exported:";
+            this.label7.Text = "Exported";
             // 
             // txtExportedHours
             // 
             this.txtExportedHours.Enabled = false;
-            this.txtExportedHours.Location = new System.Drawing.Point(85, 59);
+            this.txtExportedHours.Location = new System.Drawing.Point(86, 59);
             this.txtExportedHours.Name = "txtExportedHours";
             this.txtExportedHours.Size = new System.Drawing.Size(39, 25);
             this.txtExportedHours.TabIndex = 6;
@@ -366,7 +366,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(123, 62);
+            this.label8.Location = new System.Drawing.Point(124, 62);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(43, 17);
             this.label8.TabIndex = 7;
@@ -386,9 +386,9 @@
             this.label16.AutoSize = true;
             this.label16.Location = new System.Drawing.Point(6, 493);
             this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(67, 17);
+            this.label16.Size = new System.Drawing.Size(64, 17);
             this.label16.TabIndex = 7;
-            this.label16.Text = "Comment:";
+            this.label16.Text = "Comment";
             // 
             // txtComment
             // 
