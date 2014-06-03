@@ -59,7 +59,14 @@ namespace Gallifrey.UI.Classic
 
         private void btnOK_Click(object sender, EventArgs e)
         {
-            if (AdjustTime()) Close();
+            if (AdjustTime())
+            {
+                Close();
+            }
+            else
+            {
+                DialogResult = DialogResult.None;
+            }
         }
     }
 }

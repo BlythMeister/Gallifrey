@@ -161,7 +161,14 @@ namespace Gallifrey.UI.Classic
 
         private void btnOK_Click(object sender, EventArgs e)
         {
-            if (ExportTime()) Close();
+            if (ExportTime())
+            {
+                Close();
+            }
+            else
+            {
+                DialogResult = DialogResult.None;
+            }
         }
 
         private void radSetValue_CheckedChanged(object sender, EventArgs e)
