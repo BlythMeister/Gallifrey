@@ -66,7 +66,7 @@ namespace Gallifrey.IdleTimers
 
         public void RemoveOldTimers()
         {
-            lockTimerList.RemoveAll(idleTimer => !idleTimer.IsRunning && idleTimer.DateStarted >= DateTime.Now.AddDays(-1));
+            lockTimerList.RemoveAll(idleTimer => !idleTimer.IsRunning && idleTimer.DateStarted <= DateTime.Now.AddDays(-1));
             SaveTimers();
         }
 
