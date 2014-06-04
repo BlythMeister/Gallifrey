@@ -547,11 +547,11 @@ namespace Gallifrey.UI.Classic
                 var fileName = string.Format("Error-{0}.txt", Guid.NewGuid());
 
                 var path = Path.Combine(Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.System)), "Temp", "Gallifrey Errors");
-                if (Directory.Exists(path)) Directory.CreateDirectory(path);
+                if (!Directory.Exists(path)) Directory.CreateDirectory(path);
                 File.WriteAllText(Path.Combine(path, fileName), message);
                 
                 path = Path.Combine(Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.System)), "Temp", "Gallifrey Event Log Errors");
-                if (Directory.Exists(path)) Directory.CreateDirectory(path);
+                if (!Directory.Exists(path)) Directory.CreateDirectory(path);
                 File.WriteAllText(Path.Combine(path, fileName), string.Format("{0}\n{1}", ex.Message, ex.StackTrace));
             }
             
