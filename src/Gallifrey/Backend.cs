@@ -42,7 +42,7 @@ namespace Gallifrey
             idleTimerCollection = new IdleTimerCollection();
             ActivityChecker = new ActivityChecker(jiraTimerCollection, settingsCollection.AppSettings);
             ActivityChecker.NoActivityEvent += OnNoActivityEvent;
-            hearbeat = new Timer(1800000);
+            hearbeat = new Timer(1800000);           
             hearbeat.Elapsed += HearbeatOnElapsed;
             hearbeat.Start();
         }
