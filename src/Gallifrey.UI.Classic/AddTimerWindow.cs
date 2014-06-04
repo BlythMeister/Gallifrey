@@ -122,5 +122,21 @@ namespace Gallifrey.UI.Classic
                 chkStartNow.Enabled = true;
             }
         }
+
+        private void btnSearch_Click(object sender, EventArgs e)
+        {
+            TopMost = false;
+            var searchForm = new SearchWindow(gallifrey);
+            searchForm.SetFromAddWindow();
+            searchForm.ShowDialog();
+
+            if (!string.IsNullOrWhiteSpace(searchForm.JiraReference))
+            {
+                txtJiraRef.Text = searchForm.JiraReference;
+                txtJiraRef.Enabled = false;
+            }
+
+            TopMost = gallifrey.Settings.UiSettings.AlwaysOnTop;
+        }
     }
 }

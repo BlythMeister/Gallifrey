@@ -4,14 +4,15 @@ using System.Linq;
 using System.Windows.Forms;
 using Atlassian.Jira;
 using Gallifrey.Exceptions.IntergrationPoints;
-using Gallifrey.Exceptions.JiraTimers;
 
 namespace Gallifrey.UI.Classic
 {
     public partial class SearchWindow : Form
     {
         private readonly IBackend gallifrey;
+        private bool fromAddWindow = false;
         public Guid? NewTimerId { get; private set; }
+        public string JiraReference { get; private set;  }
 
         public SearchWindow(IBackend gallifrey)
         {
@@ -46,10 +47,29 @@ namespace Gallifrey.UI.Classic
             TopMost = gallifrey.Settings.UiSettings.AlwaysOnTop;
         }
 
+        public void SetFromAddWindow()
+        {
+            fromAddWindow = true;
+        }
+
         private void btnAddTimer_Click(object sender, EventArgs e)
         {
             var selectedIssue = (JiraSearchResult) lstResults.SelectedItem;
 
+            if (fromAddWindow)
+            {
+                JiraReference = selectedIssue.JiraRef;
+                Close();
+            }
+            else
+            {
+                LoadAddTimerWindow(selectedIssue);    
+            }
+            
+        }
+
+        private void LoadAddTimerWindow(JiraSearchResult selectedIssue)
+        {
             TopMost = false;
             var addForm = new AddTimerWindow(gallifrey);
             addForm.PreLoadJira(selectedIssue.JiraRef);
@@ -62,6 +82,7 @@ namespace Gallifrey.UI.Classic
             else
             {
                 DialogResult = DialogResult.None;
+                TopMost = gallifrey.Settings.UiSettings.AlwaysOnTop;
             }
         }
 
