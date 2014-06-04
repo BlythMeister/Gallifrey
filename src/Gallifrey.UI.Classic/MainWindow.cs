@@ -442,6 +442,7 @@ namespace Gallifrey.UI.Classic
                 if (foundMatch)
                 {
                     tabTimerDays.SelectedTab = tabPage;
+                    break;
                 }
             }
         }
