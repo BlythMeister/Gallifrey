@@ -257,6 +257,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(382, 686);
+            this.ControlBox = false;
             this.Controls.Add(this.btnTwitter);
             this.Controls.Add(this.btnEmail);
             this.Controls.Add(this.label12);
@@ -278,11 +279,13 @@
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.label2);
             this.Font = new System.Drawing.Font("Segoe UI", 9.75F);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.MaximumSize = new System.Drawing.Size(398, 724);
-            this.MinimumSize = new System.Drawing.Size(398, 724);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "AboutWindow";
+            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "Gallifrey - About";
             this.TopMost = true;
             this.ResumeLayout(false);

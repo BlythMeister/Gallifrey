@@ -38,6 +38,8 @@
             this.txtJiraPassword = new System.Windows.Forms.TextBox();
             this.grpJira = new System.Windows.Forms.GroupBox();
             this.grpAppSettings = new System.Windows.Forms.GroupBox();
+            this.label13 = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
             this.chkAlwaysTop = new System.Windows.Forms.CheckBox();
             this.label11 = new System.Windows.Forms.Label();
             this.txtTargetHours = new System.Windows.Forms.TextBox();
@@ -53,8 +55,6 @@
             this.label7 = new System.Windows.Forms.Label();
             this.btnCancelEditSettings = new System.Windows.Forms.Button();
             this.btnSaveSettings = new System.Windows.Forms.Button();
-            this.label12 = new System.Windows.Forms.Label();
-            this.label13 = new System.Windows.Forms.Label();
             this.grpJira.SuspendLayout();
             this.grpAppSettings.SuspendLayout();
             this.SuspendLayout();
@@ -156,6 +156,24 @@
             this.grpAppSettings.TabIndex = 1;
             this.grpAppSettings.TabStop = false;
             this.grpAppSettings.Text = "App Settings";
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(190, 80);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(36, 17);
+            this.label13.TabIndex = 14;
+            this.label13.Text = "Days";
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(190, 53);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(54, 17);
+            this.label12.TabIndex = 13;
+            this.label12.Text = "Minutes";
             // 
             // chkAlwaysTop
             // 
@@ -297,24 +315,6 @@
             this.btnSaveSettings.UseVisualStyleBackColor = true;
             this.btnSaveSettings.Click += new System.EventHandler(this.btnSaveSettings_Click);
             // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(190, 53);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(54, 17);
-            this.label12.TabIndex = 13;
-            this.label12.Text = "Minutes";
-            // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(190, 80);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(36, 17);
-            this.label13.TabIndex = 14;
-            this.label13.Text = "Days";
-            // 
             // SettingsWindow
             // 
             this.AcceptButton = this.btnSaveSettings;
@@ -322,18 +322,22 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancelEditSettings;
             this.ClientSize = new System.Drawing.Size(331, 464);
+            this.ControlBox = false;
             this.Controls.Add(this.grpAppSettings);
             this.Controls.Add(this.grpJira);
             this.Controls.Add(this.btnCancelEditSettings);
             this.Controls.Add(this.btnSaveSettings);
             this.Controls.Add(this.label2);
             this.Font = new System.Drawing.Font("Segoe UI", 9.75F);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.MaximumSize = new System.Drawing.Size(347, 502);
-            this.MinimumSize = new System.Drawing.Size(347, 502);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "SettingsWindow";
+            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "Gallifrey - Settings";
+            this.TopMost = true;
             this.grpJira.ResumeLayout(false);
             this.grpJira.PerformLayout();
             this.grpAppSettings.ResumeLayout(false);

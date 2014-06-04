@@ -180,6 +180,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(263, 293);
+            this.ControlBox = false;
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
@@ -192,11 +193,13 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.txtJiraRef);
             this.Font = new System.Drawing.Font("Segoe UI", 9.75F);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.MaximumSize = new System.Drawing.Size(279, 331);
-            this.MinimumSize = new System.Drawing.Size(279, 331);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "AdjustTimerWindow";
+            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "Gallifrey - Adjust Time";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
