@@ -111,6 +111,16 @@ namespace Gallifrey.UI.Classic.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] digital7 {
+            get {
+                object obj = ResourceManager.GetObject("digital7", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap Edit_48x48 {

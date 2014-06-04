@@ -16,6 +16,8 @@ using Gallifrey.Exceptions.JiraTimers;
 using Gallifrey.ExtensionMethods;
 using Gallifrey.JiraTimers;
 using Microsoft.Win32;
+using System.Runtime.InteropServices;
+using System.Drawing.Text;
 
 namespace Gallifrey.UI.Classic
 {
@@ -331,25 +333,23 @@ namespace Gallifrey.UI.Classic
 
         #region "UI Hlpers"
 
+        [DllImport("gdi32.dll")]
+        private static extern IntPtr AddFontMemResourceEx(IntPtr pbFont, uint cbFont, IntPtr pdv, [In] ref uint pcFonts);
+
         private void SetupDisplayFont()
         {
+            var fontArray = Properties.Resources.digital7;
+            var dataLenth = fontArray.Length;
+
+            var ptrData = Marshal.AllocCoTaskMem(dataLenth);
+            Marshal.Copy(fontArray, 0, ptrData, dataLenth);
+            uint cfonts = 0;
+            AddFontMemResourceEx(ptrData, (uint) dataLenth, IntPtr.Zero, ref cfonts);
+            
             var privateFonts = new PrivateFontCollection();
 
-            var resource = string.Empty;
-            foreach (var name in GetType().Assembly.GetManifestResourceNames().Where(name => name.Contains("digital7.ttf")))
-            {
-                resource = name;
-                break;
-            }
-
-            var fontStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resource);
-            var data = Marshal.AllocCoTaskMem((int)fontStream.Length);
-            var fontdata = new byte[fontStream.Length];
-            fontStream.Read(fontdata, 0, (int)fontStream.Length);
-            Marshal.Copy(fontdata, 0, data, (int)fontStream.Length);
-            privateFonts.AddMemoryFont(data, (int)fontStream.Length);
-            fontStream.Close();
-            Marshal.FreeCoTaskMem(data);
+            privateFonts.AddMemoryFont(ptrData, dataLenth);
+            Marshal.FreeCoTaskMem(ptrData);
 
             lblCurrentTime.Font = new Font(privateFonts.Families[0], 50);
         }
