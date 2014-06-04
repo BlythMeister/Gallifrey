@@ -542,17 +542,13 @@ namespace Gallifrey.UI.Classic
 
                 EventLog.WriteEntry(eventSource, message, EventLogEntryType.Error);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 var fileName = string.Format("Error-{0}.txt", Guid.NewGuid());
 
                 var path = Path.Combine(Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.System)), "Temp", "Gallifrey Errors");
                 if (!Directory.Exists(path)) Directory.CreateDirectory(path);
                 File.WriteAllText(Path.Combine(path, fileName), message);
-                
-                path = Path.Combine(Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.System)), "Temp", "Gallifrey Event Log Errors");
-                if (!Directory.Exists(path)) Directory.CreateDirectory(path);
-                File.WriteAllText(Path.Combine(path, fileName), string.Format("{0}\n{1}", ex.Message, ex.StackTrace));
             }
             
             if (MessageBox.Show("Sorry An Unexpected Error Has Occured!\n\nDo You Want To Restart The App?", "Unexpected Error", MessageBoxButtons.YesNo, MessageBoxIcon.Error) == DialogResult.Yes)
