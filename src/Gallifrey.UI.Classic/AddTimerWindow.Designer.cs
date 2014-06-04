@@ -43,6 +43,7 @@
             this.btnAddTimer = new System.Windows.Forms.Button();
             this.chkStartNow = new System.Windows.Forms.CheckBox();
             this.label7 = new System.Windows.Forms.Label();
+            this.btnSearch = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // txtJiraRef
@@ -137,7 +138,7 @@
             // 
             this.btnCancelAddTimer.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancelAddTimer.Image = global::Gallifrey.UI.Classic.Properties.Resources.Cancel_48x48;
-            this.btnCancelAddTimer.Location = new System.Drawing.Point(173, 172);
+            this.btnCancelAddTimer.Location = new System.Drawing.Point(123, 172);
             this.btnCancelAddTimer.Name = "btnCancelAddTimer";
             this.btnCancelAddTimer.Size = new System.Drawing.Size(65, 65);
             this.btnCancelAddTimer.TabIndex = 13;
@@ -148,7 +149,7 @@
             // btnAddTimer
             // 
             this.btnAddTimer.Image = global::Gallifrey.UI.Classic.Properties.Resources.Check_48x48;
-            this.btnAddTimer.Location = new System.Drawing.Point(60, 172);
+            this.btnAddTimer.Location = new System.Drawing.Point(48, 172);
             this.btnAddTimer.Name = "btnAddTimer";
             this.btnAddTimer.Size = new System.Drawing.Size(65, 65);
             this.btnAddTimer.TabIndex = 12;
@@ -174,6 +175,17 @@
             this.label7.TabIndex = 10;
             this.label7.Text = "Start Now?";
             // 
+            // btnSearch
+            // 
+            this.btnSearch.Image = global::Gallifrey.UI.Classic.Properties.Resources.Search_48x48;
+            this.btnSearch.Location = new System.Drawing.Point(194, 172);
+            this.btnSearch.Name = "btnSearch";
+            this.btnSearch.Size = new System.Drawing.Size(65, 65);
+            this.btnSearch.TabIndex = 14;
+            this.btnSearch.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.btnSearch.UseVisualStyleBackColor = true;
+            this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
+            // 
             // AddTimerWindow
             // 
             this.AcceptButton = this.btnAddTimer;
@@ -182,6 +194,7 @@
             this.CancelButton = this.btnCancelAddTimer;
             this.ClientSize = new System.Drawing.Size(296, 251);
             this.ControlBox = false;
+            this.Controls.Add(this.btnSearch);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.chkStartNow);
             this.Controls.Add(this.btnCancelAddTimer);
@@ -226,5 +239,6 @@
         private System.Windows.Forms.Button btnCancelAddTimer;
         private System.Windows.Forms.CheckBox chkStartNow;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Button btnSearch;
     }
 }
