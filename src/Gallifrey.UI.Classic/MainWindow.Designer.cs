@@ -55,6 +55,7 @@
             this.btnRemoveTimer = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.btnAddTimer = new System.Windows.Forms.Button();
+            this.btnException = new System.Windows.Forms.Button();
             this.grpTarget.SuspendLayout();
             this.grpExportStats.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -316,11 +317,22 @@
             this.btnAddTimer.UseVisualStyleBackColor = true;
             this.btnAddTimer.Click += new System.EventHandler(this.btnAddTimer_Click);
             // 
+            // btnException
+            // 
+            this.btnException.Location = new System.Drawing.Point(282, 13);
+            this.btnException.Name = "btnException";
+            this.btnException.Size = new System.Drawing.Size(75, 39);
+            this.btnException.TabIndex = 16;
+            this.btnException.Text = "DO NOT PRESS";
+            this.btnException.UseVisualStyleBackColor = true;
+            this.btnException.Click += new System.EventHandler(this.btnException_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(975, 595);
+            this.Controls.Add(this.btnException);
             this.Controls.Add(this.btnAbout);
             this.Controls.Add(this.btnIdle);
             this.Controls.Add(this.grpExportStats);
@@ -384,6 +396,7 @@
         private System.Windows.Forms.Button btnIdle;
         private System.Windows.Forms.ToolTip toolTip;
         private System.Windows.Forms.Button btnAbout;
+        private System.Windows.Forms.Button btnException;
     }
 }
 

@@ -541,7 +541,7 @@ namespace Gallifrey.UI.Classic
 
             if (MessageBox.Show("Sorry An Unexpected Error Has Occured!\n\nDo You Want To Restart The App?", "Unexpected Error", MessageBoxButtons.YesNo, MessageBoxIcon.Error) == DialogResult.Yes)
             {
-                Process.Start(Application.ExecutablePath);
+                Application.Restart();
             }
 
             MainWindow_FormClosed(null, null);
@@ -549,6 +549,11 @@ namespace Gallifrey.UI.Classic
         }
 
         #endregion
+
+        private void btnException_Click(object sender, EventArgs e)
+        {
+            throw new Exception();
+        }
 
     }
 }
