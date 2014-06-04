@@ -309,12 +309,12 @@ namespace Gallifrey.UI.Classic
                     BringToFront();
                     var idleTimerId = gallifrey.StopIdleTimer();
                     var idleTimer = gallifrey.IdleTimerCollection.GetTimer(idleTimerId);
-                    //if (idleTimer.ExactCurrentTime.TotalSeconds < 60 || idleTimer.ExactCurrentTime.TotalHours > 10)
-                    //{
-                    //    gallifrey.IdleTimerCollection.RemoveTimer(idleTimerId);
-                    //}
-                    //else
-                    //{
+                    if (idleTimer.ExactCurrentTime.TotalSeconds < 60 || idleTimer.ExactCurrentTime.TotalHours > 10)
+                    {
+                        gallifrey.IdleTimerCollection.RemoveTimer(idleTimerId);
+                    }
+                    else
+                    {
                         var lockedTimerWindow = new LockedTimerWindow(gallifrey);
                         lockedTimerWindow.Closed += (o, args) => RefreshTimerPages();
                         if (lockedTimerWindow.DisplayForm)
@@ -322,7 +322,7 @@ namespace Gallifrey.UI.Classic
                             lockedTimerWindow.BringToFront();
                             lockedTimerWindow.Show();
                         }
-                    //}
+                    }
                     break;
             }
         }
