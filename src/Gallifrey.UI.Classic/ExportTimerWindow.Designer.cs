@@ -427,6 +427,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(293, 657);
+            this.ControlBox = false;
             this.Controls.Add(this.txtComment);
             this.Controls.Add(this.label16);
             this.Controls.Add(this.groupBox2);
@@ -439,12 +440,14 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.txtJiraRef);
             this.Font = new System.Drawing.Font("Segoe UI", 9.75F);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.MaximumSize = new System.Drawing.Size(309, 695);
-            this.MinimumSize = new System.Drawing.Size(309, 695);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "ExportTimerWindow";
+            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "Gallifrey - Export Time";
             this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.ExportTimerWindow_KeyUp);
             this.groupBox1.ResumeLayout(false);

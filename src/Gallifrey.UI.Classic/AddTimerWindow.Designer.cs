@@ -181,6 +181,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancelAddTimer;
             this.ClientSize = new System.Drawing.Size(296, 251);
+            this.ControlBox = false;
             this.Controls.Add(this.label7);
             this.Controls.Add(this.chkStartNow);
             this.Controls.Add(this.btnCancelAddTimer);
@@ -196,11 +197,13 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.txtJiraRef);
             this.Font = new System.Drawing.Font("Segoe UI", 9.75F);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.MaximumSize = new System.Drawing.Size(312, 289);
-            this.MinimumSize = new System.Drawing.Size(312, 289);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "AddTimerWindow";
+            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "Gallifrey - Add Timer";
             this.ResumeLayout(false);
             this.PerformLayout();

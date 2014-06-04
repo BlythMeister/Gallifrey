@@ -25,8 +25,6 @@ namespace Gallifrey.UI.Classic
             txtTargetMins.Text = gallifrey.Settings.AppSettings.TargetLogPerDay.Minutes.ToString();
 
             chkAlwaysTop.Checked = gallifrey.Settings.UiSettings.AlwaysOnTop;
-
-            TopMost = gallifrey.Settings.UiSettings.AlwaysOnTop;
         }
 
         private void btnCancelEditSettings_Click(object sender, EventArgs e)
