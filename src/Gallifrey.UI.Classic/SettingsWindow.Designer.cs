@@ -338,6 +338,7 @@
             this.MinimizeBox = false;
             this.Name = "SettingsWindow";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Gallifrey - Settings";
             this.TopMost = true;
             this.grpJira.ResumeLayout(false);

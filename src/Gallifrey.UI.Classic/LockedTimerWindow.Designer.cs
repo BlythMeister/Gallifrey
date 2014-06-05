@@ -178,6 +178,7 @@
             this.MinimizeBox = false;
             this.Name = "LockedTimerWindow";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Gallifrey - Locked Timers";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();

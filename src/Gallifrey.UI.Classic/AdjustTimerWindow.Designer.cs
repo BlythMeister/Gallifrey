@@ -200,6 +200,7 @@
             this.MinimizeBox = false;
             this.Name = "AdjustTimerWindow";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Gallifrey - Adjust Time";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
