@@ -128,8 +128,12 @@ namespace Gallifrey
 
             if (runningTimerWhenIdle.HasValue)
             {
-                jiraTimerCollection.StartTimer(runningTimerWhenIdle.Value);
-                runningTimerWhenIdle = null;
+                var timer = jiraTimerCollection.GetTimer(runningTimerWhenIdle.Value);
+                if (timer.DateStarted.Date == DateTime.Now.Date)
+                {
+                    jiraTimerCollection.StartTimer(runningTimerWhenIdle.Value);
+                    runningTimerWhenIdle = null;    
+                }
             }
             return idleTimerCollection.StopLockedTimers();
         }

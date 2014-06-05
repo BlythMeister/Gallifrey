@@ -563,10 +563,5 @@ namespace Gallifrey.UI.Classic
 
         #endregion
 
-        private void btnException_Click(object sender, EventArgs e)
-        {
-            throw new Exception();
-        }
-
     }
 }
