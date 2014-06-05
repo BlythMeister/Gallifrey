@@ -89,5 +89,10 @@ namespace Gallifrey.UI.Classic
             Close();
         }
 
+        private void chkAlert_CheckedChanged(object sender, EventArgs e)
+        {
+            txtAlertMins.Enabled = chkAlert.Checked;
+        }
+
     }
 }
