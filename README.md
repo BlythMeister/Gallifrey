@@ -5,7 +5,7 @@ Gallifrey will make anyone a Jira time lord!
 
 A simple, light-weight Jira time logging companion to help you travel the Jira universe!
 
-Why Gallifrey
+Why Is The App Called Gallifrey
 =========
 
 Gallifrey is the home of the time lords in the hit BBC TV show Dr Who....Need i say more?
@@ -35,12 +35,16 @@ Please help us keep this project up and running by donating.
 We hope to get a domain up and running with a nice GitHub Pages website, but this all costs money.
 [Click Here to donate](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=G3MWL8E6UG4RS)
 
+Support
+=========
+
+You can get app support via [twitter](https://twitter.com/GallifreyApp) or via email (GallifreyApp@gmail.com).
+We are using GitHub issues to maintain a backlog and track bugs, so feel free to raise issues there (https://github.com/BlythMeister/Gallifrey/issues)
 
 Contributions
 =========
 
 Feel free to contribute, but please read the wiki (https://github.com/BlythMeister/Gallifrey/wiki) first to familiarise yourself with the correct processes and way we do things. :)
-
 
 3rd Party Libraries
 =========
