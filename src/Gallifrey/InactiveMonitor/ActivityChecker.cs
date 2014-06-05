@@ -69,7 +69,10 @@ namespace Gallifrey.InactiveMonitor
 
         public void Start()
         {
-            hearbeat.Start();
+            if (appSettings.AlertWhenNotRunning)
+            {
+                hearbeat.Start();    
+            }
         }
 
         public void Stop()

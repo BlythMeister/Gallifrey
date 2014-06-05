@@ -246,6 +246,7 @@
             this.chkAlert.Size = new System.Drawing.Size(15, 14);
             this.chkAlert.TabIndex = 1;
             this.chkAlert.UseVisualStyleBackColor = true;
+            this.chkAlert.CheckedChanged += new System.EventHandler(this.chkAlert_CheckedChanged);
             // 
             // txtTimerDays
             // 
@@ -267,6 +268,7 @@
             // 
             // txtAlertMins
             // 
+            this.txtAlertMins.Enabled = false;
             this.txtAlertMins.Location = new System.Drawing.Point(148, 46);
             this.txtAlertMins.Name = "txtAlertMins";
             this.txtAlertMins.Size = new System.Drawing.Size(39, 25);
