@@ -67,10 +67,16 @@ namespace Gallifrey.InactiveMonitor
             }
         }
 
-        public void Reset()
+        public void Start()
+        {
+            hearbeat.Start();
+        }
+
+        public void Stop()
         {
             lock (lockObject)
             {
+                hearbeat.Stop();
                 noTimerRunning.Stop();
                 noTimerRunning.Reset();
                 eventsSent = 0;
