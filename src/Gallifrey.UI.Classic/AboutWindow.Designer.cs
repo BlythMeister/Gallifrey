@@ -286,6 +286,7 @@
             this.MinimizeBox = false;
             this.Name = "AboutWindow";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Gallifrey - About";
             this.TopMost = true;
             this.ResumeLayout(false);

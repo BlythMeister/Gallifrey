@@ -448,6 +448,7 @@
             this.MinimizeBox = false;
             this.Name = "ExportTimerWindow";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Gallifrey - Export Time";
             this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.ExportTimerWindow_KeyUp);
             this.groupBox1.ResumeLayout(false);

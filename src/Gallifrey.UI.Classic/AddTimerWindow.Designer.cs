@@ -218,6 +218,7 @@
             this.MinimizeBox = false;
             this.Name = "AddTimerWindow";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Gallifrey - Add Timer";
             this.ResumeLayout(false);
             this.PerformLayout();

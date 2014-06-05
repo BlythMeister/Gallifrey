@@ -127,6 +127,7 @@
             this.MinimizeBox = false;
             this.Name = "RenameTimerWindow";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Gallifrey - Rename Timer";
             this.ResumeLayout(false);
             this.PerformLayout();
