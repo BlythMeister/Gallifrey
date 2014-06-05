@@ -48,6 +48,7 @@
             // 
             // txtJiraRef
             // 
+            this.txtJiraRef.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
             this.txtJiraRef.Location = new System.Drawing.Point(123, 47);
             this.txtJiraRef.Name = "txtJiraRef";
             this.txtJiraRef.Size = new System.Drawing.Size(157, 25);
