@@ -112,7 +112,7 @@ namespace Gallifrey
 
         public void StartIdleTimer()
         {
-            ActivityChecker.Stop();
+            ActivityChecker.StopActivityCheck();
 
             runningTimerWhenIdle = JiraTimerCollection.GetRunningTimerId();
             if (runningTimerWhenIdle.HasValue)
@@ -124,7 +124,7 @@ namespace Gallifrey
 
         public Guid StopIdleTimer()
         {
-            ActivityChecker.Start();
+            ActivityChecker.StartActivityCheck();
 
             if (runningTimerWhenIdle.HasValue)
             {
