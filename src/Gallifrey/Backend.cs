@@ -42,9 +42,19 @@ namespace Gallifrey
             idleTimerCollection = new IdleTimerCollection();
             ActivityChecker = new ActivityChecker(jiraTimerCollection, settingsCollection.AppSettings);
             ActivityChecker.NoActivityEvent += OnNoActivityEvent;
-            hearbeat = new Timer(1800000);           
+            hearbeat = new Timer(1800000);
             hearbeat.Elapsed += HearbeatOnElapsed;
             hearbeat.Start();
+
+            if (Settings.AppSettings.TimerRunningOnShutdown.HasValue)
+            {
+                if (jiraTimerCollection.GetTimer(Settings.AppSettings.TimerRunningOnShutdown.Value).DateStarted.Date == DateTime.Now.Date)
+                {
+                    JiraTimerCollection.StartTimer(Settings.AppSettings.TimerRunningOnShutdown.Value);
+                    Settings.AppSettings.TimerRunningOnShutdown = null;
+                    SaveSettings();
+                }
+            }
         }
 
         private void OnNoActivityEvent(object sender, int millisecondsSinceActivity)
@@ -82,7 +92,11 @@ namespace Gallifrey
         public void Close()
         {
             var runningTimer = jiraTimerCollection.GetRunningTimerId();
-            if (runningTimer.HasValue) jiraTimerCollection.StopTimer(runningTimer.Value);
+            if (runningTimer.HasValue)
+            {
+                jiraTimerCollection.StopTimer(runningTimer.Value);
+            }
+            settingsCollection.AppSettings.TimerRunningOnShutdown = runningTimer;
 
             try
             {
@@ -132,7 +146,7 @@ namespace Gallifrey
                 if (timer.DateStarted.Date == DateTime.Now.Date)
                 {
                     jiraTimerCollection.StartTimer(runningTimerWhenIdle.Value);
-                    runningTimerWhenIdle = null;    
+                    runningTimerWhenIdle = null;
                 }
             }
             return idleTimerCollection.StopLockedTimers();
