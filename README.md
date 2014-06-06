@@ -23,7 +23,7 @@ We are aiming to maintain a Beta & Stable version of the app.
 
 **Installing on Windows 8 will alert with SmartScreen, you should be able to "Run Anyway" until I can afford a proper certificate, there is no way around this!  After a couple of runs, the warning should stop**
 
-* Stable Release - Coming Soon!
+* [Stable Release - Click Here](https://github.com/BlythMeister/Gallifrey/raw/master/deploy/stable/setup.exe)
 * [Beta Release - Click Here](https://github.com/BlythMeister/Gallifrey/raw/develop/deploy/beta/setup.exe)
 
 *Although the "stable" can also be downloaded from the "develop" branch & the "beta" from the "master" branch, i strongly recommend using the links above to guarantee correct updates!*
