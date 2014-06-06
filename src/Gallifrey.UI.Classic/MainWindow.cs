@@ -512,7 +512,7 @@ namespace Gallifrey.UI.Classic
                 {
                     var updateInfo = ApplicationDeployment.CurrentDeployment.CheckForDetailedUpdate();
 
-                    if (updateInfo.UpdateAvailable)
+                    if (updateInfo.UpdateAvailable && updateInfo.AvailableVersion > ApplicationDeployment.CurrentDeployment.CurrentVersion)
                     {
                         ApplicationDeployment.CurrentDeployment.UpdateCompleted += (sender, args) => lblUpdate.Visible = true;
                         ApplicationDeployment.CurrentDeployment.UpdateAsync();
