@@ -20,14 +20,17 @@
     <UpdateInterval>7</UpdateInterval>
     <UpdateIntervalUnits>Days</UpdateIntervalUnits>
     <UpdatePeriodically>false</UpdatePeriodically>
-    <UpdateRequired>false</UpdateRequired>
+    <UpdateRequired>true</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <InstallUrl>https://raw.githubusercontent.com/BlythMeister/Gallifrey/master/deploy/stable/</InstallUrl>
+    <SupportUrl>https://github.com/BlythMeister/Gallifrey</SupportUrl>
+    <ErrorReportUrl>https://github.com/BlythMeister/Gallifrey</ErrorReportUrl>
     <ProductName>Gallifrey</ProductName>
     <PublisherName>Gallifrey</PublisherName>
+    <MinimumRequiredVersion>1.0.0.0</MinimumRequiredVersion>
     <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>0.1.0.%2a</ApplicationVersion>
-    <UseApplicationTrust>false</UseApplicationTrust>
+    <ApplicationVersion>1.0.0.0</ApplicationVersion>
+    <UseApplicationTrust>true</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
@@ -106,17 +109,23 @@
     <Compile Include="AdjustTimerWindow.Designer.cs">
       <DependentUpon>AdjustTimerWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="AboutWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AboutWindow.Designer.cs">
+      <DependentUpon>AboutWindow.cs</DependentUpon>
+    </Compile>
     <Compile Include="SearchWindow.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="SearchWindow.Designer.cs">
       <DependentUpon>SearchWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="IdleTimerWindow.cs">
+    <Compile Include="LockedTimerWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="IdleTimerWindow.Designer.cs">
-      <DependentUpon>IdleTimerWindow.cs</DependentUpon>
+    <Compile Include="LockedTimerWindow.Designer.cs">
+      <DependentUpon>LockedTimerWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="ExportTimerWindow.cs">
       <SubType>Form</SubType>
@@ -155,11 +164,14 @@
     <EmbeddedResource Include="AdjustTimerWindow.resx">
       <DependentUpon>AdjustTimerWindow.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="AboutWindow.resx">
+      <DependentUpon>AboutWindow.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="SearchWindow.resx">
       <DependentUpon>SearchWindow.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="IdleTimerWindow.resx">
-      <DependentUpon>IdleTimerWindow.cs</DependentUpon>
+    <EmbeddedResource Include="LockedTimerWindow.resx">
+      <DependentUpon>LockedTimerWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ExportTimerWindow.resx">
       <DependentUpon>ExportTimerWindow.cs</DependentUpon>
@@ -230,9 +242,18 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="clock_blue.ico" />
+    <None Include="Icons\pp_logo_100px.png" />
+    <None Include="Icons\pp_log_100px.png" />
+    <None Include="Icons\GitHub_Mark_32px.png" />
+    <None Include="Icons\Twitter_logo_blue.png" />
+    <None Include="Icons\Mail_32x32.png" />
+    <None Include="Icons\Information_48x48.png" />
+    <None Include="Icons\pp-logo-100px.png" />
+    <None Include="Icons\GitHub-Mark-32px.png" />
+    <None Include="Icons\Save_48x48.png" />
+    <None Include="Icons\Upload_48x48.png" />
     <None Include="Icons\Refresh_48x48.png" />
     <None Include="Icons\Key_48x48.png" />
-    <None Include="Icons\Log Out_48x48.png" />
     <None Include="Icons\Rename_48x48.png" />
     <None Include="Icons\Search_48x48.png" />
     <None Include="Icons\Edit_48x48.png" />

@@ -13,23 +13,25 @@ namespace Gallifrey.UI.Classic
             this.gallifrey = gallifrey;
             InitializeComponent();
 
-            if (gallifrey.JiraConnectionSettings.JiraUrl != null) txtJiraUrl.Text = gallifrey.JiraConnectionSettings.JiraUrl;
-            if (gallifrey.JiraConnectionSettings.JiraUsername != null) txtJiraUsername.Text = gallifrey.JiraConnectionSettings.JiraUsername;
-            if (gallifrey.JiraConnectionSettings.JiraPassword != null) txtJiraPassword.Text = gallifrey.JiraConnectionSettings.JiraPassword;
+            if (gallifrey.Settings.JiraConnectionSettings.JiraUrl != null) txtJiraUrl.Text = gallifrey.Settings.JiraConnectionSettings.JiraUrl;
+            if (gallifrey.Settings.JiraConnectionSettings.JiraUsername != null) txtJiraUsername.Text = gallifrey.Settings.JiraConnectionSettings.JiraUsername;
+            if (gallifrey.Settings.JiraConnectionSettings.JiraPassword != null) txtJiraPassword.Text = gallifrey.Settings.JiraConnectionSettings.JiraPassword;
 
-            chkAlert.Checked = gallifrey.AppSettings.AlertWhenNotRunning;
-            txtAlertMins.Text = ((gallifrey.AppSettings.AlertTimeMilliseconds / 1000) / 60).ToString();
-            txtTimerDays.Text = gallifrey.AppSettings.KeepTimersForDays.ToString();
+            chkAlert.Checked = gallifrey.Settings.AppSettings.AlertWhenNotRunning;
+            txtAlertMins.Text = ((gallifrey.Settings.AppSettings.AlertTimeMilliseconds / 1000) / 60).ToString();
+            txtTimerDays.Text = gallifrey.Settings.AppSettings.KeepTimersForDays.ToString();
 
-            txtTargetHours.Text = gallifrey.AppSettings.TargetLogPerDay.Hours.ToString();
-            txtTargetMins.Text = gallifrey.AppSettings.TargetLogPerDay.Minutes.ToString();
+            txtTargetHours.Text = gallifrey.Settings.AppSettings.TargetLogPerDay.Hours.ToString();
+            txtTargetMins.Text = gallifrey.Settings.AppSettings.TargetLogPerDay.Minutes.ToString();
+
+            chkAlwaysTop.Checked = gallifrey.Settings.UiSettings.AlwaysOnTop;
         }
 
         private void btnCancelEditSettings_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(gallifrey.JiraConnectionSettings.JiraUrl) ||
-                    string.IsNullOrWhiteSpace(gallifrey.JiraConnectionSettings.JiraUsername) ||
-                    string.IsNullOrWhiteSpace(gallifrey.JiraConnectionSettings.JiraPassword))
+            if (string.IsNullOrWhiteSpace(gallifrey.Settings.JiraConnectionSettings.JiraUrl) ||
+                    string.IsNullOrWhiteSpace(gallifrey.Settings.JiraConnectionSettings.JiraUsername) ||
+                    string.IsNullOrWhiteSpace(gallifrey.Settings.JiraConnectionSettings.JiraPassword))
             {
                 MessageBox.Show("You have to populate the Jira Credentials!", "Missing Config");
                 return;
@@ -43,27 +45,29 @@ namespace Gallifrey.UI.Classic
             if (!int.TryParse(txtAlertMins.Text, out alertTime)) alertTime = 0;
             if (!int.TryParse(txtTimerDays.Text, out keepTimerDays)) keepTimerDays = 28;
 
-            gallifrey.AppSettings.AlertWhenNotRunning = chkAlert.Checked;
-            gallifrey.AppSettings.AlertTimeMilliseconds = (alertTime * 60) * 1000;
-            gallifrey.AppSettings.KeepTimersForDays = keepTimerDays;
+            gallifrey.Settings.AppSettings.AlertWhenNotRunning = chkAlert.Checked;
+            gallifrey.Settings.AppSettings.AlertTimeMilliseconds = (alertTime * 60) * 1000;
+            gallifrey.Settings.AppSettings.KeepTimersForDays = keepTimerDays;
+            gallifrey.Settings.UiSettings.AlwaysOnTop = chkAlwaysTop.Checked;
 
             int hours, minutes;
 
             if (!int.TryParse(txtTargetHours.Text, out hours)) { hours = 7; }
             if (!int.TryParse(txtTargetMins.Text, out minutes)) { minutes = 30; }
 
-            gallifrey.AppSettings.TargetLogPerDay = new TimeSpan(hours, minutes, 0);
+            gallifrey.Settings.AppSettings.TargetLogPerDay = new TimeSpan(hours, minutes, 0);
 
 
-            gallifrey.JiraConnectionSettings.JiraUrl = txtJiraUrl.Text;
-            gallifrey.JiraConnectionSettings.JiraUsername = txtJiraUsername.Text;
-            gallifrey.JiraConnectionSettings.JiraPassword = txtJiraPassword.Text;
-            
-            if (string.IsNullOrWhiteSpace(gallifrey.JiraConnectionSettings.JiraUrl) ||
-                    string.IsNullOrWhiteSpace(gallifrey.JiraConnectionSettings.JiraUsername) ||
-                    string.IsNullOrWhiteSpace(gallifrey.JiraConnectionSettings.JiraPassword))
+            gallifrey.Settings.JiraConnectionSettings.JiraUrl = txtJiraUrl.Text;
+            gallifrey.Settings.JiraConnectionSettings.JiraUsername = txtJiraUsername.Text;
+            gallifrey.Settings.JiraConnectionSettings.JiraPassword = txtJiraPassword.Text;
+
+            if (string.IsNullOrWhiteSpace(gallifrey.Settings.JiraConnectionSettings.JiraUrl) ||
+                    string.IsNullOrWhiteSpace(gallifrey.Settings.JiraConnectionSettings.JiraUsername) ||
+                    string.IsNullOrWhiteSpace(gallifrey.Settings.JiraConnectionSettings.JiraPassword))
             {
                 MessageBox.Show("You have to populate the Jira Credentials!", "Missing Config");
+                DialogResult = DialogResult.None;
                 return;
             }
 
@@ -74,8 +78,7 @@ namespace Gallifrey.UI.Classic
         {
             try
             {
-                gallifrey.SaveJiraConnectionSettings();
-                gallifrey.SaveAppSettings();
+                gallifrey.SaveSettings();
             }
             catch (JiraConnectionException)
             {
@@ -84,6 +87,11 @@ namespace Gallifrey.UI.Classic
             }
 
             Close();
+        }
+
+        private void chkAlert_CheckedChanged(object sender, EventArgs e)
+        {
+            txtAlertMins.Enabled = chkAlert.Checked;
         }
 
     }

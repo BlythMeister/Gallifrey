@@ -15,18 +15,22 @@ namespace Gallifrey.InactiveMonitor
         private readonly object lockObject;
         private IAppSettings appSettings;
         private int eventsSent;
+        private bool TemporaryStopActivityCheck;
         
         internal ActivityChecker(IJiraTimerCollection timerCollection, IAppSettings appSettings)
         {
             this.timerCollection = timerCollection;
             noTimerRunning = new Stopwatch();
+            TemporaryStopActivityCheck = false;
             lockObject = new object();
-
+            
             hearbeat = new Timer(500);
             hearbeat.Elapsed += HearbeatOnElapsed;
 
             UpdateAppSettings(appSettings);
         }
+
+        
 
         internal void UpdateAppSettings(IAppSettings newAppSettings)
         {
@@ -47,7 +51,7 @@ namespace Gallifrey.InactiveMonitor
         {
             lock (lockObject)
             {
-                if (timerCollection.GetRunningTimerId().HasValue)
+                if (timerCollection.GetRunningTimerId().HasValue || TemporaryStopActivityCheck)
                 {
                     noTimerRunning.Stop();
                     noTimerRunning.Reset();
@@ -65,6 +69,17 @@ namespace Gallifrey.InactiveMonitor
                     }
                 }
             }
+        }
+
+        public void StopActivityCheck()
+        {
+            TemporaryStopActivityCheck = true;
+            eventsSent = 100;
+        }
+
+        public void StartActivityCheck()
+        {
+            TemporaryStopActivityCheck = false;
         }
     }
 }

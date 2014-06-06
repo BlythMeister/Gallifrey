@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Timers;
+using Gallifrey.Exceptions.IdleTimers;
 using Gallifrey.IdleTimers;
 using Gallifrey.InactiveMonitor;
 using Gallifrey.IntegrationPoints;
@@ -13,14 +14,12 @@ namespace Gallifrey
     {
         IJiraTimerCollection JiraTimerCollection { get; }
         IIdleTimerCollection IdleTimerCollection { get; }
-        IAppSettings AppSettings { get; }
-        IJiraConnectionSettings JiraConnectionSettings { get; }
+        ISettingsCollection Settings { get; }
         IJiraConnection JiraConnection { get; }
         event EventHandler<int> NoActivityEvent;
         void Initialise();
         void Close();
-        void SaveJiraConnectionSettings();
-        void SaveAppSettings();
+        void SaveSettings();
         void StartIdleTimer();
         Guid StopIdleTimer();
     }
@@ -29,22 +28,21 @@ namespace Gallifrey
     {
         private readonly JiraTimerCollection jiraTimerCollection;
         private readonly IdleTimerCollection idleTimerCollection;
-        private readonly AppSettings appSettings;
-        private readonly JiraConnectionSettings jiraConnectionSettings;
+        private readonly SettingsCollection settingsCollection;
         private JiraConnection jiraConnection;
         public event EventHandler<int> NoActivityEvent;
         internal ActivityChecker ActivityChecker;
         private readonly Timer hearbeat;
-        
+        private Guid? runningTimerWhenIdle;
+
         public Backend()
         {
-            appSettings = AppSettingsSerializer.DeSerialize();
-            jiraConnectionSettings = JiraConnectionSettingsSerializer.DeSerialize();
+            settingsCollection = SettingsCollectionSerializer.DeSerialize();
             jiraTimerCollection = new JiraTimerCollection();
             idleTimerCollection = new IdleTimerCollection();
-            ActivityChecker = new ActivityChecker(jiraTimerCollection, appSettings);
+            ActivityChecker = new ActivityChecker(jiraTimerCollection, settingsCollection.AppSettings);
             ActivityChecker.NoActivityEvent += OnNoActivityEvent;
-            hearbeat = new Timer(3600000);
+            hearbeat = new Timer(1800000);           
             hearbeat.Elapsed += HearbeatOnElapsed;
             hearbeat.Start();
         }
@@ -57,49 +55,86 @@ namespace Gallifrey
 
         private void HearbeatOnElapsed(object sender, ElapsedEventArgs e)
         {
-            jiraTimerCollection.RemoveTimersOlderThanDays(appSettings.KeepTimersForDays);
-            idleTimerCollection.RemoveOldTimers();
+            try
+            {
+                jiraTimerCollection.RemoveTimersOlderThanDays(settingsCollection.AppSettings.KeepTimersForDays);
+                idleTimerCollection.RemoveOldTimers();
+
+                var runningTimerId = jiraTimerCollection.GetRunningTimerId();
+                if (runningTimerId.HasValue)
+                {
+                    var runningTimer = jiraTimerCollection.GetTimer(runningTimerId.Value);
+                    if (runningTimer.DateStarted.Date != DateTime.Now.Date)
+                    {
+                        jiraTimerCollection.StopTimer(runningTimerId.Value);
+                        jiraTimerCollection.StartTimer(runningTimerId.Value);
+                    }
+                }
+            }
+            catch { /*Surpress Errors, if this fails timers won't be removed*/}
         }
 
         public void Initialise()
         {
-            jiraConnection = new JiraConnection(jiraConnectionSettings);
+            jiraConnection = new JiraConnection(settingsCollection.JiraConnectionSettings);
         }
 
         public void Close()
         {
+            var runningTimer = jiraTimerCollection.GetRunningTimerId();
+            if (runningTimer.HasValue) jiraTimerCollection.StopTimer(runningTimer.Value);
+
+            try
+            {
+                idleTimerCollection.StopLockedTimers();
+            }
+            catch (NoIdleTimerRunningException) { /*This being caught is good, there was nothing to stop*/}
+
             jiraTimerCollection.SaveTimers();
             idleTimerCollection.SaveTimers();
-            appSettings.SaveSettings();
-            jiraConnectionSettings.SaveSettings();
+            settingsCollection.SaveSettings();
         }
 
-        public void SaveJiraConnectionSettings()
+        public void SaveSettings()
         {
-            jiraConnectionSettings.SaveSettings();
+            settingsCollection.SaveSettings();
             if (jiraConnection == null)
             {
-                jiraConnection = new JiraConnection(jiraConnectionSettings);
+                jiraConnection = new JiraConnection(settingsCollection.JiraConnectionSettings);
             }
             else
             {
-                jiraConnection.ReConnect(jiraConnectionSettings);
+                jiraConnection.ReConnect(settingsCollection.JiraConnectionSettings);
             }
-        }
 
-        public void SaveAppSettings()
-        {
-            appSettings.SaveSettings();
-            ActivityChecker.UpdateAppSettings(appSettings);
+            ActivityChecker.UpdateAppSettings(settingsCollection.AppSettings);
         }
 
         public void StartIdleTimer()
         {
+            ActivityChecker.StopActivityCheck();
+
+            runningTimerWhenIdle = JiraTimerCollection.GetRunningTimerId();
+            if (runningTimerWhenIdle.HasValue)
+            {
+                jiraTimerCollection.StopTimer(runningTimerWhenIdle.Value);
+            }
             idleTimerCollection.NewLockTimer();
         }
 
         public Guid StopIdleTimer()
         {
+            ActivityChecker.StartActivityCheck();
+
+            if (runningTimerWhenIdle.HasValue)
+            {
+                var timer = jiraTimerCollection.GetTimer(runningTimerWhenIdle.Value);
+                if (timer.DateStarted.Date == DateTime.Now.Date)
+                {
+                    jiraTimerCollection.StartTimer(runningTimerWhenIdle.Value);
+                    runningTimerWhenIdle = null;    
+                }
+            }
             return idleTimerCollection.StopLockedTimers();
         }
 
@@ -113,14 +148,9 @@ namespace Gallifrey
             get { return idleTimerCollection; }
         }
 
-        public IAppSettings AppSettings
+        public ISettingsCollection Settings
         {
-            get { return appSettings; }
-        }
-
-        public IJiraConnectionSettings JiraConnectionSettings
-        {
-            get { return jiraConnectionSettings; }
+            get { return settingsCollection; }
         }
 
         public IJiraConnection JiraConnection

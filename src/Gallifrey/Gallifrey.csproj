@@ -51,6 +51,7 @@
     <Compile Include="Backend.cs" />
     <Compile Include="Exceptions\IdleTimers\NoIdleTimerRunningException.cs" />
     <Compile Include="Exceptions\JiraTimers\IdleTimerRunningException.cs" />
+    <Compile Include="ExtensionMethods\DateTimeExtensionMethods.cs" />
     <Compile Include="IdleTimers\IdleTimer.cs" />
     <Compile Include="IdleTimers\IdleTimerCollection.cs" />
     <Compile Include="Exceptions\IntergrationPoints\MissingJiraConfigException.cs" />
@@ -65,12 +66,13 @@
     <Compile Include="JiraTimers\JiraTimerCollection.cs" />
     <Compile Include="ExtensionMethods\TimespanExtensionMethods.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Serialization\AppSettingsSerializer.cs" />
+    <Compile Include="Serialization\SettingsCollectionSerializer.cs" />
     <Compile Include="Serialization\IdleTimerCollectionSerializer.cs" />
     <Compile Include="Serialization\DataEncryption.cs" />
-    <Compile Include="Serialization\JiraConnectionSettingsSerializer.cs" />
     <Compile Include="Serialization\JiraTimerCollectionSerializer.cs" />
     <Compile Include="Settings\AppSettings.cs" />
+    <Compile Include="Settings\SettingsCollection.cs" />
+    <Compile Include="Settings\UISettings.cs" />
     <Compile Include="Settings\JiraConnnectionSettings.cs" />
     <Compile Include="Settings\FilePathSettings.cs" />
     <Compile Include="Settings\UiAnimationLevel.cs" />

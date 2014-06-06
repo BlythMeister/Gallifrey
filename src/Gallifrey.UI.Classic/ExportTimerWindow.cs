@@ -12,10 +12,11 @@ namespace Gallifrey.UI.Classic
         private readonly IBackend gallifrey;
         private readonly JiraTimer timerToShow;
         private readonly Issue jiraIssue;
-        internal readonly bool DisplayForm = true;
+        internal bool DisplayForm { get; private set; }
 
         public ExportTimerWindow(IBackend gallifrey, Guid timerGuid)
         {
+            DisplayForm = true;
             this.gallifrey = gallifrey;
             timerToShow = gallifrey.JiraTimerCollection.GetTimer(timerGuid);
             InitializeComponent();
@@ -24,7 +25,7 @@ namespace Gallifrey.UI.Classic
             var loggedTime = new TimeSpan();
             foreach (var worklog in jiraIssue.GetWorklogs())
             {
-                if (worklog.StartDate.HasValue && worklog.StartDate.Value.Date == timerToShow.DateStarted.Date && worklog.Author.ToLower() == gallifrey.JiraConnectionSettings.JiraUsername.ToLower())
+                if (worklog.StartDate.HasValue && worklog.StartDate.Value.Date == timerToShow.DateStarted.Date && worklog.Author.ToLower() == gallifrey.Settings.JiraConnectionSettings.JiraUsername.ToLower())
                 {
                     loggedTime = loggedTime.Add(new TimeSpan(0, 0, (int)worklog.TimeSpentInSeconds));
                 }
@@ -33,7 +34,7 @@ namespace Gallifrey.UI.Classic
 
             timerToShow = gallifrey.JiraTimerCollection.GetTimer(timerGuid);
 
-            if (timerToShow.TimeToExport.TotalMinutes <= 0)
+            if (timerToShow.TimeToExport.TotalMinutes < 1)
             {
                 MessageBox.Show("There Is No Time To Export", "Nothing To Export", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 DisplayForm = false;
@@ -56,6 +57,8 @@ namespace Gallifrey.UI.Classic
             {
                 calExportDate.Value = DateTime.Now;
             }
+
+            TopMost = gallifrey.Settings.UiSettings.AlwaysOnTop;
         }
 
         private bool ExportTime()
@@ -158,7 +161,14 @@ namespace Gallifrey.UI.Classic
 
         private void btnOK_Click(object sender, EventArgs e)
         {
-            if (ExportTime()) Close();
+            if (ExportTime())
+            {
+                Close();
+            }
+            else
+            {
+                DialogResult = DialogResult.None;
+            }
         }
 
         private void radSetValue_CheckedChanged(object sender, EventArgs e)
@@ -167,5 +177,12 @@ namespace Gallifrey.UI.Classic
             txtSetValueMins.Enabled = radSetValue.Checked;
         }
 
+        private void ExportTimerWindow_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Alt && e.KeyCode == Keys.Enter)
+            {
+                btnOK_Click(sender, null);
+            }
+        }
     }
 }

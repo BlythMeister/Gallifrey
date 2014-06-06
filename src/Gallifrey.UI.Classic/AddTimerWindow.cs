@@ -3,29 +3,64 @@ using System.Windows.Forms;
 using Atlassian.Jira;
 using Gallifrey.Exceptions.IntergrationPoints;
 using Gallifrey.Exceptions.JiraTimers;
+using Gallifrey.ExtensionMethods;
 
 namespace Gallifrey.UI.Classic
 {
     public partial class AddTimerWindow : Form
     {
         private readonly IBackend gallifrey;
+        public Guid? NewTimerId { get; private set; }
+        internal bool DisplayForm { get; private set; }
 
         public AddTimerWindow(IBackend gallifrey)
         {
+            DisplayForm = true;
             this.gallifrey = gallifrey;
             InitializeComponent();
-            calStartDate.MinDate = DateTime.Now.AddDays(gallifrey.AppSettings.KeepTimersForDays*-1);
-            calStartDate.MaxDate = DateTime.Now.AddDays(gallifrey.AppSettings.KeepTimersForDays);
+            calStartDate.MinDate = DateTime.Now.AddDays(gallifrey.Settings.AppSettings.KeepTimersForDays * -1);
+            calStartDate.MaxDate = DateTime.Now.AddDays(gallifrey.Settings.AppSettings.KeepTimersForDays);
+
+            TopMost = gallifrey.Settings.UiSettings.AlwaysOnTop;           
         }
 
-        public void PreLoadData(string jiraRef)
+        public void PreLoadJira(string jiraRef)
         {
             txtJiraRef.Text = jiraRef;
+            txtJiraRef.Enabled = false;
+        }
+
+        public void PreLoadDate(DateTime startDate)
+        {
+            if (!startDate.Between(calStartDate.MinDate, calStartDate.MaxDate))
+            {
+                MessageBox.Show(
+                    "New timer start date is not valid for the minimum and maximum duration of timers to keep.\nHave you updated the days to keep in settings?",
+                    "New timer date invalid", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                DisplayForm = false;
+            }
+            else
+            {
+                calStartDate.Value = startDate;
+            }
+        }
+
+        public void PreLoadTime(TimeSpan time)
+        {
+            txtStartHours.Text = time.Hours.ToString();
+            txtStartMins.Text = time.Minutes.ToString();
         }
 
         private void btnAddTimer_Click(object sender, EventArgs e)
         {
-            if (AddJira()) Close();
+            if (AddJira())
+            {
+                Close();
+            }
+            else
+            {
+                DialogResult = DialogResult.None;
+            }
         }
 
         private bool AddJira()
@@ -49,14 +84,17 @@ namespace Gallifrey.UI.Classic
                 return false;
             }
 
-            if (MessageBox.Show(string.Format("Jira found!\n\nRef: {0}\nName: {1}\n\nIs that correct?", jiraIssue.Key, jiraIssue.Summary), "Correct Jira?", MessageBoxButtons.YesNo) == DialogResult.No)
+            if (txtJiraRef.Enabled)
             {
-                return false;
+                if (MessageBox.Show(string.Format("Jira found!\n\nRef: {0}\nName: {1}\n\nIs that correct?", jiraIssue.Key, jiraIssue.Summary), "Correct Jira?", MessageBoxButtons.YesNo) == DialogResult.No)
+                {
+                    return false;
+                }
             }
 
             try
             {
-                gallifrey.JiraTimerCollection.AddTimer(jiraIssue, startDate, seedTime, chkStartNow.Checked);
+                NewTimerId = gallifrey.JiraTimerCollection.AddTimer(jiraIssue, startDate, seedTime, chkStartNow.Checked);
             }
             catch (DuplicateTimerException)
             {
@@ -83,6 +121,22 @@ namespace Gallifrey.UI.Classic
             {
                 chkStartNow.Enabled = true;
             }
+        }
+
+        private void btnSearch_Click(object sender, EventArgs e)
+        {
+            TopMost = false;
+            var searchForm = new SearchWindow(gallifrey);
+            searchForm.SetFromAddWindow();
+            searchForm.ShowDialog();
+
+            if (!string.IsNullOrWhiteSpace(searchForm.JiraReference))
+            {
+                txtJiraRef.Text = searchForm.JiraReference;
+                txtJiraRef.Enabled = false;
+            }
+
+            TopMost = gallifrey.Settings.UiSettings.AlwaysOnTop;
         }
     }
 }
