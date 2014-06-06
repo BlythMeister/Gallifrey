@@ -19,6 +19,8 @@ namespace Gallifrey.UI.Classic
             InitializeComponent();
             
             txtJiraRef.Text = timerToShow.JiraReference;
+
+            TopMost = gallifrey.Settings.UiSettings.AlwaysOnTop;
         }
         
         private bool AdjustTime()
@@ -57,7 +59,14 @@ namespace Gallifrey.UI.Classic
 
         private void btnOK_Click(object sender, EventArgs e)
         {
-            if (AdjustTime()) Close();
+            if (AdjustTime())
+            {
+                Close();
+            }
+            else
+            {
+                DialogResult = DialogResult.None;
+            }
         }
     }
 }

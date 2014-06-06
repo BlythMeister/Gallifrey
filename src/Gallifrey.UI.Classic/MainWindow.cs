@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Deployment.Application;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Text;
 using System.Globalization;
@@ -7,12 +9,15 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Windows.Forms;
 using Gallifrey.Exceptions.IntergrationPoints;
 using Gallifrey.Exceptions.JiraTimers;
 using Gallifrey.ExtensionMethods;
 using Gallifrey.JiraTimers;
 using Microsoft.Win32;
+using System.Runtime.InteropServices;
+using System.Drawing.Text;
 
 namespace Gallifrey.UI.Classic
 {
@@ -43,20 +48,63 @@ namespace Gallifrey.UI.Classic
 
         private void MainWindow_Load(object sender, EventArgs e)
         {
-            Height = gallifrey.AppSettings.UiHeight;
-            Width = gallifrey.AppSettings.UiWidth;
+            Height = gallifrey.Settings.UiSettings.Height;
+            Width = gallifrey.Settings.UiSettings.Width;
 
             SetVersionNumber();
             RefreshTimerPages();
             SetupDisplayFont();
+            SetToolTips();
+            HandleUnexpectedErrors();
             formTimer.Enabled = true;
+        }
+
+        private void MainWindow_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Control)
+            {
+                switch (e.KeyCode)
+                {
+                    case Keys.A:
+                        btnAddTimer_Click(sender, null);
+                        break;
+                    case Keys.D:
+                        btnRemoveTimer_Click(sender, null);
+                        break;
+                    case Keys.F:
+                        btnSearch_Click(sender, null);
+                        break;
+                    case Keys.C:
+                        btnTimeEdit_Click(sender, null);
+                        break;
+                    case Keys.R:
+                        btnRename_Click(sender, null);
+                        break;
+                    case Keys.E:
+                        btnExport_Click(sender, null);
+                        break;
+                    case Keys.L:
+                        btnIdle_Click(sender, null);
+                        break;
+                    case Keys.I:
+                        btnAbout_Click(sender, null);
+                        break;
+                    case Keys.S:
+                        btnSettings_Click(sender, null);
+                        break;
+                    case Keys.J:
+                        lblCurrentTime_DoubleClick(sender, null);
+                        break;
+                }
+            }
         }
 
         private void MainWindow_FormClosed(object sender, FormClosedEventArgs e)
         {
-            gallifrey.AppSettings.UiHeight = Height;
-            gallifrey.AppSettings.UiWidth = Width;
+            gallifrey.Settings.UiSettings.Height = Height;
+            gallifrey.Settings.UiSettings.Width = Width;
             gallifrey.Close();
+            notifyAlert.Visible = false;
         }
 
         private void formTimer_Tick(object sender, EventArgs e)
@@ -91,7 +139,22 @@ namespace Gallifrey.UI.Classic
                     MessageBox.Show("Use the version of this timer for today!", "Wrong Day!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
+
             RefreshTimerPages();
+            var runningId = gallifrey.JiraTimerCollection.GetRunningTimerId();
+            if (runningId.HasValue)
+            {
+                SelectTimer(runningId.Value);
+            }
+        }
+
+        private void lblCurrentTime_DoubleClick(object sender, EventArgs e)
+        {
+            var runningId = gallifrey.JiraTimerCollection.GetRunningTimerId();
+            if (runningId.HasValue)
+            {
+                SelectTimer(runningId.Value);
+            }
         }
 
         #region "Button Handlers
@@ -99,8 +162,21 @@ namespace Gallifrey.UI.Classic
         private void btnAddTimer_Click(object sender, EventArgs e)
         {
             var addForm = new AddTimerWindow(gallifrey);
-            addForm.ShowDialog();
-            RefreshTimerPages();
+            var selectedTab = tabTimerDays.SelectedTab;
+            if (selectedTab != null)
+            {
+                if (gallifrey.JiraTimerCollection.GetTimersForADate(DateTime.Now.Date).Any())
+                {
+                    var tabDate = DateTime.ParseExact(selectedTab.Name, "yyyyMMdd", CultureInfo.InvariantCulture);
+                    addForm.PreLoadDate(tabDate);
+                }
+            }
+            if (addForm.DisplayForm)
+            {
+                addForm.ShowDialog();
+                RefreshTimerPages();
+                if (addForm.NewTimerId.HasValue) SelectTimer(addForm.NewTimerId.Value);
+            }
         }
 
         private void btnRemoveTimer_Click(object sender, EventArgs e)
@@ -108,8 +184,12 @@ namespace Gallifrey.UI.Classic
             var selectedTab = tabTimerDays.SelectedTab;
             if (selectedTab == null) return;
             var selectedTimer = (JiraTimer)((ListBox)selectedTab.Controls[string.Format("lst_{0}", selectedTab.Name)]).SelectedItem;
-            gallifrey.JiraTimerCollection.RemoveTimer(selectedTimer.UniqueId);
-            RefreshTimerPages();
+
+            if (MessageBox.Show(string.Format("Are you sure you want to remove timer for '{0}'?", selectedTimer.JiraReference), "Are You Sure", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                gallifrey.JiraTimerCollection.RemoveTimer(selectedTimer.UniqueId);
+                RefreshTimerPages();
+            }
         }
 
         private void btnSettings_Click(object sender, EventArgs e)
@@ -153,10 +233,10 @@ namespace Gallifrey.UI.Classic
 
         private void btnIdle_Click(object sender, EventArgs e)
         {
-            var idleTimerWindow = new IdleTimerWindow(gallifrey);
-            if (idleTimerWindow.DisplayForm)
+            var lockedTimerWindow = new LockedTimerWindow(gallifrey);
+            if (lockedTimerWindow.DisplayForm)
             {
-                idleTimerWindow.ShowDialog();
+                lockedTimerWindow.ShowDialog();
                 RefreshTimerPages();
             }
         }
@@ -166,6 +246,13 @@ namespace Gallifrey.UI.Classic
             var searchForm = new SearchWindow(gallifrey);
             searchForm.ShowDialog();
             RefreshTimerPages();
+            if (searchForm.NewTimerId.HasValue) SelectTimer(searchForm.NewTimerId.Value);
+        }
+
+        private void btnAbout_Click(object sender, EventArgs e)
+        {
+            var aboutForm = new AboutWindow();
+            aboutForm.ShowDialog();
         }
 
         #endregion
@@ -212,24 +299,31 @@ namespace Gallifrey.UI.Classic
             switch (e.Reason)
             {
                 case SessionSwitchReason.SessionLock:
+                    var openForms = Application.OpenForms.Cast<Form>().ToList();
+                    foreach (var form in openForms.Where(form => form.Name != "MainWindow"))
+                    {
+                        form.Close();
+                    }
+
                     gallifrey.StartIdleTimer();
                     break;
                 case SessionSwitchReason.SessionUnlock:
+                    BringToFront();
                     var idleTimerId = gallifrey.StopIdleTimer();
                     var idleTimer = gallifrey.IdleTimerCollection.GetTimer(idleTimerId);
-                    if (idleTimer.ExactCurrentTime.TotalSeconds < 15)
+                    if (idleTimer.ExactCurrentTime.TotalSeconds < 60 || idleTimer.ExactCurrentTime.TotalHours > 10)
                     {
-                        MessageBox.Show("Machine Locked For Less Than 15 Seconds.\nIf Your Machine Went Into Screensaver Without Being Locked The Idle Time Cannot Be Captured", "Short Idle Time", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         gallifrey.IdleTimerCollection.RemoveTimer(idleTimerId);
                     }
                     else
                     {
-                        var idleTimerWindow = new IdleTimerWindow(gallifrey);
-                        if (idleTimerWindow.DisplayForm)
+                        var lockedTimerWindow = new LockedTimerWindow(gallifrey);
+                        lockedTimerWindow.Closed += (o, args) => RefreshTimerPages();
+                        if (lockedTimerWindow.DisplayForm)
                         {
-                            idleTimerWindow.ShowDialog();
-                            RefreshTimerPages();
-                        }  
+                            lockedTimerWindow.BringToFront();
+                            lockedTimerWindow.Show();
+                        }
                     }
                     break;
             }
@@ -239,25 +333,23 @@ namespace Gallifrey.UI.Classic
 
         #region "UI Hlpers"
 
+        [DllImport("gdi32.dll")]
+        private static extern IntPtr AddFontMemResourceEx(IntPtr pbFont, uint cbFont, IntPtr pdv, [In] ref uint pcFonts);
+
         private void SetupDisplayFont()
         {
+            var fontArray = Properties.Resources.digital7;
+            var dataLenth = fontArray.Length;
+
+            var ptrData = Marshal.AllocCoTaskMem(dataLenth);
+            Marshal.Copy(fontArray, 0, ptrData, dataLenth);
+            uint cfonts = 0;
+            AddFontMemResourceEx(ptrData, (uint) dataLenth, IntPtr.Zero, ref cfonts);
+            
             var privateFonts = new PrivateFontCollection();
 
-            var resource = string.Empty;
-            foreach (var name in GetType().Assembly.GetManifestResourceNames().Where(name => name.Contains("digital7.ttf")))
-            {
-                resource = name;
-                break;
-            }
-
-            var fontStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resource);
-            var data = Marshal.AllocCoTaskMem((int)fontStream.Length);
-            var fontdata = new byte[fontStream.Length];
-            fontStream.Read(fontdata, 0, (int)fontStream.Length);
-            Marshal.Copy(fontdata, 0, data, (int)fontStream.Length);
-            privateFonts.AddMemoryFont(data, (int)fontStream.Length);
-            fontStream.Close();
-            Marshal.FreeCoTaskMem(data);
+            privateFonts.AddMemoryFont(ptrData, dataLenth);
+            Marshal.FreeCoTaskMem(ptrData);
 
             lblCurrentTime.Font = new Font(privateFonts.Families[0], 50);
         }
@@ -299,13 +391,17 @@ namespace Gallifrey.UI.Classic
 
                 var tabName = timerDate.Date.ToString("yyyyMMdd");
                 var tabListName = string.Format("lst_{0}", tabName);
-                var tabDisplay = timerDate.Date.ToString("ddd, dd MMM");
+                var tabDisplay = string.Format("{0} [ {1} ]", timerDate.Date.ToString("ddd, dd MMM"), timers.GetTotalTimeForDate(timerDate).FormatAsString());
                 var page = tabTimerDays.TabPages[tabName];
 
                 if (page == null)
                 {
                     page = new TabPage(tabName) { Name = tabName, Text = tabDisplay };
                     tabTimerDays.TabPages.Insert(itteration, page);
+                }
+                else
+                {
+                    page.Text = tabDisplay;
                 }
 
                 ListBox timerList;
@@ -346,6 +442,7 @@ namespace Gallifrey.UI.Classic
                 if (foundMatch)
                 {
                     tabTimerDays.SelectedTab = tabPage;
+                    break;
                 }
             }
         }
@@ -389,13 +486,79 @@ namespace Gallifrey.UI.Classic
             var n = 0;
             while (n++ < (int)DateTime.Today.DayOfWeek)
             {
-                target = target.Add(gallifrey.AppSettings.TargetLogPerDay);
+                target = target.Add(gallifrey.Settings.AppSettings.TargetLogPerDay);
             }
 
             lblExportedWeek.Text = string.Format("Exported: {0}", exportedTime.FormatAsString(false));
             lblExportTargetWeek.Text = string.Format("Target: {0}", target.FormatAsString(false));
             progExportTarget.Maximum = (int)target.TotalMinutes;
-            progExportTarget.Value = (int)exportedTime.TotalMinutes;
+
+            var exportedMinutes = (int)exportedTime.TotalMinutes;
+            progExportTarget.Value = exportedMinutes > progExportTarget.Maximum ? progExportTarget.Maximum : exportedMinutes;
+        }
+
+        private void SetToolTips()
+        {
+            toolTip.SetToolTip(btnAddTimer, "Add New Timer (CTRL+A)");
+            toolTip.SetToolTip(btnRemoveTimer, "Remove Selected Timer (CTRL+D)");
+            toolTip.SetToolTip(btnSearch, "Search Jira (CTRL+F)");
+            toolTip.SetToolTip(btnTimeEdit, "Edit Current Time (CTRL+C)");
+            toolTip.SetToolTip(btnRename, "Change Jira For Timer (CTRL+R)");
+            toolTip.SetToolTip(btnExport, "Export Time To Jira (CTRL+E)");
+            toolTip.SetToolTip(btnIdle, "View Machine Locked Timers (CTRL+L)");
+            toolTip.SetToolTip(btnAbout, "About (CTRL+I)");
+            toolTip.SetToolTip(btnSettings, "Settings (CTRL+S)");
+            toolTip.SetToolTip(lblCurrentTime, "Double Click Jump To Running (CTRL+J)");
+        }
+
+        #endregion
+
+        #region "Unhandled Errors"
+
+        private void HandleUnexpectedErrors()
+        {
+            Application.ThreadException += ThreadExceptionHandler;
+            AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionHandler;
+        }
+
+        private void UnhandledExceptionHandler(object sender, UnhandledExceptionEventArgs e)
+        {
+            HandleUnexpectedError(e.ExceptionObject.ToString());
+        }
+
+        private void ThreadExceptionHandler(object sender, ThreadExceptionEventArgs e)
+        {
+            HandleUnexpectedError(string.Format("{0}\n{1}", e.Exception.Message, e.Exception.StackTrace));
+        }
+
+        private void HandleUnexpectedError(string message)
+        {
+            try
+            {
+                const string eventSource = "Gallifrey";
+                if (!EventLog.SourceExists(eventSource))
+                {
+                    EventLog.CreateEventSource(eventSource, eventSource);
+                }
+
+                EventLog.WriteEntry(eventSource, message, EventLogEntryType.Error);
+            }
+            catch (Exception)
+            {
+                var fileName = string.Format("Error-{0}.txt", Guid.NewGuid());
+
+                var path = Path.Combine(Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.System)), "Temp", "Gallifrey Errors");
+                if (!Directory.Exists(path)) Directory.CreateDirectory(path);
+                File.WriteAllText(Path.Combine(path, fileName), message);
+            }
+            
+            if (MessageBox.Show("Sorry An Unexpected Error Has Occured!\n\nDo You Want To Restart The App?", "Unexpected Error", MessageBoxButtons.YesNo, MessageBoxIcon.Error) == DialogResult.Yes)
+            {
+                Application.Restart();
+            }
+
+            MainWindow_FormClosed(null, null);
+            Application.ExitThread();
         }
 
         #endregion

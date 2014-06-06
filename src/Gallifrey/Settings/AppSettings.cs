@@ -1,5 +1,4 @@
 ﻿using System;
-using Gallifrey.Serialization;
 
 namespace Gallifrey.Settings
 {
@@ -9,10 +8,6 @@ namespace Gallifrey.Settings
         int AlertTimeMilliseconds { get; set; }
         int KeepTimersForDays { get; set; }
         TimeSpan TargetLogPerDay { get; set; }
-        int UiHeight { get; set; }
-        int UiWidth { get; set; }
-        bool UiAlwaysOnTop { get; set; }
-        UiAnimationLevel UiAnimationLevel { get; set; }
     }
 
     public class AppSettings : IAppSettings
@@ -21,14 +16,10 @@ namespace Gallifrey.Settings
         public int AlertTimeMilliseconds { get; set; }
         public int KeepTimersForDays { get; set; }
         public TimeSpan TargetLogPerDay { get; set; }
-        public int UiHeight { get; set; }
-        public int UiWidth { get; set; }
-        public bool UiAlwaysOnTop { get; set; }
-        public UiAnimationLevel UiAnimationLevel { get; set; }
 
-        internal void SaveSettings()
+        public AppSettings()
         {
-            AppSettingsSerializer.Serialize(this);    
+            KeepTimersForDays = 7;
         }
     }
 }

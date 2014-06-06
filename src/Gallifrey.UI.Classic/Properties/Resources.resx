@@ -121,37 +121,61 @@
   <data name="Rename_48x48" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Icons\Rename_48x48.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Delete_48x48" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Icons\Delete_48x48.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Search_48x48" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Icons\Search_48x48.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Synchronize_48x48" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Icons\Synchronize_48x48.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Cancel_48x48" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Icons\Cancel_48x48.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Edit_48x48" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Icons\Edit_48x48.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Settings_48x48" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Icons\Settings_48x48.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Key_48x48" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Icons\Key_48x48.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="clock_blue_128x128" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Icons\clock_blue 128x128.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Save_48x48" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Icons\Save_48x48.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Check_48x48" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Icons\Check_48x48.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Add_48x48" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Icons\Add_48x48.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Synchronize_48x48" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Icons\Synchronize_48x48.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Information_48x48" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Icons\Information_48x48.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Upload_48x48" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Icons\Upload_48x48.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="clock_blue_128x128" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Icons\clock_blue 128x128.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Key_48x48" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Icons\Key_48x48.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Cancel_48x48" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Icons\Cancel_48x48.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Search_48x48" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Icons\Search_48x48.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Edit_48x48" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Icons\Edit_48x48.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Refresh_48x48" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Icons\Refresh_48x48.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Delete_48x48" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Icons\Delete_48x48.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Add_48x48" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Icons\Add_48x48.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Settings_48x48" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Icons\Settings_48x48.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Mail_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Icons\Mail_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Twitter_logo_blue" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Icons\Twitter_logo_blue.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="GitHub_Mark_32px" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Icons\GitHub_Mark_32px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="pp_logo_100px" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Icons\pp_logo_100px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="digital7" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Font\digital7.ttf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
 </root>

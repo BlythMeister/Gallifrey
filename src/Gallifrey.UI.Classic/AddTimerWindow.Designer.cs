@@ -43,14 +43,16 @@
             this.btnAddTimer = new System.Windows.Forms.Button();
             this.chkStartNow = new System.Windows.Forms.CheckBox();
             this.label7 = new System.Windows.Forms.Label();
+            this.btnSearch = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // txtJiraRef
             // 
+            this.txtJiraRef.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
             this.txtJiraRef.Location = new System.Drawing.Point(123, 47);
             this.txtJiraRef.Name = "txtJiraRef";
             this.txtJiraRef.Size = new System.Drawing.Size(157, 25);
-            this.txtJiraRef.TabIndex = 0;
+            this.txtJiraRef.TabIndex = 2;
             // 
             // label1
             // 
@@ -66,7 +68,7 @@
             this.calStartDate.Location = new System.Drawing.Point(123, 78);
             this.calStartDate.Name = "calStartDate";
             this.calStartDate.Size = new System.Drawing.Size(157, 25);
-            this.calStartDate.TabIndex = 2;
+            this.calStartDate.TabIndex = 4;
             this.calStartDate.ValueChanged += new System.EventHandler(this.calStartDate_ValueChanged);
             // 
             // txtStartHours
@@ -74,7 +76,7 @@
             this.txtStartHours.Location = new System.Drawing.Point(123, 109);
             this.txtStartHours.Name = "txtStartHours";
             this.txtStartHours.Size = new System.Drawing.Size(30, 25);
-            this.txtStartHours.TabIndex = 3;
+            this.txtStartHours.TabIndex = 6;
             this.txtStartHours.Text = "00";
             this.txtStartHours.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -83,7 +85,7 @@
             this.txtStartMins.Location = new System.Drawing.Point(208, 109);
             this.txtStartMins.Name = "txtStartMins";
             this.txtStartMins.Size = new System.Drawing.Size(30, 25);
-            this.txtStartMins.TabIndex = 4;
+            this.txtStartMins.TabIndex = 8;
             this.txtStartMins.Text = "00";
             this.txtStartMins.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -94,7 +96,7 @@
             this.label2.Location = new System.Drawing.Point(12, 9);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(105, 25);
-            this.label2.TabIndex = 5;
+            this.label2.TabIndex = 0;
             this.label2.Text = "New Timer";
             // 
             // label3
@@ -103,7 +105,7 @@
             this.label3.Location = new System.Drawing.Point(35, 84);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(84, 17);
-            this.label3.TabIndex = 6;
+            this.label3.TabIndex = 3;
             this.label3.Text = "Starting Date";
             // 
             // label4
@@ -112,7 +114,7 @@
             this.label4.Location = new System.Drawing.Point(12, 112);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(107, 17);
-            this.label4.TabIndex = 7;
+            this.label4.TabIndex = 5;
             this.label4.Text = "Pre Loaded Time";
             // 
             // label5
@@ -121,7 +123,7 @@
             this.label5.Location = new System.Drawing.Point(159, 112);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(43, 17);
-            this.label5.TabIndex = 8;
+            this.label5.TabIndex = 7;
             this.label5.Text = "Hours";
             // 
             // label6
@@ -135,11 +137,12 @@
             // 
             // btnCancelAddTimer
             // 
+            this.btnCancelAddTimer.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancelAddTimer.Image = global::Gallifrey.UI.Classic.Properties.Resources.Cancel_48x48;
-            this.btnCancelAddTimer.Location = new System.Drawing.Point(173, 172);
+            this.btnCancelAddTimer.Location = new System.Drawing.Point(123, 172);
             this.btnCancelAddTimer.Name = "btnCancelAddTimer";
             this.btnCancelAddTimer.Size = new System.Drawing.Size(65, 65);
-            this.btnCancelAddTimer.TabIndex = 11;
+            this.btnCancelAddTimer.TabIndex = 13;
             this.btnCancelAddTimer.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnCancelAddTimer.UseVisualStyleBackColor = true;
             this.btnCancelAddTimer.Click += new System.EventHandler(this.btnCancelAddTimer_Click);
@@ -147,10 +150,10 @@
             // btnAddTimer
             // 
             this.btnAddTimer.Image = global::Gallifrey.UI.Classic.Properties.Resources.Check_48x48;
-            this.btnAddTimer.Location = new System.Drawing.Point(60, 172);
+            this.btnAddTimer.Location = new System.Drawing.Point(48, 172);
             this.btnAddTimer.Name = "btnAddTimer";
             this.btnAddTimer.Size = new System.Drawing.Size(65, 65);
-            this.btnAddTimer.TabIndex = 10;
+            this.btnAddTimer.TabIndex = 12;
             this.btnAddTimer.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnAddTimer.UseVisualStyleBackColor = true;
             this.btnAddTimer.Click += new System.EventHandler(this.btnAddTimer_Click);
@@ -161,7 +164,7 @@
             this.chkStartNow.Location = new System.Drawing.Point(123, 140);
             this.chkStartNow.Name = "chkStartNow";
             this.chkStartNow.Size = new System.Drawing.Size(15, 14);
-            this.chkStartNow.TabIndex = 12;
+            this.chkStartNow.TabIndex = 11;
             this.chkStartNow.UseVisualStyleBackColor = true;
             // 
             // label7
@@ -170,14 +173,29 @@
             this.label7.Location = new System.Drawing.Point(45, 138);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(72, 17);
-            this.label7.TabIndex = 13;
+            this.label7.TabIndex = 10;
             this.label7.Text = "Start Now?";
+            // 
+            // btnSearch
+            // 
+            this.btnSearch.Image = global::Gallifrey.UI.Classic.Properties.Resources.Search_48x48;
+            this.btnSearch.Location = new System.Drawing.Point(194, 172);
+            this.btnSearch.Name = "btnSearch";
+            this.btnSearch.Size = new System.Drawing.Size(65, 65);
+            this.btnSearch.TabIndex = 14;
+            this.btnSearch.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.btnSearch.UseVisualStyleBackColor = true;
+            this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
             // 
             // AddTimerWindow
             // 
+            this.AcceptButton = this.btnAddTimer;
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CancelButton = this.btnCancelAddTimer;
             this.ClientSize = new System.Drawing.Size(296, 251);
+            this.ControlBox = false;
+            this.Controls.Add(this.btnSearch);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.chkStartNow);
             this.Controls.Add(this.btnCancelAddTimer);
@@ -193,11 +211,14 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.txtJiraRef);
             this.Font = new System.Drawing.Font("Segoe UI", 9.75F);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.MaximumSize = new System.Drawing.Size(312, 289);
-            this.MinimumSize = new System.Drawing.Size(312, 289);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "AddTimerWindow";
+            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Gallifrey - Add Timer";
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -220,5 +241,6 @@
         private System.Windows.Forms.Button btnCancelAddTimer;
         private System.Windows.Forms.CheckBox chkStartNow;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Button btnSearch;
     }
 }

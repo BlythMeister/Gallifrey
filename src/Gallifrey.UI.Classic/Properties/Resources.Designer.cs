@@ -111,6 +111,16 @@ namespace Gallifrey.UI.Classic.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] digital7 {
+            get {
+                object obj = ResourceManager.GetObject("digital7", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap Edit_48x48 {
@@ -123,9 +133,49 @@ namespace Gallifrey.UI.Classic.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap GitHub_Mark_32px {
+            get {
+                object obj = ResourceManager.GetObject("GitHub_Mark_32px", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Information_48x48 {
+            get {
+                object obj = ResourceManager.GetObject("Information_48x48", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Key_48x48 {
             get {
                 object obj = ResourceManager.GetObject("Key_48x48", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Mail_32x32 {
+            get {
+                object obj = ResourceManager.GetObject("Mail_32x32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap pp_logo_100px {
+            get {
+                object obj = ResourceManager.GetObject("pp_logo_100px", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -146,6 +196,16 @@ namespace Gallifrey.UI.Classic.Properties {
         internal static System.Drawing.Bitmap Rename_48x48 {
             get {
                 object obj = ResourceManager.GetObject("Rename_48x48", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Save_48x48 {
+            get {
+                object obj = ResourceManager.GetObject("Save_48x48", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -176,6 +236,26 @@ namespace Gallifrey.UI.Classic.Properties {
         internal static System.Drawing.Bitmap Synchronize_48x48 {
             get {
                 object obj = ResourceManager.GetObject("Synchronize_48x48", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Twitter_logo_blue {
+            get {
+                object obj = ResourceManager.GetObject("Twitter_logo_blue", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Upload_48x48 {
+            get {
+                object obj = ResourceManager.GetObject("Upload_48x48", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
