@@ -78,6 +78,15 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Atlassian.SDK.3.0.0-beta1\lib\Atlassian.Jira.dll</HintPath>
     </Reference>
+    <Reference Include="Exceptionless">
+      <HintPath>..\packages\Exceptionless.1.5.2064\lib\net45\Exceptionless.dll</HintPath>
+    </Reference>
+    <Reference Include="Exceptionless.Models">
+      <HintPath>..\packages\Exceptionless.1.5.2064\lib\net45\Exceptionless.Models.dll</HintPath>
+    </Reference>
+    <Reference Include="Exceptionless.Windows">
+      <HintPath>..\packages\Exceptionless.Windows.1.5.2064\lib\net45\Exceptionless.Windows.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.4.5.3\lib\net40\Newtonsoft.Json.dll</HintPath>
