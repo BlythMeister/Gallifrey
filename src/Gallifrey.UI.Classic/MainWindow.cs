@@ -56,6 +56,7 @@ namespace Gallifrey.UI.Classic
             RefreshTimerPages();
             SetupDisplayFont();
             SetToolTips();
+            CheckForUpdates();
             formTimer.Enabled = true;
 
             if (gallifrey.JiraTimerCollection.GetRunningTimerId().HasValue)
@@ -122,7 +123,7 @@ namespace Gallifrey.UI.Classic
             SetDisplayClock();
             SetExportStats();
             SetExportTargetStats();
-            CheckForUpdate();
+            CheckIfUpdateCallNeeded();
         }
 
         private void DoubleClickListBox(object sender, EventArgs e)
@@ -509,23 +510,29 @@ namespace Gallifrey.UI.Classic
             progExportTarget.Value = exportedMinutes > progExportTarget.Maximum ? progExportTarget.Maximum : exportedMinutes;
         }
 
-        private void CheckForUpdate()
+        private void CheckIfUpdateCallNeeded()
         {
             if (ApplicationDeployment.IsNetworkDeployed &&
                 ApplicationDeployment.CurrentDeployment.TimeOfLastUpdateCheck < DateTime.UtcNow.AddMinutes(-30))
             {
-                try
-                {
-                    var updateInfo = ApplicationDeployment.CurrentDeployment.CheckForDetailedUpdate();
+                CheckForUpdates();
+            }
+        }
 
-                    if (updateInfo.UpdateAvailable && updateInfo.AvailableVersion > ApplicationDeployment.CurrentDeployment.CurrentVersion)
-                    {
-                        ApplicationDeployment.CurrentDeployment.UpdateCompleted += (sender, args) => lblUpdate.Visible = true;
-                        ApplicationDeployment.CurrentDeployment.UpdateAsync();
-                    }
+        private void CheckForUpdates()
+        {
+            try
+            {
+                var updateInfo = ApplicationDeployment.CurrentDeployment.CheckForDetailedUpdate();
+
+                if (updateInfo.UpdateAvailable && updateInfo.AvailableVersion > ApplicationDeployment.CurrentDeployment.CurrentVersion)
+                {
+                    ApplicationDeployment.CurrentDeployment.UpdateCompleted += (sender, args) => lblUpdate.Visible = true;
+                    ApplicationDeployment.CurrentDeployment.UpdateAsync();
                 }
-                catch (Exception) { }
-                
+            }
+            catch (Exception)
+            {
             }
         }
 
