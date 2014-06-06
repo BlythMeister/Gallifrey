@@ -251,6 +251,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="clock_blue.ico" />
+    <None Include="Icons\Download_16x16.png" />
     <None Include="Icons\pp_logo_100px.png" />
     <None Include="Icons\pp_log_100px.png" />
     <None Include="Icons\GitHub_Mark_32px.png" />
