@@ -214,11 +214,11 @@
             this.lblUpdate.Font = new System.Drawing.Font("Segoe UI", 9.75F);
             this.lblUpdate.Image = global::Gallifrey.UI.Classic.Properties.Resources.Download_16x16;
             this.lblUpdate.ImageAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.lblUpdate.Location = new System.Drawing.Point(296, 12);
+            this.lblUpdate.Location = new System.Drawing.Point(296, 22);
             this.lblUpdate.Name = "lblUpdate";
-            this.lblUpdate.Size = new System.Drawing.Size(136, 80);
+            this.lblUpdate.Size = new System.Drawing.Size(136, 64);
             this.lblUpdate.TabIndex = 16;
-            this.lblUpdate.Text = "     There Is An Update Avaliable\r\nClick Here To Install!";
+            this.lblUpdate.Text = "    There Is An Update Avaliable\r\nClick Here To Install!";
             this.lblUpdate.Visible = false;
             this.lblUpdate.Click += new System.EventHandler(this.lblUpdate_Click);
             // 
