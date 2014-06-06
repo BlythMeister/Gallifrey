@@ -51,12 +51,17 @@ namespace Gallifrey.UI.Classic
         {
             Height = gallifrey.Settings.UiSettings.Height;
             Width = gallifrey.Settings.UiSettings.Width;
-
+            
             SetVersionNumber();
             RefreshTimerPages();
             SetupDisplayFont();
             SetToolTips();
             formTimer.Enabled = true;
+
+            if (gallifrey.JiraTimerCollection.GetRunningTimerId().HasValue)
+            {
+                SelectTimer(gallifrey.JiraTimerCollection.GetRunningTimerId().Value);
+            }
         }
 
         private void MainWindow_KeyUp(object sender, KeyEventArgs e)
