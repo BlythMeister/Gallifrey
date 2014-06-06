@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Deployment.Application;
 using System.Diagnostics;
 using System.Drawing;
@@ -7,17 +6,15 @@ using System.Drawing.Text;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
+using Exceptionless;
 using Gallifrey.Exceptions.IntergrationPoints;
 using Gallifrey.Exceptions.JiraTimers;
 using Gallifrey.ExtensionMethods;
 using Gallifrey.JiraTimers;
 using Microsoft.Win32;
-using System.Runtime.InteropServices;
-using System.Drawing.Text;
 
 namespace Gallifrey.UI.Classic
 {
@@ -49,6 +46,7 @@ namespace Gallifrey.UI.Classic
 
             Text = isBeta ? "Gallifrey (Beta)" : "Gallifrey";
 
+            ExceptionlessClient.Current.Register();
         }
 
         private void MainWindow_Load(object sender, EventArgs e)
@@ -523,12 +521,13 @@ namespace Gallifrey.UI.Classic
 
         private void HandleUnexpectedErrors()
         {
-            Application.ThreadException += ThreadExceptionHandler;
-            AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionHandler;
+            //Application.ThreadException += ThreadExceptionHandler;
+            //AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionHandler;
         }
 
         private void UnhandledExceptionHandler(object sender, UnhandledExceptionEventArgs e)
         {
+            
             HandleUnexpectedError(e.ExceptionObject.ToString());
         }
 
@@ -568,6 +567,11 @@ namespace Gallifrey.UI.Classic
         }
 
         #endregion
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            throw new Exception("Trying To Catch Errors");
+        }
 
     }
 }
