@@ -46,6 +46,9 @@ namespace Gallifrey.UI.Classic
 
             gallifrey.NoActivityEvent += GallifreyOnNoActivityEvent;
             SystemEvents.SessionSwitch += SessionSwitchHandler;
+
+            Text = isBeta ? "Gallifrey (Beta)" : "Gallifrey";
+
         }
 
         private void MainWindow_Load(object sender, EventArgs e)
