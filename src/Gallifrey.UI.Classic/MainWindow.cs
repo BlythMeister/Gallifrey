@@ -506,7 +506,8 @@ namespace Gallifrey.UI.Classic
 
         private void CheckForUpdate()
         {
-            if (ApplicationDeployment.IsNetworkDeployed && ApplicationDeployment.CurrentDeployment.TimeOfLastUpdateCheck > DateTime.UtcNow.AddMinutes(-30))
+            if (ApplicationDeployment.IsNetworkDeployed &&
+                ApplicationDeployment.CurrentDeployment.TimeOfLastUpdateCheck < DateTime.UtcNow.AddMinutes(-30))
             {
                 try
                 {
