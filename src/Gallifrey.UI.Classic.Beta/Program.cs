@@ -13,7 +13,7 @@ namespace Gallifrey.UI.Classic.Beta
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainWindow());
+            Application.Run(new MainWindow(true));
         }
     }
 }
