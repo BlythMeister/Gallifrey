@@ -45,6 +45,7 @@
             this.lblExportStat = new System.Windows.Forms.Label();
             this.notifyAlert = new System.Windows.Forms.NotifyIcon(this.components);
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.lblUpdate = new System.Windows.Forms.Label();
             this.btnAbout = new System.Windows.Forms.Button();
             this.btnIdle = new System.Windows.Forms.Button();
             this.btnRename = new System.Windows.Forms.Button();
@@ -129,9 +130,9 @@
             this.grpTarget.Controls.Add(this.progExportTarget);
             this.grpTarget.Controls.Add(this.lblExportedWeek);
             this.grpTarget.Controls.Add(this.lblExportTargetWeek);
-            this.grpTarget.Location = new System.Drawing.Point(580, 9);
+            this.grpTarget.Location = new System.Drawing.Point(651, 9);
             this.grpTarget.Name = "grpTarget";
-            this.grpTarget.Size = new System.Drawing.Size(383, 83);
+            this.grpTarget.Size = new System.Drawing.Size(312, 83);
             this.grpTarget.TabIndex = 4;
             this.grpTarget.TabStop = false;
             this.grpTarget.Text = "Target Export Week To Date";
@@ -142,7 +143,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.progExportTarget.Location = new System.Drawing.Point(9, 42);
             this.progExportTarget.Name = "progExportTarget";
-            this.progExportTarget.Size = new System.Drawing.Size(368, 35);
+            this.progExportTarget.Size = new System.Drawing.Size(297, 35);
             this.progExportTarget.TabIndex = 2;
             // 
             // lblExportedWeek
@@ -169,7 +170,7 @@
             // 
             this.grpExportStats.Controls.Add(this.lblUnexportedTime);
             this.grpExportStats.Controls.Add(this.lblExportStat);
-            this.grpExportStats.Location = new System.Drawing.Point(367, 12);
+            this.grpExportStats.Location = new System.Drawing.Point(438, 12);
             this.grpExportStats.Name = "grpExportStats";
             this.grpExportStats.Size = new System.Drawing.Size(207, 80);
             this.grpExportStats.TabIndex = 3;
@@ -206,6 +207,20 @@
             this.notifyAlert.Visible = true;
             this.notifyAlert.BalloonTipClicked += new System.EventHandler(this.notifyAlert_BalloonTipClicked);
             this.notifyAlert.DoubleClick += new System.EventHandler(this.notifyAlert_DoubleClick);
+            // 
+            // lblUpdate
+            // 
+            this.lblUpdate.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblUpdate.Font = new System.Drawing.Font("Segoe UI", 9.75F);
+            this.lblUpdate.Image = global::Gallifrey.UI.Classic.Properties.Resources.Download_16x16;
+            this.lblUpdate.ImageAlign = System.Drawing.ContentAlignment.TopLeft;
+            this.lblUpdate.Location = new System.Drawing.Point(296, 12);
+            this.lblUpdate.Name = "lblUpdate";
+            this.lblUpdate.Size = new System.Drawing.Size(136, 80);
+            this.lblUpdate.TabIndex = 16;
+            this.lblUpdate.Text = "     There Is An Update Avaliable\r\nClick Here To Install!";
+            this.lblUpdate.Visible = false;
+            this.lblUpdate.Click += new System.EventHandler(this.lblUpdate_Click);
             // 
             // btnAbout
             // 
@@ -321,6 +336,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(975, 595);
+            this.Controls.Add(this.lblUpdate);
             this.Controls.Add(this.btnAbout);
             this.Controls.Add(this.btnIdle);
             this.Controls.Add(this.grpExportStats);
@@ -385,6 +401,7 @@
         private System.Windows.Forms.Button btnIdle;
         private System.Windows.Forms.ToolTip toolTip;
         private System.Windows.Forms.Button btnAbout;
+        private System.Windows.Forms.Label lblUpdate;
     }
 }
 

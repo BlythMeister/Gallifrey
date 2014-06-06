@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Deployment.Application;
 using System.Drawing;
 using System.Drawing.Text;
@@ -116,6 +117,7 @@ namespace Gallifrey.UI.Classic
             SetDisplayClock();
             SetExportStats();
             SetExportTargetStats();
+            CheckForUpdate();
         }
 
         private void DoubleClickListBox(object sender, EventArgs e)
@@ -252,6 +254,11 @@ namespace Gallifrey.UI.Classic
         {
             var aboutForm = new AboutWindow(isBeta);
             aboutForm.ShowDialog();
+        }
+        
+        private void lblUpdate_Click(object sender, EventArgs e)
+        {
+            Application.Restart();
         }
 
         #endregion
@@ -495,6 +502,20 @@ namespace Gallifrey.UI.Classic
 
             var exportedMinutes = (int)exportedTime.TotalMinutes;
             progExportTarget.Value = exportedMinutes > progExportTarget.Maximum ? progExportTarget.Maximum : exportedMinutes;
+        }
+
+        private void CheckForUpdate()
+        {
+            if (ApplicationDeployment.IsNetworkDeployed)
+            {
+                var updateInfo = ApplicationDeployment.CurrentDeployment.CheckForDetailedUpdate();
+
+                if (updateInfo.UpdateAvailable)
+                {
+                    ApplicationDeployment.CurrentDeployment.UpdateCompleted += (sender, args) => lblUpdate.Visible = true;
+                    ApplicationDeployment.CurrentDeployment.UpdateAsync();
+                }
+            }
         }
 
         private void SetToolTips()
