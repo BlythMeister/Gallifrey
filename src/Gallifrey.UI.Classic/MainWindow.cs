@@ -508,13 +508,18 @@ namespace Gallifrey.UI.Classic
         {
             if (ApplicationDeployment.IsNetworkDeployed)
             {
-                var updateInfo = ApplicationDeployment.CurrentDeployment.CheckForDetailedUpdate();
-
-                if (updateInfo.UpdateAvailable)
+                try
                 {
-                    ApplicationDeployment.CurrentDeployment.UpdateCompleted += (sender, args) => lblUpdate.Visible = true;
-                    ApplicationDeployment.CurrentDeployment.UpdateAsync();
+                    var updateInfo = ApplicationDeployment.CurrentDeployment.CheckForDetailedUpdate();
+
+                    if (updateInfo.UpdateAvailable)
+                    {
+                        ApplicationDeployment.CurrentDeployment.UpdateCompleted += (sender, args) => lblUpdate.Visible = true;
+                        ApplicationDeployment.CurrentDeployment.UpdateAsync();
+                    }
                 }
+                catch (Exception) { }
+                
             }
         }
 
