@@ -23,10 +23,12 @@ namespace Gallifrey.UI.Classic
 {
     public partial class MainWindow : Form
     {
+        private readonly bool isBeta;
         private readonly IBackend gallifrey;
 
-        public MainWindow()
+        public MainWindow(bool isBeta)
         {
+            this.isBeta = isBeta;
             InitializeComponent();
             gallifrey = new Backend();
             try
@@ -251,7 +253,7 @@ namespace Gallifrey.UI.Classic
 
         private void btnAbout_Click(object sender, EventArgs e)
         {
-            var aboutForm = new AboutWindow();
+            var aboutForm = new AboutWindow(isBeta);
             aboutForm.ShowDialog();
         }
 
@@ -360,6 +362,7 @@ namespace Gallifrey.UI.Classic
             var myVersion = networkDeploy ? ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString() : Application.ProductVersion;
             myVersion = string.Format("v{0}", myVersion);
             if (!networkDeploy) myVersion = string.Format("{0} (manual)", myVersion);
+            if (isBeta) myVersion = string.Format("{0} (beta)", myVersion);
             lblVersion.Text = myVersion;
         }
 
