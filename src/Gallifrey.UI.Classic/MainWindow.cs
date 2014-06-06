@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Deployment.Application;
-using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Text;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Threading;
 using System.Windows.Forms;
 using Exceptionless;
 using Gallifrey.Exceptions.IntergrationPoints;
@@ -58,7 +55,6 @@ namespace Gallifrey.UI.Classic
             RefreshTimerPages();
             SetupDisplayFont();
             SetToolTips();
-            HandleUnexpectedErrors();
             formTimer.Enabled = true;
         }
 
@@ -516,62 +512,6 @@ namespace Gallifrey.UI.Classic
         }
 
         #endregion
-
-        #region "Unhandled Errors"
-
-        private void HandleUnexpectedErrors()
-        {
-            //Application.ThreadException += ThreadExceptionHandler;
-            //AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionHandler;
-        }
-
-        private void UnhandledExceptionHandler(object sender, UnhandledExceptionEventArgs e)
-        {
-            
-            HandleUnexpectedError(e.ExceptionObject.ToString());
-        }
-
-        private void ThreadExceptionHandler(object sender, ThreadExceptionEventArgs e)
-        {
-            HandleUnexpectedError(string.Format("{0}\n{1}", e.Exception.Message, e.Exception.StackTrace));
-        }
-
-        private void HandleUnexpectedError(string message)
-        {
-            try
-            {
-                const string eventSource = "Gallifrey";
-                if (!EventLog.SourceExists(eventSource))
-                {
-                    EventLog.CreateEventSource(eventSource, eventSource);
-                }
-
-                EventLog.WriteEntry(eventSource, message, EventLogEntryType.Error);
-            }
-            catch (Exception)
-            {
-                var fileName = string.Format("Error-{0}.txt", Guid.NewGuid());
-
-                var path = Path.Combine(Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.System)), "Temp", "Gallifrey Errors");
-                if (!Directory.Exists(path)) Directory.CreateDirectory(path);
-                File.WriteAllText(Path.Combine(path, fileName), message);
-            }
-            
-            if (MessageBox.Show("Sorry An Unexpected Error Has Occured!\n\nDo You Want To Restart The App?", "Unexpected Error", MessageBoxButtons.YesNo, MessageBoxIcon.Error) == DialogResult.Yes)
-            {
-                Application.Restart();
-            }
-
-            MainWindow_FormClosed(null, null);
-            Application.ExitThread();
-        }
-
-        #endregion
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            throw new Exception("Trying To Catch Errors");
-        }
 
     }
 }
