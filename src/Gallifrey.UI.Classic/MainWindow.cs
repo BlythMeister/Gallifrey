@@ -6,6 +6,7 @@ using System.Drawing.Text;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Exceptionless;
 using Gallifrey.Exceptions.IntergrationPoints;
@@ -115,8 +116,8 @@ namespace Gallifrey.UI.Classic
                         lblCurrentTime_DoubleClick(sender, null);
                         break;
                     case Keys.Down:
-                            tabList.SelectedIndex = 0;
-                            tabList.Focus();
+                        tabList.SelectedIndex = 0;
+                        tabList.Focus();
                         break;
                     case Keys.Right:
                         if (selectedTab.TabIndex < tabTimerDays.TabPages.Count - 1)
@@ -400,12 +401,17 @@ namespace Gallifrey.UI.Classic
             catch (Exception) {/*Intentional - use default font*/}
         }
 
-        private void SetVersionNumber(bool checkingUpdate = false)
+        private void SetVersionNumber(bool checkingUpdate = false, bool noUpdate = false)
         {
             var networkDeploy = ApplicationDeployment.IsNetworkDeployed;
             myVersion = networkDeploy ? ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString() : Application.ProductVersion;
             var betaText = isBeta ? " (beta)" : "";
-            var upToDateText = checkingUpdate ? "Checking Updates!" : networkDeploy ? "Up To Date!" : "Invalid Deployment";
+            var upToDateText = "Invalid Deployment";
+
+            if (networkDeploy) upToDateText = "Up To Date!";
+            if (checkingUpdate) upToDateText = "Checking Updates!";
+            if (noUpdate) upToDateText = "No New Updates!";
+
             myVersion = string.Format("Currently Running v{0}{1}\n{2}", myVersion, betaText, upToDateText);
             if (!networkDeploy)
             {
@@ -544,7 +550,7 @@ namespace Gallifrey.UI.Classic
             lblExportedWeek.Text = string.Format("Exported: {0}", exportedTime.FormatAsString(false));
             lblExportTargetWeek.Text = string.Format("Target: {0}", target.FormatAsString(false));
             progExportTarget.Maximum = (int)target.TotalMinutes;
-            
+
             if (progExportTarget.Maximum == 0)
             {
                 progExportTarget.Maximum = 1;
@@ -553,7 +559,7 @@ namespace Gallifrey.UI.Classic
             else
             {
                 var exportedMinutes = (int)exportedTime.TotalMinutes;
-                progExportTarget.Value = exportedMinutes > progExportTarget.Maximum ? progExportTarget.Maximum : exportedMinutes;    
+                progExportTarget.Value = exportedMinutes > progExportTarget.Maximum ? progExportTarget.Maximum : exportedMinutes;
             }
         }
 
@@ -576,18 +582,19 @@ namespace Gallifrey.UI.Classic
         #region "Updates
 
 
-        private void lblUpdate_DoubleClick(object sender, EventArgs e)
+        private async void lblUpdate_DoubleClick(object sender, EventArgs e)
         {
             if (ApplicationDeployment.IsNetworkDeployed)
             {
                 if (ApplicationDeployment.CurrentDeployment.UpdatedVersion != ApplicationDeployment.CurrentDeployment.CurrentVersion)
                 {
-                    Application.Restart();    
+                    Application.Restart();
                 }
                 else
                 {
                     SetVersionNumber(true);
-                    CheckForUpdates(true);    
+                    await Task.Delay(2000);
+                    CheckForUpdates(true);
                 }
             }
             else
@@ -598,9 +605,9 @@ namespace Gallifrey.UI.Classic
 
         private void CheckIfUpdateCallNeeded()
         {
-            if (ApplicationDeployment.IsNetworkDeployed &&
-                lastUpdateCheck < DateTime.UtcNow.AddMinutes(-15))
+            if (ApplicationDeployment.IsNetworkDeployed && lastUpdateCheck < DateTime.UtcNow.AddMinutes(-15))
             {
+                SetVersionNumber();
                 CheckForUpdates(false);
             }
         }
@@ -619,7 +626,7 @@ namespace Gallifrey.UI.Classic
                 }
                 else if (manualCheck)
                 {
-                    SetVersionNumber();
+                    SetVersionNumber(noUpdate: true);
                 }
             }
             catch (Exception)
