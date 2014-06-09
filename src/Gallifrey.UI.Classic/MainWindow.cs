@@ -46,6 +46,14 @@ namespace Gallifrey.UI.Classic
             SystemEvents.SessionSwitch += SessionSwitchHandler;
 
             ExceptionlessClient.Current.Register();
+            ExceptionlessClient.Current.UnhandledExceptionReporting += OnUnhandledExceptionReporting;
+        }
+
+        private void OnUnhandledExceptionReporting(object sender, UnhandledExceptionReportingEventArgs e)
+        {
+            e.Error.Tags.Add(lblVersion.Text);
+            e.Error.UserEmail = gallifrey.Settings.JiraConnectionSettings.JiraUsername;
+            e.Error.UserName = gallifrey.Settings.JiraConnectionSettings.JiraUsername;
         }
 
         private void MainWindow_Load(object sender, EventArgs e)
