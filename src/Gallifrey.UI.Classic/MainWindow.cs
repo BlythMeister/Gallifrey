@@ -20,11 +20,14 @@ namespace Gallifrey.UI.Classic
     {
         private readonly bool isBeta;
         private readonly IBackend gallifrey;
+        private DateTime lastUpdateCheck;
 
         public MainWindow(bool isBeta)
         {
-            this.isBeta = isBeta;
             InitializeComponent();
+            this.isBeta = isBeta;
+            lastUpdateCheck = DateTime.MinValue;
+
             gallifrey = new Backend();
             try
             {
@@ -548,7 +551,7 @@ namespace Gallifrey.UI.Classic
         private void CheckIfUpdateCallNeeded()
         {
             if (ApplicationDeployment.IsNetworkDeployed &&
-                ApplicationDeployment.CurrentDeployment.TimeOfLastUpdateCheck < DateTime.UtcNow.AddMinutes(-15))
+                lastUpdateCheck < DateTime.UtcNow.AddMinutes(-15))
             {
                 CheckForUpdates();
             }
@@ -559,6 +562,7 @@ namespace Gallifrey.UI.Classic
             try
             {
                 var updateInfo = ApplicationDeployment.CurrentDeployment.CheckForDetailedUpdate();
+                lastUpdateCheck = DateTime.UtcNow;
 
                 if (updateInfo.UpdateAvailable && updateInfo.AvailableVersion > ApplicationDeployment.CurrentDeployment.CurrentVersion)
                 {
