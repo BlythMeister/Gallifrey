@@ -396,7 +396,10 @@ namespace Gallifrey.UI.Classic
                 privateFonts.AddMemoryFont(ptrData, dataLenth);
                 Marshal.FreeCoTaskMem(ptrData);
 
-                lblCurrentTime.Font = new Font(privateFonts.Families[0], 50);
+                if (privateFonts.Families.Any())
+                {
+                    lblCurrentTime.Font = new Font(privateFonts.Families[0], 50);
+                }
             }
             catch (Exception) {/*Intentional - use default font*/}
         }
