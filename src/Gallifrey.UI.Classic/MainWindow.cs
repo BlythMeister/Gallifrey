@@ -45,8 +45,6 @@ namespace Gallifrey.UI.Classic
             gallifrey.NoActivityEvent += GallifreyOnNoActivityEvent;
             SystemEvents.SessionSwitch += SessionSwitchHandler;
 
-            Text = isBeta ? "Gallifrey (Beta)" : "Gallifrey";
-
             ExceptionlessClient.Current.Register();
         }
 
@@ -54,6 +52,7 @@ namespace Gallifrey.UI.Classic
         {
             Height = gallifrey.Settings.UiSettings.Height;
             Width = gallifrey.Settings.UiSettings.Width;
+            Text = isBeta ? "Gallifrey (Beta)" : "Gallifrey";
 
             SetVersionNumber();
             RefreshTimerPages();
@@ -353,20 +352,24 @@ namespace Gallifrey.UI.Classic
 
         private void SetupDisplayFont()
         {
-            var fontArray = Properties.Resources.digital7;
-            var dataLenth = fontArray.Length;
+            try
+            {
+                var fontArray = Properties.Resources.digital7;
+                var dataLenth = fontArray.Length;
 
-            var ptrData = Marshal.AllocCoTaskMem(dataLenth);
-            Marshal.Copy(fontArray, 0, ptrData, dataLenth);
-            uint cfonts = 0;
-            AddFontMemResourceEx(ptrData, (uint)dataLenth, IntPtr.Zero, ref cfonts);
+                var ptrData = Marshal.AllocCoTaskMem(dataLenth);
+                Marshal.Copy(fontArray, 0, ptrData, dataLenth);
+                uint cfonts = 0;
+                AddFontMemResourceEx(ptrData, (uint)dataLenth, IntPtr.Zero, ref cfonts);
 
-            var privateFonts = new PrivateFontCollection();
+                var privateFonts = new PrivateFontCollection();
 
-            privateFonts.AddMemoryFont(ptrData, dataLenth);
-            Marshal.FreeCoTaskMem(ptrData);
+                privateFonts.AddMemoryFont(ptrData, dataLenth);
+                Marshal.FreeCoTaskMem(ptrData);
 
-            lblCurrentTime.Font = new Font(privateFonts.Families[0], 50);
+                lblCurrentTime.Font = new Font(privateFonts.Families[0], 50);
+            }
+            catch (Exception) {/*Intentional - use default font*/}
         }
 
         private void SetVersionNumber()
