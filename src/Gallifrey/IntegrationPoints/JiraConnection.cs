@@ -173,7 +173,7 @@ namespace Gallifrey.IntegrationPoints
             string remaining = null;
             if (remainingTime.HasValue)
             {
-                remaining = string.Format("{0}h {1}m", exportTime.Hours, exportTime.Minutes);
+                remaining = string.Format("{0}h {1}m", remainingTime.Value.Hours, remainingTime.Value.Minutes);
             }
             try
             {
