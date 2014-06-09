@@ -70,6 +70,9 @@ namespace Gallifrey.UI.Classic
         {
             if (e.Control)
             {
+                var selectedTab = tabTimerDays.SelectedTab;
+                var tabList = (ListBox)selectedTab.Controls[string.Format("lst_{0}", selectedTab.Name)];
+
                 switch (e.KeyCode)
                 {
                     case Keys.A:
@@ -103,18 +106,25 @@ namespace Gallifrey.UI.Classic
                         lblCurrentTime_DoubleClick(sender, null);
                         break;
                     case Keys.Down:
-                        tabTimerDays.Focus();
+                            tabList.SelectedIndex = 0;
+                            tabList.Focus();
                         break;
                     case Keys.Right:
-                        if (tabTimerDays.SelectedIndex < tabTimerDays.TabPages.Count - 1)
+                        if (selectedTab.TabIndex < tabTimerDays.TabPages.Count - 1)
                         {
                             tabTimerDays.SelectedIndex++;
+                            tabList = (ListBox)tabTimerDays.SelectedTab.Controls[string.Format("lst_{0}", tabTimerDays.SelectedTab.Name)];
+                            tabList.SelectedIndex = 0;
+                            tabList.Focus();
                         }
                         break;
                     case Keys.Left:
-                        if (tabTimerDays.SelectedIndex > 0)
+                        if (selectedTab.TabIndex > 0)
                         {
                             tabTimerDays.SelectedIndex--;
+                            tabList = (ListBox)tabTimerDays.SelectedTab.Controls[string.Format("lst_{0}", tabTimerDays.SelectedTab.Name)];
+                            tabList.SelectedIndex = 0;
+                            tabList.Focus();
                         }
                         break;
                 }
