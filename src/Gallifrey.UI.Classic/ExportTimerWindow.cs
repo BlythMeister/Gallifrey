@@ -65,7 +65,7 @@ namespace Gallifrey.UI.Classic
         {
             int hours, minutes;
 
-            if (!int.TryParse(txtExportHours.Text, out hours) || !int.TryParse(txtExportMins.Text, out minutes))
+            if (!int.TryParse(txtSetValueHours.Text, out hours) || !int.TryParse(txtSetValueMins.Text, out minutes))
             {
                 MessageBox.Show("Invalid Hours/Minutes Entered For Export!", "Invalid Export", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
