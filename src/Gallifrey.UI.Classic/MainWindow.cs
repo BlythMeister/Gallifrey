@@ -585,7 +585,7 @@ namespace Gallifrey.UI.Classic
         #region "Updates
 
 
-        private async void lblUpdate_DoubleClick(object sender, EventArgs e)
+        private void lblUpdate_DoubleClick(object sender, EventArgs e)
         {
             if (ApplicationDeployment.IsNetworkDeployed)
             {
@@ -596,7 +596,6 @@ namespace Gallifrey.UI.Classic
                 else
                 {
                     SetVersionNumber(true);
-                    await Task.Delay(2000);
                     CheckForUpdates(true);
                 }
             }
@@ -615,7 +614,7 @@ namespace Gallifrey.UI.Classic
             }
         }
 
-        private void CheckForUpdates(bool manualCheck)
+        private async void CheckForUpdates(bool manualCheck)
         {
             try
             {
@@ -629,6 +628,7 @@ namespace Gallifrey.UI.Classic
                 }
                 else if (manualCheck)
                 {
+                    await Task.Delay(1500);
                     SetVersionNumber(noUpdate: true);
                 }
             }
