@@ -10,13 +10,14 @@ namespace Gallifrey.UI.Classic
         private readonly List<string> contributors;
         private int position;
 
-        public AboutWindow()
+        public AboutWindow(bool isBeta)
         {
             InitializeComponent();
                 var networkDeploy = ApplicationDeployment.IsNetworkDeployed;
             var myVersion = networkDeploy ? ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString() : Application.ProductVersion;
             myVersion = string.Format("Current Version: {0}", myVersion);
             if (!networkDeploy) myVersion = string.Format("{0} (manual)", myVersion);
+            if (isBeta) myVersion = string.Format("{0} (beta)", myVersion);
             lblCurrentVersion.Text = myVersion;
 
             contributors = new List<string>()
