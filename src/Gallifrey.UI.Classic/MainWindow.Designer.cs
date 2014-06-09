@@ -80,6 +80,7 @@
             this.lblVersion.Size = new System.Drawing.Size(92, 13);
             this.lblVersion.TabIndex = 2;
             this.lblVersion.Text = "v0.0.0.0 (manual)";
+            this.lblVersion.DoubleClick += new System.EventHandler(this.lblVersion_DoubleClick);
             // 
             // label3
             // 
@@ -214,11 +215,11 @@
             this.lblUpdate.Font = new System.Drawing.Font("Segoe UI", 9.75F);
             this.lblUpdate.Image = global::Gallifrey.UI.Classic.Properties.Resources.Download_16x16;
             this.lblUpdate.ImageAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.lblUpdate.Location = new System.Drawing.Point(296, 22);
+            this.lblUpdate.Location = new System.Drawing.Point(296, 28);
             this.lblUpdate.Name = "lblUpdate";
             this.lblUpdate.Size = new System.Drawing.Size(136, 64);
             this.lblUpdate.TabIndex = 16;
-            this.lblUpdate.Text = "    There Is An Update Avaliable\r\nClick Here To Install!";
+            this.lblUpdate.Text = "    Update to v99.99.99.99.\r\nClick Here To Restart.";
             this.lblUpdate.Visible = false;
             this.lblUpdate.Click += new System.EventHandler(this.lblUpdate_Click);
             // 
