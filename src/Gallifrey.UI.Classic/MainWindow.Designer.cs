@@ -56,9 +56,11 @@
             this.btnRemoveTimer = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.btnAddTimer = new System.Windows.Forms.Button();
+            this.grpUpdates = new System.Windows.Forms.GroupBox();
             this.grpTarget.SuspendLayout();
             this.grpExportStats.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.grpUpdates.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -211,16 +213,14 @@
             // 
             // lblUpdate
             // 
-            this.lblUpdate.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblUpdate.Font = new System.Drawing.Font("Segoe UI", 9.75F);
             this.lblUpdate.Image = global::Gallifrey.UI.Classic.Properties.Resources.Download_16x16;
             this.lblUpdate.ImageAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.lblUpdate.Location = new System.Drawing.Point(296, 28);
+            this.lblUpdate.Location = new System.Drawing.Point(9, 18);
             this.lblUpdate.Name = "lblUpdate";
-            this.lblUpdate.Size = new System.Drawing.Size(136, 64);
+            this.lblUpdate.Size = new System.Drawing.Size(121, 55);
             this.lblUpdate.TabIndex = 16;
-            this.lblUpdate.Text = "    Update Avaliable To v99.99.99.99.\r\nClick Here To Restart.";
-            this.lblUpdate.Visible = false;
+            this.lblUpdate.Text = "     v99.99.99.99\r\nClick Here To Restart.";
             this.lblUpdate.Click += new System.EventHandler(this.lblUpdate_Click);
             // 
             // btnAbout
@@ -332,12 +332,23 @@
             this.btnAddTimer.UseVisualStyleBackColor = true;
             this.btnAddTimer.Click += new System.EventHandler(this.btnAddTimer_Click);
             // 
+            // grpUpdates
+            // 
+            this.grpUpdates.Controls.Add(this.lblUpdate);
+            this.grpUpdates.Location = new System.Drawing.Point(296, 12);
+            this.grpUpdates.Name = "grpUpdates";
+            this.grpUpdates.Size = new System.Drawing.Size(136, 80);
+            this.grpUpdates.TabIndex = 17;
+            this.grpUpdates.TabStop = false;
+            this.grpUpdates.Text = "Update Avaliable";
+            this.grpUpdates.Visible = false;
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(975, 595);
-            this.Controls.Add(this.lblUpdate);
+            this.Controls.Add(this.grpUpdates);
             this.Controls.Add(this.btnAbout);
             this.Controls.Add(this.btnIdle);
             this.Controls.Add(this.grpExportStats);
@@ -370,6 +381,7 @@
             this.grpExportStats.ResumeLayout(false);
             this.grpExportStats.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.grpUpdates.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -403,6 +415,7 @@
         private System.Windows.Forms.ToolTip toolTip;
         private System.Windows.Forms.Button btnAbout;
         private System.Windows.Forms.Label lblUpdate;
+        private System.Windows.Forms.GroupBox grpUpdates;
     }
 }
 
