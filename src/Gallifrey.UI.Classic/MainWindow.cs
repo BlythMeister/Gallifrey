@@ -611,8 +611,8 @@ namespace Gallifrey.UI.Classic
 
         private void UpdateComplete(object sender, AsyncCompletedEventArgs e)
         {
-            lblUpdate.Visible = true;
-            lblUpdate.Text = string.Format("    Update Avaliable To v{0}.\nClick Here To Restart.", ApplicationDeployment.CurrentDeployment.UpdatedVersion);
+            grpUpdates.Visible = true;
+            lblUpdate.Text = string.Format("     v{0}\nClick Here To Restart.", ApplicationDeployment.CurrentDeployment.UpdatedVersion);
         }
 
         #endregion
