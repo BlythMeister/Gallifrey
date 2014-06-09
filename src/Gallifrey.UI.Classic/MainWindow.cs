@@ -102,6 +102,21 @@ namespace Gallifrey.UI.Classic
                     case Keys.J:
                         lblCurrentTime_DoubleClick(sender, null);
                         break;
+                    case Keys.Down:
+                        tabTimerDays.Focus();
+                        break;
+                    case Keys.Right:
+                        if (tabTimerDays.SelectedIndex < tabTimerDays.TabPages.Count - 1)
+                        {
+                            tabTimerDays.SelectedIndex++;
+                        }
+                        break;
+                    case Keys.Left:
+                        if (tabTimerDays.SelectedIndex > 0)
+                        {
+                            tabTimerDays.SelectedIndex--;
+                        }
+                        break;
                 }
             }
         }
@@ -527,14 +542,13 @@ namespace Gallifrey.UI.Classic
             toolTip.SetToolTip(btnAbout, "About (CTRL+I)");
             toolTip.SetToolTip(btnSettings, "Settings (CTRL+S)");
             toolTip.SetToolTip(lblCurrentTime, "Double Click Jump To Running (CTRL+J)");
-            toolTip.SetToolTip(lblCurrentTime, "Double Click Jump To Running (CTRL+J)");
             if (ApplicationDeployment.IsNetworkDeployed)
             {
-                toolTip.SetToolTip(lblUpdate, string.Format("Currently Have {0} Installed, Double Click To Check For Updates", lblUpdate.Text));
+                toolTip.SetToolTip(lblVersion, string.Format("Currently Have {0} Installed, Double Click To Check For Updates", lblVersion.Text));
             }
             else
             {
-                toolTip.SetToolTip(lblUpdate, string.Format("Currently Have {0} Installed", lblUpdate.Text));
+                toolTip.SetToolTip(lblVersion, string.Format("Currently Have {0} Installed", lblVersion.Text));
             }
         }
 
