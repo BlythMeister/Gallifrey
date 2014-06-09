@@ -51,7 +51,7 @@ namespace Gallifrey.UI.Classic
         {
             Height = gallifrey.Settings.UiSettings.Height;
             Width = gallifrey.Settings.UiSettings.Width;
-            
+
             SetVersionNumber();
             RefreshTimerPages();
             SetupDisplayFont();
@@ -261,7 +261,7 @@ namespace Gallifrey.UI.Classic
             var aboutForm = new AboutWindow(isBeta);
             aboutForm.ShowDialog();
         }
-        
+
         private void lblUpdate_Click(object sender, EventArgs e)
         {
             Application.Restart();
@@ -356,8 +356,8 @@ namespace Gallifrey.UI.Classic
             var ptrData = Marshal.AllocCoTaskMem(dataLenth);
             Marshal.Copy(fontArray, 0, ptrData, dataLenth);
             uint cfonts = 0;
-            AddFontMemResourceEx(ptrData, (uint) dataLenth, IntPtr.Zero, ref cfonts);
-            
+            AddFontMemResourceEx(ptrData, (uint)dataLenth, IntPtr.Zero, ref cfonts);
+
             var privateFonts = new PrivateFontCollection();
 
             privateFonts.AddMemoryFont(ptrData, dataLenth);
@@ -510,10 +510,45 @@ namespace Gallifrey.UI.Classic
             progExportTarget.Value = exportedMinutes > progExportTarget.Maximum ? progExportTarget.Maximum : exportedMinutes;
         }
 
+        private void SetToolTips()
+        {
+            toolTip.SetToolTip(btnAddTimer, "Add New Timer (CTRL+A)");
+            toolTip.SetToolTip(btnRemoveTimer, "Remove Selected Timer (CTRL+D)");
+            toolTip.SetToolTip(btnSearch, "Search Jira (CTRL+F)");
+            toolTip.SetToolTip(btnTimeEdit, "Edit Current Time (CTRL+C)");
+            toolTip.SetToolTip(btnRename, "Change Jira For Timer (CTRL+R)");
+            toolTip.SetToolTip(btnExport, "Export Time To Jira (CTRL+E)");
+            toolTip.SetToolTip(btnIdle, "View Machine Locked Timers (CTRL+L)");
+            toolTip.SetToolTip(btnAbout, "About (CTRL+I)");
+            toolTip.SetToolTip(btnSettings, "Settings (CTRL+S)");
+            toolTip.SetToolTip(lblCurrentTime, "Double Click Jump To Running (CTRL+J)");
+            toolTip.SetToolTip(lblCurrentTime, "Double Click Jump To Running (CTRL+J)");
+            if (ApplicationDeployment.IsNetworkDeployed)
+            {
+                toolTip.SetToolTip(lblUpdate, string.Format("Currently Have {0} Installed, Double Click To Check For Updates", lblUpdate.Text));
+            }
+            else
+            {
+                toolTip.SetToolTip(lblUpdate, string.Format("Currently Have {0} Installed", lblUpdate.Text));
+            }
+        }
+
+        #endregion
+
+        #region "Updates
+
+        private void lblVersion_DoubleClick(object sender, EventArgs e)
+        {
+            if (ApplicationDeployment.IsNetworkDeployed)
+            {
+                CheckForUpdates();
+            }
+        }
+
         private void CheckIfUpdateCallNeeded()
         {
             if (ApplicationDeployment.IsNetworkDeployed &&
-                ApplicationDeployment.CurrentDeployment.TimeOfLastUpdateCheck < DateTime.UtcNow.AddMinutes(-30))
+                ApplicationDeployment.CurrentDeployment.TimeOfLastUpdateCheck < DateTime.UtcNow.AddMinutes(-15))
             {
                 CheckForUpdates();
             }
@@ -527,7 +562,7 @@ namespace Gallifrey.UI.Classic
 
                 if (updateInfo.UpdateAvailable && updateInfo.AvailableVersion > ApplicationDeployment.CurrentDeployment.CurrentVersion)
                 {
-                    ApplicationDeployment.CurrentDeployment.UpdateCompleted += (sender, args) => lblUpdate.Visible = true;
+                    ApplicationDeployment.CurrentDeployment.UpdateCompleted += UpdateComplete;
                     ApplicationDeployment.CurrentDeployment.UpdateAsync();
                 }
             }
@@ -536,18 +571,10 @@ namespace Gallifrey.UI.Classic
             }
         }
 
-        private void SetToolTips()
+        private void UpdateComplete(object sender, AsyncCompletedEventArgs e)
         {
-            toolTip.SetToolTip(btnAddTimer, "Add New Timer (CTRL+A)");
-            toolTip.SetToolTip(btnRemoveTimer, "Remove Selected Timer (CTRL+D)");
-            toolTip.SetToolTip(btnSearch, "Search Jira (CTRL+F)");
-            toolTip.SetToolTip(btnTimeEdit, "Edit Current Time (CTRL+C)");
-            toolTip.SetToolTip(btnRename, "Change Jira For Timer (CTRL+R)");
-            toolTip.SetToolTip(btnExport, "Export Time To Jira (CTRL+E)");
-            toolTip.SetToolTip(btnIdle, "View Machine Locked Timers (CTRL+L)");
-            toolTip.SetToolTip(btnAbout, "About (CTRL+I)");
-            toolTip.SetToolTip(btnSettings, "Settings (CTRL+S)");
-            toolTip.SetToolTip(lblCurrentTime, "Double Click Jump To Running (CTRL+J)");
+            lblUpdate.Visible = true;
+            lblUpdate.Text = string.Format("    Update to v{0}.\nClick Here To Restart.", ApplicationDeployment.CurrentDeployment.UpdatedVersion);
         }
 
         #endregion
