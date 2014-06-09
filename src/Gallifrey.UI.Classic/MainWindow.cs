@@ -1,33 +1,33 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.ComponentModel;
 using System.Deployment.Application;
-using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Text;
 using System.Globalization;
-using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Threading;
 using System.Windows.Forms;
+using Exceptionless;
 using Gallifrey.Exceptions.IntergrationPoints;
 using Gallifrey.Exceptions.JiraTimers;
 using Gallifrey.ExtensionMethods;
 using Gallifrey.JiraTimers;
 using Microsoft.Win32;
-using System.Runtime.InteropServices;
-using System.Drawing.Text;
 
 namespace Gallifrey.UI.Classic
 {
     public partial class MainWindow : Form
     {
+        private readonly bool isBeta;
         private readonly IBackend gallifrey;
+        private DateTime lastUpdateCheck;
 
-        public MainWindow()
+        public MainWindow(bool isBeta)
         {
             InitializeComponent();
+            this.isBeta = isBeta;
+            lastUpdateCheck = DateTime.MinValue;
+
             gallifrey = new Backend();
             try
             {
@@ -44,25 +44,35 @@ namespace Gallifrey.UI.Classic
 
             gallifrey.NoActivityEvent += GallifreyOnNoActivityEvent;
             SystemEvents.SessionSwitch += SessionSwitchHandler;
+
+            ExceptionlessClient.Current.Register();
         }
 
         private void MainWindow_Load(object sender, EventArgs e)
         {
             Height = gallifrey.Settings.UiSettings.Height;
             Width = gallifrey.Settings.UiSettings.Width;
+            Text = isBeta ? "Gallifrey (Beta)" : "Gallifrey";
 
             SetVersionNumber();
             RefreshTimerPages();
             SetupDisplayFont();
             SetToolTips();
-            HandleUnexpectedErrors();
             formTimer.Enabled = true;
+
+            if (gallifrey.JiraTimerCollection.GetRunningTimerId().HasValue)
+            {
+                SelectTimer(gallifrey.JiraTimerCollection.GetRunningTimerId().Value);
+            }
         }
 
         private void MainWindow_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.Control)
             {
+                var selectedTab = tabTimerDays.SelectedTab;
+                var tabList = (ListBox)selectedTab.Controls[string.Format("lst_{0}", selectedTab.Name)];
+
                 switch (e.KeyCode)
                 {
                     case Keys.A:
@@ -95,6 +105,28 @@ namespace Gallifrey.UI.Classic
                     case Keys.J:
                         lblCurrentTime_DoubleClick(sender, null);
                         break;
+                    case Keys.Down:
+                            tabList.SelectedIndex = 0;
+                            tabList.Focus();
+                        break;
+                    case Keys.Right:
+                        if (selectedTab.TabIndex < tabTimerDays.TabPages.Count - 1)
+                        {
+                            tabTimerDays.SelectedIndex++;
+                            tabList = (ListBox)tabTimerDays.SelectedTab.Controls[string.Format("lst_{0}", tabTimerDays.SelectedTab.Name)];
+                            tabList.SelectedIndex = 0;
+                            tabList.Focus();
+                        }
+                        break;
+                    case Keys.Left:
+                        if (selectedTab.TabIndex > 0)
+                        {
+                            tabTimerDays.SelectedIndex--;
+                            tabList = (ListBox)tabTimerDays.SelectedTab.Controls[string.Format("lst_{0}", tabTimerDays.SelectedTab.Name)];
+                            tabList.SelectedIndex = 0;
+                            tabList.Focus();
+                        }
+                        break;
                 }
             }
         }
@@ -117,6 +149,7 @@ namespace Gallifrey.UI.Classic
             SetDisplayClock();
             SetExportStats();
             SetExportTargetStats();
+            CheckIfUpdateCallNeeded();
         }
 
         private void DoubleClickListBox(object sender, EventArgs e)
@@ -251,8 +284,13 @@ namespace Gallifrey.UI.Classic
 
         private void btnAbout_Click(object sender, EventArgs e)
         {
-            var aboutForm = new AboutWindow();
+            var aboutForm = new AboutWindow(isBeta);
             aboutForm.ShowDialog();
+        }
+
+        private void lblUpdate_Click(object sender, EventArgs e)
+        {
+            Application.Restart();
         }
 
         #endregion
@@ -338,20 +376,24 @@ namespace Gallifrey.UI.Classic
 
         private void SetupDisplayFont()
         {
-            var fontArray = Properties.Resources.digital7;
-            var dataLenth = fontArray.Length;
+            try
+            {
+                var fontArray = Properties.Resources.digital7;
+                var dataLenth = fontArray.Length;
 
-            var ptrData = Marshal.AllocCoTaskMem(dataLenth);
-            Marshal.Copy(fontArray, 0, ptrData, dataLenth);
-            uint cfonts = 0;
-            AddFontMemResourceEx(ptrData, (uint) dataLenth, IntPtr.Zero, ref cfonts);
-            
-            var privateFonts = new PrivateFontCollection();
+                var ptrData = Marshal.AllocCoTaskMem(dataLenth);
+                Marshal.Copy(fontArray, 0, ptrData, dataLenth);
+                uint cfonts = 0;
+                AddFontMemResourceEx(ptrData, (uint)dataLenth, IntPtr.Zero, ref cfonts);
 
-            privateFonts.AddMemoryFont(ptrData, dataLenth);
-            Marshal.FreeCoTaskMem(ptrData);
+                var privateFonts = new PrivateFontCollection();
 
-            lblCurrentTime.Font = new Font(privateFonts.Families[0], 50);
+                privateFonts.AddMemoryFont(ptrData, dataLenth);
+                Marshal.FreeCoTaskMem(ptrData);
+
+                lblCurrentTime.Font = new Font(privateFonts.Families[0], 50);
+            }
+            catch (Exception) {/*Intentional - use default font*/}
         }
 
         private void SetVersionNumber()
@@ -360,6 +402,7 @@ namespace Gallifrey.UI.Classic
             var myVersion = networkDeploy ? ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString() : Application.ProductVersion;
             myVersion = string.Format("v{0}", myVersion);
             if (!networkDeploy) myVersion = string.Format("{0} (manual)", myVersion);
+            if (isBeta) myVersion = string.Format("{0} (beta)", myVersion);
             lblVersion.Text = myVersion;
         }
 
@@ -492,9 +535,17 @@ namespace Gallifrey.UI.Classic
             lblExportedWeek.Text = string.Format("Exported: {0}", exportedTime.FormatAsString(false));
             lblExportTargetWeek.Text = string.Format("Target: {0}", target.FormatAsString(false));
             progExportTarget.Maximum = (int)target.TotalMinutes;
-
-            var exportedMinutes = (int)exportedTime.TotalMinutes;
-            progExportTarget.Value = exportedMinutes > progExportTarget.Maximum ? progExportTarget.Maximum : exportedMinutes;
+            
+            if (progExportTarget.Maximum == 0)
+            {
+                progExportTarget.Maximum = 1;
+                progExportTarget.Value = 1;
+            }
+            else
+            {
+                var exportedMinutes = (int)exportedTime.TotalMinutes;
+                progExportTarget.Value = exportedMinutes > progExportTarget.Maximum ? progExportTarget.Maximum : exportedMinutes;    
+            }
         }
 
         private void SetToolTips()
@@ -509,56 +560,59 @@ namespace Gallifrey.UI.Classic
             toolTip.SetToolTip(btnAbout, "About (CTRL+I)");
             toolTip.SetToolTip(btnSettings, "Settings (CTRL+S)");
             toolTip.SetToolTip(lblCurrentTime, "Double Click Jump To Running (CTRL+J)");
+            if (ApplicationDeployment.IsNetworkDeployed)
+            {
+                toolTip.SetToolTip(lblVersion, string.Format("Currently Have {0} Installed, Double Click To Check For Updates", lblVersion.Text));
+            }
+            else
+            {
+                toolTip.SetToolTip(lblVersion, string.Format("Currently Have {0} Installed", lblVersion.Text));
+            }
         }
 
         #endregion
 
-        #region "Unhandled Errors"
+        #region "Updates
 
-        private void HandleUnexpectedErrors()
+        private void lblVersion_DoubleClick(object sender, EventArgs e)
         {
-            Application.ThreadException += ThreadExceptionHandler;
-            AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionHandler;
+            if (ApplicationDeployment.IsNetworkDeployed)
+            {
+                CheckForUpdates();
+            }
         }
 
-        private void UnhandledExceptionHandler(object sender, UnhandledExceptionEventArgs e)
+        private void CheckIfUpdateCallNeeded()
         {
-            HandleUnexpectedError(e.ExceptionObject.ToString());
+            if (ApplicationDeployment.IsNetworkDeployed &&
+                lastUpdateCheck < DateTime.UtcNow.AddMinutes(-15))
+            {
+                CheckForUpdates();
+            }
         }
 
-        private void ThreadExceptionHandler(object sender, ThreadExceptionEventArgs e)
-        {
-            HandleUnexpectedError(string.Format("{0}\n{1}", e.Exception.Message, e.Exception.StackTrace));
-        }
-
-        private void HandleUnexpectedError(string message)
+        private void CheckForUpdates()
         {
             try
             {
-                const string eventSource = "Gallifrey";
-                if (!EventLog.SourceExists(eventSource))
-                {
-                    EventLog.CreateEventSource(eventSource, eventSource);
-                }
+                var updateInfo = ApplicationDeployment.CurrentDeployment.CheckForDetailedUpdate();
+                lastUpdateCheck = DateTime.UtcNow;
 
-                EventLog.WriteEntry(eventSource, message, EventLogEntryType.Error);
+                if (updateInfo.UpdateAvailable && updateInfo.AvailableVersion > ApplicationDeployment.CurrentDeployment.CurrentVersion)
+                {
+                    ApplicationDeployment.CurrentDeployment.UpdateCompleted += UpdateComplete;
+                    ApplicationDeployment.CurrentDeployment.UpdateAsync();
+                }
             }
             catch (Exception)
             {
-                var fileName = string.Format("Error-{0}.txt", Guid.NewGuid());
-
-                var path = Path.Combine(Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.System)), "Temp", "Gallifrey Errors");
-                if (!Directory.Exists(path)) Directory.CreateDirectory(path);
-                File.WriteAllText(Path.Combine(path, fileName), message);
             }
-            
-            if (MessageBox.Show("Sorry An Unexpected Error Has Occured!\n\nDo You Want To Restart The App?", "Unexpected Error", MessageBoxButtons.YesNo, MessageBoxIcon.Error) == DialogResult.Yes)
-            {
-                Application.Restart();
-            }
+        }
 
-            MainWindow_FormClosed(null, null);
-            Application.ExitThread();
+        private void UpdateComplete(object sender, AsyncCompletedEventArgs e)
+        {
+            grpUpdates.Visible = true;
+            lblUpdate.Text = string.Format("     v{0}\nClick Here To Restart.", ApplicationDeployment.CurrentDeployment.UpdatedVersion);
         }
 
         #endregion

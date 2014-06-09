@@ -15,7 +15,7 @@
     <PublishUrl>..\..\deploy\stable\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Web</InstallFrom>
-    <UpdateEnabled>true</UpdateEnabled>
+    <UpdateEnabled>false</UpdateEnabled>
     <UpdateMode>Foreground</UpdateMode>
     <UpdateInterval>7</UpdateInterval>
     <UpdateIntervalUnits>Days</UpdateIntervalUnits>
@@ -29,7 +29,7 @@
     <PublisherName>Gallifrey</PublisherName>
     <MinimumRequiredVersion>1.0.0.0</MinimumRequiredVersion>
     <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.0.0.0</ApplicationVersion>
+    <ApplicationVersion>1.0.1.0</ApplicationVersion>
     <UseApplicationTrust>true</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -77,6 +77,15 @@
     <Reference Include="Atlassian.Jira, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Atlassian.SDK.3.0.0-beta1\lib\Atlassian.Jira.dll</HintPath>
+    </Reference>
+    <Reference Include="Exceptionless">
+      <HintPath>..\packages\Exceptionless.1.5.2064\lib\net45\Exceptionless.dll</HintPath>
+    </Reference>
+    <Reference Include="Exceptionless.Models">
+      <HintPath>..\packages\Exceptionless.1.5.2064\lib\net45\Exceptionless.Models.dll</HintPath>
+    </Reference>
+    <Reference Include="Exceptionless.Windows">
+      <HintPath>..\packages\Exceptionless.Windows.1.5.2064\lib\net45\Exceptionless.Windows.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -190,9 +199,7 @@
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Font\digital7.ttf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
+    <None Include="Font\digital7.ttf" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -242,14 +249,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="clock_blue.ico" />
+    <None Include="Icons\Download_16x16.png" />
     <None Include="Icons\pp_logo_100px.png" />
-    <None Include="Icons\pp_log_100px.png" />
     <None Include="Icons\GitHub_Mark_32px.png" />
     <None Include="Icons\Twitter_logo_blue.png" />
     <None Include="Icons\Mail_32x32.png" />
     <None Include="Icons\Information_48x48.png" />
-    <None Include="Icons\pp-logo-100px.png" />
-    <None Include="Icons\GitHub-Mark-32px.png" />
     <None Include="Icons\Save_48x48.png" />
     <None Include="Icons\Upload_48x48.png" />
     <None Include="Icons\Refresh_48x48.png" />
