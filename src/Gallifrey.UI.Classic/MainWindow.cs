@@ -58,7 +58,6 @@ namespace Gallifrey.UI.Classic
             RefreshTimerPages();
             SetupDisplayFont();
             SetToolTips();
-            CheckForUpdates();
             formTimer.Enabled = true;
 
             if (gallifrey.JiraTimerCollection.GetRunningTimerId().HasValue)
