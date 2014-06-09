@@ -525,9 +525,17 @@ namespace Gallifrey.UI.Classic
             lblExportedWeek.Text = string.Format("Exported: {0}", exportedTime.FormatAsString(false));
             lblExportTargetWeek.Text = string.Format("Target: {0}", target.FormatAsString(false));
             progExportTarget.Maximum = (int)target.TotalMinutes;
-
-            var exportedMinutes = (int)exportedTime.TotalMinutes;
-            progExportTarget.Value = exportedMinutes > progExportTarget.Maximum ? progExportTarget.Maximum : exportedMinutes;
+            
+            if (progExportTarget.Maximum == 0)
+            {
+                progExportTarget.Maximum = 1;
+                progExportTarget.Value = 1;
+            }
+            else
+            {
+                var exportedMinutes = (int)exportedTime.TotalMinutes;
+                progExportTarget.Value = exportedMinutes > progExportTarget.Maximum ? progExportTarget.Maximum : exportedMinutes;    
+            }
         }
 
         private void SetToolTips()
@@ -594,7 +602,7 @@ namespace Gallifrey.UI.Classic
         private void UpdateComplete(object sender, AsyncCompletedEventArgs e)
         {
             lblUpdate.Visible = true;
-            lblUpdate.Text = string.Format("    Update to v{0}.\nClick Here To Restart.", ApplicationDeployment.CurrentDeployment.UpdatedVersion);
+            lblUpdate.Text = string.Format("    Update Avaliable To v{0}.\nClick Here To Restart.", ApplicationDeployment.CurrentDeployment.UpdatedVersion);
         }
 
         #endregion
