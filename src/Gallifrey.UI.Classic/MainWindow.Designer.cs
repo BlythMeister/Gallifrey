@@ -31,7 +31,6 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             this.label1 = new System.Windows.Forms.Label();
-            this.lblVersion = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.tabTimerDays = new System.Windows.Forms.TabControl();
             this.formTimer = new System.Windows.Forms.Timer(this.components);
@@ -72,17 +71,6 @@
             this.label1.Size = new System.Drawing.Size(163, 50);
             this.label1.TabIndex = 0;
             this.label1.Text = "Gallifrey";
-            // 
-            // lblVersion
-            // 
-            this.lblVersion.AutoSize = true;
-            this.lblVersion.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblVersion.Location = new System.Drawing.Point(98, 79);
-            this.lblVersion.Name = "lblVersion";
-            this.lblVersion.Size = new System.Drawing.Size(92, 13);
-            this.lblVersion.TabIndex = 2;
-            this.lblVersion.Text = "v0.0.0.0 (manual)";
-            this.lblVersion.DoubleClick += new System.EventHandler(this.lblVersion_DoubleClick);
             // 
             // label3
             // 
@@ -213,15 +201,15 @@
             // 
             // lblUpdate
             // 
+            this.lblUpdate.BackColor = System.Drawing.SystemColors.Control;
             this.lblUpdate.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            this.lblUpdate.Image = global::Gallifrey.UI.Classic.Properties.Resources.Download_16x16;
             this.lblUpdate.ImageAlign = System.Drawing.ContentAlignment.TopLeft;
             this.lblUpdate.Location = new System.Drawing.Point(9, 18);
             this.lblUpdate.Name = "lblUpdate";
             this.lblUpdate.Size = new System.Drawing.Size(121, 55);
             this.lblUpdate.TabIndex = 16;
-            this.lblUpdate.Text = "     v99.99.99.99\r\nClick Here To Restart.";
-            this.lblUpdate.Click += new System.EventHandler(this.lblUpdate_Click);
+            this.lblUpdate.Text = "Currently Running v99.99.99.99 (beta)\r\nUp To Date!\r\n";
+            this.lblUpdate.DoubleClick += new System.EventHandler(this.lblUpdate_DoubleClick);
             // 
             // btnAbout
             // 
@@ -334,14 +322,14 @@
             // 
             // grpUpdates
             // 
+            this.grpUpdates.BackColor = System.Drawing.SystemColors.Control;
             this.grpUpdates.Controls.Add(this.lblUpdate);
             this.grpUpdates.Location = new System.Drawing.Point(296, 12);
             this.grpUpdates.Name = "grpUpdates";
             this.grpUpdates.Size = new System.Drawing.Size(136, 80);
             this.grpUpdates.TabIndex = 17;
             this.grpUpdates.TabStop = false;
-            this.grpUpdates.Text = "Update Avaliable";
-            this.grpUpdates.Visible = false;
+            this.grpUpdates.Text = "Version Info";
             // 
             // MainWindow
             // 
@@ -362,7 +350,6 @@
             this.Controls.Add(this.tabTimerDays);
             this.Controls.Add(this.btnRemoveTimer);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.lblVersion);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btnAddTimer);
@@ -392,7 +379,6 @@
         private System.Windows.Forms.Button btnAddTimer;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.Label lblVersion;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button btnRemoveTimer;
         private System.Windows.Forms.TabControl tabTimerDays;

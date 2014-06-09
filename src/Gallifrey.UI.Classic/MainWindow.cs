@@ -21,6 +21,7 @@ namespace Gallifrey.UI.Classic
         private readonly bool isBeta;
         private readonly IBackend gallifrey;
         private DateTime lastUpdateCheck;
+        private string myVersion;
 
         public MainWindow(bool isBeta)
         {
@@ -51,7 +52,7 @@ namespace Gallifrey.UI.Classic
 
         private void OnUnhandledExceptionReporting(object sender, UnhandledExceptionReportingEventArgs e)
         {
-            e.Error.Tags.Add(lblVersion.Text);
+            e.Error.Tags.Add(myVersion);
             e.Error.UserEmail = gallifrey.Settings.JiraConnectionSettings.JiraUsername;
             e.Error.UserName = gallifrey.Settings.JiraConnectionSettings.JiraUsername;
         }
@@ -296,11 +297,6 @@ namespace Gallifrey.UI.Classic
             aboutForm.ShowDialog();
         }
 
-        private void lblUpdate_Click(object sender, EventArgs e)
-        {
-            Application.Restart();
-        }
-
         #endregion
 
         #region "Tray Icon"
@@ -407,11 +403,16 @@ namespace Gallifrey.UI.Classic
         private void SetVersionNumber()
         {
             var networkDeploy = ApplicationDeployment.IsNetworkDeployed;
-            var myVersion = networkDeploy ? ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString() : Application.ProductVersion;
-            myVersion = string.Format("v{0}", myVersion);
-            if (!networkDeploy) myVersion = string.Format("{0} (manual)", myVersion);
-            if (isBeta) myVersion = string.Format("{0} (beta)", myVersion);
-            lblVersion.Text = myVersion;
+            myVersion = networkDeploy ? ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString() : Application.ProductVersion;
+            var betaText = isBeta ? " (beta)" : "";
+            var upToDateText = networkDeploy ? "Up To Date!" : "Invalid Deployment";
+            myVersion = string.Format("Currently Running v{0}{1}\n{2}", myVersion, betaText, upToDateText);
+            if (!networkDeploy)
+            {
+                lblUpdate.BackColor = Color.Red;
+                lblUpdate.BorderStyle = BorderStyle.FixedSingle;
+            }
+            lblUpdate.Text = myVersion;
         }
 
         private void RefreshTimerPages()
@@ -568,25 +569,29 @@ namespace Gallifrey.UI.Classic
             toolTip.SetToolTip(btnAbout, "About (CTRL+I)");
             toolTip.SetToolTip(btnSettings, "Settings (CTRL+S)");
             toolTip.SetToolTip(lblCurrentTime, "Double Click Jump To Running (CTRL+J)");
-            if (ApplicationDeployment.IsNetworkDeployed)
-            {
-                toolTip.SetToolTip(lblVersion, string.Format("Currently Have {0} Installed, Double Click To Check For Updates", lblVersion.Text));
-            }
-            else
-            {
-                toolTip.SetToolTip(lblVersion, string.Format("Currently Have {0} Installed", lblVersion.Text));
-            }
         }
 
         #endregion
 
         #region "Updates
 
-        private void lblVersion_DoubleClick(object sender, EventArgs e)
+
+        private void lblUpdate_DoubleClick(object sender, EventArgs e)
         {
             if (ApplicationDeployment.IsNetworkDeployed)
             {
-                CheckForUpdates();
+                if (ApplicationDeployment.CurrentDeployment.UpdatedVersion != ApplicationDeployment.CurrentDeployment.CurrentVersion)
+                {
+                    Application.Restart();    
+                }
+                else
+                {
+                    CheckForUpdates(true);    
+                }
+            }
+            else
+            {
+                MessageBox.Show("The Version You Are Running Cannot Be Updated!!", "Invalid Version", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
         }
 
@@ -595,11 +600,11 @@ namespace Gallifrey.UI.Classic
             if (ApplicationDeployment.IsNetworkDeployed &&
                 lastUpdateCheck < DateTime.UtcNow.AddMinutes(-15))
             {
-                CheckForUpdates();
+                CheckForUpdates(false);
             }
         }
 
-        private void CheckForUpdates()
+        private void CheckForUpdates(bool manualCheck)
         {
             try
             {
@@ -611,6 +616,10 @@ namespace Gallifrey.UI.Classic
                     ApplicationDeployment.CurrentDeployment.UpdateCompleted += UpdateComplete;
                     ApplicationDeployment.CurrentDeployment.UpdateAsync();
                 }
+                else if (manualCheck)
+                {
+                    SetVersionNumber();
+                }
             }
             catch (Exception)
             {
@@ -619,11 +628,16 @@ namespace Gallifrey.UI.Classic
 
         private void UpdateComplete(object sender, AsyncCompletedEventArgs e)
         {
-            grpUpdates.Visible = true;
-            lblUpdate.Text = string.Format("     v{0}\nClick Here To Restart.", ApplicationDeployment.CurrentDeployment.UpdatedVersion);
+            grpUpdates.Text = "Update Avaliable";
+            lblUpdate.BackColor = Color.OrangeRed;
+            lblUpdate.BorderStyle = BorderStyle.FixedSingle;
+            lblUpdate.Text = string.Format("     v{0}\nDouble Click Here To Restart.", ApplicationDeployment.CurrentDeployment.UpdatedVersion);
+            lblUpdate.Image = Properties.Resources.Download_16x16;
         }
 
         #endregion
+
+
 
     }
 }
