@@ -400,12 +400,12 @@ namespace Gallifrey.UI.Classic
             catch (Exception) {/*Intentional - use default font*/}
         }
 
-        private void SetVersionNumber()
+        private void SetVersionNumber(bool checkingUpdate = false)
         {
             var networkDeploy = ApplicationDeployment.IsNetworkDeployed;
             myVersion = networkDeploy ? ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString() : Application.ProductVersion;
             var betaText = isBeta ? " (beta)" : "";
-            var upToDateText = networkDeploy ? "Up To Date!" : "Invalid Deployment";
+            var upToDateText = checkingUpdate ? "Checking Updates!" : networkDeploy ? "Up To Date!" : "Invalid Deployment";
             myVersion = string.Format("Currently Running v{0}{1}\n{2}", myVersion, betaText, upToDateText);
             if (!networkDeploy)
             {
@@ -586,6 +586,7 @@ namespace Gallifrey.UI.Classic
                 }
                 else
                 {
+                    SetVersionNumber(true);
                     CheckForUpdates(true);    
                 }
             }
