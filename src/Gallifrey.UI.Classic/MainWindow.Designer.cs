@@ -219,7 +219,7 @@
             this.lblUpdate.Name = "lblUpdate";
             this.lblUpdate.Size = new System.Drawing.Size(136, 64);
             this.lblUpdate.TabIndex = 16;
-            this.lblUpdate.Text = "    Update to v99.99.99.99.\r\nClick Here To Restart.";
+            this.lblUpdate.Text = "    Update Avaliable To v99.99.99.99.\r\nClick Here To Restart.";
             this.lblUpdate.Visible = false;
             this.lblUpdate.Click += new System.EventHandler(this.lblUpdate_Click);
             // 
