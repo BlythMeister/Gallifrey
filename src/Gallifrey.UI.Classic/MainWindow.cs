@@ -4,6 +4,7 @@ using System.Deployment.Application;
 using System.Drawing;
 using System.Drawing.Text;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
@@ -24,6 +25,7 @@ namespace Gallifrey.UI.Classic
         private readonly IBackend gallifrey;
         private DateTime lastUpdateCheck;
         private string myVersion;
+        private PrivateFontCollection privateFontCollection;
 
         public MainWindow(bool isBeta)
         {
@@ -402,30 +404,25 @@ namespace Gallifrey.UI.Classic
 
         #region "UI Hlpers"
 
-        [DllImport("gdi32.dll")]
-        private static extern IntPtr AddFontMemResourceEx(IntPtr pbFont, uint cbFont, IntPtr pdv, [In] ref uint pcFonts);
-
         private void SetupDisplayFont()
         {
             try
             {
-                var fontArray = Properties.Resources.digital7;
-                var dataLenth = fontArray.Length;
+                privateFontCollection = new PrivateFontCollection();
 
-                var ptrData = Marshal.AllocCoTaskMem(dataLenth);
-                Marshal.Copy(fontArray, 0, ptrData, dataLenth);
-                uint cfonts = 0;
-                AddFontMemResourceEx(ptrData, (uint)dataLenth, IntPtr.Zero, ref cfonts);
-
-                var privateFonts = new PrivateFontCollection();
-
-                privateFonts.AddMemoryFont(ptrData, dataLenth);
-                Marshal.FreeCoTaskMem(ptrData);
-
-                if (privateFonts.Families.Any())
+                var fontPath = Path.Combine(Environment.CurrentDirectory, "digital7.ttf");
+                if (!File.Exists(fontPath))
                 {
-                    lblCurrentTime.Font = new Font(privateFonts.Families[0], 50);
+                    File.WriteAllBytes(fontPath, Properties.Resources.digital7);
                 }
+
+                privateFontCollection.AddFontFile(fontPath);
+
+                if (privateFontCollection.Families.Any())
+                {
+                    lblCurrentTime.Font = new Font(privateFontCollection.Families[0], 50);
+                }
+
             }
             catch (Exception) {/*Intentional - use default font*/}
         }
