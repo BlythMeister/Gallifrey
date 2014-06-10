@@ -49,6 +49,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Backend.cs" />
+    <Compile Include="ChangeLog\ChangeLogProvider.cs" />
+    <Compile Include="ChangeLog\ChangeLogVersion.cs" />
     <Compile Include="Exceptions\IdleTimers\NoIdleTimerRunningException.cs" />
     <Compile Include="Exceptions\JiraTimers\IdleTimerRunningException.cs" />
     <Compile Include="ExtensionMethods\DateTimeExtensionMethods.cs" />
@@ -71,6 +73,7 @@
     <Compile Include="Serialization\DataEncryption.cs" />
     <Compile Include="Serialization\JiraTimerCollectionSerializer.cs" />
     <Compile Include="Settings\AppSettings.cs" />
+    <Compile Include="Settings\InternalSettings.cs" />
     <Compile Include="Settings\SettingsCollection.cs" />
     <Compile Include="Settings\UISettings.cs" />
     <Compile Include="Settings\JiraConnnectionSettings.cs" />

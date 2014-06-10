@@ -47,6 +47,7 @@
             this.label12 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
             this.btnOK = new System.Windows.Forms.Button();
+            this.btnChangeLog = new System.Windows.Forms.Button();
             this.btnTwitter = new System.Windows.Forms.Button();
             this.btnEmail = new System.Windows.Forms.Button();
             this.btnGitHub = new System.Windows.Forms.Button();
@@ -208,6 +209,17 @@
             this.btnOK.UseVisualStyleBackColor = true;
             this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
             // 
+            // btnChangeLog
+            // 
+            this.btnChangeLog.Image = global::Gallifrey.UI.Classic.Properties.Resources.Copy_v2_32x32;
+            this.btnChangeLog.Location = new System.Drawing.Point(322, 12);
+            this.btnChangeLog.Name = "btnChangeLog";
+            this.btnChangeLog.Size = new System.Drawing.Size(48, 46);
+            this.btnChangeLog.TabIndex = 20;
+            this.btnChangeLog.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.btnChangeLog.UseVisualStyleBackColor = true;
+            this.btnChangeLog.Click += new System.EventHandler(this.btnChangeLog_Click);
+            // 
             // btnTwitter
             // 
             this.btnTwitter.Image = global::Gallifrey.UI.Classic.Properties.Resources.Twitter_logo_blue;
@@ -258,6 +270,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(382, 686);
             this.ControlBox = false;
+            this.Controls.Add(this.btnChangeLog);
             this.Controls.Add(this.btnTwitter);
             this.Controls.Add(this.btnEmail);
             this.Controls.Add(this.label12);
@@ -317,5 +330,6 @@
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Button btnEmail;
         private System.Windows.Forms.Button btnTwitter;
+        private System.Windows.Forms.Button btnChangeLog;
     }
 }

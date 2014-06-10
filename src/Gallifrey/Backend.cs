@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Timers;
+using Gallifrey.ChangeLog;
 using Gallifrey.Exceptions.IdleTimers;
 using Gallifrey.IdleTimers;
 using Gallifrey.InactiveMonitor;
@@ -22,8 +24,9 @@ namespace Gallifrey
         void SaveSettings();
         void StartIdleTimer();
         Guid StopIdleTimer();
+        IDictionary<Version, ChangeLogVersionDetails> GetChangeLog(Version currentVersion);
     }
-
+    
     public class Backend : IBackend
     {
         private readonly JiraTimerCollection jiraTimerCollection;
@@ -150,6 +153,14 @@ namespace Gallifrey
                 }
             }
             return idleTimerCollection.StopLockedTimers();
+        }
+
+        public IDictionary<Version, ChangeLogVersionDetails> GetChangeLog(Version currentVersion)
+        {
+            var changeLogItems = ChangeLogProvider.GetChangeLog(settingsCollection.InternalSettings.LastChangeLogVersion, currentVersion);
+            settingsCollection.InternalSettings.SetLastChangeLogVersion(currentVersion);
+            settingsCollection.SaveSettings();
+            return changeLogItems;
         }
 
         public IJiraTimerCollection JiraTimerCollection
