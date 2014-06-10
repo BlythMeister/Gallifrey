@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Deployment.Application;
 using System.Linq;
 using System.Windows.Forms;
+using System.Xml.Linq;
 
 namespace Gallifrey.UI.Classic
 {
@@ -70,7 +71,7 @@ namespace Gallifrey.UI.Classic
 
         private void btnChangeLog_Click(object sender, EventArgs e)
         {
-            var changeLog = gallifrey.GetChangeLog(ApplicationDeployment.CurrentDeployment.CurrentVersion);
+            var changeLog = gallifrey.GetChangeLog(ApplicationDeployment.CurrentDeployment.CurrentVersion, XDocument.Parse(Properties.Resources.ChangeLog));
 
             if (changeLog.Any())
             {

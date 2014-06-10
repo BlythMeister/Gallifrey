@@ -8,6 +8,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Linq;
 using Exceptionless;
 using Gallifrey.Exceptions.IntergrationPoints;
 using Gallifrey.Exceptions.JiraTimers;
@@ -87,7 +88,7 @@ namespace Gallifrey.UI.Classic
                 var version = ApplicationDeployment.CurrentDeployment.CurrentVersion;
                 if (isBeta) version = new Version(version.Major, version.Minor, version.Build, 0);
 
-                var changeLog = gallifrey.GetChangeLog(version);
+                var changeLog = gallifrey.GetChangeLog(version, XDocument.Parse(Properties.Resources.ChangeLog));
 
                 if (changeLog.Any())
                 {

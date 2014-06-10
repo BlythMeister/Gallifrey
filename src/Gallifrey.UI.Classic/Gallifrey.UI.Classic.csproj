@@ -257,9 +257,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ChangeLog.xml">
+    <EmbeddedResource Include="ChangeLog.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    </EmbeddedResource>
     <Content Include="clock_blue.ico" />
     <None Include="Icons\Copy v2_32x32.png" />
     <None Include="Icons\Download_16x16.png" />
