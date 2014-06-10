@@ -81,6 +81,27 @@ namespace Gallifrey.UI.Classic.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+        ///&lt;Versions&gt;
+        ///  &lt;Version&gt;
+        ///    &lt;Number&gt;1.0.0.0&lt;/Number&gt;
+        ///    &lt;Features&gt;
+        ///      &lt;Feature&gt;Daily timer management&lt;/Feature&gt;
+        ///      &lt;Feature&gt;Manual Timer Adjustment&lt;/Feature&gt;
+        ///      &lt;Feature&gt;Export Direct To Jira&lt;/Feature&gt;
+        ///      &lt;Feature&gt;Jira issue search (with saved filters)&lt;/Feature&gt;
+        ///      &lt;Feature&gt;Alerts when no timer is running&lt;/Feature&gt;
+        ///      &lt;Feature&gt;Machine locked time capture&lt;/Feature&gt;
+        ///      &lt;Feature&gt;Automatic Updates&lt;/Feature&gt;
+        ///      &lt;Feature&gt;Export Stats &amp;amp [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string ChangeLog {
+            get {
+                return ResourceManager.GetString("ChangeLog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap Check_48x48 {
