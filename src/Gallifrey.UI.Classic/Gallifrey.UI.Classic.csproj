@@ -124,6 +124,12 @@
     <Compile Include="AboutWindow.Designer.cs">
       <DependentUpon>AboutWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="ChangeLogWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ChangeLogWindow.Designer.cs">
+      <DependentUpon>ChangeLogWindow.cs</DependentUpon>
+    </Compile>
     <Compile Include="SearchWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -175,6 +181,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="AboutWindow.resx">
       <DependentUpon>AboutWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ChangeLogWindow.resx">
+      <DependentUpon>ChangeLogWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SearchWindow.resx">
       <DependentUpon>SearchWindow.cs</DependentUpon>
@@ -248,7 +257,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="ChangeLog.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="clock_blue.ico" />
+    <None Include="Icons\Copy v2_32x32.png" />
     <None Include="Icons\Download_16x16.png" />
     <None Include="Icons\pp_logo_100px.png" />
     <None Include="Icons\GitHub_Mark_32px.png" />

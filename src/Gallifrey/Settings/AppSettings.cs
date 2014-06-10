@@ -18,6 +18,7 @@ namespace Gallifrey.Settings
         public int KeepTimersForDays { get; set; }
         public TimeSpan TargetLogPerDay { get; set; }
         public Guid? TimerRunningOnShutdown { get; set; }
+        
 
         public AppSettings()
         {

@@ -81,6 +81,20 @@ namespace Gallifrey.UI.Classic
             {
                 SelectTimer(gallifrey.JiraTimerCollection.GetRunningTimerId().Value);
             }
+
+            if (ApplicationDeployment.IsNetworkDeployed && ApplicationDeployment.CurrentDeployment.IsFirstRun)
+            {
+                var version = ApplicationDeployment.CurrentDeployment.CurrentVersion;
+                if (isBeta) version = new Version(version.Major, version.Minor, version.Build, 0);
+
+                var changeLog = gallifrey.GetChangeLog(version);
+
+                if (changeLog.Any())
+                {
+                    var changeLogWindow = new ChangeLogWindow(isBeta, changeLog);
+                    changeLogWindow.ShowDialog();
+                }
+            }
         }
 
         private void MainWindow_KeyUp(object sender, KeyEventArgs e)
@@ -305,7 +319,7 @@ namespace Gallifrey.UI.Classic
 
         private void btnAbout_Click(object sender, EventArgs e)
         {
-            var aboutForm = new AboutWindow(isBeta);
+            var aboutForm = new AboutWindow(isBeta, gallifrey);
             aboutForm.ShowDialog();
         }
 
