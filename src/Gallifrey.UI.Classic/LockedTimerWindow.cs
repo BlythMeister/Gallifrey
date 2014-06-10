@@ -101,7 +101,7 @@ namespace Gallifrey.UI.Classic
         {
             if (lstLockedTimers.SelectedItems.Count > 1)
             {
-                MessageBox.Show("Cannot Apply Action Using Multiple Timers!", "Invalid Opperation", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Cannot Apply Action Using Multiple Timers!", "Invalid Operation", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             
             var removeTimer = true;
@@ -131,7 +131,7 @@ namespace Gallifrey.UI.Classic
             else
             {
                 removeTimer = false;
-                MessageBox.Show("You Must Select An Opperation When Pressing This Button", "Invalid Opperation", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("You Must Select An Operation When Pressing This Button", "Invalid Operation", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
 
             if (removeTimer)
@@ -155,11 +155,12 @@ namespace Gallifrey.UI.Classic
         {
             foreach (IdleTimer idleTimer in lstLockedTimers.SelectedItems)
             {
-                if (MessageBox.Show(string.Format("Are You Sure You Want To Remove Idle Timer\nBetween {0} & {1}?", idleTimer.DateStarted.ToString("HH:mm:ss"), idleTimer.DateFinished.Value.ToString("HH:mm:ss")), "Are You Sure", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                if (MessageBox.Show(string.Format("Are You Sure You Want To Remove Idle Timer For\n{0} Between {1} & {2}?", idleTimer.DateStarted.ToString("ddd, dd MMM"), idleTimer.DateStarted.ToString("HH:mm:ss"), idleTimer.DateFinished.Value.ToString("HH:mm:ss")), "Are You Sure", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
                     gallifrey.IdleTimerCollection.RemoveTimer(idleTimer.UniqueId);
                 }
             }
+            BindIdleTimers(false);
         }
     }
 }

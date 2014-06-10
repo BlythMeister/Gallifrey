@@ -47,15 +47,22 @@ namespace Gallifrey.UI.Classic
             gallifrey.NoActivityEvent += GallifreyOnNoActivityEvent;
             SystemEvents.SessionSwitch += SessionSwitchHandler;
 
-            ExceptionlessClient.Current.Register();
             ExceptionlessClient.Current.UnhandledExceptionReporting += OnUnhandledExceptionReporting;
+            ExceptionlessClient.Current.Register();
         }
 
         private void OnUnhandledExceptionReporting(object sender, UnhandledExceptionReportingEventArgs e)
         {
-            e.Error.Tags.Add(myVersion);
-            e.Error.UserEmail = gallifrey.Settings.JiraConnectionSettings.JiraUsername;
-            e.Error.UserName = gallifrey.Settings.JiraConnectionSettings.JiraUsername;
+            foreach (var form in Application.OpenForms.Cast<Form>())
+            {
+                form.TopMost = false;
+            }
+
+            e.Error.Tags.Add(myVersion.Replace("\n", " - "));
+            foreach (var module in e.Error.Modules.Where(module => module.Name.ToLower().Contains("gallifrey.ui")))
+            {
+                module.Version = myVersion.Replace("\n", " - ");
+            }
         }
 
         private void MainWindow_Load(object sender, EventArgs e)
@@ -162,6 +169,8 @@ namespace Gallifrey.UI.Classic
             CheckIfUpdateCallNeeded();
         }
 
+        #region "Non Button Handlers"
+
         private void DoubleClickListBox(object sender, EventArgs e)
         {
             var timerClicked = (JiraTimer)((ListBox)sender).SelectedItem;
@@ -200,7 +209,9 @@ namespace Gallifrey.UI.Classic
             }
         }
 
-        #region "Button Handlers
+        #endregion
+
+        #region "Button Handlers"
 
         private void btnAddTimer_Click(object sender, EventArgs e)
         {
@@ -415,13 +426,13 @@ namespace Gallifrey.UI.Classic
             if (checkingUpdate) upToDateText = "Checking Updates!";
             if (noUpdate) upToDateText = "No New Updates!";
 
-            myVersion = string.Format("Currently Running v{0}{1}\n{2}", myVersion, betaText, upToDateText);
+            myVersion = string.Format("v{0}{1}\n{2}", myVersion, betaText, upToDateText);
             if (!networkDeploy)
             {
                 lblUpdate.BackColor = Color.Red;
                 lblUpdate.BorderStyle = BorderStyle.FixedSingle;
             }
-            lblUpdate.Text = myVersion;
+            lblUpdate.Text = string.Format("Currently Running {0}", myVersion);
         }
 
         private void RefreshTimerPages()
@@ -647,8 +658,5 @@ namespace Gallifrey.UI.Classic
         }
 
         #endregion
-
-
-
     }
 }
