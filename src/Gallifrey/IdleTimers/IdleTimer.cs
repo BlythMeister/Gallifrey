@@ -11,7 +11,7 @@ namespace Gallifrey.IdleTimers
         public DateTime? DateFinished { get; private set; }
         public TimeSpan CurrentTime { get; private set; }
         public Guid UniqueId { get; private set; }
-        public bool IsRunning { get { return DateFinished.HasValue; } }
+        public bool IsRunning { get { return !DateFinished.HasValue; } }
         private readonly Stopwatch currentRunningTime;
 
         [JsonConstructor]
