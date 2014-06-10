@@ -43,9 +43,9 @@
             this.label2.Font = new System.Drawing.Font("Segoe UI Semibold", 14.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.Location = new System.Drawing.Point(12, 9);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(65, 25);
+            this.label2.Size = new System.Drawing.Size(113, 25);
             this.label2.TabIndex = 0;
-            this.label2.Text = "About";
+            this.label2.Text = "Change Log";
             // 
             // lblCurrentVersion
             // 
@@ -101,7 +101,7 @@
             this.Name = "ChangeLogWindow";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Gallifrey - About";
+            this.Text = "Gallifrey - Change Log";
             this.TopMost = true;
             this.ResumeLayout(false);
             this.PerformLayout();
