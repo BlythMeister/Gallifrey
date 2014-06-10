@@ -59,7 +59,7 @@
             this.lstLockedTimers.ItemHeight = 17;
             this.lstLockedTimers.Location = new System.Drawing.Point(17, 37);
             this.lstLockedTimers.Name = "lstLockedTimers";
-            this.lstLockedTimers.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
+            this.lstLockedTimers.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
             this.lstLockedTimers.Size = new System.Drawing.Size(532, 174);
             this.lstLockedTimers.TabIndex = 2;
             this.lstLockedTimers.SelectedIndexChanged += new System.EventHandler(this.lstIdleTimers_SelectedIndexChanged);
