@@ -99,8 +99,12 @@ namespace Gallifrey.UI.Classic
 
         private void btnOK_Click(object sender, EventArgs e)
         {
+            if (lstLockedTimers.SelectedItems.Count > 1)
+            {
+                MessageBox.Show("Cannot Apply Action Using Multiple Timers!", "Invalid Opperation", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            
             var removeTimer = true;
-            var closeWindow = true;
             var idleTimer = (IdleTimer)lstLockedTimers.SelectedItem;
 
             if (radSelected.Checked)
@@ -121,30 +125,18 @@ namespace Gallifrey.UI.Classic
                 if (!addForm.NewTimerId.HasValue)
                 {
                     removeTimer = false;
-                    closeWindow = false;
                 }
                 TopMost = gallifrey.Settings.UiSettings.AlwaysOnTop;
-            }
-            else if (radRemove.Checked)
-            {
-                if (MessageBox.Show(string.Format("Are You Sure You Want To Remove Idle Timer\nBetween {0} & {1}?", idleTimer.DateStarted.ToString("HH:mm:ss"), idleTimer.DateFinished.Value.ToString("HH:mm:ss")), "Are You Sure?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
-                {
-                    removeTimer = false;
-                    closeWindow = false;
-                }
             }
             else
             {
                 removeTimer = false;
+                MessageBox.Show("You Must Select An Opperation When Pressing This Button", "Invalid Opperation", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
 
             if (removeTimer)
             {
                 gallifrey.IdleTimerCollection.RemoveTimer(idleTimer.UniqueId);
-            }
-
-            if (closeWindow)
-            {
                 Close();
             }
         }
@@ -152,6 +144,22 @@ namespace Gallifrey.UI.Classic
         private void lstIdleTimers_SelectedIndexChanged(object sender, EventArgs e)
         {
             SetExportTimers();
+        }
+
+        private void btnClose_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void btnRemove_Click(object sender, EventArgs e)
+        {
+            foreach (IdleTimer idleTimer in lstLockedTimers.SelectedItems)
+            {
+                if (MessageBox.Show(string.Format("Are You Sure You Want To Remove Idle Timer\nBetween {0} & {1}?", idleTimer.DateStarted.ToString("HH:mm:ss"), idleTimer.DateFinished.Value.ToString("HH:mm:ss")), "Are You Sure", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    gallifrey.IdleTimerCollection.RemoveTimer(idleTimer.UniqueId);
+                }
+            }
         }
     }
 }
