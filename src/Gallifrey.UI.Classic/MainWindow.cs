@@ -88,7 +88,6 @@ namespace Gallifrey.UI.Classic
             if (ApplicationDeployment.IsNetworkDeployed && ApplicationDeployment.CurrentDeployment.IsFirstRun)
             {
                 var version = ApplicationDeployment.CurrentDeployment.CurrentVersion;
-                if (isBeta) version = new Version(version.Major, version.Minor, version.Build, 0);
 
                 var changeLog = gallifrey.GetChangeLog(version, XDocument.Parse(Properties.Resources.ChangeLog));
 
