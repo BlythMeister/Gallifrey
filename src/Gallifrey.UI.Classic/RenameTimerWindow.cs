@@ -52,7 +52,7 @@ namespace Gallifrey.UI.Classic
             }
             catch (DuplicateTimerException)
             {
-                MessageBox.Show("This timer already exists!", "Duplicate Timer", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("This Timer Already Exists!", "Duplicate Timer", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
 
@@ -69,7 +69,7 @@ namespace Gallifrey.UI.Classic
             }
             catch (DuplicateTimerException)
             {
-                MessageBox.Show("This timer already exists!", "Duplicate Timer", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("This Timer Already Exists!", "Duplicate Timer", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
 

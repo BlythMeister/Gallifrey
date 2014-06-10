@@ -19,29 +19,7 @@ namespace Gallifrey.UI.Classic
             InitializeComponent();
 
             BindIdleTimers();
-
-            runningTimerId = gallifrey.JiraTimerCollection.GetRunningTimerId();
-
-            if (runningTimerId.HasValue)
-            {
-                lblRunning.Text = gallifrey.JiraTimerCollection.GetTimer(runningTimerId.Value).ToString();
-                radRunning.Checked = true;
-            }
-            else
-            {
-                lblRunning.Text = "N/A";
-                radRunning.Enabled = false;
-                lblRunning.Enabled = false;
-
-                if (cmbDayTimers.Items.Count > 0)
-                {
-                    radSelected.Checked = true;
-                }
-                else
-                {
-                    radNew.Checked = true;
-                }
-            }
+            SetExportTimers();
 
             TopMost = gallifrey.Settings.UiSettings.AlwaysOnTop;
         }
@@ -62,18 +40,20 @@ namespace Gallifrey.UI.Classic
 
             lstLockedTimers.DataSource = idleTimers;
             lstLockedTimers.Refresh();
-
-            SetDayTimers();
         }
 
-        private void SetDayTimers()
+        private void SetExportTimers()
         {
+            runningTimerId = gallifrey.JiraTimerCollection.GetRunningTimerId();
+
             var selectedTimer = (IdleTimer)lstLockedTimers.SelectedItem;
             var disableDayTimers = false;
-            
+            var disableRunning = false;
+
             if (selectedTimer == null)
             {
                 disableDayTimers = true;
+                disableRunning = true;
             }
             else
             {
@@ -87,27 +67,40 @@ namespace Gallifrey.UI.Classic
                     radSelected.Enabled = true;
                     cmbDayTimers.Enabled = true;
                     cmbDayTimers.DataSource = dayTimers;
-                    cmbDayTimers.Refresh();    
+                    cmbDayTimers.Refresh();
                 }
+
+                disableRunning = selectedTimer.DateStarted.Date != DateTime.Now.Date;
             }
 
             if (disableDayTimers)
             {
                 cmbDayTimers.DataSource = null;
                 cmbDayTimers.Refresh();
+                radSelected.Checked = false;
                 radSelected.Enabled = false;
                 cmbDayTimers.Enabled = false;
             }
-        }
 
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            Close();
+            if (disableRunning || !runningTimerId.HasValue)
+            {
+                radRunning.Checked = false;
+                radRunning.Enabled = false;
+                lblRunning.Text = "N/A";
+                lblRunning.Enabled = false;
+            }
+            else if (runningTimerId.HasValue)
+            {
+                lblRunning.Text = gallifrey.JiraTimerCollection.GetTimer(runningTimerId.Value).ToString();
+                lblRunning.Enabled = true;
+                radRunning.Enabled = true;
+            }
         }
 
         private void btnOK_Click(object sender, EventArgs e)
         {
-            bool removeTimer = true;
+            var removeTimer = true;
+            var closeWindow = true;
             var idleTimer = (IdleTimer)lstLockedTimers.SelectedItem;
 
             if (radSelected.Checked)
@@ -128,25 +121,37 @@ namespace Gallifrey.UI.Classic
                 if (!addForm.NewTimerId.HasValue)
                 {
                     removeTimer = false;
+                    closeWindow = false;
                 }
                 TopMost = gallifrey.Settings.UiSettings.AlwaysOnTop;
             }
+            else if (radRemove.Checked)
+            {
+                if (MessageBox.Show(string.Format("Are You Sure You Want To Remove Idle Timer\nBetween {0} & {1}?", idleTimer.DateStarted.ToString("HH:mm:ss"), idleTimer.DateFinished.Value.ToString("HH:mm:ss")), "Are You Sure?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
+                {
+                    removeTimer = false;
+                    closeWindow = false;
+                }
+            }
             else
             {
-                MessageBox.Show("Please Choose One Of The Locked Timer Destinations", "No Action Selected", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 removeTimer = false;
             }
 
             if (removeTimer)
             {
                 gallifrey.IdleTimerCollection.RemoveTimer(idleTimer.UniqueId);
-                BindIdleTimers(false);
+            }
+
+            if (closeWindow)
+            {
+                Close();
             }
         }
 
         private void lstIdleTimers_SelectedIndexChanged(object sender, EventArgs e)
         {
-            SetDayTimers();
+            SetExportTimers();
         }
     }
 }

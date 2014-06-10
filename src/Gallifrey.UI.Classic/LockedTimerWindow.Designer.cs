@@ -39,7 +39,8 @@
             this.btnOK = new System.Windows.Forms.Button();
             this.radSelected = new System.Windows.Forms.RadioButton();
             this.radRunning = new System.Windows.Forms.RadioButton();
-            this.btnCancel = new System.Windows.Forms.Button();
+            this.radNothing = new System.Windows.Forms.RadioButton();
+            this.radRemove = new System.Windows.Forms.RadioButton();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -74,15 +75,16 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.radRemove);
+            this.groupBox1.Controls.Add(this.radNothing);
             this.groupBox1.Controls.Add(this.radNew);
             this.groupBox1.Controls.Add(this.lblRunning);
             this.groupBox1.Controls.Add(this.cmbDayTimers);
-            this.groupBox1.Controls.Add(this.btnOK);
             this.groupBox1.Controls.Add(this.radSelected);
             this.groupBox1.Controls.Add(this.radRunning);
             this.groupBox1.Location = new System.Drawing.Point(13, 225);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(607, 123);
+            this.groupBox1.Size = new System.Drawing.Size(607, 158);
             this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Locked Time Destination";
@@ -90,7 +92,7 @@
             // radNew
             // 
             this.radNew.AutoSize = true;
-            this.radNew.Location = new System.Drawing.Point(6, 85);
+            this.radNew.Location = new System.Drawing.Point(6, 101);
             this.radNew.Name = "radNew";
             this.radNew.Size = new System.Drawing.Size(136, 21);
             this.radNew.TabIndex = 4;
@@ -99,9 +101,9 @@
             // 
             // lblRunning
             // 
-            this.lblRunning.Location = new System.Drawing.Point(161, 33);
+            this.lblRunning.Location = new System.Drawing.Point(161, 49);
             this.lblRunning.Name = "lblRunning";
-            this.lblRunning.Size = new System.Drawing.Size(360, 21);
+            this.lblRunning.Size = new System.Drawing.Size(440, 21);
             this.lblRunning.TabIndex = 1;
             this.lblRunning.Text = "N/A";
             // 
@@ -109,15 +111,15 @@
             // 
             this.cmbDayTimers.DropDownWidth = 460;
             this.cmbDayTimers.FormattingEnabled = true;
-            this.cmbDayTimers.Location = new System.Drawing.Point(134, 57);
+            this.cmbDayTimers.Location = new System.Drawing.Point(134, 73);
             this.cmbDayTimers.Name = "cmbDayTimers";
-            this.cmbDayTimers.Size = new System.Drawing.Size(387, 25);
+            this.cmbDayTimers.Size = new System.Drawing.Size(467, 25);
             this.cmbDayTimers.TabIndex = 3;
             // 
             // btnOK
             // 
-            this.btnOK.Image = global::Gallifrey.UI.Classic.Properties.Resources.Save_48x48;
-            this.btnOK.Location = new System.Drawing.Point(527, 33);
+            this.btnOK.Image = global::Gallifrey.UI.Classic.Properties.Resources.Check_48x48;
+            this.btnOK.Location = new System.Drawing.Point(278, 388);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(65, 65);
             this.btnOK.TabIndex = 5;
@@ -128,7 +130,7 @@
             // radSelected
             // 
             this.radSelected.AutoSize = true;
-            this.radSelected.Location = new System.Drawing.Point(6, 58);
+            this.radSelected.Location = new System.Drawing.Point(6, 74);
             this.radSelected.Name = "radSelected";
             this.radSelected.Size = new System.Drawing.Size(125, 21);
             this.radSelected.TabIndex = 2;
@@ -138,37 +140,46 @@
             // radRunning
             // 
             this.radRunning.AutoSize = true;
-            this.radRunning.Location = new System.Drawing.Point(6, 31);
+            this.radRunning.Location = new System.Drawing.Point(6, 47);
             this.radRunning.Name = "radRunning";
             this.radRunning.Size = new System.Drawing.Size(160, 21);
             this.radRunning.TabIndex = 0;
             this.radRunning.Text = "Add To Running Timer:";
             this.radRunning.UseVisualStyleBackColor = true;
             // 
-            // btnCancel
+            // radNothing
             // 
-            this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Image = global::Gallifrey.UI.Classic.Properties.Resources.Cancel_48x48;
-            this.btnCancel.Location = new System.Drawing.Point(304, 354);
-            this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(65, 65);
-            this.btnCancel.TabIndex = 4;
-            this.btnCancel.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.btnCancel.UseVisualStyleBackColor = true;
-            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+            this.radNothing.AutoSize = true;
+            this.radNothing.Checked = true;
+            this.radNothing.Location = new System.Drawing.Point(6, 20);
+            this.radNothing.Name = "radNothing";
+            this.radNothing.Size = new System.Drawing.Size(216, 21);
+            this.radNothing.TabIndex = 6;
+            this.radNothing.TabStop = true;
+            this.radNothing.Text = "Do Nothing (And Close Window)";
+            this.radNothing.UseVisualStyleBackColor = true;
+            // 
+            // radRemove
+            // 
+            this.radRemove.AutoSize = true;
+            this.radRemove.Location = new System.Drawing.Point(6, 128);
+            this.radRemove.Name = "radRemove";
+            this.radRemove.Size = new System.Drawing.Size(126, 21);
+            this.radRemove.TabIndex = 7;
+            this.radRemove.Text = "Remove Selected";
+            this.radRemove.UseVisualStyleBackColor = true;
             // 
             // LockedTimerWindow
             // 
             this.AcceptButton = this.btnOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(634, 430);
+            this.ClientSize = new System.Drawing.Size(634, 465);
             this.ControlBox = false;
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.lstLockedTimers);
-            this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.label2);
+            this.Controls.Add(this.btnOK);
             this.Controls.Add(this.label1);
             this.Font = new System.Drawing.Font("Segoe UI", 9.75F);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -193,12 +204,13 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button btnOK;
         private System.Windows.Forms.ListBox lstLockedTimers;
-        private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label lblRunning;
         private System.Windows.Forms.ComboBox cmbDayTimers;
         private System.Windows.Forms.RadioButton radSelected;
         private System.Windows.Forms.RadioButton radRunning;
         private System.Windows.Forms.RadioButton radNew;
+        private System.Windows.Forms.RadioButton radRemove;
+        private System.Windows.Forms.RadioButton radNothing;
     }
 }
