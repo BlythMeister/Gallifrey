@@ -70,10 +70,7 @@ namespace Gallifrey.UI.Classic
 
         private void btnChangeLog_Click(object sender, EventArgs e)
         {
-            var version = ApplicationDeployment.CurrentDeployment.CurrentVersion;
-            if (isBeta) version = new Version(version.Major, version.Minor, version.Build, 0);
-
-            var changeLog = gallifrey.GetChangeLog(version);
+            var changeLog = gallifrey.GetChangeLog(ApplicationDeployment.CurrentDeployment.CurrentVersion);
 
             if (changeLog.Any())
             {
