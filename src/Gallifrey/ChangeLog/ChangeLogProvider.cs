@@ -28,7 +28,12 @@ namespace Gallifrey.ChangeLog
                 return changeLog.Where(x => x.Key > fromVersion && x.Key <= toVersion).OrderByDescending(detail=>detail.Key).ToDictionary(detail => detail.Key, detail => detail.Value);
             }
 
-            return changeLog.Where(x => x.Key <= toVersion).OrderByDescending(detail => detail.Key).ToDictionary(detail => detail.Key, detail => detail.Value); ;
+            if (fromVersion < toVersion && toVersion > changeLog.Keys.Max())
+            {
+                return changeLog.Where(x => x.Key == changeLog.Keys.Max()).ToDictionary(detail => detail.Key, detail => detail.Value);
+            }
+
+            return changeLog.Where(x => x.Key <= toVersion).OrderByDescending(detail => detail.Key).ToDictionary(detail => detail.Key, detail => detail.Value);
         }
 
         private static KeyValuePair<Version, ChangeLogVersionDetails> BuildChangeLogItem(XElement changeVersion)
