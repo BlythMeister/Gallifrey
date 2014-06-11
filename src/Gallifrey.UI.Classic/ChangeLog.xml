@@ -38,6 +38,7 @@
       <Feature>Change Log</Feature>
       <Feature>Locked timers show recent timers, rather than todays timers (auto create if not already created)</Feature>
       <Feature>Jira Cache, all queries returning issues from Jira are cached for 14 days and used to populate drop-down on add/rename timers</Feature>
+      <Feature>Added tray icon pop-out when update avaliable</Feature>
     </Features>
     <Bugs>
       <Bug>Simplified export window</Bug>

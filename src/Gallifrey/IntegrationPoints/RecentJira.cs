@@ -35,14 +35,7 @@ namespace Gallifrey.IntegrationPoints
 
         public override string ToString()
         {
-            if (!string.IsNullOrWhiteSpace(JiraReference))
-            {
-                return string.Format("{0} - Desc [ {1} ]", JiraReference, JiraName);    
-            }
-            else
-            {
-                return string.Empty;
-            }
+            return string.Format("{0} - Desc [ {1} ]", JiraReference, JiraName);
         }
     }
 }

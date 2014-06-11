@@ -32,9 +32,7 @@ namespace Gallifrey.UI.Classic
 
         private void BindRecentTimers()
         {
-            var recentTimers = new List<RecentJira> {new RecentJira("", "", "")};
-            recentTimers.AddRange(gallifrey.JiraTimerCollection.GetJiraReferencesForLastDays(7));
-            cmbRecentJiras.DataSource = recentTimers;
+            cmbRecentJiras.DataSource = gallifrey.JiraTimerCollection.GetJiraReferencesForLastDays(7).ToList();
             cmbRecentJiras.Refresh();
             cmbRecentJiras.Text = string.Empty;
         }
@@ -101,12 +99,7 @@ namespace Gallifrey.UI.Classic
             if (radSelected.Checked)
             {
                 var selectedRecent = (RecentJira)cmbRecentJiras.SelectedItem;
-                if (selectedRecent.JiraReference == string.Empty)
-                {
-                    MessageBox.Show("No Recent Jira Selected", "No Recent Selected", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-
+                
                 var todaysTimers = gallifrey.JiraTimerCollection.GetTimersForADate(DateTime.Now.Date);
                 Guid timerToAddTimeTo;
 
@@ -189,10 +182,7 @@ namespace Gallifrey.UI.Classic
 
         private void cmbRecentJiras_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (cmbRecentJiras.Text != string.Empty)
-            {
-                radSelected.Checked = true;
-            }
+            radSelected.Checked = true;
         }
     }
 }

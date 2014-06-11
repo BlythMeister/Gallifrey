@@ -385,12 +385,12 @@ namespace Gallifrey.UI.Classic
                     BringToFront();
                     var idleTimerId = gallifrey.StopIdleTimer();
                     var idleTimer = gallifrey.IdleTimerCollection.GetTimer(idleTimerId);
-                    //if (idleTimer.ExactCurrentTime.TotalSeconds < 60 || idleTimer.ExactCurrentTime.TotalHours > 10)
-                    //{
-                    //    gallifrey.IdleTimerCollection.RemoveTimer(idleTimerId);
-                    //}
-                    //else
-                    //{
+                    if (idleTimer.ExactCurrentTime.TotalSeconds < 60 || idleTimer.ExactCurrentTime.TotalHours > 10)
+                    {
+                        gallifrey.IdleTimerCollection.RemoveTimer(idleTimerId);
+                    }
+                    else
+                    {
                         var lockedTimerWindow = new LockedTimerWindow(gallifrey);
                         lockedTimerWindow.Closed += LockedTimerWindowClosed;
                         if (lockedTimerWindow.DisplayForm)
@@ -398,7 +398,7 @@ namespace Gallifrey.UI.Classic
                             lockedTimerWindow.BringToFront();
                             lockedTimerWindow.Show();
                         }
-                    //}
+                    }
                     break;
             }
         }
@@ -687,6 +687,8 @@ namespace Gallifrey.UI.Classic
             lblUpdate.BorderStyle = BorderStyle.FixedSingle;
             lblUpdate.Text = string.Format("     v{0}\nDouble Click Here To Restart.", ApplicationDeployment.CurrentDeployment.UpdatedVersion);
             lblUpdate.Image = Properties.Resources.Download_16x16;
+
+            notifyAlert.ShowBalloonTip(10000, "Update Avaliable", string.Format("An Update To v{0} Has Been Downloaded!", ApplicationDeployment.CurrentDeployment.UpdatedVersion), ToolTipIcon.Info);
         }
 
         #endregion
