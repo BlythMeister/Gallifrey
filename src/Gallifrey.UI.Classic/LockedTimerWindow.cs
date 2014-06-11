@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using Atlassian.Jira;
+using Gallifrey.Exceptions.IntergrationPoints;
 using Gallifrey.IdleTimers;
+using Gallifrey.IntegrationPoints;
 using Gallifrey.JiraTimers;
 
 namespace Gallifrey.UI.Classic
@@ -11,6 +15,7 @@ namespace Gallifrey.UI.Classic
         private readonly IBackend gallifrey;
         private Guid? runningTimerId;
         internal bool DisplayForm { get; private set; }
+        public Guid? NewTimerId { get; private set; }
 
         public LockedTimerWindow(IBackend gallifrey)
         {
@@ -19,9 +24,19 @@ namespace Gallifrey.UI.Classic
             InitializeComponent();
 
             BindIdleTimers();
-            SetExportTimers();
+            SetRunningTimer();
+            BindRecentTimers();
 
             TopMost = gallifrey.Settings.UiSettings.AlwaysOnTop;
+        }
+
+        private void BindRecentTimers()
+        {
+            var recentTimers = new List<RecentJira> {new RecentJira("", "", "")};
+            recentTimers.AddRange(gallifrey.JiraTimerCollection.GetJiraReferencesForLastDays(7));
+            cmbRecentJiras.DataSource = recentTimers;
+            cmbRecentJiras.Refresh();
+            cmbRecentJiras.Text = string.Empty;
         }
 
         private void BindIdleTimers(bool showNoTimers = true)
@@ -42,46 +57,22 @@ namespace Gallifrey.UI.Classic
             lstLockedTimers.Refresh();
         }
 
-        private void SetExportTimers()
+        private void SetRunningTimer()
         {
             runningTimerId = gallifrey.JiraTimerCollection.GetRunningTimerId();
 
             var selectedTimer = (IdleTimer)lstLockedTimers.SelectedItem;
-            var disableDayTimers = false;
-            var disableRunning = false;
 
+            bool disableRunning;
             if (selectedTimer == null)
             {
-                disableDayTimers = true;
                 disableRunning = true;
             }
             else
             {
-                var dayTimers = gallifrey.JiraTimerCollection.GetTimersForADate(selectedTimer.DateStarted.Date).ToList();
-                if (!dayTimers.Any())
-                {
-                    disableDayTimers = true;
-                }
-                else
-                {
-                    radSelected.Enabled = true;
-                    cmbDayTimers.Enabled = true;
-                    cmbDayTimers.DataSource = dayTimers;
-                    cmbDayTimers.Refresh();
-                }
-
                 disableRunning = selectedTimer.DateStarted.Date != DateTime.Now.Date;
             }
-
-            if (disableDayTimers)
-            {
-                cmbDayTimers.DataSource = null;
-                cmbDayTimers.Refresh();
-                radSelected.Checked = false;
-                radSelected.Enabled = false;
-                cmbDayTimers.Enabled = false;
-            }
-
+            
             if (disableRunning || !runningTimerId.HasValue)
             {
                 radRunning.Checked = false;
@@ -109,12 +100,44 @@ namespace Gallifrey.UI.Classic
 
             if (radSelected.Checked)
             {
-                var selectedTimer = (JiraTimer)cmbDayTimers.SelectedItem;
-                gallifrey.JiraTimerCollection.AddIdleTimer(selectedTimer.UniqueId, idleTimer);
+                var selectedRecent = (RecentJira)cmbRecentJiras.SelectedItem;
+                if (selectedRecent.JiraReference == string.Empty)
+                {
+                    MessageBox.Show("No Recent Jira Selected", "No Recent Selected", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                var todaysTimers = gallifrey.JiraTimerCollection.GetTimersForADate(DateTime.Now.Date);
+                Guid timerToAddTimeTo;
+
+                if (todaysTimers.Any(x => x.JiraReference == selectedRecent.JiraReference))
+                {
+                    timerToAddTimeTo = todaysTimers.First(x => x.JiraReference == selectedRecent.JiraReference).UniqueId;
+                }
+                else
+                {
+                    Issue jiraIssue;
+                    try
+                    {
+                        jiraIssue = gallifrey.JiraConnection.GetJiraIssue(selectedRecent.JiraReference);
+                    }
+                    catch (NoResultsFoundException)
+                    {
+                        MessageBox.Show("Unable To Locate The Jira", "Invalid Jira", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        BindRecentTimers();
+                        return;
+                    }
+
+                    timerToAddTimeTo = gallifrey.JiraTimerCollection.AddTimer(jiraIssue, idleTimer.DateStarted, new TimeSpan(), false);
+                }
+
+                gallifrey.JiraTimerCollection.AddIdleTimer(timerToAddTimeTo, idleTimer);
+                NewTimerId = timerToAddTimeTo;
             }
             else if (radRunning.Checked)
             {
                 gallifrey.JiraTimerCollection.AddIdleTimer(runningTimerId.Value, idleTimer);
+                NewTimerId = runningTimerId;
             }
             else if (radNew.Checked)
             {
@@ -127,6 +150,7 @@ namespace Gallifrey.UI.Classic
                     removeTimer = false;
                 }
                 TopMost = gallifrey.Settings.UiSettings.AlwaysOnTop;
+                NewTimerId = addForm.NewTimerId;
             }
             else
             {
@@ -143,7 +167,7 @@ namespace Gallifrey.UI.Classic
 
         private void lstIdleTimers_SelectedIndexChanged(object sender, EventArgs e)
         {
-            SetExportTimers();
+            SetRunningTimer();
         }
 
         private void btnClose_Click(object sender, EventArgs e)
@@ -161,6 +185,14 @@ namespace Gallifrey.UI.Classic
                 }
             }
             BindIdleTimers(false);
+        }
+
+        private void cmbRecentJiras_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cmbRecentJiras.Text != string.Empty)
+            {
+                radSelected.Checked = true;
+            }
         }
     }
 }

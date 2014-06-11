@@ -308,6 +308,10 @@ namespace Gallifrey.UI.Classic
             {
                 lockedTimerWindow.ShowDialog();
                 RefreshTimerPages();
+                if (lockedTimerWindow.NewTimerId.HasValue)
+                {
+                    SelectTimer(lockedTimerWindow.NewTimerId.Value);
+                }
             }
         }
 
@@ -381,21 +385,31 @@ namespace Gallifrey.UI.Classic
                     BringToFront();
                     var idleTimerId = gallifrey.StopIdleTimer();
                     var idleTimer = gallifrey.IdleTimerCollection.GetTimer(idleTimerId);
-                    if (idleTimer.ExactCurrentTime.TotalSeconds < 60 || idleTimer.ExactCurrentTime.TotalHours > 10)
-                    {
-                        gallifrey.IdleTimerCollection.RemoveTimer(idleTimerId);
-                    }
-                    else
-                    {
+                    //if (idleTimer.ExactCurrentTime.TotalSeconds < 60 || idleTimer.ExactCurrentTime.TotalHours > 10)
+                    //{
+                    //    gallifrey.IdleTimerCollection.RemoveTimer(idleTimerId);
+                    //}
+                    //else
+                    //{
                         var lockedTimerWindow = new LockedTimerWindow(gallifrey);
-                        lockedTimerWindow.Closed += (o, args) => RefreshTimerPages();
+                        lockedTimerWindow.Closed += LockedTimerWindowClosed;
                         if (lockedTimerWindow.DisplayForm)
                         {
                             lockedTimerWindow.BringToFront();
                             lockedTimerWindow.Show();
                         }
-                    }
+                    //}
                     break;
+            }
+        }
+
+        private void LockedTimerWindowClosed(object sender, EventArgs e)
+        {
+            RefreshTimerPages();
+            var lockedTimerWindow = (LockedTimerWindow) sender;
+            if (lockedTimerWindow.NewTimerId.HasValue)
+            {
+                SelectTimer(lockedTimerWindow.NewTimerId.Value);
             }
         }
 
