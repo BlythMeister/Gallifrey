@@ -153,5 +153,10 @@ namespace Gallifrey.UI.Classic
                 btnAddTimer_Click(sender, null);
             }
         }
+
+        private void lstResults_DoubleClick(object sender, EventArgs e)
+        {
+            btnAddTimer_Click(sender, e);
+        }
     }
 }
