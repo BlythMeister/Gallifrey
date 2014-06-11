@@ -118,6 +118,7 @@
             this.lstResults.Name = "lstResults";
             this.lstResults.Size = new System.Drawing.Size(386, 174);
             this.lstResults.TabIndex = 2;
+            this.lstResults.DoubleClick += new System.EventHandler(this.lstResults_DoubleClick);
             // 
             // btnCancelAddTimer
             // 
