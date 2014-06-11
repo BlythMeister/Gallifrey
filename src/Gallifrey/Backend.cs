@@ -52,12 +52,14 @@ namespace Gallifrey
 
             if (Settings.AppSettings.TimerRunningOnShutdown.HasValue)
             {
-                if (jiraTimerCollection.GetTimer(Settings.AppSettings.TimerRunningOnShutdown.Value).DateStarted.Date == DateTime.Now.Date)
+                var timer = jiraTimerCollection.GetTimer(Settings.AppSettings.TimerRunningOnShutdown.Value);
+                if (timer != null && timer.DateStarted.Date == DateTime.Now.Date)
                 {
                     JiraTimerCollection.StartTimer(Settings.AppSettings.TimerRunningOnShutdown.Value);
-                    Settings.AppSettings.TimerRunningOnShutdown = null;
-                    SaveSettings();
                 }
+
+                Settings.AppSettings.TimerRunningOnShutdown = null;
+                SaveSettings();
             }
         }
 
@@ -150,8 +152,8 @@ namespace Gallifrey
                 if (timer.DateStarted.Date == DateTime.Now.Date)
                 {
                     jiraTimerCollection.StartTimer(runningTimerWhenIdle.Value);
-                    runningTimerWhenIdle = null;
                 }
+                runningTimerWhenIdle = null;
             }
             return idleTimerCollection.StopLockedTimers();
         }

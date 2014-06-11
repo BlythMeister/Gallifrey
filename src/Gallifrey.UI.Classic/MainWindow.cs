@@ -452,7 +452,10 @@ namespace Gallifrey.UI.Classic
             if (tabTimerDays.SelectedTab != null)
             {
                 var selectedTimer = (JiraTimer)((ListBox)tabTimerDays.SelectedTab.Controls[string.Format("lst_{0}", tabTimerDays.SelectedTab.Name)]).SelectedItem;
-                selectedTimerId = selectedTimer.UniqueId;
+                if (selectedTimer != null)
+                {
+                    selectedTimerId = selectedTimer.UniqueId;    
+                }
             }
 
             var timers = gallifrey.JiraTimerCollection;
@@ -517,7 +520,11 @@ namespace Gallifrey.UI.Classic
                 var tabList = (ListBox)tabPage.Controls[string.Format("lst_{0}", tabPage.Name)];
                 foreach (var item in tabList.Items.Cast<JiraTimer>().Where(item => item.UniqueId == selectedTimerId))
                 {
-                    tabList.SelectedItem = item;
+                    try
+                    {
+                        tabList.SelectedItem = item;
+                    }
+                    catch (Exception) { }
                     foundMatch = true;
                     break;
                 }

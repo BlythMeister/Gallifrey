@@ -136,7 +136,7 @@ namespace Gallifrey.JiraTimers
 
         public JiraTimer GetTimer(Guid timerGuid)
         {
-            return timerList.First(timer => timer.UniqueId == timerGuid);
+            return timerList.FirstOrDefault(timer => timer.UniqueId == timerGuid);
         }
 
         public void RenameTimer(Guid timerGuid, Issue newIssue)

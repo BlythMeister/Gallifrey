@@ -235,7 +235,7 @@
             // 
             // btnRename
             // 
-            this.btnRename.Image = global::Gallifrey.UI.Classic.Properties.Resources.Rename_48x48;
+            this.btnRename.Image = global::Gallifrey.UI.Classic.Properties.Resources.Edit_48x48;
             this.btnRename.Location = new System.Drawing.Point(296, 98);
             this.btnRename.Name = "btnRename";
             this.btnRename.Size = new System.Drawing.Size(65, 65);
@@ -246,7 +246,7 @@
             // 
             // btnTimeEdit
             // 
-            this.btnTimeEdit.Image = global::Gallifrey.UI.Classic.Properties.Resources.Edit_48x48;
+            this.btnTimeEdit.Image = global::Gallifrey.UI.Classic.Properties.Resources.Calendar_48x48;
             this.btnTimeEdit.Location = new System.Drawing.Point(225, 98);
             this.btnTimeEdit.Name = "btnTimeEdit";
             this.btnTimeEdit.Size = new System.Drawing.Size(65, 65);
