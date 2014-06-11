@@ -73,16 +73,6 @@ namespace Gallifrey.UI.Classic.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Calendar_48x48 {
-            get {
-                object obj = ResourceManager.GetObject("Calendar_48x48", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap Cancel_48x48 {
             get {
                 object obj = ResourceManager.GetObject("Cancel_48x48", resourceCulture);
@@ -136,7 +126,7 @@ namespace Gallifrey.UI.Classic.Properties {
         /// </summary>
         internal static System.Drawing.Bitmap Copy_v2_32x32 {
             get {
-                object obj = ResourceManager.GetObject("Copy v2_32x32", resourceCulture);
+                object obj = ResourceManager.GetObject("Copy_v2_32x32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -244,16 +234,6 @@ namespace Gallifrey.UI.Classic.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Rename_48x48 {
-            get {
-                object obj = ResourceManager.GetObject("Rename_48x48", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap Save_48x48 {
             get {
                 object obj = ResourceManager.GetObject("Save_48x48", resourceCulture);
@@ -297,6 +277,16 @@ namespace Gallifrey.UI.Classic.Properties {
         internal static System.Drawing.Bitmap Twitter_logo_blue {
             get {
                 object obj = ResourceManager.GetObject("Twitter_logo_blue", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap UpDown_48x48 {
+            get {
+                object obj = ResourceManager.GetObject("UpDown_48x48", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

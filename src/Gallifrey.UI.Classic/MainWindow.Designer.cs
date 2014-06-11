@@ -246,7 +246,7 @@
             // 
             // btnTimeEdit
             // 
-            this.btnTimeEdit.Image = global::Gallifrey.UI.Classic.Properties.Resources.Calendar_48x48;
+            this.btnTimeEdit.Image = global::Gallifrey.UI.Classic.Properties.Resources.UpDown_48x48;
             this.btnTimeEdit.Location = new System.Drawing.Point(225, 98);
             this.btnTimeEdit.Name = "btnTimeEdit";
             this.btnTimeEdit.Size = new System.Drawing.Size(65, 65);
