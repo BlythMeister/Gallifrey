@@ -73,6 +73,16 @@ namespace Gallifrey.UI.Classic.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Calendar_48x48 {
+            get {
+                object obj = ResourceManager.GetObject("Calendar_48x48", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Cancel_48x48 {
             get {
                 object obj = ResourceManager.GetObject("Cancel_48x48", resourceCulture);

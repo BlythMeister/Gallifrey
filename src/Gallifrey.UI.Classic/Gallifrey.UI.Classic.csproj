@@ -257,6 +257,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Icons\Calendar_48x48.png" />
     <EmbeddedResource Include="ChangeLog.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
