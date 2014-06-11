@@ -75,6 +75,7 @@ namespace Gallifrey
             {
                 jiraTimerCollection.RemoveTimersOlderThanDays(settingsCollection.AppSettings.KeepTimersForDays);
                 idleTimerCollection.RemoveOldTimers();
+                jiraConnection.RemoveRecentJiraExpiredCache();
 
                 var runningTimerId = jiraTimerCollection.GetRunningTimerId();
                 if (runningTimerId.HasValue)

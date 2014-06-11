@@ -63,11 +63,14 @@
     <Compile Include="Exceptions\IntergrationPoints\JiraConnectionException.cs" />
     <Compile Include="Exceptions\JiraTimers\DuplicateTimerException.cs" />
     <Compile Include="InactiveMonitor\ActivityChecker.cs" />
+    <Compile Include="IntegrationPoints\RecentJiraCollection.cs" />
     <Compile Include="IntegrationPoints\JiraConnection.cs" />
+    <Compile Include="IntegrationPoints\RecentJira.cs" />
     <Compile Include="JiraTimers\JiraTimer.cs" />
     <Compile Include="JiraTimers\JiraTimerCollection.cs" />
     <Compile Include="ExtensionMethods\TimespanExtensionMethods.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Serialization\RecentJiraCollectionSerializer.cs" />
     <Compile Include="Serialization\SettingsCollectionSerializer.cs" />
     <Compile Include="Serialization\IdleTimerCollectionSerializer.cs" />
     <Compile Include="Serialization\DataEncryption.cs" />

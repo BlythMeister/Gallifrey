@@ -18,15 +18,19 @@ namespace Gallifrey.IntegrationPoints
         TimeSpan GetCurrentLoggedTimeForDate(Issue jiraIssue, DateTime date);
         void LogTime(Issue jiraIssue, DateTime exportTimeStamp, TimeSpan exportTime, WorklogStrategy strategy, string comment = "", TimeSpan? remainingTime = null);
         IEnumerable<Issue> GetJiraCurrentUserOpenIssues();
+        IEnumerable<RecentJira> GetRecentJirasFound();
+        void RemoveRecentJiraExpiredCache();
     }
 
     public class JiraConnection : IJiraConnection
     {
+        private readonly IRecentJiraCollection recentJiraCollection;
         private IJiraConnectionSettings jiraConnectionSettings;
         private Jira jira;
 
         public JiraConnection(IJiraConnectionSettings jiraConnectionSettings)
         {
+            recentJiraCollection = new RecentJiraCollection();
             this.jiraConnectionSettings = jiraConnectionSettings;
             CheckAndConnectJira();
         }
@@ -74,9 +78,11 @@ namespace Gallifrey.IntegrationPoints
             }
             catch (Exception)
             {
+                recentJiraCollection.Remove(jiraRef);
                 return false;
             }
 
+            recentJiraCollection.Remove(jiraRef);
             return false;
         }
 
@@ -85,10 +91,13 @@ namespace Gallifrey.IntegrationPoints
             try
             {
                 CheckAndConnectJira();
-                return jira.GetIssue(jiraRef);
+                var issue = jira.GetIssue(jiraRef);
+                recentJiraCollection.AddRecentJira(issue.Key.Value, issue.Project, issue.Summary);
+                return issue;
             }
             catch (Exception ex)
             {
+                recentJiraCollection.Remove(jiraRef);
                 throw new NoResultsFoundException(string.Format("Unable to locate Jira {0}", jiraRef), ex);
             }
         }
@@ -112,7 +121,12 @@ namespace Gallifrey.IntegrationPoints
             try
             {
                 CheckAndConnectJira();
-                return jira.GetIssuesFromFilter(filterName, 0, 999);
+                var issues = jira.GetIssuesFromFilter(filterName, 0, 999);
+                foreach (var issue in issues)
+                {
+                    recentJiraCollection.AddRecentJira(issue.Key.Value, issue.Project, issue.Summary);    
+                }
+                return issues;
             }
             catch (Exception ex)
             {
@@ -125,7 +139,12 @@ namespace Gallifrey.IntegrationPoints
             try
             {
                 CheckAndConnectJira();
-                return jira.GetIssuesFromJql(GetJql(searchText), 0, 999);
+                var issues = jira.GetIssuesFromJql(GetJql(searchText), 0, 999);
+                foreach (var issue in issues)
+                {
+                    recentJiraCollection.AddRecentJira(issue.Key.Value, issue.Project, issue.Summary);
+                }
+                return issues;
             }
             catch (Exception ex)
             {
@@ -154,12 +173,27 @@ namespace Gallifrey.IntegrationPoints
             try
             {
                 CheckAndConnectJira();
-                return jira.GetIssuesFromJql("assignee in (currentUser()) AND status not in (Closed,Resolved)", 0, 999);
+                var issues = jira.GetIssuesFromJql("assignee in (currentUser()) AND status not in (Closed,Resolved)", 0, 999);
+                foreach (var issue in issues)
+                {
+                    recentJiraCollection.AddRecentJira(issue.Key.Value, issue.Project, issue.Summary);
+                }
+                return issues;
             }
             catch (Exception ex)
             {
                 throw new NoResultsFoundException("Error loading jiras from search text", ex);
             }
+        }
+
+        public IEnumerable<RecentJira> GetRecentJirasFound()
+        {
+            return recentJiraCollection.GetRecentJiraCollection();
+        }
+
+        public void RemoveRecentJiraExpiredCache()
+        {
+            recentJiraCollection.RemoveExpiredCache();
         }
 
         public void LogTime(Issue jiraIssue, DateTime exportTimeStamp, TimeSpan exportTime, WorklogStrategy strategy, string comment = "", TimeSpan? remainingTime = null)

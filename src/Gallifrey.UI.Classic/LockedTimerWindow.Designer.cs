@@ -34,9 +34,9 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.radNew = new System.Windows.Forms.RadioButton();
             this.lblRunning = new System.Windows.Forms.Label();
-            this.cmbDayTimers = new System.Windows.Forms.ComboBox();
-            this.btnOK = new System.Windows.Forms.Button();
+            this.cmbRecentJiras = new System.Windows.Forms.ComboBox();
             this.radSelected = new System.Windows.Forms.RadioButton();
+            this.btnOK = new System.Windows.Forms.Button();
             this.radRunning = new System.Windows.Forms.RadioButton();
             this.btnRemove = new System.Windows.Forms.Button();
             this.btnClose = new System.Windows.Forms.Button();
@@ -68,7 +68,7 @@
             // 
             this.groupBox1.Controls.Add(this.radNew);
             this.groupBox1.Controls.Add(this.lblRunning);
-            this.groupBox1.Controls.Add(this.cmbDayTimers);
+            this.groupBox1.Controls.Add(this.cmbRecentJiras);
             this.groupBox1.Controls.Add(this.radSelected);
             this.groupBox1.Controls.Add(this.btnOK);
             this.groupBox1.Controls.Add(this.radRunning);
@@ -97,14 +97,25 @@
             this.lblRunning.TabIndex = 1;
             this.lblRunning.Text = "N/A";
             // 
-            // cmbDayTimers
+            // cmbRecentJiras
             // 
-            this.cmbDayTimers.DropDownWidth = 460;
-            this.cmbDayTimers.FormattingEnabled = true;
-            this.cmbDayTimers.Location = new System.Drawing.Point(134, 50);
-            this.cmbDayTimers.Name = "cmbDayTimers";
-            this.cmbDayTimers.Size = new System.Drawing.Size(396, 25);
-            this.cmbDayTimers.TabIndex = 3;
+            this.cmbRecentJiras.DropDownWidth = 460;
+            this.cmbRecentJiras.FormattingEnabled = true;
+            this.cmbRecentJiras.Location = new System.Drawing.Point(134, 50);
+            this.cmbRecentJiras.Name = "cmbRecentJiras";
+            this.cmbRecentJiras.Size = new System.Drawing.Size(396, 25);
+            this.cmbRecentJiras.TabIndex = 3;
+            this.cmbRecentJiras.SelectedIndexChanged += new System.EventHandler(this.cmbRecentJiras_SelectedIndexChanged);
+            // 
+            // radSelected
+            // 
+            this.radSelected.AutoSize = true;
+            this.radSelected.Location = new System.Drawing.Point(6, 51);
+            this.radSelected.Name = "radSelected";
+            this.radSelected.Size = new System.Drawing.Size(115, 21);
+            this.radSelected.TabIndex = 2;
+            this.radSelected.Text = "Add To Recent:";
+            this.radSelected.UseVisualStyleBackColor = true;
             // 
             // btnOK
             // 
@@ -116,16 +127,6 @@
             this.btnOK.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnOK.UseVisualStyleBackColor = true;
             this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
-            // 
-            // radSelected
-            // 
-            this.radSelected.AutoSize = true;
-            this.radSelected.Location = new System.Drawing.Point(6, 51);
-            this.radSelected.Name = "radSelected";
-            this.radSelected.Size = new System.Drawing.Size(125, 21);
-            this.radSelected.TabIndex = 2;
-            this.radSelected.Text = "Add To Selected:";
-            this.radSelected.UseVisualStyleBackColor = true;
             // 
             // radRunning
             // 
@@ -195,7 +196,7 @@
         private System.Windows.Forms.ListBox lstLockedTimers;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label lblRunning;
-        private System.Windows.Forms.ComboBox cmbDayTimers;
+        private System.Windows.Forms.ComboBox cmbRecentJiras;
         private System.Windows.Forms.RadioButton radSelected;
         private System.Windows.Forms.RadioButton radRunning;
         private System.Windows.Forms.RadioButton radNew;

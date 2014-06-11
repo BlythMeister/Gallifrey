@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Windows.Forms;
 using Atlassian.Jira;
 using Gallifrey.Exceptions.IntergrationPoints;
@@ -19,7 +20,10 @@ namespace Gallifrey.UI.Classic
             InitializeComponent();
 
             txtJiraRef.Text = timerToShow.JiraReference;
+            txtJiraRef.AutoCompleteCustomSource.AddRange(gallifrey.JiraConnection.GetRecentJirasFound().Select(x => x.ToString()).ToArray());
+
             calStartDate.Value = timerToShow.DateStarted.Date;
+            
             txtJiraRef.Enabled = timerToShow.HasExportedTime();
             calStartDate.Enabled = timerToShow.HasExportedTime();
 
@@ -92,6 +96,17 @@ namespace Gallifrey.UI.Classic
                 DialogResult = DialogResult.None;
             }
 
+        }
+
+        private void txtJiraRef_TextChanged(object sender, EventArgs e)
+        {
+            var enteredJiraRef = txtJiraRef.Text;
+
+            if (enteredJiraRef.Contains(" - "))
+            {
+                enteredJiraRef = enteredJiraRef.Substring(0, enteredJiraRef.IndexOf(" - "));
+                txtJiraRef.Text = enteredJiraRef;
+            }
         }
     }
 }

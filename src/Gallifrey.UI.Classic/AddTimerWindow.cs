@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Windows.Forms;
 using Atlassian.Jira;
 using Gallifrey.Exceptions.IntergrationPoints;
@@ -20,6 +21,8 @@ namespace Gallifrey.UI.Classic
             InitializeComponent();
             calStartDate.MinDate = DateTime.Now.AddDays(gallifrey.Settings.AppSettings.KeepTimersForDays * -1);
             calStartDate.MaxDate = DateTime.Now.AddDays(gallifrey.Settings.AppSettings.KeepTimersForDays);
+
+            txtJiraRef.AutoCompleteCustomSource.AddRange(gallifrey.JiraConnection.GetRecentJirasFound().Select(x=>x.ToString()).ToArray());
 
             TopMost = gallifrey.Settings.UiSettings.AlwaysOnTop;
         }
@@ -147,6 +150,17 @@ namespace Gallifrey.UI.Classic
             }
 
             TopMost = gallifrey.Settings.UiSettings.AlwaysOnTop;
+        }
+
+        private void txtJiraRef_TextChanged(object sender, EventArgs e)
+        {
+            var enteredJiraRef = txtJiraRef.Text;
+
+            if (enteredJiraRef.Contains(" - "))
+            {
+                enteredJiraRef = enteredJiraRef.Substring(0, enteredJiraRef.IndexOf(" - "));
+                txtJiraRef.Text = enteredJiraRef;
+            }
         }
     }
 }
