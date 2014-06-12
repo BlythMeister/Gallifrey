@@ -1,7 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json;
 
-namespace Gallifrey.IntegrationPoints
+namespace Gallifrey.JiraIntegration
 {
     public class RecentJira
     {
@@ -35,7 +35,7 @@ namespace Gallifrey.IntegrationPoints
 
         public override string ToString()
         {
-            return string.Format("{0} - Desc [ {1} ]", JiraReference, JiraName);
+            return string.Format("{0} ({1})", JiraReference, JiraName);
         }
     }
 }

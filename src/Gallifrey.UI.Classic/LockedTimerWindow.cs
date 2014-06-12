@@ -5,7 +5,7 @@ using System.Windows.Forms;
 using Atlassian.Jira;
 using Gallifrey.Exceptions.IntergrationPoints;
 using Gallifrey.IdleTimers;
-using Gallifrey.IntegrationPoints;
+using Gallifrey.JiraIntegration;
 using Gallifrey.JiraTimers;
 
 namespace Gallifrey.UI.Classic

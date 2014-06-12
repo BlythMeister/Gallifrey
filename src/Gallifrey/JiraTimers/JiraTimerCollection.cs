@@ -4,7 +4,7 @@ using System.Linq;
 using Atlassian.Jira;
 using Gallifrey.Exceptions.JiraTimers;
 using Gallifrey.IdleTimers;
-using Gallifrey.IntegrationPoints;
+using Gallifrey.JiraIntegration;
 using Gallifrey.Serialization;
 
 namespace Gallifrey.JiraTimers
