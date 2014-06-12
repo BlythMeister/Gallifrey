@@ -12,6 +12,7 @@ namespace Gallifrey.UI.Classic
     {
         private readonly IBackend gallifrey;
         private readonly JiraTimer timerToShow;
+        private bool showingJiras;
 
         public RenameTimerWindow(IBackend gallifrey, Guid timerGuid)
         {
@@ -19,8 +20,9 @@ namespace Gallifrey.UI.Classic
             timerToShow = gallifrey.JiraTimerCollection.GetTimer(timerGuid);
             InitializeComponent();
 
+            txtJiraRef.AutoCompleteCustomSource.AddRange(gallifrey.JiraConnection.GetJiraProjects().Select(x => x.ToString()).ToArray());
+            showingJiras = false;
             txtJiraRef.Text = timerToShow.JiraReference;
-            txtJiraRef.AutoCompleteCustomSource.AddRange(gallifrey.JiraConnection.GetRecentJirasFound().Select(x => x.ToString()).ToArray());
 
             calStartDate.Value = timerToShow.DateStarted.Date;
             
@@ -102,10 +104,33 @@ namespace Gallifrey.UI.Classic
         {
             var enteredJiraRef = txtJiraRef.Text;
 
-            if (enteredJiraRef.Contains(" - "))
+            if (enteredJiraRef.Contains(" ("))
             {
-                enteredJiraRef = enteredJiraRef.Substring(0, enteredJiraRef.IndexOf(" - "));
+                enteredJiraRef = enteredJiraRef.Substring(0, enteredJiraRef.IndexOf(" ("));
                 txtJiraRef.Text = enteredJiraRef;
+            }
+
+            if (enteredJiraRef.Contains("-"))
+            {
+                if (!showingJiras)
+                {
+                    txtJiraRef.AutoCompleteCustomSource.Clear();
+                    txtJiraRef.AutoCompleteCustomSource.AddRange(gallifrey.JiraConnection.GetRecentJirasFound().Select(x => x.ToString()).ToArray());
+                    showingJiras = true;
+                    txtJiraRef.SelectionLength = 0;
+                    txtJiraRef.SelectionStart = txtJiraRef.TextLength;
+                }
+            }
+            else
+            {
+                if (showingJiras)
+                {
+                    txtJiraRef.AutoCompleteCustomSource.Clear();
+                    txtJiraRef.AutoCompleteCustomSource.AddRange(gallifrey.JiraConnection.GetJiraProjects().Select(x => x.ToString()).ToArray());
+                    showingJiras = false;
+                    txtJiraRef.SelectionLength = 0;
+                    txtJiraRef.SelectionStart = txtJiraRef.TextLength;
+                }
             }
         }
     }

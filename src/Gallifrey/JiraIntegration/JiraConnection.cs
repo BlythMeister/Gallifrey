@@ -5,7 +5,7 @@ using Atlassian.Jira;
 using Gallifrey.Exceptions.IntergrationPoints;
 using Gallifrey.Settings;
 
-namespace Gallifrey.IntegrationPoints
+namespace Gallifrey.JiraIntegration
 {
     public interface IJiraConnection
     {
@@ -18,21 +18,26 @@ namespace Gallifrey.IntegrationPoints
         TimeSpan GetCurrentLoggedTimeForDate(Issue jiraIssue, DateTime date);
         void LogTime(Issue jiraIssue, DateTime exportTimeStamp, TimeSpan exportTime, WorklogStrategy strategy, string comment = "", TimeSpan? remainingTime = null);
         IEnumerable<Issue> GetJiraCurrentUserOpenIssues();
+        IEnumerable<JiraProject> GetJiraProjects();
         IEnumerable<RecentJira> GetRecentJirasFound();
-        void RemoveRecentJiraExpiredCache();
+        void UpdateCache();
     }
 
     public class JiraConnection : IJiraConnection
     {
         private readonly IRecentJiraCollection recentJiraCollection;
+        private readonly List<JiraProject> jiraProjectCache;
         private IJiraConnectionSettings jiraConnectionSettings;
         private Jira jira;
 
         public JiraConnection(IJiraConnectionSettings jiraConnectionSettings)
         {
             recentJiraCollection = new RecentJiraCollection();
+            jiraProjectCache = new List<JiraProject>();
+
             this.jiraConnectionSettings = jiraConnectionSettings;
             CheckAndConnectJira();
+            UpdateJiraProjectCache();
         }
 
         public void ReConnect(IJiraConnectionSettings newJiraConnectionSettings)
@@ -186,14 +191,28 @@ namespace Gallifrey.IntegrationPoints
             }
         }
 
+        private void UpdateJiraProjectCache()
+        {
+            CheckAndConnectJira();
+            var projects = jira.GetProjects();
+            jiraProjectCache.Clear();
+            jiraProjectCache.AddRange(projects.Select(project => new JiraProject(project.Key, project.Name)));
+        }
+
+        public IEnumerable<JiraProject> GetJiraProjects()
+        {
+            return jiraProjectCache;
+        }
+
         public IEnumerable<RecentJira> GetRecentJirasFound()
         {
             return recentJiraCollection.GetRecentJiraCollection();
         }
 
-        public void RemoveRecentJiraExpiredCache()
+        public void UpdateCache()
         {
             recentJiraCollection.RemoveExpiredCache();
+            UpdateJiraProjectCache();
         }
 
         public void LogTime(Issue jiraIssue, DateTime exportTimeStamp, TimeSpan exportTime, WorklogStrategy strategy, string comment = "", TimeSpan? remainingTime = null)

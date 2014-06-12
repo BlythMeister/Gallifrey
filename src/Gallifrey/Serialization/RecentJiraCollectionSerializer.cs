@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using Gallifrey.IntegrationPoints;
+using Gallifrey.JiraIntegration;
 using Gallifrey.Settings;
 using Newtonsoft.Json;
 

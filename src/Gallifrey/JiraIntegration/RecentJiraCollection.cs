@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Gallifrey.Serialization;
 
-namespace Gallifrey.IntegrationPoints
+namespace Gallifrey.JiraIntegration
 {
     public interface IRecentJiraCollection
     {

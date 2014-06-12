@@ -6,7 +6,7 @@ using Gallifrey.ChangeLog;
 using Gallifrey.Exceptions.IdleTimers;
 using Gallifrey.IdleTimers;
 using Gallifrey.InactiveMonitor;
-using Gallifrey.IntegrationPoints;
+using Gallifrey.JiraIntegration;
 using Gallifrey.JiraTimers;
 using Gallifrey.Serialization;
 using Gallifrey.Settings;
@@ -75,7 +75,7 @@ namespace Gallifrey
             {
                 jiraTimerCollection.RemoveTimersOlderThanDays(settingsCollection.AppSettings.KeepTimersForDays);
                 idleTimerCollection.RemoveOldTimers();
-                jiraConnection.RemoveRecentJiraExpiredCache();
+                jiraConnection.UpdateCache();
 
                 var runningTimerId = jiraTimerCollection.GetRunningTimerId();
                 if (runningTimerId.HasValue)
