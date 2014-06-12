@@ -129,7 +129,7 @@ namespace Gallifrey.JiraIntegration
                 var issues = jira.GetIssuesFromFilter(filterName, 0, 999);
                 foreach (var issue in issues)
                 {
-                    recentJiraCollection.AddRecentJira(issue.Key.Value, issue.Project, issue.Summary);    
+                    recentJiraCollection.AddRecentJira(issue.Key.Value, issue.Project, issue.Summary);
                 }
                 return issues;
             }
@@ -193,10 +193,14 @@ namespace Gallifrey.JiraIntegration
 
         private void UpdateJiraProjectCache()
         {
-            CheckAndConnectJira();
-            var projects = jira.GetProjects();
-            jiraProjectCache.Clear();
-            jiraProjectCache.AddRange(projects.Select(project => new JiraProject(project.Key, project.Name)));
+            try
+            {
+                CheckAndConnectJira();
+                var projects = jira.GetProjects();
+                jiraProjectCache.Clear();
+                jiraProjectCache.AddRange(projects.Select(project => new JiraProject(project.Key, project.Name)));
+            }
+            catch (Exception) { }
         }
 
         public IEnumerable<JiraProject> GetJiraProjects()
@@ -218,7 +222,7 @@ namespace Gallifrey.JiraIntegration
         public void LogTime(Issue jiraIssue, DateTime exportTimeStamp, TimeSpan exportTime, WorklogStrategy strategy, string comment = "", TimeSpan? remainingTime = null)
         {
             var wasClosed = TryReopenJira(jiraIssue);
-            
+
             if (string.IsNullOrWhiteSpace(comment)) comment = "No Comment Entered";
             comment = "Gallifrey: " + comment;
 
