@@ -588,7 +588,12 @@ namespace Gallifrey.UI.Classic
             var exportedTime = gallifrey.JiraTimerCollection.GetTotalExportedTimeThisWeek();
             var target = new TimeSpan();
             var n = 0;
-            while (n++ < (int)DateTime.Today.DayOfWeek)
+            var dayIndex = DateTime.Today.DayOfWeek;
+            if (dayIndex < DayOfWeek.Monday)
+            {
+                dayIndex += 7; //Monday is first day of week, no day of week should have a smaller index
+            }
+            while (n++ < (int)dayIndex)
             {
                 target = target.Add(gallifrey.Settings.AppSettings.TargetLogPerDay);
             }
