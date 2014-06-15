@@ -48,11 +48,14 @@
             // 
             // txtJiraRef
             // 
+            this.txtJiraRef.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
+            this.txtJiraRef.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
             this.txtJiraRef.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
             this.txtJiraRef.Location = new System.Drawing.Point(123, 47);
             this.txtJiraRef.Name = "txtJiraRef";
-            this.txtJiraRef.Size = new System.Drawing.Size(157, 25);
+            this.txtJiraRef.Size = new System.Drawing.Size(249, 25);
             this.txtJiraRef.TabIndex = 2;
+            this.txtJiraRef.TextChanged += new System.EventHandler(this.txtJiraRef_TextChanged);
             // 
             // label1
             // 
@@ -67,7 +70,7 @@
             // 
             this.calStartDate.Location = new System.Drawing.Point(123, 78);
             this.calStartDate.Name = "calStartDate";
-            this.calStartDate.Size = new System.Drawing.Size(157, 25);
+            this.calStartDate.Size = new System.Drawing.Size(249, 25);
             this.calStartDate.TabIndex = 4;
             this.calStartDate.ValueChanged += new System.EventHandler(this.calStartDate_ValueChanged);
             // 
@@ -139,7 +142,7 @@
             // 
             this.btnCancelAddTimer.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancelAddTimer.Image = global::Gallifrey.UI.Classic.Properties.Resources.Cancel_48x48;
-            this.btnCancelAddTimer.Location = new System.Drawing.Point(123, 172);
+            this.btnCancelAddTimer.Location = new System.Drawing.Point(158, 174);
             this.btnCancelAddTimer.Name = "btnCancelAddTimer";
             this.btnCancelAddTimer.Size = new System.Drawing.Size(65, 65);
             this.btnCancelAddTimer.TabIndex = 13;
@@ -150,7 +153,7 @@
             // btnAddTimer
             // 
             this.btnAddTimer.Image = global::Gallifrey.UI.Classic.Properties.Resources.Check_48x48;
-            this.btnAddTimer.Location = new System.Drawing.Point(48, 172);
+            this.btnAddTimer.Location = new System.Drawing.Point(83, 174);
             this.btnAddTimer.Name = "btnAddTimer";
             this.btnAddTimer.Size = new System.Drawing.Size(65, 65);
             this.btnAddTimer.TabIndex = 12;
@@ -179,7 +182,7 @@
             // btnSearch
             // 
             this.btnSearch.Image = global::Gallifrey.UI.Classic.Properties.Resources.Search_48x48;
-            this.btnSearch.Location = new System.Drawing.Point(194, 172);
+            this.btnSearch.Location = new System.Drawing.Point(229, 174);
             this.btnSearch.Name = "btnSearch";
             this.btnSearch.Size = new System.Drawing.Size(65, 65);
             this.btnSearch.TabIndex = 14;
@@ -193,7 +196,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancelAddTimer;
-            this.ClientSize = new System.Drawing.Size(296, 251);
+            this.ClientSize = new System.Drawing.Size(384, 251);
             this.ControlBox = false;
             this.Controls.Add(this.btnSearch);
             this.Controls.Add(this.label7);

@@ -29,7 +29,7 @@
     <PublisherName>Gallifrey</PublisherName>
     <MinimumRequiredVersion>1.0.0.0</MinimumRequiredVersion>
     <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.0.2.0</ApplicationVersion>
+    <ApplicationVersion>1.0.3.0</ApplicationVersion>
     <UseApplicationTrust>true</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -124,6 +124,17 @@
     <Compile Include="AboutWindow.Designer.cs">
       <DependentUpon>AboutWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="ChangeLogWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ChangeLogWindow.Designer.cs">
+      <DependentUpon>ChangeLogWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="SearchWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -162,11 +173,6 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <EmbeddedResource Include="AddTimerWindow.resx">
       <DependentUpon>AddTimerWindow.cs</DependentUpon>
     </EmbeddedResource>
@@ -175,6 +181,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="AboutWindow.resx">
       <DependentUpon>AboutWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ChangeLogWindow.resx">
+      <DependentUpon>ChangeLogWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SearchWindow.resx">
       <DependentUpon>SearchWindow.cs</DependentUpon>
@@ -248,7 +257,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Icons\UpDown_48x48.png" />
+    <EmbeddedResource Include="ChangeLog.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
     <Content Include="clock_blue.ico" />
+    <None Include="Icons\Copy v2_32x32.png" />
     <None Include="Icons\Download_16x16.png" />
     <None Include="Icons\pp_logo_100px.png" />
     <None Include="Icons\GitHub_Mark_32px.png" />
@@ -259,7 +273,6 @@
     <None Include="Icons\Upload_48x48.png" />
     <None Include="Icons\Refresh_48x48.png" />
     <None Include="Icons\Key_48x48.png" />
-    <None Include="Icons\Rename_48x48.png" />
     <None Include="Icons\Search_48x48.png" />
     <None Include="Icons\Edit_48x48.png" />
     <None Include="Icons\Synchronize_48x48.png" />

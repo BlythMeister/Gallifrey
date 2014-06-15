@@ -49,6 +49,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Backend.cs" />
+    <Compile Include="ChangeLog\ChangeLogProvider.cs" />
+    <Compile Include="ChangeLog\ChangeLogVersion.cs" />
     <Compile Include="Exceptions\IdleTimers\NoIdleTimerRunningException.cs" />
     <Compile Include="Exceptions\JiraTimers\IdleTimerRunningException.cs" />
     <Compile Include="ExtensionMethods\DateTimeExtensionMethods.cs" />
@@ -61,16 +63,21 @@
     <Compile Include="Exceptions\IntergrationPoints\JiraConnectionException.cs" />
     <Compile Include="Exceptions\JiraTimers\DuplicateTimerException.cs" />
     <Compile Include="InactiveMonitor\ActivityChecker.cs" />
-    <Compile Include="IntegrationPoints\JiraConnection.cs" />
+    <Compile Include="JiraIntegration\JiraProject.cs" />
+    <Compile Include="JiraIntegration\RecentJiraCollection.cs" />
+    <Compile Include="JiraIntegration\JiraConnection.cs" />
+    <Compile Include="JiraIntegration\RecentJira.cs" />
     <Compile Include="JiraTimers\JiraTimer.cs" />
     <Compile Include="JiraTimers\JiraTimerCollection.cs" />
     <Compile Include="ExtensionMethods\TimespanExtensionMethods.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Serialization\RecentJiraCollectionSerializer.cs" />
     <Compile Include="Serialization\SettingsCollectionSerializer.cs" />
     <Compile Include="Serialization\IdleTimerCollectionSerializer.cs" />
     <Compile Include="Serialization\DataEncryption.cs" />
     <Compile Include="Serialization\JiraTimerCollectionSerializer.cs" />
     <Compile Include="Settings\AppSettings.cs" />
+    <Compile Include="Settings\InternalSettings.cs" />
     <Compile Include="Settings\SettingsCollection.cs" />
     <Compile Include="Settings\UISettings.cs" />
     <Compile Include="Settings\JiraConnnectionSettings.cs" />

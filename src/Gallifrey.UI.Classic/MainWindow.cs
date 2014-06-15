@@ -4,9 +4,12 @@ using System.Deployment.Application;
 using System.Drawing;
 using System.Drawing.Text;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Linq;
 using Exceptionless;
 using Gallifrey.Exceptions.IntergrationPoints;
 using Gallifrey.Exceptions.JiraTimers;
@@ -21,6 +24,8 @@ namespace Gallifrey.UI.Classic
         private readonly bool isBeta;
         private readonly IBackend gallifrey;
         private DateTime lastUpdateCheck;
+        private string myVersion;
+        private PrivateFontCollection privateFontCollection;
 
         public MainWindow(bool isBeta)
         {
@@ -45,15 +50,22 @@ namespace Gallifrey.UI.Classic
             gallifrey.NoActivityEvent += GallifreyOnNoActivityEvent;
             SystemEvents.SessionSwitch += SessionSwitchHandler;
 
-            ExceptionlessClient.Current.Register();
             ExceptionlessClient.Current.UnhandledExceptionReporting += OnUnhandledExceptionReporting;
+            ExceptionlessClient.Current.Register();
         }
 
         private void OnUnhandledExceptionReporting(object sender, UnhandledExceptionReportingEventArgs e)
         {
-            e.Error.Tags.Add(lblVersion.Text);
-            e.Error.UserEmail = gallifrey.Settings.JiraConnectionSettings.JiraUsername;
-            e.Error.UserName = gallifrey.Settings.JiraConnectionSettings.JiraUsername;
+            foreach (var form in Application.OpenForms.Cast<Form>())
+            {
+                form.TopMost = false;
+            }
+
+            e.Error.Tags.Add(myVersion.Replace("\n", " - "));
+            foreach (var module in e.Error.Modules.Where(module => module.Name.ToLower().Contains("gallifrey.ui")))
+            {
+                module.Version = myVersion.Replace("\n", " - ");
+            }
         }
 
         private void MainWindow_Load(object sender, EventArgs e)
@@ -71,6 +83,19 @@ namespace Gallifrey.UI.Classic
             if (gallifrey.JiraTimerCollection.GetRunningTimerId().HasValue)
             {
                 SelectTimer(gallifrey.JiraTimerCollection.GetRunningTimerId().Value);
+            }
+
+            if (ApplicationDeployment.IsNetworkDeployed && ApplicationDeployment.CurrentDeployment.IsFirstRun)
+            {
+                var version = ApplicationDeployment.CurrentDeployment.CurrentVersion;
+
+                var changeLog = gallifrey.GetChangeLog(version, XDocument.Parse(Properties.Resources.ChangeLog));
+
+                if (changeLog.Any())
+                {
+                    var changeLogWindow = new ChangeLogWindow(isBeta, changeLog);
+                    changeLogWindow.ShowDialog();
+                }
             }
         }
 
@@ -114,8 +139,8 @@ namespace Gallifrey.UI.Classic
                         lblCurrentTime_DoubleClick(sender, null);
                         break;
                     case Keys.Down:
-                            tabList.SelectedIndex = 0;
-                            tabList.Focus();
+                        tabList.SelectedIndex = 0;
+                        tabList.Focus();
                         break;
                     case Keys.Right:
                         if (selectedTab.TabIndex < tabTimerDays.TabPages.Count - 1)
@@ -160,6 +185,8 @@ namespace Gallifrey.UI.Classic
             CheckIfUpdateCallNeeded();
         }
 
+        #region "Non Button Handlers"
+
         private void DoubleClickListBox(object sender, EventArgs e)
         {
             var timerClicked = (JiraTimer)((ListBox)sender).SelectedItem;
@@ -177,7 +204,7 @@ namespace Gallifrey.UI.Classic
                 }
                 catch (DuplicateTimerException)
                 {
-                    MessageBox.Show("Use the version of this timer for today!", "Wrong Day!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Use The Version Of This Timer For Today!", "Wrong Day!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
 
@@ -198,7 +225,9 @@ namespace Gallifrey.UI.Classic
             }
         }
 
-        #region "Button Handlers
+        #endregion
+
+        #region "Button Handlers"
 
         private void btnAddTimer_Click(object sender, EventArgs e)
         {
@@ -226,7 +255,7 @@ namespace Gallifrey.UI.Classic
             if (selectedTab == null) return;
             var selectedTimer = (JiraTimer)((ListBox)selectedTab.Controls[string.Format("lst_{0}", selectedTab.Name)]).SelectedItem;
 
-            if (MessageBox.Show(string.Format("Are you sure you want to remove timer for '{0}'?", selectedTimer.JiraReference), "Are You Sure", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            if (MessageBox.Show(string.Format("Are You Sure You Want To Remove Timer For '{0}'?", selectedTimer.JiraReference), "Are You Sure", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
                 gallifrey.JiraTimerCollection.RemoveTimer(selectedTimer.UniqueId);
                 RefreshTimerPages();
@@ -279,6 +308,10 @@ namespace Gallifrey.UI.Classic
             {
                 lockedTimerWindow.ShowDialog();
                 RefreshTimerPages();
+                if (lockedTimerWindow.NewTimerId.HasValue)
+                {
+                    SelectTimer(lockedTimerWindow.NewTimerId.Value);
+                }
             }
         }
 
@@ -292,13 +325,8 @@ namespace Gallifrey.UI.Classic
 
         private void btnAbout_Click(object sender, EventArgs e)
         {
-            var aboutForm = new AboutWindow(isBeta);
+            var aboutForm = new AboutWindow(isBeta, gallifrey);
             aboutForm.ShowDialog();
-        }
-
-        private void lblUpdate_Click(object sender, EventArgs e)
-        {
-            Application.Restart();
         }
 
         #endregion
@@ -364,7 +392,7 @@ namespace Gallifrey.UI.Classic
                     else
                     {
                         var lockedTimerWindow = new LockedTimerWindow(gallifrey);
-                        lockedTimerWindow.Closed += (o, args) => RefreshTimerPages();
+                        lockedTimerWindow.Closed += LockedTimerWindowClosed;
                         if (lockedTimerWindow.DisplayForm)
                         {
                             lockedTimerWindow.BringToFront();
@@ -375,43 +403,61 @@ namespace Gallifrey.UI.Classic
             }
         }
 
+        private void LockedTimerWindowClosed(object sender, EventArgs e)
+        {
+            RefreshTimerPages();
+            var lockedTimerWindow = (LockedTimerWindow) sender;
+            if (lockedTimerWindow.NewTimerId.HasValue)
+            {
+                SelectTimer(lockedTimerWindow.NewTimerId.Value);
+            }
+        }
+
         #endregion
 
         #region "UI Hlpers"
-
-        [DllImport("gdi32.dll")]
-        private static extern IntPtr AddFontMemResourceEx(IntPtr pbFont, uint cbFont, IntPtr pdv, [In] ref uint pcFonts);
 
         private void SetupDisplayFont()
         {
             try
             {
-                var fontArray = Properties.Resources.digital7;
-                var dataLenth = fontArray.Length;
+                privateFontCollection = new PrivateFontCollection();
 
-                var ptrData = Marshal.AllocCoTaskMem(dataLenth);
-                Marshal.Copy(fontArray, 0, ptrData, dataLenth);
-                uint cfonts = 0;
-                AddFontMemResourceEx(ptrData, (uint)dataLenth, IntPtr.Zero, ref cfonts);
+                var fontPath = Path.Combine(Environment.CurrentDirectory, "digital7.ttf");
+                if (!File.Exists(fontPath))
+                {
+                    File.WriteAllBytes(fontPath, Properties.Resources.digital7);
+                }
 
-                var privateFonts = new PrivateFontCollection();
+                privateFontCollection.AddFontFile(fontPath);
 
-                privateFonts.AddMemoryFont(ptrData, dataLenth);
-                Marshal.FreeCoTaskMem(ptrData);
+                if (privateFontCollection.Families.Any())
+                {
+                    lblCurrentTime.Font = new Font(privateFontCollection.Families[0], 50);
+                }
 
-                lblCurrentTime.Font = new Font(privateFonts.Families[0], 50);
             }
             catch (Exception) {/*Intentional - use default font*/}
         }
 
-        private void SetVersionNumber()
+        private void SetVersionNumber(bool checkingUpdate = false, bool noUpdate = false)
         {
             var networkDeploy = ApplicationDeployment.IsNetworkDeployed;
-            var myVersion = networkDeploy ? ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString() : Application.ProductVersion;
-            myVersion = string.Format("v{0}", myVersion);
-            if (!networkDeploy) myVersion = string.Format("{0} (manual)", myVersion);
-            if (isBeta) myVersion = string.Format("{0} (beta)", myVersion);
-            lblVersion.Text = myVersion;
+            myVersion = networkDeploy ? ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString() : Application.ProductVersion;
+            var betaText = isBeta ? " (beta)" : "";
+            var upToDateText = "Invalid Deployment";
+
+            if (networkDeploy) upToDateText = "Up To Date!";
+            if (checkingUpdate) upToDateText = "Checking Updates!";
+            if (noUpdate) upToDateText = "No New Updates!";
+
+            myVersion = string.Format("v{0}{1}\n{2}", myVersion, betaText, upToDateText);
+            if (!networkDeploy)
+            {
+                lblUpdate.BackColor = Color.Red;
+                lblUpdate.BorderStyle = BorderStyle.FixedSingle;
+            }
+            lblUpdate.Text = string.Format("Currently Running {0}", myVersion);
         }
 
         private void RefreshTimerPages()
@@ -420,7 +466,10 @@ namespace Gallifrey.UI.Classic
             if (tabTimerDays.SelectedTab != null)
             {
                 var selectedTimer = (JiraTimer)((ListBox)tabTimerDays.SelectedTab.Controls[string.Format("lst_{0}", tabTimerDays.SelectedTab.Name)]).SelectedItem;
-                selectedTimerId = selectedTimer.UniqueId;
+                if (selectedTimer != null)
+                {
+                    selectedTimerId = selectedTimer.UniqueId;    
+                }
             }
 
             var timers = gallifrey.JiraTimerCollection;
@@ -485,7 +534,11 @@ namespace Gallifrey.UI.Classic
                 var tabList = (ListBox)tabPage.Controls[string.Format("lst_{0}", tabPage.Name)];
                 foreach (var item in tabList.Items.Cast<JiraTimer>().Where(item => item.UniqueId == selectedTimerId))
                 {
-                    tabList.SelectedItem = item;
+                    try
+                    {
+                        tabList.SelectedItem = item;
+                    }
+                    catch (Exception) { }
                     foundMatch = true;
                     break;
                 }
@@ -543,7 +596,7 @@ namespace Gallifrey.UI.Classic
             lblExportedWeek.Text = string.Format("Exported: {0}", exportedTime.FormatAsString(false));
             lblExportTargetWeek.Text = string.Format("Target: {0}", target.FormatAsString(false));
             progExportTarget.Maximum = (int)target.TotalMinutes;
-            
+
             if (progExportTarget.Maximum == 0)
             {
                 progExportTarget.Maximum = 1;
@@ -552,7 +605,7 @@ namespace Gallifrey.UI.Classic
             else
             {
                 var exportedMinutes = (int)exportedTime.TotalMinutes;
-                progExportTarget.Value = exportedMinutes > progExportTarget.Maximum ? progExportTarget.Maximum : exportedMinutes;    
+                progExportTarget.Value = exportedMinutes > progExportTarget.Maximum ? progExportTarget.Maximum : exportedMinutes;
             }
         }
 
@@ -568,38 +621,43 @@ namespace Gallifrey.UI.Classic
             toolTip.SetToolTip(btnAbout, "About (CTRL+I)");
             toolTip.SetToolTip(btnSettings, "Settings (CTRL+S)");
             toolTip.SetToolTip(lblCurrentTime, "Double Click Jump To Running (CTRL+J)");
-            if (ApplicationDeployment.IsNetworkDeployed)
-            {
-                toolTip.SetToolTip(lblVersion, string.Format("Currently Have {0} Installed, Double Click To Check For Updates", lblVersion.Text));
-            }
-            else
-            {
-                toolTip.SetToolTip(lblVersion, string.Format("Currently Have {0} Installed", lblVersion.Text));
-            }
         }
 
         #endregion
 
         #region "Updates
 
-        private void lblVersion_DoubleClick(object sender, EventArgs e)
+
+        private void lblUpdate_DoubleClick(object sender, EventArgs e)
         {
             if (ApplicationDeployment.IsNetworkDeployed)
             {
-                CheckForUpdates();
+                if (ApplicationDeployment.CurrentDeployment.UpdatedVersion != ApplicationDeployment.CurrentDeployment.CurrentVersion)
+                {
+                    Application.Restart();
+                }
+                else
+                {
+                    SetVersionNumber(true);
+                    CheckForUpdates(true);
+                }
+            }
+            else
+            {
+                MessageBox.Show("The Version You Are Running Cannot Be Updated!!", "Invalid Version", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
         }
 
         private void CheckIfUpdateCallNeeded()
         {
-            if (ApplicationDeployment.IsNetworkDeployed &&
-                lastUpdateCheck < DateTime.UtcNow.AddMinutes(-15))
+            if (ApplicationDeployment.IsNetworkDeployed && lastUpdateCheck < DateTime.UtcNow.AddMinutes(-15))
             {
-                CheckForUpdates();
+                SetVersionNumber();
+                CheckForUpdates(false);
             }
         }
 
-        private void CheckForUpdates()
+        private async void CheckForUpdates(bool manualCheck)
         {
             try
             {
@@ -611,6 +669,11 @@ namespace Gallifrey.UI.Classic
                     ApplicationDeployment.CurrentDeployment.UpdateCompleted += UpdateComplete;
                     ApplicationDeployment.CurrentDeployment.UpdateAsync();
                 }
+                else if (manualCheck)
+                {
+                    await Task.Delay(1500);
+                    SetVersionNumber(noUpdate: true);
+                }
             }
             catch (Exception)
             {
@@ -619,11 +682,15 @@ namespace Gallifrey.UI.Classic
 
         private void UpdateComplete(object sender, AsyncCompletedEventArgs e)
         {
-            grpUpdates.Visible = true;
-            lblUpdate.Text = string.Format("     v{0}\nClick Here To Restart.", ApplicationDeployment.CurrentDeployment.UpdatedVersion);
+            grpUpdates.Text = "Update Avaliable";
+            lblUpdate.BackColor = Color.OrangeRed;
+            lblUpdate.BorderStyle = BorderStyle.FixedSingle;
+            lblUpdate.Text = string.Format("     v{0}\nDouble Click Here To Restart.", ApplicationDeployment.CurrentDeployment.UpdatedVersion);
+            lblUpdate.Image = Properties.Resources.Download_16x16;
+
+            notifyAlert.ShowBalloonTip(10000, "Update Avaliable", string.Format("An Update To v{0} Has Been Downloaded!", ApplicationDeployment.CurrentDeployment.UpdatedVersion), ToolTipIcon.Info);
         }
 
         #endregion
-
     }
 }

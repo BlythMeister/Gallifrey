@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Windows.Forms;
 using Atlassian.Jira;
 using Gallifrey.Exceptions.IntergrationPoints;
@@ -10,6 +11,7 @@ namespace Gallifrey.UI.Classic
     public partial class AddTimerWindow : Form
     {
         private readonly IBackend gallifrey;
+        private bool showingJiras;
         public Guid? NewTimerId { get; private set; }
         internal bool DisplayForm { get; private set; }
 
@@ -21,7 +23,10 @@ namespace Gallifrey.UI.Classic
             calStartDate.MinDate = DateTime.Now.AddDays(gallifrey.Settings.AppSettings.KeepTimersForDays * -1);
             calStartDate.MaxDate = DateTime.Now.AddDays(gallifrey.Settings.AppSettings.KeepTimersForDays);
 
-            TopMost = gallifrey.Settings.UiSettings.AlwaysOnTop;           
+            txtJiraRef.AutoCompleteCustomSource.AddRange(gallifrey.JiraConnection.GetJiraProjects().Select(x => x.ToString()).ToArray());
+            showingJiras = false;
+
+            TopMost = gallifrey.Settings.UiSettings.AlwaysOnTop;
         }
 
         public void PreLoadJira(string jiraRef)
@@ -34,9 +39,7 @@ namespace Gallifrey.UI.Classic
         {
             if (!startDate.Between(calStartDate.MinDate, calStartDate.MaxDate))
             {
-                MessageBox.Show(
-                    "New timer start date is not valid for the minimum and maximum duration of timers to keep.\nHave you updated the days to keep in settings?",
-                    "New timer date invalid", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("New Timer Start Date Is Not Valid For The Minimum And Maximum Duration Of Timers To Keep.\nHave You Updated The Days To Keep In Settings?", "New Timer Date Invalid", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 DisplayForm = false;
             }
             else
@@ -71,6 +74,18 @@ namespace Gallifrey.UI.Classic
             int.TryParse(txtStartHours.Text, out hours);
             int.TryParse(txtStartMins.Text, out minutes);
 
+            if (minutes > 60)
+            {
+                MessageBox.Show("You Cannot Start A Timer With More Than 60 Minutes!", "Invalid Start Time", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+
+            if (hours > 10)
+            {
+                MessageBox.Show("You Cannot Start A Timer With More Than 10 Hours!", "Invalid  Start Time", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+
             var seedTime = new TimeSpan(hours, minutes, 0);
 
             Issue jiraIssue;
@@ -80,7 +95,7 @@ namespace Gallifrey.UI.Classic
             }
             catch (NoResultsFoundException)
             {
-                MessageBox.Show("Unable to locate the Jira", "Invalid Jira", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Unable To Locate The Jira", "Invalid Jira", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
 
@@ -98,7 +113,7 @@ namespace Gallifrey.UI.Classic
             }
             catch (DuplicateTimerException)
             {
-                MessageBox.Show("This timer already exists!", "Duplicate Timer", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("This Timer Already Exists!", "Duplicate Timer", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
 
@@ -137,6 +152,40 @@ namespace Gallifrey.UI.Classic
             }
 
             TopMost = gallifrey.Settings.UiSettings.AlwaysOnTop;
+        }
+
+        private void txtJiraRef_TextChanged(object sender, EventArgs e)
+        {
+            var enteredJiraRef = txtJiraRef.Text;
+
+            if (enteredJiraRef.Contains(" ("))
+            {
+                enteredJiraRef = enteredJiraRef.Substring(0, enteredJiraRef.IndexOf(" ("));
+                txtJiraRef.Text = enteredJiraRef;
+            }
+
+            if (enteredJiraRef.Contains("-"))
+            {
+                if (!showingJiras)
+                {
+                    txtJiraRef.AutoCompleteCustomSource.Clear();
+                    txtJiraRef.AutoCompleteCustomSource.AddRange(gallifrey.JiraConnection.GetRecentJirasFound().Select(x => x.ToString()).ToArray());
+                    showingJiras = true;
+                    txtJiraRef.SelectionLength = 0;
+                    txtJiraRef.SelectionStart = txtJiraRef.TextLength;
+                }
+            }
+            else
+            {
+                if (showingJiras)
+                {
+                    txtJiraRef.AutoCompleteCustomSource.Clear();
+                    txtJiraRef.AutoCompleteCustomSource.AddRange(gallifrey.JiraConnection.GetJiraProjects().Select(x => x.ToString()).ToArray());
+                    showingJiras = false;
+                    txtJiraRef.SelectionLength = 0;
+                    txtJiraRef.SelectionStart = txtJiraRef.TextLength;
+                }
+            }
         }
     }
 }

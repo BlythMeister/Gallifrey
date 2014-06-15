@@ -40,11 +40,14 @@
             // 
             // txtJiraRef
             // 
+            this.txtJiraRef.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
+            this.txtJiraRef.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
             this.txtJiraRef.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
             this.txtJiraRef.Location = new System.Drawing.Point(123, 47);
             this.txtJiraRef.Name = "txtJiraRef";
-            this.txtJiraRef.Size = new System.Drawing.Size(157, 25);
+            this.txtJiraRef.Size = new System.Drawing.Size(249, 25);
             this.txtJiraRef.TabIndex = 2;
+            this.txtJiraRef.TextChanged += new System.EventHandler(this.txtJiraRef_TextChanged);
             // 
             // label1
             // 
@@ -59,7 +62,7 @@
             // 
             this.calStartDate.Location = new System.Drawing.Point(123, 78);
             this.calStartDate.Name = "calStartDate";
-            this.calStartDate.Size = new System.Drawing.Size(157, 25);
+            this.calStartDate.Size = new System.Drawing.Size(249, 25);
             this.calStartDate.TabIndex = 4;
             // 
             // label2
@@ -85,7 +88,7 @@
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancel.Image = global::Gallifrey.UI.Classic.Properties.Resources.Cancel_48x48;
-            this.btnCancel.Location = new System.Drawing.Point(168, 118);
+            this.btnCancel.Location = new System.Drawing.Point(207, 121);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(65, 65);
             this.btnCancel.TabIndex = 6;
@@ -96,7 +99,7 @@
             // btnOK
             // 
             this.btnOK.Image = global::Gallifrey.UI.Classic.Properties.Resources.Check_48x48;
-            this.btnOK.Location = new System.Drawing.Point(55, 118);
+            this.btnOK.Location = new System.Drawing.Point(94, 121);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(65, 65);
             this.btnOK.TabIndex = 5;
@@ -110,7 +113,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(296, 198);
+            this.ClientSize = new System.Drawing.Size(384, 198);
             this.ControlBox = false;
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnOK);

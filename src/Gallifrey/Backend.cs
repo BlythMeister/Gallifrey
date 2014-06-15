@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Timers;
+using System.Xml.Linq;
+using Gallifrey.ChangeLog;
 using Gallifrey.Exceptions.IdleTimers;
 using Gallifrey.IdleTimers;
 using Gallifrey.InactiveMonitor;
-using Gallifrey.IntegrationPoints;
+using Gallifrey.JiraIntegration;
 using Gallifrey.JiraTimers;
 using Gallifrey.Serialization;
 using Gallifrey.Settings;
@@ -22,8 +25,9 @@ namespace Gallifrey
         void SaveSettings();
         void StartIdleTimer();
         Guid StopIdleTimer();
+        IDictionary<Version, ChangeLogVersionDetails> GetChangeLog(Version currentVersion, XDocument changeLogContent);
     }
-
+    
     public class Backend : IBackend
     {
         private readonly JiraTimerCollection jiraTimerCollection;
@@ -48,12 +52,14 @@ namespace Gallifrey
 
             if (Settings.AppSettings.TimerRunningOnShutdown.HasValue)
             {
-                if (jiraTimerCollection.GetTimer(Settings.AppSettings.TimerRunningOnShutdown.Value).DateStarted.Date == DateTime.Now.Date)
+                var timer = jiraTimerCollection.GetTimer(Settings.AppSettings.TimerRunningOnShutdown.Value);
+                if (timer != null && timer.DateStarted.Date == DateTime.Now.Date)
                 {
                     JiraTimerCollection.StartTimer(Settings.AppSettings.TimerRunningOnShutdown.Value);
-                    Settings.AppSettings.TimerRunningOnShutdown = null;
-                    SaveSettings();
                 }
+
+                Settings.AppSettings.TimerRunningOnShutdown = null;
+                SaveSettings();
             }
         }
 
@@ -69,6 +75,7 @@ namespace Gallifrey
             {
                 jiraTimerCollection.RemoveTimersOlderThanDays(settingsCollection.AppSettings.KeepTimersForDays);
                 idleTimerCollection.RemoveOldTimers();
+                jiraConnection.UpdateCache();
 
                 var runningTimerId = jiraTimerCollection.GetRunningTimerId();
                 if (runningTimerId.HasValue)
@@ -146,10 +153,18 @@ namespace Gallifrey
                 if (timer.DateStarted.Date == DateTime.Now.Date)
                 {
                     jiraTimerCollection.StartTimer(runningTimerWhenIdle.Value);
-                    runningTimerWhenIdle = null;
                 }
+                runningTimerWhenIdle = null;
             }
             return idleTimerCollection.StopLockedTimers();
+        }
+
+        public IDictionary<Version, ChangeLogVersionDetails> GetChangeLog(Version currentVersion, XDocument changeLogContent)
+        {
+            var changeLogItems = ChangeLogProvider.GetChangeLog(settingsCollection.InternalSettings.LastChangeLogVersion, currentVersion, changeLogContent);
+            settingsCollection.InternalSettings.SetLastChangeLogVersion(currentVersion);
+            settingsCollection.SaveSettings();
+            return changeLogItems;
         }
 
         public IJiraTimerCollection JiraTimerCollection

@@ -121,7 +121,7 @@ namespace Gallifrey.JiraTimers
         public override string ToString()
         {
             return TimeToExport.TotalMinutes >= 1 ?
-                string.Format("{0} - Time [ {1} ] - Desc [ {3} ] - To Export [ {2} ]", JiraReference, ExactCurrentTime.FormatAsString(), TimeToExport.FormatAsString(), JiraName) :
+                string.Format("{0} - Time [ {1} ] - To Export [ {2} ] - Desc [ {3} ]", JiraReference, ExactCurrentTime.FormatAsString(), TimeToExport.FormatAsString(), JiraName) :
                 string.Format("{0} - Time [ {1} ] - Desc [ {2} ]", JiraReference, ExactCurrentTime.FormatAsString(), JiraName);
         }
 

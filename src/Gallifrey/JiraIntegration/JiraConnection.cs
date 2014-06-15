@@ -5,7 +5,7 @@ using Atlassian.Jira;
 using Gallifrey.Exceptions.IntergrationPoints;
 using Gallifrey.Settings;
 
-namespace Gallifrey.IntegrationPoints
+namespace Gallifrey.JiraIntegration
 {
     public interface IJiraConnection
     {
@@ -18,17 +18,26 @@ namespace Gallifrey.IntegrationPoints
         TimeSpan GetCurrentLoggedTimeForDate(Issue jiraIssue, DateTime date);
         void LogTime(Issue jiraIssue, DateTime exportTimeStamp, TimeSpan exportTime, WorklogStrategy strategy, string comment = "", TimeSpan? remainingTime = null);
         IEnumerable<Issue> GetJiraCurrentUserOpenIssues();
+        IEnumerable<JiraProject> GetJiraProjects();
+        IEnumerable<RecentJira> GetRecentJirasFound();
+        void UpdateCache();
     }
 
     public class JiraConnection : IJiraConnection
     {
+        private readonly IRecentJiraCollection recentJiraCollection;
+        private readonly List<JiraProject> jiraProjectCache;
         private IJiraConnectionSettings jiraConnectionSettings;
         private Jira jira;
 
         public JiraConnection(IJiraConnectionSettings jiraConnectionSettings)
         {
+            recentJiraCollection = new RecentJiraCollection();
+            jiraProjectCache = new List<JiraProject>();
+
             this.jiraConnectionSettings = jiraConnectionSettings;
             CheckAndConnectJira();
+            UpdateJiraProjectCache();
         }
 
         public void ReConnect(IJiraConnectionSettings newJiraConnectionSettings)
@@ -74,9 +83,11 @@ namespace Gallifrey.IntegrationPoints
             }
             catch (Exception)
             {
+                recentJiraCollection.Remove(jiraRef);
                 return false;
             }
 
+            recentJiraCollection.Remove(jiraRef);
             return false;
         }
 
@@ -85,10 +96,13 @@ namespace Gallifrey.IntegrationPoints
             try
             {
                 CheckAndConnectJira();
-                return jira.GetIssue(jiraRef);
+                var issue = jira.GetIssue(jiraRef);
+                recentJiraCollection.AddRecentJira(issue.Key.Value, issue.Project, issue.Summary);
+                return issue;
             }
             catch (Exception ex)
             {
+                recentJiraCollection.Remove(jiraRef);
                 throw new NoResultsFoundException(string.Format("Unable to locate Jira {0}", jiraRef), ex);
             }
         }
@@ -112,7 +126,12 @@ namespace Gallifrey.IntegrationPoints
             try
             {
                 CheckAndConnectJira();
-                return jira.GetIssuesFromFilter(filterName, 0, 999);
+                var issues = jira.GetIssuesFromFilter(filterName, 0, 999);
+                foreach (var issue in issues)
+                {
+                    recentJiraCollection.AddRecentJira(issue.Key.Value, issue.Project, issue.Summary);
+                }
+                return issues;
             }
             catch (Exception ex)
             {
@@ -125,7 +144,12 @@ namespace Gallifrey.IntegrationPoints
             try
             {
                 CheckAndConnectJira();
-                return jira.GetIssuesFromJql(GetJql(searchText), 0, 999);
+                var issues = jira.GetIssuesFromJql(GetJql(searchText), 0, 999);
+                foreach (var issue in issues)
+                {
+                    recentJiraCollection.AddRecentJira(issue.Key.Value, issue.Project, issue.Summary);
+                }
+                return issues;
             }
             catch (Exception ex)
             {
@@ -154,7 +178,12 @@ namespace Gallifrey.IntegrationPoints
             try
             {
                 CheckAndConnectJira();
-                return jira.GetIssuesFromJql("assignee in (currentUser()) AND status not in (Closed,Resolved)", 0, 999);
+                var issues = jira.GetIssuesFromJql("assignee in (currentUser()) AND status not in (Closed,Resolved)", 0, 999);
+                foreach (var issue in issues)
+                {
+                    recentJiraCollection.AddRecentJira(issue.Key.Value, issue.Project, issue.Summary);
+                }
+                return issues;
             }
             catch (Exception ex)
             {
@@ -162,10 +191,38 @@ namespace Gallifrey.IntegrationPoints
             }
         }
 
+        private void UpdateJiraProjectCache()
+        {
+            try
+            {
+                CheckAndConnectJira();
+                var projects = jira.GetProjects();
+                jiraProjectCache.Clear();
+                jiraProjectCache.AddRange(projects.Select(project => new JiraProject(project.Key, project.Name)));
+            }
+            catch (Exception) { }
+        }
+
+        public IEnumerable<JiraProject> GetJiraProjects()
+        {
+            return jiraProjectCache;
+        }
+
+        public IEnumerable<RecentJira> GetRecentJirasFound()
+        {
+            return recentJiraCollection.GetRecentJiraCollection();
+        }
+
+        public void UpdateCache()
+        {
+            recentJiraCollection.RemoveExpiredCache();
+            UpdateJiraProjectCache();
+        }
+
         public void LogTime(Issue jiraIssue, DateTime exportTimeStamp, TimeSpan exportTime, WorklogStrategy strategy, string comment = "", TimeSpan? remainingTime = null)
         {
             var wasClosed = TryReopenJira(jiraIssue);
-            
+
             if (string.IsNullOrWhiteSpace(comment)) comment = "No Comment Entered";
             comment = "Gallifrey: " + comment;
 
