@@ -1,19 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Deployment.Application;
+using System.Linq;
 using System.Windows.Forms;
+using System.Xml.Linq;
 
 namespace Gallifrey.UI.Classic
 {
     public partial class AboutWindow : Form
     {
+        private readonly bool isBeta;
+        private readonly IBackend gallifrey;
         private readonly List<string> contributors;
         private int position;
 
-        public AboutWindow(bool isBeta)
+        public AboutWindow(bool isBeta, IBackend gallifrey)
         {
+            this.isBeta = isBeta;
+            this.gallifrey = gallifrey;
             InitializeComponent();
-                var networkDeploy = ApplicationDeployment.IsNetworkDeployed;
+            var networkDeploy = ApplicationDeployment.IsNetworkDeployed;
             var myVersion = networkDeploy ? ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString() : Application.ProductVersion;
             myVersion = string.Format("Current Version: {0}", myVersion);
             if (!networkDeploy) myVersion = string.Format("{0} (manual)", myVersion);
@@ -24,6 +30,8 @@ namespace Gallifrey.UI.Classic
                 {
                     "Mark Harrison\nTwitter: @HarrisonMeister\nGitHub: @HarrisonMeister",
                 };
+
+            btnChangeLog.Visible = networkDeploy;
         }
 
         private void btnOK_Click(object sender, EventArgs e)
@@ -59,6 +67,17 @@ namespace Gallifrey.UI.Classic
         private void btnTwitter_Click(object sender, EventArgs e)
         {
             System.Diagnostics.Process.Start("https://twitter.com/GallifreyApp");
+        }
+
+        private void btnChangeLog_Click(object sender, EventArgs e)
+        {
+            var changeLog = gallifrey.GetChangeLog(ApplicationDeployment.CurrentDeployment.CurrentVersion, XDocument.Parse(Properties.Resources.ChangeLog));
+
+            if (changeLog.Any())
+            {
+                var changeLogWindow = new ChangeLogWindow(isBeta, changeLog);
+                changeLogWindow.ShowDialog();
+            }
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using Atlassian.Jira;
 using Gallifrey.Exceptions.JiraTimers;
 using Gallifrey.IdleTimers;
+using Gallifrey.JiraIntegration;
 using Gallifrey.Serialization;
 
 namespace Gallifrey.JiraTimers
@@ -12,6 +13,7 @@ namespace Gallifrey.JiraTimers
     {
         IEnumerable<DateTime> GetValidTimerDates();
         IEnumerable<JiraTimer> GetTimersForADate(DateTime timerDate);
+        IEnumerable<RecentJira> GetJiraReferencesForLastDays(int days);
         Guid AddTimer(Issue jiraIssue, DateTime startDate, TimeSpan seedTime, bool startNow);
         void RemoveTimer(Guid uniqueId);
         void StartTimer(Guid uniqueId);
@@ -30,6 +32,8 @@ namespace Gallifrey.JiraTimers
         void AddJiraExportedTime(Guid uniqueId, int hours, int minutes);
         void AddIdleTimer(Guid uniqueId, IdleTimer idleTimer);
     }
+
+
 
     public class JiraTimerCollection : IJiraTimerCollection
     {
@@ -53,6 +57,17 @@ namespace Gallifrey.JiraTimers
         public IEnumerable<JiraTimer> GetTimersForADate(DateTime timerDate)
         {
             return timerList.Where(timer => timer.DateStarted.Date == timerDate.Date).OrderBy(timer => timer.JiraReference);
+        }
+
+        public IEnumerable<RecentJira> GetJiraReferencesForLastDays(int days)
+        {
+            if (days > 0) days = days * -1;
+
+            return timerList
+                .Where(timer => timer.DateStarted.Date >= DateTime.Now.AddDays(days).Date)
+                .Select(timer => new RecentJira(timer.JiraReference, timer.JiraProjectName, timer.JiraName))
+                .Distinct(new DuplicateRecentLogComparer())
+                .OrderBy(x=>x.JiraReference);
         }
 
         private void AddTimer(JiraTimer newTimer)
@@ -126,17 +141,17 @@ namespace Gallifrey.JiraTimers
         public void RemoveTimersOlderThanDays(int keepTimersForDays)
         {
             if (keepTimersForDays > 0) keepTimersForDays = keepTimersForDays * -1;
-            
-            timerList.RemoveAll(timer => timer.FullyExported && 
-                timer.DateStarted.Date != DateTime.Now.Date && 
+
+            timerList.RemoveAll(timer => timer.FullyExported &&
+                timer.DateStarted.Date != DateTime.Now.Date &&
                 timer.DateStarted <= DateTime.Now.AddDays(keepTimersForDays));
-            
+
             SaveTimers();
         }
 
         public JiraTimer GetTimer(Guid timerGuid)
         {
-            return timerList.First(timer => timer.UniqueId == timerGuid);
+            return timerList.FirstOrDefault(timer => timer.UniqueId == timerGuid);
         }
 
         public void RenameTimer(Guid timerGuid, Issue newIssue)
@@ -220,6 +235,19 @@ namespace Gallifrey.JiraTimers
             var timer = GetTimer(uniqueId);
             timer.AddIdleTimer(idleTimer);
             SaveTimers();
+        }
+    }
+
+    public class DuplicateRecentLogComparer : IEqualityComparer<RecentJira>
+    {
+        public bool Equals(RecentJira x, RecentJira y)
+        {
+            return x.JiraReference == y.JiraReference;
+        }
+
+        public int GetHashCode(RecentJira recentJira)
+        {
+            return GetHashCode();
         }
     }
 }

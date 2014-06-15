@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Windows.Forms;
 using Atlassian.Jira;
 using Gallifrey.Exceptions.IntergrationPoints;
@@ -11,6 +12,7 @@ namespace Gallifrey.UI.Classic
     {
         private readonly IBackend gallifrey;
         private readonly JiraTimer timerToShow;
+        private bool showingJiras;
 
         public RenameTimerWindow(IBackend gallifrey, Guid timerGuid)
         {
@@ -18,8 +20,12 @@ namespace Gallifrey.UI.Classic
             timerToShow = gallifrey.JiraTimerCollection.GetTimer(timerGuid);
             InitializeComponent();
 
+            txtJiraRef.AutoCompleteCustomSource.AddRange(gallifrey.JiraConnection.GetJiraProjects().Select(x => x.ToString()).ToArray());
+            showingJiras = false;
             txtJiraRef.Text = timerToShow.JiraReference;
+
             calStartDate.Value = timerToShow.DateStarted.Date;
+            
             txtJiraRef.Enabled = timerToShow.HasExportedTime();
             calStartDate.Enabled = timerToShow.HasExportedTime();
 
@@ -52,7 +58,7 @@ namespace Gallifrey.UI.Classic
             }
             catch (DuplicateTimerException)
             {
-                MessageBox.Show("This timer already exists!", "Duplicate Timer", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("This Timer Already Exists!", "Duplicate Timer", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
 
@@ -69,7 +75,7 @@ namespace Gallifrey.UI.Classic
             }
             catch (DuplicateTimerException)
             {
-                MessageBox.Show("This timer already exists!", "Duplicate Timer", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("This Timer Already Exists!", "Duplicate Timer", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
 
@@ -92,6 +98,40 @@ namespace Gallifrey.UI.Classic
                 DialogResult = DialogResult.None;
             }
 
+        }
+
+        private void txtJiraRef_TextChanged(object sender, EventArgs e)
+        {
+            var enteredJiraRef = txtJiraRef.Text;
+
+            if (enteredJiraRef.Contains(" ("))
+            {
+                enteredJiraRef = enteredJiraRef.Substring(0, enteredJiraRef.IndexOf(" ("));
+                txtJiraRef.Text = enteredJiraRef;
+            }
+
+            if (enteredJiraRef.Contains("-"))
+            {
+                if (!showingJiras)
+                {
+                    txtJiraRef.AutoCompleteCustomSource.Clear();
+                    txtJiraRef.AutoCompleteCustomSource.AddRange(gallifrey.JiraConnection.GetRecentJirasFound().Select(x => x.ToString()).ToArray());
+                    showingJiras = true;
+                    txtJiraRef.SelectionLength = 0;
+                    txtJiraRef.SelectionStart = txtJiraRef.TextLength;
+                }
+            }
+            else
+            {
+                if (showingJiras)
+                {
+                    txtJiraRef.AutoCompleteCustomSource.Clear();
+                    txtJiraRef.AutoCompleteCustomSource.AddRange(gallifrey.JiraConnection.GetJiraProjects().Select(x => x.ToString()).ToArray());
+                    showingJiras = false;
+                    txtJiraRef.SelectionLength = 0;
+                    txtJiraRef.SelectionStart = txtJiraRef.TextLength;
+                }
+            }
         }
     }
 }
