@@ -47,4 +47,12 @@
     </Bugs>
     <Others />
   </Version>
+  <Version>
+    <Number>1.0.4.0</Number>
+    <Features />
+    <Bugs>
+      <Bug>Corrected bug with export target on Sundays being zero, but exported being correct</Bug>
+    </Bugs>
+    <Others />
+  </Version>
 </Versions>
