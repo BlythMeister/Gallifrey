@@ -406,7 +406,7 @@ namespace Gallifrey.UI.Classic
         private void LockedTimerWindowClosed(object sender, EventArgs e)
         {
             RefreshTimerPages();
-            var lockedTimerWindow = (LockedTimerWindow) sender;
+            var lockedTimerWindow = (LockedTimerWindow)sender;
             if (lockedTimerWindow.NewTimerId.HasValue)
             {
                 SelectTimer(lockedTimerWindow.NewTimerId.Value);
@@ -468,7 +468,7 @@ namespace Gallifrey.UI.Classic
                 var selectedTimer = (JiraTimer)((ListBox)tabTimerDays.SelectedTab.Controls[string.Format("lst_{0}", tabTimerDays.SelectedTab.Name)]).SelectedItem;
                 if (selectedTimer != null)
                 {
-                    selectedTimerId = selectedTimer.UniqueId;    
+                    selectedTimerId = selectedTimer.UniqueId;
                 }
             }
 
@@ -585,19 +585,9 @@ namespace Gallifrey.UI.Classic
 
         private void SetExportTargetStats()
         {
-            var exportedTime = gallifrey.JiraTimerCollection.GetTotalExportedTimeThisWeek();
-            var target = new TimeSpan();
-            var n = 0;
-            var dayIndex = DateTime.Today.DayOfWeek;
-            if (dayIndex < DayOfWeek.Monday)
-            {
-                dayIndex += 7; //Monday is first day of week, no day of week should have a smaller index
-            }
-            while (n++ < (int)dayIndex)
-            {
-                target = target.Add(gallifrey.Settings.AppSettings.TargetLogPerDay);
-            }
-
+            var exportedTime = gallifrey.JiraTimerCollection.GetTotalExportedTimeThisWeek(gallifrey.Settings.AppSettings.StartOfWeek);
+            var target = gallifrey.Settings.AppSettings.GetTargetThisWeek();
+            
             lblExportedWeek.Text = string.Format("Exported: {0}", exportedTime.FormatAsString(false));
             lblExportTargetWeek.Text = string.Format("Target: {0}", target.FormatAsString(false));
             progExportTarget.Maximum = (int)target.TotalMinutes;

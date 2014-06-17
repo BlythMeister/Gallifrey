@@ -75,23 +75,15 @@ namespace Gallifrey.JiraTimers
             get { return CurrentTime.Add(currentRunningTime.Elapsed); }
         }
 
-        public bool IsThisWeek
+        public bool IsThisWeek(DayOfWeek startOfWeek)
         {
-            get
-            {
-                var today = DateTime.Today;
-                var dayIndex = today.DayOfWeek;
-                if (dayIndex < DayOfWeek.Monday)
-                {
-                    dayIndex += 7; //Monday is first day of week, no day of week should have a smaller index
-                }
+            var today = DateTime.Today;
+            var daysThisWeek = (7 + (today.DayOfWeek - startOfWeek)) % 7;
 
-                var dateDiff = dayIndex - DayOfWeek.Monday;
-                var mondayThisWeek = today.AddDays(dateDiff * -1);
-                var mondayNextWeek = mondayThisWeek.AddDays(7);
+            var weekStartDate = today.AddDays(daysThisWeek * -1);
+            var weekEndDate = weekStartDate.AddDays(7).AddSeconds(-1);
 
-                return DateStarted.Date >= mondayThisWeek.Date && DateStarted.Date < mondayNextWeek.Date;
-            }
+            return DateStarted.Date >= weekStartDate.Date && DateStarted.Date < weekEndDate.Date;
         }
 
         public void StartTimer()
