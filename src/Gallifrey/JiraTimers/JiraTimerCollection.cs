@@ -25,15 +25,13 @@ namespace Gallifrey.JiraTimers
         void ChangeTimerDate(Guid timerGuid, DateTime newStartDate);
         Tuple<int, int> GetNumberExported();
         TimeSpan GetTotalUnexportedTime();
-        TimeSpan GetTotalExportedTimeThisWeek();
+        TimeSpan GetTotalExportedTimeThisWeek(DayOfWeek startOfWeek);
         TimeSpan GetTotalTimeForDate(DateTime timerDate);
         void AdjustTime(Guid uniqueId, int hours, int minutes, bool addTime);
         void SetJiraExportedTime(Guid uniqueId, TimeSpan loggedTime);
         void AddJiraExportedTime(Guid uniqueId, int hours, int minutes);
         void AddIdleTimer(Guid uniqueId, IdleTimer idleTimer);
     }
-
-
 
     public class JiraTimerCollection : IJiraTimerCollection
     {
@@ -197,10 +195,10 @@ namespace Gallifrey.JiraTimers
             return timerList.Aggregate(unexportedTime, (current, jiraTimer) => current.Add(new TimeSpan(jiraTimer.TimeToExport.Hours, jiraTimer.TimeToExport.Minutes, 0)));
         }
 
-        public TimeSpan GetTotalExportedTimeThisWeek()
+        public TimeSpan GetTotalExportedTimeThisWeek(DayOfWeek startOfWeek)
         {
             var exportedTime = new TimeSpan();
-            return timerList.Where(jiraTimer => jiraTimer.IsThisWeek).Aggregate(exportedTime, (current, jiraTimer) => current.Add(jiraTimer.ExportedTime));
+            return timerList.Where(jiraTimer => jiraTimer.IsThisWeek(startOfWeek)).Aggregate(exportedTime, (current, jiraTimer) => current.Add(jiraTimer.ExportedTime));
         }
 
         public TimeSpan GetTotalTimeForDate(DateTime timerDate)

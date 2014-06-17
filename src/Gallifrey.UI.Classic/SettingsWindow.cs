@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 using Gallifrey.Exceptions.IntergrationPoints;
 
@@ -23,6 +25,15 @@ namespace Gallifrey.UI.Classic
 
             txtTargetHours.Text = gallifrey.Settings.AppSettings.TargetLogPerDay.Hours.ToString();
             txtTargetMins.Text = gallifrey.Settings.AppSettings.TargetLogPerDay.Minutes.ToString();
+
+            for (var i = 0; i < chklstWorkingDays.Items.Count; i++)
+            {
+                var foundItem = gallifrey.Settings.AppSettings.ExportDays.Any(exportDay => exportDay.ToString().ToLower() == chklstWorkingDays.Items[i].ToString().ToLower());
+
+                chklstWorkingDays.SetItemChecked(i, foundItem);
+            }
+
+            cmdWeekStart.Text = gallifrey.Settings.AppSettings.StartOfWeek.ToString();
 
             chkAlwaysTop.Checked = gallifrey.Settings.UiSettings.AlwaysOnTop;
         }
@@ -57,6 +68,8 @@ namespace Gallifrey.UI.Classic
 
             gallifrey.Settings.AppSettings.TargetLogPerDay = new TimeSpan(hours, minutes, 0);
 
+            gallifrey.Settings.AppSettings.ExportDays = (from object t in chklstWorkingDays.CheckedItems select (DayOfWeek) Enum.Parse(typeof (DayOfWeek), t.ToString(), true));
+            gallifrey.Settings.AppSettings.StartOfWeek = (DayOfWeek) Enum.Parse(typeof (DayOfWeek), cmdWeekStart.Text, true);
 
             gallifrey.Settings.JiraConnectionSettings.JiraUrl = txtJiraUrl.Text;
             gallifrey.Settings.JiraConnectionSettings.JiraUsername = txtJiraUsername.Text;

@@ -49,7 +49,9 @@
   </Version>
   <Version>
     <Number>1.0.4.0</Number>
-    <Features />
+    <Features>
+      <Feature>Add ability to set working days &amp; start of week for target calculations</Feature>
+    </Features>
     <Bugs>
       <Bug>Corrected bug with export target on Sundays being zero, but exported being correct</Bug>
     </Bugs>
