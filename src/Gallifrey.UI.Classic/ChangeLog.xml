@@ -44,6 +44,7 @@
       <Bug>Simplified export window</Bug>
       <Bug>Changed icons for Manual Adjust &amp; Rename</Bug>
       <Bug>Better handling of timers left running overnight</Bug>
+      <Bug>Adding locked timer invalid check of timer presence for adding to existing.</Bug>
     </Bugs>
     <Others />
   </Version>

@@ -629,7 +629,14 @@ namespace Gallifrey.UI.Classic
             {
                 if (ApplicationDeployment.CurrentDeployment.UpdatedVersion != ApplicationDeployment.CurrentDeployment.CurrentVersion)
                 {
-                    Application.Restart();
+                    try
+                    {
+                        Application.Restart();
+                    }
+                    catch (Exception)
+                    {
+                        MessageBox.Show("An Error Occured When Trying To Restart, Please Restart Manually", "Restart Failure", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    }
                 }
                 else
                 {
