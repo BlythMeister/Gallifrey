@@ -1,60 +1,57 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Versions>
-  <Version>
-    <Number>1.0.0.0</Number>
+  <Version Number="1.0.0" Name="">
     <Features>
-      <Feature>Daily timer management</Feature>
-      <Feature>Manual Timer Adjustment</Feature>
-      <Feature>Export Direct To Jira</Feature>
-      <Feature>Jira issue search (with saved filters)</Feature>
-      <Feature>Alerts when no timer is running</Feature>
-      <Feature>Machine locked time capture</Feature>
-      <Feature>Automatic Updates</Feature>
-      <Feature>Export Stats &amp; A Target Export Amount</Feature>
+      <Feature>Daily timer management.</Feature>
+      <Feature>Manual Timer Adjustment.</Feature>
+      <Feature>Export Direct To Jira.</Feature>
+      <Feature>Jira issue search (with saved filters).</Feature>
+      <Feature>Alerts when no timer is running.</Feature>
+      <Feature>Machine locked time capture.</Feature>
+      <Feature>Automatic Updates.</Feature>
+      <Feature>Export Stats &amp; A Target Export Amount.</Feature>
     </Features>
     <Bugs />
     <Others />
   </Version>
-  <Version>
-    <Number>1.0.1.0</Number>
+  <Version Number="1.0.1" Name="">
     <Features>
-      <Feature>Intergrated updates in spotify style</Feature>
-      <Feature>Nice error reporting back to central store</Feature>
+      <Feature>Intergrated updates in spotify style.</Feature>
+      <Feature>Nice error reporting back to central store.</Feature>
     </Features>
     <Bugs />   
     <Others />   
   </Version>
-  <Version>
-    <Number>1.0.2.0</Number>
+  <Version Number="1.0.2" Name="">
     <Features />   
     <Bugs>
-      <Bug>Critical export bug fix</Bug>
+      <Bug>Critical export bug fix.</Bug>
     </Bugs>
     <Others />    
   </Version>
-  <Version>
-    <Number>1.0.3.0</Number>
+  <Version Number="1.0.3" Name="">
     <Features>
-      <Feature>Change Log</Feature>
-      <Feature>Locked timers show recent timers, rather than todays timers (auto create if not already created)</Feature>
-      <Feature>Jira Cache, all queries returning issues from Jira are cached for 14 days and used to populate drop-down on add/rename timers</Feature>
-      <Feature>Added tray icon pop-out when update avaliable</Feature>
+      <Feature>Added viewable change log.</Feature>
+      <Feature>Locked timers show recent timers, rather than todays timers (auto create if not already created).</Feature>
+      <Feature>Jira Cache, all queries returning issues from Jira are cached for 14 days and used to populate drop-down on add/rename timers.</Feature>
+      <Feature>Added tray icon pop-out when update avaliable.</Feature>
     </Features>
     <Bugs>
-      <Bug>Simplified export window</Bug>
-      <Bug>Changed icons for Manual Adjust &amp; Rename</Bug>
-      <Bug>Better handling of timers left running overnight</Bug>
-      <Bug>Adding locked timer invalid check of timer presence for adding to existing.</Bug>
+      <Bug>Simplified export window.</Bug>
+      <Bug>Changed icons for Manual Adjust &amp; Rename.</Bug>
+      <Bug>Better handling of timers left running overnight.</Bug>
     </Bugs>
     <Others />
   </Version>
-  <Version>
-    <Number>1.0.4.0</Number>
+  <Version Number="1.0.4" Name="">
     <Features>
-      <Feature>Add ability to set working days &amp; start of week for target calculations</Feature>
+      <Feature>Add ability to set working days &amp; start of week for target calculations.</Feature>
     </Features>
     <Bugs>
-      <Bug>Corrected bug with export target on Sundays being zero, but exported being correct</Bug>
+      <Bug>Corrected bug with export target on Sundays being zero, but exported being correct.</Bug>
+      <Bug>Adding locked timer invalid check of timer presence for adding to existing.</Bug>
+      <Bug>Corrected some windows being top most &amp; hiding pop-ups.</Bug>
+      <Bug>Only show build reference on Beta builds, all others are always "0" so pointless.</Bug>
     </Bugs>
     <Others />
   </Version>

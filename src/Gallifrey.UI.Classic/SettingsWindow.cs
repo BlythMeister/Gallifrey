@@ -52,6 +52,8 @@ namespace Gallifrey.UI.Classic
 
         private void btnSaveSettings_Click(object sender, EventArgs e)
         {
+            TopMost = false;
+
             int keepTimerDays, alertTime;
             if (!int.TryParse(txtAlertMins.Text, out alertTime)) alertTime = 0;
             if (!int.TryParse(txtTimerDays.Text, out keepTimerDays)) keepTimerDays = 28;
@@ -81,14 +83,17 @@ namespace Gallifrey.UI.Classic
             {
                 MessageBox.Show("You have to populate the Jira Credentials!", "Missing Config");
                 DialogResult = DialogResult.None;
+                TopMost = true;
                 return;
             }
 
+            TopMost = true;
             CloseWindow();
         }
 
         private void CloseWindow()
         {
+            TopMost = false;
             try
             {
                 gallifrey.SaveSettings();
@@ -96,6 +101,8 @@ namespace Gallifrey.UI.Classic
             catch (JiraConnectionException)
             {
                 MessageBox.Show("Unable to connect to Jira with these settings!", "Unable to connect");
+                DialogResult = DialogResult.None;
+                TopMost = true;
                 return;
             }
 

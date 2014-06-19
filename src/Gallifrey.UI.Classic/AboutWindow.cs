@@ -21,6 +21,10 @@ namespace Gallifrey.UI.Classic
             InitializeComponent();
             var networkDeploy = ApplicationDeployment.IsNetworkDeployed;
             var myVersion = networkDeploy ? ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString() : Application.ProductVersion;
+            if (networkDeploy && !isBeta)
+            {
+                myVersion = myVersion.Substring(0, myVersion.LastIndexOf("."));
+            }
             myVersion = string.Format("Current Version: {0}", myVersion);
             if (!networkDeploy) myVersion = string.Format("{0} (manual)", myVersion);
             if (isBeta) myVersion = string.Format("{0} (beta)", myVersion);
