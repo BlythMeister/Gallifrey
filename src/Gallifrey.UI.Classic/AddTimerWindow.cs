@@ -56,6 +56,7 @@ namespace Gallifrey.UI.Classic
 
         private void btnAddTimer_Click(object sender, EventArgs e)
         {
+            TopMost = false;
             if (AddJira())
             {
                 Close();
@@ -64,6 +65,7 @@ namespace Gallifrey.UI.Classic
             {
                 DialogResult = DialogResult.None;
             }
+            TopMost = gallifrey.Settings.UiSettings.AlwaysOnTop;
         }
 
         private bool AddJira()

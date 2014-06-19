@@ -161,6 +161,7 @@ namespace Gallifrey.UI.Classic
 
         private void btnOK_Click(object sender, EventArgs e)
         {
+            TopMost = false;
             if (ExportTime())
             {
                 Close();
@@ -169,6 +170,7 @@ namespace Gallifrey.UI.Classic
             {
                 DialogResult = DialogResult.None;
             }
+            TopMost = gallifrey.Settings.UiSettings.AlwaysOnTop;
         }
 
         private void radSetValue_CheckedChanged(object sender, EventArgs e)

@@ -34,18 +34,19 @@ namespace Gallifrey.ChangeLog
 
         private static KeyValuePair<Version, ChangeLogVersionDetails> BuildChangeLogItem(XElement changeVersion)
         {
-            var version = new Version(changeVersion.Element("Number").Value);
+            var version = new Version(changeVersion.Attribute("Number").Value);
             var details = BuildChangeLogVersionDetails(changeVersion);
             return new KeyValuePair<Version, ChangeLogVersionDetails>(version, details);
         }
 
         private static ChangeLogVersionDetails BuildChangeLogVersionDetails(XElement changeVersion)
         {
+            var name = changeVersion.Attribute("Name").Value;
             var features = changeVersion.Descendants("Feature").Select(item => item.Value).ToList();
             var bugs = changeVersion.Descendants("Bug").Select(item => item.Value).ToList();
             var others = changeVersion.Descendants("Other").Select(item => item.Value).ToList();
 
-            return new ChangeLogVersionDetails(features, bugs, others);
+            return new ChangeLogVersionDetails(name, features, bugs, others);
         }
     }
 }

@@ -15,6 +15,10 @@ namespace Gallifrey.UI.Classic
             InitializeComponent();
             var networkDeploy = ApplicationDeployment.IsNetworkDeployed;
             var myVersion = networkDeploy ? ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString() : Application.ProductVersion;
+            if (networkDeploy && !isBeta)
+            {
+                myVersion = myVersion.Substring(0, myVersion.LastIndexOf("."));
+            }
             myVersion = string.Format("Current Version: {0}", myVersion);
             if (!networkDeploy) myVersion = string.Format("{0} (manual)", myVersion);
             if (isBeta) myVersion = string.Format("{0} (beta)", myVersion);
@@ -23,7 +27,14 @@ namespace Gallifrey.UI.Classic
             foreach (var changeLogDetail in changeLog)
             {
                 txtChangeLog.SelectionFont = new Font(txtChangeLog.SelectionFont.FontFamily, 14, FontStyle.Bold);
-                txtChangeLog.AppendText(string.Format("Version: {0}\n", changeLogDetail.Key));
+                if (string.IsNullOrWhiteSpace(changeLogDetail.Value.Name))
+                {
+                    txtChangeLog.AppendText(string.Format("Version: {0}\n", changeLogDetail.Key));    
+                }
+                else
+                {
+                    txtChangeLog.AppendText(string.Format("Version: {0} ({1})\n", changeLogDetail.Key, changeLogDetail.Value.Name));
+                }
                 
                 if (changeLogDetail.Value.Features.Any())
                 {

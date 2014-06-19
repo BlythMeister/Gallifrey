@@ -89,6 +89,7 @@ namespace Gallifrey.UI.Classic
 
         private void btnOK_Click(object sender, EventArgs e)
         {
+            TopMost = false;
             if ((txtJiraRef.Text != timerToShow.JiraReference && RenameTimer()) || (calStartDate.Value.Date != timerToShow.DateStarted.Date && ChangeTimerDate()))
             {
                 Close();
@@ -97,7 +98,7 @@ namespace Gallifrey.UI.Classic
             {
                 DialogResult = DialogResult.None;
             }
-
+            TopMost = gallifrey.Settings.UiSettings.AlwaysOnTop;
         }
 
         private void txtJiraRef_TextChanged(object sender, EventArgs e)

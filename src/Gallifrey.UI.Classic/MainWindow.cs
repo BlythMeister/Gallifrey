@@ -444,6 +444,12 @@ namespace Gallifrey.UI.Classic
         {
             var networkDeploy = ApplicationDeployment.IsNetworkDeployed;
             myVersion = networkDeploy ? ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString() : Application.ProductVersion;
+
+            if (networkDeploy && !isBeta)
+            {
+                myVersion = myVersion.Substring(0, myVersion.LastIndexOf("."));
+            }
+
             var betaText = isBeta ? " (beta)" : "";
             var upToDateText = "Invalid Deployment";
 
