@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Atlassian.Jira;
+using Gallifrey.Comparers;
 using Gallifrey.Exceptions.JiraTimers;
 using Gallifrey.IdleTimers;
 using Gallifrey.JiraIntegration;
@@ -54,7 +55,7 @@ namespace Gallifrey.JiraTimers
 
         public IEnumerable<JiraTimer> GetTimersForADate(DateTime timerDate)
         {
-            return timerList.Where(timer => timer.DateStarted.Date == timerDate.Date).OrderBy(timer => timer.JiraReference);
+            return timerList.Where(timer => timer.DateStarted.Date == timerDate.Date).OrderBy(timer => timer.JiraReference, new JiraReferenceComparer());
         }
 
         public IEnumerable<RecentJira> GetJiraReferencesForLastDays(int days)
@@ -65,7 +66,7 @@ namespace Gallifrey.JiraTimers
                 .Where(timer => timer.DateStarted.Date >= DateTime.Now.AddDays(days).Date)
                 .Select(timer => new RecentJira(timer.JiraReference, timer.JiraProjectName, timer.JiraName))
                 .Distinct(new DuplicateRecentLogComparer())
-                .OrderBy(x=>x.JiraReference);
+                .OrderBy(x=>x.JiraReference, new JiraReferenceComparer());
         }
 
         private void AddTimer(JiraTimer newTimer)
@@ -233,19 +234,6 @@ namespace Gallifrey.JiraTimers
             var timer = GetTimer(uniqueId);
             timer.AddIdleTimer(idleTimer);
             SaveTimers();
-        }
-    }
-
-    public class DuplicateRecentLogComparer : IEqualityComparer<RecentJira>
-    {
-        public bool Equals(RecentJira x, RecentJira y)
-        {
-            return x.JiraReference == y.JiraReference;
-        }
-
-        public int GetHashCode(RecentJira recentJira)
-        {
-            return GetHashCode();
         }
     }
 }

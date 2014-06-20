@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gallifrey.Comparers;
+using Gallifrey.JiraTimers;
 using Gallifrey.Serialization;
 
 namespace Gallifrey.JiraIntegration
@@ -29,7 +31,7 @@ namespace Gallifrey.JiraIntegration
 
         public IEnumerable<RecentJira> GetRecentJiraCollection()
         {
-            return recentJiraList;
+            return recentJiraList.OrderBy(x=>x.JiraReference, new JiraReferenceComparer());
         }
 
         public void AddRecentJira(string jiraReference, string jiraProjectName, string jiraName)

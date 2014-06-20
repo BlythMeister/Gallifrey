@@ -52,6 +52,7 @@
       <Bug>Adding locked timer invalid check of timer presence for adding to existing.</Bug>
       <Bug>Corrected some windows being top most &amp; hiding pop-ups.</Bug>
       <Bug>Only show build reference on Beta builds, all others are always "0" so pointless.</Bug>
+      <Bug>Change ordering of Jiras to use new comparer to sort numerical parts correctly.</Bug>
     </Bugs>
     <Others />
   </Version>
