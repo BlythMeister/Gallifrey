@@ -67,6 +67,8 @@
     <Compile Include="JiraIntegration\RecentJiraCollection.cs" />
     <Compile Include="JiraIntegration\JiraConnection.cs" />
     <Compile Include="JiraIntegration\RecentJira.cs" />
+    <Compile Include="Comparers\DuplicateRecentLogComparer.cs" />
+    <Compile Include="Comparers\JiraReferenceComparer.cs" />
     <Compile Include="JiraTimers\JiraTimer.cs" />
     <Compile Include="JiraTimers\JiraTimerCollection.cs" />
     <Compile Include="ExtensionMethods\TimespanExtensionMethods.cs" />
