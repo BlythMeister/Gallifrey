@@ -15,26 +15,25 @@ namespace Gallifrey.Serialization
         {
             if (!Directory.Exists(FilePathSettings.DataSavePath)) Directory.CreateDirectory(FilePathSettings.DataSavePath);
 
-            
+
             File.WriteAllText(SavePath, DataEncryption.Encrypt(JsonConvert.SerializeObject(timerCollection)));
         }
 
         internal static List<JiraTimer> DeSerialize()
         {
             List<JiraTimer> timers;
-            
+
             if (File.Exists(SavePath))
             {
                 try
                 {
-                    var text = DataEncryption.Decrypt(File.ReadAllText(SavePath));
+                    var text = TryAndFixJson(DataEncryption.Decrypt(File.ReadAllText(SavePath)));
                     timers = JsonConvert.DeserializeObject<List<JiraTimer>>(text);
                 }
                 catch (Exception)
                 {
                     timers = new List<JiraTimer>();
                 }
-
             }
             else
             {
@@ -42,6 +41,14 @@ namespace Gallifrey.Serialization
             }
 
             return timers;
+        }
+
+        private static string TryAndFixJson(string text)
+        {
+            text = text.Replace("[{\"JiraReference\"", "[{\"JiraInfo\":{\"JiraReference\"");
+            text = text.Replace(",{\"JiraReference\"", ",{\"JiraInfo\":{\"JiraReference\"");
+            text = text.Replace("\",\"DateStarted\"", "\"},\"DateStarted\"");
+            return text;
         }
     }
 }
