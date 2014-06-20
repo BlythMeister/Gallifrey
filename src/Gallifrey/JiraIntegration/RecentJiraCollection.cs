@@ -29,19 +29,19 @@ namespace Gallifrey.JiraIntegration
 
         public IEnumerable<RecentJira> GetRecentJiraCollection()
         {
-            return recentJiraList.OrderBy(x=>x.JiraInfo);
+            return recentJiraList;
         }
 
         public void AddRecentJira(string jiraReference, string jiraProjectName, string jiraName)
         {
-            if (recentJiraList.Any(x => x.JiraInfo.JiraReference == jiraReference))
+            if (recentJiraList.Any(x => x.JiraReference == jiraReference))
             {
-                var recentJira = recentJiraList.First(x => x.JiraInfo.JiraReference == jiraReference);
+                var recentJira = recentJiraList.First(x => x.JiraReference == jiraReference);
                 recentJira.UpdateDetail(jiraProjectName, jiraName, DateTime.Now);
             }
             else
             {
-                recentJiraList.Add(new RecentJira(new JiraInfo(jiraReference, jiraProjectName, jiraName), DateTime.Now));
+                recentJiraList.Add(new RecentJira(jiraReference, jiraProjectName, jiraName, DateTime.Now));
             }
             SaveCache();
         }
@@ -54,7 +54,7 @@ namespace Gallifrey.JiraIntegration
 
         public void Remove(string jiraReference)
         {
-            recentJiraList.RemoveAll(recentJira => recentJira.JiraInfo.JiraReference == jiraReference);
+            recentJiraList.RemoveAll(recentJira => recentJira.JiraReference == jiraReference);
             SaveCache();
         }
     }

@@ -3,37 +3,39 @@ using Newtonsoft.Json;
 
 namespace Gallifrey.JiraIntegration
 {
-    public class RecentJira : IEquatable<RecentJira>
+    public class RecentJira
     {
-        public JiraInfo JiraInfo { get; private set; }
+        public string JiraReference { get; private set; }
+        public string JiraProjectName { get; private set; }
+        public string JiraName { get; private set; }
         public DateTime DateSeen { get; private set; }
 
         [JsonConstructor]
-        public RecentJira(JiraInfo jiraInfo, DateTime dateSeen)
+        public RecentJira(string jiraReference, string jiraProjectName, string jiraName, DateTime dateSeen)
         {
-            JiraInfo = jiraInfo;
+            JiraReference = jiraReference;
+            JiraProjectName = jiraProjectName;
+            JiraName = jiraName;
             DateSeen = dateSeen;
         }
 
-        public RecentJira(JiraInfo jiraInfo)
+        public RecentJira(string jiraReference, string jiraProjectName, string jiraName)
         {
-            JiraInfo = jiraInfo;
+            JiraReference = jiraReference;
+            JiraProjectName = jiraProjectName;
+            JiraName = jiraName;
         }
 
         public void UpdateDetail(string jiraProjectName, string jiraName, DateTime dateSeen)
         {
-            JiraInfo.UpdateDetail(jiraProjectName, jiraName);
+            JiraProjectName = jiraProjectName;
+            JiraName = jiraName;
             DateSeen = dateSeen;
-        }
-
-        public bool Equals(RecentJira other)
-        {
-            return JiraInfo.Equals(other.JiraInfo);
         }
 
         public override string ToString()
         {
-            return JiraInfo.ToString();
+            return string.Format("{0} ({1})", JiraReference, JiraName);
         }
     }
 }

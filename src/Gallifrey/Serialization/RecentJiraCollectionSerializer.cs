@@ -26,7 +26,7 @@ namespace Gallifrey.Serialization
             {
                 try
                 {
-                    var text = TryAndFixJson(DataEncryption.Decrypt(File.ReadAllText(SavePath)));
+                    var text = DataEncryption.Decrypt(File.ReadAllText(SavePath));
                     recentJiraCollection = JsonConvert.DeserializeObject<List<RecentJira>>(text);
                 }
                 catch (Exception)
@@ -41,14 +41,6 @@ namespace Gallifrey.Serialization
             }
 
             return recentJiraCollection;
-        }
-
-        private static string TryAndFixJson(string text)
-        {
-            text = text.Replace("[{\"JiraReference\"", "[{\"JiraInfo\":{\"JiraReference\"");
-            text = text.Replace(",{\"JiraReference\"", ",{\"JiraInfo\":{\"JiraReference\"");
-            text = text.Replace("\",\"DateStarted\"", "\"},\"DateStarted\"");
-            return text;
         }
     }
 }

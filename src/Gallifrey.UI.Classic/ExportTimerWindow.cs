@@ -21,7 +21,7 @@ namespace Gallifrey.UI.Classic
             timerToShow = gallifrey.JiraTimerCollection.GetTimer(timerGuid);
             InitializeComponent();
 
-            jiraIssue = gallifrey.JiraConnection.GetJiraIssue(timerToShow.JiraInfo.JiraReference);
+            jiraIssue = gallifrey.JiraConnection.GetJiraIssue(timerToShow.JiraReference);
             var loggedTime = new TimeSpan();
             foreach (var worklog in jiraIssue.GetWorklogs())
             {
@@ -40,8 +40,8 @@ namespace Gallifrey.UI.Classic
                 DisplayForm = false;
             }
 
-            txtJiraRef.Text = timerToShow.JiraInfo.JiraReference;
-            txtDescription.Text = timerToShow.JiraInfo.JiraName;
+            txtJiraRef.Text = timerToShow.JiraReference;
+            txtDescription.Text = timerToShow.JiraName;
             txtTotalHours.Text = timerToShow.ExactCurrentTime.Hours.ToString();
             txtTotalMinutes.Text = timerToShow.ExactCurrentTime.Minutes.ToString();
             txtExportedHours.Text = timerToShow.ExportedTime.Hours.ToString();

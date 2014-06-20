@@ -18,7 +18,7 @@ namespace Gallifrey.UI.Classic
             timerToShow = gallifrey.JiraTimerCollection.GetTimer(timerGuid);
             InitializeComponent();
             
-            txtJiraRef.Text = timerToShow.JiraInfo.JiraReference;
+            txtJiraRef.Text = timerToShow.JiraReference;
 
             TopMost = gallifrey.Settings.UiSettings.AlwaysOnTop;
         }

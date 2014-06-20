@@ -63,7 +63,6 @@
     <Compile Include="Exceptions\IntergrationPoints\JiraConnectionException.cs" />
     <Compile Include="Exceptions\JiraTimers\DuplicateTimerException.cs" />
     <Compile Include="InactiveMonitor\ActivityChecker.cs" />
-    <Compile Include="JiraIntegration\JiraInfo.cs" />
     <Compile Include="JiraIntegration\JiraProject.cs" />
     <Compile Include="JiraIntegration\RecentJiraCollection.cs" />
     <Compile Include="JiraIntegration\JiraConnection.cs" />
