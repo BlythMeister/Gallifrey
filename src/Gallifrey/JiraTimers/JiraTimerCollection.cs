@@ -54,7 +54,7 @@ namespace Gallifrey.JiraTimers
 
         public IEnumerable<JiraTimer> GetTimersForADate(DateTime timerDate)
         {
-            return timerList.Where(timer => timer.DateStarted.Date == timerDate.Date).OrderBy(timer => timer.JiraInfo);
+            return timerList.Where(timer => timer.DateStarted.Date == timerDate.Date).OrderBy(timer => timer.JiraReference);
         }
 
         public IEnumerable<RecentJira> GetJiraReferencesForLastDays(int days)
@@ -63,13 +63,14 @@ namespace Gallifrey.JiraTimers
 
             return timerList
                 .Where(timer => timer.DateStarted.Date >= DateTime.Now.AddDays(days).Date)
-                .Select(timer => new RecentJira(timer.JiraInfo))
-                .OrderBy(x=>x.JiraInfo);
+                .Select(timer => new RecentJira(timer.JiraReference, timer.JiraProjectName, timer.JiraName))
+                .Distinct(new DuplicateRecentLogComparer())
+                .OrderBy(x=>x.JiraReference);
         }
 
         private void AddTimer(JiraTimer newTimer)
         {
-            if (timerList.Any(timer => timer.JiraInfo.Equals(newTimer.JiraInfo) && timer.DateStarted.Date == newTimer.DateStarted.Date))
+            if (timerList.Any(timer => timer.JiraReference == newTimer.JiraReference && timer.DateStarted.Date == newTimer.DateStarted.Date))
             {
                 throw new DuplicateTimerException("Already have a timer for this task on this day!");
             }
@@ -157,7 +158,7 @@ namespace Gallifrey.JiraTimers
             if (currentTimer.IsRunning) currentTimer.StopTimer();
             var newTimer = new JiraTimer(newIssue, currentTimer.DateStarted, currentTimer.ExactCurrentTime);
 
-            if (timerList.Any(timer => timer.JiraInfo.Equals(newTimer.JiraInfo) && timer.DateStarted.Date == newTimer.DateStarted.Date && timer.UniqueId != timerGuid))
+            if (timerList.Any(timer => timer.JiraReference == newTimer.JiraReference && timer.DateStarted.Date == newTimer.DateStarted.Date && timer.UniqueId != timerGuid))
             {
                 throw new DuplicateTimerException("Already have a timer for this task on this day!");
             }
@@ -173,7 +174,7 @@ namespace Gallifrey.JiraTimers
             if (currentTimer.IsRunning) currentTimer.StopTimer();
             var newTimer = new JiraTimer(currentTimer, newStartDate.Date);
 
-            if (timerList.Any(timer => timer.JiraInfo.Equals(newTimer.JiraInfo) && timer.DateStarted.Date == newTimer.DateStarted.Date && timer.UniqueId != timerGuid))
+            if (timerList.Any(timer => timer.JiraReference == newTimer.JiraReference && timer.DateStarted.Date == newTimer.DateStarted.Date && timer.UniqueId != timerGuid))
             {
                 throw new DuplicateTimerException("Already have a timer for this task on this day!");
             }
@@ -232,6 +233,19 @@ namespace Gallifrey.JiraTimers
             var timer = GetTimer(uniqueId);
             timer.AddIdleTimer(idleTimer);
             SaveTimers();
+        }
+    }
+
+    public class DuplicateRecentLogComparer : IEqualityComparer<RecentJira>
+    {
+        public bool Equals(RecentJira x, RecentJira y)
+        {
+            return x.JiraReference == y.JiraReference;
+        }
+
+        public int GetHashCode(RecentJira recentJira)
+        {
+            return GetHashCode();
         }
     }
 }
