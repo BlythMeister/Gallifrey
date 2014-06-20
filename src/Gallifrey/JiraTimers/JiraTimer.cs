@@ -4,15 +4,14 @@ using Atlassian.Jira;
 using Gallifrey.Exceptions.JiraTimers;
 using Gallifrey.ExtensionMethods;
 using Gallifrey.IdleTimers;
+using Gallifrey.JiraIntegration;
 using Newtonsoft.Json;
 
 namespace Gallifrey.JiraTimers
 {
     public class JiraTimer
     {
-        public string JiraReference { get; private set; }
-        public string JiraProjectName { get; private set; }
-        public string JiraName { get; private set; }
+        public JiraInfo JiraInfo { get; private set; }
         public DateTime DateStarted { get; private set; }
         public TimeSpan CurrentTime { get; private set; }
         public TimeSpan ExportedTime { get; private set; }
@@ -21,11 +20,9 @@ namespace Gallifrey.JiraTimers
         private readonly Stopwatch currentRunningTime;
 
         [JsonConstructor]
-        public JiraTimer(string jiraReference, string jiraProjectName, string jiraName, DateTime dateStarted, TimeSpan currentTime, TimeSpan exportedTime, Guid uniqueId)
+        public JiraTimer(JiraInfo jiraInfo, DateTime dateStarted, TimeSpan currentTime, TimeSpan exportedTime, Guid uniqueId)
         {
-            JiraReference = jiraReference;
-            JiraProjectName = jiraProjectName;
-            JiraName = jiraName;
+            JiraInfo = jiraInfo;
             DateStarted = dateStarted;
             CurrentTime = currentTime;
             ExportedTime = exportedTime;
@@ -36,9 +33,7 @@ namespace Gallifrey.JiraTimers
 
         public JiraTimer(Issue jiraIssue, DateTime dateStarted, TimeSpan currentTime)
         {
-            JiraReference = jiraIssue.Key.Value;
-            JiraProjectName = jiraIssue.Project;
-            JiraName = jiraIssue.Summary;
+            JiraInfo = new JiraInfo(jiraIssue.Key.Value, jiraIssue.Project, jiraIssue.Summary);
             DateStarted = dateStarted;
             CurrentTime = currentTime;
             ExportedTime = new TimeSpan();
@@ -49,9 +44,7 @@ namespace Gallifrey.JiraTimers
 
         public JiraTimer(JiraTimer previousTimer, DateTime dateStarted)
         {
-            JiraReference = previousTimer.JiraReference;
-            JiraProjectName = previousTimer.JiraProjectName;
-            JiraName = previousTimer.JiraName;
+            JiraInfo = previousTimer.JiraInfo;
             DateStarted = dateStarted;
             CurrentTime = new TimeSpan();
             ExportedTime = new TimeSpan();
@@ -113,8 +106,8 @@ namespace Gallifrey.JiraTimers
         public override string ToString()
         {
             return TimeToExport.TotalMinutes >= 1 ?
-                string.Format("{0} - Time [ {1} ] - To Export [ {2} ] - Desc [ {3} ]", JiraReference, ExactCurrentTime.FormatAsString(), TimeToExport.FormatAsString(), JiraName) :
-                string.Format("{0} - Time [ {1} ] - Desc [ {2} ]", JiraReference, ExactCurrentTime.FormatAsString(), JiraName);
+                string.Format("{0} - Time [ {1} ] - To Export [ {2} ] - Desc [ {3} ]", JiraInfo.JiraReference, ExactCurrentTime.FormatAsString(), TimeToExport.FormatAsString(), JiraInfo.JiraName) :
+                string.Format("{0} - Time [ {1} ] - Desc [ {2} ]", JiraInfo.JiraReference, ExactCurrentTime.FormatAsString(), JiraInfo.JiraName);
         }
 
         public bool HasExportedTime()

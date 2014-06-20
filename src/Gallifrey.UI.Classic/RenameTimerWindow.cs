@@ -22,7 +22,7 @@ namespace Gallifrey.UI.Classic
 
             txtJiraRef.AutoCompleteCustomSource.AddRange(gallifrey.JiraConnection.GetJiraProjects().Select(x => x.ToString()).ToArray());
             showingJiras = false;
-            txtJiraRef.Text = timerToShow.JiraReference;
+            txtJiraRef.Text = timerToShow.JiraInfo.JiraReference;
 
             calStartDate.Value = timerToShow.DateStarted.Date;
             
@@ -90,7 +90,7 @@ namespace Gallifrey.UI.Classic
         private void btnOK_Click(object sender, EventArgs e)
         {
             TopMost = false;
-            if ((txtJiraRef.Text != timerToShow.JiraReference && RenameTimer()) || (calStartDate.Value.Date != timerToShow.DateStarted.Date && ChangeTimerDate()))
+            if ((txtJiraRef.Text != timerToShow.JiraInfo.JiraReference && RenameTimer()) || (calStartDate.Value.Date != timerToShow.DateStarted.Date && ChangeTimerDate()))
             {
                 Close();
             }

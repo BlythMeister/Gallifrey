@@ -103,16 +103,16 @@ namespace Gallifrey.UI.Classic
                 var timersForADate = gallifrey.JiraTimerCollection.GetTimersForADate(idleTimer.DateStarted);
                 Guid timerToAddTimeTo;
 
-                if (timersForADate.Any(x => x.JiraReference == selectedRecent.JiraReference))
+                if (timersForADate.Any(x => x.JiraInfo.Equals(selectedRecent.JiraInfo)))
                 {
-                    timerToAddTimeTo = timersForADate.First(x => x.JiraReference == selectedRecent.JiraReference).UniqueId;
+                    timerToAddTimeTo = timersForADate.First(x => x.JiraInfo.Equals(selectedRecent.JiraInfo)).UniqueId;
                 }
                 else
                 {
                     Issue jiraIssue;
                     try
                     {
-                        jiraIssue = gallifrey.JiraConnection.GetJiraIssue(selectedRecent.JiraReference);
+                        jiraIssue = gallifrey.JiraConnection.GetJiraIssue(selectedRecent.JiraInfo.JiraReference);
                     }
                     catch (NoResultsFoundException)
                     {
