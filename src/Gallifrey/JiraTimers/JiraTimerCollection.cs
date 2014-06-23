@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Atlassian.Jira;
@@ -14,6 +15,7 @@ namespace Gallifrey.JiraTimers
     {
         IEnumerable<DateTime> GetValidTimerDates();
         IEnumerable<JiraTimer> GetTimersForADate(DateTime timerDate);
+        IEnumerable<JiraTimer> GetUnexportedTimers(DateTime timerDate);
         IEnumerable<RecentJira> GetJiraReferencesForLastDays(int days);
         Guid AddTimer(Issue jiraIssue, DateTime startDate, TimeSpan seedTime, bool startNow);
         void RemoveTimer(Guid uniqueId);
@@ -56,6 +58,11 @@ namespace Gallifrey.JiraTimers
         public IEnumerable<JiraTimer> GetTimersForADate(DateTime timerDate)
         {
             return timerList.Where(timer => timer.DateStarted.Date == timerDate.Date).OrderBy(timer => timer.JiraReference, new JiraReferenceComparer());
+        }
+
+        public IEnumerable<JiraTimer> GetUnexportedTimers(DateTime timerDate)
+        {
+            return timerList.Where(timer => timer.DateStarted.Date == timerDate.Date && timer.TimeToExport.TotalMinutes >= 1).OrderBy(timer => timer.JiraReference, new JiraReferenceComparer());
         }
 
         public IEnumerable<RecentJira> GetJiraReferencesForLastDays(int days)

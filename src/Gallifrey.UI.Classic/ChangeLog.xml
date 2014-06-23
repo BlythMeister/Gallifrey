@@ -47,6 +47,7 @@
     <Features>
       <Feature>Add ability to set working days &amp; start of week for target calculations.</Feature>
       <Feature>Add ToolTips to all windows to help users.</Feature>
+      <Feature>Add Keyboard shortcut to export an entire day of un-exported timers.</Feature>
     </Features>
     <Bugs>
       <Bug>Corrected bug with export target on Sundays being zero, but exported being correct.</Bug>

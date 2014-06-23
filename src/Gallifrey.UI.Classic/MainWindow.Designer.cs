@@ -44,7 +44,6 @@
             this.lblExportStat = new System.Windows.Forms.Label();
             this.notifyAlert = new System.Windows.Forms.NotifyIcon(this.components);
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.lblUpdate = new System.Windows.Forms.Label();
             this.btnAbout = new System.Windows.Forms.Button();
             this.btnIdle = new System.Windows.Forms.Button();
             this.btnRename = new System.Windows.Forms.Button();
@@ -53,8 +52,9 @@
             this.btnExport = new System.Windows.Forms.Button();
             this.btnSettings = new System.Windows.Forms.Button();
             this.btnRemoveTimer = new System.Windows.Forms.Button();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.btnAddTimer = new System.Windows.Forms.Button();
+            this.lblUpdate = new System.Windows.Forms.Label();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.grpUpdates = new System.Windows.Forms.GroupBox();
             this.grpTarget.SuspendLayout();
             this.grpExportStats.SuspendLayout();
@@ -200,18 +200,6 @@
             this.notifyAlert.BalloonTipClicked += new System.EventHandler(this.notifyAlert_BalloonTipClicked);
             this.notifyAlert.DoubleClick += new System.EventHandler(this.notifyAlert_DoubleClick);
             // 
-            // lblUpdate
-            // 
-            this.lblUpdate.BackColor = System.Drawing.SystemColors.Control;
-            this.lblUpdate.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            this.lblUpdate.ImageAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.lblUpdate.Location = new System.Drawing.Point(9, 18);
-            this.lblUpdate.Name = "lblUpdate";
-            this.lblUpdate.Size = new System.Drawing.Size(121, 55);
-            this.lblUpdate.TabIndex = 16;
-            this.lblUpdate.Text = "Currently Running v99.99.99.99 (beta)\r\nUp To Date!\r\n";
-            this.lblUpdate.DoubleClick += new System.EventHandler(this.lblUpdate_DoubleClick);
-            // 
             // btnAbout
             // 
             this.btnAbout.Image = global::Gallifrey.UI.Classic.Properties.Resources.Information_48x48;
@@ -280,7 +268,8 @@
             this.btnExport.Size = new System.Drawing.Size(65, 65);
             this.btnExport.TabIndex = 10;
             this.btnExport.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.toolTip.SetToolTip(this.btnExport, "Export Time To Jira (CTRL+E)");
+            this.toolTip.SetToolTip(this.btnExport, "Export Time To Jira (CTRL+E)\r\nOr \r\nExport Selected Day To Jira (CTRL + X ) - Keyb" +
+        "oard Shortcut ONLY");
             this.btnExport.UseVisualStyleBackColor = true;
             this.btnExport.Click += new System.EventHandler(this.btnExport_Click);
             // 
@@ -308,16 +297,6 @@
             this.btnRemoveTimer.UseVisualStyleBackColor = true;
             this.btnRemoveTimer.Click += new System.EventHandler(this.btnRemoveTimer_Click);
             // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Image = global::Gallifrey.UI.Classic.Properties.Resources.clock_blue_128x128;
-            this.pictureBox1.Location = new System.Drawing.Point(12, 12);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(80, 80);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox1.TabIndex = 2;
-            this.pictureBox1.TabStop = false;
-            // 
             // btnAddTimer
             // 
             this.btnAddTimer.Image = global::Gallifrey.UI.Classic.Properties.Resources.Add_48x48;
@@ -329,6 +308,28 @@
             this.toolTip.SetToolTip(this.btnAddTimer, "Add New Timer (CTRL+A)");
             this.btnAddTimer.UseVisualStyleBackColor = true;
             this.btnAddTimer.Click += new System.EventHandler(this.btnAddTimer_Click);
+            // 
+            // lblUpdate
+            // 
+            this.lblUpdate.BackColor = System.Drawing.SystemColors.Control;
+            this.lblUpdate.Font = new System.Drawing.Font("Segoe UI", 9.75F);
+            this.lblUpdate.ImageAlign = System.Drawing.ContentAlignment.TopLeft;
+            this.lblUpdate.Location = new System.Drawing.Point(9, 18);
+            this.lblUpdate.Name = "lblUpdate";
+            this.lblUpdate.Size = new System.Drawing.Size(121, 55);
+            this.lblUpdate.TabIndex = 16;
+            this.lblUpdate.Text = "Currently Running v99.99.99.99 (beta)\r\nUp To Date!\r\n";
+            this.lblUpdate.DoubleClick += new System.EventHandler(this.lblUpdate_DoubleClick);
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = global::Gallifrey.UI.Classic.Properties.Resources.clock_blue_128x128;
+            this.pictureBox1.Location = new System.Drawing.Point(12, 12);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(80, 80);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox1.TabIndex = 2;
+            this.pictureBox1.TabStop = false;
             // 
             // grpUpdates
             // 
