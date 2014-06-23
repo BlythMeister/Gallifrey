@@ -1,5 +1,7 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
+using System.Timers;
 using Atlassian.Jira;
 using Gallifrey.Exceptions.JiraTimers;
 using Gallifrey.ExtensionMethods;
@@ -8,7 +10,7 @@ using Newtonsoft.Json;
 
 namespace Gallifrey.JiraTimers
 {
-    public class JiraTimer
+    public class JiraTimer : INotifyPropertyChanged
     {
         public string JiraReference { get; private set; }
         public string JiraProjectName { get; private set; }
@@ -19,6 +21,7 @@ namespace Gallifrey.JiraTimers
         public Guid UniqueId { get; private set; }
         public bool IsRunning { get; private set; }
         private readonly Stopwatch currentRunningTime;
+        private readonly Timer runningWatcher;
 
         [JsonConstructor]
         public JiraTimer(string jiraReference, string jiraProjectName, string jiraName, DateTime dateStarted, TimeSpan currentTime, TimeSpan exportedTime, Guid uniqueId)
@@ -32,6 +35,8 @@ namespace Gallifrey.JiraTimers
             UniqueId = uniqueId;
             IsRunning = false;
             currentRunningTime = new Stopwatch();
+            runningWatcher = new Timer(100);
+            runningWatcher.Elapsed += runningWatcherElapsed;
         }
 
         public JiraTimer(Issue jiraIssue, DateTime dateStarted, TimeSpan currentTime)
@@ -45,6 +50,8 @@ namespace Gallifrey.JiraTimers
             UniqueId = Guid.NewGuid();
             IsRunning = false;
             currentRunningTime = new Stopwatch();
+            runningWatcher = new Timer(100);
+            runningWatcher.Elapsed += runningWatcherElapsed;
         }
 
         public JiraTimer(JiraTimer previousTimer, DateTime dateStarted)
@@ -58,6 +65,16 @@ namespace Gallifrey.JiraTimers
             UniqueId = Guid.NewGuid();
             IsRunning = false;
             currentRunningTime = new Stopwatch();
+            runningWatcher = new Timer(100);
+            runningWatcher.Elapsed += runningWatcherElapsed;
+        }
+
+        void runningWatcherElapsed(object sender, ElapsedEventArgs e)
+        {
+            if (PropertyChanged != null && currentRunningTime.IsRunning)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs("ExactCurrentTime"));
+            }
         }
 
         public bool FullyExported
@@ -88,6 +105,7 @@ namespace Gallifrey.JiraTimers
 
         public void StartTimer()
         {
+            runningWatcher.Start();
             currentRunningTime.Start();
             IsRunning = true;
         }
@@ -95,6 +113,7 @@ namespace Gallifrey.JiraTimers
         public void StopTimer()
         {
             currentRunningTime.Stop();
+            runningWatcher.Stop();
             IsRunning = false;
             CurrentTime = CurrentTime.Add(currentRunningTime.Elapsed);
             currentRunningTime.Reset();
@@ -142,5 +161,7 @@ namespace Gallifrey.JiraTimers
         {
             ExportedTime = ExportedTime.Add(loggedTime);
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 }
