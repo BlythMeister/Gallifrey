@@ -55,6 +55,7 @@
       <Bug>Only show build reference on Beta builds, all others are always "0" so pointless.</Bug>
       <Bug>Change ordering of Jiras to use new comparer to sort numerical parts correctly.</Bug>
       <Bug>Prevent flashing of UI when refreshing.</Bug>
+      <Bug>Remove Stopwatch in locked timer to make display more accurate. Do not need regualar update, machine is locked.</Bug>
     </Bugs>
     <Others />
   </Version>

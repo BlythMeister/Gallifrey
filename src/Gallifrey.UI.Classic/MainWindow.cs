@@ -387,7 +387,7 @@ namespace Gallifrey.UI.Classic
                     BringToFront();
                     var idleTimerId = gallifrey.StopIdleTimer();
                     var idleTimer = gallifrey.IdleTimerCollection.GetTimer(idleTimerId);
-                    if (idleTimer.ExactCurrentTime.TotalSeconds < 60 || idleTimer.ExactCurrentTime.TotalHours > 10)
+                    if (idleTimer.IdleTimeValue.TotalSeconds < 60 || idleTimer.IdleTimeValue.TotalHours > 10)
                     {
                         gallifrey.IdleTimerCollection.RemoveTimer(idleTimerId);
                     }

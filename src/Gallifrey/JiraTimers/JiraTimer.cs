@@ -126,7 +126,7 @@ namespace Gallifrey.JiraTimers
                 throw new IdleTimerRunningException("Cannot add time from a running idle timer!");
             }
 
-            CurrentTime = CurrentTime.Add(idleTimer.CurrentTime);
+            CurrentTime = CurrentTime.Add(idleTimer.IdleTimeValue);
             PropertyChanged(this, new PropertyChangedEventArgs("ExactCurrentTime"));
         }
 
