@@ -35,7 +35,6 @@ namespace Gallifrey.UI.Classic
             cmbRecentJiras.DataSource = gallifrey.JiraTimerCollection.GetJiraReferencesForLastDays(7).ToList();
             cmbRecentJiras.Refresh();
             cmbRecentJiras.Text = string.Empty;
-            cmbRecentJiras.SelectedText = "";
         }
 
         private void BindIdleTimers(bool showNoTimers = true)
