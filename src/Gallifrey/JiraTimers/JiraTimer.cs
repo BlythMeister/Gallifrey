@@ -127,6 +127,7 @@ namespace Gallifrey.JiraTimers
             }
 
             CurrentTime = CurrentTime.Add(idleTimer.CurrentTime);
+            PropertyChanged(this, new PropertyChangedEventArgs("ExactCurrentTime"));
         }
 
         public override string ToString()
@@ -145,6 +146,7 @@ namespace Gallifrey.JiraTimers
         {
             var changeTimespan = new TimeSpan(hours, minutes, 0);
             CurrentTime = addTime ? CurrentTime.Add(changeTimespan) : CurrentTime.Subtract(changeTimespan > ExactCurrentTime ? ExactCurrentTime : changeTimespan);
+            PropertyChanged(this, new PropertyChangedEventArgs("ExactCurrentTime"));
         }
 
         public void SetJiraExportedTime(TimeSpan loggedTime)
@@ -155,11 +157,13 @@ namespace Gallifrey.JiraTimers
             {
                 ManualAdjustment(exportedvsActual.Hours, exportedvsActual.Minutes, true);
             }
+            PropertyChanged(this, new PropertyChangedEventArgs("ExactCurrentTime"));
         }
 
         public void AddJiraExportedTime(TimeSpan loggedTime)
         {
             ExportedTime = ExportedTime.Add(loggedTime);
+            PropertyChanged(this, new PropertyChangedEventArgs("ExactCurrentTime"));
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
