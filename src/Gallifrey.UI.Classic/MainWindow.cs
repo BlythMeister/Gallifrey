@@ -132,6 +132,9 @@ namespace Gallifrey.UI.Classic
                     case Keys.E:
                         btnExport_Click(sender, null);
                         break;
+                    case Keys.X:
+                        MultiExport();
+                        break;
                     case Keys.L:
                         btnIdle_Click(sender, null);
                         break;
@@ -501,8 +504,8 @@ namespace Gallifrey.UI.Classic
             }
 
             //remove dates that don't have any timers or date is not present
-            var removeDates = internalTimerList.Where(x=>!x.Value.Any()).Select(x=>x.Key).ToList();
-            removeDates.AddRange(internalTimerList.Where(x => validDates.All(date => date != x.Key)).Select(x=>x.Key));
+            var removeDates = internalTimerList.Where(x => !x.Value.Any()).Select(x => x.Key).ToList();
+            removeDates.AddRange(internalTimerList.Where(x => validDates.All(date => date != x.Key)).Select(x => x.Key));
             foreach (var removeDate in removeDates)
             {
                 internalTimerList.Remove(removeDate);
@@ -595,7 +598,10 @@ namespace Gallifrey.UI.Classic
         {
             var selectedTab = tabTimerDays.SelectedTab;
             if (selectedTab == null) return;
-            var selectedTimer = (JiraTimer)((ListBox)selectedTab.Controls[string.Format("lst_{0}", selectedTab.Name)]).SelectedItem;
+            var selectedList = ((ListBox) selectedTab.Controls[string.Format("lst_{0}", selectedTab.Name)]);
+            if (selectedList == null) return;
+            
+            var selectedTimer = (JiraTimer)selectedList.SelectedItem;
             lblCurrentTime.Text = selectedTimer.ExactCurrentTime.FormatAsString();
 
             if (gallifrey.JiraTimerCollection.GetRunningTimerId().HasValue)
@@ -644,10 +650,28 @@ namespace Gallifrey.UI.Classic
             }
         }
 
+        private void MultiExport()
+        {
+            var selectedTimer = (JiraTimer)((ListBox)tabTimerDays.SelectedTab.Controls[string.Format("lst_{0}", tabTimerDays.SelectedTab.Name)]).SelectedItem;
+
+            if (selectedTimer != null)
+            {
+                foreach (var jiraTimer in gallifrey.JiraTimerCollection.GetUnexportedTimers(selectedTimer.DateStarted))
+                {
+                    var exportTimerWindow = new ExportTimerWindow(gallifrey, jiraTimer.UniqueId);
+                    if (exportTimerWindow.DisplayForm)
+                    {
+                        exportTimerWindow.ShowDialog();
+                    }
+                }
+            }
+
+            RefreshInternalTimerList();
+        }
+
         #endregion
 
         #region "Updates
-
 
         private void lblUpdate_DoubleClick(object sender, EventArgs e)
         {
