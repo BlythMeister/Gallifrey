@@ -84,7 +84,6 @@ namespace Gallifrey.UI.Classic
             SetVersionNumber();
             RefreshInternalTimerList();
             SetupDisplayFont();
-            SetToolTips();
             formTimer.Enabled = true;
 
             if (gallifrey.JiraTimerCollection.GetRunningTimerId().HasValue)
@@ -276,7 +275,7 @@ namespace Gallifrey.UI.Classic
             var selectedTab = tabTimerDays.SelectedTab;
             if (selectedTab == null) return;
             var selectedTimer = (JiraTimer)((ListBox)selectedTab.Controls[string.Format("lst_{0}", selectedTab.Name)]).SelectedItem;
-            var renameWindow = new RenameTimerWindow(gallifrey, selectedTimer.UniqueId);
+            var renameWindow = new EditTimerWindow(gallifrey, selectedTimer.UniqueId);
             renameWindow.ShowDialog();
             RefreshInternalTimerList();
         }
@@ -643,20 +642,6 @@ namespace Gallifrey.UI.Classic
                 var exportedMinutes = (int)exportedTime.TotalMinutes;
                 progExportTarget.Value = exportedMinutes > progExportTarget.Maximum ? progExportTarget.Maximum : exportedMinutes;
             }
-        }
-
-        private void SetToolTips()
-        {
-            toolTip.SetToolTip(btnAddTimer, "Add New Timer (CTRL+A)");
-            toolTip.SetToolTip(btnRemoveTimer, "Remove Selected Timer (CTRL+D)");
-            toolTip.SetToolTip(btnSearch, "Search Jira (CTRL+F)");
-            toolTip.SetToolTip(btnTimeEdit, "Edit Current Time (CTRL+C)");
-            toolTip.SetToolTip(btnRename, "Change Jira For Timer (CTRL+R)");
-            toolTip.SetToolTip(btnExport, "Export Time To Jira (CTRL+E)");
-            toolTip.SetToolTip(btnIdle, "View Machine Locked Timers (CTRL+L)");
-            toolTip.SetToolTip(btnAbout, "About (CTRL+I)");
-            toolTip.SetToolTip(btnSettings, "Settings (CTRL+S)");
-            toolTip.SetToolTip(lblCurrentTime, "Double Click Jump To Running (CTRL+J)");
         }
 
         #endregion

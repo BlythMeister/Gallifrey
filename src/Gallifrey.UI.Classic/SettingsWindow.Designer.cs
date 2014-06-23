@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingsWindow));
             this.txtJiraUrl = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -42,24 +43,25 @@
             this.label12 = new System.Windows.Forms.Label();
             this.chkAlwaysTop = new System.Windows.Forms.CheckBox();
             this.label11 = new System.Windows.Forms.Label();
-            this.txtTargetHours = new System.Windows.Forms.TextBox();
-            this.txtTargetMins = new System.Windows.Forms.TextBox();
-            this.label9 = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
             this.chkAlert = new System.Windows.Forms.CheckBox();
             this.txtTimerDays = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.txtAlertMins = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
+            this.txtTargetHours = new System.Windows.Forms.TextBox();
+            this.txtTargetMins = new System.Windows.Forms.TextBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
             this.btnCancelEditSettings = new System.Windows.Forms.Button();
             this.btnSaveSettings = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.chklstWorkingDays = new System.Windows.Forms.CheckedListBox();
-            this.label14 = new System.Windows.Forms.Label();
-            this.cmdWeekStart = new System.Windows.Forms.ComboBox();
             this.label15 = new System.Windows.Forms.Label();
+            this.cmdWeekStart = new System.Windows.Forms.ComboBox();
+            this.label14 = new System.Windows.Forms.Label();
+            this.chklstWorkingDays = new System.Windows.Forms.CheckedListBox();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.grpJira.SuspendLayout();
             this.grpAppSettings.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -71,6 +73,7 @@
             this.txtJiraUrl.Name = "txtJiraUrl";
             this.txtJiraUrl.Size = new System.Drawing.Size(194, 25);
             this.txtJiraUrl.TabIndex = 1;
+            this.toolTip.SetToolTip(this.txtJiraUrl, "URL Used To Access Jira");
             // 
             // label1
             // 
@@ -97,6 +100,7 @@
             this.txtJiraUsername.Name = "txtJiraUsername";
             this.txtJiraUsername.Size = new System.Drawing.Size(194, 25);
             this.txtJiraUsername.TabIndex = 3;
+            this.toolTip.SetToolTip(this.txtJiraUsername, "Your Jira Username");
             // 
             // label3
             // 
@@ -122,6 +126,7 @@
             this.txtJiraPassword.Name = "txtJiraPassword";
             this.txtJiraPassword.Size = new System.Drawing.Size(194, 25);
             this.txtJiraPassword.TabIndex = 5;
+            this.toolTip.SetToolTip(this.txtJiraPassword, "Your Jira Password");
             this.txtJiraPassword.UseSystemPasswordChar = true;
             // 
             // grpJira
@@ -183,6 +188,7 @@
             this.chkAlwaysTop.Name = "chkAlwaysTop";
             this.chkAlwaysTop.Size = new System.Drawing.Size(15, 14);
             this.chkAlwaysTop.TabIndex = 12;
+            this.toolTip.SetToolTip(this.chkAlwaysTop, "UI Windows Always On Top (Not Main Window)");
             this.chkAlwaysTop.UseVisualStyleBackColor = true;
             // 
             // label11
@@ -194,6 +200,65 @@
             this.label11.TabIndex = 11;
             this.label11.Text = "Always On Top?";
             // 
+            // chkAlert
+            // 
+            this.chkAlert.AutoSize = true;
+            this.chkAlert.Location = new System.Drawing.Point(148, 26);
+            this.chkAlert.Name = "chkAlert";
+            this.chkAlert.Size = new System.Drawing.Size(15, 14);
+            this.chkAlert.TabIndex = 1;
+            this.toolTip.SetToolTip(this.chkAlert, "Tray Balloon When No Timers Running");
+            this.chkAlert.UseVisualStyleBackColor = true;
+            this.chkAlert.CheckedChanged += new System.EventHandler(this.chkAlert_CheckedChanged);
+            // 
+            // txtTimerDays
+            // 
+            this.txtTimerDays.Location = new System.Drawing.Point(148, 77);
+            this.txtTimerDays.Name = "txtTimerDays";
+            this.txtTimerDays.Size = new System.Drawing.Size(39, 25);
+            this.txtTimerDays.TabIndex = 5;
+            this.txtTimerDays.Text = "00";
+            this.txtTimerDays.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.toolTip.SetToolTip(this.txtTimerDays, "Keep Timers In Gallifrey For X Days");
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(38, 80);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(104, 17);
+            this.label5.TabIndex = 4;
+            this.label5.Text = "Keep Timers For";
+            // 
+            // txtAlertMins
+            // 
+            this.txtAlertMins.Enabled = false;
+            this.txtAlertMins.Location = new System.Drawing.Point(148, 46);
+            this.txtAlertMins.Name = "txtAlertMins";
+            this.txtAlertMins.Size = new System.Drawing.Size(39, 25);
+            this.txtAlertMins.TabIndex = 3;
+            this.txtAlertMins.Text = "00";
+            this.txtAlertMins.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.toolTip.SetToolTip(this.txtAlertMins, "Alert Every X Minutes");
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(50, 49);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(92, 17);
+            this.label6.TabIndex = 2;
+            this.label6.Text = "Idle Time Alert";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(39, 23);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(103, 17);
+            this.label7.TabIndex = 0;
+            this.label7.Text = "Alert When Idle?";
+            // 
             // txtTargetHours
             // 
             this.txtTargetHours.Location = new System.Drawing.Point(148, 24);
@@ -202,6 +267,7 @@
             this.txtTargetHours.TabIndex = 7;
             this.txtTargetHours.Text = "00";
             this.txtTargetHours.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.toolTip.SetToolTip(this.txtTargetHours, "Target Export Hours Per Day");
             // 
             // txtTargetMins
             // 
@@ -211,6 +277,7 @@
             this.txtTargetMins.TabIndex = 9;
             this.txtTargetMins.Text = "00";
             this.txtTargetMins.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.toolTip.SetToolTip(this.txtTargetMins, "Target Export Minutes Per Day");
             // 
             // label9
             // 
@@ -239,62 +306,6 @@
             this.label8.TabIndex = 6;
             this.label8.Text = " Export Time Per Day";
             // 
-            // chkAlert
-            // 
-            this.chkAlert.AutoSize = true;
-            this.chkAlert.Location = new System.Drawing.Point(148, 26);
-            this.chkAlert.Name = "chkAlert";
-            this.chkAlert.Size = new System.Drawing.Size(15, 14);
-            this.chkAlert.TabIndex = 1;
-            this.chkAlert.UseVisualStyleBackColor = true;
-            this.chkAlert.CheckedChanged += new System.EventHandler(this.chkAlert_CheckedChanged);
-            // 
-            // txtTimerDays
-            // 
-            this.txtTimerDays.Location = new System.Drawing.Point(148, 77);
-            this.txtTimerDays.Name = "txtTimerDays";
-            this.txtTimerDays.Size = new System.Drawing.Size(39, 25);
-            this.txtTimerDays.TabIndex = 5;
-            this.txtTimerDays.Text = "00";
-            this.txtTimerDays.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(38, 80);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(104, 17);
-            this.label5.TabIndex = 4;
-            this.label5.Text = "Keep Timers For";
-            // 
-            // txtAlertMins
-            // 
-            this.txtAlertMins.Enabled = false;
-            this.txtAlertMins.Location = new System.Drawing.Point(148, 46);
-            this.txtAlertMins.Name = "txtAlertMins";
-            this.txtAlertMins.Size = new System.Drawing.Size(39, 25);
-            this.txtAlertMins.TabIndex = 3;
-            this.txtAlertMins.Text = "00";
-            this.txtAlertMins.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(50, 49);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(92, 17);
-            this.label6.TabIndex = 2;
-            this.label6.Text = "Idle Time Alert";
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(39, 23);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(103, 17);
-            this.label7.TabIndex = 0;
-            this.label7.Text = "Alert When Idle?";
-            // 
             // btnCancelEditSettings
             // 
             this.btnCancelEditSettings.DialogResult = System.Windows.Forms.DialogResult.Cancel;
@@ -304,6 +315,7 @@
             this.btnCancelEditSettings.Size = new System.Drawing.Size(65, 65);
             this.btnCancelEditSettings.TabIndex = 4;
             this.btnCancelEditSettings.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.toolTip.SetToolTip(this.btnCancelEditSettings, "Cancel Editing Settings");
             this.btnCancelEditSettings.UseVisualStyleBackColor = true;
             this.btnCancelEditSettings.Click += new System.EventHandler(this.btnCancelEditSettings_Click);
             // 
@@ -315,6 +327,7 @@
             this.btnSaveSettings.Name = "btnSaveSettings";
             this.btnSaveSettings.Size = new System.Drawing.Size(65, 65);
             this.btnSaveSettings.TabIndex = 3;
+            this.toolTip.SetToolTip(this.btnSaveSettings, "Save Settings");
             this.btnSaveSettings.UseVisualStyleBackColor = true;
             this.btnSaveSettings.Click += new System.EventHandler(this.btnSaveSettings_Click);
             // 
@@ -336,30 +349,14 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Target Export";
             // 
-            // chklstWorkingDays
+            // label15
             // 
-            this.chklstWorkingDays.FormattingEnabled = true;
-            this.chklstWorkingDays.Items.AddRange(new object[] {
-            "Monday",
-            "Tuesday",
-            "Wednesday",
-            "Thursday",
-            "Friday",
-            "Saturday",
-            "Sunday"});
-            this.chklstWorkingDays.Location = new System.Drawing.Point(148, 86);
-            this.chklstWorkingDays.Name = "chklstWorkingDays";
-            this.chklstWorkingDays.Size = new System.Drawing.Size(148, 144);
-            this.chklstWorkingDays.TabIndex = 11;
-            // 
-            // label14
-            // 
-            this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(53, 86);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(89, 17);
-            this.label14.TabIndex = 12;
-            this.label14.Text = "Working Days";
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(53, 239);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(89, 17);
+            this.label15.TabIndex = 14;
+            this.label15.Text = "Start Of Week";
             // 
             // cmdWeekStart
             // 
@@ -376,15 +373,33 @@
             this.cmdWeekStart.Name = "cmdWeekStart";
             this.cmdWeekStart.Size = new System.Drawing.Size(148, 25);
             this.cmdWeekStart.TabIndex = 13;
+            this.toolTip.SetToolTip(this.cmdWeekStart, "Start Of Week (For Export Per Week Target)");
             // 
-            // label15
+            // label14
             // 
-            this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(53, 239);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(89, 17);
-            this.label15.TabIndex = 14;
-            this.label15.Text = "Start Of Week";
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(53, 86);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(89, 17);
+            this.label14.TabIndex = 12;
+            this.label14.Text = "Working Days";
+            // 
+            // chklstWorkingDays
+            // 
+            this.chklstWorkingDays.FormattingEnabled = true;
+            this.chklstWorkingDays.Items.AddRange(new object[] {
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday",
+            "Sunday"});
+            this.chklstWorkingDays.Location = new System.Drawing.Point(148, 86);
+            this.chklstWorkingDays.Name = "chklstWorkingDays";
+            this.chklstWorkingDays.Size = new System.Drawing.Size(148, 144);
+            this.chklstWorkingDays.TabIndex = 11;
+            this.toolTip.SetToolTip(this.chklstWorkingDays, "Valid Working Days To Export");
             // 
             // SettingsWindow
             // 
@@ -455,5 +470,6 @@
         private System.Windows.Forms.ComboBox cmdWeekStart;
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.CheckedListBox chklstWorkingDays;
+        private System.Windows.Forms.ToolTip toolTip;
     }
 }
