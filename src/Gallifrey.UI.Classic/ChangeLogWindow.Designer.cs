@@ -32,9 +32,9 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ChangeLogWindow));
             this.label2 = new System.Windows.Forms.Label();
             this.lblCurrentVersion = new System.Windows.Forms.Label();
-            this.timerContributor = new System.Windows.Forms.Timer(this.components);
             this.btnOK = new System.Windows.Forms.Button();
             this.txtChangeLog = new System.Windows.Forms.RichTextBox();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.SuspendLayout();
             // 
             // label2
@@ -56,11 +56,6 @@
             this.lblCurrentVersion.TabIndex = 1;
             this.lblCurrentVersion.Text = "Current Version: 0.0.0.0";
             // 
-            // timerContributor
-            // 
-            this.timerContributor.Enabled = true;
-            this.timerContributor.Interval = 1000;
-            // 
             // btnOK
             // 
             this.btnOK.Image = global::Gallifrey.UI.Classic.Properties.Resources.Check_48x48;
@@ -69,6 +64,7 @@
             this.btnOK.Size = new System.Drawing.Size(65, 65);
             this.btnOK.TabIndex = 19;
             this.btnOK.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.toolTip.SetToolTip(this.btnOK, "Done");
             this.btnOK.UseVisualStyleBackColor = true;
             this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
             // 
@@ -113,7 +109,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button btnOK;
         private System.Windows.Forms.Label lblCurrentVersion;
-        private System.Windows.Forms.Timer timerContributor;
         private System.Windows.Forms.RichTextBox txtChangeLog;
+        private System.Windows.Forms.ToolTip toolTip;
     }
 }

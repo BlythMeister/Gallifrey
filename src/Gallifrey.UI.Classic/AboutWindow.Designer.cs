@@ -52,6 +52,7 @@
             this.btnEmail = new System.Windows.Forms.Button();
             this.btnGitHub = new System.Windows.Forms.Button();
             this.btnPayPal = new System.Windows.Forms.Button();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.SuspendLayout();
             // 
             // label2
@@ -206,6 +207,7 @@
             this.btnOK.Size = new System.Drawing.Size(65, 65);
             this.btnOK.TabIndex = 19;
             this.btnOK.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.toolTip.SetToolTip(this.btnOK, "Close Window");
             this.btnOK.UseVisualStyleBackColor = true;
             this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
             // 
@@ -217,6 +219,7 @@
             this.btnChangeLog.Size = new System.Drawing.Size(48, 46);
             this.btnChangeLog.TabIndex = 20;
             this.btnChangeLog.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.toolTip.SetToolTip(this.btnChangeLog, "View Change Log");
             this.btnChangeLog.UseVisualStyleBackColor = true;
             this.btnChangeLog.Click += new System.EventHandler(this.btnChangeLog_Click);
             // 
@@ -228,6 +231,7 @@
             this.btnTwitter.Size = new System.Drawing.Size(48, 46);
             this.btnTwitter.TabIndex = 10;
             this.btnTwitter.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.toolTip.SetToolTip(this.btnTwitter, "Find Us On Twitter");
             this.btnTwitter.UseVisualStyleBackColor = true;
             this.btnTwitter.Click += new System.EventHandler(this.btnTwitter_Click);
             // 
@@ -239,6 +243,7 @@
             this.btnEmail.Size = new System.Drawing.Size(48, 46);
             this.btnEmail.TabIndex = 9;
             this.btnEmail.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.toolTip.SetToolTip(this.btnEmail, "Send Us An E-Mail");
             this.btnEmail.UseVisualStyleBackColor = true;
             this.btnEmail.Click += new System.EventHandler(this.btnEmail_Click);
             // 
@@ -250,6 +255,7 @@
             this.btnGitHub.Size = new System.Drawing.Size(48, 46);
             this.btnGitHub.TabIndex = 16;
             this.btnGitHub.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.toolTip.SetToolTip(this.btnGitHub, "View The Code On GitHub");
             this.btnGitHub.UseVisualStyleBackColor = true;
             this.btnGitHub.Click += new System.EventHandler(this.btnGitHub_Click);
             // 
@@ -260,6 +266,7 @@
             this.btnPayPal.Name = "btnPayPal";
             this.btnPayPal.Size = new System.Drawing.Size(111, 36);
             this.btnPayPal.TabIndex = 13;
+            this.toolTip.SetToolTip(this.btnPayPal, "Donate Via PayPal");
             this.btnPayPal.UseVisualStyleBackColor = true;
             this.btnPayPal.Click += new System.EventHandler(this.btnPayPal_Click);
             // 
@@ -331,5 +338,6 @@
         private System.Windows.Forms.Button btnEmail;
         private System.Windows.Forms.Button btnTwitter;
         private System.Windows.Forms.Button btnChangeLog;
+        private System.Windows.Forms.ToolTip toolTip;
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace Gallifrey.UI.Classic
 {
-    partial class RenameTimerWindow
+    partial class EditTimerWindow
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RenameTimerWindow));
+            this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EditTimerWindow));
             this.txtJiraRef = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.calStartDate = new System.Windows.Forms.DateTimePicker();
@@ -36,6 +37,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnOK = new System.Windows.Forms.Button();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.SuspendLayout();
             // 
             // txtJiraRef
@@ -47,6 +49,7 @@
             this.txtJiraRef.Name = "txtJiraRef";
             this.txtJiraRef.Size = new System.Drawing.Size(249, 25);
             this.txtJiraRef.TabIndex = 2;
+            this.toolTip.SetToolTip(this.txtJiraRef, "Jira Reference");
             this.txtJiraRef.TextChanged += new System.EventHandler(this.txtJiraRef_TextChanged);
             // 
             // label1
@@ -64,6 +67,7 @@
             this.calStartDate.Name = "calStartDate";
             this.calStartDate.Size = new System.Drawing.Size(249, 25);
             this.calStartDate.TabIndex = 4;
+            this.toolTip.SetToolTip(this.calStartDate, "Date Time Is For");
             // 
             // label2
             // 
@@ -71,9 +75,9 @@
             this.label2.Font = new System.Drawing.Font("Segoe UI Semibold", 14.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.Location = new System.Drawing.Point(12, 9);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(136, 25);
+            this.label2.Size = new System.Drawing.Size(155, 25);
             this.label2.TabIndex = 0;
-            this.label2.Text = "Rename Timer";
+            this.label2.Text = "Edit Timer Detail";
             // 
             // label3
             // 
@@ -93,6 +97,7 @@
             this.btnCancel.Size = new System.Drawing.Size(65, 65);
             this.btnCancel.TabIndex = 6;
             this.btnCancel.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.toolTip.SetToolTip(this.btnCancel, "Cancel Edit Timer");
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
@@ -104,6 +109,7 @@
             this.btnOK.Size = new System.Drawing.Size(65, 65);
             this.btnOK.TabIndex = 5;
             this.btnOK.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.toolTip.SetToolTip(this.btnOK, "Edit Timer");
             this.btnOK.UseVisualStyleBackColor = true;
             this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
             // 
@@ -131,7 +137,7 @@
             this.Name = "RenameTimerWindow";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Gallifrey - Rename Timer";
+            this.Text = "Gallifrey - Edit Timer";
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -146,5 +152,6 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button btnOK;
         private System.Windows.Forms.Button btnCancel;
+        private System.Windows.Forms.ToolTip toolTip;
     }
 }

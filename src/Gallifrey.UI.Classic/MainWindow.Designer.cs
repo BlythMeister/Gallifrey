@@ -112,6 +112,7 @@
             this.lblCurrentTime.TabIndex = 14;
             this.lblCurrentTime.Text = "00:00:00";
             this.lblCurrentTime.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.toolTip.SetToolTip(this.lblCurrentTime, "Double Click Jump To Running (CTRL+J)");
             this.lblCurrentTime.DoubleClick += new System.EventHandler(this.lblCurrentTime_DoubleClick);
             // 
             // grpTarget
@@ -219,6 +220,7 @@
             this.btnAbout.Size = new System.Drawing.Size(65, 65);
             this.btnAbout.TabIndex = 12;
             this.btnAbout.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.toolTip.SetToolTip(this.btnAbout, "About (CTRL+I)");
             this.btnAbout.UseVisualStyleBackColor = true;
             this.btnAbout.Click += new System.EventHandler(this.btnAbout_Click);
             // 
@@ -230,6 +232,7 @@
             this.btnIdle.Size = new System.Drawing.Size(65, 65);
             this.btnIdle.TabIndex = 11;
             this.btnIdle.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.toolTip.SetToolTip(this.btnIdle, "\"View Machine Locked Timers (CTRL+L)");
             this.btnIdle.UseVisualStyleBackColor = true;
             this.btnIdle.Click += new System.EventHandler(this.btnIdle_Click);
             // 
@@ -241,6 +244,7 @@
             this.btnRename.Size = new System.Drawing.Size(65, 65);
             this.btnRename.TabIndex = 9;
             this.btnRename.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.toolTip.SetToolTip(this.btnRename, "Change Jira For Timer (CTRL+R)");
             this.btnRename.UseVisualStyleBackColor = true;
             this.btnRename.Click += new System.EventHandler(this.btnRename_Click);
             // 
@@ -252,6 +256,7 @@
             this.btnTimeEdit.Size = new System.Drawing.Size(65, 65);
             this.btnTimeEdit.TabIndex = 8;
             this.btnTimeEdit.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.toolTip.SetToolTip(this.btnTimeEdit, "Edit Current Time (CTRL+C)");
             this.btnTimeEdit.UseVisualStyleBackColor = true;
             this.btnTimeEdit.Click += new System.EventHandler(this.btnTimeEdit_Click);
             // 
@@ -263,6 +268,7 @@
             this.btnSearch.Size = new System.Drawing.Size(65, 65);
             this.btnSearch.TabIndex = 7;
             this.btnSearch.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.toolTip.SetToolTip(this.btnSearch, "Search Jira (CTRL+F)");
             this.btnSearch.UseVisualStyleBackColor = true;
             this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
             // 
@@ -274,6 +280,7 @@
             this.btnExport.Size = new System.Drawing.Size(65, 65);
             this.btnExport.TabIndex = 10;
             this.btnExport.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.toolTip.SetToolTip(this.btnExport, "Export Time To Jira (CTRL+E)");
             this.btnExport.UseVisualStyleBackColor = true;
             this.btnExport.Click += new System.EventHandler(this.btnExport_Click);
             // 
@@ -285,6 +292,7 @@
             this.btnSettings.Size = new System.Drawing.Size(65, 65);
             this.btnSettings.TabIndex = 13;
             this.btnSettings.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.toolTip.SetToolTip(this.btnSettings, "Settings (CTRL+S)");
             this.btnSettings.UseVisualStyleBackColor = true;
             this.btnSettings.Click += new System.EventHandler(this.btnSettings_Click);
             // 
@@ -296,6 +304,7 @@
             this.btnRemoveTimer.Size = new System.Drawing.Size(65, 65);
             this.btnRemoveTimer.TabIndex = 6;
             this.btnRemoveTimer.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.toolTip.SetToolTip(this.btnRemoveTimer, "Remove Selected Timer (CTRL+D)");
             this.btnRemoveTimer.UseVisualStyleBackColor = true;
             this.btnRemoveTimer.Click += new System.EventHandler(this.btnRemoveTimer_Click);
             // 
@@ -317,6 +326,7 @@
             this.btnAddTimer.Size = new System.Drawing.Size(65, 65);
             this.btnAddTimer.TabIndex = 5;
             this.btnAddTimer.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.toolTip.SetToolTip(this.btnAddTimer, "Add New Timer (CTRL+A)");
             this.btnAddTimer.UseVisualStyleBackColor = true;
             this.btnAddTimer.Click += new System.EventHandler(this.btnAddTimer_Click);
             // 

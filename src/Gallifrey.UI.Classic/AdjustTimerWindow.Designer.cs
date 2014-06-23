@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AdjustTimerWindow));
             this.txtJiraRef = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -42,6 +43,7 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.radSubtract = new System.Windows.Forms.RadioButton();
             this.radAdd = new System.Windows.Forms.RadioButton();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -81,6 +83,7 @@
             this.btnCancel.Size = new System.Drawing.Size(65, 65);
             this.btnCancel.TabIndex = 10;
             this.btnCancel.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.toolTip.SetToolTip(this.btnCancel, "Cancel Timer Adjustment");
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
@@ -92,6 +95,7 @@
             this.btnOK.Size = new System.Drawing.Size(65, 65);
             this.btnOK.TabIndex = 9;
             this.btnOK.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.toolTip.SetToolTip(this.btnOK, "Adjust Timer");
             this.btnOK.UseVisualStyleBackColor = true;
             this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
             // 
@@ -112,6 +116,7 @@
             this.txtHours.TabIndex = 4;
             this.txtHours.Text = "00";
             this.txtHours.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.toolTip.SetToolTip(this.txtHours, "Hours To Change Timer By");
             // 
             // txtMinutes
             // 
@@ -121,6 +126,7 @@
             this.txtMinutes.TabIndex = 6;
             this.txtMinutes.Text = "00";
             this.txtMinutes.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.toolTip.SetToolTip(this.txtMinutes, "Minutes To Change Timer By");
             // 
             // label4
             // 
@@ -224,5 +230,6 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.RadioButton radSubtract;
         private System.Windows.Forms.RadioButton radAdd;
+        private System.Windows.Forms.ToolTip toolTip;
     }
 }

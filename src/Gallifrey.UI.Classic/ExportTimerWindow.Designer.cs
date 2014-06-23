@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ExportTimerWindow));
             this.txtJiraRef = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -64,6 +65,7 @@
             this.txtComment = new System.Windows.Forms.TextBox();
             this.btnOK = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -113,6 +115,7 @@
             this.txtTotalHours.TabIndex = 1;
             this.txtTotalHours.Text = "00";
             this.txtTotalHours.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.toolTip.SetToolTip(this.txtTotalHours, "Hours Clocked In Timer");
             // 
             // txtTotalMinutes
             // 
@@ -123,6 +126,7 @@
             this.txtTotalMinutes.TabIndex = 3;
             this.txtTotalMinutes.Text = "00";
             this.txtTotalMinutes.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.toolTip.SetToolTip(this.txtTotalMinutes, "Minutes Clocked In Timer");
             // 
             // label4
             // 
@@ -157,6 +161,7 @@
             this.groupBox1.TabIndex = 6;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Remaining Time";
+            this.toolTip.SetToolTip(this.groupBox1, "Set Action For Remaining Time");
             // 
             // txtSetValueHours
             // 
@@ -166,6 +171,7 @@
             this.txtSetValueHours.TabIndex = 3;
             this.txtSetValueHours.Text = "00";
             this.txtSetValueHours.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.toolTip.SetToolTip(this.txtSetValueHours, "Remaining Hours");
             // 
             // radAutoAdjust
             // 
@@ -185,6 +191,7 @@
             this.txtSetValueMins.TabIndex = 5;
             this.txtSetValueMins.Text = "00";
             this.txtSetValueMins.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.toolTip.SetToolTip(this.txtSetValueMins, "Remaining Minutes");
             // 
             // label13
             // 
@@ -288,6 +295,7 @@
             this.calExportDate.Name = "calExportDate";
             this.calExportDate.Size = new System.Drawing.Size(182, 25);
             this.calExportDate.TabIndex = 16;
+            this.toolTip.SetToolTip(this.calExportDate, "Enter Date/Time For Exported Time");
             // 
             // label10
             // 
@@ -306,6 +314,7 @@
             this.txtExportHours.TabIndex = 11;
             this.txtExportHours.Text = "00";
             this.txtExportHours.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.toolTip.SetToolTip(this.txtExportHours, "Enter Hours To Export");
             // 
             // txtExportMins
             // 
@@ -315,6 +324,7 @@
             this.txtExportMins.TabIndex = 13;
             this.txtExportMins.Text = "00";
             this.txtExportMins.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.toolTip.SetToolTip(this.txtExportMins, "Enter Minutes To Export");
             // 
             // label11
             // 
@@ -352,6 +362,7 @@
             this.txtExportedHours.TabIndex = 6;
             this.txtExportedHours.Text = "00";
             this.txtExportedHours.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.toolTip.SetToolTip(this.txtExportedHours, "Hours Already Exported");
             // 
             // txtExportedMins
             // 
@@ -362,6 +373,7 @@
             this.txtExportedMins.TabIndex = 8;
             this.txtExportedMins.Text = "00";
             this.txtExportedMins.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.toolTip.SetToolTip(this.txtExportedMins, "Minutes Already Exported");
             // 
             // label8
             // 
@@ -397,6 +409,7 @@
             this.txtComment.Name = "txtComment";
             this.txtComment.Size = new System.Drawing.Size(202, 81);
             this.txtComment.TabIndex = 8;
+            this.toolTip.SetToolTip(this.txtComment, "Comment To Be Added With Work Log ");
             // 
             // btnOK
             // 
@@ -406,6 +419,7 @@
             this.btnOK.Size = new System.Drawing.Size(65, 65);
             this.btnOK.TabIndex = 9;
             this.btnOK.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.toolTip.SetToolTip(this.btnOK, "Export To Jira");
             this.btnOK.UseVisualStyleBackColor = true;
             this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
             // 
@@ -418,6 +432,7 @@
             this.btnCancel.Size = new System.Drawing.Size(65, 65);
             this.btnCancel.TabIndex = 10;
             this.btnCancel.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.toolTip.SetToolTip(this.btnCancel, "Cancel Export");
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
@@ -497,5 +512,6 @@
         private System.Windows.Forms.DateTimePicker calExportDate;
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.TextBox txtComment;
+        private System.Windows.Forms.ToolTip toolTip;
     }
 }
