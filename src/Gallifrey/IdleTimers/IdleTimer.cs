@@ -14,11 +14,15 @@ namespace Gallifrey.IdleTimers
         public bool IsRunning { get { return !DateFinished.HasValue; } }
 
         [JsonConstructor]
-        public IdleTimer(DateTime dateStarted, DateTime? dateFinished, TimeSpan currentTime, Guid uniqueId)
+        public IdleTimer(DateTime dateStarted, DateTime? dateFinished, TimeSpan idleTimeValue, Guid uniqueId)
         {
             DateStarted = dateStarted;
             DateFinished = dateFinished;
-            IdleTimeValue = currentTime;
+            IdleTimeValue = idleTimeValue;
+            if (IdleTimeValue.TotalSeconds == 0)
+            {
+                IdleTimeValue = DateFinished.Value.Subtract(DateStarted);
+            }
             UniqueId = uniqueId;
         }
 
