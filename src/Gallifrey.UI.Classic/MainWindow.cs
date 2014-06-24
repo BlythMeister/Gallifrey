@@ -518,7 +518,7 @@ namespace Gallifrey.UI.Classic
         {
             //Add missing tab pages
             var itteration = 0;
-            foreach (var timerlistValue in internalTimerList)
+            foreach (var timerlistValue in internalTimerList.OrderByDescending(x=>x.Key))
             {
                 var tabName = timerlistValue.Key.Date.ToString("yyyyMMdd");
                 var tabListName = string.Format("lst_{0}", tabName);
