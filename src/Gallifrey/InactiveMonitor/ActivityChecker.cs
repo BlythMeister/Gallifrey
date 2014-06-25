@@ -74,12 +74,17 @@ namespace Gallifrey.InactiveMonitor
         public void StopActivityCheck()
         {
             TemporaryStopActivityCheck = true;
-            eventsSent = 100;
+            noTimerRunning.Stop();
+            noTimerRunning.Reset();
+            eventsSent = 0;
         }
 
         public void StartActivityCheck()
         {
             TemporaryStopActivityCheck = false;
+            noTimerRunning.Stop();
+            noTimerRunning.Reset();
+            eventsSent = 0;
         }
     }
 }

@@ -22,14 +22,9 @@ namespace Gallifrey.UI.Classic
             InitializeComponent();
 
             jiraIssue = gallifrey.JiraConnection.GetJiraIssue(timerToShow.JiraReference);
-            var loggedTime = new TimeSpan();
-            foreach (var worklog in jiraIssue.GetWorklogs())
-            {
-                if (worklog.StartDate.HasValue && worklog.StartDate.Value.Date == timerToShow.DateStarted.Date && worklog.Author.ToLower() == gallifrey.Settings.JiraConnectionSettings.JiraUsername.ToLower())
-                {
-                    loggedTime = loggedTime.Add(new TimeSpan(0, 0, (int)worklog.TimeSpentInSeconds));
-                }
-            }
+            
+            var loggedTime = gallifrey.JiraConnection.GetCurrentLoggedTimeForDate(jiraIssue, timerToShow.DateStarted);
+
             gallifrey.JiraTimerCollection.SetJiraExportedTime(timerGuid, loggedTime);
 
             timerToShow = gallifrey.JiraTimerCollection.GetTimer(timerGuid);
