@@ -62,7 +62,7 @@
             this.btnOK.Location = new System.Drawing.Point(330, 418);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(65, 65);
-            this.btnOK.TabIndex = 19;
+            this.btnOK.TabIndex = 3;
             this.btnOK.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.toolTip.SetToolTip(this.btnOK, "Done");
             this.btnOK.UseVisualStyleBackColor = true;
@@ -74,7 +74,7 @@
             this.txtChangeLog.Name = "txtChangeLog";
             this.txtChangeLog.ReadOnly = true;
             this.txtChangeLog.Size = new System.Drawing.Size(706, 353);
-            this.txtChangeLog.TabIndex = 20;
+            this.txtChangeLog.TabIndex = 2;
             this.txtChangeLog.Text = "";
             // 
             // ChangeLogWindow

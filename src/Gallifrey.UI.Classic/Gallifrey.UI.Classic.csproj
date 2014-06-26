@@ -258,6 +258,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Icons\Stock Index Up_48x48.png" />
+    <None Include="Icons\Stock Index Down_48x48.png" />
     <None Include="Icons\UpDown_48x48.png" />
     <EmbeddedResource Include="ChangeLog.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
