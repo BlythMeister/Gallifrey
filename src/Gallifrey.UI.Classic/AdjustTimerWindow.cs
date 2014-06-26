@@ -17,16 +17,16 @@ namespace Gallifrey.UI.Classic
             this.gallifrey = gallifrey;
             timerToShow = gallifrey.JiraTimerCollection.GetTimer(timerGuid);
             InitializeComponent();
-            
+
             txtJiraRef.Text = timerToShow.JiraReference;
 
             TopMost = gallifrey.Settings.UiSettings.AlwaysOnTop;
         }
-        
-        private bool AdjustTime()
+
+        private bool AdjustTime(bool addTime)
         {
             int hours, minutes;
-            
+
             if (!int.TryParse(txtHours.Text, out hours) || !int.TryParse(txtMinutes.Text, out minutes))
             {
                 MessageBox.Show("Invalid Hours/Minutes Entered!", "Invalid Adjustment", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -44,10 +44,10 @@ namespace Gallifrey.UI.Classic
                 MessageBox.Show("You Cannot Change By More Than 10 Hours!", "Invalid Adjustment", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
-            
 
-            gallifrey.JiraTimerCollection.AdjustTime(timerToShow.UniqueId, hours, minutes, radAdd.Checked);
-            
+
+            gallifrey.JiraTimerCollection.AdjustTime(timerToShow.UniqueId, hours, minutes, addTime);
+
 
             return true;
         }
@@ -57,9 +57,21 @@ namespace Gallifrey.UI.Classic
             Close();
         }
 
-        private void btnOK_Click(object sender, EventArgs e)
+        private void btnAdd_Click(object sender, EventArgs e)
         {
-            if (AdjustTime())
+            if (AdjustTime(true))
+            {
+                Close();
+            }
+            else
+            {
+                DialogResult = DialogResult.None;
+            }
+        }
+
+        private void btnSubtract_Click(object sender, EventArgs e)
+        {
+            if (AdjustTime(false))
             {
                 Close();
             }

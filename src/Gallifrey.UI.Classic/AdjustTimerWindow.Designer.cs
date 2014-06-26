@@ -34,17 +34,14 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.btnCancel = new System.Windows.Forms.Button();
-            this.btnOK = new System.Windows.Forms.Button();
+            this.btnAdd = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.txtHours = new System.Windows.Forms.TextBox();
             this.txtMinutes = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.radSubtract = new System.Windows.Forms.RadioButton();
-            this.radAdd = new System.Windows.Forms.RadioButton();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.groupBox1.SuspendLayout();
+            this.btnSubtract = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // txtJiraRef
@@ -78,7 +75,7 @@
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancel.Image = global::Gallifrey.UI.Classic.Properties.Resources.Cancel_48x48;
-            this.btnCancel.Location = new System.Drawing.Point(138, 215);
+            this.btnCancel.Location = new System.Drawing.Point(186, 149);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(65, 65);
             this.btnCancel.TabIndex = 10;
@@ -87,17 +84,17 @@
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
-            // btnOK
+            // btnAdd
             // 
-            this.btnOK.Image = global::Gallifrey.UI.Classic.Properties.Resources.Check_48x48;
-            this.btnOK.Location = new System.Drawing.Point(33, 215);
-            this.btnOK.Name = "btnOK";
-            this.btnOK.Size = new System.Drawing.Size(65, 65);
-            this.btnOK.TabIndex = 9;
-            this.btnOK.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.toolTip.SetToolTip(this.btnOK, "Adjust Timer");
-            this.btnOK.UseVisualStyleBackColor = true;
-            this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
+            this.btnAdd.Image = global::Gallifrey.UI.Classic.Properties.Resources.Stock_Index_Up_48x48;
+            this.btnAdd.Location = new System.Drawing.Point(12, 149);
+            this.btnAdd.Name = "btnAdd";
+            this.btnAdd.Size = new System.Drawing.Size(65, 65);
+            this.btnAdd.TabIndex = 8;
+            this.btnAdd.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.toolTip.SetToolTip(this.btnAdd, "Adjust Timer");
+            this.btnAdd.UseVisualStyleBackColor = true;
+            this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
             // 
             // label3
             // 
@@ -146,55 +143,34 @@
             this.label5.TabIndex = 7;
             this.label5.Text = "Minutes";
             // 
-            // groupBox1
+            // btnSubtract
             // 
-            this.groupBox1.Controls.Add(this.radSubtract);
-            this.groupBox1.Controls.Add(this.radAdd);
-            this.groupBox1.Location = new System.Drawing.Point(15, 151);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(233, 58);
-            this.groupBox1.TabIndex = 8;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Adjustment Direction";
-            // 
-            // radSubtract
-            // 
-            this.radSubtract.AutoSize = true;
-            this.radSubtract.Location = new System.Drawing.Point(112, 25);
-            this.radSubtract.Name = "radSubtract";
-            this.radSubtract.Size = new System.Drawing.Size(112, 21);
-            this.radSubtract.TabIndex = 1;
-            this.radSubtract.Text = "Substract Time";
-            this.radSubtract.UseVisualStyleBackColor = true;
-            // 
-            // radAdd
-            // 
-            this.radAdd.AutoSize = true;
-            this.radAdd.Checked = true;
-            this.radAdd.Location = new System.Drawing.Point(7, 25);
-            this.radAdd.Name = "radAdd";
-            this.radAdd.Size = new System.Drawing.Size(82, 21);
-            this.radAdd.TabIndex = 0;
-            this.radAdd.TabStop = true;
-            this.radAdd.Text = "Add Time";
-            this.radAdd.UseVisualStyleBackColor = true;
+            this.btnSubtract.Image = global::Gallifrey.UI.Classic.Properties.Resources.Stock_Index_Down_48x48;
+            this.btnSubtract.Location = new System.Drawing.Point(99, 149);
+            this.btnSubtract.Name = "btnSubtract";
+            this.btnSubtract.Size = new System.Drawing.Size(65, 65);
+            this.btnSubtract.TabIndex = 9;
+            this.btnSubtract.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.toolTip.SetToolTip(this.btnSubtract, "Adjust Timer");
+            this.btnSubtract.UseVisualStyleBackColor = true;
+            this.btnSubtract.Click += new System.EventHandler(this.btnSubtract_Click);
             // 
             // AdjustTimerWindow
             // 
-            this.AcceptButton = this.btnOK;
+            this.AcceptButton = this.btnAdd;
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(263, 293);
+            this.ClientSize = new System.Drawing.Size(263, 226);
             this.ControlBox = false;
-            this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.btnSubtract);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.txtMinutes);
             this.Controls.Add(this.txtHours);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.btnCancel);
-            this.Controls.Add(this.btnOK);
+            this.Controls.Add(this.btnAdd);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.txtJiraRef);
@@ -208,8 +184,6 @@
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Gallifrey - Adjust Time";
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -220,16 +194,14 @@
         private System.Windows.Forms.TextBox txtJiraRef;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Button btnOK;
+        private System.Windows.Forms.Button btnAdd;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox txtHours;
         private System.Windows.Forms.TextBox txtMinutes;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.RadioButton radSubtract;
-        private System.Windows.Forms.RadioButton radAdd;
         private System.Windows.Forms.ToolTip toolTip;
+        private System.Windows.Forms.Button btnSubtract;
     }
 }

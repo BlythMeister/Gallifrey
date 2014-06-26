@@ -63,7 +63,7 @@
             this.lstLockedTimers.Name = "lstLockedTimers";
             this.lstLockedTimers.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
             this.lstLockedTimers.Size = new System.Drawing.Size(532, 174);
-            this.lstLockedTimers.TabIndex = 2;
+            this.lstLockedTimers.TabIndex = 1;
             this.toolTip.SetToolTip(this.lstLockedTimers, "Time Machine Locked");
             this.lstLockedTimers.SelectedIndexChanged += new System.EventHandler(this.lstIdleTimers_SelectedIndexChanged);
             // 
@@ -149,7 +149,7 @@
             this.btnRemove.Location = new System.Drawing.Point(555, 81);
             this.btnRemove.Name = "btnRemove";
             this.btnRemove.Size = new System.Drawing.Size(65, 65);
-            this.btnRemove.TabIndex = 6;
+            this.btnRemove.TabIndex = 2;
             this.btnRemove.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.toolTip.SetToolTip(this.btnRemove, "Delete A Machine Lock Timer");
             this.btnRemove.UseVisualStyleBackColor = true;
@@ -161,7 +161,7 @@
             this.btnClose.Location = new System.Drawing.Point(286, 341);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(65, 65);
-            this.btnClose.TabIndex = 7;
+            this.btnClose.TabIndex = 4;
             this.btnClose.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.toolTip.SetToolTip(this.btnClose, "Close Window");
             this.btnClose.UseVisualStyleBackColor = true;
