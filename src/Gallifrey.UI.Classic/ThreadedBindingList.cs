@@ -1,10 +1,16 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
 using System.Threading;
 
 namespace Gallifrey.UI.Classic
 {
     public class ThreadedBindingList<T> : BindingList<T>
     {
+        public ThreadedBindingList() : base() { }
+        public ThreadedBindingList(IList<T> list) : base(list) { }
+
         SynchronizationContext ctx = SynchronizationContext.Current;
         protected override void OnAddingNew(AddingNewEventArgs e)
         {

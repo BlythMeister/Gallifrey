@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using Exceptionless;
+using Gallifrey.Comparers;
 using Gallifrey.Exceptions.IntergrationPoints;
 using Gallifrey.Exceptions.JiraTimers;
 using Gallifrey.ExtensionMethods;
@@ -487,15 +488,28 @@ namespace Gallifrey.UI.Classic
                     internalTimerList.Add(validDate, list);
                 }
 
-                //Add missing dates
+                //Add missing timers
+                var addedTimer = false;
+                var listStartedEmpty = !internalTimerList[validDate].Any();
                 foreach (var jiraTimer in gallifrey.JiraTimerCollection.GetTimersForADate(validDate))
                 {
                     if (internalTimerList[validDate].All(x => x.UniqueId != jiraTimer.UniqueId))
                     {
+                        if (!listStartedEmpty) addedTimer = true;
                         internalTimerList[validDate].Add(jiraTimer);
                     }
                 }
 
+                //re-order list
+                if (addedTimer)
+                {
+                    var orderedList = internalTimerList[validDate].OrderBy(x => x.JiraReference, new JiraReferenceComparer()).ToList();
+                    internalTimerList[validDate] = new ThreadedBindingList<JiraTimer>(orderedList);
+                    
+                    var timerList = (ListBox)tabTimerDays.TabPages[validDate.ToString("yyyyMMdd")].Controls[string.Format("lst_{0}", validDate.ToString("yyyyMMdd"))];
+                    timerList.DataSource = internalTimerList[validDate];
+                }
+                
                 //remove timers that have been deleted
                 var removeList = internalTimerList[validDate].Where(timer => gallifrey.JiraTimerCollection.GetTimer(timer.UniqueId) == null).ToList();
                 foreach (var jiraTimer in removeList)
@@ -597,28 +611,41 @@ namespace Gallifrey.UI.Classic
 
         private void SetDisplayClock()
         {
+            JiraTimer selectedTimer = null;
             var selectedTab = tabTimerDays.SelectedTab;
-            if (selectedTab == null) return;
-            var selectedList = ((ListBox)selectedTab.Controls[string.Format("lst_{0}", selectedTab.Name)]);
-            if (selectedList == null) return;
-
-            var selectedTimer = (JiraTimer)selectedList.SelectedItem;
-            lblCurrentTime.Text = selectedTimer.ExactCurrentTime.FormatAsString();
-
-            if (gallifrey.JiraTimerCollection.GetRunningTimerId().HasValue)
+            if (selectedTab != null)
             {
-                if (selectedTimer.IsRunning)
+                var selectedList = ((ListBox)selectedTab.Controls[string.Format("lst_{0}", selectedTab.Name)]);
+                if (selectedList != null)
                 {
-                    lblCurrentTime.ForeColor = Color.LimeGreen;
+                    selectedTimer = (JiraTimer)selectedList.SelectedItem;
                 }
-                else
-                {
-                    lblCurrentTime.ForeColor = Color.Orange;
-                }
+            }
+
+            if (selectedTimer == null)
+            {
+                lblCurrentTime.Text = "00:00:00";
+                lblCurrentTime.ForeColor = Color.Red;
             }
             else
             {
-                lblCurrentTime.ForeColor = Color.Red;
+                lblCurrentTime.Text = selectedTimer.ExactCurrentTime.FormatAsString();
+
+                if (gallifrey.JiraTimerCollection.GetRunningTimerId().HasValue)
+                {
+                    if (selectedTimer.IsRunning)
+                    {
+                        lblCurrentTime.ForeColor = Color.LimeGreen;
+                    }
+                    else
+                    {
+                        lblCurrentTime.ForeColor = Color.Orange;
+                    }
+                }
+                else
+                {
+                    lblCurrentTime.ForeColor = Color.Red;
+                }
             }
         }
 
