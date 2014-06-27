@@ -29,7 +29,7 @@
     <PublisherName>Gallifrey</PublisherName>
     <MinimumRequiredVersion>1.0.0.0</MinimumRequiredVersion>
     <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.0.3.0</ApplicationVersion>
+    <ApplicationVersion>1.0.4.0</ApplicationVersion>
     <UseApplicationTrust>true</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -153,11 +153,11 @@
     <Compile Include="ExportTimerWindow.Designer.cs">
       <DependentUpon>ExportTimerWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="RenameTimerWindow.cs">
+    <Compile Include="EditTimerWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="RenameTimerWindow.Designer.cs">
-      <DependentUpon>RenameTimerWindow.cs</DependentUpon>
+    <Compile Include="EditTimerWindow.Designer.cs">
+      <DependentUpon>EditTimerWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="SettingsWindow.cs">
       <SubType>Form</SubType>
@@ -173,6 +173,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ThreadedBindingList.cs" />
     <EmbeddedResource Include="AddTimerWindow.resx">
       <DependentUpon>AddTimerWindow.cs</DependentUpon>
     </EmbeddedResource>
@@ -194,8 +195,8 @@
     <EmbeddedResource Include="ExportTimerWindow.resx">
       <DependentUpon>ExportTimerWindow.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="RenameTimerWindow.resx">
-      <DependentUpon>RenameTimerWindow.cs</DependentUpon>
+    <EmbeddedResource Include="EditTimerWindow.resx">
+      <DependentUpon>EditTimerWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SettingsWindow.resx">
       <DependentUpon>SettingsWindow.cs</DependentUpon>
@@ -257,6 +258,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Icons\Stock Index Up_48x48.png" />
+    <None Include="Icons\Stock Index Down_48x48.png" />
     <None Include="Icons\UpDown_48x48.png" />
     <EmbeddedResource Include="ChangeLog.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -276,6 +279,28 @@
     <None Include="Icons\Search_48x48.png" />
     <None Include="Icons\Edit_48x48.png" />
     <None Include="Icons\Synchronize_48x48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <PublishFile Include="Gallifrey.pdb">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>File</FileType>
+    </PublishFile>
+    <PublishFile Include="Gallifrey.UI.Classic.pdb">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>File</FileType>
+    </PublishFile>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

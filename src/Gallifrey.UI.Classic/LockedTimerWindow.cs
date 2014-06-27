@@ -99,13 +99,13 @@ namespace Gallifrey.UI.Classic
             if (radSelected.Checked)
             {
                 var selectedRecent = (RecentJira)cmbRecentJiras.SelectedItem;
-                
-                var todaysTimers = gallifrey.JiraTimerCollection.GetTimersForADate(DateTime.Now.Date);
+
+                var timersForADate = gallifrey.JiraTimerCollection.GetTimersForADate(idleTimer.DateStarted);
                 Guid timerToAddTimeTo;
 
-                if (todaysTimers.Any(x => x.JiraReference == selectedRecent.JiraReference))
+                if (timersForADate.Any(x => x.JiraReference == selectedRecent.JiraReference))
                 {
-                    timerToAddTimeTo = todaysTimers.First(x => x.JiraReference == selectedRecent.JiraReference).UniqueId;
+                    timerToAddTimeTo = timersForADate.First(x => x.JiraReference == selectedRecent.JiraReference).UniqueId;
                 }
                 else
                 {
@@ -136,7 +136,7 @@ namespace Gallifrey.UI.Classic
             {
                 TopMost = false;
                 var addForm = new AddTimerWindow(gallifrey);
-                addForm.PreLoadTime(idleTimer.ExactCurrentTime);
+                addForm.PreLoadTime(idleTimer.IdleTimeValue);
                 addForm.ShowDialog();
                 if (!addForm.NewTimerId.HasValue)
                 {
