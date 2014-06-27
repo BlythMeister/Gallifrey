@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Atlassian.Jira;
+using Gallifrey.Comparers;
 using Gallifrey.Exceptions.JiraTimers;
 using Gallifrey.IdleTimers;
 using Gallifrey.JiraIntegration;
@@ -13,6 +15,7 @@ namespace Gallifrey.JiraTimers
     {
         IEnumerable<DateTime> GetValidTimerDates();
         IEnumerable<JiraTimer> GetTimersForADate(DateTime timerDate);
+        IEnumerable<JiraTimer> GetUnexportedTimers(DateTime timerDate);
         IEnumerable<RecentJira> GetJiraReferencesForLastDays(int days);
         Guid AddTimer(Issue jiraIssue, DateTime startDate, TimeSpan seedTime, bool startNow);
         void RemoveTimer(Guid uniqueId);
@@ -25,15 +28,13 @@ namespace Gallifrey.JiraTimers
         void ChangeTimerDate(Guid timerGuid, DateTime newStartDate);
         Tuple<int, int> GetNumberExported();
         TimeSpan GetTotalUnexportedTime();
-        TimeSpan GetTotalExportedTimeThisWeek();
+        TimeSpan GetTotalExportedTimeThisWeek(DayOfWeek startOfWeek);
         TimeSpan GetTotalTimeForDate(DateTime timerDate);
         void AdjustTime(Guid uniqueId, int hours, int minutes, bool addTime);
         void SetJiraExportedTime(Guid uniqueId, TimeSpan loggedTime);
         void AddJiraExportedTime(Guid uniqueId, int hours, int minutes);
         void AddIdleTimer(Guid uniqueId, IdleTimer idleTimer);
     }
-
-
 
     public class JiraTimerCollection : IJiraTimerCollection
     {
@@ -56,7 +57,12 @@ namespace Gallifrey.JiraTimers
 
         public IEnumerable<JiraTimer> GetTimersForADate(DateTime timerDate)
         {
-            return timerList.Where(timer => timer.DateStarted.Date == timerDate.Date).OrderBy(timer => timer.JiraReference);
+            return timerList.Where(timer => timer.DateStarted.Date == timerDate.Date).OrderBy(timer => timer.JiraReference, new JiraReferenceComparer());
+        }
+
+        public IEnumerable<JiraTimer> GetUnexportedTimers(DateTime timerDate)
+        {
+            return timerList.Where(timer => timer.DateStarted.Date == timerDate.Date && timer.TimeToExport.TotalMinutes >= 1).OrderBy(timer => timer.JiraReference, new JiraReferenceComparer());
         }
 
         public IEnumerable<RecentJira> GetJiraReferencesForLastDays(int days)
@@ -67,7 +73,7 @@ namespace Gallifrey.JiraTimers
                 .Where(timer => timer.DateStarted.Date >= DateTime.Now.AddDays(days).Date)
                 .Select(timer => new RecentJira(timer.JiraReference, timer.JiraProjectName, timer.JiraName))
                 .Distinct(new DuplicateRecentLogComparer())
-                .OrderBy(x=>x.JiraReference);
+                .OrderBy(x=>x.JiraReference, new JiraReferenceComparer());
         }
 
         private void AddTimer(JiraTimer newTimer)
@@ -197,10 +203,10 @@ namespace Gallifrey.JiraTimers
             return timerList.Aggregate(unexportedTime, (current, jiraTimer) => current.Add(new TimeSpan(jiraTimer.TimeToExport.Hours, jiraTimer.TimeToExport.Minutes, 0)));
         }
 
-        public TimeSpan GetTotalExportedTimeThisWeek()
+        public TimeSpan GetTotalExportedTimeThisWeek(DayOfWeek startOfWeek)
         {
             var exportedTime = new TimeSpan();
-            return timerList.Where(jiraTimer => jiraTimer.IsThisWeek).Aggregate(exportedTime, (current, jiraTimer) => current.Add(jiraTimer.ExportedTime));
+            return timerList.Where(jiraTimer => jiraTimer.IsThisWeek(startOfWeek)).Aggregate(exportedTime, (current, jiraTimer) => current.Add(jiraTimer.ExportedTime));
         }
 
         public TimeSpan GetTotalTimeForDate(DateTime timerDate)
@@ -235,19 +241,6 @@ namespace Gallifrey.JiraTimers
             var timer = GetTimer(uniqueId);
             timer.AddIdleTimer(idleTimer);
             SaveTimers();
-        }
-    }
-
-    public class DuplicateRecentLogComparer : IEqualityComparer<RecentJira>
-    {
-        public bool Equals(RecentJira x, RecentJira y)
-        {
-            return x.JiraReference == y.JiraReference;
-        }
-
-        public int GetHashCode(RecentJira recentJira)
-        {
-            return GetHashCode();
         }
     }
 }

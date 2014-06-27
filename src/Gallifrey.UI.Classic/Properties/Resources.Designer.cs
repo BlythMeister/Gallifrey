@@ -83,16 +83,15 @@ namespace Gallifrey.UI.Classic.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
         ///&lt;Versions&gt;
-        ///  &lt;Version&gt;
-        ///    &lt;Number&gt;1.0.0.0&lt;/Number&gt;
+        ///  &lt;Version Number=&quot;1.0.0&quot; Name=&quot;&quot;&gt;
         ///    &lt;Features&gt;
-        ///      &lt;Feature&gt;Daily timer management&lt;/Feature&gt;
-        ///      &lt;Feature&gt;Manual Timer Adjustment&lt;/Feature&gt;
-        ///      &lt;Feature&gt;Export Direct To Jira&lt;/Feature&gt;
-        ///      &lt;Feature&gt;Jira issue search (with saved filters)&lt;/Feature&gt;
-        ///      &lt;Feature&gt;Alerts when no timer is running&lt;/Feature&gt;
-        ///      &lt;Feature&gt;Machine locked time capture&lt;/Feature&gt;
-        ///      &lt;Feature&gt;Automatic Updates&lt;/Feature&gt;
+        ///      &lt;Feature&gt;Daily timer management.&lt;/Feature&gt;
+        ///      &lt;Feature&gt;Manual Timer Adjustment.&lt;/Feature&gt;
+        ///      &lt;Feature&gt;Export Direct To Jira.&lt;/Feature&gt;
+        ///      &lt;Feature&gt;Jira issue search (with saved filters).&lt;/Feature&gt;
+        ///      &lt;Feature&gt;Alerts when no timer is running.&lt;/Feature&gt;
+        ///      &lt;Feature&gt;Machine locked time capture.&lt;/Feature&gt;
+        ///      &lt;Feature&gt;Automatic Updates.&lt;/Feature&gt;
         ///      &lt;Feature&gt;Export Stats &amp;amp [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string ChangeLog {
@@ -257,6 +256,26 @@ namespace Gallifrey.UI.Classic.Properties {
         internal static System.Drawing.Bitmap Settings_48x48 {
             get {
                 object obj = ResourceManager.GetObject("Settings_48x48", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Stock_Index_Down_48x48 {
+            get {
+                object obj = ResourceManager.GetObject("Stock Index Down_48x48", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Stock_Index_Up_48x48 {
+            get {
+                object obj = ResourceManager.GetObject("Stock Index Up_48x48", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SearchWindow));
             this.txtJiraRef = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -39,6 +40,7 @@
             this.lstResults = new System.Windows.Forms.ListBox();
             this.btnCancelAddTimer = new System.Windows.Forms.Button();
             this.btnAddTimer = new System.Windows.Forms.Button();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -48,6 +50,7 @@
             this.txtJiraRef.Name = "txtJiraRef";
             this.txtJiraRef.Size = new System.Drawing.Size(280, 25);
             this.txtJiraRef.TabIndex = 1;
+            this.toolTip.SetToolTip(this.txtJiraRef, "Enter Search Term (Press Enter To Submit)");
             // 
             // label1
             // 
@@ -90,6 +93,7 @@
             this.btnRefresh.Size = new System.Drawing.Size(65, 65);
             this.btnRefresh.TabIndex = 4;
             this.btnRefresh.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.toolTip.SetToolTip(this.btnRefresh, "Search Jira");
             this.btnRefresh.UseVisualStyleBackColor = true;
             this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
             // 
@@ -109,6 +113,7 @@
             this.cmbUserFilters.Name = "cmbUserFilters";
             this.cmbUserFilters.Size = new System.Drawing.Size(280, 25);
             this.cmbUserFilters.TabIndex = 3;
+            this.toolTip.SetToolTip(this.cmbUserFilters, "Choose One Of Your Saved Filters");
             // 
             // lstResults
             // 
@@ -118,17 +123,19 @@
             this.lstResults.Name = "lstResults";
             this.lstResults.Size = new System.Drawing.Size(386, 174);
             this.lstResults.TabIndex = 2;
+            this.toolTip.SetToolTip(this.lstResults, "Jira Search Results");
             this.lstResults.DoubleClick += new System.EventHandler(this.lstResults_DoubleClick);
             // 
             // btnCancelAddTimer
             // 
             this.btnCancelAddTimer.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancelAddTimer.Image = global::Gallifrey.UI.Classic.Properties.Resources.Cancel_48x48;
-            this.btnCancelAddTimer.Location = new System.Drawing.Point(234, 399);
+            this.btnCancelAddTimer.Location = new System.Drawing.Point(217, 399);
             this.btnCancelAddTimer.Name = "btnCancelAddTimer";
             this.btnCancelAddTimer.Size = new System.Drawing.Size(65, 65);
             this.btnCancelAddTimer.TabIndex = 4;
             this.btnCancelAddTimer.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.toolTip.SetToolTip(this.btnCancelAddTimer, "Close Search");
             this.btnCancelAddTimer.UseVisualStyleBackColor = true;
             this.btnCancelAddTimer.Click += new System.EventHandler(this.btnCancelAddTimer_Click);
             // 
@@ -141,6 +148,7 @@
             this.btnAddTimer.Size = new System.Drawing.Size(65, 65);
             this.btnAddTimer.TabIndex = 3;
             this.btnAddTimer.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.toolTip.SetToolTip(this.btnAddTimer, "Add Timer For Selected Jira");
             this.btnAddTimer.UseVisualStyleBackColor = true;
             this.btnAddTimer.Click += new System.EventHandler(this.btnAddTimer_Click);
             // 
@@ -188,5 +196,6 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ComboBox cmbUserFilters;
         private System.Windows.Forms.ListBox lstResults;
+        private System.Windows.Forms.ToolTip toolTip;
     }
 }

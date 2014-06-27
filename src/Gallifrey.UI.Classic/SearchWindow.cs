@@ -56,6 +56,12 @@ namespace Gallifrey.UI.Classic
         {
             var selectedIssue = (JiraSearchResult) lstResults.SelectedItem;
 
+            if (selectedIssue == null)
+            {
+                MessageBox.Show("No Issue Selected, Cannot Add Timer", "No Issue Selected", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                DialogResult = DialogResult.None;
+            }
+
             if (fromAddWindow)
             {
                 JiraReference = selectedIssue.JiraRef;
@@ -120,12 +126,20 @@ namespace Gallifrey.UI.Classic
                     searchResults = gallifrey.JiraConnection.GetJiraIssuesFromFilter(filterSearch);
                 }
 
-                lstResults.DataSource = searchResults.Select(issue => new JiraSearchResult(issue)).ToList();
-                lstResults.Enabled = true;
+                if (searchResults.Any())
+                {
+                    lstResults.DataSource = searchResults.Select(issue => new JiraSearchResult(issue)).ToList();
+                    lstResults.Enabled = true;    
+                }
+                else
+                {
+                    throw new NoResultsFoundException("No Results In Collection");
+                }
             }
             catch (NoResultsFoundException)
             {
                 lstResults.Enabled = false;
+                MessageBox.Show("No Results Found, Try A Different Search", "No Results", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 

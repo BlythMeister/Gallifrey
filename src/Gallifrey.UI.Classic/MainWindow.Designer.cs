@@ -44,7 +44,6 @@
             this.lblExportStat = new System.Windows.Forms.Label();
             this.notifyAlert = new System.Windows.Forms.NotifyIcon(this.components);
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.lblUpdate = new System.Windows.Forms.Label();
             this.btnAbout = new System.Windows.Forms.Button();
             this.btnIdle = new System.Windows.Forms.Button();
             this.btnRename = new System.Windows.Forms.Button();
@@ -53,8 +52,9 @@
             this.btnExport = new System.Windows.Forms.Button();
             this.btnSettings = new System.Windows.Forms.Button();
             this.btnRemoveTimer = new System.Windows.Forms.Button();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.btnAddTimer = new System.Windows.Forms.Button();
+            this.lblUpdate = new System.Windows.Forms.Label();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.grpUpdates = new System.Windows.Forms.GroupBox();
             this.grpTarget.SuspendLayout();
             this.grpExportStats.SuspendLayout();
@@ -112,6 +112,7 @@
             this.lblCurrentTime.TabIndex = 14;
             this.lblCurrentTime.Text = "00:00:00";
             this.lblCurrentTime.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.toolTip.SetToolTip(this.lblCurrentTime, "Double Click Jump To Running (CTRL+J)");
             this.lblCurrentTime.DoubleClick += new System.EventHandler(this.lblCurrentTime_DoubleClick);
             // 
             // grpTarget
@@ -199,6 +200,115 @@
             this.notifyAlert.BalloonTipClicked += new System.EventHandler(this.notifyAlert_BalloonTipClicked);
             this.notifyAlert.DoubleClick += new System.EventHandler(this.notifyAlert_DoubleClick);
             // 
+            // btnAbout
+            // 
+            this.btnAbout.Image = global::Gallifrey.UI.Classic.Properties.Resources.Information_48x48;
+            this.btnAbout.Location = new System.Drawing.Point(509, 98);
+            this.btnAbout.Name = "btnAbout";
+            this.btnAbout.Size = new System.Drawing.Size(65, 65);
+            this.btnAbout.TabIndex = 12;
+            this.btnAbout.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.toolTip.SetToolTip(this.btnAbout, "About (CTRL+I)");
+            this.btnAbout.UseVisualStyleBackColor = true;
+            this.btnAbout.Click += new System.EventHandler(this.btnAbout_Click);
+            // 
+            // btnIdle
+            // 
+            this.btnIdle.Image = global::Gallifrey.UI.Classic.Properties.Resources.Key_48x48;
+            this.btnIdle.Location = new System.Drawing.Point(438, 98);
+            this.btnIdle.Name = "btnIdle";
+            this.btnIdle.Size = new System.Drawing.Size(65, 65);
+            this.btnIdle.TabIndex = 11;
+            this.btnIdle.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.toolTip.SetToolTip(this.btnIdle, "\"View Machine Locked Timers (CTRL+L)");
+            this.btnIdle.UseVisualStyleBackColor = true;
+            this.btnIdle.Click += new System.EventHandler(this.btnIdle_Click);
+            // 
+            // btnRename
+            // 
+            this.btnRename.Image = global::Gallifrey.UI.Classic.Properties.Resources.Edit_48x48;
+            this.btnRename.Location = new System.Drawing.Point(296, 98);
+            this.btnRename.Name = "btnRename";
+            this.btnRename.Size = new System.Drawing.Size(65, 65);
+            this.btnRename.TabIndex = 9;
+            this.btnRename.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.toolTip.SetToolTip(this.btnRename, "Change Jira For Timer (CTRL+R)");
+            this.btnRename.UseVisualStyleBackColor = true;
+            this.btnRename.Click += new System.EventHandler(this.btnRename_Click);
+            // 
+            // btnTimeEdit
+            // 
+            this.btnTimeEdit.Image = global::Gallifrey.UI.Classic.Properties.Resources.UpDown_48x48;
+            this.btnTimeEdit.Location = new System.Drawing.Point(225, 98);
+            this.btnTimeEdit.Name = "btnTimeEdit";
+            this.btnTimeEdit.Size = new System.Drawing.Size(65, 65);
+            this.btnTimeEdit.TabIndex = 8;
+            this.btnTimeEdit.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.toolTip.SetToolTip(this.btnTimeEdit, "Edit Current Time (CTRL+C)");
+            this.btnTimeEdit.UseVisualStyleBackColor = true;
+            this.btnTimeEdit.Click += new System.EventHandler(this.btnTimeEdit_Click);
+            // 
+            // btnSearch
+            // 
+            this.btnSearch.Image = global::Gallifrey.UI.Classic.Properties.Resources.Search_48x48;
+            this.btnSearch.Location = new System.Drawing.Point(154, 98);
+            this.btnSearch.Name = "btnSearch";
+            this.btnSearch.Size = new System.Drawing.Size(65, 65);
+            this.btnSearch.TabIndex = 7;
+            this.btnSearch.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.toolTip.SetToolTip(this.btnSearch, "Search Jira (CTRL+F)");
+            this.btnSearch.UseVisualStyleBackColor = true;
+            this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
+            // 
+            // btnExport
+            // 
+            this.btnExport.Image = global::Gallifrey.UI.Classic.Properties.Resources.Upload_48x48;
+            this.btnExport.Location = new System.Drawing.Point(367, 98);
+            this.btnExport.Name = "btnExport";
+            this.btnExport.Size = new System.Drawing.Size(65, 65);
+            this.btnExport.TabIndex = 10;
+            this.btnExport.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.toolTip.SetToolTip(this.btnExport, "Export Time To Jira (CTRL+E)\r\nOr \r\nExport Selected Day To Jira (CTRL + X ) - Keyb" +
+        "oard Shortcut ONLY");
+            this.btnExport.UseVisualStyleBackColor = true;
+            this.btnExport.Click += new System.EventHandler(this.btnExport_Click);
+            // 
+            // btnSettings
+            // 
+            this.btnSettings.Image = global::Gallifrey.UI.Classic.Properties.Resources.Settings_48x48;
+            this.btnSettings.Location = new System.Drawing.Point(580, 98);
+            this.btnSettings.Name = "btnSettings";
+            this.btnSettings.Size = new System.Drawing.Size(65, 65);
+            this.btnSettings.TabIndex = 13;
+            this.btnSettings.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.toolTip.SetToolTip(this.btnSettings, "Settings (CTRL+S)");
+            this.btnSettings.UseVisualStyleBackColor = true;
+            this.btnSettings.Click += new System.EventHandler(this.btnSettings_Click);
+            // 
+            // btnRemoveTimer
+            // 
+            this.btnRemoveTimer.Image = global::Gallifrey.UI.Classic.Properties.Resources.Delete_48x48;
+            this.btnRemoveTimer.Location = new System.Drawing.Point(83, 98);
+            this.btnRemoveTimer.Name = "btnRemoveTimer";
+            this.btnRemoveTimer.Size = new System.Drawing.Size(65, 65);
+            this.btnRemoveTimer.TabIndex = 6;
+            this.btnRemoveTimer.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.toolTip.SetToolTip(this.btnRemoveTimer, "Remove Selected Timer (CTRL+D)");
+            this.btnRemoveTimer.UseVisualStyleBackColor = true;
+            this.btnRemoveTimer.Click += new System.EventHandler(this.btnRemoveTimer_Click);
+            // 
+            // btnAddTimer
+            // 
+            this.btnAddTimer.Image = global::Gallifrey.UI.Classic.Properties.Resources.Add_48x48;
+            this.btnAddTimer.Location = new System.Drawing.Point(12, 98);
+            this.btnAddTimer.Name = "btnAddTimer";
+            this.btnAddTimer.Size = new System.Drawing.Size(65, 65);
+            this.btnAddTimer.TabIndex = 5;
+            this.btnAddTimer.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.toolTip.SetToolTip(this.btnAddTimer, "Add New Timer (CTRL+A)");
+            this.btnAddTimer.UseVisualStyleBackColor = true;
+            this.btnAddTimer.Click += new System.EventHandler(this.btnAddTimer_Click);
+            // 
             // lblUpdate
             // 
             this.lblUpdate.BackColor = System.Drawing.SystemColors.Control;
@@ -211,94 +321,6 @@
             this.lblUpdate.Text = "Currently Running v99.99.99.99 (beta)\r\nUp To Date!\r\n";
             this.lblUpdate.DoubleClick += new System.EventHandler(this.lblUpdate_DoubleClick);
             // 
-            // btnAbout
-            // 
-            this.btnAbout.Image = global::Gallifrey.UI.Classic.Properties.Resources.Information_48x48;
-            this.btnAbout.Location = new System.Drawing.Point(509, 98);
-            this.btnAbout.Name = "btnAbout";
-            this.btnAbout.Size = new System.Drawing.Size(65, 65);
-            this.btnAbout.TabIndex = 12;
-            this.btnAbout.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.btnAbout.UseVisualStyleBackColor = true;
-            this.btnAbout.Click += new System.EventHandler(this.btnAbout_Click);
-            // 
-            // btnIdle
-            // 
-            this.btnIdle.Image = global::Gallifrey.UI.Classic.Properties.Resources.Key_48x48;
-            this.btnIdle.Location = new System.Drawing.Point(438, 98);
-            this.btnIdle.Name = "btnIdle";
-            this.btnIdle.Size = new System.Drawing.Size(65, 65);
-            this.btnIdle.TabIndex = 11;
-            this.btnIdle.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.btnIdle.UseVisualStyleBackColor = true;
-            this.btnIdle.Click += new System.EventHandler(this.btnIdle_Click);
-            // 
-            // btnRename
-            // 
-            this.btnRename.Image = global::Gallifrey.UI.Classic.Properties.Resources.Edit_48x48;
-            this.btnRename.Location = new System.Drawing.Point(296, 98);
-            this.btnRename.Name = "btnRename";
-            this.btnRename.Size = new System.Drawing.Size(65, 65);
-            this.btnRename.TabIndex = 9;
-            this.btnRename.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.btnRename.UseVisualStyleBackColor = true;
-            this.btnRename.Click += new System.EventHandler(this.btnRename_Click);
-            // 
-            // btnTimeEdit
-            // 
-            this.btnTimeEdit.Image = global::Gallifrey.UI.Classic.Properties.Resources.UpDown_48x48;
-            this.btnTimeEdit.Location = new System.Drawing.Point(225, 98);
-            this.btnTimeEdit.Name = "btnTimeEdit";
-            this.btnTimeEdit.Size = new System.Drawing.Size(65, 65);
-            this.btnTimeEdit.TabIndex = 8;
-            this.btnTimeEdit.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.btnTimeEdit.UseVisualStyleBackColor = true;
-            this.btnTimeEdit.Click += new System.EventHandler(this.btnTimeEdit_Click);
-            // 
-            // btnSearch
-            // 
-            this.btnSearch.Image = global::Gallifrey.UI.Classic.Properties.Resources.Search_48x48;
-            this.btnSearch.Location = new System.Drawing.Point(154, 98);
-            this.btnSearch.Name = "btnSearch";
-            this.btnSearch.Size = new System.Drawing.Size(65, 65);
-            this.btnSearch.TabIndex = 7;
-            this.btnSearch.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.btnSearch.UseVisualStyleBackColor = true;
-            this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
-            // 
-            // btnExport
-            // 
-            this.btnExport.Image = global::Gallifrey.UI.Classic.Properties.Resources.Upload_48x48;
-            this.btnExport.Location = new System.Drawing.Point(367, 98);
-            this.btnExport.Name = "btnExport";
-            this.btnExport.Size = new System.Drawing.Size(65, 65);
-            this.btnExport.TabIndex = 10;
-            this.btnExport.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.btnExport.UseVisualStyleBackColor = true;
-            this.btnExport.Click += new System.EventHandler(this.btnExport_Click);
-            // 
-            // btnSettings
-            // 
-            this.btnSettings.Image = global::Gallifrey.UI.Classic.Properties.Resources.Settings_48x48;
-            this.btnSettings.Location = new System.Drawing.Point(580, 98);
-            this.btnSettings.Name = "btnSettings";
-            this.btnSettings.Size = new System.Drawing.Size(65, 65);
-            this.btnSettings.TabIndex = 13;
-            this.btnSettings.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.btnSettings.UseVisualStyleBackColor = true;
-            this.btnSettings.Click += new System.EventHandler(this.btnSettings_Click);
-            // 
-            // btnRemoveTimer
-            // 
-            this.btnRemoveTimer.Image = global::Gallifrey.UI.Classic.Properties.Resources.Delete_48x48;
-            this.btnRemoveTimer.Location = new System.Drawing.Point(83, 98);
-            this.btnRemoveTimer.Name = "btnRemoveTimer";
-            this.btnRemoveTimer.Size = new System.Drawing.Size(65, 65);
-            this.btnRemoveTimer.TabIndex = 6;
-            this.btnRemoveTimer.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.btnRemoveTimer.UseVisualStyleBackColor = true;
-            this.btnRemoveTimer.Click += new System.EventHandler(this.btnRemoveTimer_Click);
-            // 
             // pictureBox1
             // 
             this.pictureBox1.Image = global::Gallifrey.UI.Classic.Properties.Resources.clock_blue_128x128;
@@ -308,17 +330,6 @@
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 2;
             this.pictureBox1.TabStop = false;
-            // 
-            // btnAddTimer
-            // 
-            this.btnAddTimer.Image = global::Gallifrey.UI.Classic.Properties.Resources.Add_48x48;
-            this.btnAddTimer.Location = new System.Drawing.Point(12, 98);
-            this.btnAddTimer.Name = "btnAddTimer";
-            this.btnAddTimer.Size = new System.Drawing.Size(65, 65);
-            this.btnAddTimer.TabIndex = 5;
-            this.btnAddTimer.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.btnAddTimer.UseVisualStyleBackColor = true;
-            this.btnAddTimer.Click += new System.EventHandler(this.btnAddTimer_Click);
             // 
             // grpUpdates
             // 
@@ -333,6 +344,7 @@
             // 
             // MainWindow
             // 
+            this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(975, 595);
@@ -362,6 +374,8 @@
             this.Text = "Gallifrey";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainWindow_FormClosed);
             this.Load += new System.EventHandler(this.MainWindow_Load);
+            this.DragDrop += new System.Windows.Forms.DragEventHandler(this.MainWindow_DragDrop);
+            this.DragEnter += new System.Windows.Forms.DragEventHandler(this.MainWindow_DragEnter);
             this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.MainWindow_KeyUp);
             this.grpTarget.ResumeLayout(false);
             this.grpTarget.PerformLayout();

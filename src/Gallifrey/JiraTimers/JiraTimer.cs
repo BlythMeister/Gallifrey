@@ -1,5 +1,7 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
+using System.Timers;
 using Atlassian.Jira;
 using Gallifrey.Exceptions.JiraTimers;
 using Gallifrey.ExtensionMethods;
@@ -8,7 +10,7 @@ using Newtonsoft.Json;
 
 namespace Gallifrey.JiraTimers
 {
-    public class JiraTimer
+    public class JiraTimer : INotifyPropertyChanged
     {
         public string JiraReference { get; private set; }
         public string JiraProjectName { get; private set; }
@@ -19,6 +21,7 @@ namespace Gallifrey.JiraTimers
         public Guid UniqueId { get; private set; }
         public bool IsRunning { get; private set; }
         private readonly Stopwatch currentRunningTime;
+        private readonly Timer runningWatcher;
 
         [JsonConstructor]
         public JiraTimer(string jiraReference, string jiraProjectName, string jiraName, DateTime dateStarted, TimeSpan currentTime, TimeSpan exportedTime, Guid uniqueId)
@@ -32,6 +35,8 @@ namespace Gallifrey.JiraTimers
             UniqueId = uniqueId;
             IsRunning = false;
             currentRunningTime = new Stopwatch();
+            runningWatcher = new Timer(100);
+            runningWatcher.Elapsed += runningWatcherElapsed;
         }
 
         public JiraTimer(Issue jiraIssue, DateTime dateStarted, TimeSpan currentTime)
@@ -45,6 +50,8 @@ namespace Gallifrey.JiraTimers
             UniqueId = Guid.NewGuid();
             IsRunning = false;
             currentRunningTime = new Stopwatch();
+            runningWatcher = new Timer(100);
+            runningWatcher.Elapsed += runningWatcherElapsed;
         }
 
         public JiraTimer(JiraTimer previousTimer, DateTime dateStarted)
@@ -58,6 +65,16 @@ namespace Gallifrey.JiraTimers
             UniqueId = Guid.NewGuid();
             IsRunning = false;
             currentRunningTime = new Stopwatch();
+            runningWatcher = new Timer(100);
+            runningWatcher.Elapsed += runningWatcherElapsed;
+        }
+
+        void runningWatcherElapsed(object sender, ElapsedEventArgs e)
+        {
+            if (PropertyChanged != null && currentRunningTime.IsRunning)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs("ExactCurrentTime"));
+            }
         }
 
         public bool FullyExported
@@ -75,27 +92,20 @@ namespace Gallifrey.JiraTimers
             get { return CurrentTime.Add(currentRunningTime.Elapsed); }
         }
 
-        public bool IsThisWeek
+        public bool IsThisWeek(DayOfWeek startOfWeek)
         {
-            get
-            {
-                var today = DateTime.Today;
-                var dayIndex = today.DayOfWeek;
-                if (dayIndex < DayOfWeek.Monday)
-                {
-                    dayIndex += 7; //Monday is first day of week, no day of week should have a smaller index
-                }
+            var today = DateTime.Today;
+            var daysThisWeek = (7 + (today.DayOfWeek - startOfWeek)) % 7;
 
-                var dateDiff = dayIndex - DayOfWeek.Monday;
-                var mondayThisWeek = today.AddDays(dateDiff * -1);
-                var mondayNextWeek = mondayThisWeek.AddDays(7);
+            var weekStartDate = today.AddDays(daysThisWeek * -1);
+            var weekEndDate = weekStartDate.AddDays(7).AddSeconds(-1);
 
-                return DateStarted.Date >= mondayThisWeek.Date && DateStarted.Date < mondayNextWeek.Date;
-            }
+            return DateStarted.Date >= weekStartDate.Date && DateStarted.Date < weekEndDate.Date;
         }
 
         public void StartTimer()
         {
+            runningWatcher.Start();
             currentRunningTime.Start();
             IsRunning = true;
         }
@@ -103,6 +113,7 @@ namespace Gallifrey.JiraTimers
         public void StopTimer()
         {
             currentRunningTime.Stop();
+            runningWatcher.Stop();
             IsRunning = false;
             CurrentTime = CurrentTime.Add(currentRunningTime.Elapsed);
             currentRunningTime.Reset();
@@ -115,7 +126,8 @@ namespace Gallifrey.JiraTimers
                 throw new IdleTimerRunningException("Cannot add time from a running idle timer!");
             }
 
-            CurrentTime = CurrentTime.Add(idleTimer.CurrentTime);
+            CurrentTime = CurrentTime.Add(idleTimer.IdleTimeValue);
+             if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("ExactCurrentTime"));
         }
 
         public override string ToString()
@@ -134,6 +146,7 @@ namespace Gallifrey.JiraTimers
         {
             var changeTimespan = new TimeSpan(hours, minutes, 0);
             CurrentTime = addTime ? CurrentTime.Add(changeTimespan) : CurrentTime.Subtract(changeTimespan > ExactCurrentTime ? ExactCurrentTime : changeTimespan);
+            if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("ExactCurrentTime"));
         }
 
         public void SetJiraExportedTime(TimeSpan loggedTime)
@@ -144,11 +157,15 @@ namespace Gallifrey.JiraTimers
             {
                 ManualAdjustment(exportedvsActual.Hours, exportedvsActual.Minutes, true);
             }
+            if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("ExactCurrentTime"));
         }
 
         public void AddJiraExportedTime(TimeSpan loggedTime)
         {
             ExportedTime = ExportedTime.Add(loggedTime);
+            if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("ExactCurrentTime"));
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

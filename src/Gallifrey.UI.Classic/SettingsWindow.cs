@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 using Gallifrey.Exceptions.IntergrationPoints;
 
@@ -24,6 +26,15 @@ namespace Gallifrey.UI.Classic
             txtTargetHours.Text = gallifrey.Settings.AppSettings.TargetLogPerDay.Hours.ToString();
             txtTargetMins.Text = gallifrey.Settings.AppSettings.TargetLogPerDay.Minutes.ToString();
 
+            for (var i = 0; i < chklstWorkingDays.Items.Count; i++)
+            {
+                var foundItem = gallifrey.Settings.AppSettings.ExportDays.Any(exportDay => exportDay.ToString().ToLower() == chklstWorkingDays.Items[i].ToString().ToLower());
+
+                chklstWorkingDays.SetItemChecked(i, foundItem);
+            }
+
+            cmdWeekStart.Text = gallifrey.Settings.AppSettings.StartOfWeek.ToString();
+
             chkAlwaysTop.Checked = gallifrey.Settings.UiSettings.AlwaysOnTop;
         }
 
@@ -41,6 +52,8 @@ namespace Gallifrey.UI.Classic
 
         private void btnSaveSettings_Click(object sender, EventArgs e)
         {
+            TopMost = false;
+
             int keepTimerDays, alertTime;
             if (!int.TryParse(txtAlertMins.Text, out alertTime)) alertTime = 0;
             if (!int.TryParse(txtTimerDays.Text, out keepTimerDays)) keepTimerDays = 28;
@@ -57,6 +70,8 @@ namespace Gallifrey.UI.Classic
 
             gallifrey.Settings.AppSettings.TargetLogPerDay = new TimeSpan(hours, minutes, 0);
 
+            gallifrey.Settings.AppSettings.ExportDays = (from object t in chklstWorkingDays.CheckedItems select (DayOfWeek) Enum.Parse(typeof (DayOfWeek), t.ToString(), true));
+            gallifrey.Settings.AppSettings.StartOfWeek = (DayOfWeek) Enum.Parse(typeof (DayOfWeek), cmdWeekStart.Text, true);
 
             gallifrey.Settings.JiraConnectionSettings.JiraUrl = txtJiraUrl.Text;
             gallifrey.Settings.JiraConnectionSettings.JiraUsername = txtJiraUsername.Text;
@@ -68,14 +83,17 @@ namespace Gallifrey.UI.Classic
             {
                 MessageBox.Show("You have to populate the Jira Credentials!", "Missing Config");
                 DialogResult = DialogResult.None;
+                TopMost = true;
                 return;
             }
 
+            TopMost = true;
             CloseWindow();
         }
 
         private void CloseWindow()
         {
+            TopMost = false;
             try
             {
                 gallifrey.SaveSettings();
@@ -83,6 +101,8 @@ namespace Gallifrey.UI.Classic
             catch (JiraConnectionException)
             {
                 MessageBox.Show("Unable to connect to Jira with these settings!", "Unable to connect");
+                DialogResult = DialogResult.None;
+                TopMost = true;
                 return;
             }
 

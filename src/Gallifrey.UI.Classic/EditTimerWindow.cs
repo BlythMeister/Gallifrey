@@ -8,13 +8,13 @@ using Gallifrey.JiraTimers;
 
 namespace Gallifrey.UI.Classic
 {
-    public partial class RenameTimerWindow : Form
+    public partial class EditTimerWindow : Form
     {
         private readonly IBackend gallifrey;
         private readonly JiraTimer timerToShow;
         private bool showingJiras;
 
-        public RenameTimerWindow(IBackend gallifrey, Guid timerGuid)
+        public EditTimerWindow(IBackend gallifrey, Guid timerGuid)
         {
             this.gallifrey = gallifrey;
             timerToShow = gallifrey.JiraTimerCollection.GetTimer(timerGuid);
@@ -89,6 +89,7 @@ namespace Gallifrey.UI.Classic
 
         private void btnOK_Click(object sender, EventArgs e)
         {
+            TopMost = false;
             if ((txtJiraRef.Text != timerToShow.JiraReference && RenameTimer()) || (calStartDate.Value.Date != timerToShow.DateStarted.Date && ChangeTimerDate()))
             {
                 Close();
@@ -97,7 +98,7 @@ namespace Gallifrey.UI.Classic
             {
                 DialogResult = DialogResult.None;
             }
-
+            TopMost = gallifrey.Settings.UiSettings.AlwaysOnTop;
         }
 
         private void txtJiraRef_TextChanged(object sender, EventArgs e)

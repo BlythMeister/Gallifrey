@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LockedTimerWindow));
             this.label2 = new System.Windows.Forms.Label();
             this.lstLockedTimers = new System.Windows.Forms.ListBox();
@@ -40,6 +41,7 @@
             this.radRunning = new System.Windows.Forms.RadioButton();
             this.btnRemove = new System.Windows.Forms.Button();
             this.btnClose = new System.Windows.Forms.Button();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -61,7 +63,8 @@
             this.lstLockedTimers.Name = "lstLockedTimers";
             this.lstLockedTimers.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
             this.lstLockedTimers.Size = new System.Drawing.Size(532, 174);
-            this.lstLockedTimers.TabIndex = 2;
+            this.lstLockedTimers.TabIndex = 1;
+            this.toolTip.SetToolTip(this.lstLockedTimers, "Time Machine Locked");
             this.lstLockedTimers.SelectedIndexChanged += new System.EventHandler(this.lstIdleTimers_SelectedIndexChanged);
             // 
             // groupBox1
@@ -78,6 +81,7 @@
             this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Locked Time Destination";
+            this.toolTip.SetToolTip(this.groupBox1, "Choose Destination For Locked Time");
             // 
             // radNew
             // 
@@ -125,6 +129,7 @@
             this.btnOK.Size = new System.Drawing.Size(65, 65);
             this.btnOK.TabIndex = 5;
             this.btnOK.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.toolTip.SetToolTip(this.btnOK, "Add Locked Time");
             this.btnOK.UseVisualStyleBackColor = true;
             this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
             // 
@@ -144,8 +149,9 @@
             this.btnRemove.Location = new System.Drawing.Point(555, 81);
             this.btnRemove.Name = "btnRemove";
             this.btnRemove.Size = new System.Drawing.Size(65, 65);
-            this.btnRemove.TabIndex = 6;
+            this.btnRemove.TabIndex = 2;
             this.btnRemove.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.toolTip.SetToolTip(this.btnRemove, "Delete A Machine Lock Timer");
             this.btnRemove.UseVisualStyleBackColor = true;
             this.btnRemove.Click += new System.EventHandler(this.btnRemove_Click);
             // 
@@ -155,8 +161,9 @@
             this.btnClose.Location = new System.Drawing.Point(286, 341);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(65, 65);
-            this.btnClose.TabIndex = 7;
+            this.btnClose.TabIndex = 4;
             this.btnClose.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.toolTip.SetToolTip(this.btnClose, "Close Window");
             this.btnClose.UseVisualStyleBackColor = true;
             this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
             // 
@@ -202,5 +209,6 @@
         private System.Windows.Forms.RadioButton radNew;
         private System.Windows.Forms.Button btnRemove;
         private System.Windows.Forms.Button btnClose;
+        private System.Windows.Forms.ToolTip toolTip;
     }
 }

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AddTimerWindow));
             this.txtJiraRef = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -44,6 +45,7 @@
             this.chkStartNow = new System.Windows.Forms.CheckBox();
             this.label7 = new System.Windows.Forms.Label();
             this.btnSearch = new System.Windows.Forms.Button();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.SuspendLayout();
             // 
             // txtJiraRef
@@ -55,6 +57,7 @@
             this.txtJiraRef.Name = "txtJiraRef";
             this.txtJiraRef.Size = new System.Drawing.Size(249, 25);
             this.txtJiraRef.TabIndex = 2;
+            this.toolTip.SetToolTip(this.txtJiraRef, "Enter Jira Reference For New Timer");
             this.txtJiraRef.TextChanged += new System.EventHandler(this.txtJiraRef_TextChanged);
             // 
             // label1
@@ -72,6 +75,7 @@
             this.calStartDate.Name = "calStartDate";
             this.calStartDate.Size = new System.Drawing.Size(249, 25);
             this.calStartDate.TabIndex = 4;
+            this.toolTip.SetToolTip(this.calStartDate, "Choose Valid Date For Timer");
             this.calStartDate.ValueChanged += new System.EventHandler(this.calStartDate_ValueChanged);
             // 
             // txtStartHours
@@ -82,6 +86,7 @@
             this.txtStartHours.TabIndex = 6;
             this.txtStartHours.Text = "00";
             this.txtStartHours.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.toolTip.SetToolTip(this.txtStartHours, "Pre Load Timer With Hours");
             // 
             // txtStartMins
             // 
@@ -91,6 +96,7 @@
             this.txtStartMins.TabIndex = 8;
             this.txtStartMins.Text = "00";
             this.txtStartMins.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.toolTip.SetToolTip(this.txtStartMins, "Pre Load Timer With Minutes");
             // 
             // label2
             // 
@@ -147,6 +153,7 @@
             this.btnCancelAddTimer.Size = new System.Drawing.Size(65, 65);
             this.btnCancelAddTimer.TabIndex = 13;
             this.btnCancelAddTimer.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.toolTip.SetToolTip(this.btnCancelAddTimer, "Cancel");
             this.btnCancelAddTimer.UseVisualStyleBackColor = true;
             this.btnCancelAddTimer.Click += new System.EventHandler(this.btnCancelAddTimer_Click);
             // 
@@ -158,6 +165,7 @@
             this.btnAddTimer.Size = new System.Drawing.Size(65, 65);
             this.btnAddTimer.TabIndex = 12;
             this.btnAddTimer.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.toolTip.SetToolTip(this.btnAddTimer, "Add Timer");
             this.btnAddTimer.UseVisualStyleBackColor = true;
             this.btnAddTimer.Click += new System.EventHandler(this.btnAddTimer_Click);
             // 
@@ -168,6 +176,7 @@
             this.chkStartNow.Name = "chkStartNow";
             this.chkStartNow.Size = new System.Drawing.Size(15, 14);
             this.chkStartNow.TabIndex = 11;
+            this.toolTip.SetToolTip(this.chkStartNow, "Tick To Start Timer Straight Away");
             this.chkStartNow.UseVisualStyleBackColor = true;
             // 
             // label7
@@ -187,6 +196,7 @@
             this.btnSearch.Size = new System.Drawing.Size(65, 65);
             this.btnSearch.TabIndex = 14;
             this.btnSearch.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.toolTip.SetToolTip(this.btnSearch, "Search Jira");
             this.btnSearch.UseVisualStyleBackColor = true;
             this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
             // 
@@ -245,5 +255,6 @@
         private System.Windows.Forms.CheckBox chkStartNow;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Button btnSearch;
+        private System.Windows.Forms.ToolTip toolTip;
     }
 }
