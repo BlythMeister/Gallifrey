@@ -618,7 +618,11 @@ namespace Gallifrey.UI.Classic
                 var selectedList = ((ListBox)selectedTab.Controls[string.Format("lst_{0}", selectedTab.Name)]);
                 if (selectedList != null)
                 {
-                    selectedTimer = (JiraTimer)selectedList.SelectedItem;
+                    try
+                    {
+                        selectedTimer = (JiraTimer)selectedList.SelectedItem;
+                    }
+                    catch (IndexOutOfRangeException) { /* There Seems to be some situations this throws, for no good reason */}
                 }
             }
 

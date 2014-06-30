@@ -19,15 +19,15 @@
       <Feature>Intergrated updates in spotify style.</Feature>
       <Feature>Nice error reporting back to central store.</Feature>
     </Features>
-    <Bugs />   
-    <Others />   
+    <Bugs />
+    <Others />
   </Version>
   <Version Number="1.0.2" Name="">
-    <Features />   
+    <Features />
     <Bugs>
       <Bug>Critical export bug fix.</Bug>
     </Bugs>
-    <Others />    
+    <Others />
   </Version>
   <Version Number="1.0.3" Name="">
     <Features>
@@ -59,6 +59,13 @@
       <Bug>Change ordering of Jiras to use new comparer to sort numerical parts correctly.</Bug>
       <Bug>Prevent flashing of UI when refreshing.</Bug>
       <Bug>Remove Stopwatch in locked timer to make display more accurate. Do not need regualar update, machine is locked.</Bug>
+    </Bugs>
+    <Others />
+  </Version>
+  <Version Number="1.0.5" Name="">
+    <Features />
+    <Bugs>
+      <Bug>Added error handling for condition when selected timer disappears (normally on app open/close).</Bug>
     </Bugs>
     <Others />
   </Version>
