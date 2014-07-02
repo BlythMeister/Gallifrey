@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Deployment.Application;
@@ -241,7 +242,7 @@ namespace Gallifrey.UI.Classic
         private void btnAddTimer_Click(object sender, EventArgs e)
         {
             var addForm = new AddTimerWindow(gallifrey);
-            
+
             var selectedTabDate = GetSelectedTabDate();
             if (selectedTabDate.HasValue)
             {
@@ -505,11 +506,11 @@ namespace Gallifrey.UI.Classic
                 {
                     var orderedList = internalTimerList[validDate].OrderBy(x => x.JiraReference, new JiraReferenceComparer()).ToList();
                     internalTimerList[validDate] = new ThreadedBindingList<JiraTimer>(orderedList);
-                    
+
                     var timerList = (ListBox)tabTimerDays.TabPages[validDate.ToString("yyyyMMdd")].Controls[string.Format("lst_{0}", validDate.ToString("yyyyMMdd"))];
                     timerList.DataSource = internalTimerList[validDate];
                 }
-                
+
                 //remove timers that have been deleted
                 var removeList = internalTimerList[validDate].Where(timer => gallifrey.JiraTimerCollection.GetTimer(timer.UniqueId) == null).ToList();
                 foreach (var jiraTimer in removeList)
@@ -791,9 +792,9 @@ namespace Gallifrey.UI.Classic
         #endregion
 
         #region "Drag & Drop"
-
-        private void MainWindow_DragEnter(object sender, DragEventArgs e)
+        private void tabTimerDays_DragOver(object sender, DragEventArgs e)
         {
+            var validDrop = false;
             var url = GetUrl(e);
             if (!string.IsNullOrWhiteSpace(url))
             {
@@ -801,11 +802,22 @@ namespace Gallifrey.UI.Classic
                 var jiraUri = new Uri(gallifrey.Settings.JiraConnectionSettings.JiraUrl);
                 if (uriDrag.Host == jiraUri.Host)
                 {
-                    e.Effect = DragDropEffects.Copy;
+                    validDrop = true;
                 }
-                else
+            }
+
+            if (validDrop)
+            {
+                e.Effect = DragDropEffects.Copy;
+
+                var pos = tabTimerDays.PointToClient(MousePosition);
+                for (var ix = 0; ix < tabTimerDays.TabCount; ++ix)
                 {
-                    e.Effect = DragDropEffects.None;
+                    if (tabTimerDays.GetTabRect(ix).Contains(pos))
+                    {
+                        tabTimerDays.SelectedIndex = ix;
+                        break;
+                    }
                 }
             }
             else
@@ -814,7 +826,7 @@ namespace Gallifrey.UI.Classic
             }
         }
 
-        private void MainWindow_DragDrop(object sender, DragEventArgs e)
+        private void tabTimerDays_DragDrop(object sender, DragEventArgs e)
         {
             var url = GetUrl(e);
             if (!string.IsNullOrWhiteSpace(url))
@@ -829,11 +841,11 @@ namespace Gallifrey.UI.Classic
                     var dayTimers = gallifrey.JiraTimerCollection.GetTimersForADate(selectedTabDate.Value);
                     if (dayTimers.Any(x => x.JiraReference == jiraRef))
                     {
-                        gallifrey.JiraTimerCollection.StartTimer(dayTimers.First(x=>x.JiraReference == jiraRef).UniqueId);
+                        gallifrey.JiraTimerCollection.StartTimer(dayTimers.First(x => x.JiraReference == jiraRef).UniqueId);
                         RefreshInternalTimerList();
                         if (gallifrey.JiraTimerCollection.GetRunningTimerId().HasValue)
                         {
-                            SelectTimer(gallifrey.JiraTimerCollection.GetRunningTimerId().Value);    
+                            SelectTimer(gallifrey.JiraTimerCollection.GetRunningTimerId().Value);
                         }
                         return;
                     }
@@ -883,5 +895,7 @@ namespace Gallifrey.UI.Classic
         }
 
         #endregion
+
+
     }
 }

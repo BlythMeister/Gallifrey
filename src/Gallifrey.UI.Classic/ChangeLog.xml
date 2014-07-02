@@ -63,10 +63,13 @@
     <Others />
   </Version>
   <Version Number="1.0.5" Name="">
-    <Features />
+    <Features>
+      <Feature>Drag &amp; Drop can change the tab</Feature>
+    </Features>
     <Bugs>
       <Bug>Added error handling for condition when selected timer disappears (normally on app open/close).</Bug>
       <Bug>Better handling of deleting locked timers and which items selected after delete.</Bug>
+      <Bug>Reduce drag and drop area to tab list as this makes more sense.</Bug>
     </Bugs>
     <Others />
   </Version>
