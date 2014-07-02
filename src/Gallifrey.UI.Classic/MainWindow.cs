@@ -228,7 +228,7 @@ namespace Gallifrey.UI.Classic
 
         private void formTimer_Tick(object sender, EventArgs e)
         {
-            RefreshInternalTimerList();
+            //RefreshInternalTimerList();
             SetDisplayClock();
             SetExportStats();
             SetExportTargetStats();
@@ -485,7 +485,7 @@ namespace Gallifrey.UI.Classic
                 if (!internalTimerList.ContainsKey(validDate))
                 {
                     var list = new ThreadedBindingList<JiraTimer> { RaiseListChangedEvents = true };
-                    list.ListChanged += ListOnListChanged;
+                    list.ListChanged += OnListChanged;
                     internalTimerList.Add(validDate, list);
                 }
 
@@ -505,7 +505,9 @@ namespace Gallifrey.UI.Classic
                 if (addedTimer)
                 {
                     var orderedList = internalTimerList[validDate].OrderBy(x => x.JiraReference, new JiraReferenceComparer()).ToList();
-                    internalTimerList[validDate] = new ThreadedBindingList<JiraTimer>(orderedList);
+                    var list = new ThreadedBindingList<JiraTimer>(orderedList){RaiseListChangedEvents = true};
+                    list.ListChanged += OnListChanged;
+                    internalTimerList[validDate] = list;
 
                     var timerList = (ListBox)tabTimerDays.TabPages[validDate.ToString("yyyyMMdd")].Controls[string.Format("lst_{0}", validDate.ToString("yyyyMMdd"))];
                     timerList.DataSource = internalTimerList[validDate];
@@ -569,7 +571,7 @@ namespace Gallifrey.UI.Classic
             }
         }
 
-        private void ListOnListChanged(object sender, ListChangedEventArgs listChangedEventArgs)
+        private void OnListChanged(object sender, ListChangedEventArgs listChangedEventArgs)
         {
             var jiraTimerList = sender as IEnumerable<JiraTimer>;
             if (jiraTimerList != null && jiraTimerList.Any())
@@ -895,7 +897,6 @@ namespace Gallifrey.UI.Classic
         }
 
         #endregion
-
 
     }
 }
