@@ -14,6 +14,7 @@ namespace Gallifrey.Settings
         DayOfWeek StartOfWeek { get; set; }
         Guid? TimerRunningOnShutdown { get; set; }
         TimeSpan GetTargetThisWeek();
+        bool AutoUpdate { get; set; }
     }
 
     public class AppSettings : IAppSettings
@@ -25,6 +26,7 @@ namespace Gallifrey.Settings
         public IEnumerable<DayOfWeek> ExportDays { get; set; }
         public DayOfWeek StartOfWeek { get; set; }
         public Guid? TimerRunningOnShutdown { get; set; }
+        public bool AutoUpdate { get; set; }
         
         public AppSettings()
         {

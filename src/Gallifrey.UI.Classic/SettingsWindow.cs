@@ -20,6 +20,7 @@ namespace Gallifrey.UI.Classic
             if (gallifrey.Settings.JiraConnectionSettings.JiraPassword != null) txtJiraPassword.Text = gallifrey.Settings.JiraConnectionSettings.JiraPassword;
 
             chkAlert.Checked = gallifrey.Settings.AppSettings.AlertWhenNotRunning;
+            chkAutoUpdate.Checked = gallifrey.Settings.AppSettings.AutoUpdate;
             txtAlertMins.Text = ((gallifrey.Settings.AppSettings.AlertTimeMilliseconds / 1000) / 60).ToString();
             txtTimerDays.Text = gallifrey.Settings.AppSettings.KeepTimersForDays.ToString();
 
@@ -61,6 +62,7 @@ namespace Gallifrey.UI.Classic
             gallifrey.Settings.AppSettings.AlertWhenNotRunning = chkAlert.Checked;
             gallifrey.Settings.AppSettings.AlertTimeMilliseconds = (alertTime * 60) * 1000;
             gallifrey.Settings.AppSettings.KeepTimersForDays = keepTimerDays;
+            gallifrey.Settings.AppSettings.AutoUpdate = chkAutoUpdate.Checked;
             gallifrey.Settings.UiSettings.AlwaysOnTop = chkAlwaysTop.Checked;
 
             int hours, minutes;

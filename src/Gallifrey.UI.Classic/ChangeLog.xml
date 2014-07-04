@@ -66,6 +66,7 @@
     <Features>
       <Feature>Drag &amp; Drop can change the tab</Feature>
       <Feature>Clicking update avaliable baloon will restart the app and install the update.</Feature>
+      <Feature>Added auto update, when new update installed, the app automatically restarts to use new version.</Feature>
     </Features>
     <Bugs>
       <Bug>Added error handling for condition when selected timer disappears (normally on app open/close).</Bug>

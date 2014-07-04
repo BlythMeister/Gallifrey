@@ -798,14 +798,28 @@ namespace Gallifrey.UI.Classic
 
         private void UpdateComplete(object sender, AsyncCompletedEventArgs e)
         {
-            grpUpdates.Text = "Update Avaliable";
-            lblUpdate.BackColor = Color.OrangeRed;
-            lblUpdate.BorderStyle = BorderStyle.FixedSingle;
-            lblUpdate.Text = string.Format("     v{0}\nClick Here To Restart.", ApplicationDeployment.CurrentDeployment.UpdatedVersion);
-            lblUpdate.Image = Properties.Resources.Download_16x16;
-            updateReady = true;
+            if (gallifrey.Settings.AppSettings.AutoUpdate)
+            {
+                try
+                {
+                    Application.Restart();
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("An Error Occured When Trying To Restart Following An Update, Please Restart Manually", "Restart Failure", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                }
+            }
+            else
+            {
+                grpUpdates.Text = "Update Avaliable";
+                lblUpdate.BackColor = Color.OrangeRed;
+                lblUpdate.BorderStyle = BorderStyle.FixedSingle;
+                lblUpdate.Text = string.Format("     v{0}\nClick Here To Restart.", ApplicationDeployment.CurrentDeployment.UpdatedVersion);
+                lblUpdate.Image = Properties.Resources.Download_16x16;
+                updateReady = true;
 
-            notifyAlert.ShowBalloonTip(10000, "Update Avaliable", string.Format("An Update To v{0} Has Been Downloaded!", ApplicationDeployment.CurrentDeployment.UpdatedVersion), ToolTipIcon.Info);
+                notifyAlert.ShowBalloonTip(10000, "Update Avaliable", string.Format("An Update To v{0} Has Been Downloaded!", ApplicationDeployment.CurrentDeployment.UpdatedVersion), ToolTipIcon.Info);    
+            }
         }
 
         #endregion

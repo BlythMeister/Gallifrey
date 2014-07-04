@@ -84,7 +84,6 @@
     <Compile Include="Settings\UISettings.cs" />
     <Compile Include="Settings\JiraConnnectionSettings.cs" />
     <Compile Include="Settings\FilePathSettings.cs" />
-    <Compile Include="Settings\UiAnimationLevel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

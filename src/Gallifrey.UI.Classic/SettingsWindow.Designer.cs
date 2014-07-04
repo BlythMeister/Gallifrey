@@ -62,6 +62,8 @@
             this.label14 = new System.Windows.Forms.Label();
             this.chklstWorkingDays = new System.Windows.Forms.CheckedListBox();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.chkAutoUpdate = new System.Windows.Forms.CheckBox();
+            this.label16 = new System.Windows.Forms.Label();
             this.grpJira.SuspendLayout();
             this.grpAppSettings.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -137,7 +139,7 @@
             this.grpJira.Controls.Add(this.label1);
             this.grpJira.Controls.Add(this.label3);
             this.grpJira.Controls.Add(this.txtJiraUsername);
-            this.grpJira.Location = new System.Drawing.Point(12, 467);
+            this.grpJira.Location = new System.Drawing.Point(12, 484);
             this.grpJira.Name = "grpJira";
             this.grpJira.Size = new System.Drawing.Size(302, 130);
             this.grpJira.TabIndex = 3;
@@ -146,6 +148,8 @@
             // 
             // grpAppSettings
             // 
+            this.grpAppSettings.Controls.Add(this.chkAutoUpdate);
+            this.grpAppSettings.Controls.Add(this.label16);
             this.grpAppSettings.Controls.Add(this.label13);
             this.grpAppSettings.Controls.Add(this.label12);
             this.grpAppSettings.Controls.Add(this.chkAlwaysTop);
@@ -158,7 +162,7 @@
             this.grpAppSettings.Controls.Add(this.label7);
             this.grpAppSettings.Location = new System.Drawing.Point(12, 46);
             this.grpAppSettings.Name = "grpAppSettings";
-            this.grpAppSettings.Size = new System.Drawing.Size(302, 137);
+            this.grpAppSettings.Size = new System.Drawing.Size(302, 154);
             this.grpAppSettings.TabIndex = 1;
             this.grpAppSettings.TabStop = false;
             this.grpAppSettings.Text = "App Settings";
@@ -310,7 +314,7 @@
             // 
             this.btnCancelEditSettings.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancelEditSettings.Image = global::Gallifrey.UI.Classic.Properties.Resources.Cancel_48x48;
-            this.btnCancelEditSettings.Location = new System.Drawing.Point(173, 603);
+            this.btnCancelEditSettings.Location = new System.Drawing.Point(173, 620);
             this.btnCancelEditSettings.Name = "btnCancelEditSettings";
             this.btnCancelEditSettings.Size = new System.Drawing.Size(65, 65);
             this.btnCancelEditSettings.TabIndex = 5;
@@ -323,7 +327,7 @@
             // 
             this.btnSaveSettings.Image = global::Gallifrey.UI.Classic.Properties.Resources.Check_48x48;
             this.btnSaveSettings.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.btnSaveSettings.Location = new System.Drawing.Point(92, 603);
+            this.btnSaveSettings.Location = new System.Drawing.Point(92, 620);
             this.btnSaveSettings.Name = "btnSaveSettings";
             this.btnSaveSettings.Size = new System.Drawing.Size(65, 65);
             this.btnSaveSettings.TabIndex = 4;
@@ -342,7 +346,7 @@
             this.groupBox1.Controls.Add(this.label10);
             this.groupBox1.Controls.Add(this.label9);
             this.groupBox1.Controls.Add(this.txtTargetHours);
-            this.groupBox1.Location = new System.Drawing.Point(12, 189);
+            this.groupBox1.Location = new System.Drawing.Point(12, 206);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(302, 272);
             this.groupBox1.TabIndex = 2;
@@ -401,13 +405,32 @@
             this.chklstWorkingDays.TabIndex = 6;
             this.toolTip.SetToolTip(this.chklstWorkingDays, "Valid Working Days To Export");
             // 
+            // chkAutoUpdate
+            // 
+            this.chkAutoUpdate.AutoSize = true;
+            this.chkAutoUpdate.Location = new System.Drawing.Point(148, 128);
+            this.chkAutoUpdate.Name = "chkAutoUpdate";
+            this.chkAutoUpdate.Size = new System.Drawing.Size(15, 14);
+            this.chkAutoUpdate.TabIndex = 11;
+            this.toolTip.SetToolTip(this.chkAutoUpdate, "UI Windows Always On Top (Not Main Window)");
+            this.chkAutoUpdate.UseVisualStyleBackColor = true;
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(53, 126);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(88, 17);
+            this.label16.TabIndex = 10;
+            this.label16.Text = "Auto Update?";
+            // 
             // SettingsWindow
             // 
             this.AcceptButton = this.btnSaveSettings;
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancelEditSettings;
-            this.ClientSize = new System.Drawing.Size(331, 678);
+            this.ClientSize = new System.Drawing.Size(331, 695);
             this.ControlBox = false;
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.grpAppSettings);
@@ -471,5 +494,7 @@
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.CheckedListBox chklstWorkingDays;
         private System.Windows.Forms.ToolTip toolTip;
+        private System.Windows.Forms.CheckBox chkAutoUpdate;
+        private System.Windows.Forms.Label label16;
     }
 }
