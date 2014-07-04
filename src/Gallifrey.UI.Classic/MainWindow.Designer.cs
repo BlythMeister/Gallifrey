@@ -322,7 +322,7 @@
             this.lblUpdate.Size = new System.Drawing.Size(121, 55);
             this.lblUpdate.TabIndex = 16;
             this.lblUpdate.Text = "Currently Running v99.99.99.99 (beta)\r\nUp To Date!\r\n";
-            this.lblUpdate.DoubleClick += new System.EventHandler(this.lblUpdate_DoubleClick);
+            this.lblUpdate.Click += new System.EventHandler(this.lblUpdate_Click);
             // 
             // pictureBox1
             // 

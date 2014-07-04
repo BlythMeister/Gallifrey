@@ -30,6 +30,7 @@ namespace Gallifrey.UI.Classic
         private DateTime lastUpdateCheck;
         private string myVersion;
         private PrivateFontCollection privateFontCollection;
+        private bool updateReady;
 
         #region "Main Window & Error"
 
@@ -37,6 +38,7 @@ namespace Gallifrey.UI.Classic
         {
             InitializeComponent();
             this.isBeta = isBeta;
+            updateReady = false;
             lastUpdateCheck = DateTime.MinValue;
             internalTimerList = new Dictionary<DateTime, ThreadedBindingList<JiraTimer>>();
 
@@ -228,7 +230,7 @@ namespace Gallifrey.UI.Classic
 
         private void formTimer_Tick(object sender, EventArgs e)
         {
-            //RefreshInternalTimerList();
+            RefreshInternalTimerList();
             SetDisplayClock();
             SetExportStats();
             SetExportTargetStats();
@@ -356,14 +358,28 @@ namespace Gallifrey.UI.Classic
 
         private void notifyAlert_BalloonTipClicked(object sender, EventArgs e)
         {
-            switch (WindowState)
+            if (updateReady)
             {
-                case FormWindowState.Minimized:
-                    WindowState = FormWindowState.Normal;
-                    break;
-                default:
-                    BringToFront();
-                    break;
+                try
+                {
+                    Application.Restart();
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("An Error Occured When Trying To Restart, Please Restart Manually", "Restart Failure", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                }
+            }
+            else
+            {
+                switch (WindowState)
+                {
+                    case FormWindowState.Minimized:
+                        WindowState = FormWindowState.Normal;
+                        break;
+                    default:
+                        this.BringToFront();
+                        break;
+                }
             }
         }
 
@@ -721,7 +737,7 @@ namespace Gallifrey.UI.Classic
 
         #region "Updates
 
-        private void lblUpdate_DoubleClick(object sender, EventArgs e)
+        private void lblUpdate_Click(object sender, EventArgs e)
         {
             if (ApplicationDeployment.IsNetworkDeployed)
             {
@@ -750,7 +766,7 @@ namespace Gallifrey.UI.Classic
 
         private void CheckIfUpdateCallNeeded()
         {
-            if (ApplicationDeployment.IsNetworkDeployed && lastUpdateCheck < DateTime.UtcNow.AddMinutes(-15))
+            if (ApplicationDeployment.IsNetworkDeployed && lastUpdateCheck < DateTime.UtcNow.AddMinutes(-1))
             {
                 SetVersionNumber();
                 CheckForUpdates(false);
@@ -785,8 +801,9 @@ namespace Gallifrey.UI.Classic
             grpUpdates.Text = "Update Avaliable";
             lblUpdate.BackColor = Color.OrangeRed;
             lblUpdate.BorderStyle = BorderStyle.FixedSingle;
-            lblUpdate.Text = string.Format("     v{0}\nDouble Click Here To Restart.", ApplicationDeployment.CurrentDeployment.UpdatedVersion);
+            lblUpdate.Text = string.Format("     v{0}\nClick Here To Restart.", ApplicationDeployment.CurrentDeployment.UpdatedVersion);
             lblUpdate.Image = Properties.Resources.Download_16x16;
+            updateReady = true;
 
             notifyAlert.ShowBalloonTip(10000, "Update Avaliable", string.Format("An Update To v{0} Has Been Downloaded!", ApplicationDeployment.CurrentDeployment.UpdatedVersion), ToolTipIcon.Info);
         }
