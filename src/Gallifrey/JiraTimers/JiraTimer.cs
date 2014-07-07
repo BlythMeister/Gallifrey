@@ -60,8 +60,8 @@ namespace Gallifrey.JiraTimers
             JiraProjectName = previousTimer.JiraProjectName;
             JiraName = previousTimer.JiraName;
             DateStarted = dateStarted;
-            CurrentTime = new TimeSpan();
-            ExportedTime = new TimeSpan();
+            CurrentTime = previousTimer.CurrentTime;
+            ExportedTime = previousTimer.ExportedTime;
             UniqueId = Guid.NewGuid();
             IsRunning = false;
             currentRunningTime = new Stopwatch();

@@ -74,6 +74,7 @@
       <Bug>Reduce drag and drop area to tab list as this makes more sense.</Bug>
       <Bug>Correct issue with page title not being updated once a new timer is added.</Bug>
       <Bug>Changed check/install updates to single click to by-pass .net issue with copying label text on double click.</Bug>
+      <Bug>Changing timer date now maintains exported &amp; current time values.</Bug>
     </Bugs>
     <Others />
   </Version>
