@@ -54,14 +54,14 @@ namespace Gallifrey.JiraTimers
             runningWatcher.Elapsed += runningWatcherElapsed;
         }
 
-        public JiraTimer(JiraTimer previousTimer, DateTime dateStarted)
+        public JiraTimer(JiraTimer previousTimer, DateTime dateStarted, bool resetTimes)
         {
             JiraReference = previousTimer.JiraReference;
             JiraProjectName = previousTimer.JiraProjectName;
             JiraName = previousTimer.JiraName;
             DateStarted = dateStarted;
-            CurrentTime = previousTimer.CurrentTime;
-            ExportedTime = previousTimer.ExportedTime;
+            CurrentTime = resetTimes ? new TimeSpan() : previousTimer.CurrentTime;
+            ExportedTime = resetTimes ? new TimeSpan() : previousTimer.ExportedTime;
             UniqueId = Guid.NewGuid();
             IsRunning = false;
             currentRunningTime = new Stopwatch();

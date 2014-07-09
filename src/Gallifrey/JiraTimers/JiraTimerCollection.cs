@@ -109,7 +109,7 @@ namespace Gallifrey.JiraTimers
             var timerForInteration = GetTimer(uniqueId);
             if (timerForInteration.DateStarted.Date != DateTime.Now.Date)
             {
-                timerForInteration = new JiraTimer(timerForInteration, DateTime.Now);
+                timerForInteration = new JiraTimer(timerForInteration, DateTime.Now, true);
                 AddTimer(timerForInteration);
                 uniqueId = timerForInteration.UniqueId;
             }
@@ -180,7 +180,7 @@ namespace Gallifrey.JiraTimers
         {
             var currentTimer = GetTimer(timerGuid);
             if (currentTimer.IsRunning) currentTimer.StopTimer();
-            var newTimer = new JiraTimer(currentTimer, newStartDate.Date);
+            var newTimer = new JiraTimer(currentTimer, newStartDate.Date, false);
 
             if (timerList.Any(timer => timer.JiraReference == newTimer.JiraReference && timer.DateStarted.Date == newTimer.DateStarted.Date && timer.UniqueId != timerGuid))
             {
