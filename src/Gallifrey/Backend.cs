@@ -93,7 +93,7 @@ namespace Gallifrey
 
         public void Initialise()
         {
-            jiraConnection = new JiraConnection(settingsCollection.JiraConnectionSettings);
+            jiraConnection = new JiraConnection(settingsCollection.JiraConnectionSettings, settingsCollection.ExportSettings);
         }
 
         public void Close()
@@ -121,11 +121,11 @@ namespace Gallifrey
             settingsCollection.SaveSettings();
             if (jiraConnection == null)
             {
-                jiraConnection = new JiraConnection(settingsCollection.JiraConnectionSettings);
+                jiraConnection = new JiraConnection(settingsCollection.JiraConnectionSettings, settingsCollection.ExportSettings);
             }
             else
             {
-                jiraConnection.ReConnect(settingsCollection.JiraConnectionSettings);
+                jiraConnection.ReConnect(settingsCollection.JiraConnectionSettings, settingsCollection.ExportSettings);
             }
 
             ActivityChecker.UpdateAppSettings(settingsCollection.AppSettings);

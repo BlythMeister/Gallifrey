@@ -4,6 +4,7 @@ using Atlassian.Jira;
 using Gallifrey.Exceptions.IntergrationPoints;
 using Gallifrey.Exceptions.JiraTimers;
 using Gallifrey.JiraTimers;
+using Gallifrey.Settings;
 
 namespace Gallifrey.UI.Classic
 {
@@ -52,6 +53,11 @@ namespace Gallifrey.UI.Classic
             {
                 calExportDate.Value = DateTime.Now;
             }
+
+            radAutoAdjust.Checked = gallifrey.Settings.ExportSettings.DefaultRemainingValue == DefaultRemaining.Auto;
+            radLeaveRemaining.Checked = gallifrey.Settings.ExportSettings.DefaultRemainingValue == DefaultRemaining.Leave;
+            radSetValue.Checked = gallifrey.Settings.ExportSettings.DefaultRemainingValue == DefaultRemaining.Set;
+            radSetValue_CheckedChanged(this, null);
 
             TopMost = gallifrey.Settings.UiSettings.AlwaysOnTop;
         }

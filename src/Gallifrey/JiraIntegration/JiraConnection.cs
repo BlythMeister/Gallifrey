@@ -9,7 +9,7 @@ namespace Gallifrey.JiraIntegration
 {
     public interface IJiraConnection
     {
-        void ReConnect(IJiraConnectionSettings newJiraConnectionSettings);
+        void ReConnect(IJiraConnectionSettings newJiraConnectionSettings, IExportSettings newExportSettings);
         bool DoesJiraExist(string jiraRef);
         Issue GetJiraIssue(string jiraRef);
         IEnumerable<string> GetJiraFilters();
@@ -28,20 +28,23 @@ namespace Gallifrey.JiraIntegration
         private readonly IRecentJiraCollection recentJiraCollection;
         private readonly List<JiraProject> jiraProjectCache;
         private IJiraConnectionSettings jiraConnectionSettings;
+        private IExportSettings exportSettings;
         private Jira jira;
 
-        public JiraConnection(IJiraConnectionSettings jiraConnectionSettings)
+        public JiraConnection(IJiraConnectionSettings jiraConnectionSettings, IExportSettings exportSettings)
         {
             recentJiraCollection = new RecentJiraCollection();
             jiraProjectCache = new List<JiraProject>();
 
             this.jiraConnectionSettings = jiraConnectionSettings;
+            this.exportSettings = exportSettings;
             CheckAndConnectJira();
             UpdateJiraProjectCache();
         }
 
-        public void ReConnect(IJiraConnectionSettings newJiraConnectionSettings)
+        public void ReConnect(IJiraConnectionSettings newJiraConnectionSettings, IExportSettings newExportSettings)
         {
+            exportSettings = newExportSettings;
             jiraConnectionSettings = newJiraConnectionSettings;
             jira = null;
             CheckAndConnectJira();
@@ -224,7 +227,10 @@ namespace Gallifrey.JiraIntegration
             var wasClosed = TryReopenJira(jiraIssue);
 
             if (string.IsNullOrWhiteSpace(comment)) comment = "No Comment Entered";
-            comment = "Gallifrey: " + comment;
+            if (!string.IsNullOrWhiteSpace(exportSettings.ExportCommentPrefix))
+            {
+                comment = string.Format("{0}: {1}", exportSettings.ExportCommentPrefix, comment);
+            }
 
             var worklog = new Worklog(string.Format("{0}h {1}m", exportTime.Hours, exportTime.Minutes), DateTime.SpecifyKind(exportTimeStamp, DateTimeKind.Local), comment);
             string remaining = null;

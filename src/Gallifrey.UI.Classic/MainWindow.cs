@@ -741,7 +741,7 @@ namespace Gallifrey.UI.Classic
         {
             if (ApplicationDeployment.IsNetworkDeployed)
             {
-                if (ApplicationDeployment.CurrentDeployment.UpdatedVersion != ApplicationDeployment.CurrentDeployment.CurrentVersion)
+                if (ApplicationDeployment.CurrentDeployment != null && ApplicationDeployment.CurrentDeployment.UpdatedVersion != ApplicationDeployment.CurrentDeployment.CurrentVersion)
                 {
                     try
                     {

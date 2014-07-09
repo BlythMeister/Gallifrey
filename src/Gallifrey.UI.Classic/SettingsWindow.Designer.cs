@@ -39,6 +39,8 @@
             this.txtJiraPassword = new System.Windows.Forms.TextBox();
             this.grpJira = new System.Windows.Forms.GroupBox();
             this.grpAppSettings = new System.Windows.Forms.GroupBox();
+            this.chkAutoUpdate = new System.Windows.Forms.CheckBox();
+            this.label16 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
             this.chkAlwaysTop = new System.Windows.Forms.CheckBox();
@@ -62,11 +64,15 @@
             this.label14 = new System.Windows.Forms.Label();
             this.chklstWorkingDays = new System.Windows.Forms.CheckedListBox();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.chkAutoUpdate = new System.Windows.Forms.CheckBox();
-            this.label16 = new System.Windows.Forms.Label();
+            this.cmdDefaultExport = new System.Windows.Forms.ComboBox();
+            this.txtCommentPrefix = new System.Windows.Forms.TextBox();
+            this.label17 = new System.Windows.Forms.Label();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.label18 = new System.Windows.Forms.Label();
             this.grpJira.SuspendLayout();
             this.grpAppSettings.SuspendLayout();
             this.groupBox1.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // txtJiraUrl
@@ -139,7 +145,7 @@
             this.grpJira.Controls.Add(this.label1);
             this.grpJira.Controls.Add(this.label3);
             this.grpJira.Controls.Add(this.txtJiraUsername);
-            this.grpJira.Location = new System.Drawing.Point(12, 484);
+            this.grpJira.Location = new System.Drawing.Point(628, 46);
             this.grpJira.Name = "grpJira";
             this.grpJira.Size = new System.Drawing.Size(302, 130);
             this.grpJira.TabIndex = 3;
@@ -162,15 +168,34 @@
             this.grpAppSettings.Controls.Add(this.label7);
             this.grpAppSettings.Location = new System.Drawing.Point(12, 46);
             this.grpAppSettings.Name = "grpAppSettings";
-            this.grpAppSettings.Size = new System.Drawing.Size(302, 154);
+            this.grpAppSettings.Size = new System.Drawing.Size(302, 171);
             this.grpAppSettings.TabIndex = 1;
             this.grpAppSettings.TabStop = false;
             this.grpAppSettings.Text = "App Settings";
             // 
+            // chkAutoUpdate
+            // 
+            this.chkAutoUpdate.AutoSize = true;
+            this.chkAutoUpdate.Location = new System.Drawing.Point(148, 112);
+            this.chkAutoUpdate.Name = "chkAutoUpdate";
+            this.chkAutoUpdate.Size = new System.Drawing.Size(15, 14);
+            this.chkAutoUpdate.TabIndex = 11;
+            this.toolTip.SetToolTip(this.chkAutoUpdate, "UI Windows Always On Top (Not Main Window)");
+            this.chkAutoUpdate.UseVisualStyleBackColor = true;
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(54, 134);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(88, 17);
+            this.label16.TabIndex = 10;
+            this.label16.Text = "Auto Update?";
+            // 
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(190, 80);
+            this.label13.Location = new System.Drawing.Point(190, 81);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(36, 17);
             this.label13.TabIndex = 7;
@@ -179,7 +204,7 @@
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(190, 53);
+            this.label12.Location = new System.Drawing.Point(190, 54);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(54, 17);
             this.label12.TabIndex = 4;
@@ -188,7 +213,7 @@
             // chkAlwaysTop
             // 
             this.chkAlwaysTop.AutoSize = true;
-            this.chkAlwaysTop.Location = new System.Drawing.Point(148, 108);
+            this.chkAlwaysTop.Location = new System.Drawing.Point(148, 134);
             this.chkAlwaysTop.Name = "chkAlwaysTop";
             this.chkAlwaysTop.Size = new System.Drawing.Size(15, 14);
             this.chkAlwaysTop.TabIndex = 9;
@@ -198,7 +223,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(41, 106);
+            this.label11.Location = new System.Drawing.Point(41, 110);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(101, 17);
             this.label11.TabIndex = 8;
@@ -217,7 +242,7 @@
             // 
             // txtTimerDays
             // 
-            this.txtTimerDays.Location = new System.Drawing.Point(148, 77);
+            this.txtTimerDays.Location = new System.Drawing.Point(148, 78);
             this.txtTimerDays.Name = "txtTimerDays";
             this.txtTimerDays.Size = new System.Drawing.Size(39, 25);
             this.txtTimerDays.TabIndex = 6;
@@ -228,7 +253,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(38, 80);
+            this.label5.Location = new System.Drawing.Point(38, 81);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(104, 17);
             this.label5.TabIndex = 5;
@@ -237,7 +262,7 @@
             // txtAlertMins
             // 
             this.txtAlertMins.Enabled = false;
-            this.txtAlertMins.Location = new System.Drawing.Point(148, 46);
+            this.txtAlertMins.Location = new System.Drawing.Point(148, 47);
             this.txtAlertMins.Name = "txtAlertMins";
             this.txtAlertMins.Size = new System.Drawing.Size(39, 25);
             this.txtAlertMins.TabIndex = 3;
@@ -248,7 +273,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(50, 49);
+            this.label6.Location = new System.Drawing.Point(50, 50);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(92, 17);
             this.label6.TabIndex = 2;
@@ -314,7 +339,7 @@
             // 
             this.btnCancelEditSettings.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancelEditSettings.Image = global::Gallifrey.UI.Classic.Properties.Resources.Cancel_48x48;
-            this.btnCancelEditSettings.Location = new System.Drawing.Point(173, 620);
+            this.btnCancelEditSettings.Location = new System.Drawing.Point(786, 202);
             this.btnCancelEditSettings.Name = "btnCancelEditSettings";
             this.btnCancelEditSettings.Size = new System.Drawing.Size(65, 65);
             this.btnCancelEditSettings.TabIndex = 5;
@@ -327,7 +352,7 @@
             // 
             this.btnSaveSettings.Image = global::Gallifrey.UI.Classic.Properties.Resources.Check_48x48;
             this.btnSaveSettings.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.btnSaveSettings.Location = new System.Drawing.Point(92, 620);
+            this.btnSaveSettings.Location = new System.Drawing.Point(705, 202);
             this.btnSaveSettings.Name = "btnSaveSettings";
             this.btnSaveSettings.Size = new System.Drawing.Size(65, 65);
             this.btnSaveSettings.TabIndex = 4;
@@ -346,9 +371,9 @@
             this.groupBox1.Controls.Add(this.label10);
             this.groupBox1.Controls.Add(this.label9);
             this.groupBox1.Controls.Add(this.txtTargetHours);
-            this.groupBox1.Location = new System.Drawing.Point(12, 206);
+            this.groupBox1.Location = new System.Drawing.Point(320, 46);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(302, 272);
+            this.groupBox1.Size = new System.Drawing.Size(302, 267);
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Target Export";
@@ -390,6 +415,7 @@
             // 
             // chklstWorkingDays
             // 
+            this.chklstWorkingDays.CheckOnClick = true;
             this.chklstWorkingDays.FormattingEnabled = true;
             this.chklstWorkingDays.Items.AddRange(new object[] {
             "Monday",
@@ -405,24 +431,57 @@
             this.chklstWorkingDays.TabIndex = 6;
             this.toolTip.SetToolTip(this.chklstWorkingDays, "Valid Working Days To Export");
             // 
-            // chkAutoUpdate
+            // cmdDefaultExport
             // 
-            this.chkAutoUpdate.AutoSize = true;
-            this.chkAutoUpdate.Location = new System.Drawing.Point(148, 128);
-            this.chkAutoUpdate.Name = "chkAutoUpdate";
-            this.chkAutoUpdate.Size = new System.Drawing.Size(15, 14);
-            this.chkAutoUpdate.TabIndex = 11;
-            this.toolTip.SetToolTip(this.chkAutoUpdate, "UI Windows Always On Top (Not Main Window)");
-            this.chkAutoUpdate.UseVisualStyleBackColor = true;
+            this.cmdDefaultExport.FormattingEnabled = true;
+            this.cmdDefaultExport.Items.AddRange(new object[] {
+            "Automatically Adjust",
+            "Leave Remaining",
+            "Set To Value"});
+            this.cmdDefaultExport.Location = new System.Drawing.Point(121, 24);
+            this.cmdDefaultExport.Name = "cmdDefaultExport";
+            this.cmdDefaultExport.Size = new System.Drawing.Size(175, 25);
+            this.cmdDefaultExport.TabIndex = 9;
+            this.toolTip.SetToolTip(this.cmdDefaultExport, "Sets What To Do With Remaining Time By Default");
             // 
-            // label16
+            // txtCommentPrefix
             // 
-            this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(53, 126);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(88, 17);
-            this.label16.TabIndex = 10;
-            this.label16.Text = "Auto Update?";
+            this.txtCommentPrefix.Location = new System.Drawing.Point(121, 55);
+            this.txtCommentPrefix.Name = "txtCommentPrefix";
+            this.txtCommentPrefix.Size = new System.Drawing.Size(175, 25);
+            this.txtCommentPrefix.TabIndex = 14;
+            this.toolTip.SetToolTip(this.txtCommentPrefix, "Comment Prefix, Fomat: \"Prefix: Comment\"");
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(6, 27);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(109, 17);
+            this.label17.TabIndex = 12;
+            this.label17.Text = "Remaining Action";
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.txtCommentPrefix);
+            this.groupBox2.Controls.Add(this.label18);
+            this.groupBox2.Controls.Add(this.cmdDefaultExport);
+            this.groupBox2.Controls.Add(this.label17);
+            this.groupBox2.Location = new System.Drawing.Point(12, 223);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(302, 90);
+            this.groupBox2.TabIndex = 6;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Export Settings";
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(15, 58);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(100, 17);
+            this.label18.TabIndex = 13;
+            this.label18.Text = "Comment Prefix";
             // 
             // SettingsWindow
             // 
@@ -430,8 +489,9 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancelEditSettings;
-            this.ClientSize = new System.Drawing.Size(331, 695);
+            this.ClientSize = new System.Drawing.Size(947, 326);
             this.ControlBox = false;
+            this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.grpAppSettings);
             this.Controls.Add(this.grpJira);
@@ -455,6 +515,8 @@
             this.grpAppSettings.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -496,5 +558,10 @@
         private System.Windows.Forms.ToolTip toolTip;
         private System.Windows.Forms.CheckBox chkAutoUpdate;
         private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.ComboBox cmdDefaultExport;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.TextBox txtCommentPrefix;
+        private System.Windows.Forms.Label label18;
     }
 }
