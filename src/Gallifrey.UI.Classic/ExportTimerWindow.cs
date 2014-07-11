@@ -22,7 +22,15 @@ namespace Gallifrey.UI.Classic
             timerToShow = gallifrey.JiraTimerCollection.GetTimer(timerGuid);
             InitializeComponent();
 
-            jiraIssue = gallifrey.JiraConnection.GetJiraIssue(timerToShow.JiraReference);
+            try
+            {
+                jiraIssue = gallifrey.JiraConnection.GetJiraIssue(timerToShow.JiraReference);
+            }
+            catch (NoResultsFoundException)
+            {
+                MessageBox.Show(string.Format("Unable To Locate Jira {0}!\nCannot Export Time\nPlease Verify/Correct Jira Reference", timerToShow.JiraReference), "Unable To Locate Jira", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                DisplayForm = false;
+            }
             
             var loggedTime = gallifrey.JiraConnection.GetCurrentLoggedTimeForDate(jiraIssue, timerToShow.DateStarted);
 

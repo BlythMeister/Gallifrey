@@ -750,7 +750,25 @@ namespace Gallifrey.UI.Classic
         {
             if (ApplicationDeployment.IsNetworkDeployed)
             {
-                if (ApplicationDeployment.CurrentDeployment != null && ApplicationDeployment.CurrentDeployment.UpdatedVersion != ApplicationDeployment.CurrentDeployment.CurrentVersion)
+                var restart = false;
+                try
+                {
+                    if (ApplicationDeployment.CurrentDeployment != null && ApplicationDeployment.CurrentDeployment.UpdatedVersion != ApplicationDeployment.CurrentDeployment.CurrentVersion)
+                    {
+                        restart = true;
+                    }
+                    else
+                    {
+                        SetVersionNumber(true);
+                        CheckForUpdates(true);
+                    }
+                }
+                catch (Exception)
+                {
+                    restart = true;
+                }
+
+                if (restart)
                 {
                     try
                     {
@@ -760,11 +778,6 @@ namespace Gallifrey.UI.Classic
                     {
                         MessageBox.Show("An Error Occured When Trying To Restart, Please Restart Manually", "Restart Failure", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     }
-                }
-                else
-                {
-                    SetVersionNumber(true);
-                    CheckForUpdates(true);
                 }
             }
             else
