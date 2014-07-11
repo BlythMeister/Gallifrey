@@ -82,4 +82,11 @@
     </Bugs>
     <Others />
   </Version>
+  <Version Number="1.1.1" Name="">
+    <Features />
+    <Bugs>
+      <Bug>Fixed change log to show only the latest version.</Bug>
+    </Bugs>
+    <Others />
+  </Version>
 </Versions>
