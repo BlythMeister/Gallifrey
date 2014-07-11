@@ -13,6 +13,7 @@ using System.Windows.Forms;
 using System.Xml.Linq;
 using Exceptionless;
 using Gallifrey.Comparers;
+using Gallifrey.Exceptions.IdleTimers;
 using Gallifrey.Exceptions.IntergrationPoints;
 using Gallifrey.Exceptions.JiraTimers;
 using Gallifrey.ExtensionMethods;
@@ -401,13 +402,15 @@ namespace Gallifrey.UI.Classic
                 case SessionSwitchReason.RemoteDisconnect:
                 case SessionSwitchReason.ConsoleDisconnect:
 
-                    var openForms = Application.OpenForms.Cast<Form>().ToList();
-                    foreach (var form in openForms.Where(form => form.Name != "MainWindow"))
+                    if (gallifrey.StartIdleTimer())
                     {
-                        form.Close();
+                        var openForms = Application.OpenForms.Cast<Form>().ToList();
+                        foreach (var form in openForms.Where(form => form.Name != "MainWindow"))
+                        {
+                            form.Close();
+                        }
                     }
 
-                    gallifrey.StartIdleTimer();
                     break;
 
                 case SessionSwitchReason.SessionUnlock:
@@ -415,23 +418,28 @@ namespace Gallifrey.UI.Classic
                 case SessionSwitchReason.RemoteConnect:
                 case SessionSwitchReason.ConsoleConnect:
 
-                    BringToFront();
-                    var idleTimerId = gallifrey.StopIdleTimer();
-                    var idleTimer = gallifrey.IdleTimerCollection.GetTimer(idleTimerId);
-                    if (idleTimer.IdleTimeValue.TotalSeconds < 60 || idleTimer.IdleTimeValue.TotalHours > 10)
+                    try
                     {
-                        gallifrey.IdleTimerCollection.RemoveTimer(idleTimerId);
-                    }
-                    else
-                    {
-                        var lockedTimerWindow = new LockedTimerWindow(gallifrey);
-                        lockedTimerWindow.Closed += LockedTimerWindowClosed;
-                        if (lockedTimerWindow.DisplayForm)
+                        BringToFront();
+                        var idleTimerId = gallifrey.StopIdleTimer();
+                        var idleTimer = gallifrey.IdleTimerCollection.GetTimer(idleTimerId);
+                        if (idleTimer.IdleTimeValue.TotalSeconds < 60 || idleTimer.IdleTimeValue.TotalHours > 10)
                         {
-                            lockedTimerWindow.BringToFront();
-                            lockedTimerWindow.Show();
+                            gallifrey.IdleTimerCollection.RemoveTimer(idleTimerId);
+                        }
+                        else
+                        {
+                            var lockedTimerWindow = new LockedTimerWindow(gallifrey);
+                            lockedTimerWindow.Closed += LockedTimerWindowClosed;
+                            if (lockedTimerWindow.DisplayForm)
+                            {
+                                lockedTimerWindow.BringToFront();
+                                lockedTimerWindow.Show();
+                            }
                         }
                     }
+                    catch (NoIdleTimerRunningException) { }
+
                     break;
             }
         }
@@ -530,7 +538,7 @@ namespace Gallifrey.UI.Classic
                 if (addedTimer)
                 {
                     var orderedList = internalTimerList[validDate].OrderBy(x => x.JiraReference, new JiraReferenceComparer()).ToList();
-                    var list = new ThreadedBindingList<JiraTimer>(orderedList){RaiseListChangedEvents = true};
+                    var list = new ThreadedBindingList<JiraTimer>(orderedList) { RaiseListChangedEvents = true };
                     list.ListChanged += OnListChanged;
                     internalTimerList[validDate] = list;
 
@@ -840,7 +848,7 @@ namespace Gallifrey.UI.Classic
                 lblUpdate.Image = Properties.Resources.Download_16x16;
                 updateReady = true;
 
-                notifyAlert.ShowBalloonTip(10000, "Update Avaliable", string.Format("An Update To v{0} Has Been Downloaded!", ApplicationDeployment.CurrentDeployment.UpdatedVersion), ToolTipIcon.Info);    
+                notifyAlert.ShowBalloonTip(10000, "Update Avaliable", string.Format("An Update To v{0} Has Been Downloaded!", ApplicationDeployment.CurrentDeployment.UpdatedVersion), ToolTipIcon.Info);
             }
         }
 

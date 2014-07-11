@@ -23,7 +23,7 @@ namespace Gallifrey
         void Initialise();
         void Close();
         void SaveSettings();
-        void StartIdleTimer();
+        bool StartIdleTimer();
         Guid StopIdleTimer();
         IDictionary<Version, ChangeLogVersionDetails> GetChangeLog(Version currentVersion, XDocument changeLogContent);
     }
@@ -131,7 +131,7 @@ namespace Gallifrey
             ActivityChecker.UpdateAppSettings(settingsCollection.AppSettings);
         }
 
-        public void StartIdleTimer()
+        public bool StartIdleTimer()
         {
             ActivityChecker.StopActivityCheck();
 
@@ -140,7 +140,7 @@ namespace Gallifrey
             {
                 jiraTimerCollection.StopTimer(runningTimerWhenIdle.Value);
             }
-            idleTimerCollection.NewLockTimer();
+            return idleTimerCollection.NewLockTimer();
         }
 
         public Guid StopIdleTimer()
