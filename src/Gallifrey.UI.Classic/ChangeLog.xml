@@ -19,15 +19,15 @@
       <Feature>Intergrated updates in spotify style.</Feature>
       <Feature>Nice error reporting back to central store.</Feature>
     </Features>
-    <Bugs />   
-    <Others />   
+    <Bugs />
+    <Others />
   </Version>
   <Version Number="1.0.2" Name="">
-    <Features />   
+    <Features />
     <Bugs>
       <Bug>Critical export bug fix.</Bug>
     </Bugs>
-    <Others />    
+    <Others />
   </Version>
   <Version Number="1.0.3" Name="">
     <Features>
@@ -59,6 +59,26 @@
       <Bug>Change ordering of Jiras to use new comparer to sort numerical parts correctly.</Bug>
       <Bug>Prevent flashing of UI when refreshing.</Bug>
       <Bug>Remove Stopwatch in locked timer to make display more accurate. Do not need regualar update, machine is locked.</Bug>
+    </Bugs>
+    <Others />
+  </Version>
+  <Version Number="1.1.0" Name="">
+    <Features>
+      <Feature>Drag &amp; Drop can change the tab</Feature>
+      <Feature>Clicking update avaliable baloon will restart the app and install the update.</Feature>
+      <Feature>Added auto update, when new update installed, the app automatically restarts to use new version.</Feature>
+      <Feature>Added default export remaining time value.</Feature>
+      <Feature>Added option to set the comment prefix, default same as previous "Gallifrey".</Feature>
+      <Feature>Included Remote Desktop connect/disconnect to session switch for better lock/unlock detection</Feature>
+    </Features>
+    <Bugs>
+      <Bug>Added error handling for condition when selected timer disappears (normally on app open/close).</Bug>
+      <Bug>Better handling of deleting locked timers and which items selected after delete.</Bug>
+      <Bug>Reduce drag and drop area to tab list as this makes more sense.</Bug>
+      <Bug>Correct issue with page title not being updated once a new timer is added.</Bug>
+      <Bug>Changed check/install updates to single click to by-pass .net issue with copying label text on double click.</Bug>
+      <Bug>Changing timer date now maintains exported &amp; current time values.</Bug>
+      <Bug>Fixed issue when unable to locate Jira when exporting (due to Jira rename)</Bug>
     </Bugs>
     <Others />
   </Version>

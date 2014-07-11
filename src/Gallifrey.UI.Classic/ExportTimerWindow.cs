@@ -4,6 +4,7 @@ using Atlassian.Jira;
 using Gallifrey.Exceptions.IntergrationPoints;
 using Gallifrey.Exceptions.JiraTimers;
 using Gallifrey.JiraTimers;
+using Gallifrey.Settings;
 
 namespace Gallifrey.UI.Classic
 {
@@ -21,7 +22,15 @@ namespace Gallifrey.UI.Classic
             timerToShow = gallifrey.JiraTimerCollection.GetTimer(timerGuid);
             InitializeComponent();
 
-            jiraIssue = gallifrey.JiraConnection.GetJiraIssue(timerToShow.JiraReference);
+            try
+            {
+                jiraIssue = gallifrey.JiraConnection.GetJiraIssue(timerToShow.JiraReference);
+            }
+            catch (NoResultsFoundException)
+            {
+                MessageBox.Show(string.Format("Unable To Locate Jira {0}!\nCannot Export Time\nPlease Verify/Correct Jira Reference", timerToShow.JiraReference), "Unable To Locate Jira", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                DisplayForm = false;
+            }
             
             var loggedTime = gallifrey.JiraConnection.GetCurrentLoggedTimeForDate(jiraIssue, timerToShow.DateStarted);
 
@@ -52,6 +61,11 @@ namespace Gallifrey.UI.Classic
             {
                 calExportDate.Value = DateTime.Now;
             }
+
+            radAutoAdjust.Checked = gallifrey.Settings.ExportSettings.DefaultRemainingValue == DefaultRemaining.Auto;
+            radLeaveRemaining.Checked = gallifrey.Settings.ExportSettings.DefaultRemainingValue == DefaultRemaining.Leave;
+            radSetValue.Checked = gallifrey.Settings.ExportSettings.DefaultRemainingValue == DefaultRemaining.Set;
+            radSetValue_CheckedChanged(this, null);
 
             TopMost = gallifrey.Settings.UiSettings.AlwaysOnTop;
         }

@@ -84,6 +84,7 @@
             // 
             // tabTimerDays
             // 
+            this.tabTimerDays.AllowDrop = true;
             this.tabTimerDays.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -93,6 +94,8 @@
             this.tabTimerDays.SelectedIndex = 0;
             this.tabTimerDays.Size = new System.Drawing.Size(951, 414);
             this.tabTimerDays.TabIndex = 15;
+            this.tabTimerDays.DragDrop += new System.Windows.Forms.DragEventHandler(this.tabTimerDays_DragDrop);
+            this.tabTimerDays.DragOver += new System.Windows.Forms.DragEventHandler(this.tabTimerDays_DragOver);
             // 
             // formTimer
             // 
@@ -319,7 +322,7 @@
             this.lblUpdate.Size = new System.Drawing.Size(121, 55);
             this.lblUpdate.TabIndex = 16;
             this.lblUpdate.Text = "Currently Running v99.99.99.99 (beta)\r\nUp To Date!\r\n";
-            this.lblUpdate.DoubleClick += new System.EventHandler(this.lblUpdate_DoubleClick);
+            this.lblUpdate.Click += new System.EventHandler(this.lblUpdate_Click);
             // 
             // pictureBox1
             // 
@@ -344,7 +347,6 @@
             // 
             // MainWindow
             // 
-            this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(975, 595);
@@ -374,8 +376,6 @@
             this.Text = "Gallifrey";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainWindow_FormClosed);
             this.Load += new System.EventHandler(this.MainWindow_Load);
-            this.DragDrop += new System.Windows.Forms.DragEventHandler(this.MainWindow_DragDrop);
-            this.DragEnter += new System.Windows.Forms.DragEventHandler(this.MainWindow_DragEnter);
             this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.MainWindow_KeyUp);
             this.grpTarget.ResumeLayout(false);
             this.grpTarget.PerformLayout();

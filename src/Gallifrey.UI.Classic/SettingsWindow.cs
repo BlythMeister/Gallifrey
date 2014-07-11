@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using Gallifrey.Exceptions.IntergrationPoints;
+using Gallifrey.Settings;
 
 namespace Gallifrey.UI.Classic
 {
@@ -20,8 +21,12 @@ namespace Gallifrey.UI.Classic
             if (gallifrey.Settings.JiraConnectionSettings.JiraPassword != null) txtJiraPassword.Text = gallifrey.Settings.JiraConnectionSettings.JiraPassword;
 
             chkAlert.Checked = gallifrey.Settings.AppSettings.AlertWhenNotRunning;
+            chkAutoUpdate.Checked = gallifrey.Settings.AppSettings.AutoUpdate;
             txtAlertMins.Text = ((gallifrey.Settings.AppSettings.AlertTimeMilliseconds / 1000) / 60).ToString();
             txtTimerDays.Text = gallifrey.Settings.AppSettings.KeepTimersForDays.ToString();
+
+            cmdDefaultExport.SelectedIndex = (int)gallifrey.Settings.ExportSettings.DefaultRemainingValue;
+            txtCommentPrefix.Text = gallifrey.Settings.ExportSettings.ExportCommentPrefix;
 
             txtTargetHours.Text = gallifrey.Settings.AppSettings.TargetLogPerDay.Hours.ToString();
             txtTargetMins.Text = gallifrey.Settings.AppSettings.TargetLogPerDay.Minutes.ToString();
@@ -61,7 +66,11 @@ namespace Gallifrey.UI.Classic
             gallifrey.Settings.AppSettings.AlertWhenNotRunning = chkAlert.Checked;
             gallifrey.Settings.AppSettings.AlertTimeMilliseconds = (alertTime * 60) * 1000;
             gallifrey.Settings.AppSettings.KeepTimersForDays = keepTimerDays;
+            gallifrey.Settings.AppSettings.AutoUpdate = chkAutoUpdate.Checked;
             gallifrey.Settings.UiSettings.AlwaysOnTop = chkAlwaysTop.Checked;
+
+            gallifrey.Settings.ExportSettings.DefaultRemainingValue = (DefaultRemaining)cmdDefaultExport.SelectedIndex;
+            gallifrey.Settings.ExportSettings.ExportCommentPrefix = txtCommentPrefix.Text;
 
             int hours, minutes;
 

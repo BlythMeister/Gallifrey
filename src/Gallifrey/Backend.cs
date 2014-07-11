@@ -23,7 +23,7 @@ namespace Gallifrey
         void Initialise();
         void Close();
         void SaveSettings();
-        void StartIdleTimer();
+        bool StartIdleTimer();
         Guid StopIdleTimer();
         IDictionary<Version, ChangeLogVersionDetails> GetChangeLog(Version currentVersion, XDocument changeLogContent);
     }
@@ -93,7 +93,7 @@ namespace Gallifrey
 
         public void Initialise()
         {
-            jiraConnection = new JiraConnection(settingsCollection.JiraConnectionSettings);
+            jiraConnection = new JiraConnection(settingsCollection.JiraConnectionSettings, settingsCollection.ExportSettings);
         }
 
         public void Close()
@@ -121,17 +121,17 @@ namespace Gallifrey
             settingsCollection.SaveSettings();
             if (jiraConnection == null)
             {
-                jiraConnection = new JiraConnection(settingsCollection.JiraConnectionSettings);
+                jiraConnection = new JiraConnection(settingsCollection.JiraConnectionSettings, settingsCollection.ExportSettings);
             }
             else
             {
-                jiraConnection.ReConnect(settingsCollection.JiraConnectionSettings);
+                jiraConnection.ReConnect(settingsCollection.JiraConnectionSettings, settingsCollection.ExportSettings);
             }
 
             ActivityChecker.UpdateAppSettings(settingsCollection.AppSettings);
         }
 
-        public void StartIdleTimer()
+        public bool StartIdleTimer()
         {
             ActivityChecker.StopActivityCheck();
 
@@ -140,7 +140,7 @@ namespace Gallifrey
             {
                 jiraTimerCollection.StopTimer(runningTimerWhenIdle.Value);
             }
-            idleTimerCollection.NewLockTimer();
+            return idleTimerCollection.NewLockTimer();
         }
 
         public Guid StopIdleTimer()

@@ -70,7 +70,7 @@ namespace Gallifrey.UI.Classic
             {
                 disableRunning = selectedTimer.DateStarted.Date != DateTime.Now.Date;
             }
-            
+
             if (disableRunning || !runningTimerId.HasValue)
             {
                 radRunning.Checked = false;
@@ -92,7 +92,7 @@ namespace Gallifrey.UI.Classic
             {
                 MessageBox.Show("Cannot Apply Action Using Multiple Timers!", "Invalid Operation", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-            
+
             var removeTimer = true;
             var idleTimer = (IdleTimer)lstLockedTimers.SelectedItem;
 
@@ -177,7 +177,17 @@ namespace Gallifrey.UI.Classic
                     gallifrey.IdleTimerCollection.RemoveTimer(idleTimer.UniqueId);
                 }
             }
+            var selectedPosition = lstLockedTimers.SelectedIndex;
             BindIdleTimers(false);
+            if (lstLockedTimers.Items.Count <= selectedPosition)
+            {
+                selectedPosition--;
+            }
+            lstLockedTimers.ClearSelected();
+            if (selectedPosition > 0)
+            {
+                lstLockedTimers.SetSelected(selectedPosition, true);    
+            }
         }
 
         private void cmbRecentJiras_SelectedIndexChanged(object sender, EventArgs e)

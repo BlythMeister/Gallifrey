@@ -79,12 +79,13 @@
     <Compile Include="Serialization\DataEncryption.cs" />
     <Compile Include="Serialization\JiraTimerCollectionSerializer.cs" />
     <Compile Include="Settings\AppSettings.cs" />
+    <Compile Include="Settings\DefaultRemaining.cs" />
+    <Compile Include="Settings\ExportSettings.cs" />
     <Compile Include="Settings\InternalSettings.cs" />
     <Compile Include="Settings\SettingsCollection.cs" />
     <Compile Include="Settings\UISettings.cs" />
     <Compile Include="Settings\JiraConnnectionSettings.cs" />
     <Compile Include="Settings\FilePathSettings.cs" />
-    <Compile Include="Settings\UiAnimationLevel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Deployment.Application;
@@ -12,6 +13,7 @@ using System.Windows.Forms;
 using System.Xml.Linq;
 using Exceptionless;
 using Gallifrey.Comparers;
+using Gallifrey.Exceptions.IdleTimers;
 using Gallifrey.Exceptions.IntergrationPoints;
 using Gallifrey.Exceptions.JiraTimers;
 using Gallifrey.ExtensionMethods;
@@ -29,6 +31,7 @@ namespace Gallifrey.UI.Classic
         private DateTime lastUpdateCheck;
         private string myVersion;
         private PrivateFontCollection privateFontCollection;
+        private bool updateReady;
 
         #region "Main Window & Error"
 
@@ -36,6 +39,7 @@ namespace Gallifrey.UI.Classic
         {
             InitializeComponent();
             this.isBeta = isBeta;
+            updateReady = false;
             lastUpdateCheck = DateTime.MinValue;
             internalTimerList = new Dictionary<DateTime, ThreadedBindingList<JiraTimer>>();
 
@@ -241,7 +245,7 @@ namespace Gallifrey.UI.Classic
         private void btnAddTimer_Click(object sender, EventArgs e)
         {
             var addForm = new AddTimerWindow(gallifrey);
-            
+
             var selectedTabDate = GetSelectedTabDate();
             if (selectedTabDate.HasValue)
             {
@@ -355,14 +359,28 @@ namespace Gallifrey.UI.Classic
 
         private void notifyAlert_BalloonTipClicked(object sender, EventArgs e)
         {
-            switch (WindowState)
+            if (updateReady)
             {
-                case FormWindowState.Minimized:
-                    WindowState = FormWindowState.Normal;
-                    break;
-                default:
-                    BringToFront();
-                    break;
+                try
+                {
+                    Application.Restart();
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("An Error Occured When Trying To Restart, Please Restart Manually", "Restart Failure", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                }
+            }
+            else
+            {
+                switch (WindowState)
+                {
+                    case FormWindowState.Minimized:
+                        WindowState = FormWindowState.Normal;
+                        break;
+                    default:
+                        this.BringToFront();
+                        break;
+                }
             }
         }
 
@@ -380,32 +398,48 @@ namespace Gallifrey.UI.Classic
             switch (e.Reason)
             {
                 case SessionSwitchReason.SessionLock:
-                    var openForms = Application.OpenForms.Cast<Form>().ToList();
-                    foreach (var form in openForms.Where(form => form.Name != "MainWindow"))
-                    {
-                        form.Close();
-                    }
+                case SessionSwitchReason.SessionLogoff:
+                case SessionSwitchReason.RemoteDisconnect:
+                case SessionSwitchReason.ConsoleDisconnect:
 
-                    gallifrey.StartIdleTimer();
-                    break;
-                case SessionSwitchReason.SessionUnlock:
-                    BringToFront();
-                    var idleTimerId = gallifrey.StopIdleTimer();
-                    var idleTimer = gallifrey.IdleTimerCollection.GetTimer(idleTimerId);
-                    if (idleTimer.IdleTimeValue.TotalSeconds < 60 || idleTimer.IdleTimeValue.TotalHours > 10)
+                    if (gallifrey.StartIdleTimer())
                     {
-                        gallifrey.IdleTimerCollection.RemoveTimer(idleTimerId);
-                    }
-                    else
-                    {
-                        var lockedTimerWindow = new LockedTimerWindow(gallifrey);
-                        lockedTimerWindow.Closed += LockedTimerWindowClosed;
-                        if (lockedTimerWindow.DisplayForm)
+                        var openForms = Application.OpenForms.Cast<Form>().ToList();
+                        foreach (var form in openForms.Where(form => form.Name != "MainWindow"))
                         {
-                            lockedTimerWindow.BringToFront();
-                            lockedTimerWindow.Show();
+                            form.Close();
                         }
                     }
+
+                    break;
+
+                case SessionSwitchReason.SessionUnlock:
+                case SessionSwitchReason.SessionLogon:
+                case SessionSwitchReason.RemoteConnect:
+                case SessionSwitchReason.ConsoleConnect:
+
+                    try
+                    {
+                        BringToFront();
+                        var idleTimerId = gallifrey.StopIdleTimer();
+                        var idleTimer = gallifrey.IdleTimerCollection.GetTimer(idleTimerId);
+                        if (idleTimer.IdleTimeValue.TotalSeconds < 60 || idleTimer.IdleTimeValue.TotalHours > 10)
+                        {
+                            gallifrey.IdleTimerCollection.RemoveTimer(idleTimerId);
+                        }
+                        else
+                        {
+                            var lockedTimerWindow = new LockedTimerWindow(gallifrey);
+                            lockedTimerWindow.Closed += LockedTimerWindowClosed;
+                            if (lockedTimerWindow.DisplayForm)
+                            {
+                                lockedTimerWindow.BringToFront();
+                                lockedTimerWindow.Show();
+                            }
+                        }
+                    }
+                    catch (NoIdleTimerRunningException) { }
+
                     break;
             }
         }
@@ -484,7 +518,7 @@ namespace Gallifrey.UI.Classic
                 if (!internalTimerList.ContainsKey(validDate))
                 {
                     var list = new ThreadedBindingList<JiraTimer> { RaiseListChangedEvents = true };
-                    list.ListChanged += ListOnListChanged;
+                    list.ListChanged += OnListChanged;
                     internalTimerList.Add(validDate, list);
                 }
 
@@ -504,12 +538,14 @@ namespace Gallifrey.UI.Classic
                 if (addedTimer)
                 {
                     var orderedList = internalTimerList[validDate].OrderBy(x => x.JiraReference, new JiraReferenceComparer()).ToList();
-                    internalTimerList[validDate] = new ThreadedBindingList<JiraTimer>(orderedList);
-                    
+                    var list = new ThreadedBindingList<JiraTimer>(orderedList) { RaiseListChangedEvents = true };
+                    list.ListChanged += OnListChanged;
+                    internalTimerList[validDate] = list;
+
                     var timerList = (ListBox)tabTimerDays.TabPages[validDate.ToString("yyyyMMdd")].Controls[string.Format("lst_{0}", validDate.ToString("yyyyMMdd"))];
                     timerList.DataSource = internalTimerList[validDate];
                 }
-                
+
                 //remove timers that have been deleted
                 var removeList = internalTimerList[validDate].Where(timer => gallifrey.JiraTimerCollection.GetTimer(timer.UniqueId) == null).ToList();
                 foreach (var jiraTimer in removeList)
@@ -568,7 +604,7 @@ namespace Gallifrey.UI.Classic
             }
         }
 
-        private void ListOnListChanged(object sender, ListChangedEventArgs listChangedEventArgs)
+        private void OnListChanged(object sender, ListChangedEventArgs listChangedEventArgs)
         {
             var jiraTimerList = sender as IEnumerable<JiraTimer>;
             if (jiraTimerList != null && jiraTimerList.Any())
@@ -618,7 +654,11 @@ namespace Gallifrey.UI.Classic
                 var selectedList = ((ListBox)selectedTab.Controls[string.Format("lst_{0}", selectedTab.Name)]);
                 if (selectedList != null)
                 {
-                    selectedTimer = (JiraTimer)selectedList.SelectedItem;
+                    try
+                    {
+                        selectedTimer = (JiraTimer)selectedList.SelectedItem;
+                    }
+                    catch (IndexOutOfRangeException) { /* There Seems to be some situations this throws, for no good reason */}
                 }
             }
 
@@ -714,11 +754,29 @@ namespace Gallifrey.UI.Classic
 
         #region "Updates
 
-        private void lblUpdate_DoubleClick(object sender, EventArgs e)
+        private void lblUpdate_Click(object sender, EventArgs e)
         {
             if (ApplicationDeployment.IsNetworkDeployed)
             {
-                if (ApplicationDeployment.CurrentDeployment.UpdatedVersion != ApplicationDeployment.CurrentDeployment.CurrentVersion)
+                var restart = false;
+                try
+                {
+                    if (ApplicationDeployment.CurrentDeployment != null && ApplicationDeployment.CurrentDeployment.UpdatedVersion != ApplicationDeployment.CurrentDeployment.CurrentVersion)
+                    {
+                        restart = true;
+                    }
+                    else
+                    {
+                        SetVersionNumber(true);
+                        CheckForUpdates(true);
+                    }
+                }
+                catch (Exception)
+                {
+                    restart = true;
+                }
+
+                if (restart)
                 {
                     try
                     {
@@ -729,11 +787,6 @@ namespace Gallifrey.UI.Classic
                         MessageBox.Show("An Error Occured When Trying To Restart, Please Restart Manually", "Restart Failure", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     }
                 }
-                else
-                {
-                    SetVersionNumber(true);
-                    CheckForUpdates(true);
-                }
             }
             else
             {
@@ -743,7 +796,7 @@ namespace Gallifrey.UI.Classic
 
         private void CheckIfUpdateCallNeeded()
         {
-            if (ApplicationDeployment.IsNetworkDeployed && lastUpdateCheck < DateTime.UtcNow.AddMinutes(-15))
+            if (ApplicationDeployment.IsNetworkDeployed && lastUpdateCheck < DateTime.UtcNow.AddMinutes(-1))
             {
                 SetVersionNumber();
                 CheckForUpdates(false);
@@ -775,21 +828,36 @@ namespace Gallifrey.UI.Classic
 
         private void UpdateComplete(object sender, AsyncCompletedEventArgs e)
         {
-            grpUpdates.Text = "Update Avaliable";
-            lblUpdate.BackColor = Color.OrangeRed;
-            lblUpdate.BorderStyle = BorderStyle.FixedSingle;
-            lblUpdate.Text = string.Format("     v{0}\nDouble Click Here To Restart.", ApplicationDeployment.CurrentDeployment.UpdatedVersion);
-            lblUpdate.Image = Properties.Resources.Download_16x16;
+            if (gallifrey.Settings.AppSettings.AutoUpdate)
+            {
+                try
+                {
+                    Application.Restart();
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("An Error Occured When Trying To Restart Following An Update, Please Restart Manually", "Restart Failure", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                }
+            }
+            else
+            {
+                grpUpdates.Text = "Update Avaliable";
+                lblUpdate.BackColor = Color.OrangeRed;
+                lblUpdate.BorderStyle = BorderStyle.FixedSingle;
+                lblUpdate.Text = string.Format("     v{0}\nClick Here To Restart.", ApplicationDeployment.CurrentDeployment.UpdatedVersion);
+                lblUpdate.Image = Properties.Resources.Download_16x16;
+                updateReady = true;
 
-            notifyAlert.ShowBalloonTip(10000, "Update Avaliable", string.Format("An Update To v{0} Has Been Downloaded!", ApplicationDeployment.CurrentDeployment.UpdatedVersion), ToolTipIcon.Info);
+                notifyAlert.ShowBalloonTip(10000, "Update Avaliable", string.Format("An Update To v{0} Has Been Downloaded!", ApplicationDeployment.CurrentDeployment.UpdatedVersion), ToolTipIcon.Info);
+            }
         }
 
         #endregion
 
         #region "Drag & Drop"
-
-        private void MainWindow_DragEnter(object sender, DragEventArgs e)
+        private void tabTimerDays_DragOver(object sender, DragEventArgs e)
         {
+            var validDrop = false;
             var url = GetUrl(e);
             if (!string.IsNullOrWhiteSpace(url))
             {
@@ -797,11 +865,22 @@ namespace Gallifrey.UI.Classic
                 var jiraUri = new Uri(gallifrey.Settings.JiraConnectionSettings.JiraUrl);
                 if (uriDrag.Host == jiraUri.Host)
                 {
-                    e.Effect = DragDropEffects.Copy;
+                    validDrop = true;
                 }
-                else
+            }
+
+            if (validDrop)
+            {
+                e.Effect = DragDropEffects.Copy;
+
+                var pos = tabTimerDays.PointToClient(MousePosition);
+                for (var ix = 0; ix < tabTimerDays.TabCount; ++ix)
                 {
-                    e.Effect = DragDropEffects.None;
+                    if (tabTimerDays.GetTabRect(ix).Contains(pos))
+                    {
+                        tabTimerDays.SelectedIndex = ix;
+                        break;
+                    }
                 }
             }
             else
@@ -810,7 +889,7 @@ namespace Gallifrey.UI.Classic
             }
         }
 
-        private void MainWindow_DragDrop(object sender, DragEventArgs e)
+        private void tabTimerDays_DragDrop(object sender, DragEventArgs e)
         {
             var url = GetUrl(e);
             if (!string.IsNullOrWhiteSpace(url))
@@ -825,11 +904,11 @@ namespace Gallifrey.UI.Classic
                     var dayTimers = gallifrey.JiraTimerCollection.GetTimersForADate(selectedTabDate.Value);
                     if (dayTimers.Any(x => x.JiraReference == jiraRef))
                     {
-                        gallifrey.JiraTimerCollection.StartTimer(dayTimers.First(x=>x.JiraReference == jiraRef).UniqueId);
+                        gallifrey.JiraTimerCollection.StartTimer(dayTimers.First(x => x.JiraReference == jiraRef).UniqueId);
                         RefreshInternalTimerList();
                         if (gallifrey.JiraTimerCollection.GetRunningTimerId().HasValue)
                         {
-                            SelectTimer(gallifrey.JiraTimerCollection.GetRunningTimerId().Value);    
+                            SelectTimer(gallifrey.JiraTimerCollection.GetRunningTimerId().Value);
                         }
                         return;
                     }
@@ -879,5 +958,6 @@ namespace Gallifrey.UI.Classic
         }
 
         #endregion
+
     }
 }

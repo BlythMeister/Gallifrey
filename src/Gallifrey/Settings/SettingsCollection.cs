@@ -8,6 +8,7 @@ namespace Gallifrey.Settings
         IJiraConnectionSettings JiraConnectionSettings { get; }
         IUiSettings UiSettings { get; }
         IInternalSettings InternalSettings { get; }
+        IExportSettings ExportSettings { get; }
         void SaveSettings();
     }
 
@@ -17,6 +18,7 @@ namespace Gallifrey.Settings
         public IJiraConnectionSettings JiraConnectionSettings { get; private set; }
         public IUiSettings UiSettings { get; private set; }
         public IInternalSettings InternalSettings { get; private set; }
+        public IExportSettings ExportSettings { get; private set; }
 
         public SettingsCollection()
         {
@@ -24,14 +26,16 @@ namespace Gallifrey.Settings
             JiraConnectionSettings = new JiraConnectionSettings();
             UiSettings = new UiSettings();
             InternalSettings = new InternalSettings();
+            ExportSettings = new ExportSettings();
         }
 
-        public SettingsCollection(IAppSettings appSettings, IJiraConnectionSettings jiraConnectionSettings, IUiSettings uiSettings, IInternalSettings internalSettings)
+        public SettingsCollection(IAppSettings appSettings, IJiraConnectionSettings jiraConnectionSettings, IUiSettings uiSettings, IInternalSettings internalSettings, IExportSettings exportSettings)
         {
             AppSettings = appSettings;
             JiraConnectionSettings = jiraConnectionSettings;
             UiSettings = uiSettings;
             InternalSettings = internalSettings;
+            ExportSettings = exportSettings;
         }
 
         public void SaveSettings()
