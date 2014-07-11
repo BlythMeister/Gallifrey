@@ -184,7 +184,10 @@ namespace Gallifrey.UI.Classic
                 selectedPosition--;
             }
             lstLockedTimers.ClearSelected();
-            lstLockedTimers.SetSelected(selectedPosition, true);
+            if (selectedPosition > 0)
+            {
+                lstLockedTimers.SetSelected(selectedPosition, true);    
+            }
         }
 
         private void cmbRecentJiras_SelectedIndexChanged(object sender, EventArgs e)
