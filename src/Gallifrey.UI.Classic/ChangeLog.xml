@@ -62,13 +62,14 @@
     </Bugs>
     <Others />
   </Version>
-  <Version Number="1.0.5" Name="">
+  <Version Number="1.1.0" Name="">
     <Features>
       <Feature>Drag &amp; Drop can change the tab</Feature>
       <Feature>Clicking update avaliable baloon will restart the app and install the update.</Feature>
       <Feature>Added auto update, when new update installed, the app automatically restarts to use new version.</Feature>
       <Feature>Added default export remaining time value.</Feature>
       <Feature>Added option to set the comment prefix, default same as previous "Gallifrey".</Feature>
+      <Feature>Included Remote Desktop connect/disconnect to session switch for better lock/unlock detection</Feature>
     </Features>
     <Bugs>
       <Bug>Added error handling for condition when selected timer disappears (normally on app open/close).</Bug>

@@ -397,6 +397,10 @@ namespace Gallifrey.UI.Classic
             switch (e.Reason)
             {
                 case SessionSwitchReason.SessionLock:
+                case SessionSwitchReason.SessionLogoff:
+                case SessionSwitchReason.RemoteDisconnect:
+                case SessionSwitchReason.ConsoleDisconnect:
+
                     var openForms = Application.OpenForms.Cast<Form>().ToList();
                     foreach (var form in openForms.Where(form => form.Name != "MainWindow"))
                     {
@@ -405,7 +409,12 @@ namespace Gallifrey.UI.Classic
 
                     gallifrey.StartIdleTimer();
                     break;
+
                 case SessionSwitchReason.SessionUnlock:
+                case SessionSwitchReason.SessionLogon:
+                case SessionSwitchReason.RemoteConnect:
+                case SessionSwitchReason.ConsoleConnect:
+
                     BringToFront();
                     var idleTimerId = gallifrey.StopIdleTimer();
                     var idleTimer = gallifrey.IdleTimerCollection.GetTimer(idleTimerId);
