@@ -1,3 +1,9 @@
+# Raising Issues/Features
+
+Issues are used to raise features as well as bugs.
+When raised, please include as much information as possible.
+A maintainer will then review & label the issue and assign it to a release milestone (where applicable).
+
 # Pull Request Location
 
 Please feel free to fork and send pull requests.
