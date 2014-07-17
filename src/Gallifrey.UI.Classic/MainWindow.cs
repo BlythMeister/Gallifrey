@@ -855,6 +855,7 @@ namespace Gallifrey.UI.Classic
         #endregion
 
         #region "Drag & Drop"
+
         private void tabTimerDays_DragOver(object sender, DragEventArgs e)
         {
             var validDrop = false;
@@ -933,6 +934,10 @@ namespace Gallifrey.UI.Classic
                 if (selectedTabDate.HasValue)
                 {
                     addForm.PreLoadDate(selectedTabDate.Value);
+                    if (selectedTabDate.Value.Date == DateTime.Now.Date)
+                    {
+                        addForm.PreLoadStartNow();
+                    }
                 }
 
                 if (addForm.DisplayForm)
@@ -958,6 +963,5 @@ namespace Gallifrey.UI.Classic
         }
 
         #endregion
-
     }
 }

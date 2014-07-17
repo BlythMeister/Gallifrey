@@ -54,6 +54,11 @@ namespace Gallifrey.UI.Classic
             txtStartMins.Text = time.Minutes.ToString();
         }
 
+        public void PreLoadStartNow()
+        {
+            chkStartNow.Checked = true;
+        }
+
         private void btnAddTimer_Click(object sender, EventArgs e)
         {
             TopMost = false;

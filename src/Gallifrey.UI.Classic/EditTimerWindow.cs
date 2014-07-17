@@ -90,13 +90,30 @@ namespace Gallifrey.UI.Classic
         private void btnOK_Click(object sender, EventArgs e)
         {
             TopMost = false;
-            if ((txtJiraRef.Text != timerToShow.JiraReference && RenameTimer()) || (calStartDate.Value.Date != timerToShow.DateStarted.Date && ChangeTimerDate()))
+            Func<bool> actionFunction = null;
+            if (txtJiraRef.Text != timerToShow.JiraReference)
+            {
+                actionFunction = RenameTimer;
+            }
+            else if (calStartDate.Value.Date != timerToShow.DateStarted.Date)
+            {
+                actionFunction = ChangeTimerDate;
+            }
+
+            if (actionFunction == null)
             {
                 Close();
             }
             else
             {
-                DialogResult = DialogResult.None;
+                if (actionFunction.Invoke())
+                {
+                    Close();
+                }
+                else
+                {
+                    DialogResult = DialogResult.None;
+                }
             }
             TopMost = gallifrey.Settings.UiSettings.AlwaysOnTop;
         }
