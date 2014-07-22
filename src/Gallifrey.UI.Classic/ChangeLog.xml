@@ -89,6 +89,7 @@
     <Bugs>
       <Bug>Fixed change log to show only the latest version.</Bug>
       <Bug>When editing timer and nothing changed, the OK button closes the form.</Bug>
+      <Bug>Handling error when adding locked timer to selected item.</Bug>
     </Bugs>
     <Others />
   </Version>
