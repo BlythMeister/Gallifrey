@@ -480,7 +480,7 @@
             this.chkExportAll.Name = "chkExportAll";
             this.chkExportAll.Size = new System.Drawing.Size(15, 14);
             this.chkExportAll.TabIndex = 3;
-            this.toolTip.SetToolTip(this.chkExportAll, "UI Windows Always On Top (Not Main Window)");
+            this.toolTip.SetToolTip(this.chkExportAll, "Export Prompt Shows All Time Or Just Changed Time");
             this.chkExportAll.UseVisualStyleBackColor = true;
             // 
             // label17
