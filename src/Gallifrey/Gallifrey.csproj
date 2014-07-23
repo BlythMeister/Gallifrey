@@ -69,6 +69,7 @@
     <Compile Include="JiraIntegration\RecentJira.cs" />
     <Compile Include="Comparers\DuplicateRecentLogComparer.cs" />
     <Compile Include="Comparers\JiraReferenceComparer.cs" />
+    <Compile Include="JiraTimers\ExportPromptDetail.cs" />
     <Compile Include="JiraTimers\JiraTimer.cs" />
     <Compile Include="JiraTimers\JiraTimerCollection.cs" />
     <Compile Include="ExtensionMethods\TimespanExtensionMethods.cs" />
@@ -80,6 +81,7 @@
     <Compile Include="Serialization\JiraTimerCollectionSerializer.cs" />
     <Compile Include="Settings\AppSettings.cs" />
     <Compile Include="Settings\DefaultRemaining.cs" />
+    <Compile Include="Settings\ExportPrompt.cs" />
     <Compile Include="Settings\ExportSettings.cs" />
     <Compile Include="Settings\InternalSettings.cs" />
     <Compile Include="Settings\SettingsCollection.cs" />

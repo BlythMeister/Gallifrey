@@ -66,13 +66,19 @@
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.cmdDefaultExport = new System.Windows.Forms.ComboBox();
             this.txtCommentPrefix = new System.Windows.Forms.TextBox();
+            this.chklstExportPrompt = new System.Windows.Forms.CheckedListBox();
+            this.chkExportAll = new System.Windows.Forms.CheckBox();
             this.label17 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label18 = new System.Windows.Forms.Label();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.label20 = new System.Windows.Forms.Label();
+            this.label19 = new System.Windows.Forms.Label();
             this.grpJira.SuspendLayout();
             this.grpAppSettings.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
             // txtJiraUrl
@@ -147,8 +153,8 @@
             this.grpJira.Controls.Add(this.txtJiraUsername);
             this.grpJira.Location = new System.Drawing.Point(628, 46);
             this.grpJira.Name = "grpJira";
-            this.grpJira.Size = new System.Drawing.Size(302, 130);
-            this.grpJira.TabIndex = 3;
+            this.grpJira.Size = new System.Drawing.Size(302, 127);
+            this.grpJira.TabIndex = 4;
             this.grpJira.TabStop = false;
             this.grpJira.Text = "Jira Connection Settings";
             // 
@@ -179,7 +185,7 @@
             this.chkAutoUpdate.Location = new System.Drawing.Point(148, 112);
             this.chkAutoUpdate.Name = "chkAutoUpdate";
             this.chkAutoUpdate.Size = new System.Drawing.Size(15, 14);
-            this.chkAutoUpdate.TabIndex = 11;
+            this.chkAutoUpdate.TabIndex = 9;
             this.toolTip.SetToolTip(this.chkAutoUpdate, "UI Windows Always On Top (Not Main Window)");
             this.chkAutoUpdate.UseVisualStyleBackColor = true;
             // 
@@ -216,7 +222,7 @@
             this.chkAlwaysTop.Location = new System.Drawing.Point(148, 134);
             this.chkAlwaysTop.Name = "chkAlwaysTop";
             this.chkAlwaysTop.Size = new System.Drawing.Size(15, 14);
-            this.chkAlwaysTop.TabIndex = 9;
+            this.chkAlwaysTop.TabIndex = 11;
             this.toolTip.SetToolTip(this.chkAlwaysTop, "UI Windows Always On Top (Not Main Window)");
             this.chkAlwaysTop.UseVisualStyleBackColor = true;
             // 
@@ -339,10 +345,10 @@
             // 
             this.btnCancelEditSettings.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancelEditSettings.Image = global::Gallifrey.UI.Classic.Properties.Resources.Cancel_48x48;
-            this.btnCancelEditSettings.Location = new System.Drawing.Point(786, 202);
+            this.btnCancelEditSettings.Location = new System.Drawing.Point(468, 328);
             this.btnCancelEditSettings.Name = "btnCancelEditSettings";
             this.btnCancelEditSettings.Size = new System.Drawing.Size(65, 65);
-            this.btnCancelEditSettings.TabIndex = 5;
+            this.btnCancelEditSettings.TabIndex = 7;
             this.btnCancelEditSettings.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.toolTip.SetToolTip(this.btnCancelEditSettings, "Cancel Editing Settings");
             this.btnCancelEditSettings.UseVisualStyleBackColor = true;
@@ -352,10 +358,10 @@
             // 
             this.btnSaveSettings.Image = global::Gallifrey.UI.Classic.Properties.Resources.Check_48x48;
             this.btnSaveSettings.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.btnSaveSettings.Location = new System.Drawing.Point(705, 202);
+            this.btnSaveSettings.Location = new System.Drawing.Point(387, 328);
             this.btnSaveSettings.Name = "btnSaveSettings";
             this.btnSaveSettings.Size = new System.Drawing.Size(65, 65);
-            this.btnSaveSettings.TabIndex = 4;
+            this.btnSaveSettings.TabIndex = 6;
             this.toolTip.SetToolTip(this.btnSaveSettings, "Save Settings");
             this.btnSaveSettings.UseVisualStyleBackColor = true;
             this.btnSaveSettings.Click += new System.EventHandler(this.btnSaveSettings_Click);
@@ -374,7 +380,7 @@
             this.groupBox1.Location = new System.Drawing.Point(320, 46);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(302, 267);
-            this.groupBox1.TabIndex = 2;
+            this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Target Export";
             // 
@@ -441,7 +447,7 @@
             this.cmdDefaultExport.Location = new System.Drawing.Point(121, 24);
             this.cmdDefaultExport.Name = "cmdDefaultExport";
             this.cmdDefaultExport.Size = new System.Drawing.Size(175, 25);
-            this.cmdDefaultExport.TabIndex = 9;
+            this.cmdDefaultExport.TabIndex = 1;
             this.toolTip.SetToolTip(this.cmdDefaultExport, "Sets What To Do With Remaining Time By Default");
             // 
             // txtCommentPrefix
@@ -449,8 +455,33 @@
             this.txtCommentPrefix.Location = new System.Drawing.Point(121, 55);
             this.txtCommentPrefix.Name = "txtCommentPrefix";
             this.txtCommentPrefix.Size = new System.Drawing.Size(175, 25);
-            this.txtCommentPrefix.TabIndex = 14;
+            this.txtCommentPrefix.TabIndex = 3;
             this.toolTip.SetToolTip(this.txtCommentPrefix, "Comment Prefix, Fomat: \"Prefix: Comment\"");
+            // 
+            // chklstExportPrompt
+            // 
+            this.chklstExportPrompt.CheckOnClick = true;
+            this.chklstExportPrompt.FormattingEnabled = true;
+            this.chklstExportPrompt.Items.AddRange(new object[] {
+            "Add Idle Time",
+            "Manual Timer Adjustment",
+            "Stop Timer",
+            "Add Pre-Loaded Timer"});
+            this.chklstExportPrompt.Location = new System.Drawing.Point(102, 24);
+            this.chklstExportPrompt.Name = "chklstExportPrompt";
+            this.chklstExportPrompt.Size = new System.Drawing.Size(194, 84);
+            this.chklstExportPrompt.TabIndex = 1;
+            this.toolTip.SetToolTip(this.chklstExportPrompt, "Valid Export Prompt Scenarios");
+            // 
+            // chkExportAll
+            // 
+            this.chkExportAll.AutoSize = true;
+            this.chkExportAll.Location = new System.Drawing.Point(102, 114);
+            this.chkExportAll.Name = "chkExportAll";
+            this.chkExportAll.Size = new System.Drawing.Size(15, 14);
+            this.chkExportAll.TabIndex = 3;
+            this.toolTip.SetToolTip(this.chkExportAll, "UI Windows Always On Top (Not Main Window)");
+            this.chkExportAll.UseVisualStyleBackColor = true;
             // 
             // label17
             // 
@@ -458,7 +489,7 @@
             this.label17.Location = new System.Drawing.Point(6, 27);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(109, 17);
-            this.label17.TabIndex = 12;
+            this.label17.TabIndex = 0;
             this.label17.Text = "Remaining Action";
             // 
             // groupBox2
@@ -470,7 +501,7 @@
             this.groupBox2.Location = new System.Drawing.Point(12, 223);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(302, 90);
-            this.groupBox2.TabIndex = 6;
+            this.groupBox2.TabIndex = 2;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Export Settings";
             // 
@@ -480,8 +511,39 @@
             this.label18.Location = new System.Drawing.Point(15, 58);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(100, 17);
-            this.label18.TabIndex = 13;
+            this.label18.TabIndex = 2;
             this.label18.Text = "Comment Prefix";
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.chkExportAll);
+            this.groupBox3.Controls.Add(this.label20);
+            this.groupBox3.Controls.Add(this.label19);
+            this.groupBox3.Controls.Add(this.chklstExportPrompt);
+            this.groupBox3.Location = new System.Drawing.Point(628, 179);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(302, 134);
+            this.groupBox3.TabIndex = 5;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Export Prompt";
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Location = new System.Drawing.Point(26, 112);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(70, 17);
+            this.label20.TabIndex = 2;
+            this.label20.Text = "Export All?";
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(51, 24);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(45, 17);
+            this.label19.TabIndex = 0;
+            this.label19.Text = "Events";
             // 
             // SettingsWindow
             // 
@@ -489,8 +551,9 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancelEditSettings;
-            this.ClientSize = new System.Drawing.Size(947, 326);
+            this.ClientSize = new System.Drawing.Size(947, 414);
             this.ControlBox = false;
+            this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.grpAppSettings);
@@ -517,6 +580,8 @@
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -563,5 +628,10 @@
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.TextBox txtCommentPrefix;
         private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.CheckedListBox chklstExportPrompt;
+        private System.Windows.Forms.CheckBox chkExportAll;
+        private System.Windows.Forms.Label label20;
     }
 }

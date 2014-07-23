@@ -85,6 +85,7 @@
   <Version Number="1.1.1" Name="">
     <Features>
       <Feature>Drag &amp; Drop feature no defaults to "start now".</Feature>
+      <Feature>Added Optional Export Prompts With Ability To Select Just Changed Time, Or All Exported Time.</Feature>
     </Features>
     <Bugs>
       <Bug>Fixed change log to show only the latest version.</Bug>

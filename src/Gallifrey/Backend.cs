@@ -20,6 +20,7 @@ namespace Gallifrey
         ISettingsCollection Settings { get; }
         IJiraConnection JiraConnection { get; }
         event EventHandler<int> NoActivityEvent;
+        event EventHandler<ExportPromptDetail> ExportPromptEvent;
         void Initialise();
         void Close();
         void SaveSettings();
@@ -27,7 +28,7 @@ namespace Gallifrey
         Guid StopIdleTimer();
         IDictionary<Version, ChangeLogVersionDetails> GetChangeLog(Version currentVersion, XDocument changeLogContent);
     }
-    
+
     public class Backend : IBackend
     {
         private readonly JiraTimerCollection jiraTimerCollection;
@@ -35,6 +36,7 @@ namespace Gallifrey
         private readonly SettingsCollection settingsCollection;
         private JiraConnection jiraConnection;
         public event EventHandler<int> NoActivityEvent;
+        public event EventHandler<ExportPromptDetail> ExportPromptEvent;
         internal ActivityChecker ActivityChecker;
         private readonly Timer hearbeat;
         private Guid? runningTimerWhenIdle;
@@ -42,7 +44,8 @@ namespace Gallifrey
         public Backend()
         {
             settingsCollection = SettingsCollectionSerializer.DeSerialize();
-            jiraTimerCollection = new JiraTimerCollection();
+            jiraTimerCollection = new JiraTimerCollection(settingsCollection.AppSettings);
+            jiraTimerCollection.exportPrompt += OnExportPromptEvent;
             idleTimerCollection = new IdleTimerCollection();
             ActivityChecker = new ActivityChecker(jiraTimerCollection, settingsCollection.AppSettings);
             ActivityChecker.NoActivityEvent += OnNoActivityEvent;
@@ -60,6 +63,15 @@ namespace Gallifrey
 
                 Settings.AppSettings.TimerRunningOnShutdown = null;
                 SaveSettings();
+            }
+        }
+
+        private void OnExportPromptEvent(object sender, ExportPromptDetail promptDetail)
+        {
+            if (promptDetail.ExportTime.TotalSeconds >= 60)
+            {
+                var handler = ExportPromptEvent;
+                if (handler != null) handler(sender, promptDetail);    
             }
         }
 
@@ -129,6 +141,7 @@ namespace Gallifrey
             }
 
             ActivityChecker.UpdateAppSettings(settingsCollection.AppSettings);
+            jiraTimerCollection.UpdateAppSettings(settingsCollection.AppSettings);
         }
 
         public bool StartIdleTimer()
