@@ -45,6 +45,7 @@ namespace Gallifrey.UI.Classic
             else
             {
                 calStartDate.Value = startDate;
+                calStartDate.Enabled = false;
             }
         }
 
@@ -52,6 +53,8 @@ namespace Gallifrey.UI.Classic
         {
             txtStartHours.Text = time.Hours.ToString();
             txtStartMins.Text = time.Minutes.ToString();
+            txtStartHours.Enabled = false;
+            txtStartMins.Enabled = false;
         }
 
         public void PreLoadStartNow()
