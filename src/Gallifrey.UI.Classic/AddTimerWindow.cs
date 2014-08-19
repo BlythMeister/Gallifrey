@@ -35,7 +35,7 @@ namespace Gallifrey.UI.Classic
             txtJiraRef.Enabled = false;
         }
 
-        public void PreLoadDate(DateTime startDate)
+        public void PreLoadDate(DateTime startDate, bool enableDateChange)
         {
             if (!startDate.Between(calStartDate.MinDate, calStartDate.MaxDate))
             {
@@ -45,7 +45,7 @@ namespace Gallifrey.UI.Classic
             else
             {
                 calStartDate.Value = startDate;
-                calStartDate.Enabled = false;
+                calStartDate.Enabled = enableDateChange;
             }
         }
 

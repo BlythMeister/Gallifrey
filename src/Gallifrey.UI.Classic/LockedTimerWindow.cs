@@ -144,7 +144,7 @@ namespace Gallifrey.UI.Classic
                 TopMost = false;
                 var addForm = new AddTimerWindow(gallifrey);
                 addForm.PreLoadTime(idleTimer.IdleTimeValue);
-                addForm.PreLoadDate(idleTimer.DateStarted.Date);
+                addForm.PreLoadDate(idleTimer.DateStarted.Date, false);
                 addForm.ShowDialog();
                 if (!addForm.NewTimerId.HasValue)
                 {

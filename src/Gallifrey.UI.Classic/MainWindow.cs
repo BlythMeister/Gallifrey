@@ -282,7 +282,7 @@ namespace Gallifrey.UI.Classic
             var selectedTabDate = GetSelectedTabDate();
             if (selectedTabDate.HasValue)
             {
-                addForm.PreLoadDate(selectedTabDate.Value);
+                addForm.PreLoadDate(selectedTabDate.Value, true);
             }
 
             if (addForm.DisplayForm)
@@ -966,7 +966,7 @@ namespace Gallifrey.UI.Classic
 
                 if (selectedTabDate.HasValue)
                 {
-                    addForm.PreLoadDate(selectedTabDate.Value);
+                    addForm.PreLoadDate(selectedTabDate.Value, true);
                     if (selectedTabDate.Value.Date == DateTime.Now.Date)
                     {
                         addForm.PreLoadStartNow();
