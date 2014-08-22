@@ -71,6 +71,8 @@ namespace Gallifrey.UI.Classic
 
                 txtChangeLog.AppendText("\n");
             }
+
+            txtChangeLog.Select(0,0);
         }
 
         private void btnOK_Click(object sender, EventArgs e)

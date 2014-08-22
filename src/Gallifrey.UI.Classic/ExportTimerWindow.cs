@@ -38,7 +38,7 @@ namespace Gallifrey.UI.Classic
 
             timerToShow = gallifrey.JiraTimerCollection.GetTimer(timerGuid);
 
-            if (timerToShow.TimeToExport.TotalMinutes < 1)
+            if (timerToShow.FullyExported)
             {
                 MessageBox.Show("There Is No Time To Export", "Nothing To Export", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 DisplayForm = false;
@@ -68,6 +68,17 @@ namespace Gallifrey.UI.Classic
             radSetValue_CheckedChanged(this, null);
 
             TopMost = gallifrey.Settings.UiSettings.AlwaysOnTop;
+        }
+
+        public void PreLoadExportTime(TimeSpan exportTime)
+        {
+            if (timerToShow.TimeToExport > exportTime)
+            {
+                txtExportHours.Text = exportTime.Hours.ToString();
+                txtExportMins.Text = exportTime.Minutes.ToString();
+                txtExportHours.Enabled = false;
+                txtExportMins.Enabled = false;
+            }
         }
 
         private bool ExportTime()

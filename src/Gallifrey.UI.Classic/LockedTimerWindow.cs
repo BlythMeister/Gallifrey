@@ -100,6 +100,13 @@ namespace Gallifrey.UI.Classic
             {
                 var selectedRecent = (RecentJira)cmbRecentJiras.SelectedItem;
 
+                if (selectedRecent == null)
+                {
+                    MessageBox.Show("Unable To Add Time To That Jira", "Unable To Add Time", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    BindRecentTimers();
+                    return;
+                }
+
                 var timersForADate = gallifrey.JiraTimerCollection.GetTimersForADate(idleTimer.DateStarted);
                 Guid timerToAddTimeTo;
 
@@ -137,6 +144,7 @@ namespace Gallifrey.UI.Classic
                 TopMost = false;
                 var addForm = new AddTimerWindow(gallifrey);
                 addForm.PreLoadTime(idleTimer.IdleTimeValue);
+                addForm.PreLoadDate(idleTimer.DateStarted.Date, false);
                 addForm.ShowDialog();
                 if (!addForm.NewTimerId.HasValue)
                 {

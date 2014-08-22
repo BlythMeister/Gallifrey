@@ -91,7 +91,7 @@ namespace Gallifrey.JiraTimers
         {
             get { return CurrentTime.Add(currentRunningTime.Elapsed); }
         }
-
+        
         public bool IsThisWeek(DayOfWeek startOfWeek)
         {
             var today = DateTime.Today;
@@ -110,13 +110,15 @@ namespace Gallifrey.JiraTimers
             IsRunning = true;
         }
 
-        public void StopTimer()
+        public TimeSpan StopTimer()
         {
             currentRunningTime.Stop();
             runningWatcher.Stop();
             IsRunning = false;
-            CurrentTime = CurrentTime.Add(currentRunningTime.Elapsed);
+            var elapsed = currentRunningTime.Elapsed;
+            CurrentTime = CurrentTime.Add(elapsed);
             currentRunningTime.Reset();
+            return elapsed;
         }
 
         public void AddIdleTimer(IdleTimer idleTimer)

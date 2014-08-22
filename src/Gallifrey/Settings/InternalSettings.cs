@@ -18,10 +18,10 @@ namespace Gallifrey.Settings
         public Version LastChangeLogVersion { get { return new Version(Major, Minor, Build, Revision); } }
         public void SetLastChangeLogVersion(Version currentVersion)
         {
-            Major = currentVersion.Major;
-            Minor = currentVersion.Minor;
-            Build = currentVersion.Build;
-            Revision = currentVersion.Revision;
+            Major = currentVersion.Major < 0 ? 0 : currentVersion.Major;
+            Minor = currentVersion.Minor < 0 ? 0 : currentVersion.Minor;
+            Build = currentVersion.Build < 0 ? 0 : currentVersion.Build;
+            Revision = currentVersion.Revision < 0 ? 0 : currentVersion.Revision;
         }
     }
 }

@@ -35,7 +35,7 @@ namespace Gallifrey.UI.Classic
             txtJiraRef.Enabled = false;
         }
 
-        public void PreLoadDate(DateTime startDate)
+        public void PreLoadDate(DateTime startDate, bool enableDateChange)
         {
             if (!startDate.Between(calStartDate.MinDate, calStartDate.MaxDate))
             {
@@ -45,6 +45,7 @@ namespace Gallifrey.UI.Classic
             else
             {
                 calStartDate.Value = startDate;
+                calStartDate.Enabled = enableDateChange;
             }
         }
 
@@ -52,6 +53,13 @@ namespace Gallifrey.UI.Classic
         {
             txtStartHours.Text = time.Hours.ToString();
             txtStartMins.Text = time.Minutes.ToString();
+            txtStartHours.Enabled = false;
+            txtStartMins.Enabled = false;
+        }
+
+        public void PreLoadStartNow()
+        {
+            chkStartNow.Checked = true;
         }
 
         private void btnAddTimer_Click(object sender, EventArgs e)

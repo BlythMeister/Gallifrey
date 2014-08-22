@@ -58,6 +58,7 @@ namespace Gallifrey.UI.Classic
             }
 
             gallifrey.NoActivityEvent += GallifreyOnNoActivityEvent;
+            gallifrey.ExportPromptEvent += GallifreyOnExportPromptEvent;
             SystemEvents.SessionSwitch += SessionSwitchHandler;
 
             if (ApplicationDeployment.IsNetworkDeployed)
@@ -238,6 +239,38 @@ namespace Gallifrey.UI.Classic
             CheckIfUpdateCallNeeded();
         }
 
+        private void GallifreyOnExportPromptEvent(object sender, ExportPromptDetail e)
+        {
+            var timer = gallifrey.JiraTimerCollection.GetTimer(e.TimerId);
+            if (timer != null)
+            {
+                var exportTime = e.ExportTime;
+                var message = string.Format("Do You Want To Export '{0}'?\n", timer.JiraReference);
+                if (gallifrey.Settings.AppSettings.ExportPromptAll || (new TimeSpan(exportTime.Ticks - (exportTime.Ticks % 600000000)) == new TimeSpan(timer.TimeToExport.Ticks - (timer.TimeToExport.Ticks % 600000000))))
+                {
+                    exportTime = timer.TimeToExport;
+                    message += string.Format("You Have '{0}' To Export", exportTime.FormatAsString(false));
+                }
+                else
+                {
+                    message += string.Format("You Have '{0}' To Export For This Change", exportTime.FormatAsString(false));
+                }
+
+                if (MessageBox.Show(message, "Do You Want To Export?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    var exportTimerWindow = new ExportTimerWindow(gallifrey, e.TimerId);
+                    if (exportTimerWindow.DisplayForm)
+                    {
+                        if (!gallifrey.Settings.AppSettings.ExportPromptAll)
+                        {
+                            exportTimerWindow.PreLoadExportTime(e.ExportTime);
+                        }
+                        exportTimerWindow.ShowDialog();
+                    }
+                }
+            }
+        }
+
         #endregion
 
         #region "Button Handlers"
@@ -249,7 +282,7 @@ namespace Gallifrey.UI.Classic
             var selectedTabDate = GetSelectedTabDate();
             if (selectedTabDate.HasValue)
             {
-                addForm.PreLoadDate(selectedTabDate.Value);
+                addForm.PreLoadDate(selectedTabDate.Value, true);
             }
 
             if (addForm.DisplayForm)
@@ -855,6 +888,7 @@ namespace Gallifrey.UI.Classic
         #endregion
 
         #region "Drag & Drop"
+
         private void tabTimerDays_DragOver(object sender, DragEventArgs e)
         {
             var validDrop = false;
@@ -932,7 +966,11 @@ namespace Gallifrey.UI.Classic
 
                 if (selectedTabDate.HasValue)
                 {
-                    addForm.PreLoadDate(selectedTabDate.Value);
+                    addForm.PreLoadDate(selectedTabDate.Value, true);
+                    if (selectedTabDate.Value.Date == DateTime.Now.Date)
+                    {
+                        addForm.PreLoadStartNow();
+                    }
                 }
 
                 if (addForm.DisplayForm)
@@ -958,6 +996,5 @@ namespace Gallifrey.UI.Classic
         }
 
         #endregion
-
     }
 }

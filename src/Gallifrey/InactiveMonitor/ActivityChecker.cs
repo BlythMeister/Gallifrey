@@ -8,7 +8,7 @@ namespace Gallifrey.InactiveMonitor
 {
     public class ActivityChecker
     {
-        public event EventHandler<int> NoActivityEvent;
+        internal event EventHandler<int> NoActivityEvent;
         private readonly IJiraTimerCollection timerCollection;
         private readonly Timer hearbeat;
         private readonly Stopwatch noTimerRunning;

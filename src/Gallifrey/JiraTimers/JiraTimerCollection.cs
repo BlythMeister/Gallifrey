@@ -8,6 +8,7 @@ using Gallifrey.Exceptions.JiraTimers;
 using Gallifrey.IdleTimers;
 using Gallifrey.JiraIntegration;
 using Gallifrey.Serialization;
+using Gallifrey.Settings;
 
 namespace Gallifrey.JiraTimers
 {
@@ -34,15 +35,24 @@ namespace Gallifrey.JiraTimers
         void SetJiraExportedTime(Guid uniqueId, TimeSpan loggedTime);
         void AddJiraExportedTime(Guid uniqueId, int hours, int minutes);
         void AddIdleTimer(Guid uniqueId, IdleTimer idleTimer);
+
     }
 
     public class JiraTimerCollection : IJiraTimerCollection
     {
+        private IAppSettings appSettings;
         private readonly List<JiraTimer> timerList;
+        internal event EventHandler<ExportPromptDetail> exportPrompt;
 
-        internal JiraTimerCollection()
+        internal JiraTimerCollection(IAppSettings appSettings)
         {
+            this.appSettings = appSettings;
             timerList = JiraTimerCollectionSerializer.DeSerialize();
+        }
+
+        internal void UpdateAppSettings(IAppSettings newAppSettings)
+        {
+            appSettings = newAppSettings;
         }
 
         internal void SaveTimers()
@@ -62,7 +72,7 @@ namespace Gallifrey.JiraTimers
 
         public IEnumerable<JiraTimer> GetUnexportedTimers(DateTime timerDate)
         {
-            return timerList.Where(timer => timer.DateStarted.Date == timerDate.Date && timer.TimeToExport.TotalMinutes >= 1).OrderBy(timer => timer.JiraReference, new JiraReferenceComparer());
+            return timerList.Where(timer => timer.DateStarted.Date == timerDate.Date && !timer.FullyExported).OrderBy(timer => timer.JiraReference, new JiraReferenceComparer());
         }
 
         public IEnumerable<RecentJira> GetJiraReferencesForLastDays(int days)
@@ -73,7 +83,7 @@ namespace Gallifrey.JiraTimers
                 .Where(timer => timer.DateStarted.Date >= DateTime.Now.AddDays(days).Date)
                 .Select(timer => new RecentJira(timer.JiraReference, timer.JiraProjectName, timer.JiraName))
                 .Distinct(new DuplicateRecentLogComparer())
-                .OrderBy(x=>x.JiraReference, new JiraReferenceComparer());
+                .OrderBy(x => x.JiraReference, new JiraReferenceComparer());
         }
 
         private void AddTimer(JiraTimer newTimer)
@@ -94,6 +104,13 @@ namespace Gallifrey.JiraTimers
             if (startNow)
             {
                 StartTimer(newTimer.UniqueId);
+            }
+            else
+            {
+                if (appSettings.ExportPrompt != null && appSettings.ExportPrompt.OnCreatePreloaded && !newTimer.FullyExported)
+                {
+                    exportPrompt.Invoke(this, new ExportPromptDetail(newTimer.UniqueId, seedTime));
+                }
             }
             return newTimer.UniqueId;
         }
@@ -128,9 +145,13 @@ namespace Gallifrey.JiraTimers
         public void StopTimer(Guid uniqueId)
         {
             var timerForInteration = GetTimer(uniqueId);
-            timerForInteration.StopTimer();
+            var stopTime = timerForInteration.StopTimer();
 
             SaveTimers();
+            if (appSettings.ExportPrompt != null && appSettings.ExportPrompt.OnStop && !timerForInteration.FullyExported)
+            {
+                exportPrompt.Invoke(this, new ExportPromptDetail(uniqueId, stopTime));
+            }
         }
 
         public Guid? GetRunningTimerId()
@@ -220,6 +241,12 @@ namespace Gallifrey.JiraTimers
             var timer = GetTimer(uniqueId);
             timer.ManualAdjustment(hours, minutes, addTime);
             SaveTimers();
+            if (appSettings.ExportPrompt != null && appSettings.ExportPrompt.OnManualAdjust && !timer.FullyExported)
+            {
+                var adjustment = new TimeSpan(hours, minutes, 0);
+                if (!addTime) adjustment = adjustment.Negate();
+                exportPrompt.Invoke(this, new ExportPromptDetail(uniqueId, adjustment));
+            }
         }
 
         public void SetJiraExportedTime(Guid uniqueId, TimeSpan loggedTime)
@@ -241,6 +268,10 @@ namespace Gallifrey.JiraTimers
             var timer = GetTimer(uniqueId);
             timer.AddIdleTimer(idleTimer);
             SaveTimers();
+            if (appSettings.ExportPrompt != null && appSettings.ExportPrompt.OnAddIdle && !timer.FullyExported)
+            {
+                exportPrompt.Invoke(this, new ExportPromptDetail(uniqueId, idleTimer.IdleTimeValue));
+            }
         }
     }
 }

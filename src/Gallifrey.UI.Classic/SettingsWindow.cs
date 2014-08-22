@@ -38,6 +38,31 @@ namespace Gallifrey.UI.Classic
                 chklstWorkingDays.SetItemChecked(i, foundItem);
             }
 
+            if (gallifrey.Settings.AppSettings.ExportPrompt == null)
+            {
+                gallifrey.Settings.AppSettings.ExportPrompt = new ExportPrompt();
+            }
+
+            for (var i = 0; i < chklstExportPrompt.Items.Count; i++)
+            {
+                switch (chklstExportPrompt.Items[i].ToString())
+                {
+                    case "Add Idle Time":
+                        chklstExportPrompt.SetItemChecked(i, gallifrey.Settings.AppSettings.ExportPrompt.OnAddIdle);
+                        break;
+                    case "Manual Timer Adjustment":
+                        chklstExportPrompt.SetItemChecked(i, gallifrey.Settings.AppSettings.ExportPrompt.OnManualAdjust);
+                        break;
+                    case "Stop Timer":
+                        chklstExportPrompt.SetItemChecked(i, gallifrey.Settings.AppSettings.ExportPrompt.OnStop);
+                        break;
+                    case "Add Pre-Loaded Timer":
+                        chklstExportPrompt.SetItemChecked(i, gallifrey.Settings.AppSettings.ExportPrompt.OnCreatePreloaded);
+                        break;
+                }
+            }
+            chkExportAll.Checked = gallifrey.Settings.AppSettings.ExportPromptAll;
+
             cmdWeekStart.Text = gallifrey.Settings.AppSettings.StartOfWeek.ToString();
 
             chkAlwaysTop.Checked = gallifrey.Settings.UiSettings.AlwaysOnTop;
@@ -79,8 +104,28 @@ namespace Gallifrey.UI.Classic
 
             gallifrey.Settings.AppSettings.TargetLogPerDay = new TimeSpan(hours, minutes, 0);
 
-            gallifrey.Settings.AppSettings.ExportDays = (from object t in chklstWorkingDays.CheckedItems select (DayOfWeek) Enum.Parse(typeof (DayOfWeek), t.ToString(), true));
-            gallifrey.Settings.AppSettings.StartOfWeek = (DayOfWeek) Enum.Parse(typeof (DayOfWeek), cmdWeekStart.Text, true);
+            gallifrey.Settings.AppSettings.ExportDays = (from object t in chklstWorkingDays.CheckedItems select (DayOfWeek)Enum.Parse(typeof(DayOfWeek), t.ToString(), true));
+            gallifrey.Settings.AppSettings.StartOfWeek = (DayOfWeek)Enum.Parse(typeof(DayOfWeek), cmdWeekStart.Text, true);
+
+            for (var i = 0; i < chklstExportPrompt.Items.Count; i++)
+            {
+                switch (chklstExportPrompt.Items[i].ToString())
+                {
+                    case "Add Idle Time":
+                        gallifrey.Settings.AppSettings.ExportPrompt.OnAddIdle = chklstExportPrompt.GetItemChecked(i);
+                        break;
+                    case "Manual Timer Adjustment":
+                        gallifrey.Settings.AppSettings.ExportPrompt.OnManualAdjust = chklstExportPrompt.GetItemChecked(i);
+                        break;
+                    case "Stop Timers":
+                        gallifrey.Settings.AppSettings.ExportPrompt.OnStop = chklstExportPrompt.GetItemChecked(i);
+                        break;
+                    case "Add Pre-Loaded Timer":
+                        gallifrey.Settings.AppSettings.ExportPrompt.OnCreatePreloaded = chklstExportPrompt.GetItemChecked(i);
+                        break;
+                }
+            }
+            gallifrey.Settings.AppSettings.ExportPromptAll = chkExportAll.Checked;
 
             gallifrey.Settings.JiraConnectionSettings.JiraUrl = txtJiraUrl.Text;
             gallifrey.Settings.JiraConnectionSettings.JiraUsername = txtJiraUsername.Text;
