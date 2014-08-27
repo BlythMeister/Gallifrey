@@ -972,6 +972,10 @@ namespace Gallifrey.UI.Classic
                         addForm.PreLoadStartNow();
                     }
                 }
+                else
+                {
+                    addForm.PreLoadStartNow();
+                }
 
                 if (addForm.DisplayForm)
                 {

@@ -99,6 +99,7 @@
     <Features />
     <Bugs>
       <Bug>Fixed issue with drag and drop with custom Jira URLs.</Bug>
+      <Bug>Issue when drag and drop with no timers on current date, start now not checked.</Bug>
     </Bugs>
     <Others />
   </Version>
