@@ -928,8 +928,8 @@ namespace Gallifrey.UI.Classic
             var url = GetUrl(e);
             if (!string.IsNullOrWhiteSpace(url))
             {
-                var uriDrag = new Uri(url);
-                var jiraRef = uriDrag.AbsolutePath.Replace("/browse/", "");
+                var uriDrag = new Uri(url).AbsolutePath;
+                var jiraRef = uriDrag.Substring(uriDrag.LastIndexOf("/") + 1);
 
                 var selectedTabDate = GetSelectedTabDate();
                 //Check if already added & if so start timer.

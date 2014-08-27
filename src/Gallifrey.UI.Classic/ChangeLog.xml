@@ -95,4 +95,11 @@
     </Bugs>
     <Others />
   </Version>
+  <Version Number="1.1.2" Name="">
+    <Features />
+    <Bugs>
+      <Bug>Fixed issue with drag and drop with custom Jira URLs.</Bug>
+    </Bugs>
+    <Others />
+  </Version>
 </Versions>
