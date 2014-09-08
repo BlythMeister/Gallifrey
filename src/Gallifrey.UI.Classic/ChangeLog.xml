@@ -100,6 +100,8 @@
     <Bugs>
       <Bug>Fixed issue with drag and drop with custom Jira URLs.</Bug>
       <Bug>Issue when drag and drop with no timers on current date, start now not checked.</Bug>
+      <Bug>Fixed issue where you can subtract more time than you had already exported from a timer.</Bug>
+      <Bug>Fixed issue where unexported time will subtract values from timers with a negative unexported time.</Bug>
     </Bugs>
     <Others />
   </Version>

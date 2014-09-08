@@ -84,7 +84,11 @@ namespace Gallifrey.JiraTimers
 
         public TimeSpan TimeToExport
         {
-            get { return ExactCurrentTime.Subtract(ExportedTime); }
+            get
+            {
+                var timeToExport = ExactCurrentTime.Subtract(ExportedTime);
+                return timeToExport.TotalSeconds > 0 ? timeToExport : new TimeSpan();
+            }
         }
 
         public TimeSpan ExactCurrentTime
@@ -144,11 +148,19 @@ namespace Gallifrey.JiraTimers
             return ExportedTime.TotalSeconds == 0;
         }
 
-        public void ManualAdjustment(int hours, int minutes, bool addTime)
+        public bool ManualAdjustment(TimeSpan changeTimespan, bool addTime)
         {
-            var changeTimespan = new TimeSpan(hours, minutes, 0);
-            CurrentTime = addTime ? CurrentTime.Add(changeTimespan) : CurrentTime.Subtract(changeTimespan > ExactCurrentTime ? ExactCurrentTime : changeTimespan);
+            var calculatedNewTime = addTime ? CurrentTime.Add(changeTimespan) : CurrentTime.Subtract(changeTimespan > ExactCurrentTime ? ExactCurrentTime : changeTimespan);
+            var returnValue = true;
+            if (!addTime && ExportedTime > calculatedNewTime)
+            {
+                returnValue = false;
+                calculatedNewTime = ExportedTime;
+            }
+
+            CurrentTime = calculatedNewTime;
             if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("ExactCurrentTime"));
+            return returnValue;
         }
 
         public void SetJiraExportedTime(TimeSpan loggedTime)
@@ -157,7 +169,7 @@ namespace Gallifrey.JiraTimers
             var exportedvsActual = ExportedTime.Subtract(ExactCurrentTime);
             if (exportedvsActual.TotalMinutes >= 1)
             {
-                ManualAdjustment(exportedvsActual.Hours, exportedvsActual.Minutes, true);
+                ManualAdjustment(exportedvsActual, true);
             }
             if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("ExactCurrentTime"));
         }

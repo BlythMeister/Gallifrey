@@ -31,7 +31,7 @@ namespace Gallifrey.JiraTimers
         TimeSpan GetTotalUnexportedTime();
         TimeSpan GetTotalExportedTimeThisWeek(DayOfWeek startOfWeek);
         TimeSpan GetTotalTimeForDate(DateTime timerDate);
-        void AdjustTime(Guid uniqueId, int hours, int minutes, bool addTime);
+        bool AdjustTime(Guid uniqueId, int hours, int minutes, bool addTime);
         void SetJiraExportedTime(Guid uniqueId, TimeSpan loggedTime);
         void AddJiraExportedTime(Guid uniqueId, int hours, int minutes);
         void AddIdleTimer(Guid uniqueId, IdleTimer idleTimer);
@@ -236,17 +236,24 @@ namespace Gallifrey.JiraTimers
             return timerList.Where(jiraTimer => jiraTimer.DateStarted.Date == timerDate.Date).Aggregate(time, (current, jiraTimer) => current.Add(new TimeSpan(jiraTimer.ExactCurrentTime.Hours, jiraTimer.ExactCurrentTime.Minutes, jiraTimer.ExactCurrentTime.Seconds)));
         }
 
-        public void AdjustTime(Guid uniqueId, int hours, int minutes, bool addTime)
+        public bool AdjustTime(Guid uniqueId, int hours, int minutes, bool addTime)
         {
             var timer = GetTimer(uniqueId);
-            timer.ManualAdjustment(hours, minutes, addTime);
+            var adjustment = new TimeSpan(hours, minutes, 0);
+
+            if (!timer.ManualAdjustment(adjustment, addTime))
+            {
+                return false;
+            }
+
             SaveTimers();
             if (appSettings.ExportPrompt != null && appSettings.ExportPrompt.OnManualAdjust && !timer.FullyExported)
             {
-                var adjustment = new TimeSpan(hours, minutes, 0);
                 if (!addTime) adjustment = adjustment.Negate();
                 exportPrompt.Invoke(this, new ExportPromptDetail(uniqueId, adjustment));
             }
+
+            return true;
         }
 
         public void SetJiraExportedTime(Guid uniqueId, TimeSpan loggedTime)
