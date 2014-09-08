@@ -40,7 +40,7 @@ namespace Gallifrey.UI.Classic
         private void BindIdleTimers(bool showNoTimers = true)
         {
             var idleTimers = gallifrey.IdleTimerCollection.GetUnusedLockTimers().ToList();
-
+            
             if (!idleTimers.Any())
             {
                 if (showNoTimers)
@@ -88,9 +88,16 @@ namespace Gallifrey.UI.Classic
 
         private void btnOK_Click(object sender, EventArgs e)
         {
+            if (lstLockedTimers.SelectedItems.Count == 0)
+            {
+                MessageBox.Show("You Must Select A Time From The List", "Invalid Operation", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            
             if (lstLockedTimers.SelectedItems.Count > 1)
             {
                 MessageBox.Show("Cannot Apply Action Using Multiple Timers!", "Invalid Operation", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
             }
 
             var removeTimer = true;
@@ -192,9 +199,13 @@ namespace Gallifrey.UI.Classic
                 selectedPosition--;
             }
             lstLockedTimers.ClearSelected();
-            if (selectedPosition > 0)
+            if (selectedPosition >= 0)
             {
                 lstLockedTimers.SetSelected(selectedPosition, true);    
+            }
+            else if(lstLockedTimers.Items.Count > 0)
+            {
+                lstLockedTimers.SetSelected(0, true);  
             }
         }
 
