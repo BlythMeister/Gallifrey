@@ -115,7 +115,7 @@ namespace Gallifrey.Jira
 
             while (moreToGet)
             {
-                var response = ExectuteRequest(Method.GET, HttpStatusCode.OK, string.Format("search?jql={0}&maxResults=200&startAt={1}", jql, startAt));
+                var response = ExectuteRequest(Method.GET, HttpStatusCode.OK, string.Format("search?jql={0}&maxResults=500&startAt={1}", jql, startAt));
 
                 var searchResult = deserializer.Deserialize<SearchResult>(response);
 
@@ -203,7 +203,7 @@ namespace Gallifrey.Jira
 
             if (remainingTime.HasValue)
             {
-                newEstimate = string.Format("{0}h {1}m", timeSpent.Hours, timeSpent.Minutes);
+                newEstimate = string.Format("{0}h {1}m", remainingTime.Value.Hours, remainingTime.Value.Minutes);
             }
 
             switch (workLogStrategy)
