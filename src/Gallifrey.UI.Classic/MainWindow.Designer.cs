@@ -223,7 +223,7 @@
             this.btnIdle.Size = new System.Drawing.Size(65, 65);
             this.btnIdle.TabIndex = 11;
             this.btnIdle.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.toolTip.SetToolTip(this.btnIdle, "\"View Machine Locked Timers (CTRL+L)");
+            this.toolTip.SetToolTip(this.btnIdle, "View Machine Locked Timers (CTRL+L)");
             this.btnIdle.UseVisualStyleBackColor = true;
             this.btnIdle.Click += new System.EventHandler(this.btnIdle_Click);
             // 

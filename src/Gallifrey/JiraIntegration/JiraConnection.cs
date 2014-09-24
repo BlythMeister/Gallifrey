@@ -166,7 +166,7 @@ namespace Gallifrey.JiraIntegration
 
             var issue = jira.GetIssue(jiraRef);
 
-            foreach (var worklog in issue.fields.worklog.worklogs.Where(worklog => worklog.created.Date == date.Date &&
+            foreach (var worklog in issue.fields.worklog.worklogs.Where(worklog => worklog.started.Date == date.Date &&
                                                                              worklog.author.name.ToLower() == jiraConnectionSettings.JiraUsername.ToLower()))
             {
                 loggedTime = loggedTime.Add(new TimeSpan(0, 0, (int)worklog.timeSpentSeconds));
