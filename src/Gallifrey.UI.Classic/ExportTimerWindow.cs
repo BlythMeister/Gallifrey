@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
-using Atlassian.Jira;
 using Gallifrey.Exceptions.IntergrationPoints;
-using Gallifrey.Exceptions.JiraTimers;
+using Gallifrey.Jira;
 using Gallifrey.JiraTimers;
 using Gallifrey.Settings;
 
@@ -32,7 +31,7 @@ namespace Gallifrey.UI.Classic
                 DisplayForm = false;
             }
             
-            var loggedTime = gallifrey.JiraConnection.GetCurrentLoggedTimeForDate(jiraIssue, timerToShow.DateStarted);
+            var loggedTime = gallifrey.JiraConnection.GetCurrentLoggedTimeForDate(jiraIssue.key, timerToShow.DateStarted);
 
             gallifrey.JiraTimerCollection.SetJiraExportedTime(timerGuid, loggedTime);
 
@@ -106,7 +105,7 @@ namespace Gallifrey.UI.Classic
 
             var worklogStrategy = GetWorklogStrategy();
             TimeSpan? newEstimate = null;
-            if (worklogStrategy == WorklogStrategy.NewRemainingEstimate)
+            if (worklogStrategy == WorkLogStrategy.SetValue)
             {
                 newEstimate = GetNewEstimate();
                 if (newEstimate == null)
@@ -118,7 +117,7 @@ namespace Gallifrey.UI.Classic
 
             try
             {
-                gallifrey.JiraConnection.LogTime(jiraIssue, calExportDate.Value, new TimeSpan(hours, minutes, 0), worklogStrategy, txtComment.Text, newEstimate);
+                gallifrey.JiraConnection.LogTime(jiraIssue.key, calExportDate.Value, new TimeSpan(hours, minutes, 0), worklogStrategy, txtComment.Text, newEstimate);
             }
             catch (WorkLogException)
             {
@@ -156,20 +155,20 @@ namespace Gallifrey.UI.Classic
             return new TimeSpan(hours, minutes, 0);
         }
 
-        private WorklogStrategy GetWorklogStrategy()
+        private WorkLogStrategy GetWorklogStrategy()
         {
-            WorklogStrategy worklogStrategy;
+            WorkLogStrategy worklogStrategy;
             if (radAutoAdjust.Checked)
             {
-                worklogStrategy = WorklogStrategy.AutoAdjustRemainingEstimate;
+                worklogStrategy = WorkLogStrategy.Automatic;
             }
             else if (radLeaveRemaining.Checked)
             {
-                worklogStrategy = WorklogStrategy.RetainRemainingEstimate;
+                worklogStrategy = WorkLogStrategy.LeaveRemaining;
             }
             else
             {
-                worklogStrategy = WorklogStrategy.NewRemainingEstimate;
+                worklogStrategy = WorkLogStrategy.SetValue;
             }
             return worklogStrategy;
         }

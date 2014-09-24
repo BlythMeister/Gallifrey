@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Atlassian.Jira;
 using Gallifrey.Exceptions.IntergrationPoints;
+using Gallifrey.Jira;
 using Gallifrey.Settings;
 
 namespace Gallifrey.JiraIntegration
@@ -15,8 +15,8 @@ namespace Gallifrey.JiraIntegration
         IEnumerable<string> GetJiraFilters();
         IEnumerable<Issue> GetJiraIssuesFromFilter(string filterName);
         IEnumerable<Issue> GetJiraIssuesFromSearchText(string searchText);
-        TimeSpan GetCurrentLoggedTimeForDate(Issue jiraIssue, DateTime date);
-        void LogTime(Issue jiraIssue, DateTime exportTimeStamp, TimeSpan exportTime, WorklogStrategy strategy, string comment = "", TimeSpan? remainingTime = null);
+        TimeSpan GetCurrentLoggedTimeForDate(string jiraRef, DateTime date);
+        void LogTime(string jiraRef, DateTime exportTimeStamp, TimeSpan exportTime, WorkLogStrategy strategy, string comment = "", TimeSpan? remainingTime = null);
         IEnumerable<Issue> GetJiraCurrentUserOpenIssues();
         IEnumerable<JiraProject> GetJiraProjects();
         IEnumerable<RecentJira> GetRecentJirasFound();
@@ -29,7 +29,7 @@ namespace Gallifrey.JiraIntegration
         private readonly List<JiraProject> jiraProjectCache;
         private IJiraConnectionSettings jiraConnectionSettings;
         private IExportSettings exportSettings;
-        private Jira jira;
+        private JiraClient jira;
 
         public JiraConnection(IJiraConnectionSettings jiraConnectionSettings, IExportSettings exportSettings)
         {
@@ -63,8 +63,8 @@ namespace Gallifrey.JiraIntegration
 
                 try
                 {
-                    jira = new Jira(jiraConnectionSettings.JiraUrl.Replace("/secure/Dashboard.jspa", ""), jiraConnectionSettings.JiraUsername, jiraConnectionSettings.JiraPassword);
-                    jira.GetIssuePriorities();
+                    jira = new JiraClient(jiraConnectionSettings.JiraUrl.Replace("/secure/Dashboard.jspa", ""), jiraConnectionSettings.JiraUsername, jiraConnectionSettings.JiraPassword);
+                    jira.GetAllStatuses();
                 }
                 catch (Exception ex)
                 {
@@ -100,7 +100,7 @@ namespace Gallifrey.JiraIntegration
             {
                 CheckAndConnectJira();
                 var issue = jira.GetIssue(jiraRef);
-                recentJiraCollection.AddRecentJira(issue.Key.Value, issue.Project, issue.Summary);
+                recentJiraCollection.AddRecentJira(issue.key, issue.fields.project.key, issue.fields.summary);
                 return issue;
             }
             catch (Exception ex)
@@ -116,7 +116,7 @@ namespace Gallifrey.JiraIntegration
             {
                 CheckAndConnectJira();
                 var returnedFilters = jira.GetFilters();
-                return returnedFilters.Select(returned => returned.Name);
+                return returnedFilters.Select(returned => returned.name);
             }
             catch (Exception ex)
             {
@@ -129,10 +129,10 @@ namespace Gallifrey.JiraIntegration
             try
             {
                 CheckAndConnectJira();
-                var issues = jira.GetIssuesFromFilter(filterName, 0, 999);
+                var issues = jira.GetIssuesFromFilter(filterName);
                 foreach (var issue in issues)
                 {
-                    recentJiraCollection.AddRecentJira(issue.Key.Value, issue.Project, issue.Summary);
+                    recentJiraCollection.AddRecentJira(issue.key, issue.fields.project.key, issue.fields.summary);
                 }
                 return issues;
             }
@@ -147,10 +147,10 @@ namespace Gallifrey.JiraIntegration
             try
             {
                 CheckAndConnectJira();
-                var issues = jira.GetIssuesFromJql(GetJql(searchText), 0, 999);
+                var issues = jira.GetIssuesFromJql(GetJql(searchText));
                 foreach (var issue in issues)
                 {
-                    recentJiraCollection.AddRecentJira(issue.Key.Value, issue.Project, issue.Summary);
+                    recentJiraCollection.AddRecentJira(issue.key, issue.fields.project.key, issue.fields.summary);
                 }
                 return issues;
             }
@@ -160,15 +160,16 @@ namespace Gallifrey.JiraIntegration
             }
         }
 
-        public TimeSpan GetCurrentLoggedTimeForDate(Issue jiraIssue, DateTime date)
+        public TimeSpan GetCurrentLoggedTimeForDate(string jiraRef, DateTime date)
         {
             var loggedTime = new TimeSpan();
 
-            foreach (var worklog in jiraIssue.GetWorklogs().Where(worklog => worklog.StartDate.HasValue &&
-                                                                             worklog.StartDate.Value.Date == date.Date &&
-                                                                             worklog.Author.ToLower() == jiraConnectionSettings.JiraUsername.ToLower()))
+            var issue = jira.GetIssue(jiraRef);
+
+            foreach (var worklog in issue.fields.worklog.worklogs.Where(worklog => worklog.created.Date == date.Date &&
+                                                                             worklog.author.name.ToLower() == jiraConnectionSettings.JiraUsername.ToLower()))
             {
-                loggedTime = loggedTime.Add(new TimeSpan(0, 0, (int)worklog.TimeSpentInSeconds));
+                loggedTime = loggedTime.Add(new TimeSpan(0, 0, (int)worklog.timeSpentSeconds));
             }
 
             return loggedTime;
@@ -181,10 +182,10 @@ namespace Gallifrey.JiraIntegration
             try
             {
                 CheckAndConnectJira();
-                var issues = jira.GetIssuesFromJql("assignee in (currentUser()) AND status not in (Closed,Resolved)", 0, 999);
+                var issues = jira.GetIssuesFromJql("assignee in (currentUser()) AND status not in (Closed,Resolved)");
                 foreach (var issue in issues)
                 {
-                    recentJiraCollection.AddRecentJira(issue.Key.Value, issue.Project, issue.Summary);
+                    recentJiraCollection.AddRecentJira(issue.key, issue.fields.project.key, issue.fields.summary);
                 }
                 return issues;
             }
@@ -201,7 +202,7 @@ namespace Gallifrey.JiraIntegration
                 CheckAndConnectJira();
                 var projects = jira.GetProjects();
                 jiraProjectCache.Clear();
-                jiraProjectCache.AddRange(projects.Select(project => new JiraProject(project.Key, project.Name)));
+                jiraProjectCache.AddRange(projects.Select(project => new JiraProject(project.key, project.name)));
             }
             catch (Exception) { }
         }
@@ -222,8 +223,10 @@ namespace Gallifrey.JiraIntegration
             UpdateJiraProjectCache();
         }
 
-        public void LogTime(Issue jiraIssue, DateTime exportTimeStamp, TimeSpan exportTime, WorklogStrategy strategy, string comment = "", TimeSpan? remainingTime = null)
+        public void LogTime(string jiraRef, DateTime exportTimeStamp, TimeSpan exportTime, WorkLogStrategy strategy, string comment = "", TimeSpan? remainingTime = null)
         {
+            var jiraIssue = jira.GetIssue(jiraRef);
+
             var wasClosed = TryReopenJira(jiraIssue);
 
             if (string.IsNullOrWhiteSpace(comment)) comment = "No Comment Entered";
@@ -232,27 +235,20 @@ namespace Gallifrey.JiraIntegration
                 comment = string.Format("{0}: {1}", exportSettings.ExportCommentPrefix, comment);
             }
 
-            var worklog = new Worklog(string.Format("{0}h {1}m", exportTime.Hours, exportTime.Minutes), DateTime.SpecifyKind(exportTimeStamp, DateTimeKind.Local), comment);
-            string remaining = null;
-            if (remainingTime.HasValue)
-            {
-                remaining = string.Format("{0}h {1}m", remainingTime.Value.Hours, remainingTime.Value.Minutes);
-            }
             try
             {
-                jiraIssue.AddWorklog(worklog, strategy, remaining);
+                jira.AddWorkLog(jiraRef, strategy, comment, exportTime, DateTime.SpecifyKind(exportTimeStamp, DateTimeKind.Local), remainingTime);
             }
             catch (Exception ex)
             {
                 throw new WorkLogException("Error logging work", ex);
             }
-
-
+            
             if (wasClosed)
             {
                 try
                 {
-                    ReCloseJira(jiraIssue);
+                    ReCloseJira(jiraRef);
                 }
                 catch (Exception ex)
                 {
@@ -261,33 +257,33 @@ namespace Gallifrey.JiraIntegration
             }
         }
 
-        private void ReCloseJira(Issue jiraIssue)
+        private void ReCloseJira(string jiraRef)
         {
             try
             {
-                jiraIssue.WorkflowTransition("Close Issue");
+                jira.TransitionIssue(jiraRef, "Close Issue");
             }
             catch (Exception)
             {
-                jiraIssue.WorkflowTransition("Closed");
+                jira.TransitionIssue(jiraRef, "Closed");
             }
         }
 
         private bool TryReopenJira(Issue jiraIssue)
         {
             var wasClosed = false;
-            if (jiraIssue.Status.Name == "Closed")
+            if (jiraIssue.fields.status.name == "Closed")
             {
                 try
                 {
-                    jiraIssue.WorkflowTransition("Reopen Issue");
+                    jira.TransitionIssue(jiraIssue.key, "Reopen Issue");
                     wasClosed = true;
                 }
                 catch (Exception)
                 {
                     try
                     {
-                        jiraIssue.WorkflowTransition("Open");
+                        jira.TransitionIssue(jiraIssue.key, "Open");
                         wasClosed = true;
                     }
                     catch (Exception)
@@ -303,18 +299,14 @@ namespace Gallifrey.JiraIntegration
         {
             var jql = string.Empty;
             var searchTerm = string.Empty;
-            dynamic projects = jira.GetProjects();
+            var projects = jira.GetProjects();
             foreach (var keyword in searchText.Split(' '))
             {
                 var foundProject = false;
-                foreach (var project in projects)
+                if (projects.Any(project => project.key == keyword))
                 {
-                    if (project.Key == keyword)
-                    {
-                        jql = string.Format("project = \"{0}\"", keyword);
-                        foundProject = true;
-                        break;
-                    }
+                    jql = string.Format("project = \"{0}\"", keyword);
+                    foundProject = true;
                 }
 
                 if (!foundProject)

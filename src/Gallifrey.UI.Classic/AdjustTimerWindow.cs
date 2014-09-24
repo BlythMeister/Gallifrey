@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Windows.Forms;
-using Atlassian.Jira;
-using Gallifrey.Exceptions.IntergrationPoints;
-using Gallifrey.Exceptions.JiraTimers;
 using Gallifrey.JiraTimers;
 
 namespace Gallifrey.UI.Classic

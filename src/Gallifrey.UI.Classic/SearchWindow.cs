@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using Atlassian.Jira;
 using Gallifrey.Exceptions.IntergrationPoints;
+using Gallifrey.Jira;
 
 namespace Gallifrey.UI.Classic
 {
@@ -150,8 +150,8 @@ namespace Gallifrey.UI.Classic
 
             internal JiraSearchResult(Issue issue)
             {
-                JiraRef = issue.Key.Value;
-                JiraDesc = issue.Summary;
+                JiraRef = issue.key;
+                JiraDesc = issue.fields.summary;
             }
 
             public override string ToString()

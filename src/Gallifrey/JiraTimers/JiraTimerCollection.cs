@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Atlassian.Jira;
 using Gallifrey.Comparers;
 using Gallifrey.Exceptions.JiraTimers;
 using Gallifrey.IdleTimers;
+using Gallifrey.Jira;
 using Gallifrey.JiraIntegration;
 using Gallifrey.Serialization;
 using Gallifrey.Settings;

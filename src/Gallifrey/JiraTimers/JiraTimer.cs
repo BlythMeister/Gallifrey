@@ -2,10 +2,10 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Timers;
-using Atlassian.Jira;
 using Gallifrey.Exceptions.JiraTimers;
 using Gallifrey.ExtensionMethods;
 using Gallifrey.IdleTimers;
+using Gallifrey.Jira;
 using Newtonsoft.Json;
 
 namespace Gallifrey.JiraTimers
@@ -41,9 +41,9 @@ namespace Gallifrey.JiraTimers
 
         public JiraTimer(Issue jiraIssue, DateTime dateStarted, TimeSpan currentTime)
         {
-            JiraReference = jiraIssue.Key.Value;
-            JiraProjectName = jiraIssue.Project;
-            JiraName = jiraIssue.Summary;
+            JiraReference = jiraIssue.key;
+            JiraProjectName = jiraIssue.fields.project.key;
+            JiraName = jiraIssue.fields.summary;
             DateStarted = dateStarted;
             CurrentTime = currentTime;
             ExportedTime = new TimeSpan();

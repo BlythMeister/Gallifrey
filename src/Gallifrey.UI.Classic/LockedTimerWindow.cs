@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using Atlassian.Jira;
 using Gallifrey.Exceptions.IntergrationPoints;
 using Gallifrey.IdleTimers;
+using Gallifrey.Jira;
 using Gallifrey.JiraIntegration;
-using Gallifrey.JiraTimers;
 
 namespace Gallifrey.UI.Classic
 {
