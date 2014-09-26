@@ -98,6 +98,8 @@
   <Version Number="1.1.2" Name="">
     <Features>
       <Feature>Change Jira interaction to use hand rolled REST API communication layer to open more features.</Feature>
+      <Feature>Add display of parent issue when Jira is a sub-task.</Feature>
+      <Feature>Show remaining estimate in the export window.</Feature>
     </Features>
     <Bugs>
       <Bug>Fixed issue with drag and drop with custom Jira URLs.</Bug>

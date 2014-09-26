@@ -1,4 +1,4 @@
-﻿namespace Gallifrey.Jira
+﻿namespace Gallifrey.Jira.Model
 {
     public class Status
     {

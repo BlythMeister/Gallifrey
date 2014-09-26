@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using Gallifrey.Exceptions.IntergrationPoints;
 using Gallifrey.IdleTimers;
 using Gallifrey.Jira;
+using Gallifrey.Jira.Model;
 using Gallifrey.JiraIntegration;
 
 namespace Gallifrey.UI.Classic

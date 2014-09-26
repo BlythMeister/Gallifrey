@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Gallifrey.Exceptions.IntergrationPoints;
 using Gallifrey.Jira;
+using Gallifrey.Jira.Model;
 
 namespace Gallifrey.UI.Classic
 {

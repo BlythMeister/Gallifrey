@@ -1,4 +1,4 @@
-namespace Gallifrey.Jira
+namespace Gallifrey.Jira.Model
 {
     public class Fields
     {
@@ -6,6 +6,7 @@ namespace Gallifrey.Jira
         public Project project { get; set; }
         public WorkLogs worklog { get; set; }
         public Status status { get; set; }
-
+        public Issue parent { get; set; }
+        public TimeTracking timetracking { get; set; }
     }
 }

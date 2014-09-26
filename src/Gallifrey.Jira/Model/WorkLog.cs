@@ -1,6 +1,6 @@
 using System;
 
-namespace Gallifrey.Jira
+namespace Gallifrey.Jira.Model
 {
     public class WorkLog
     {

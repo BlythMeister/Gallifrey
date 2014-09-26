@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Gallifrey.Exceptions.IntergrationPoints;
 using Gallifrey.Jira;
+using Gallifrey.Jira.Enum;
+using Gallifrey.Jira.Model;
 using Gallifrey.Settings;
 
 namespace Gallifrey.JiraIntegration
@@ -15,12 +17,12 @@ namespace Gallifrey.JiraIntegration
         IEnumerable<string> GetJiraFilters();
         IEnumerable<Issue> GetJiraIssuesFromFilter(string filterName);
         IEnumerable<Issue> GetJiraIssuesFromSearchText(string searchText);
-        TimeSpan GetCurrentLoggedTimeForDate(string jiraRef, DateTime date);
         void LogTime(string jiraRef, DateTime exportTimeStamp, TimeSpan exportTime, WorkLogStrategy strategy, string comment = "", TimeSpan? remainingTime = null);
         IEnumerable<Issue> GetJiraCurrentUserOpenIssues();
         IEnumerable<JiraProject> GetJiraProjects();
         IEnumerable<RecentJira> GetRecentJirasFound();
         void UpdateCache();
+        User CurrentUser { get; }
     }
 
     public class JiraConnection : IJiraConnection
@@ -30,6 +32,8 @@ namespace Gallifrey.JiraIntegration
         private IJiraConnectionSettings jiraConnectionSettings;
         private IExportSettings exportSettings;
         private JiraClient jira;
+
+        public User CurrentUser { get; private set; }
 
         public JiraConnection(IJiraConnectionSettings jiraConnectionSettings, IExportSettings exportSettings)
         {
@@ -64,7 +68,7 @@ namespace Gallifrey.JiraIntegration
                 try
                 {
                     jira = new JiraClient(jiraConnectionSettings.JiraUrl.Replace("/secure/Dashboard.jspa", ""), jiraConnectionSettings.JiraUsername, jiraConnectionSettings.JiraPassword);
-                    jira.GetAllStatuses();
+                    CurrentUser = jira.GetCurrentUser();
                 }
                 catch (Exception ex)
                 {
@@ -159,23 +163,6 @@ namespace Gallifrey.JiraIntegration
                 throw new NoResultsFoundException("Error loading jiras from search text", ex);
             }
         }
-
-        public TimeSpan GetCurrentLoggedTimeForDate(string jiraRef, DateTime date)
-        {
-            var loggedTime = new TimeSpan();
-
-            var issue = jira.GetIssue(jiraRef);
-
-            foreach (var worklog in issue.fields.worklog.worklogs.Where(worklog => worklog.started.Date == date.Date &&
-                                                                             worklog.author.name.ToLower() == jiraConnectionSettings.JiraUsername.ToLower()))
-            {
-                loggedTime = loggedTime.Add(new TimeSpan(0, 0, (int)worklog.timeSpentSeconds));
-            }
-
-            return loggedTime;
-        }
-
-
 
         public IEnumerable<Issue> GetJiraCurrentUserOpenIssues()
         {

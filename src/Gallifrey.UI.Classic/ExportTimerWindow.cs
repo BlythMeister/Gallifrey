@@ -2,6 +2,8 @@
 using System.Windows.Forms;
 using Gallifrey.Exceptions.IntergrationPoints;
 using Gallifrey.Jira;
+using Gallifrey.Jira.Enum;
+using Gallifrey.Jira.Model;
 using Gallifrey.JiraTimers;
 using Gallifrey.Settings;
 
@@ -31,9 +33,7 @@ namespace Gallifrey.UI.Classic
                 DisplayForm = false;
             }
             
-            var loggedTime = gallifrey.JiraConnection.GetCurrentLoggedTimeForDate(jiraIssue.key, timerToShow.DateStarted);
-
-            gallifrey.JiraTimerCollection.SetJiraExportedTime(timerGuid, loggedTime);
+            gallifrey.JiraTimerCollection.RefreshFromJira(timerGuid, jiraIssue, gallifrey.JiraConnection.CurrentUser.name);
 
             timerToShow = gallifrey.JiraTimerCollection.GetTimer(timerGuid);
 
@@ -51,6 +51,10 @@ namespace Gallifrey.UI.Classic
             txtExportedMins.Text = timerToShow.ExportedTime.Minutes.ToString();
             txtExportHours.Text = timerToShow.TimeToExport.Hours.ToString();
             txtExportMins.Text = timerToShow.TimeToExport.Minutes.ToString();
+
+            var remainingTime = new TimeSpan(0, 0, jiraIssue.fields.timetracking.remainingEstimateSeconds);
+            txtRemainingHours.Text = remainingTime.Hours.ToString();
+            txtRemainingMinutes.Text = remainingTime.Minutes.ToString();
 
             if (timerToShow.DateStarted.Date != DateTime.Now.Date)
             {

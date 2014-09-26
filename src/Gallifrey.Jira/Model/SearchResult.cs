@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Gallifrey.Jira
+namespace Gallifrey.Jira.Model
 {
     public class SearchResult
     {

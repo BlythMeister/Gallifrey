@@ -5,6 +5,7 @@ using Gallifrey.Exceptions.IntergrationPoints;
 using Gallifrey.Exceptions.JiraTimers;
 using Gallifrey.ExtensionMethods;
 using Gallifrey.Jira;
+using Gallifrey.Jira.Model;
 
 namespace Gallifrey.UI.Classic
 {

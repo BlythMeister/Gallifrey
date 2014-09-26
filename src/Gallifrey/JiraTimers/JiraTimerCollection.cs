@@ -5,6 +5,7 @@ using Gallifrey.Comparers;
 using Gallifrey.Exceptions.JiraTimers;
 using Gallifrey.IdleTimers;
 using Gallifrey.Jira;
+using Gallifrey.Jira.Model;
 using Gallifrey.JiraIntegration;
 using Gallifrey.Serialization;
 using Gallifrey.Settings;
@@ -31,10 +32,9 @@ namespace Gallifrey.JiraTimers
         TimeSpan GetTotalExportedTimeThisWeek(DayOfWeek startOfWeek);
         TimeSpan GetTotalTimeForDate(DateTime timerDate);
         bool AdjustTime(Guid uniqueId, int hours, int minutes, bool addTime);
-        void SetJiraExportedTime(Guid uniqueId, TimeSpan loggedTime);
         void AddJiraExportedTime(Guid uniqueId, int hours, int minutes);
         void AddIdleTimer(Guid uniqueId, IdleTimer idleTimer);
-
+        void RefreshFromJira(Guid uniqueId, Issue jiraIssue, string currentUsername);
     }
 
     public class JiraTimerCollection : IJiraTimerCollection
@@ -255,13 +255,6 @@ namespace Gallifrey.JiraTimers
             return true;
         }
 
-        public void SetJiraExportedTime(Guid uniqueId, TimeSpan loggedTime)
-        {
-            var timer = GetTimer(uniqueId);
-            timer.SetJiraExportedTime(loggedTime);
-            SaveTimers();
-        }
-
         public void AddJiraExportedTime(Guid uniqueId, int hours, int minutes)
         {
             var timer = GetTimer(uniqueId);
@@ -278,6 +271,13 @@ namespace Gallifrey.JiraTimers
             {
                 exportPrompt.Invoke(this, new ExportPromptDetail(uniqueId, idleTimer.IdleTimeValue));
             }
+        }
+
+        public void RefreshFromJira(Guid uniqueId, Issue jiraIssue, string currentUsername)
+        {
+            var timer = GetTimer(uniqueId);
+            timer.RefreshFromJira(jiraIssue, currentUsername);
+            SaveTimers();
         }
     }
 }

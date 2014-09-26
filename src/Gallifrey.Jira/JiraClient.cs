@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
+using Gallifrey.Jira.Enum;
 using Gallifrey.Jira.Exception;
+using Gallifrey.Jira.Model;
 using RestSharp;
 using RestSharp.Deserializers;
 
@@ -74,13 +76,18 @@ namespace Gallifrey.Jira
             return response;
         }
 
+        public User GetCurrentUser()
+        {
+            var response = ExectuteRequest(Method.GET, HttpStatusCode.OK, "myself");
+
+            return deserializer.Deserialize<User>(response);
+        }
+
         public Issue GetIssue(string issueRef)
         {
             var response = ExectuteRequest(Method.GET, HttpStatusCode.OK, string.Format("issue/{0}", issueRef));
 
-            var issue = deserializer.Deserialize<Issue>(response);
-
-            return issue;
+            return deserializer.Deserialize<Issue>(response);
         }
 
 
@@ -115,7 +122,7 @@ namespace Gallifrey.Jira
 
             while (moreToGet)
             {
-                var response = ExectuteRequest(Method.GET, HttpStatusCode.OK, string.Format("search?jql={0}&maxResults=500&startAt={1}", jql, startAt));
+                var response = ExectuteRequest(Method.GET, HttpStatusCode.OK, string.Format("search?jql={0}&maxResults=500&startAt={1}&fields=summary,project", jql, startAt));
 
                 var searchResult = deserializer.Deserialize<SearchResult>(response);
 
@@ -138,36 +145,28 @@ namespace Gallifrey.Jira
         {
             var response = ExectuteRequest(Method.GET, HttpStatusCode.OK, "project");
 
-            var projects = deserializer.Deserialize<List<Project>>(response);
-
-            return projects;
+            return deserializer.Deserialize<List<Project>>(response);
         }
 
         public IEnumerable<Status> GetAllStatuses()
         {
             var response = ExectuteRequest(Method.GET, HttpStatusCode.OK, "status");
 
-            var statuses = deserializer.Deserialize<List<Status>>(response);
-
-            return statuses;
+            return deserializer.Deserialize<List<Status>>(response);
         }
 
         public IEnumerable<Filter> GetFilters()
         {
             var response = ExectuteRequest(Method.GET, HttpStatusCode.OK, "filter/favourite");
 
-            var filters = deserializer.Deserialize<List<Filter>>(response);
-
-            return filters;
+            return deserializer.Deserialize<List<Filter>>(response);
         }
 
         public Transitions GetIssueTransitions(string issueRef)
         {
             var response = ExectuteRequest(Method.GET, HttpStatusCode.OK, string.Format("issue/{0}/transitions?expand=transitions.fields", issueRef));
 
-            var transitions = deserializer.Deserialize<Transitions>(response);
-
-            return transitions;
+            return deserializer.Deserialize<Transitions>(response);
         }
 
         public void TransitionIssue(string issueRef, string transitionName)
