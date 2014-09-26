@@ -13,7 +13,7 @@ namespace Gallifrey.JiraIntegration
     {
         void ReConnect(IJiraConnectionSettings newJiraConnectionSettings, IExportSettings newExportSettings);
         bool DoesJiraExist(string jiraRef);
-        Issue GetJiraIssue(string jiraRef);
+        Issue GetJiraIssue(string jiraRef, bool includeWorkLogs = false);
         IEnumerable<string> GetJiraFilters();
         IEnumerable<Issue> GetJiraIssuesFromFilter(string filterName);
         IEnumerable<Issue> GetJiraIssuesFromSearchText(string searchText);
@@ -98,12 +98,13 @@ namespace Gallifrey.JiraIntegration
             return false;
         }
 
-        public Issue GetJiraIssue(string jiraRef)
+        public Issue GetJiraIssue(string jiraRef, bool includeWorkLogs = false)
         {
             try
             {
                 CheckAndConnectJira();
-                var issue = jira.GetIssue(jiraRef);
+                var issue = includeWorkLogs ? jira.GetIssueWithWorklogs(jiraRef) : jira.GetIssue(jiraRef);
+
                 recentJiraCollection.AddRecentJira(issue.key, issue.fields.project.key, issue.fields.summary);
                 return issue;
             }

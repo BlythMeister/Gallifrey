@@ -25,7 +25,7 @@ namespace Gallifrey.UI.Classic
 
             try
             {
-                jiraIssue = gallifrey.JiraConnection.GetJiraIssue(timerToShow.JiraReference);
+                jiraIssue = gallifrey.JiraConnection.GetJiraIssue(timerToShow.JiraReference, true);
             }
             catch (NoResultsFoundException)
             {

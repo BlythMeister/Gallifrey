@@ -90,6 +90,23 @@ namespace Gallifrey.Jira
             return deserializer.Deserialize<Issue>(response);
         }
 
+        public Issue GetIssueWithWorklogs(string issueRef)
+        {
+            var response = ExectuteRequest(Method.GET, HttpStatusCode.OK, string.Format("issue/{0}", issueRef));
+
+            var issue = deserializer.Deserialize<Issue>(response);
+
+            if (issue.fields.worklog.total > issue.fields.worklog.maxResults)
+            {
+                var worklogResponse = ExectuteRequest(Method.GET, HttpStatusCode.OK, string.Format("issue/{0}/worklog", issueRef));
+
+                var worklogs = deserializer.Deserialize<WorkLogs>(worklogResponse);
+
+                issue.fields.worklog.worklogs = worklogs.worklogs;
+            }
+
+            return issue;
+        }
 
         public IEnumerable<Issue> GetIssuesFromFilter(string filterName)
         {
@@ -189,7 +206,7 @@ namespace Gallifrey.Jira
 
         public void AddWorkLog(string issueRef, WorkLogStrategy workLogStrategy, string comment, TimeSpan timeSpent, DateTime logDate, TimeSpan? remainingTime = null)
         {
-            if(logDate.Kind != DateTimeKind.Local) logDate = DateTime.SpecifyKind(logDate, DateTimeKind.Local);
+            if (logDate.Kind != DateTimeKind.Local) logDate = DateTime.SpecifyKind(logDate, DateTimeKind.Local);
 
             var postData = new Dictionary<string, object>
             {

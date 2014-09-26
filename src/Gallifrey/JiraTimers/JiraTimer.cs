@@ -217,6 +217,8 @@ namespace Gallifrey.JiraTimers
 
         public void RefreshFromJira(Issue jiraIssue, string currentUserName)
         {
+            if(jiraIssue == null) return;
+
             ExportedTime = jiraIssue.GetCurrentLoggedTimeForDate(DateStarted, currentUserName);
             JiraReference = jiraIssue.key;
             JiraProjectName = jiraIssue.fields.project.key;
