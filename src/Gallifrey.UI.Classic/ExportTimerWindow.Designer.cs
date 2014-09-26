@@ -353,6 +353,7 @@
             // calExportDate
             // 
             this.calExportDate.CustomFormat = "dd/MM/yyyy HH:mm";
+            this.calExportDate.Enabled = false;
             this.calExportDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.calExportDate.Location = new System.Drawing.Point(86, 121);
             this.calExportDate.Name = "calExportDate";

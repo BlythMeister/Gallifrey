@@ -108,6 +108,7 @@
       <Bug>Fixed issue where unexported time will subtract values from timers with a negative unexported time.</Bug>
       <Bug>Fixed issue with locked timers when deleting time and leaving just one, it's not selected by default.</Bug>
       <Bug>Fixed issue on locked timer window when trying to export with no timers selected.</Bug>
+      <Bug>Make export date non changable non the export screen.</Bug>
     </Bugs>
     <Others />
   </Version>
