@@ -51,7 +51,6 @@ Feel free to contribute, but please read the wiki (https://github.com/BlythMeist
 
 Gallifrey makes use of the following libraries:
 
-* Atlassian .Net SDK (https://bitbucket.org/farmas/atlassian.net-sdk/wiki/Home)
 * Exceptionless (http://exceptionless.com/)
 
 3rd Party Resources
