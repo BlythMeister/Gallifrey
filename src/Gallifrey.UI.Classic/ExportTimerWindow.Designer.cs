@@ -39,6 +39,11 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label19 = new System.Windows.Forms.Label();
+            this.txtRemainingHours = new System.Windows.Forms.TextBox();
+            this.txtRemainingMinutes = new System.Windows.Forms.TextBox();
+            this.label17 = new System.Windows.Forms.Label();
+            this.label18 = new System.Windows.Forms.Label();
             this.txtSetValueHours = new System.Windows.Forms.TextBox();
             this.radAutoAdjust = new System.Windows.Forms.RadioButton();
             this.txtSetValueMins = new System.Windows.Forms.TextBox();
@@ -66,11 +71,10 @@
             this.btnOK = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.txtRemainingHours = new System.Windows.Forms.TextBox();
-            this.txtRemainingMinutes = new System.Windows.Forms.TextBox();
-            this.label17 = new System.Windows.Forms.Label();
-            this.label18 = new System.Windows.Forms.Label();
-            this.label19 = new System.Windows.Forms.Label();
+            this.lblParentDesc = new System.Windows.Forms.Label();
+            this.txtParentDesc = new System.Windows.Forms.TextBox();
+            this.lblParentRef = new System.Windows.Forms.Label();
+            this.txtParentRef = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -165,13 +169,62 @@
             this.groupBox1.Controls.Add(this.radLeaveRemaining);
             this.groupBox1.Controls.Add(this.label14);
             this.groupBox1.Controls.Add(this.radSetValue);
-            this.groupBox1.Location = new System.Drawing.Point(7, 344);
+            this.groupBox1.Location = new System.Drawing.Point(284, 172);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(274, 173);
+            this.groupBox1.Size = new System.Drawing.Size(293, 173);
             this.groupBox1.TabIndex = 6;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Remaining Time";
             this.toolTip.SetToolTip(this.groupBox1, "Set Action For Remaining Time");
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(7, 27);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(69, 17);
+            this.label19.TabIndex = 17;
+            this.label19.Text = "Remaining";
+            // 
+            // txtRemainingHours
+            // 
+            this.txtRemainingHours.Enabled = false;
+            this.txtRemainingHours.Location = new System.Drawing.Point(85, 24);
+            this.txtRemainingHours.Name = "txtRemainingHours";
+            this.txtRemainingHours.Size = new System.Drawing.Size(39, 25);
+            this.txtRemainingHours.TabIndex = 7;
+            this.txtRemainingHours.Text = "00";
+            this.txtRemainingHours.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.toolTip.SetToolTip(this.txtRemainingHours, "Remaining Hours");
+            // 
+            // txtRemainingMinutes
+            // 
+            this.txtRemainingMinutes.Enabled = false;
+            this.txtRemainingMinutes.Location = new System.Drawing.Point(172, 24);
+            this.txtRemainingMinutes.Name = "txtRemainingMinutes";
+            this.txtRemainingMinutes.Size = new System.Drawing.Size(39, 25);
+            this.txtRemainingMinutes.TabIndex = 9;
+            this.txtRemainingMinutes.Text = "00";
+            this.txtRemainingMinutes.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.toolTip.SetToolTip(this.txtRemainingMinutes, "Remaining Minutes");
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(123, 27);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(43, 17);
+            this.label17.TabIndex = 8;
+            this.label17.Text = "Hours";
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(217, 27);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(54, 17);
+            this.label18.TabIndex = 10;
+            this.label18.Text = "Minutes";
             // 
             // txtSetValueHours
             // 
@@ -283,7 +336,7 @@
             this.groupBox2.Controls.Add(this.label5);
             this.groupBox2.Location = new System.Drawing.Point(7, 172);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(274, 166);
+            this.groupBox2.Size = new System.Drawing.Size(274, 173);
             this.groupBox2.TabIndex = 5;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = " Export Info";
@@ -406,7 +459,7 @@
             // label16
             // 
             this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(6, 520);
+            this.label16.Location = new System.Drawing.Point(12, 348);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(64, 17);
             this.label16.TabIndex = 7;
@@ -414,17 +467,17 @@
             // 
             // txtComment
             // 
-            this.txtComment.Location = new System.Drawing.Point(79, 523);
+            this.txtComment.Location = new System.Drawing.Point(82, 351);
             this.txtComment.Multiline = true;
             this.txtComment.Name = "txtComment";
-            this.txtComment.Size = new System.Drawing.Size(202, 81);
+            this.txtComment.Size = new System.Drawing.Size(493, 81);
             this.txtComment.TabIndex = 8;
             this.toolTip.SetToolTip(this.txtComment, "Comment To Be Added With Work Log ");
             // 
             // btnOK
             // 
             this.btnOK.Image = global::Gallifrey.UI.Classic.Properties.Resources.Check_48x48;
-            this.btnOK.Location = new System.Drawing.Point(54, 619);
+            this.btnOK.Location = new System.Drawing.Point(210, 438);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(65, 65);
             this.btnOK.TabIndex = 9;
@@ -437,7 +490,7 @@
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancel.Image = global::Gallifrey.UI.Classic.Properties.Resources.Cancel_48x48;
-            this.btnCancel.Location = new System.Drawing.Point(153, 619);
+            this.btnCancel.Location = new System.Drawing.Point(318, 438);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(65, 65);
             this.btnCancel.TabIndex = 10;
@@ -446,62 +499,52 @@
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
-            // txtRemainingHours
+            // lblParentDesc
             // 
-            this.txtRemainingHours.Enabled = false;
-            this.txtRemainingHours.Location = new System.Drawing.Point(85, 24);
-            this.txtRemainingHours.Name = "txtRemainingHours";
-            this.txtRemainingHours.Size = new System.Drawing.Size(39, 25);
-            this.txtRemainingHours.TabIndex = 7;
-            this.txtRemainingHours.Text = "00";
-            this.txtRemainingHours.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.toolTip.SetToolTip(this.txtRemainingHours, "Remaining Hours");
+            this.lblParentDesc.AutoSize = true;
+            this.lblParentDesc.Location = new System.Drawing.Point(283, 81);
+            this.lblParentDesc.Name = "lblParentDesc";
+            this.lblParentDesc.Size = new System.Drawing.Size(115, 17);
+            this.lblParentDesc.TabIndex = 13;
+            this.lblParentDesc.Text = "Parent Description";
             // 
-            // txtRemainingMinutes
+            // txtParentDesc
             // 
-            this.txtRemainingMinutes.Enabled = false;
-            this.txtRemainingMinutes.Location = new System.Drawing.Point(172, 24);
-            this.txtRemainingMinutes.Name = "txtRemainingMinutes";
-            this.txtRemainingMinutes.Size = new System.Drawing.Size(39, 25);
-            this.txtRemainingMinutes.TabIndex = 9;
-            this.txtRemainingMinutes.Text = "00";
-            this.txtRemainingMinutes.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.toolTip.SetToolTip(this.txtRemainingMinutes, "Remaining Minutes");
+            this.txtParentDesc.Enabled = false;
+            this.txtParentDesc.Location = new System.Drawing.Point(404, 78);
+            this.txtParentDesc.Multiline = true;
+            this.txtParentDesc.Name = "txtParentDesc";
+            this.txtParentDesc.Size = new System.Drawing.Size(173, 81);
+            this.txtParentDesc.TabIndex = 14;
             // 
-            // label17
+            // lblParentRef
             // 
-            this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(123, 27);
-            this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(43, 17);
-            this.label17.TabIndex = 8;
-            this.label17.Text = "Hours";
+            this.lblParentRef.AutoSize = true;
+            this.lblParentRef.Location = new System.Drawing.Point(291, 50);
+            this.lblParentRef.Name = "lblParentRef";
+            this.lblParentRef.Size = new System.Drawing.Size(107, 17);
+            this.lblParentRef.TabIndex = 11;
+            this.lblParentRef.Text = "Parent Reference";
             // 
-            // label18
+            // txtParentRef
             // 
-            this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(217, 27);
-            this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(54, 17);
-            this.label18.TabIndex = 10;
-            this.label18.Text = "Minutes";
-            // 
-            // label19
-            // 
-            this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(7, 27);
-            this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(69, 17);
-            this.label19.TabIndex = 17;
-            this.label19.Text = "Remaining";
+            this.txtParentRef.Enabled = false;
+            this.txtParentRef.Location = new System.Drawing.Point(404, 47);
+            this.txtParentRef.Name = "txtParentRef";
+            this.txtParentRef.Size = new System.Drawing.Size(173, 25);
+            this.txtParentRef.TabIndex = 12;
             // 
             // ExportTimerWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(293, 696);
+            this.ClientSize = new System.Drawing.Size(587, 520);
             this.ControlBox = false;
+            this.Controls.Add(this.lblParentDesc);
+            this.Controls.Add(this.txtParentDesc);
+            this.Controls.Add(this.lblParentRef);
+            this.Controls.Add(this.txtParentRef);
             this.Controls.Add(this.txtComment);
             this.Controls.Add(this.label16);
             this.Controls.Add(this.groupBox2);
@@ -577,5 +620,9 @@
         private System.Windows.Forms.TextBox txtRemainingMinutes;
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.Label lblParentDesc;
+        private System.Windows.Forms.TextBox txtParentDesc;
+        private System.Windows.Forms.Label lblParentRef;
+        private System.Windows.Forms.TextBox txtParentRef;
     }
 }

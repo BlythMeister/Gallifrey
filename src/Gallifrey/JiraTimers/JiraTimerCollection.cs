@@ -80,7 +80,7 @@ namespace Gallifrey.JiraTimers
 
             return timerList
                 .Where(timer => timer.DateStarted.Date >= DateTime.Now.AddDays(days).Date)
-                .Select(timer => new RecentJira(timer.JiraReference, timer.JiraProjectName, timer.JiraName))
+                .Select(timer => new RecentJira(timer.JiraReference, timer.JiraProjectName, timer.JiraName, timer.JiraParentReference, timer.JiraParentName))
                 .Distinct(new DuplicateRecentLogComparer())
                 .OrderBy(x => x.JiraReference, new JiraReferenceComparer());
         }

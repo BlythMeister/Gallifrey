@@ -105,7 +105,7 @@ namespace Gallifrey.JiraIntegration
                 CheckAndConnectJira();
                 var issue = includeWorkLogs ? jira.GetIssueWithWorklogs(jiraRef) : jira.GetIssue(jiraRef);
 
-                recentJiraCollection.AddRecentJira(issue.key, issue.fields.project.key, issue.fields.summary);
+                recentJiraCollection.AddRecentJira(issue);
                 return issue;
             }
             catch (Exception ex)
@@ -137,7 +137,7 @@ namespace Gallifrey.JiraIntegration
                 var issues = jira.GetIssuesFromFilter(filterName);
                 foreach (var issue in issues)
                 {
-                    recentJiraCollection.AddRecentJira(issue.key, issue.fields.project.key, issue.fields.summary);
+                    recentJiraCollection.AddRecentJira(issue);
                 }
                 return issues;
             }
@@ -155,7 +155,7 @@ namespace Gallifrey.JiraIntegration
                 var issues = jira.GetIssuesFromJql(GetJql(searchText));
                 foreach (var issue in issues)
                 {
-                    recentJiraCollection.AddRecentJira(issue.key, issue.fields.project.key, issue.fields.summary);
+                    recentJiraCollection.AddRecentJira(issue);
                 }
                 return issues;
             }
@@ -173,7 +173,7 @@ namespace Gallifrey.JiraIntegration
                 var issues = jira.GetIssuesFromJql("assignee in (currentUser()) AND status not in (Closed,Resolved)");
                 foreach (var issue in issues)
                 {
-                    recentJiraCollection.AddRecentJira(issue.key, issue.fields.project.key, issue.fields.summary);
+                    recentJiraCollection.AddRecentJira(issue);
                 }
                 return issues;
             }

@@ -45,6 +45,19 @@ namespace Gallifrey.UI.Classic
 
             txtJiraRef.Text = timerToShow.JiraReference;
             txtDescription.Text = timerToShow.JiraName;
+            if (timerToShow.HasParent)
+            {
+                txtParentRef.Text = timerToShow.JiraParentReference;
+                txtParentDesc.Text = timerToShow.JiraParentName;
+            }
+            else
+            {
+                txtParentRef.Visible = false;
+                txtParentDesc.Visible = false;
+                lblParentRef.Visible = false;
+                lblParentDesc.Visible = false;
+            }
+
             txtTotalHours.Text = timerToShow.ExactCurrentTime.Hours.ToString();
             txtTotalMinutes.Text = timerToShow.ExactCurrentTime.Minutes.ToString();
             txtExportedHours.Text = timerToShow.ExportedTime.Hours.ToString();

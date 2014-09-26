@@ -107,7 +107,12 @@ namespace Gallifrey.JiraTimers
         {
             get { return CurrentTime.Add(currentRunningTime.Elapsed); }
         }
-        
+
+        public bool HasParent
+        {
+            get { return !string.IsNullOrWhiteSpace(JiraParentReference); }
+        }
+
         public bool IsThisWeek(DayOfWeek startOfWeek)
         {
             var today = DateTime.Today;
@@ -145,7 +150,7 @@ namespace Gallifrey.JiraTimers
             }
 
             CurrentTime = CurrentTime.Add(idleTimer.IdleTimeValue);
-             if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("ExactCurrentTime"));
+            if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("ExactCurrentTime"));
         }
 
         public override string ToString()
@@ -154,24 +159,24 @@ namespace Gallifrey.JiraTimers
 
             if (TimeToExport.TotalMinutes >= 1)
             {
-                if (string.IsNullOrWhiteSpace(JiraParentReference))
+                if (HasParent)
                 {
-                    description = string.Format("{0} - Time [ {1} ] - To Export [ {2} ] - Desc [ {3} ]", JiraReference, ExactCurrentTime.FormatAsString(), TimeToExport.FormatAsString(), JiraName);
+                    description = string.Format("{0} - Time [ {1} ] - To Export [ {2} ] - Desc [ {3} ] - Parent [ {4} - {5} ]", JiraReference, ExactCurrentTime.FormatAsString(), TimeToExport.FormatAsString(), JiraName, JiraParentReference, JiraParentName); 
                 }
                 else
                 {
-                    description = string.Format("{0} - Time [ {1} ] - To Export [ {2} ] - Desc [ {3} ] - Parent [ {4} - {5} ]", JiraReference, ExactCurrentTime.FormatAsString(), TimeToExport.FormatAsString(), JiraName, JiraParentReference, JiraParentName);
+                    description = string.Format("{0} - Time [ {1} ] - To Export [ {2} ] - Desc [ {3} ]", JiraReference, ExactCurrentTime.FormatAsString(), TimeToExport.FormatAsString(), JiraName);
                 }
             }
             else
             {
-                if (string.IsNullOrWhiteSpace(JiraParentReference))
+                if (HasParent)
                 {
-                    description = string.Format("{0} - Time [ {1} ] - Desc [ {2} ]", JiraReference, ExactCurrentTime.FormatAsString(), JiraName);
+                    description = string.Format("{0} - Time [ {1} ] - Desc [ {2} ] - Parent [ {3} - {4} ]", JiraReference, ExactCurrentTime.FormatAsString(), JiraName, JiraParentReference, JiraParentName); 
                 }
                 else
                 {
-                    description = string.Format("{0} - Time [ {1} ] - Desc [ {2} ] - Parent [ {3} - {4} ]", JiraReference, ExactCurrentTime.FormatAsString(), JiraName, JiraParentReference, JiraParentName);
+                    description = string.Format("{0} - Time [ {1} ] - Desc [ {2} ]", JiraReference, ExactCurrentTime.FormatAsString(), JiraName);
                 }
             }
 
@@ -217,7 +222,7 @@ namespace Gallifrey.JiraTimers
 
         public void RefreshFromJira(Issue jiraIssue, string currentUserName)
         {
-            if(jiraIssue == null) return;
+            if (jiraIssue == null) return;
 
             ExportedTime = jiraIssue.GetCurrentLoggedTimeForDate(DateStarted, currentUserName);
             JiraReference = jiraIssue.key;
