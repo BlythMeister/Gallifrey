@@ -877,11 +877,19 @@ namespace Gallifrey.UI.Classic
                 grpUpdates.Text = "Update Avaliable";
                 lblUpdate.BackColor = Color.OrangeRed;
                 lblUpdate.BorderStyle = BorderStyle.FixedSingle;
-                lblUpdate.Text = string.Format("     v{0}\nClick Here To Restart.", ApplicationDeployment.CurrentDeployment.UpdatedVersion);
                 lblUpdate.Image = Properties.Resources.Download_16x16;
                 updateReady = true;
 
-                notifyAlert.ShowBalloonTip(10000, "Update Avaliable", string.Format("An Update To v{0} Has Been Downloaded!", ApplicationDeployment.CurrentDeployment.UpdatedVersion), ToolTipIcon.Info);
+                try
+                {
+                    lblUpdate.Text = string.Format("     v{0}\nClick Here To Restart.", ApplicationDeployment.CurrentDeployment.UpdatedVersion);
+                    
+                    notifyAlert.ShowBalloonTip(10000, "Update Avaliable", string.Format("An Update To v{0} Has Been Downloaded!", ApplicationDeployment.CurrentDeployment.UpdatedVersion), ToolTipIcon.Info);
+                }
+                catch (Exception)
+                {
+                    lblUpdate.Text = string.Format("\nClick Here To Restart.");
+                }
             }
         }
 
