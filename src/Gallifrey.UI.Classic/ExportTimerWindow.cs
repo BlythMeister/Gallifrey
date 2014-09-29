@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
-using Gallifrey.Exceptions.IntergrationPoints;
+using Gallifrey.Exceptions.JiraIntegration;
 using Gallifrey.Jira;
 using Gallifrey.Jira.Enum;
 using Gallifrey.Jira.Model;

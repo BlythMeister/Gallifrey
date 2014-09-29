@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using Gallifrey.Exceptions.IntergrationPoints;
+using Gallifrey.Exceptions.JiraIntegration;
 using Gallifrey.Jira;
 using Gallifrey.Jira.Model;
 

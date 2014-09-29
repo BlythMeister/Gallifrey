@@ -51,11 +51,11 @@
     <Compile Include="ExtensionMethods\DateTimeExtensionMethods.cs" />
     <Compile Include="IdleTimers\IdleTimer.cs" />
     <Compile Include="IdleTimers\IdleTimerCollection.cs" />
-    <Compile Include="Exceptions\IntergrationPoints\MissingJiraConfigException.cs" />
-    <Compile Include="Exceptions\IntergrationPoints\WorkLogException.cs" />
-    <Compile Include="Exceptions\IntergrationPoints\StateChangedException.cs" />
-    <Compile Include="Exceptions\IntergrationPoints\NoResultsFoundException.cs" />
-    <Compile Include="Exceptions\IntergrationPoints\JiraConnectionException.cs" />
+    <Compile Include="Exceptions\JiraIntegration\MissingJiraConfigException.cs" />
+    <Compile Include="Exceptions\JiraIntegration\WorkLogException.cs" />
+    <Compile Include="Exceptions\JiraIntegration\StateChangedException.cs" />
+    <Compile Include="Exceptions\JiraIntegration\NoResultsFoundException.cs" />
+    <Compile Include="Exceptions\JiraIntegration\JiraConnectionException.cs" />
     <Compile Include="Exceptions\JiraTimers\DuplicateTimerException.cs" />
     <Compile Include="InactiveMonitor\ActivityChecker.cs" />
     <Compile Include="JiraIntegration\JiraProject.cs" />

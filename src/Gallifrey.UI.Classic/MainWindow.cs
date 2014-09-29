@@ -14,7 +14,7 @@ using System.Xml.Linq;
 using Exceptionless;
 using Gallifrey.Comparers;
 using Gallifrey.Exceptions.IdleTimers;
-using Gallifrey.Exceptions.IntergrationPoints;
+using Gallifrey.Exceptions.JiraIntegration;
 using Gallifrey.Exceptions.JiraTimers;
 using Gallifrey.ExtensionMethods;
 using Gallifrey.JiraTimers;

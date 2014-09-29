@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Windows.Forms;
-using Gallifrey.Exceptions.IntergrationPoints;
+using Gallifrey.Exceptions.JiraIntegration;
 using Gallifrey.Exceptions.JiraTimers;
 using Gallifrey.ExtensionMethods;
 using Gallifrey.Jira;
@@ -126,6 +126,30 @@ namespace Gallifrey.UI.Classic
             {
                 MessageBox.Show("This Timer Already Exists!", "Duplicate Timer", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
+            }
+
+            if (chkAssign.Checked)
+            {
+                try
+                {
+                    gallifrey.JiraConnection.AssignToCurrentUser(jiraReference);
+                }
+                catch (JiraConnectionException)
+                {
+                    MessageBox.Show("Unable To Locate Assign Jira To Current User", "Assign Jira Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+
+            if (chkInProgress.Checked)
+            {
+                try
+                {
+                    gallifrey.JiraConnection.SetInProgress(jiraReference);
+                }
+                catch (StateChangedException)
+                {
+                    MessageBox.Show("Unable To Set Issue As In Progress", "Error Changing Status", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
 
             return true;

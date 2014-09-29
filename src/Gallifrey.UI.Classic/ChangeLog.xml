@@ -100,6 +100,8 @@
       <Feature>Change Jira interaction to use hand rolled REST API communication layer to open more features.</Feature>
       <Feature>Add display of parent issue when Jira is a sub-task.</Feature>
       <Feature>Show remaining estimate in the export window.</Feature>
+      <Feature>Assign to current user when adding new timer.</Feature>
+      <Feature>Set in-progress when adding new timer.</Feature>
     </Features>
     <Bugs>
       <Bug>Fixed issue with drag and drop with custom Jira URLs.</Bug>
@@ -109,6 +111,7 @@
       <Bug>Fixed issue with locked timers when deleting time and leaving just one, it's not selected by default.</Bug>
       <Bug>Fixed issue on locked timer window when trying to export with no timers selected.</Bug>
       <Bug>Make export date non changable non the export screen.</Bug>
+      <Bug>Better handling of errors when trying to get updates.</Bug>
     </Bugs>
     <Others />
   </Version>

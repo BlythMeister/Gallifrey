@@ -345,7 +345,7 @@
             // 
             this.btnCancelEditSettings.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancelEditSettings.Image = global::Gallifrey.UI.Classic.Properties.Resources.Cancel_48x48;
-            this.btnCancelEditSettings.Location = new System.Drawing.Point(468, 328);
+            this.btnCancelEditSettings.Location = new System.Drawing.Point(468, 322);
             this.btnCancelEditSettings.Name = "btnCancelEditSettings";
             this.btnCancelEditSettings.Size = new System.Drawing.Size(65, 65);
             this.btnCancelEditSettings.TabIndex = 7;
@@ -358,7 +358,7 @@
             // 
             this.btnSaveSettings.Image = global::Gallifrey.UI.Classic.Properties.Resources.Check_48x48;
             this.btnSaveSettings.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.btnSaveSettings.Location = new System.Drawing.Point(387, 328);
+            this.btnSaveSettings.Location = new System.Drawing.Point(383, 322);
             this.btnSaveSettings.Name = "btnSaveSettings";
             this.btnSaveSettings.Size = new System.Drawing.Size(65, 65);
             this.btnSaveSettings.TabIndex = 6;
@@ -551,7 +551,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancelEditSettings;
-            this.ClientSize = new System.Drawing.Size(947, 414);
+            this.ClientSize = new System.Drawing.Size(943, 399);
             this.ControlBox = false;
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);

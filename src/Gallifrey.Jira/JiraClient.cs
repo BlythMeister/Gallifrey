@@ -237,5 +237,15 @@ namespace Gallifrey.Jira
 
             ExectuteRequest(Method.POST, HttpStatusCode.Created, string.Format("issue/{0}/worklog?adjustEstimate={1}&newEstimate={2}&reduceBy=", issueRef, adjustmentMethod, newEstimate), postData);
         }
+
+        public void AssignIssue(string issueRef, string userName)
+        {
+            var postData = new Dictionary<string, object>
+            {
+                { "name", userName }
+            };
+
+            ExectuteRequest(Method.PUT, HttpStatusCode.NoContent, string.Format("issue/{0}/assignee", issueRef), postData);
+        }
     }
 }

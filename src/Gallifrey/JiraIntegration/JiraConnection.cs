@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Gallifrey.Exceptions.IntergrationPoints;
+using Gallifrey.Exceptions.JiraIntegration;
 using Gallifrey.Jira;
 using Gallifrey.Jira.Enum;
 using Gallifrey.Jira.Model;
@@ -22,7 +22,9 @@ namespace Gallifrey.JiraIntegration
         IEnumerable<JiraProject> GetJiraProjects();
         IEnumerable<RecentJira> GetRecentJirasFound();
         void UpdateCache();
+        void AssignToCurrentUser(string jiraRef);
         User CurrentUser { get; }
+        void SetInProgress(string jiraRef);
     }
 
     public class JiraConnection : IJiraConnection
@@ -209,6 +211,34 @@ namespace Gallifrey.JiraIntegration
         {
             recentJiraCollection.RemoveExpiredCache();
             UpdateJiraProjectCache();
+        }
+
+        public void AssignToCurrentUser(string jiraRef)
+        {
+            try
+            {
+                CheckAndConnectJira();
+                jira.AssignIssue(jiraRef, CurrentUser.name);
+            }
+            catch (Exception ex)
+            {
+                throw new JiraConnectionException("Unable to assign issue.", ex);
+            }
+            
+        }
+
+        public void SetInProgress(string jiraRef)
+        {
+            try
+            {
+                CheckAndConnectJira();
+                jira.TransitionIssue(jiraRef, "In Progress");
+            }
+            catch (Exception ex)
+            {
+                throw new StateChangedException("Cannot Set In Progress Status", ex);
+            }
+
         }
 
         public void LogTime(string jiraRef, DateTime exportTimeStamp, TimeSpan exportTime, WorkLogStrategy strategy, string comment = "", TimeSpan? remainingTime = null)

@@ -46,6 +46,10 @@
             this.label7 = new System.Windows.Forms.Label();
             this.btnSearch = new System.Windows.Forms.Button();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.label8 = new System.Windows.Forms.Label();
+            this.chkInProgress = new System.Windows.Forms.CheckBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.chkAssign = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // txtJiraRef
@@ -148,7 +152,7 @@
             // 
             this.btnCancelAddTimer.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancelAddTimer.Image = global::Gallifrey.UI.Classic.Properties.Resources.Cancel_48x48;
-            this.btnCancelAddTimer.Location = new System.Drawing.Point(158, 174);
+            this.btnCancelAddTimer.Location = new System.Drawing.Point(162, 204);
             this.btnCancelAddTimer.Name = "btnCancelAddTimer";
             this.btnCancelAddTimer.Size = new System.Drawing.Size(65, 65);
             this.btnCancelAddTimer.TabIndex = 13;
@@ -160,7 +164,7 @@
             // btnAddTimer
             // 
             this.btnAddTimer.Image = global::Gallifrey.UI.Classic.Properties.Resources.Check_48x48;
-            this.btnAddTimer.Location = new System.Drawing.Point(83, 174);
+            this.btnAddTimer.Location = new System.Drawing.Point(87, 204);
             this.btnAddTimer.Name = "btnAddTimer";
             this.btnAddTimer.Size = new System.Drawing.Size(65, 65);
             this.btnAddTimer.TabIndex = 12;
@@ -191,7 +195,7 @@
             // btnSearch
             // 
             this.btnSearch.Image = global::Gallifrey.UI.Classic.Properties.Resources.Search_48x48;
-            this.btnSearch.Location = new System.Drawing.Point(229, 174);
+            this.btnSearch.Location = new System.Drawing.Point(233, 204);
             this.btnSearch.Name = "btnSearch";
             this.btnSearch.Size = new System.Drawing.Size(65, 65);
             this.btnSearch.TabIndex = 14;
@@ -200,14 +204,56 @@
             this.btnSearch.UseVisualStyleBackColor = true;
             this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
             // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(15, 176);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(102, 17);
+            this.label8.TabIndex = 15;
+            this.label8.Text = "Set In Progress?";
+            // 
+            // chkInProgress
+            // 
+            this.chkInProgress.AutoSize = true;
+            this.chkInProgress.Location = new System.Drawing.Point(123, 178);
+            this.chkInProgress.Name = "chkInProgress";
+            this.chkInProgress.Size = new System.Drawing.Size(15, 14);
+            this.chkInProgress.TabIndex = 16;
+            this.toolTip.SetToolTip(this.chkInProgress, "Tick To Start Timer Straight Away");
+            this.chkInProgress.UseVisualStyleBackColor = true;
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(23, 157);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(94, 17);
+            this.label9.TabIndex = 17;
+            this.label9.Text = "Assign To Me?";
+            // 
+            // chkAssign
+            // 
+            this.chkAssign.AutoSize = true;
+            this.chkAssign.Location = new System.Drawing.Point(123, 158);
+            this.chkAssign.Name = "chkAssign";
+            this.chkAssign.Size = new System.Drawing.Size(15, 14);
+            this.chkAssign.TabIndex = 18;
+            this.toolTip.SetToolTip(this.chkAssign, "Tick To Start Timer Straight Away");
+            this.chkAssign.UseVisualStyleBackColor = true;
+            // 
             // AddTimerWindow
             // 
             this.AcceptButton = this.btnAddTimer;
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancelAddTimer;
-            this.ClientSize = new System.Drawing.Size(384, 251);
+            this.ClientSize = new System.Drawing.Size(384, 283);
             this.ControlBox = false;
+            this.Controls.Add(this.label9);
+            this.Controls.Add(this.chkAssign);
+            this.Controls.Add(this.label8);
+            this.Controls.Add(this.chkInProgress);
             this.Controls.Add(this.btnSearch);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.chkStartNow);
@@ -256,5 +302,9 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Button btnSearch;
         private System.Windows.Forms.ToolTip toolTip;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.CheckBox chkInProgress;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.CheckBox chkAssign;
     }
 }
