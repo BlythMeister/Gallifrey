@@ -50,11 +50,11 @@ namespace Gallifrey.UI.Classic
             }
             catch (MissingJiraConfigException)
             {
-                btnSettings_Click(null, null);
+                ShowSettings(false);
             }
             catch (JiraConnectionException)
             {
-                btnSettings_Click(null, null);
+                ShowSettings(false);
             }
 
             gallifrey.NoActivityEvent += GallifreyOnNoActivityEvent;
@@ -308,7 +308,12 @@ namespace Gallifrey.UI.Classic
 
         private void btnSettings_Click(object sender, EventArgs e)
         {
-            var settingsWindow = new SettingsWindow(gallifrey);
+            ShowSettings(true);
+        }
+
+        private void ShowSettings(bool showInTaskbar)
+        {
+            var settingsWindow = new SettingsWindow(gallifrey) { ShowInTaskbar = showInTaskbar };
             settingsWindow.ShowDialog();
         }
 
@@ -883,7 +888,7 @@ namespace Gallifrey.UI.Classic
                 try
                 {
                     lblUpdate.Text = string.Format("     v{0}\nClick Here To Restart.", ApplicationDeployment.CurrentDeployment.UpdatedVersion);
-                    
+
                     notifyAlert.ShowBalloonTip(10000, "Update Avaliable", string.Format("An Update To v{0} Has Been Downloaded!", ApplicationDeployment.CurrentDeployment.UpdatedVersion), ToolTipIcon.Info);
                 }
                 catch (Exception)

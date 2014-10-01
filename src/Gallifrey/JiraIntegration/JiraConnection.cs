@@ -37,15 +37,10 @@ namespace Gallifrey.JiraIntegration
 
         public User CurrentUser { get; private set; }
 
-        public JiraConnection(IJiraConnectionSettings jiraConnectionSettings, IExportSettings exportSettings)
+        public JiraConnection()
         {
             recentJiraCollection = new RecentJiraCollection();
             jiraProjectCache = new List<JiraProject>();
-
-            this.jiraConnectionSettings = jiraConnectionSettings;
-            this.exportSettings = exportSettings;
-            CheckAndConnectJira();
-            UpdateJiraProjectCache();
         }
 
         public void ReConnect(IJiraConnectionSettings newJiraConnectionSettings, IExportSettings newExportSettings)
@@ -54,6 +49,7 @@ namespace Gallifrey.JiraIntegration
             jiraConnectionSettings = newJiraConnectionSettings;
             jira = null;
             CheckAndConnectJira();
+            UpdateJiraProjectCache();
         }
 
         private void CheckAndConnectJira()
