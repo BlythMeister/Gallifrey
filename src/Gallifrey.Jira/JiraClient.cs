@@ -139,7 +139,7 @@ namespace Gallifrey.Jira
 
             while (moreToGet)
             {
-                var response = ExectuteRequest(Method.GET, HttpStatusCode.OK, string.Format("search?jql={0}&maxResults=500&startAt={1}&fields=summary,project", jql, startAt));
+                var response = ExectuteRequest(Method.GET, HttpStatusCode.OK, string.Format("search?jql={0}&maxResults=500&startAt={1}&fields=summary,project,parent", jql, startAt));
 
                 var searchResult = deserializer.Deserialize<SearchResult>(response);
 

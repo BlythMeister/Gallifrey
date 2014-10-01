@@ -161,22 +161,22 @@ namespace Gallifrey.JiraTimers
             {
                 if (HasParent)
                 {
-                    description = string.Format("{0} - Time [ {1} ] - To Export [ {2} ] - Desc [ {3} ] - Parent [ {4} - {5} ]", JiraReference, ExactCurrentTime.FormatAsString(), TimeToExport.FormatAsString(), JiraName, JiraParentReference, JiraParentName); 
+                    description = string.Format("{0} - [ {1} ] - Export [ {2} ] - [ {4} {5} / {0} {3} ]", JiraReference, ExactCurrentTime.FormatAsString(), TimeToExport.FormatAsString(), JiraName, JiraParentReference, JiraParentName); 
                 }
                 else
                 {
-                    description = string.Format("{0} - Time [ {1} ] - To Export [ {2} ] - Desc [ {3} ]", JiraReference, ExactCurrentTime.FormatAsString(), TimeToExport.FormatAsString(), JiraName);
+                    description = string.Format("{0} - [ {1} ] - Export [ {2} ] - [ {0} - {3} ]", JiraReference, ExactCurrentTime.FormatAsString(), TimeToExport.FormatAsString(), JiraName);
                 }
             }
             else
             {
                 if (HasParent)
                 {
-                    description = string.Format("{0} - Time [ {1} ] - Desc [ {2} ] - Parent [ {3} - {4} ]", JiraReference, ExactCurrentTime.FormatAsString(), JiraName, JiraParentReference, JiraParentName); 
+                    description = string.Format("{0} - [ {1} ] - [ {3} {4} / {0} {2} ]", JiraReference, ExactCurrentTime.FormatAsString(), JiraName, JiraParentReference, JiraParentName); 
                 }
                 else
                 {
-                    description = string.Format("{0} - Time [ {1} ] - Desc [ {2} ]", JiraReference, ExactCurrentTime.FormatAsString(), JiraName);
+                    description = string.Format("{0} - [ {1} ] - [ {0} {2} ]", JiraReference, ExactCurrentTime.FormatAsString(), JiraName);
                 }
             }
 

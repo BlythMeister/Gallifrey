@@ -102,6 +102,7 @@
       <Feature>Show remaining estimate in the export window.</Feature>
       <Feature>Assign to current user when adding new timer.</Feature>
       <Feature>Set in-progress when adding new timer.</Feature>
+      <Feature>Attempt to replicate the way Jira display issues with parents.</Feature>
     </Features>
     <Bugs>
       <Bug>Fixed issue with drag and drop with custom Jira URLs.</Bug>
