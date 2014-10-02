@@ -4,7 +4,7 @@ namespace Gallifrey.Jira.Model
     {
         public string originalEstimate { get; set; }
         public string remainingEstimate { get; set; }
-        public int originalEstimateSeconds { get; set; }
-        public int remainingEstimateSeconds { get; set; }
+        public double originalEstimateSeconds { get; set; }
+        public double remainingEstimateSeconds { get; set; }
     }
 }

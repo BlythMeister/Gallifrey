@@ -65,8 +65,9 @@ namespace Gallifrey.UI.Classic
             txtExportHours.Text = timerToShow.TimeToExport.Hours.ToString();
             txtExportMins.Text = timerToShow.TimeToExport.Minutes.ToString();
 
-            var remainingTime = new TimeSpan(0, 0, jiraIssue.fields.timetracking.remainingEstimateSeconds);
-            txtRemainingHours.Text = remainingTime.Hours.ToString();
+            var remainingTime = TimeSpan.FromSeconds(jiraIssue.fields.timetracking.remainingEstimateSeconds);
+            var hours = (remainingTime.Days*24) + remainingTime.Hours;
+            txtRemainingHours.Text = hours.ToString();
             txtRemainingMinutes.Text = remainingTime.Minutes.ToString();
 
             if (timerToShow.DateStarted.Date != DateTime.Now.Date)

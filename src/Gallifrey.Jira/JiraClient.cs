@@ -92,9 +92,7 @@ namespace Gallifrey.Jira
 
         public Issue GetIssueWithWorklogs(string issueRef)
         {
-            var response = ExectuteRequest(Method.GET, HttpStatusCode.OK, string.Format("issue/{0}", issueRef));
-
-            var issue = deserializer.Deserialize<Issue>(response);
+            var issue = GetIssue(issueRef);
 
             if (issue.fields.worklog.total > issue.fields.worklog.maxResults)
             {
