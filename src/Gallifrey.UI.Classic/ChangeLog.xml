@@ -103,6 +103,7 @@
       <Feature>Assign to current user when adding new timer.</Feature>
       <Feature>Set in-progress when adding new timer.</Feature>
       <Feature>Attempt to replicate the way Jira display issues with parents.</Feature>
+      <Feature>Clicking un-exported time value shows oldest un-exported timer.</Feature>
     </Features>
     <Bugs>
       <Bug>Fixed issue with drag and drop with custom Jira URLs.</Bug>
@@ -113,6 +114,7 @@
       <Bug>Fixed issue on locked timer window when trying to export with no timers selected.</Bug>
       <Bug>Make export date non changable non the export screen.</Bug>
       <Bug>Better handling of errors when trying to get updates.</Bug>
+      <Bug>Prevent the export of more time than the remaining to export.</Bug>
     </Bugs>
     <Others />
   </Version>

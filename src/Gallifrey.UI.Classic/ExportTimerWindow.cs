@@ -132,10 +132,17 @@ namespace Gallifrey.UI.Classic
                 }
             }
 
+            var exportTimespan = new TimeSpan(hours, minutes, 0);
+
+            if (timerToShow.TimeToExport < exportTimespan)
+            {
+                MessageBox.Show(string.Format("You Cannot Export More Than The Timer States Un-Exported\nThis Value Is {0}!", timerToShow.TimeToExport.ToString(@"hh\:mm")), "Invalid Export", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
 
             try
             {
-                gallifrey.JiraConnection.LogTime(jiraIssue.key, calExportDate.Value, new TimeSpan(hours, minutes, 0), worklogStrategy, txtComment.Text, newEstimate);
+                gallifrey.JiraConnection.LogTime(jiraIssue.key, calExportDate.Value, exportTimespan, worklogStrategy, txtComment.Text, newEstimate);
             }
             catch (WorkLogException)
             {

@@ -271,6 +271,19 @@ namespace Gallifrey.UI.Classic
             }
         }
 
+        private void lblUnexportedTime_Click(object sender, EventArgs e)
+        {
+            var timer = gallifrey.JiraTimerCollection.GetOldestUnexportedTimer();
+            if (timer != null)
+            {
+                SelectTimer(timer.UniqueId);
+            }
+            else
+            {
+                MessageBox.Show("No Un-Exported Timers To Show", "Nothing To Export");
+            }
+        }
+
         #endregion
 
         #region "Button Handlers"
@@ -1013,5 +1026,7 @@ namespace Gallifrey.UI.Classic
         }
 
         #endregion
+
+        
     }
 }

@@ -181,6 +181,8 @@
             this.lblUnexportedTime.Size = new System.Drawing.Size(145, 17);
             this.lblUnexportedTime.TabIndex = 1;
             this.lblUnexportedTime.Text = "Un-Exported Time: 0:00";
+            this.toolTip.SetToolTip(this.lblUnexportedTime, "Click To Show Oldest Un-Exported Timer");
+            this.lblUnexportedTime.Click += new System.EventHandler(this.lblUnexportedTime_Click);
             // 
             // lblExportStat
             // 
