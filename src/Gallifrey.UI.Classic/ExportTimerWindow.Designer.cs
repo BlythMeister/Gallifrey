@@ -86,7 +86,7 @@
             this.txtJiraRef.Location = new System.Drawing.Point(108, 47);
             this.txtJiraRef.Name = "txtJiraRef";
             this.txtJiraRef.Size = new System.Drawing.Size(173, 25);
-            this.txtJiraRef.TabIndex = 2;
+            this.txtJiraRef.TabIndex = 6;
             // 
             // label1
             // 
@@ -94,7 +94,7 @@
             this.label1.Location = new System.Drawing.Point(12, 50);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(90, 17);
-            this.label1.TabIndex = 1;
+            this.label1.TabIndex = 5;
             this.label1.Text = "Jira Reference";
             // 
             // label2
@@ -104,7 +104,7 @@
             this.label2.Location = new System.Drawing.Point(12, 9);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(122, 25);
-            this.label2.TabIndex = 0;
+            this.label2.TabIndex = 4;
             this.label2.Text = "Export Timer";
             // 
             // label3
@@ -173,7 +173,7 @@
             this.groupBox1.Location = new System.Drawing.Point(284, 172);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(293, 173);
-            this.groupBox1.TabIndex = 6;
+            this.groupBox1.TabIndex = 14;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Remaining Time";
             this.toolTip.SetToolTip(this.groupBox1, "Set Action For Remaining Time");
@@ -184,7 +184,7 @@
             this.label19.Location = new System.Drawing.Point(7, 27);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(69, 17);
-            this.label19.TabIndex = 17;
+            this.label19.TabIndex = 0;
             this.label19.Text = "Remaining";
             // 
             // txtRemainingHours
@@ -193,7 +193,7 @@
             this.txtRemainingHours.Location = new System.Drawing.Point(85, 24);
             this.txtRemainingHours.Name = "txtRemainingHours";
             this.txtRemainingHours.Size = new System.Drawing.Size(39, 25);
-            this.txtRemainingHours.TabIndex = 7;
+            this.txtRemainingHours.TabIndex = 1;
             this.txtRemainingHours.Text = "00";
             this.txtRemainingHours.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.toolTip.SetToolTip(this.txtRemainingHours, "Remaining Hours");
@@ -204,7 +204,7 @@
             this.txtRemainingMinutes.Location = new System.Drawing.Point(172, 24);
             this.txtRemainingMinutes.Name = "txtRemainingMinutes";
             this.txtRemainingMinutes.Size = new System.Drawing.Size(39, 25);
-            this.txtRemainingMinutes.TabIndex = 9;
+            this.txtRemainingMinutes.TabIndex = 3;
             this.txtRemainingMinutes.Text = "00";
             this.txtRemainingMinutes.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.toolTip.SetToolTip(this.txtRemainingMinutes, "Remaining Minutes");
@@ -215,7 +215,7 @@
             this.label17.Location = new System.Drawing.Point(123, 27);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(43, 17);
-            this.label17.TabIndex = 8;
+            this.label17.TabIndex = 2;
             this.label17.Text = "Hours";
             // 
             // label18
@@ -224,7 +224,7 @@
             this.label18.Location = new System.Drawing.Point(217, 27);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(54, 17);
-            this.label18.TabIndex = 10;
+            this.label18.TabIndex = 4;
             this.label18.Text = "Minutes";
             // 
             // txtSetValueHours
@@ -232,7 +232,7 @@
             this.txtSetValueHours.Location = new System.Drawing.Point(34, 137);
             this.txtSetValueHours.Name = "txtSetValueHours";
             this.txtSetValueHours.Size = new System.Drawing.Size(39, 25);
-            this.txtSetValueHours.TabIndex = 3;
+            this.txtSetValueHours.TabIndex = 8;
             this.txtSetValueHours.Text = "00";
             this.txtSetValueHours.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.toolTip.SetToolTip(this.txtSetValueHours, "Remaining Hours");
@@ -243,7 +243,7 @@
             this.radAutoAdjust.Location = new System.Drawing.Point(10, 55);
             this.radAutoAdjust.Name = "radAutoAdjust";
             this.radAutoAdjust.Size = new System.Drawing.Size(143, 21);
-            this.radAutoAdjust.TabIndex = 0;
+            this.radAutoAdjust.TabIndex = 5;
             this.radAutoAdjust.Text = "Automatically Adjust";
             this.radAutoAdjust.UseVisualStyleBackColor = true;
             // 
@@ -252,7 +252,7 @@
             this.txtSetValueMins.Location = new System.Drawing.Point(121, 137);
             this.txtSetValueMins.Name = "txtSetValueMins";
             this.txtSetValueMins.Size = new System.Drawing.Size(39, 25);
-            this.txtSetValueMins.TabIndex = 5;
+            this.txtSetValueMins.TabIndex = 10;
             this.txtSetValueMins.Text = "00";
             this.txtSetValueMins.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.toolTip.SetToolTip(this.txtSetValueMins, "Remaining Minutes");
@@ -263,7 +263,7 @@
             this.label13.Location = new System.Drawing.Point(72, 140);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(43, 17);
-            this.label13.TabIndex = 4;
+            this.label13.TabIndex = 9;
             this.label13.Text = "Hours";
             // 
             // radLeaveRemaining
@@ -272,7 +272,7 @@
             this.radLeaveRemaining.Location = new System.Drawing.Point(10, 82);
             this.radLeaveRemaining.Name = "radLeaveRemaining";
             this.radLeaveRemaining.Size = new System.Drawing.Size(124, 21);
-            this.radLeaveRemaining.TabIndex = 1;
+            this.radLeaveRemaining.TabIndex = 6;
             this.radLeaveRemaining.Text = "Leave Remaining";
             this.radLeaveRemaining.UseVisualStyleBackColor = true;
             // 
@@ -282,7 +282,7 @@
             this.label14.Location = new System.Drawing.Point(166, 140);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(54, 17);
-            this.label14.TabIndex = 6;
+            this.label14.TabIndex = 11;
             this.label14.Text = "Minutes";
             // 
             // radSetValue
@@ -292,7 +292,7 @@
             this.radSetValue.Location = new System.Drawing.Point(10, 109);
             this.radSetValue.Name = "radSetValue";
             this.radSetValue.Size = new System.Drawing.Size(99, 21);
-            this.radSetValue.TabIndex = 2;
+            this.radSetValue.TabIndex = 7;
             this.radSetValue.TabStop = true;
             this.radSetValue.Text = "Set To Value";
             this.radSetValue.UseVisualStyleBackColor = true;
@@ -304,7 +304,7 @@
             this.label6.Location = new System.Drawing.Point(4, 81);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(98, 17);
-            this.label6.TabIndex = 3;
+            this.label6.TabIndex = 7;
             this.label6.Text = "Jira Description";
             // 
             // txtDescription
@@ -314,7 +314,7 @@
             this.txtDescription.Multiline = true;
             this.txtDescription.Name = "txtDescription";
             this.txtDescription.Size = new System.Drawing.Size(173, 81);
-            this.txtDescription.TabIndex = 4;
+            this.txtDescription.TabIndex = 8;
             // 
             // groupBox2
             // 
@@ -338,7 +338,7 @@
             this.groupBox2.Location = new System.Drawing.Point(7, 172);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(274, 173);
-            this.groupBox2.TabIndex = 5;
+            this.groupBox2.TabIndex = 13;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = " Export Info";
             // 
@@ -464,7 +464,7 @@
             this.label16.Location = new System.Drawing.Point(12, 348);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(64, 17);
-            this.label16.TabIndex = 7;
+            this.label16.TabIndex = 0;
             this.label16.Text = "Comment";
             // 
             // btnOK
@@ -473,7 +473,7 @@
             this.btnOK.Location = new System.Drawing.Point(210, 438);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(65, 65);
-            this.btnOK.TabIndex = 9;
+            this.btnOK.TabIndex = 2;
             this.btnOK.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.toolTip.SetToolTip(this.btnOK, "Export To Jira");
             this.btnOK.UseVisualStyleBackColor = true;
@@ -486,7 +486,7 @@
             this.btnCancel.Location = new System.Drawing.Point(318, 438);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(65, 65);
-            this.btnCancel.TabIndex = 10;
+            this.btnCancel.TabIndex = 3;
             this.btnCancel.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.toolTip.SetToolTip(this.btnCancel, "Cancel Export");
             this.btnCancel.UseVisualStyleBackColor = true;
@@ -498,7 +498,7 @@
             this.lblParentDesc.Location = new System.Drawing.Point(283, 81);
             this.lblParentDesc.Name = "lblParentDesc";
             this.lblParentDesc.Size = new System.Drawing.Size(115, 17);
-            this.lblParentDesc.TabIndex = 13;
+            this.lblParentDesc.TabIndex = 11;
             this.lblParentDesc.Text = "Parent Description";
             // 
             // txtParentDesc
@@ -508,7 +508,7 @@
             this.txtParentDesc.Multiline = true;
             this.txtParentDesc.Name = "txtParentDesc";
             this.txtParentDesc.Size = new System.Drawing.Size(173, 81);
-            this.txtParentDesc.TabIndex = 14;
+            this.txtParentDesc.TabIndex = 12;
             // 
             // lblParentRef
             // 
@@ -516,7 +516,7 @@
             this.lblParentRef.Location = new System.Drawing.Point(291, 50);
             this.lblParentRef.Name = "lblParentRef";
             this.lblParentRef.Size = new System.Drawing.Size(107, 17);
-            this.lblParentRef.TabIndex = 11;
+            this.lblParentRef.TabIndex = 9;
             this.lblParentRef.Text = "Parent Reference";
             // 
             // txtParentRef
@@ -525,14 +525,14 @@
             this.txtParentRef.Location = new System.Drawing.Point(404, 47);
             this.txtParentRef.Name = "txtParentRef";
             this.txtParentRef.Size = new System.Drawing.Size(173, 25);
-            this.txtParentRef.TabIndex = 12;
+            this.txtParentRef.TabIndex = 10;
             // 
             // txtComment
             // 
             this.txtComment.Location = new System.Drawing.Point(82, 351);
             this.txtComment.Name = "txtComment";
             this.txtComment.Size = new System.Drawing.Size(493, 81);
-            this.txtComment.TabIndex = 16;
+            this.txtComment.TabIndex = 1;
             this.txtComment.Text = "elementHost1";
             this.txtComment.Child = this.spellCheckTextBox1;
             // 
