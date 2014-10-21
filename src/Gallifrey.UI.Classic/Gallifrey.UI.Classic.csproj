@@ -83,8 +83,11 @@
     <Reference Include="Exceptionless.Windows">
       <HintPath>..\packages\Exceptionless.Windows.1.5.2064\lib\net45\Exceptionless.Windows.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -93,6 +96,9 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="UIAutomationProvider" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddTimerWindow.cs">
@@ -241,6 +247,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Gallifrey.CustomControls\Gallifrey.CustomControls.csproj">
+      <Project>{cf18e75e-8e0f-4ab0-9491-626c58026a3b}</Project>
+      <Name>Gallifrey.CustomControls</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Gallifrey.Jira\Gallifrey.Jira.csproj">
       <Project>{FFCFED07-CD7C-46F9-98E5-B9D9116E40B1}</Project>
       <Name>Gallifrey.Jira</Name>

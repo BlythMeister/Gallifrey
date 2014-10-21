@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gallifrey.UI.Classic.Beta",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gallifrey.Jira", "Gallifrey.Jira\Gallifrey.Jira.csproj", "{FFCFED07-CD7C-46F9-98E5-B9D9116E40B1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gallifrey.CustomControls", "Gallifrey.CustomControls\Gallifrey.CustomControls.csproj", "{CF18E75E-8E0F-4AB0-9491-626C58026A3B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{FFCFED07-CD7C-46F9-98E5-B9D9116E40B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FFCFED07-CD7C-46F9-98E5-B9D9116E40B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FFCFED07-CD7C-46F9-98E5-B9D9116E40B1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF18E75E-8E0F-4AB0-9491-626C58026A3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF18E75E-8E0F-4AB0-9491-626C58026A3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF18E75E-8E0F-4AB0-9491-626C58026A3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF18E75E-8E0F-4AB0-9491-626C58026A3B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

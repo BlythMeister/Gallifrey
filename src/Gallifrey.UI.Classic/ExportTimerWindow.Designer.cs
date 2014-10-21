@@ -67,7 +67,6 @@
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.label16 = new System.Windows.Forms.Label();
-            this.txtComment = new System.Windows.Forms.TextBox();
             this.btnOK = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
@@ -75,6 +74,8 @@
             this.txtParentDesc = new System.Windows.Forms.TextBox();
             this.lblParentRef = new System.Windows.Forms.Label();
             this.txtParentRef = new System.Windows.Forms.TextBox();
+            this.txtComment = new System.Windows.Forms.Integration.ElementHost();
+            this.spellCheckTextBox1 = new Gallifrey.CustomControls.SpellCheckTextBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -466,15 +467,6 @@
             this.label16.TabIndex = 7;
             this.label16.Text = "Comment";
             // 
-            // txtComment
-            // 
-            this.txtComment.Location = new System.Drawing.Point(82, 351);
-            this.txtComment.Multiline = true;
-            this.txtComment.Name = "txtComment";
-            this.txtComment.Size = new System.Drawing.Size(493, 81);
-            this.txtComment.TabIndex = 8;
-            this.toolTip.SetToolTip(this.txtComment, "Comment To Be Added With Work Log ");
-            // 
             // btnOK
             // 
             this.btnOK.Image = global::Gallifrey.UI.Classic.Properties.Resources.Check_48x48;
@@ -535,6 +527,15 @@
             this.txtParentRef.Size = new System.Drawing.Size(173, 25);
             this.txtParentRef.TabIndex = 12;
             // 
+            // txtComment
+            // 
+            this.txtComment.Location = new System.Drawing.Point(82, 351);
+            this.txtComment.Name = "txtComment";
+            this.txtComment.Size = new System.Drawing.Size(493, 81);
+            this.txtComment.TabIndex = 16;
+            this.txtComment.Text = "elementHost1";
+            this.txtComment.Child = this.spellCheckTextBox1;
+            // 
             // ExportTimerWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
@@ -542,11 +543,11 @@
             this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(587, 520);
             this.ControlBox = false;
+            this.Controls.Add(this.txtComment);
             this.Controls.Add(this.lblParentDesc);
             this.Controls.Add(this.txtParentDesc);
             this.Controls.Add(this.lblParentRef);
             this.Controls.Add(this.txtParentRef);
-            this.Controls.Add(this.txtComment);
             this.Controls.Add(this.label16);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.label6);
@@ -614,7 +615,6 @@
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.DateTimePicker calExportDate;
         private System.Windows.Forms.Label label16;
-        private System.Windows.Forms.TextBox txtComment;
         private System.Windows.Forms.ToolTip toolTip;
         private System.Windows.Forms.Label label19;
         private System.Windows.Forms.TextBox txtRemainingHours;
@@ -625,5 +625,7 @@
         private System.Windows.Forms.TextBox txtParentDesc;
         private System.Windows.Forms.Label lblParentRef;
         private System.Windows.Forms.TextBox txtParentRef;
+        private System.Windows.Forms.Integration.ElementHost txtComment;
+        private CustomControls.SpellCheckTextBox spellCheckTextBox1;
     }
 }
