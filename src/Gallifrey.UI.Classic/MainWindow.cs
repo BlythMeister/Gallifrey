@@ -117,6 +117,8 @@ namespace Gallifrey.UI.Classic
             if (e.Control)
             {
                 var selectedTab = tabTimerDays.SelectedTab;
+                if(selectedTab == null) return;
+
                 var tabList = (ListBox)selectedTab.Controls[string.Format("lst_{0}", selectedTab.Name)];
 
                 switch (e.KeyCode)
