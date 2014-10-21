@@ -116,6 +116,7 @@
       <Bug>Better handling of errors when trying to get updates.</Bug>
       <Bug>Prevent the export of more time than the remaining to export.</Bug>
       <Bug>Fix issue with keyboard shortcuts when no timers present in the app.</Bug>
+      <Bug>No longer try and add timer from search when no timer selected.</Bug>
     </Bugs>
     <Others />
   </Version>

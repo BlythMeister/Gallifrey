@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Windows.Forms;
 using Gallifrey.Exceptions.JiraIntegration;
 using Gallifrey.Jira;
@@ -61,6 +62,7 @@ namespace Gallifrey.UI.Classic
             {
                 MessageBox.Show("No Issue Selected, Cannot Add Timer", "No Issue Selected", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 DialogResult = DialogResult.None;
+                return;
             }
 
             if (fromAddWindow)
