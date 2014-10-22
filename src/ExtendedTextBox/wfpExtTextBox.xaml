@@ -1,0 +1,11 @@
+﻿<UserControl x:Class="ExtendedTextBox.wfpExtTextBox"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="27" d:DesignWidth="306" AllowDrop="True" VisualTextHintingMode="Fixed" SnapsToDevicePixels="True">
+    <DockPanel>
+        <TextBox SpellCheck.IsEnabled="True" Name="theTextBox" AcceptsReturn="True" AcceptsTab="True" Text="" Cursor="IBeam" CaretBrush="#E6000000" />
+    </DockPanel>
+</UserControl>

@@ -83,9 +83,6 @@
     <Reference Include="Exceptionless.Windows">
       <HintPath>..\packages\Exceptionless.Windows.1.5.2064\lib\net45\Exceptionless.Windows.dll</HintPath>
     </Reference>
-    <Reference Include="ExtendedTextBox">
-      <HintPath>..\libs\ExtendedTextBox\ExtendedTextBox.dll</HintPath>
-    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
@@ -250,6 +247,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ExtendedTextBox\ExtendedTextBox.csproj">
+      <Project>{0c7c5d10-74aa-4a92-b75f-ebbfc9156172}</Project>
+      <Name>ExtendedTextBox</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Gallifrey.Jira\Gallifrey.Jira.csproj">
       <Project>{FFCFED07-CD7C-46F9-98E5-B9D9116E40B1}</Project>
       <Name>Gallifrey.Jira</Name>

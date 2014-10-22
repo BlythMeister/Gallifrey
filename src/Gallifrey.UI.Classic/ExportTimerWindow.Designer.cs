@@ -530,10 +530,9 @@
             // 
             this.txtComment.AcceptsReturn = true;
             this.txtComment.AcceptsTab = true;
-            this.txtComment.ChangedColour = System.Drawing.Color.Empty;
-            this.txtComment.ErrorProvider = null;
+            this.txtComment.AutoSize = true;
+            this.txtComment.ChangedColour = System.Drawing.SystemColors.Window;
             this.txtComment.Location = new System.Drawing.Point(82, 351);
-            this.txtComment.Mandatory = false;
             this.txtComment.MaxLength = 0;
             this.txtComment.Name = "txtComment";
             this.txtComment.OriginalText = "";
@@ -542,6 +541,7 @@
             this.txtComment.TabIndex = 1;
             this.txtComment.TextCase = System.Windows.Forms.CharacterCasing.Normal;
             this.txtComment.TextType = ExtendedTextBox.ExtTextBox.TextTypes.String;
+            this.toolTip.SetToolTip(this.txtComment, "Comment To Be Added To Work Log");
             this.txtComment.Wrapping = false;
             // 
             // ExportTimerWindow
