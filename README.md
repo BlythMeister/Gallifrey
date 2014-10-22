@@ -52,6 +52,7 @@ Feel free to contribute, but please read the wiki (https://github.com/BlythMeist
 Gallifrey makes use of the following libraries:
 
 * Exceptionless (http://exceptionless.com/)
+* Spell Check Winforms TextBox (http://spellchecktextbox.codeplex.com/)
 
 3rd Party Resources
 =========

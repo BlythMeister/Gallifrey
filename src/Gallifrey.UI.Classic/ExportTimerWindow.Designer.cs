@@ -74,8 +74,7 @@
             this.txtParentDesc = new System.Windows.Forms.TextBox();
             this.lblParentRef = new System.Windows.Forms.Label();
             this.txtParentRef = new System.Windows.Forms.TextBox();
-            this.txtComment = new System.Windows.Forms.Integration.ElementHost();
-            this.spellCheckTextBox1 = new Gallifrey.CustomControls.SpellCheckTextBox();
+            this.txtComment = new ExtendedTextBox.ExtTextBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -529,12 +528,21 @@
             // 
             // txtComment
             // 
+            this.txtComment.AcceptsReturn = true;
+            this.txtComment.AcceptsTab = true;
+            this.txtComment.ChangedColour = System.Drawing.Color.Empty;
+            this.txtComment.ErrorProvider = null;
             this.txtComment.Location = new System.Drawing.Point(82, 351);
+            this.txtComment.Mandatory = false;
+            this.txtComment.MaxLength = 0;
             this.txtComment.Name = "txtComment";
+            this.txtComment.OriginalText = "";
             this.txtComment.Size = new System.Drawing.Size(493, 81);
+            this.txtComment.SpellCheck = true;
             this.txtComment.TabIndex = 1;
-            this.txtComment.Text = "elementHost1";
-            this.txtComment.Child = this.spellCheckTextBox1;
+            this.txtComment.TextCase = System.Windows.Forms.CharacterCasing.Normal;
+            this.txtComment.TextType = ExtendedTextBox.ExtTextBox.TextTypes.String;
+            this.txtComment.Wrapping = false;
             // 
             // ExportTimerWindow
             // 
@@ -625,7 +633,6 @@
         private System.Windows.Forms.TextBox txtParentDesc;
         private System.Windows.Forms.Label lblParentRef;
         private System.Windows.Forms.TextBox txtParentRef;
-        private System.Windows.Forms.Integration.ElementHost txtComment;
-        private CustomControls.SpellCheckTextBox spellCheckTextBox1;
+        private ExtendedTextBox.ExtTextBox txtComment;
     }
 }
