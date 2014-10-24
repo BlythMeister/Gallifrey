@@ -5,7 +5,6 @@ using System.Timers;
 using Gallifrey.Exceptions.JiraTimers;
 using Gallifrey.ExtensionMethods;
 using Gallifrey.IdleTimers;
-using Gallifrey.Jira;
 using Gallifrey.Jira.Model;
 using Newtonsoft.Json;
 

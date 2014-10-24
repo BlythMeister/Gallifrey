@@ -3,7 +3,6 @@ using System.Linq;
 using System.Windows.Forms;
 using Gallifrey.Exceptions.JiraIntegration;
 using Gallifrey.Exceptions.JiraTimers;
-using Gallifrey.Jira;
 using Gallifrey.Jira.Model;
 using Gallifrey.JiraTimers;
 

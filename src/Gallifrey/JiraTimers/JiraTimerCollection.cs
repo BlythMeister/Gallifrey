@@ -4,7 +4,6 @@ using System.Linq;
 using Gallifrey.Comparers;
 using Gallifrey.Exceptions.JiraTimers;
 using Gallifrey.IdleTimers;
-using Gallifrey.Jira;
 using Gallifrey.Jira.Model;
 using Gallifrey.JiraIntegration;
 using Gallifrey.Serialization;

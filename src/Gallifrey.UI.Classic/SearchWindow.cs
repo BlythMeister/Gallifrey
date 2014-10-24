@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Windows.Forms;
 using Gallifrey.Exceptions.JiraIntegration;
-using Gallifrey.Jira;
 using Gallifrey.Jira.Model;
 
 namespace Gallifrey.UI.Classic

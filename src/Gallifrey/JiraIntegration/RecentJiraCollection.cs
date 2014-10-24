@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Gallifrey.Comparers;
 using Gallifrey.Jira.Model;
-using Gallifrey.JiraTimers;
 using Gallifrey.Serialization;
 
 namespace Gallifrey.JiraIntegration
