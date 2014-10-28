@@ -60,6 +60,7 @@ Gallifrey makes use of the following libraries:
 * Button icons provided by VisualPharm (http://www.visualpharm.com)
 * App icon provided by Jack Cai (http://www.doublejdesign.co.uk)
 * Digital-7 font by Style7 (http://www.styleseven.com/)
+* Paket (http://fsprojects.github.io/Paket/index.html)
 
 Licence
 =========
