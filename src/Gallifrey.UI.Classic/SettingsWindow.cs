@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using Gallifrey.Exceptions.IntergrationPoints;
+using Gallifrey.Exceptions.JiraIntegration;
 using Gallifrey.Settings;
 
 namespace Gallifrey.UI.Classic
@@ -70,13 +69,6 @@ namespace Gallifrey.UI.Classic
 
         private void btnCancelEditSettings_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(gallifrey.Settings.JiraConnectionSettings.JiraUrl) ||
-                    string.IsNullOrWhiteSpace(gallifrey.Settings.JiraConnectionSettings.JiraUsername) ||
-                    string.IsNullOrWhiteSpace(gallifrey.Settings.JiraConnectionSettings.JiraPassword))
-            {
-                MessageBox.Show("You have to populate the Jira Credentials!", "Missing Config");
-                return;
-            }
             CloseWindow();
         }
 
@@ -131,16 +123,6 @@ namespace Gallifrey.UI.Classic
             gallifrey.Settings.JiraConnectionSettings.JiraUsername = txtJiraUsername.Text;
             gallifrey.Settings.JiraConnectionSettings.JiraPassword = txtJiraPassword.Text;
 
-            if (string.IsNullOrWhiteSpace(gallifrey.Settings.JiraConnectionSettings.JiraUrl) ||
-                    string.IsNullOrWhiteSpace(gallifrey.Settings.JiraConnectionSettings.JiraUsername) ||
-                    string.IsNullOrWhiteSpace(gallifrey.Settings.JiraConnectionSettings.JiraPassword))
-            {
-                MessageBox.Show("You have to populate the Jira Credentials!", "Missing Config");
-                DialogResult = DialogResult.None;
-                TopMost = true;
-                return;
-            }
-
             TopMost = true;
             CloseWindow();
         }
@@ -148,19 +130,37 @@ namespace Gallifrey.UI.Classic
         private void CloseWindow()
         {
             TopMost = false;
+
             try
             {
                 gallifrey.SaveSettings();
             }
             catch (JiraConnectionException)
             {
-                MessageBox.Show("Unable to connect to Jira with these settings!", "Unable to connect");
-                DialogResult = DialogResult.None;
-                TopMost = true;
-                return;
+                if (!HandleInvalidDetails(false)) return;
+            }
+            catch (MissingJiraConfigException)
+            {
+                if (!HandleInvalidDetails(true)) return;
             }
 
             Close();
+        }
+
+        private bool HandleInvalidDetails(bool isMissingConfig)
+        {
+            if (isMissingConfig)
+            {
+                MessageBox.Show("You have to populate the Jira Credentials!\nAt present Gallifrey Required Active Connection To Jira", "Missing Config");
+            }
+            else
+            {
+                MessageBox.Show("Unable to connect to Jira with these settings!\nAt present Gallifrey Required Active Connection To Jira", "Unable to connect");
+            }
+
+            DialogResult = DialogResult.None;
+            TopMost = true;
+            return false;
         }
 
         private void chkAlert_CheckedChanged(object sender, EventArgs e)

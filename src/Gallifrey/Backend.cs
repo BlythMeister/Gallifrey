@@ -46,6 +46,7 @@ namespace Gallifrey
             settingsCollection = SettingsCollectionSerializer.DeSerialize();
             jiraTimerCollection = new JiraTimerCollection(settingsCollection.AppSettings);
             jiraTimerCollection.exportPrompt += OnExportPromptEvent;
+            jiraConnection = new JiraConnection();
             idleTimerCollection = new IdleTimerCollection();
             ActivityChecker = new ActivityChecker(jiraTimerCollection, settingsCollection.AppSettings);
             ActivityChecker.NoActivityEvent += OnNoActivityEvent;
@@ -105,7 +106,7 @@ namespace Gallifrey
 
         public void Initialise()
         {
-            jiraConnection = new JiraConnection(settingsCollection.JiraConnectionSettings, settingsCollection.ExportSettings);
+            jiraConnection.ReConnect(settingsCollection.JiraConnectionSettings, settingsCollection.ExportSettings);
         }
 
         public void Close()
@@ -131,15 +132,8 @@ namespace Gallifrey
         public void SaveSettings()
         {
             settingsCollection.SaveSettings();
-            if (jiraConnection == null)
-            {
-                jiraConnection = new JiraConnection(settingsCollection.JiraConnectionSettings, settingsCollection.ExportSettings);
-            }
-            else
-            {
-                jiraConnection.ReConnect(settingsCollection.JiraConnectionSettings, settingsCollection.ExportSettings);
-            }
-
+            jiraConnection.ReConnect(settingsCollection.JiraConnectionSettings, settingsCollection.ExportSettings);
+            
             ActivityChecker.UpdateAppSettings(settingsCollection.AppSettings);
             jiraTimerCollection.UpdateAppSettings(settingsCollection.AppSettings);
         }

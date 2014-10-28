@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Windows.Forms;
-using Atlassian.Jira;
-using Gallifrey.Exceptions.IntergrationPoints;
-using Gallifrey.Exceptions.JiraTimers;
 using Gallifrey.JiraTimers;
 
 namespace Gallifrey.UI.Classic
@@ -45,9 +42,12 @@ namespace Gallifrey.UI.Classic
                 return false;
             }
 
+            var adjustmentSuccess = gallifrey.JiraTimerCollection.AdjustTime(timerToShow.UniqueId, hours, minutes, addTime);
 
-            gallifrey.JiraTimerCollection.AdjustTime(timerToShow.UniqueId, hours, minutes, addTime);
-
+            if (!adjustmentSuccess)
+            {
+                MessageBox.Show("You Cannot Subtract More Time Than You Have Already Exported\nHave Subtracted All Un-Exported Time", "Adjustment Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
 
             return true;
         }

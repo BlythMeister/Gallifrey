@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Deployment.Application;
@@ -14,7 +13,7 @@ using System.Xml.Linq;
 using Exceptionless;
 using Gallifrey.Comparers;
 using Gallifrey.Exceptions.IdleTimers;
-using Gallifrey.Exceptions.IntergrationPoints;
+using Gallifrey.Exceptions.JiraIntegration;
 using Gallifrey.Exceptions.JiraTimers;
 using Gallifrey.ExtensionMethods;
 using Gallifrey.JiraTimers;
@@ -50,11 +49,11 @@ namespace Gallifrey.UI.Classic
             }
             catch (MissingJiraConfigException)
             {
-                btnSettings_Click(null, null);
+                ShowSettings(false);
             }
             catch (JiraConnectionException)
             {
-                btnSettings_Click(null, null);
+                ShowSettings(false);
             }
 
             gallifrey.NoActivityEvent += GallifreyOnNoActivityEvent;
@@ -117,6 +116,8 @@ namespace Gallifrey.UI.Classic
             if (e.Control)
             {
                 var selectedTab = tabTimerDays.SelectedTab;
+                if(selectedTab == null) return;
+
                 var tabList = (ListBox)selectedTab.Controls[string.Format("lst_{0}", selectedTab.Name)];
 
                 switch (e.KeyCode)
@@ -271,6 +272,19 @@ namespace Gallifrey.UI.Classic
             }
         }
 
+        private void lblUnexportedTime_Click(object sender, EventArgs e)
+        {
+            var timer = gallifrey.JiraTimerCollection.GetOldestUnexportedTimer();
+            if (timer != null)
+            {
+                SelectTimer(timer.UniqueId);
+            }
+            else
+            {
+                MessageBox.Show("No Un-Exported Timers To Show", "Nothing To Export");
+            }
+        }
+
         #endregion
 
         #region "Button Handlers"
@@ -308,7 +322,12 @@ namespace Gallifrey.UI.Classic
 
         private void btnSettings_Click(object sender, EventArgs e)
         {
-            var settingsWindow = new SettingsWindow(gallifrey);
+            ShowSettings(true);
+        }
+
+        private void ShowSettings(bool showInTaskbar)
+        {
+            var settingsWindow = new SettingsWindow(gallifrey) { ShowInTaskbar = showInTaskbar };
             settingsWindow.ShowDialog();
         }
 
@@ -877,11 +896,19 @@ namespace Gallifrey.UI.Classic
                 grpUpdates.Text = "Update Avaliable";
                 lblUpdate.BackColor = Color.OrangeRed;
                 lblUpdate.BorderStyle = BorderStyle.FixedSingle;
-                lblUpdate.Text = string.Format("     v{0}\nClick Here To Restart.", ApplicationDeployment.CurrentDeployment.UpdatedVersion);
                 lblUpdate.Image = Properties.Resources.Download_16x16;
                 updateReady = true;
 
-                notifyAlert.ShowBalloonTip(10000, "Update Avaliable", string.Format("An Update To v{0} Has Been Downloaded!", ApplicationDeployment.CurrentDeployment.UpdatedVersion), ToolTipIcon.Info);
+                try
+                {
+                    lblUpdate.Text = string.Format("     v{0}\nClick Here To Restart.", ApplicationDeployment.CurrentDeployment.UpdatedVersion);
+
+                    notifyAlert.ShowBalloonTip(10000, "Update Avaliable", string.Format("An Update To v{0} Has Been Downloaded!", ApplicationDeployment.CurrentDeployment.UpdatedVersion), ToolTipIcon.Info);
+                }
+                catch (Exception)
+                {
+                    lblUpdate.Text = string.Format("\nClick Here To Restart.");
+                }
             }
         }
 
@@ -928,8 +955,8 @@ namespace Gallifrey.UI.Classic
             var url = GetUrl(e);
             if (!string.IsNullOrWhiteSpace(url))
             {
-                var uriDrag = new Uri(url);
-                var jiraRef = uriDrag.AbsolutePath.Replace("/browse/", "");
+                var uriDrag = new Uri(url).AbsolutePath;
+                var jiraRef = uriDrag.Substring(uriDrag.LastIndexOf("/") + 1);
 
                 var selectedTabDate = GetSelectedTabDate();
                 //Check if already added & if so start timer.
@@ -972,6 +999,10 @@ namespace Gallifrey.UI.Classic
                         addForm.PreLoadStartNow();
                     }
                 }
+                else
+                {
+                    addForm.PreLoadStartNow();
+                }
 
                 if (addForm.DisplayForm)
                 {
@@ -996,5 +1027,7 @@ namespace Gallifrey.UI.Classic
         }
 
         #endregion
+
+        
     }
 }

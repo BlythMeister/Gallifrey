@@ -39,6 +39,11 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label19 = new System.Windows.Forms.Label();
+            this.txtRemainingHours = new System.Windows.Forms.TextBox();
+            this.txtRemainingMinutes = new System.Windows.Forms.TextBox();
+            this.label17 = new System.Windows.Forms.Label();
+            this.label18 = new System.Windows.Forms.Label();
             this.txtSetValueHours = new System.Windows.Forms.TextBox();
             this.radAutoAdjust = new System.Windows.Forms.RadioButton();
             this.txtSetValueMins = new System.Windows.Forms.TextBox();
@@ -62,10 +67,14 @@
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.label16 = new System.Windows.Forms.Label();
-            this.txtComment = new System.Windows.Forms.TextBox();
             this.btnOK = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.lblParentDesc = new System.Windows.Forms.Label();
+            this.txtParentDesc = new System.Windows.Forms.TextBox();
+            this.lblParentRef = new System.Windows.Forms.Label();
+            this.txtParentRef = new System.Windows.Forms.TextBox();
+            this.txtComment = new ExtendedTextBox.ExtTextBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -76,7 +85,7 @@
             this.txtJiraRef.Location = new System.Drawing.Point(108, 47);
             this.txtJiraRef.Name = "txtJiraRef";
             this.txtJiraRef.Size = new System.Drawing.Size(173, 25);
-            this.txtJiraRef.TabIndex = 2;
+            this.txtJiraRef.TabIndex = 6;
             // 
             // label1
             // 
@@ -84,7 +93,7 @@
             this.label1.Location = new System.Drawing.Point(12, 50);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(90, 17);
-            this.label1.TabIndex = 1;
+            this.label1.TabIndex = 5;
             this.label1.Text = "Jira Reference";
             // 
             // label2
@@ -94,7 +103,7 @@
             this.label2.Location = new System.Drawing.Point(12, 9);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(122, 25);
-            this.label2.TabIndex = 0;
+            this.label2.TabIndex = 4;
             this.label2.Text = "Export Timer";
             // 
             // label3
@@ -148,6 +157,11 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.label19);
+            this.groupBox1.Controls.Add(this.txtRemainingHours);
+            this.groupBox1.Controls.Add(this.txtRemainingMinutes);
+            this.groupBox1.Controls.Add(this.label17);
+            this.groupBox1.Controls.Add(this.label18);
             this.groupBox1.Controls.Add(this.txtSetValueHours);
             this.groupBox1.Controls.Add(this.radAutoAdjust);
             this.groupBox1.Controls.Add(this.txtSetValueMins);
@@ -155,20 +169,69 @@
             this.groupBox1.Controls.Add(this.radLeaveRemaining);
             this.groupBox1.Controls.Add(this.label14);
             this.groupBox1.Controls.Add(this.radSetValue);
-            this.groupBox1.Location = new System.Drawing.Point(7, 344);
+            this.groupBox1.Location = new System.Drawing.Point(284, 172);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(274, 146);
-            this.groupBox1.TabIndex = 6;
+            this.groupBox1.Size = new System.Drawing.Size(293, 173);
+            this.groupBox1.TabIndex = 14;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Remaining Time";
             this.toolTip.SetToolTip(this.groupBox1, "Set Action For Remaining Time");
             // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(7, 27);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(69, 17);
+            this.label19.TabIndex = 0;
+            this.label19.Text = "Remaining";
+            // 
+            // txtRemainingHours
+            // 
+            this.txtRemainingHours.Enabled = false;
+            this.txtRemainingHours.Location = new System.Drawing.Point(85, 24);
+            this.txtRemainingHours.Name = "txtRemainingHours";
+            this.txtRemainingHours.Size = new System.Drawing.Size(39, 25);
+            this.txtRemainingHours.TabIndex = 1;
+            this.txtRemainingHours.Text = "00";
+            this.txtRemainingHours.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.toolTip.SetToolTip(this.txtRemainingHours, "Remaining Hours");
+            // 
+            // txtRemainingMinutes
+            // 
+            this.txtRemainingMinutes.Enabled = false;
+            this.txtRemainingMinutes.Location = new System.Drawing.Point(172, 24);
+            this.txtRemainingMinutes.Name = "txtRemainingMinutes";
+            this.txtRemainingMinutes.Size = new System.Drawing.Size(39, 25);
+            this.txtRemainingMinutes.TabIndex = 3;
+            this.txtRemainingMinutes.Text = "00";
+            this.txtRemainingMinutes.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.toolTip.SetToolTip(this.txtRemainingMinutes, "Remaining Minutes");
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(123, 27);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(43, 17);
+            this.label17.TabIndex = 2;
+            this.label17.Text = "Hours";
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(217, 27);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(54, 17);
+            this.label18.TabIndex = 4;
+            this.label18.Text = "Minutes";
+            // 
             // txtSetValueHours
             // 
-            this.txtSetValueHours.Location = new System.Drawing.Point(30, 106);
+            this.txtSetValueHours.Location = new System.Drawing.Point(34, 137);
             this.txtSetValueHours.Name = "txtSetValueHours";
             this.txtSetValueHours.Size = new System.Drawing.Size(39, 25);
-            this.txtSetValueHours.TabIndex = 3;
+            this.txtSetValueHours.TabIndex = 8;
             this.txtSetValueHours.Text = "00";
             this.txtSetValueHours.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.toolTip.SetToolTip(this.txtSetValueHours, "Remaining Hours");
@@ -176,19 +239,19 @@
             // radAutoAdjust
             // 
             this.radAutoAdjust.AutoSize = true;
-            this.radAutoAdjust.Location = new System.Drawing.Point(6, 24);
+            this.radAutoAdjust.Location = new System.Drawing.Point(10, 55);
             this.radAutoAdjust.Name = "radAutoAdjust";
             this.radAutoAdjust.Size = new System.Drawing.Size(143, 21);
-            this.radAutoAdjust.TabIndex = 0;
+            this.radAutoAdjust.TabIndex = 5;
             this.radAutoAdjust.Text = "Automatically Adjust";
             this.radAutoAdjust.UseVisualStyleBackColor = true;
             // 
             // txtSetValueMins
             // 
-            this.txtSetValueMins.Location = new System.Drawing.Point(117, 106);
+            this.txtSetValueMins.Location = new System.Drawing.Point(121, 137);
             this.txtSetValueMins.Name = "txtSetValueMins";
             this.txtSetValueMins.Size = new System.Drawing.Size(39, 25);
-            this.txtSetValueMins.TabIndex = 5;
+            this.txtSetValueMins.TabIndex = 10;
             this.txtSetValueMins.Text = "00";
             this.txtSetValueMins.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.toolTip.SetToolTip(this.txtSetValueMins, "Remaining Minutes");
@@ -196,39 +259,39 @@
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(68, 109);
+            this.label13.Location = new System.Drawing.Point(72, 140);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(43, 17);
-            this.label13.TabIndex = 4;
+            this.label13.TabIndex = 9;
             this.label13.Text = "Hours";
             // 
             // radLeaveRemaining
             // 
             this.radLeaveRemaining.AutoSize = true;
-            this.radLeaveRemaining.Location = new System.Drawing.Point(6, 51);
+            this.radLeaveRemaining.Location = new System.Drawing.Point(10, 82);
             this.radLeaveRemaining.Name = "radLeaveRemaining";
             this.radLeaveRemaining.Size = new System.Drawing.Size(124, 21);
-            this.radLeaveRemaining.TabIndex = 1;
+            this.radLeaveRemaining.TabIndex = 6;
             this.radLeaveRemaining.Text = "Leave Remaining";
             this.radLeaveRemaining.UseVisualStyleBackColor = true;
             // 
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(162, 109);
+            this.label14.Location = new System.Drawing.Point(166, 140);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(54, 17);
-            this.label14.TabIndex = 6;
+            this.label14.TabIndex = 11;
             this.label14.Text = "Minutes";
             // 
             // radSetValue
             // 
             this.radSetValue.AutoSize = true;
             this.radSetValue.Checked = true;
-            this.radSetValue.Location = new System.Drawing.Point(6, 78);
+            this.radSetValue.Location = new System.Drawing.Point(10, 109);
             this.radSetValue.Name = "radSetValue";
             this.radSetValue.Size = new System.Drawing.Size(99, 21);
-            this.radSetValue.TabIndex = 2;
+            this.radSetValue.TabIndex = 7;
             this.radSetValue.TabStop = true;
             this.radSetValue.Text = "Set To Value";
             this.radSetValue.UseVisualStyleBackColor = true;
@@ -240,7 +303,7 @@
             this.label6.Location = new System.Drawing.Point(4, 81);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(98, 17);
-            this.label6.TabIndex = 3;
+            this.label6.TabIndex = 7;
             this.label6.Text = "Jira Description";
             // 
             // txtDescription
@@ -250,7 +313,7 @@
             this.txtDescription.Multiline = true;
             this.txtDescription.Name = "txtDescription";
             this.txtDescription.Size = new System.Drawing.Size(173, 81);
-            this.txtDescription.TabIndex = 4;
+            this.txtDescription.TabIndex = 8;
             // 
             // groupBox2
             // 
@@ -273,8 +336,8 @@
             this.groupBox2.Controls.Add(this.label5);
             this.groupBox2.Location = new System.Drawing.Point(7, 172);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(274, 166);
-            this.groupBox2.TabIndex = 5;
+            this.groupBox2.Size = new System.Drawing.Size(274, 173);
+            this.groupBox2.TabIndex = 13;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = " Export Info";
             // 
@@ -290,6 +353,7 @@
             // calExportDate
             // 
             this.calExportDate.CustomFormat = "dd/MM/yyyy HH:mm";
+            this.calExportDate.Enabled = false;
             this.calExportDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.calExportDate.Location = new System.Drawing.Point(86, 121);
             this.calExportDate.Name = "calExportDate";
@@ -396,28 +460,19 @@
             // label16
             // 
             this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(6, 493);
+            this.label16.Location = new System.Drawing.Point(12, 348);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(64, 17);
-            this.label16.TabIndex = 7;
+            this.label16.TabIndex = 0;
             this.label16.Text = "Comment";
-            // 
-            // txtComment
-            // 
-            this.txtComment.Location = new System.Drawing.Point(79, 496);
-            this.txtComment.Multiline = true;
-            this.txtComment.Name = "txtComment";
-            this.txtComment.Size = new System.Drawing.Size(202, 81);
-            this.txtComment.TabIndex = 8;
-            this.toolTip.SetToolTip(this.txtComment, "Comment To Be Added With Work Log ");
             // 
             // btnOK
             // 
             this.btnOK.Image = global::Gallifrey.UI.Classic.Properties.Resources.Check_48x48;
-            this.btnOK.Location = new System.Drawing.Point(54, 583);
+            this.btnOK.Location = new System.Drawing.Point(210, 438);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(65, 65);
-            this.btnOK.TabIndex = 9;
+            this.btnOK.TabIndex = 2;
             this.btnOK.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.toolTip.SetToolTip(this.btnOK, "Export To Jira");
             this.btnOK.UseVisualStyleBackColor = true;
@@ -427,23 +482,80 @@
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancel.Image = global::Gallifrey.UI.Classic.Properties.Resources.Cancel_48x48;
-            this.btnCancel.Location = new System.Drawing.Point(153, 583);
+            this.btnCancel.Location = new System.Drawing.Point(318, 438);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(65, 65);
-            this.btnCancel.TabIndex = 10;
+            this.btnCancel.TabIndex = 3;
             this.btnCancel.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.toolTip.SetToolTip(this.btnCancel, "Cancel Export");
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+            // 
+            // lblParentDesc
+            // 
+            this.lblParentDesc.AutoSize = true;
+            this.lblParentDesc.Location = new System.Drawing.Point(283, 81);
+            this.lblParentDesc.Name = "lblParentDesc";
+            this.lblParentDesc.Size = new System.Drawing.Size(115, 17);
+            this.lblParentDesc.TabIndex = 11;
+            this.lblParentDesc.Text = "Parent Description";
+            // 
+            // txtParentDesc
+            // 
+            this.txtParentDesc.Enabled = false;
+            this.txtParentDesc.Location = new System.Drawing.Point(404, 78);
+            this.txtParentDesc.Multiline = true;
+            this.txtParentDesc.Name = "txtParentDesc";
+            this.txtParentDesc.Size = new System.Drawing.Size(173, 81);
+            this.txtParentDesc.TabIndex = 12;
+            // 
+            // lblParentRef
+            // 
+            this.lblParentRef.AutoSize = true;
+            this.lblParentRef.Location = new System.Drawing.Point(291, 50);
+            this.lblParentRef.Name = "lblParentRef";
+            this.lblParentRef.Size = new System.Drawing.Size(107, 17);
+            this.lblParentRef.TabIndex = 9;
+            this.lblParentRef.Text = "Parent Reference";
+            // 
+            // txtParentRef
+            // 
+            this.txtParentRef.Enabled = false;
+            this.txtParentRef.Location = new System.Drawing.Point(404, 47);
+            this.txtParentRef.Name = "txtParentRef";
+            this.txtParentRef.Size = new System.Drawing.Size(173, 25);
+            this.txtParentRef.TabIndex = 10;
+            // 
+            // txtComment
+            // 
+            this.txtComment.AcceptsReturn = true;
+            this.txtComment.AcceptsTab = true;
+            this.txtComment.AutoSize = true;
+            this.txtComment.ChangedColour = System.Drawing.SystemColors.Window;
+            this.txtComment.Location = new System.Drawing.Point(82, 351);
+            this.txtComment.MaxLength = 0;
+            this.txtComment.Name = "txtComment";
+            this.txtComment.OriginalText = "";
+            this.txtComment.Size = new System.Drawing.Size(493, 81);
+            this.txtComment.SpellCheck = true;
+            this.txtComment.TabIndex = 1;
+            this.txtComment.TextCase = System.Windows.Forms.CharacterCasing.Normal;
+            this.txtComment.TextType = ExtendedTextBox.ExtTextBox.TextTypes.String;
+            this.toolTip.SetToolTip(this.txtComment, "Comment To Be Added To Work Log");
+            this.txtComment.Wrapping = false;
             // 
             // ExportTimerWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(293, 657);
+            this.ClientSize = new System.Drawing.Size(587, 520);
             this.ControlBox = false;
             this.Controls.Add(this.txtComment);
+            this.Controls.Add(this.lblParentDesc);
+            this.Controls.Add(this.txtParentDesc);
+            this.Controls.Add(this.lblParentRef);
+            this.Controls.Add(this.txtParentRef);
             this.Controls.Add(this.label16);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.label6);
@@ -511,7 +623,16 @@
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.DateTimePicker calExportDate;
         private System.Windows.Forms.Label label16;
-        private System.Windows.Forms.TextBox txtComment;
         private System.Windows.Forms.ToolTip toolTip;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.TextBox txtRemainingHours;
+        private System.Windows.Forms.TextBox txtRemainingMinutes;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.Label lblParentDesc;
+        private System.Windows.Forms.TextBox txtParentDesc;
+        private System.Windows.Forms.Label lblParentRef;
+        private System.Windows.Forms.TextBox txtParentRef;
+        private ExtendedTextBox.ExtTextBox txtComment;
     }
 }

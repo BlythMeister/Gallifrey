@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Windows.Forms;
-using Atlassian.Jira;
-using Gallifrey.Exceptions.IntergrationPoints;
-using Gallifrey.Exceptions.JiraTimers;
+using Gallifrey.Exceptions.JiraIntegration;
+using Gallifrey.Jira.Enum;
+using Gallifrey.Jira.Model;
 using Gallifrey.JiraTimers;
 using Gallifrey.Settings;
 
@@ -24,7 +24,7 @@ namespace Gallifrey.UI.Classic
 
             try
             {
-                jiraIssue = gallifrey.JiraConnection.GetJiraIssue(timerToShow.JiraReference);
+                jiraIssue = gallifrey.JiraConnection.GetJiraIssue(timerToShow.JiraReference, true);
             }
             catch (NoResultsFoundException)
             {
@@ -32,9 +32,7 @@ namespace Gallifrey.UI.Classic
                 DisplayForm = false;
             }
             
-            var loggedTime = gallifrey.JiraConnection.GetCurrentLoggedTimeForDate(jiraIssue, timerToShow.DateStarted);
-
-            gallifrey.JiraTimerCollection.SetJiraExportedTime(timerGuid, loggedTime);
+            gallifrey.JiraTimerCollection.RefreshFromJira(timerGuid, jiraIssue, gallifrey.JiraConnection.CurrentUser.name);
 
             timerToShow = gallifrey.JiraTimerCollection.GetTimer(timerGuid);
 
@@ -46,12 +44,30 @@ namespace Gallifrey.UI.Classic
 
             txtJiraRef.Text = timerToShow.JiraReference;
             txtDescription.Text = timerToShow.JiraName;
+            if (timerToShow.HasParent)
+            {
+                txtParentRef.Text = timerToShow.JiraParentReference;
+                txtParentDesc.Text = timerToShow.JiraParentName;
+            }
+            else
+            {
+                txtParentRef.Visible = false;
+                txtParentDesc.Visible = false;
+                lblParentRef.Visible = false;
+                lblParentDesc.Visible = false;
+            }
+
             txtTotalHours.Text = timerToShow.ExactCurrentTime.Hours.ToString();
             txtTotalMinutes.Text = timerToShow.ExactCurrentTime.Minutes.ToString();
             txtExportedHours.Text = timerToShow.ExportedTime.Hours.ToString();
             txtExportedMins.Text = timerToShow.ExportedTime.Minutes.ToString();
             txtExportHours.Text = timerToShow.TimeToExport.Hours.ToString();
             txtExportMins.Text = timerToShow.TimeToExport.Minutes.ToString();
+
+            var remainingTime = jiraIssue.fields.timetracking != null ? TimeSpan.FromSeconds(jiraIssue.fields.timetracking.remainingEstimateSeconds) : new TimeSpan();           
+            var hours = (remainingTime.Days*24) + remainingTime.Hours;
+            txtRemainingHours.Text = hours.ToString();
+            txtRemainingMinutes.Text = remainingTime.Minutes.ToString();
 
             if (timerToShow.DateStarted.Date != DateTime.Now.Date)
             {
@@ -106,7 +122,7 @@ namespace Gallifrey.UI.Classic
 
             var worklogStrategy = GetWorklogStrategy();
             TimeSpan? newEstimate = null;
-            if (worklogStrategy == WorklogStrategy.NewRemainingEstimate)
+            if (worklogStrategy == WorkLogStrategy.SetValue)
             {
                 newEstimate = GetNewEstimate();
                 if (newEstimate == null)
@@ -115,10 +131,17 @@ namespace Gallifrey.UI.Classic
                 }
             }
 
+            var exportTimespan = new TimeSpan(hours, minutes, 0);
+
+            if (timerToShow.TimeToExport < exportTimespan)
+            {
+                MessageBox.Show(string.Format("You Cannot Export More Than The Timer States Un-Exported\nThis Value Is {0}!", timerToShow.TimeToExport.ToString(@"hh\:mm")), "Invalid Export", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
 
             try
             {
-                gallifrey.JiraConnection.LogTime(jiraIssue, calExportDate.Value, new TimeSpan(hours, minutes, 0), worklogStrategy, txtComment.Text, newEstimate);
+                gallifrey.JiraConnection.LogTime(jiraIssue.key, calExportDate.Value, exportTimespan, worklogStrategy, txtComment.Text, newEstimate);
             }
             catch (WorkLogException)
             {
@@ -156,20 +179,20 @@ namespace Gallifrey.UI.Classic
             return new TimeSpan(hours, minutes, 0);
         }
 
-        private WorklogStrategy GetWorklogStrategy()
+        private WorkLogStrategy GetWorklogStrategy()
         {
-            WorklogStrategy worklogStrategy;
+            WorkLogStrategy worklogStrategy;
             if (radAutoAdjust.Checked)
             {
-                worklogStrategy = WorklogStrategy.AutoAdjustRemainingEstimate;
+                worklogStrategy = WorkLogStrategy.Automatic;
             }
             else if (radLeaveRemaining.Checked)
             {
-                worklogStrategy = WorklogStrategy.RetainRemainingEstimate;
+                worklogStrategy = WorkLogStrategy.LeaveRemaining;
             }
             else
             {
-                worklogStrategy = WorklogStrategy.NewRemainingEstimate;
+                worklogStrategy = WorkLogStrategy.SetValue;
             }
             return worklogStrategy;
         }

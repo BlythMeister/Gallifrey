@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Gallifrey.Exceptions.IntergrationPoints
+namespace Gallifrey.Exceptions.JiraIntegration
 {
     public class JiraConnectionException : Exception
     {

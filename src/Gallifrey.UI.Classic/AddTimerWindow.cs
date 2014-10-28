@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
 using System.Windows.Forms;
-using Atlassian.Jira;
-using Gallifrey.Exceptions.IntergrationPoints;
+using Gallifrey.Exceptions.JiraIntegration;
 using Gallifrey.Exceptions.JiraTimers;
 using Gallifrey.ExtensionMethods;
+using Gallifrey.Jira.Model;
 
 namespace Gallifrey.UI.Classic
 {
@@ -111,7 +111,7 @@ namespace Gallifrey.UI.Classic
 
             if (txtJiraRef.Enabled)
             {
-                if (MessageBox.Show(string.Format("Jira found!\n\nRef: {0}\nName: {1}\n\nIs that correct?", jiraIssue.Key, jiraIssue.Summary), "Correct Jira?", MessageBoxButtons.YesNo) == DialogResult.No)
+                if (MessageBox.Show(string.Format("Jira found!\n\nRef: {0}\nName: {1}\n\nIs that correct?", jiraIssue.key, jiraIssue.fields.summary), "Correct Jira?", MessageBoxButtons.YesNo) == DialogResult.No)
                 {
                     return false;
                 }
@@ -125,6 +125,30 @@ namespace Gallifrey.UI.Classic
             {
                 MessageBox.Show("This Timer Already Exists!", "Duplicate Timer", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
+            }
+
+            if (chkAssign.Checked)
+            {
+                try
+                {
+                    gallifrey.JiraConnection.AssignToCurrentUser(jiraReference);
+                }
+                catch (JiraConnectionException)
+                {
+                    MessageBox.Show("Unable To Locate Assign Jira To Current User", "Assign Jira Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+
+            if (chkInProgress.Checked)
+            {
+                try
+                {
+                    gallifrey.JiraConnection.SetInProgress(jiraReference);
+                }
+                catch (StateChangedException)
+                {
+                    MessageBox.Show("Unable To Set Issue As In Progress", "Error Changing Status", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
 
             return true;

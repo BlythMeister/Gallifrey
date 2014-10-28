@@ -1,0 +1,6 @@
+source https://nuget.org/api/v2
+
+nuget Exceptionless ~> 1.5.2092
+nuget Exceptionless.Windows ~> 1.5.2092
+nuget Newtonsoft.Json ~> 6.0.5
+nuget RestSharp ~> 104.5.0

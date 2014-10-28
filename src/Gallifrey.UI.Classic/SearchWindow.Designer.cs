@@ -48,7 +48,7 @@
             // 
             this.txtJiraRef.Location = new System.Drawing.Point(95, 24);
             this.txtJiraRef.Name = "txtJiraRef";
-            this.txtJiraRef.Size = new System.Drawing.Size(280, 25);
+            this.txtJiraRef.Size = new System.Drawing.Size(357, 25);
             this.txtJiraRef.TabIndex = 1;
             this.toolTip.SetToolTip(this.txtJiraRef, "Enter Search Term (Press Enter To Submit)");
             // 
@@ -80,7 +80,7 @@
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Location = new System.Drawing.Point(17, 49);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(381, 163);
+            this.groupBox1.Size = new System.Drawing.Size(458, 163);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Search Details";
@@ -88,7 +88,7 @@
             // btnRefresh
             // 
             this.btnRefresh.Image = global::Gallifrey.UI.Classic.Properties.Resources.Search_48x48;
-            this.btnRefresh.Location = new System.Drawing.Point(157, 86);
+            this.btnRefresh.Location = new System.Drawing.Point(206, 86);
             this.btnRefresh.Name = "btnRefresh";
             this.btnRefresh.Size = new System.Drawing.Size(65, 65);
             this.btnRefresh.TabIndex = 4;
@@ -111,17 +111,18 @@
             this.cmbUserFilters.FormattingEnabled = true;
             this.cmbUserFilters.Location = new System.Drawing.Point(95, 55);
             this.cmbUserFilters.Name = "cmbUserFilters";
-            this.cmbUserFilters.Size = new System.Drawing.Size(280, 25);
+            this.cmbUserFilters.Size = new System.Drawing.Size(357, 25);
             this.cmbUserFilters.TabIndex = 3;
             this.toolTip.SetToolTip(this.cmbUserFilters, "Choose One Of Your Saved Filters");
             // 
             // lstResults
             // 
             this.lstResults.FormattingEnabled = true;
+            this.lstResults.HorizontalScrollbar = true;
             this.lstResults.ItemHeight = 17;
             this.lstResults.Location = new System.Drawing.Point(12, 219);
             this.lstResults.Name = "lstResults";
-            this.lstResults.Size = new System.Drawing.Size(386, 174);
+            this.lstResults.Size = new System.Drawing.Size(463, 242);
             this.lstResults.TabIndex = 2;
             this.toolTip.SetToolTip(this.lstResults, "Jira Search Results");
             this.lstResults.DoubleClick += new System.EventHandler(this.lstResults_DoubleClick);
@@ -130,7 +131,7 @@
             // 
             this.btnCancelAddTimer.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancelAddTimer.Image = global::Gallifrey.UI.Classic.Properties.Resources.Cancel_48x48;
-            this.btnCancelAddTimer.Location = new System.Drawing.Point(217, 399);
+            this.btnCancelAddTimer.Location = new System.Drawing.Point(234, 470);
             this.btnCancelAddTimer.Name = "btnCancelAddTimer";
             this.btnCancelAddTimer.Size = new System.Drawing.Size(65, 65);
             this.btnCancelAddTimer.TabIndex = 4;
@@ -143,7 +144,7 @@
             // 
             this.btnAddTimer.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnAddTimer.Image = global::Gallifrey.UI.Classic.Properties.Resources.Check_48x48;
-            this.btnAddTimer.Location = new System.Drawing.Point(121, 399);
+            this.btnAddTimer.Location = new System.Drawing.Point(138, 470);
             this.btnAddTimer.Name = "btnAddTimer";
             this.btnAddTimer.Size = new System.Drawing.Size(65, 65);
             this.btnAddTimer.TabIndex = 3;
@@ -158,7 +159,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancelAddTimer;
-            this.ClientSize = new System.Drawing.Size(410, 474);
+            this.ClientSize = new System.Drawing.Size(487, 547);
             this.ControlBox = false;
             this.Controls.Add(this.lstResults);
             this.Controls.Add(this.groupBox1);

@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using Atlassian.Jira;
-using Gallifrey.Exceptions.IntergrationPoints;
+using Gallifrey.Exceptions.JiraIntegration;
+using Gallifrey.Jira.Model;
 
 namespace Gallifrey.UI.Classic
 {
@@ -12,7 +12,7 @@ namespace Gallifrey.UI.Classic
         private readonly IBackend gallifrey;
         private bool fromAddWindow = false;
         public Guid? NewTimerId { get; private set; }
-        public string JiraReference { get; private set;  }
+        public string JiraReference { get; private set; }
 
         public SearchWindow(IBackend gallifrey)
         {
@@ -32,7 +32,7 @@ namespace Gallifrey.UI.Classic
             {
                 cmbUserFilters.Enabled = false;
             }
-            
+
             try
             {
                 var currentUserIssues = gallifrey.JiraConnection.GetJiraCurrentUserOpenIssues();
@@ -54,12 +54,13 @@ namespace Gallifrey.UI.Classic
 
         private void btnAddTimer_Click(object sender, EventArgs e)
         {
-            var selectedIssue = (JiraSearchResult) lstResults.SelectedItem;
+            var selectedIssue = (JiraSearchResult)lstResults.SelectedItem;
 
             if (selectedIssue == null)
             {
                 MessageBox.Show("No Issue Selected, Cannot Add Timer", "No Issue Selected", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 DialogResult = DialogResult.None;
+                return;
             }
 
             if (fromAddWindow)
@@ -69,9 +70,9 @@ namespace Gallifrey.UI.Classic
             }
             else
             {
-                LoadAddTimerWindow(selectedIssue);    
+                LoadAddTimerWindow(selectedIssue);
             }
-            
+
         }
 
         private void LoadAddTimerWindow(JiraSearchResult selectedIssue)
@@ -129,7 +130,7 @@ namespace Gallifrey.UI.Classic
                 if (searchResults.Any())
                 {
                     lstResults.DataSource = searchResults.Select(issue => new JiraSearchResult(issue)).ToList();
-                    lstResults.Enabled = true;    
+                    lstResults.Enabled = true;
                 }
                 else
                 {
@@ -147,16 +148,30 @@ namespace Gallifrey.UI.Classic
         {
             internal string JiraRef { get; private set; }
             internal string JiraDesc { get; private set; }
+            internal string ParentJiraRef { get; private set; }
+            internal string ParentJiraDesc { get; private set; }
 
             internal JiraSearchResult(Issue issue)
             {
-                JiraRef = issue.Key.Value;
-                JiraDesc = issue.Summary;
+                JiraRef = issue.key;
+                JiraDesc = issue.fields.summary;
+                if (issue.fields.parent != null)
+                {
+                    ParentJiraRef = issue.fields.parent.key;
+                    ParentJiraDesc = issue.fields.parent.fields.summary;
+                }
             }
 
             public override string ToString()
             {
-                return string.Format("[ {0} ] - {1}", JiraRef, JiraDesc);
+                if (string.IsNullOrWhiteSpace(ParentJiraRef))
+                {
+                    return string.Format("[ {0} ] - {1}", JiraRef, JiraDesc);    
+                }
+                else
+                {
+                    return string.Format("[ {0} ] - {1} - [ {2} - {3} ]", JiraRef, JiraDesc, ParentJiraRef, ParentJiraDesc);
+                }                
             }
         }
 

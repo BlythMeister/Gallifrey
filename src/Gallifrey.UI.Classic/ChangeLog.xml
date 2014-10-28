@@ -95,4 +95,30 @@
     </Bugs>
     <Others />
   </Version>
+  <Version Number="1.2.0" Name="">
+    <Features>
+      <Feature>Change Jira interaction to use hand rolled REST API communication layer to open more features.</Feature>
+      <Feature>Add display of parent issue when Jira is a sub-task.</Feature>
+      <Feature>Show remaining estimate in the export window.</Feature>
+      <Feature>Assign to current user when adding new timer.</Feature>
+      <Feature>Set in-progress when adding new timer.</Feature>
+      <Feature>Attempt to replicate the way Jira display issues with parents.</Feature>
+      <Feature>Clicking un-exported time value shows oldest un-exported timer.</Feature>
+      <Feature>Added spell check to export comments box.</Feature>
+    </Features>
+    <Bugs>
+      <Bug>Fixed issue with drag and drop with custom Jira URLs.</Bug>
+      <Bug>Issue when drag and drop with no timers on current date, start now not checked.</Bug>
+      <Bug>Fixed issue where you can subtract more time than you had already exported from a timer.</Bug>
+      <Bug>Fixed issue where unexported time will subtract values from timers with a negative unexported time.</Bug>
+      <Bug>Fixed issue with locked timers when deleting time and leaving just one, it's not selected by default.</Bug>
+      <Bug>Fixed issue on locked timer window when trying to export with no timers selected.</Bug>
+      <Bug>Make export date non changable non the export screen.</Bug>
+      <Bug>Better handling of errors when trying to get updates.</Bug>
+      <Bug>Prevent the export of more time than the remaining to export.</Bug>
+      <Bug>Fix issue with keyboard shortcuts when no timers present in the app.</Bug>
+      <Bug>No longer try and add timer from search when no timer selected.</Bug>
+    </Bugs>
+    <Others />
+  </Version>
 </Versions>

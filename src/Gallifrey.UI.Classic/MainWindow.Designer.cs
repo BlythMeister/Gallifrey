@@ -181,6 +181,8 @@
             this.lblUnexportedTime.Size = new System.Drawing.Size(145, 17);
             this.lblUnexportedTime.TabIndex = 1;
             this.lblUnexportedTime.Text = "Un-Exported Time: 0:00";
+            this.toolTip.SetToolTip(this.lblUnexportedTime, "Click To Show Oldest Un-Exported Timer");
+            this.lblUnexportedTime.Click += new System.EventHandler(this.lblUnexportedTime_Click);
             // 
             // lblExportStat
             // 
@@ -223,7 +225,7 @@
             this.btnIdle.Size = new System.Drawing.Size(65, 65);
             this.btnIdle.TabIndex = 11;
             this.btnIdle.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.toolTip.SetToolTip(this.btnIdle, "\"View Machine Locked Timers (CTRL+L)");
+            this.toolTip.SetToolTip(this.btnIdle, "View Machine Locked Timers (CTRL+L)");
             this.btnIdle.UseVisualStyleBackColor = true;
             this.btnIdle.Click += new System.EventHandler(this.btnIdle_Click);
             // 
