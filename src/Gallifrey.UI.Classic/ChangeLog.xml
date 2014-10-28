@@ -95,7 +95,7 @@
     </Bugs>
     <Others />
   </Version>
-  <Version Number="1.1.2" Name="">
+  <Version Number="1.2.0" Name="">
     <Features>
       <Feature>Change Jira interaction to use hand rolled REST API communication layer to open more features.</Feature>
       <Feature>Add display of parent issue when Jira is a sub-task.</Feature>
