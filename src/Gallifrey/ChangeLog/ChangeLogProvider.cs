@@ -9,6 +9,10 @@ namespace Gallifrey.ChangeLog
     {
         public static IDictionary<Version, ChangeLogVersionDetails> GetChangeLog(Version fromVersion, Version toVersion, XDocument changeLogContent)
         {
+            if (toVersion.Revision > 0)
+            {
+                toVersion = new Version(toVersion.Major, toVersion.Minor, toVersion.Build + 1, 0);
+            }
             var changeLog = new Dictionary<Version, ChangeLogVersionDetails>();
 
             foreach (var changeVersion in changeLogContent.Descendants("Version"))
@@ -16,7 +20,7 @@ namespace Gallifrey.ChangeLog
                 var changeLogItem = BuildChangeLogItem(changeVersion);
                 changeLog.Add(changeLogItem.Key, changeLogItem.Value);
             }
-            
+
             if (fromVersion < toVersion && changeLog.Any(x => x.Key > fromVersion && x.Key <= toVersion))
             {
                 return changeLog.Where(x => x.Key > fromVersion && x.Key <= toVersion).OrderByDescending(detail => detail.Key).ToDictionary(detail => detail.Key, detail => detail.Value);
