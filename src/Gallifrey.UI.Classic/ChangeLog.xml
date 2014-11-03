@@ -121,4 +121,14 @@
     </Bugs>
     <Others />
   </Version>
+  <Version Number="1.2.1" Name="">
+    <Features>
+      <Feature>Add ability to create same reference timer on a different day.</Feature>
+      <Feature>Add timer splitting to move some or all time to a new timer.</Feature>
+    </Features>
+    <Bugs>
+      <Bug>Prevent update when dialog opens.</Bug>
+    </Bugs>
+    <Others />
+  </Version>
 </Versions>
