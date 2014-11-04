@@ -590,7 +590,7 @@ namespace Gallifrey.UI.Classic
 
         private void RefreshInternalTimerList()
         {
-            var validDates = gallifrey.JiraTimerCollection.GetValidTimerDates().OrderByDescending(x => x.Date);
+             var validDates = gallifrey.JiraTimerCollection.GetValidTimerDates().OrderByDescending(x => x.Date);
 
             //Build Correct Set Of Data Internally
             foreach (var validDate in validDates)
@@ -622,7 +622,7 @@ namespace Gallifrey.UI.Classic
                     var list = new ThreadedBindingList<JiraTimer>(orderedList) { RaiseListChangedEvents = true };
                     list.ListChanged += OnListChanged;
                     internalTimerList[validDate] = list;
-
+                    
                     var timerList = (ListBox)tabTimerDays.TabPages[validDate.ToString("yyyyMMdd")].Controls[string.Format("lst_{0}", validDate.ToString("yyyyMMdd"))];
                     timerList.DataSource = internalTimerList[validDate];
                 }
@@ -665,12 +665,16 @@ namespace Gallifrey.UI.Classic
 
                 if (!page.Controls.ContainsKey(tabListName))
                 {
-                    var timerList = new ListBox { Dock = DockStyle.Fill, Name = tabListName };
+                    var timerList = new ListBox {Dock = DockStyle.Fill, Name = tabListName};
                     timerList.DoubleClick += ListBoxDoubleClick;
                     timerList.ContextMenu = BuildTimerListContextMenu(timerlistValue.Key.Date);
                     timerList.MouseDown += ListBoxMouseDown;
                     page.Controls.Add(timerList);
                     timerList.DataSource = timerlistValue.Value;
+                }
+                else
+                {
+                    page.Controls[tabListName].ContextMenu = BuildTimerListContextMenu(timerlistValue.Key.Date);
                 }
 
                 itteration++;
@@ -693,11 +697,18 @@ namespace Gallifrey.UI.Classic
 
             var dateMenuItems = new List<MenuItem>();
 
-            foreach (var timerlistValue in internalTimerList.OrderByDescending(x => x.Key))
+            var dateList = gallifrey.JiraTimerCollection.GetValidTimerDates().OrderByDescending(x => x.Date);
+
+            if (dateList.All(x => x.Date != DateTime.Now.Date))
             {
-                if (timerlistValue.Key.Date != listDateTime.Date)
+                dateMenuItems.Add(new MenuItem(DateTime.Now.ToString("ddd, dd MMM"), ListContextDateClicked));
+            }
+
+            foreach (var timerlistValue in dateList)
+            {
+                if (timerlistValue.Date != listDateTime.Date)
                 {
-                    dateMenuItems.Add(new MenuItem(timerlistValue.Key.ToString("ddd, dd MMM"), ListContextDateClicked));
+                    dateMenuItems.Add(new MenuItem(timerlistValue.ToString("ddd, dd MMM"), ListContextDateClicked));
                 }
             }
 
