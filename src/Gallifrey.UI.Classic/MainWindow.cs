@@ -1029,7 +1029,7 @@ namespace Gallifrey.UI.Classic
                 
                 if (manualCheck)
                 {
-                    Task.Factory.StartNew(() =>
+                    return Task.Factory.StartNew(() =>
                     {
                         Task.Delay(1500);
                         return false;
