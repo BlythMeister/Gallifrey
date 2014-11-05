@@ -960,7 +960,7 @@ namespace Gallifrey.UI.Classic
                     else
                     {
                         SetVersionNumber(true);
-                        var updateResult = CheckForUpdates(false);
+                        var updateResult = CheckForUpdates(true);
                         await updateResult;
 
                         if (updateResult.Result)
