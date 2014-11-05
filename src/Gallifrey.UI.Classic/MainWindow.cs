@@ -1019,7 +1019,7 @@ namespace Gallifrey.UI.Classic
         {
             try
             {
-                var updateInfo = ApplicationDeployment.CurrentDeployment.CheckForDetailedUpdate();
+                var updateInfo = ApplicationDeployment.CurrentDeployment.CheckForDetailedUpdate(false);
                 lastUpdateCheck = DateTime.UtcNow;
 
                 if (updateInfo.UpdateAvailable && updateInfo.AvailableVersion > ApplicationDeployment.CurrentDeployment.CurrentVersion)
