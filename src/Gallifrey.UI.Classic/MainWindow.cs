@@ -44,10 +44,18 @@ namespace Gallifrey.UI.Classic
 
             if (ApplicationDeployment.IsNetworkDeployed)
             {
-                CheckForUpdates(false, true);
-            }
+                var updateResult = CheckForUpdates(false);
+                updateResult.Wait();
 
-            CheckForUpdates(false, true);
+                if (updateResult.Result)
+                {
+                    UpdateComplete();
+                }
+                else
+                {
+                    SetVersionNumber(noUpdate: true);
+                }
+            }
 
             internalTimerList = new Dictionary<DateTime, ThreadedBindingList<JiraTimer>>();
 
@@ -938,7 +946,7 @@ namespace Gallifrey.UI.Classic
 
         #region "Updates
 
-        private void lblUpdate_Click(object sender, EventArgs e)
+        private async void lblUpdate_Click(object sender, EventArgs e)
         {
             if (ApplicationDeployment.IsNetworkDeployed)
             {
@@ -952,7 +960,17 @@ namespace Gallifrey.UI.Classic
                     else
                     {
                         SetVersionNumber(true);
-                        CheckForUpdates(true, false);
+                        var updateResult = CheckForUpdates(false);
+                        await updateResult;
+
+                        if (updateResult.Result)
+                        {
+                            UpdateComplete();
+                        }
+                        else
+                        {
+                            SetVersionNumber(noUpdate: true);
+                        }
                     }
                 }
                 catch (Exception)
@@ -978,16 +996,26 @@ namespace Gallifrey.UI.Classic
             }
         }
 
-        private void CheckIfUpdateCallNeeded()
+        private async void CheckIfUpdateCallNeeded()
         {
             if (ApplicationDeployment.IsNetworkDeployed && lastUpdateCheck < DateTime.UtcNow.AddMinutes(-10))
             {
                 SetVersionNumber();
-                CheckForUpdates(false, false);
+                var updateResult = CheckForUpdates(false);
+                await updateResult;
+
+                if (updateResult.Result)
+                {
+                    UpdateComplete();
+                }
+                else
+                {
+                    SetVersionNumber(noUpdate: true);
+                }
             }
         }
 
-        private async void CheckForUpdates(bool manualCheck, bool updateSyncronous)
+        private Task<bool> CheckForUpdates(bool manualCheck)
         {
             try
             {
@@ -996,32 +1024,26 @@ namespace Gallifrey.UI.Classic
 
                 if (updateInfo.UpdateAvailable && updateInfo.AvailableVersion > ApplicationDeployment.CurrentDeployment.CurrentVersion)
                 {
-                    ApplicationDeployment.CurrentDeployment.UpdateCompleted += UpdateComplete;
-                    if (updateSyncronous)
-                    {
-                        if (ApplicationDeployment.CurrentDeployment.Update())
-                        {
-                            UpdateComplete(this, null);
-                        }
-                    }
-                    else
-                    {
-                        ApplicationDeployment.CurrentDeployment.UpdateAsync();
-                    }
-
+                    return Task.Factory.StartNew(() => ApplicationDeployment.CurrentDeployment.Update());
                 }
-                else if (manualCheck)
+                
+                if (manualCheck)
                 {
-                    await Task.Delay(1500);
-                    SetVersionNumber(noUpdate: true);
+                    Task.Factory.StartNew(() =>
+                    {
+                        Task.Delay(1500);
+                        return false;
+                    });
                 }
             }
             catch (Exception)
             {
             }
+
+            return Task.Factory.StartNew(() => false);
         }
 
-        private void UpdateComplete(object sender, AsyncCompletedEventArgs e)
+        private void UpdateComplete()
         {
             if (gallifrey.Settings.AppSettings.AutoUpdate && Application.OpenForms.Count <= 1)
             {
