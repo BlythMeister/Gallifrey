@@ -38,23 +38,15 @@ namespace Gallifrey.UI.Classic
         public MainWindow(bool isBeta)
         {
             InitializeComponent();
+
             this.isBeta = isBeta;
             updateReady = false;
             lastUpdateCheck = DateTime.UtcNow;
 
             if (ApplicationDeployment.IsNetworkDeployed)
             {
-                var updateResult = CheckForUpdates();
-                updateResult.Wait();
-
-                if (updateResult.Result)
-                {
-                    UpdateComplete(true);
-                }
-                else
-                {
-                    SetVersionNumber(noUpdate: true);
-                }
+                ExceptionlessClient.Current.UnhandledExceptionReporting += OnUnhandledExceptionReporting;
+                ExceptionlessClient.Current.Register();
             }
 
             internalTimerList = new Dictionary<DateTime, ThreadedBindingList<JiraTimer>>();
@@ -76,11 +68,25 @@ namespace Gallifrey.UI.Classic
             gallifrey.NoActivityEvent += GallifreyOnNoActivityEvent;
             gallifrey.ExportPromptEvent += GallifreyOnExportPromptEvent;
             SystemEvents.SessionSwitch += SessionSwitchHandler;
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
 
             if (ApplicationDeployment.IsNetworkDeployed)
             {
-                ExceptionlessClient.Current.UnhandledExceptionReporting += OnUnhandledExceptionReporting;
-                ExceptionlessClient.Current.Register();
+                var updateResult = CheckForUpdates();
+                updateResult.Wait();
+
+                if (updateResult.Result)
+                {
+                    UpdateComplete();
+                }
+                else
+                {
+                    SetVersionNumber(noUpdate: true);
+                }
             }
         }
 
@@ -1043,9 +1049,9 @@ namespace Gallifrey.UI.Classic
             return Task.Factory.StartNew(() => false);
         }
 
-        private void UpdateComplete(bool isStartup = false)
+        private void UpdateComplete()
         {
-            if (isStartup || (gallifrey.Settings.AppSettings.AutoUpdate && Application.OpenForms.Count <= 1))
+            if ((gallifrey.Settings.AppSettings.AutoUpdate && Application.OpenForms.Count <= 1))
             {
                 try
                 {
