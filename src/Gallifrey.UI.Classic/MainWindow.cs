@@ -44,12 +44,12 @@ namespace Gallifrey.UI.Classic
 
             if (ApplicationDeployment.IsNetworkDeployed)
             {
-                var updateResult = CheckForUpdates(false);
+                var updateResult = CheckForUpdates();
                 updateResult.Wait();
 
                 if (updateResult.Result)
                 {
-                    UpdateComplete();
+                    UpdateComplete(true);
                 }
                 else
                 {
@@ -1001,7 +1001,7 @@ namespace Gallifrey.UI.Classic
             if (ApplicationDeployment.IsNetworkDeployed && lastUpdateCheck < DateTime.UtcNow.AddMinutes(-10))
             {
                 SetVersionNumber();
-                var updateResult = CheckForUpdates(false);
+                var updateResult = CheckForUpdates();
                 await updateResult;
 
                 if (updateResult.Result)
@@ -1015,7 +1015,7 @@ namespace Gallifrey.UI.Classic
             }
         }
 
-        private Task<bool> CheckForUpdates(bool manualCheck)
+        private Task<bool> CheckForUpdates(bool manualCheck = false)
         {
             try
             {
@@ -1043,9 +1043,9 @@ namespace Gallifrey.UI.Classic
             return Task.Factory.StartNew(() => false);
         }
 
-        private void UpdateComplete()
+        private void UpdateComplete(bool isStartup = false)
         {
-            if (gallifrey.Settings.AppSettings.AutoUpdate && Application.OpenForms.Count <= 1)
+            if (isStartup || (gallifrey.Settings.AppSettings.AutoUpdate && Application.OpenForms.Count <= 1))
             {
                 try
                 {
