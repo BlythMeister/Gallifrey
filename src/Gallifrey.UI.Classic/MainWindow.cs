@@ -40,7 +40,15 @@ namespace Gallifrey.UI.Classic
             InitializeComponent();
             this.isBeta = isBeta;
             updateReady = false;
-            lastUpdateCheck = DateTime.MinValue;
+            lastUpdateCheck = DateTime.UtcNow;
+
+            if (ApplicationDeployment.IsNetworkDeployed)
+            {
+                CheckForUpdates(false, true);
+            }
+
+            CheckForUpdates(false, true);
+
             internalTimerList = new Dictionary<DateTime, ThreadedBindingList<JiraTimer>>();
 
             gallifrey = new Backend();
@@ -590,7 +598,7 @@ namespace Gallifrey.UI.Classic
 
         private void RefreshInternalTimerList()
         {
-             var validDates = gallifrey.JiraTimerCollection.GetValidTimerDates().OrderByDescending(x => x.Date);
+            var validDates = gallifrey.JiraTimerCollection.GetValidTimerDates().OrderByDescending(x => x.Date);
 
             //Build Correct Set Of Data Internally
             foreach (var validDate in validDates)
@@ -622,7 +630,7 @@ namespace Gallifrey.UI.Classic
                     var list = new ThreadedBindingList<JiraTimer>(orderedList) { RaiseListChangedEvents = true };
                     list.ListChanged += OnListChanged;
                     internalTimerList[validDate] = list;
-                    
+
                     var timerList = (ListBox)tabTimerDays.TabPages[validDate.ToString("yyyyMMdd")].Controls[string.Format("lst_{0}", validDate.ToString("yyyyMMdd"))];
                     timerList.DataSource = internalTimerList[validDate];
                 }
@@ -665,7 +673,7 @@ namespace Gallifrey.UI.Classic
 
                 if (!page.Controls.ContainsKey(tabListName))
                 {
-                    var timerList = new ListBox {Dock = DockStyle.Fill, Name = tabListName};
+                    var timerList = new ListBox { Dock = DockStyle.Fill, Name = tabListName };
                     timerList.DoubleClick += ListBoxDoubleClick;
                     timerList.ContextMenu = BuildTimerListContextMenu(timerlistValue.Key.Date);
                     timerList.MouseDown += ListBoxMouseDown;
@@ -944,7 +952,7 @@ namespace Gallifrey.UI.Classic
                     else
                     {
                         SetVersionNumber(true);
-                        CheckForUpdates(true);
+                        CheckForUpdates(true, false);
                     }
                 }
                 catch (Exception)
@@ -972,14 +980,14 @@ namespace Gallifrey.UI.Classic
 
         private void CheckIfUpdateCallNeeded()
         {
-            if (ApplicationDeployment.IsNetworkDeployed && lastUpdateCheck < DateTime.UtcNow.AddMinutes(-1))
+            if (ApplicationDeployment.IsNetworkDeployed && lastUpdateCheck < DateTime.UtcNow.AddMinutes(-10))
             {
                 SetVersionNumber();
-                CheckForUpdates(false);
+                CheckForUpdates(false, false);
             }
         }
 
-        private async void CheckForUpdates(bool manualCheck)
+        private async void CheckForUpdates(bool manualCheck, bool updateSyncronous)
         {
             try
             {
@@ -989,7 +997,18 @@ namespace Gallifrey.UI.Classic
                 if (updateInfo.UpdateAvailable && updateInfo.AvailableVersion > ApplicationDeployment.CurrentDeployment.CurrentVersion)
                 {
                     ApplicationDeployment.CurrentDeployment.UpdateCompleted += UpdateComplete;
-                    ApplicationDeployment.CurrentDeployment.UpdateAsync();
+                    if (updateSyncronous)
+                    {
+                        if (ApplicationDeployment.CurrentDeployment.Update())
+                        {
+                            UpdateComplete(this, null);
+                        }
+                    }
+                    else
+                    {
+                        ApplicationDeployment.CurrentDeployment.UpdateAsync();
+                    }
+
                 }
                 else if (manualCheck)
                 {
@@ -1152,6 +1171,6 @@ namespace Gallifrey.UI.Classic
 
         #endregion
 
-        
+
     }
 }

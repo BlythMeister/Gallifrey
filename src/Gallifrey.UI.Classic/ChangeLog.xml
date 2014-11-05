@@ -128,6 +128,7 @@
     </Features>
     <Bugs>
       <Bug>Prevent update when dialog opens.</Bug>
+      <Bug>Attempt to update on startup without showing the UI.</Bug>
     </Bugs>
     <Others />
   </Version>
