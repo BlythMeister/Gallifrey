@@ -70,11 +70,11 @@
             this.btnOK = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.txtComment = new ExtendedTextBox.ExtTextBox();
             this.lblParentDesc = new System.Windows.Forms.Label();
             this.txtParentDesc = new System.Windows.Forms.TextBox();
             this.lblParentRef = new System.Windows.Forms.Label();
             this.txtParentRef = new System.Windows.Forms.TextBox();
-            this.txtComment = new ExtendedTextBox.ExtTextBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -491,6 +491,26 @@
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
+            // txtComment
+            // 
+            this.txtComment.AcceptsReturn = true;
+            this.txtComment.AcceptsTab = true;
+            this.txtComment.AutoSize = true;
+            this.txtComment.ChangedColour = System.Drawing.SystemColors.Window;
+            this.txtComment.ErrorProvider = null;
+            this.txtComment.Location = new System.Drawing.Point(82, 351);
+            this.txtComment.Mandatory = false;
+            this.txtComment.MaxLength = 0;
+            this.txtComment.Name = "txtComment";
+            this.txtComment.OriginalText = "";
+            this.txtComment.Size = new System.Drawing.Size(493, 81);
+            this.txtComment.SpellCheck = true;
+            this.txtComment.TabIndex = 1;
+            this.txtComment.TextCase = System.Windows.Forms.CharacterCasing.Normal;
+            this.txtComment.TextType = ExtendedTextBox.ExtTextBox.TextTypes.String;
+            this.toolTip.SetToolTip(this.txtComment, "Comment To Be Added To Work Log");
+            this.txtComment.Wrapping = false;
+            // 
             // lblParentDesc
             // 
             this.lblParentDesc.AutoSize = true;
@@ -525,24 +545,6 @@
             this.txtParentRef.Name = "txtParentRef";
             this.txtParentRef.Size = new System.Drawing.Size(173, 25);
             this.txtParentRef.TabIndex = 10;
-            // 
-            // txtComment
-            // 
-            this.txtComment.AcceptsReturn = true;
-            this.txtComment.AcceptsTab = true;
-            this.txtComment.AutoSize = true;
-            this.txtComment.ChangedColour = System.Drawing.SystemColors.Window;
-            this.txtComment.Location = new System.Drawing.Point(82, 351);
-            this.txtComment.MaxLength = 0;
-            this.txtComment.Name = "txtComment";
-            this.txtComment.OriginalText = "";
-            this.txtComment.Size = new System.Drawing.Size(493, 81);
-            this.txtComment.SpellCheck = true;
-            this.txtComment.TabIndex = 1;
-            this.txtComment.TextCase = System.Windows.Forms.CharacterCasing.Normal;
-            this.txtComment.TextType = ExtendedTextBox.ExtTextBox.TextTypes.String;
-            this.toolTip.SetToolTip(this.txtComment, "Comment To Be Added To Work Log");
-            this.txtComment.Wrapping = false;
             // 
             // ExportTimerWindow
             // 

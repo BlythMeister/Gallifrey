@@ -129,6 +129,7 @@
     <Bugs>
       <Bug>Prevent update when dialog opens.</Bug>
       <Bug>Attempt to update on startup without showing the UI.</Bug>
+      <Bug>Make Alt + Enter on export work again, bug introduced in 1.2.0.</Bug>
     </Bugs>
     <Others />
   </Version>

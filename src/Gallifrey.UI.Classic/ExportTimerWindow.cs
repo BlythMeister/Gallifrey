@@ -84,8 +84,10 @@ namespace Gallifrey.UI.Classic
             radSetValue_CheckedChanged(this, null);
 
             TopMost = gallifrey.Settings.UiSettings.AlwaysOnTop;
-        }
 
+            txtComment.AltEnterEvent += btnOK_Click;
+        }
+        
         public void PreLoadExportTime(TimeSpan exportTime)
         {
             if (timerToShow.TimeToExport > exportTime)
