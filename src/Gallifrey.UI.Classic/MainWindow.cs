@@ -17,7 +17,6 @@ using Gallifrey.Exceptions.JiraIntegration;
 using Gallifrey.Exceptions.JiraTimers;
 using Gallifrey.ExtensionMethods;
 using Gallifrey.JiraTimers;
-using Gallifrey.Settings;
 using Microsoft.Win32;
 
 namespace Gallifrey.UI.Classic
@@ -218,7 +217,7 @@ namespace Gallifrey.UI.Classic
 
         private void ListBoxDoubleClick(object sender, EventArgs e)
         {
-            var timerClicked = (JiraTimer)((ListBox)sender).SelectedItem;
+            var timerClicked = GetSelectedTimer();
             var runningTimer = gallifrey.JiraTimerCollection.GetRunningTimerId();
 
             if (runningTimer.HasValue && runningTimer.Value == timerClicked.UniqueId)
@@ -254,6 +253,11 @@ namespace Gallifrey.UI.Classic
                 if (item >= 0)
                 {
                     senderList.SelectedIndex = item;
+                    senderList.ContextMenu = BuildTimerListContextMenu((JiraTimer)senderList.SelectedItem);
+                }
+                else
+                {
+                    senderList.ContextMenu = BuildTimerListContextMenu(null);
                 }
             }
         }
@@ -689,14 +693,9 @@ namespace Gallifrey.UI.Classic
                 {
                     var timerList = new ListBox { Dock = DockStyle.Fill, Name = tabListName };
                     timerList.DoubleClick += ListBoxDoubleClick;
-                    timerList.ContextMenu = BuildTimerListContextMenu(timerlistValue.Key.Date);
                     timerList.MouseDown += ListBoxMouseDown;
                     page.Controls.Add(timerList);
                     timerList.DataSource = timerlistValue.Value;
-                }
-                else
-                {
-                    page.Controls[tabListName].ContextMenu = BuildTimerListContextMenu(timerlistValue.Key.Date);
                 }
 
                 itteration++;
@@ -713,7 +712,29 @@ namespace Gallifrey.UI.Classic
             }
         }
 
-        private ContextMenu BuildTimerListContextMenu(DateTime listDateTime)
+        private ContextMenu BuildTimerListContextMenu(JiraTimer jiraTimerSelected)
+        {
+            if (jiraTimerSelected != null)
+            {
+                return BuildSelectedTimerContext(jiraTimerSelected);
+            }
+            else
+            {
+                return BuildNoTimerContext();
+            }
+        }
+
+        private ContextMenu BuildNoTimerContext()
+        {
+            var menuItems = new List<MenuItem>
+            {
+                new MenuItem("Add New Timer", btnAddTimer_Click)
+            };
+
+            return new ContextMenu(menuItems.ToArray());
+        }
+
+        private ContextMenu BuildSelectedTimerContext(JiraTimer jiraTimer)
         {
             var menuItems = new List<MenuItem>();
 
@@ -728,7 +749,7 @@ namespace Gallifrey.UI.Classic
 
             foreach (var timerlistValue in dateList)
             {
-                if (timerlistValue.Date != listDateTime.Date)
+                if (timerlistValue.Date != jiraTimer.DateStarted.Date)
                 {
                     dateMenuItems.Add(new MenuItem(timerlistValue.ToString("ddd, dd MMM"), ListContextDateClicked));
                 }
@@ -736,7 +757,19 @@ namespace Gallifrey.UI.Classic
 
             menuItems.Add(new MenuItem("Add To Date", dateMenuItems.ToArray()));
             menuItems.Add(new MenuItem("Move Time To New Timer", ListContextSplitClicked));
-
+            menuItems.Add(new MenuItem("Delete Timer", btnRemoveTimer_Click));
+            menuItems.Add(new MenuItem("Adjust Timer Time", btnTimeEdit_Click));
+            menuItems.Add(new MenuItem("Change Jira Ref/Date", btnRename_Click));
+            menuItems.Add(new MenuItem("Export Timer", btnExport_Click));
+            if (jiraTimer.IsRunning)
+            {
+                menuItems.Add(new MenuItem("Stop Timer", ListBoxDoubleClick));    
+            }
+            else
+            {
+                menuItems.Add(new MenuItem("Start Timer", ListBoxDoubleClick));    
+            }
+            
             return new ContextMenu(menuItems.ToArray());
         }
 
@@ -1032,7 +1065,7 @@ namespace Gallifrey.UI.Classic
                 {
                     return Task.Factory.StartNew(() => ApplicationDeployment.CurrentDeployment.Update());
                 }
-                
+
                 if (manualCheck)
                 {
                     return Task.Factory.StartNew(() =>
