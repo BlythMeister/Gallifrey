@@ -125,6 +125,7 @@
     <Features>
       <Feature>Add ability to create same reference timer on a different day.</Feature>
       <Feature>Add timer splitting to move some or all time to a new timer.</Feature>
+      <Feature>Add standard functions to conext menu to add another way to use Gallifrey!</Feature>
     </Features>
     <Bugs>
       <Bug>Prevent update when dialog opens.</Bug>

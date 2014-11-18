@@ -62,6 +62,9 @@
             this.lblEmail = new System.Windows.Forms.LinkLabel();
             this.label5 = new System.Windows.Forms.Label();
             this.lblDonate = new System.Windows.Forms.LinkLabel();
+            this.label6 = new System.Windows.Forms.Label();
+            this.splitter1 = new System.Windows.Forms.Splitter();
+            this.lblGitHub = new System.Windows.Forms.LinkLabel();
             this.grpTarget.SuspendLayout();
             this.grpExportStats.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -422,11 +425,45 @@
             this.lblDonate.Text = "click to donate";
             this.lblDonate.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lblDonate_LinkClicked);
             // 
+            // label6
+            // 
+            this.label6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(311, 586);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(205, 13);
+            this.label6.TabIndex = 24;
+            this.label6.Text = "or join our open source community on";
+            // 
+            // splitter1
+            // 
+            this.splitter1.Location = new System.Drawing.Point(0, 0);
+            this.splitter1.Name = "splitter1";
+            this.splitter1.Size = new System.Drawing.Size(3, 608);
+            this.splitter1.TabIndex = 25;
+            this.splitter1.TabStop = false;
+            // 
+            // lblGitHub
+            // 
+            this.lblGitHub.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblGitHub.AutoSize = true;
+            this.lblGitHub.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
+            this.lblGitHub.Location = new System.Drawing.Point(512, 586);
+            this.lblGitHub.Name = "lblGitHub";
+            this.lblGitHub.Size = new System.Drawing.Size(44, 13);
+            this.lblGitHub.TabIndex = 26;
+            this.lblGitHub.TabStop = true;
+            this.lblGitHub.Text = "GitHub";
+            this.lblGitHub.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lblGitHub_LinkClicked);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(975, 608);
+            this.Controls.Add(this.lblGitHub);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.splitter1);
             this.Controls.Add(this.lblDonate);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.lblEmail);
@@ -505,6 +542,9 @@
         private System.Windows.Forms.LinkLabel lblEmail;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.LinkLabel lblDonate;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Splitter splitter1;
+        private System.Windows.Forms.LinkLabel lblGitHub;
     }
 }
 

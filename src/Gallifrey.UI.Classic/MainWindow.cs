@@ -335,6 +335,11 @@ namespace Gallifrey.UI.Classic
             System.Diagnostics.Process.Start("mailto:GallifreyApp@gmail.com?subject=Gallifrey App Contact");
         }
 
+        private void lblGitHub_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://github.com/BlythMeister/Gallifrey");
+        }
+
         private void lblDonate_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             System.Diagnostics.Process.Start("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=G3MWL8E6UG4RS");
@@ -1231,6 +1236,8 @@ namespace Gallifrey.UI.Classic
         }
 
         #endregion
+
+        
 
 
     }
