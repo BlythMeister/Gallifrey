@@ -429,11 +429,11 @@
             // 
             this.label6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(311, 586);
+            this.label6.Location = new System.Drawing.Point(310, 586);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(205, 13);
+            this.label6.Size = new System.Drawing.Size(264, 13);
             this.label6.TabIndex = 24;
-            this.label6.Text = "or join our open source community on";
+            this.label6.Text = ". You can also join our open source community on";
             // 
             // splitter1
             // 
@@ -448,7 +448,7 @@
             this.lblGitHub.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblGitHub.AutoSize = true;
             this.lblGitHub.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
-            this.lblGitHub.Location = new System.Drawing.Point(512, 586);
+            this.lblGitHub.Location = new System.Drawing.Point(570, 586);
             this.lblGitHub.Name = "lblGitHub";
             this.lblGitHub.Size = new System.Drawing.Size(44, 13);
             this.lblGitHub.TabIndex = 26;
