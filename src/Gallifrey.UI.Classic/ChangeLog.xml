@@ -121,7 +121,7 @@
     </Bugs>
     <Others />
   </Version>
-  <Version Number="1.2.1" Name="">
+  <Version Number="1.2.1" Name="Pre-Release">
     <Features>
       <Feature>Add ability to create same reference timer on a different day.</Feature>
       <Feature>Add timer splitting to move some or all time to a new timer.</Feature>
