@@ -23,6 +23,7 @@
     <UpdateRequired>true</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <InstallUrl>https://raw.githubusercontent.com/BlythMeister/Gallifrey/develop/deploy/beta/</InstallUrl>
+    <UpdateUrl>http://blythmeister.github.io/Gallifrey.Releases/deploy/beta/</UpdateUrl>
     <SupportUrl>https://github.com/BlythMeister/Gallifrey</SupportUrl>
     <ErrorReportUrl>https://github.com/BlythMeister/Gallifrey</ErrorReportUrl>
     <ProductName>Gallifrey %28Beta%29</ProductName>
