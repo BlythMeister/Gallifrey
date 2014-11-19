@@ -103,7 +103,7 @@
             this.tabTimerDays.Location = new System.Drawing.Point(12, 169);
             this.tabTimerDays.Name = "tabTimerDays";
             this.tabTimerDays.SelectedIndex = 0;
-            this.tabTimerDays.Size = new System.Drawing.Size(951, 328);
+            this.tabTimerDays.Size = new System.Drawing.Size(951, 318);
             this.tabTimerDays.TabIndex = 15;
             this.tabTimerDays.DragDrop += new System.Windows.Forms.DragEventHandler(this.tabTimerDays_DragDrop);
             this.tabTimerDays.DragOver += new System.Windows.Forms.DragEventHandler(this.tabTimerDays_DragOver);
@@ -462,26 +462,27 @@
             // 
             this.lblDownload.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblDownload.AutoSize = true;
-            this.lblDownload.Font = new System.Drawing.Font("Segoe UI Semibold", 20F, System.Drawing.FontStyle.Bold);
+            this.lblDownload.Font = new System.Drawing.Font("Segoe UI Semibold", 18F, System.Drawing.FontStyle.Bold);
             this.lblDownload.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
-            this.lblDownload.Location = new System.Drawing.Point(539, 537);
+            this.lblDownload.Location = new System.Drawing.Point(313, 522);
             this.lblDownload.Name = "lblDownload";
-            this.lblDownload.Size = new System.Drawing.Size(397, 37);
+            this.lblDownload.Size = new System.Drawing.Size(407, 32);
             this.lblDownload.TabIndex = 28;
             this.lblDownload.TabStop = true;
-            this.lblDownload.Text = "click here to download installer";
+            this.lblDownload.Text = "click here to download new installer";
             this.lblDownload.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lblDownload_LinkClicked);
             // 
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Font = new System.Drawing.Font("Segoe UI Semibold", 20F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label7.Location = new System.Drawing.Point(12, 500);
+            this.label7.Font = new System.Drawing.Font("Segoe UI Semibold", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7.Location = new System.Drawing.Point(9, 490);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(839, 74);
+            this.label7.Size = new System.Drawing.Size(946, 96);
             this.label7.TabIndex = 27;
-            this.label7.Text = "Please Note: An update server change means you need to uninstall \r\nand re-install" +
-    ".  ALL timers will be retained!";
+            this.label7.Text = "Note: Due to an issue with auto updates you need to uninstall and re-install Gall" +
+    "ifrey.\r\nALL timers will be retained!\r\nThere will be no updated delivered to this" +
+    " version of the app!";
             // 
             // MainWindow
             // 
