@@ -37,9 +37,17 @@ namespace Gallifrey.UI.Classic
         public MainWindow(bool isBeta)
         {
             InitializeComponent();
+
             this.isBeta = isBeta;
             updateReady = false;
-            lastUpdateCheck = DateTime.MinValue;
+            lastUpdateCheck = DateTime.UtcNow;
+
+            if (ApplicationDeployment.IsNetworkDeployed)
+            {
+                ExceptionlessClient.Current.UnhandledExceptionReporting += OnUnhandledExceptionReporting;
+                ExceptionlessClient.Current.Register();
+            }
+
             internalTimerList = new Dictionary<DateTime, ThreadedBindingList<JiraTimer>>();
 
             gallifrey = new Backend();
@@ -59,11 +67,25 @@ namespace Gallifrey.UI.Classic
             gallifrey.NoActivityEvent += GallifreyOnNoActivityEvent;
             gallifrey.ExportPromptEvent += GallifreyOnExportPromptEvent;
             SystemEvents.SessionSwitch += SessionSwitchHandler;
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
 
             if (ApplicationDeployment.IsNetworkDeployed)
             {
-                ExceptionlessClient.Current.UnhandledExceptionReporting += OnUnhandledExceptionReporting;
-                ExceptionlessClient.Current.Register();
+                var updateResult = CheckForUpdates();
+                updateResult.Wait();
+
+                if (updateResult.Result)
+                {
+                    UpdateComplete();
+                }
+                else
+                {
+                    SetVersionNumber(noUpdate: true);
+                }
             }
         }
 
@@ -116,7 +138,7 @@ namespace Gallifrey.UI.Classic
             if (e.Control)
             {
                 var selectedTab = tabTimerDays.SelectedTab;
-                if(selectedTab == null) return;
+                if (selectedTab == null) return;
 
                 var tabList = (ListBox)selectedTab.Controls[string.Format("lst_{0}", selectedTab.Name)];
 
@@ -193,9 +215,9 @@ namespace Gallifrey.UI.Classic
 
         #region "Non Button Handlers"
 
-        private void DoubleClickListBox(object sender, EventArgs e)
+        private void ListBoxDoubleClick(object sender, EventArgs e)
         {
-            var timerClicked = (JiraTimer)((ListBox)sender).SelectedItem;
+            var timerClicked = GetSelectedTimer();
             var runningTimer = gallifrey.JiraTimerCollection.GetRunningTimerId();
 
             if (runningTimer.HasValue && runningTimer.Value == timerClicked.UniqueId)
@@ -219,6 +241,24 @@ namespace Gallifrey.UI.Classic
             if (runningId.HasValue)
             {
                 SelectTimer(runningId.Value);
+            }
+        }
+
+        private void ListBoxMouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                var senderList = (ListBox)sender;
+                var item = senderList.IndexFromPoint(e.Location);
+                if (item >= 0)
+                {
+                    senderList.SelectedIndex = item;
+                    senderList.ContextMenu = BuildTimerListContextMenu((JiraTimer)senderList.SelectedItem);
+                }
+                else
+                {
+                    senderList.ContextMenu = BuildTimerListContextMenu(null);
+                }
             }
         }
 
@@ -285,6 +325,26 @@ namespace Gallifrey.UI.Classic
             }
         }
 
+        private void lblTwitter_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://twitter.com/GallifreyApp");
+        }
+
+        private void lblEmail_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("mailto:GallifreyApp@gmail.com?subject=Gallifrey App Contact");
+        }
+
+        private void lblGitHub_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://github.com/BlythMeister/Gallifrey");
+        }
+
+        private void lblDonate_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=G3MWL8E6UG4RS");
+        }
+
         #endregion
 
         #region "Button Handlers"
@@ -311,7 +371,7 @@ namespace Gallifrey.UI.Classic
         {
             var selectedTab = tabTimerDays.SelectedTab;
             if (selectedTab == null) return;
-            var selectedTimer = (JiraTimer)((ListBox)selectedTab.Controls[string.Format("lst_{0}", selectedTab.Name)]).SelectedItem;
+            var selectedTimer = GetSelectedTimer();
 
             if (MessageBox.Show(string.Format("Are You Sure You Want To Remove Timer For '{0}'?", selectedTimer.JiraReference), "Are You Sure", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
@@ -335,7 +395,7 @@ namespace Gallifrey.UI.Classic
         {
             var selectedTab = tabTimerDays.SelectedTab;
             if (selectedTab == null) return;
-            var selectedTimer = (JiraTimer)((ListBox)selectedTab.Controls[string.Format("lst_{0}", selectedTab.Name)]).SelectedItem;
+            var selectedTimer = GetSelectedTimer();
             var renameWindow = new EditTimerWindow(gallifrey, selectedTimer.UniqueId);
             renameWindow.ShowDialog();
             RefreshInternalTimerList();
@@ -345,7 +405,7 @@ namespace Gallifrey.UI.Classic
         {
             var selectedTab = tabTimerDays.SelectedTab;
             if (selectedTab == null) return;
-            var selectedTimer = (JiraTimer)((ListBox)selectedTab.Controls[string.Format("lst_{0}", selectedTab.Name)]).SelectedItem;
+            var selectedTimer = GetSelectedTimer();
             var adjustTimerWindow = new AdjustTimerWindow(gallifrey, selectedTimer.UniqueId);
             adjustTimerWindow.ShowDialog();
             RefreshInternalTimerList();
@@ -355,7 +415,7 @@ namespace Gallifrey.UI.Classic
         {
             var selectedTab = tabTimerDays.SelectedTab;
             if (selectedTab == null) return;
-            var selectedTimer = (JiraTimer)((ListBox)selectedTab.Controls[string.Format("lst_{0}", selectedTab.Name)]).SelectedItem;
+            var selectedTimer = GetSelectedTimer();
             var exportTimerWindow = new ExportTimerWindow(gallifrey, selectedTimer.UniqueId);
             if (exportTimerWindow.DisplayForm)
             {
@@ -637,7 +697,8 @@ namespace Gallifrey.UI.Classic
                 if (!page.Controls.ContainsKey(tabListName))
                 {
                     var timerList = new ListBox { Dock = DockStyle.Fill, Name = tabListName };
-                    timerList.DoubleClick += DoubleClickListBox;
+                    timerList.DoubleClick += ListBoxDoubleClick;
+                    timerList.MouseDown += ListBoxMouseDown;
                     page.Controls.Add(timerList);
                     timerList.DataSource = timerlistValue.Value;
                 }
@@ -653,6 +714,117 @@ namespace Gallifrey.UI.Classic
                 {
                     tabTimerDays.TabPages.Remove(tabPage);
                 }
+            }
+        }
+
+        private ContextMenu BuildTimerListContextMenu(JiraTimer jiraTimerSelected)
+        {
+            if (jiraTimerSelected != null)
+            {
+                return BuildSelectedTimerContext(jiraTimerSelected);
+            }
+            else
+            {
+                return BuildNoTimerContext();
+            }
+        }
+
+        private ContextMenu BuildNoTimerContext()
+        {
+            var menuItems = new List<MenuItem>
+            {
+                new MenuItem("Add New Timer", btnAddTimer_Click)
+            };
+
+            return new ContextMenu(menuItems.ToArray());
+        }
+
+        private ContextMenu BuildSelectedTimerContext(JiraTimer jiraTimer)
+        {
+            var menuItems = new List<MenuItem>();
+
+            var dateMenuItems = new List<MenuItem>();
+
+            var dateList = gallifrey.JiraTimerCollection.GetValidTimerDates().OrderByDescending(x => x.Date);
+
+            if (dateList.All(x => x.Date != DateTime.Now.Date))
+            {
+                dateMenuItems.Add(new MenuItem(DateTime.Now.ToString("ddd, dd MMM"), ListContextDateClicked));
+            }
+
+            foreach (var timerlistValue in dateList)
+            {
+                if (timerlistValue.Date != jiraTimer.DateStarted.Date)
+                {
+                    dateMenuItems.Add(new MenuItem(timerlistValue.ToString("ddd, dd MMM"), ListContextDateClicked));
+                }
+            }
+
+            menuItems.Add(new MenuItem("Add To Date", dateMenuItems.ToArray()));
+            menuItems.Add(new MenuItem("Move Time To New Timer", ListContextSplitClicked));
+            menuItems.Add(new MenuItem("Delete Timer", btnRemoveTimer_Click));
+            menuItems.Add(new MenuItem("Adjust Timer Time", btnTimeEdit_Click));
+            menuItems.Add(new MenuItem("Change Jira Ref/Date", btnRename_Click));
+            menuItems.Add(new MenuItem("Export Timer", btnExport_Click));
+            if (jiraTimer.IsRunning)
+            {
+                menuItems.Add(new MenuItem("Stop Timer", ListBoxDoubleClick));
+            }
+            else
+            {
+                menuItems.Add(new MenuItem("Start Timer", ListBoxDoubleClick));
+            }
+
+            return new ContextMenu(menuItems.ToArray());
+        }
+
+        private void ListContextSplitClicked(object sender, EventArgs e)
+        {
+            var selectedTimer = GetSelectedTimer();
+
+            var addForm = new AddTimerWindow(gallifrey);
+            addForm.PreLoadDate(selectedTimer.DateStarted.Date, false);
+
+            if (addForm.DisplayForm)
+            {
+                addForm.ShowDialog();
+                RefreshInternalTimerList();
+                if (addForm.NewTimerId.HasValue)
+                {
+                    var addedTimer = gallifrey.JiraTimerCollection.GetTimer(addForm.NewTimerId.Value);
+                    selectedTimer.ManualAdjustment(addedTimer.CurrentTime, false);
+                    SelectTimer(addForm.NewTimerId.Value);
+                }
+            }
+        }
+
+        private void ListContextDateClicked(object sender, EventArgs e)
+        {
+            var menuItemSender = (MenuItem)sender;
+            var selectedTimer = GetSelectedTimer();
+
+            var addForm = new AddTimerWindow(gallifrey);
+            addForm.PreLoadJira(selectedTimer.JiraReference);
+
+            DateTime selecteDateTime;
+            if (DateTime.TryParse(menuItemSender.Text, out selecteDateTime))
+            {
+                addForm.PreLoadDate(selecteDateTime, true);
+                if (selecteDateTime.Date == DateTime.Now.Date)
+                {
+                    addForm.PreLoadStartNow();
+                }
+            }
+            else
+            {
+                addForm.PreLoadStartNow();
+            }
+
+            if (addForm.DisplayForm)
+            {
+                addForm.ShowDialog();
+                RefreshInternalTimerList();
+                if (addForm.NewTimerId.HasValue) SelectTimer(addForm.NewTimerId.Value);
             }
         }
 
@@ -699,20 +871,7 @@ namespace Gallifrey.UI.Classic
 
         private void SetDisplayClock()
         {
-            JiraTimer selectedTimer = null;
-            var selectedTab = tabTimerDays.SelectedTab;
-            if (selectedTab != null)
-            {
-                var selectedList = ((ListBox)selectedTab.Controls[string.Format("lst_{0}", selectedTab.Name)]);
-                if (selectedList != null)
-                {
-                    try
-                    {
-                        selectedTimer = (JiraTimer)selectedList.SelectedItem;
-                    }
-                    catch (IndexOutOfRangeException) { /* There Seems to be some situations this throws, for no good reason */}
-                }
-            }
+            var selectedTimer = GetSelectedTimer();
 
             if (selectedTimer == null)
             {
@@ -772,7 +931,7 @@ namespace Gallifrey.UI.Classic
 
         private void MultiExport()
         {
-            var selectedTimer = (JiraTimer)((ListBox)tabTimerDays.SelectedTab.Controls[string.Format("lst_{0}", tabTimerDays.SelectedTab.Name)]).SelectedItem;
+            var selectedTimer = GetSelectedTimer();
 
             if (selectedTimer != null)
             {
@@ -802,11 +961,36 @@ namespace Gallifrey.UI.Classic
             return null;
         }
 
+        private JiraTimer GetSelectedTimer()
+        {
+            JiraTimer selectedTimer = null;
+            var selectedTab = tabTimerDays.SelectedTab;
+            if (selectedTab != null)
+            {
+                var selectedList = ((ListBox)selectedTab.Controls[string.Format("lst_{0}", selectedTab.Name)]);
+                if (selectedList != null)
+                {
+                    try
+                    {
+                        selectedTimer = (JiraTimer)selectedList.SelectedItem;
+                    }
+                    catch (IndexOutOfRangeException) { /* There Seems to be some situations this throws, for no good reason */}
+                }
+            }
+
+            if (selectedTimer != null)
+            {
+                return selectedTimer;
+            }
+
+            return null;
+        }
+
         #endregion
 
         #region "Updates
 
-        private void lblUpdate_Click(object sender, EventArgs e)
+        private async void lblUpdate_Click(object sender, EventArgs e)
         {
             if (ApplicationDeployment.IsNetworkDeployed)
             {
@@ -820,7 +1004,17 @@ namespace Gallifrey.UI.Classic
                     else
                     {
                         SetVersionNumber(true);
-                        CheckForUpdates(true);
+                        var updateResult = CheckForUpdates(true);
+                        await updateResult;
+
+                        if (updateResult.Result)
+                        {
+                            UpdateComplete();
+                        }
+                        else
+                        {
+                            SetVersionNumber(noUpdate: true);
+                        }
                     }
                 }
                 catch (Exception)
@@ -846,41 +1040,56 @@ namespace Gallifrey.UI.Classic
             }
         }
 
-        private void CheckIfUpdateCallNeeded()
+        private async void CheckIfUpdateCallNeeded()
         {
-            if (ApplicationDeployment.IsNetworkDeployed && lastUpdateCheck < DateTime.UtcNow.AddMinutes(-1))
+            if (ApplicationDeployment.IsNetworkDeployed && lastUpdateCheck < DateTime.UtcNow.AddMinutes(-10))
             {
                 SetVersionNumber();
-                CheckForUpdates(false);
+                var updateResult = CheckForUpdates();
+                await updateResult;
+
+                if (updateResult.Result)
+                {
+                    UpdateComplete();
+                }
+                else
+                {
+                    SetVersionNumber(noUpdate: true);
+                }
             }
         }
 
-        private async void CheckForUpdates(bool manualCheck)
+        private Task<bool> CheckForUpdates(bool manualCheck = false)
         {
             try
             {
-                var updateInfo = ApplicationDeployment.CurrentDeployment.CheckForDetailedUpdate();
+                var updateInfo = ApplicationDeployment.CurrentDeployment.CheckForDetailedUpdate(false);
                 lastUpdateCheck = DateTime.UtcNow;
 
                 if (updateInfo.UpdateAvailable && updateInfo.AvailableVersion > ApplicationDeployment.CurrentDeployment.CurrentVersion)
                 {
-                    ApplicationDeployment.CurrentDeployment.UpdateCompleted += UpdateComplete;
-                    ApplicationDeployment.CurrentDeployment.UpdateAsync();
+                    return Task.Factory.StartNew(() => ApplicationDeployment.CurrentDeployment.Update());
                 }
-                else if (manualCheck)
+
+                if (manualCheck)
                 {
-                    await Task.Delay(1500);
-                    SetVersionNumber(noUpdate: true);
+                    return Task.Factory.StartNew(() =>
+                    {
+                        Task.Delay(1500);
+                        return false;
+                    });
                 }
             }
             catch (Exception)
             {
             }
+
+            return Task.Factory.StartNew(() => false);
         }
 
-        private void UpdateComplete(object sender, AsyncCompletedEventArgs e)
+        private void UpdateComplete()
         {
-            if (gallifrey.Settings.AppSettings.AutoUpdate)
+            if ((gallifrey.Settings.AppSettings.AutoUpdate && Application.OpenForms.Count <= 1))
             {
                 try
                 {
@@ -1028,6 +1237,5 @@ namespace Gallifrey.UI.Classic
 
         #endregion
 
-        
     }
 }

@@ -1,16 +1,18 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Windows.Forms;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
-
+using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 
 namespace ExtendedTextBox
 {
     [System.ComponentModel.DefaultBindingProperty("Text")]
     public partial class ExtTextBox : System.Windows.Forms.UserControl
     {
-
+        public event EventHandler AltEnterEvent;
         private bool _mandatory;
         private string _originalText="";
         private TextTypes _textType = TextTypes.String;
@@ -34,8 +36,8 @@ namespace ExtendedTextBox
         {
             InitializeComponent();
             wfpExtTextBox1.TextChanged += CheckForTextChanged;
+            wfpExtTextBox1.KeyUp += HandleKeyUp;
         }
-
 
         /// <summary>
         /// Add an original text property to the property box
@@ -271,6 +273,15 @@ namespace ExtendedTextBox
             DoValidation();
         }
 
+        private void HandleKeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.System && e.SystemKey == Key.Enter && Keyboard.Modifiers == System.Windows.Input.ModifierKeys.Alt)
+            {
+                AltEnterEvent.Invoke(this, null);    
+            }
+        }
+
+
 
         private void DoValidation()
         {
@@ -339,11 +350,10 @@ namespace ExtendedTextBox
 
             if (!Handled)
                 base.ProcessCmdKey(ref msg, keyData);
- 
+
             return false;
         }
-
-
+        
         private void NameFormat()
         {
             System.Windows.Controls.TextBox tb = wfpExtTextBox1.theTextBox;

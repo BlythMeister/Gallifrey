@@ -56,6 +56,15 @@
             this.lblUpdate = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.grpUpdates = new System.Windows.Forms.GroupBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.lblTwitter = new System.Windows.Forms.LinkLabel();
+            this.label4 = new System.Windows.Forms.Label();
+            this.lblEmail = new System.Windows.Forms.LinkLabel();
+            this.label5 = new System.Windows.Forms.Label();
+            this.lblDonate = new System.Windows.Forms.LinkLabel();
+            this.label6 = new System.Windows.Forms.Label();
+            this.splitter1 = new System.Windows.Forms.Splitter();
+            this.lblGitHub = new System.Windows.Forms.LinkLabel();
             this.grpTarget.SuspendLayout();
             this.grpExportStats.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -347,11 +356,120 @@
             this.grpUpdates.TabStop = false;
             this.grpUpdates.Text = "Version Info";
             // 
+            // label2
+            // 
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(12, 586);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(179, 13);
+            this.label2.TabIndex = 18;
+            this.label2.Text = "For support contact us on Twitter";
+            // 
+            // lblTwitter
+            // 
+            this.lblTwitter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblTwitter.AutoSize = true;
+            this.lblTwitter.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
+            this.lblTwitter.Location = new System.Drawing.Point(189, 586);
+            this.lblTwitter.Name = "lblTwitter";
+            this.lblTwitter.Size = new System.Drawing.Size(60, 13);
+            this.lblTwitter.TabIndex = 19;
+            this.lblTwitter.TabStop = true;
+            this.lblTwitter.Text = "@Gallifrey";
+            this.lblTwitter.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lblTwitter_LinkClicked);
+            // 
+            // label4
+            // 
+            this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(246, 586);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(33, 13);
+            this.label4.TabIndex = 20;
+            this.label4.Text = "or by";
+            // 
+            // lblEmail
+            // 
+            this.lblEmail.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblEmail.AutoSize = true;
+            this.lblEmail.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
+            this.lblEmail.Location = new System.Drawing.Point(276, 586);
+            this.lblEmail.Name = "lblEmail";
+            this.lblEmail.Size = new System.Drawing.Size(39, 13);
+            this.lblEmail.TabIndex = 21;
+            this.lblEmail.TabStop = true;
+            this.lblEmail.Text = "E-Mail";
+            this.lblEmail.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lblEmail_LinkClicked);
+            // 
+            // label5
+            // 
+            this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(730, 586);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(154, 13);
+            this.label5.TabIndex = 22;
+            this.label5.Text = "Please help support Gallifrey";
+            // 
+            // lblDonate
+            // 
+            this.lblDonate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblDonate.AutoSize = true;
+            this.lblDonate.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
+            this.lblDonate.Location = new System.Drawing.Point(880, 586);
+            this.lblDonate.Name = "lblDonate";
+            this.lblDonate.Size = new System.Drawing.Size(83, 13);
+            this.lblDonate.TabIndex = 23;
+            this.lblDonate.TabStop = true;
+            this.lblDonate.Text = "click to donate";
+            this.lblDonate.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lblDonate_LinkClicked);
+            // 
+            // label6
+            // 
+            this.label6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(310, 586);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(264, 13);
+            this.label6.TabIndex = 24;
+            this.label6.Text = ". You can also join our open source community on";
+            // 
+            // splitter1
+            // 
+            this.splitter1.Location = new System.Drawing.Point(0, 0);
+            this.splitter1.Name = "splitter1";
+            this.splitter1.Size = new System.Drawing.Size(3, 608);
+            this.splitter1.TabIndex = 25;
+            this.splitter1.TabStop = false;
+            // 
+            // lblGitHub
+            // 
+            this.lblGitHub.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblGitHub.AutoSize = true;
+            this.lblGitHub.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
+            this.lblGitHub.Location = new System.Drawing.Point(570, 586);
+            this.lblGitHub.Name = "lblGitHub";
+            this.lblGitHub.Size = new System.Drawing.Size(44, 13);
+            this.lblGitHub.TabIndex = 26;
+            this.lblGitHub.TabStop = true;
+            this.lblGitHub.Text = "GitHub";
+            this.lblGitHub.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lblGitHub_LinkClicked);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(975, 595);
+            this.ClientSize = new System.Drawing.Size(975, 608);
+            this.Controls.Add(this.lblGitHub);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.splitter1);
+            this.Controls.Add(this.lblDonate);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.lblEmail);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.lblTwitter);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.grpUpdates);
             this.Controls.Add(this.btnAbout);
             this.Controls.Add(this.btnIdle);
@@ -418,6 +536,15 @@
         private System.Windows.Forms.Button btnAbout;
         private System.Windows.Forms.Label lblUpdate;
         private System.Windows.Forms.GroupBox grpUpdates;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.LinkLabel lblTwitter;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.LinkLabel lblEmail;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.LinkLabel lblDonate;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Splitter splitter1;
+        private System.Windows.Forms.LinkLabel lblGitHub;
     }
 }
 

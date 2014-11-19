@@ -16,7 +16,7 @@ namespace Gallifrey.ChangeLog
                 var changeLogItem = BuildChangeLogItem(changeVersion);
                 changeLog.Add(changeLogItem.Key, changeLogItem.Value);
             }
-            
+
             if (fromVersion < toVersion && changeLog.Any(x => x.Key > fromVersion && x.Key <= toVersion))
             {
                 return changeLog.Where(x => x.Key > fromVersion && x.Key <= toVersion).OrderByDescending(detail => detail.Key).ToDictionary(detail => detail.Key, detail => detail.Value);
@@ -27,7 +27,12 @@ namespace Gallifrey.ChangeLog
                 return changeLog.Where(x => x.Key == changeLog.Keys.Max()).ToDictionary(detail => detail.Key, detail => detail.Value);
             }
 
-            return changeLog.Where(x => x.Key <= toVersion).OrderByDescending(detail => detail.Key).ToDictionary(detail => detail.Key, detail => detail.Value);
+            if (fromVersion < toVersion && toVersion.Revision > 0 && changeLog.Any(x => x.Key == new Version(toVersion.Major, toVersion.Minor, toVersion.Build + 1)))
+            {
+                return changeLog.Where(x => x.Key == new Version(toVersion.Major, toVersion.Minor, toVersion.Build + 1)).ToDictionary(detail => detail.Key, detail => detail.Value);
+            }
+
+            return changeLog.OrderByDescending(detail => detail.Key).ToDictionary(detail => detail.Key, detail => detail.Value);
         }
 
         private static KeyValuePair<Version, ChangeLogVersionDetails> BuildChangeLogItem(XElement changeVersion)

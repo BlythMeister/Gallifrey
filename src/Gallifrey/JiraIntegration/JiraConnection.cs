@@ -220,21 +220,18 @@ namespace Gallifrey.JiraIntegration
             {
                 throw new JiraConnectionException("Unable to assign issue.", ex);
             }
-            
+
         }
 
         public void SetInProgress(string jiraRef)
         {
-            try
+            var inProgressStatuses = new List<string>
             {
-                CheckAndConnectJira();
-                jira.TransitionIssue(jiraRef, "In Progress");
-            }
-            catch (Exception ex)
-            {
-                throw new StateChangedException("Cannot Set In Progress Status", ex);
-            }
+                "In Progress",
+                "Start Progress"
+            };
 
+            TransitionIssue(jiraRef, inProgressStatuses);
         }
 
         public void LogTime(string jiraRef, DateTime exportTimeStamp, TimeSpan exportTime, WorkLogStrategy strategy, string comment = "", TimeSpan? remainingTime = null)
@@ -257,7 +254,7 @@ namespace Gallifrey.JiraIntegration
             {
                 throw new WorkLogException("Error logging work", ex);
             }
-            
+
             if (wasClosed)
             {
                 try
@@ -273,14 +270,13 @@ namespace Gallifrey.JiraIntegration
 
         private void ReCloseJira(string jiraRef)
         {
-            try
+            var inProgressStatuses = new List<string>
             {
-                jira.TransitionIssue(jiraRef, "Close Issue");
-            }
-            catch (Exception)
-            {
-                jira.TransitionIssue(jiraRef, "Closed");
-            }
+                "Close Issue",
+                "Closed"
+            };
+
+            TransitionIssue(jiraRef, inProgressStatuses);
         }
 
         private bool TryReopenJira(Issue jiraIssue)
@@ -290,23 +286,40 @@ namespace Gallifrey.JiraIntegration
             {
                 try
                 {
-                    jira.TransitionIssue(jiraIssue.key, "Reopen Issue");
+                    var inProgressStatuses = new List<string>
+                    {
+                        "Reopen Issue",
+                        "Open"
+                    };
+
+                    TransitionIssue(jiraIssue.key, inProgressStatuses);
                     wasClosed = true;
                 }
                 catch (Exception)
                 {
-                    try
-                    {
-                        jira.TransitionIssue(jiraIssue.key, "Open");
-                        wasClosed = true;
-                    }
-                    catch (Exception)
-                    {
-                        wasClosed = false;
-                    }
+                    wasClosed = false;
                 }
             }
             return wasClosed;
+        }
+
+        private void TransitionIssue(string jiraRef, IEnumerable<string> possibleTransitionValues)
+        {
+            Exception lastex = null;
+            foreach (var possibleTransitionValue in possibleTransitionValues)
+            {
+                try
+                {
+                    jira.TransitionIssue(jiraRef, possibleTransitionValue);
+                    return;
+                }
+                catch (Exception ex)
+                {
+                    lastex = ex;
+                }
+            }
+
+            throw new StateChangedException("Cannot Set In Progress Status", lastex);
         }
 
         private string GetJql(string searchText)
