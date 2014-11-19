@@ -12,7 +12,7 @@
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <IsWebBootstrapper>true</IsWebBootstrapper>
-    <PublishUrl>..\..\..\Gallifrey.Releases\deploy\beta\</PublishUrl>
+    <PublishUrl>..\..\deploy\beta\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Web</InstallFrom>
     <UpdateEnabled>false</UpdateEnabled>
@@ -22,13 +22,13 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>true</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <InstallUrl>http://blythmeister.github.io/Gallifrey.Releases/deploy/beta/</InstallUrl>
+    <InstallUrl>https://raw.githubusercontent.com/BlythMeister/Gallifrey/develop/deploy/beta/</InstallUrl>
     <SupportUrl>https://github.com/BlythMeister/Gallifrey</SupportUrl>
     <ErrorReportUrl>https://github.com/BlythMeister/Gallifrey</ErrorReportUrl>
     <ProductName>Gallifrey %28Beta%29</ProductName>
     <PublisherName>Gallifrey</PublisherName>
     <MinimumRequiredVersion>1.0.0.0</MinimumRequiredVersion>
-    <ApplicationRevision>2</ApplicationRevision>
+    <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.2.1.%2a</ApplicationVersion>
     <UseApplicationTrust>true</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
