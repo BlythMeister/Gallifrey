@@ -133,6 +133,8 @@
       <Bug>Make Alt + Enter on export work again, bug introduced in 1.2.0.</Bug>
       <Bug>Handle my companys standard method of setting in progress.</Bug>
     </Bugs>
-    <Others />
+    <Others>
+      <Other>Download server change has resulted in a re-install, message added to main screen.</Other>
+    </Others>
   </Version>
 </Versions>

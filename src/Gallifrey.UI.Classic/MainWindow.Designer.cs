@@ -65,6 +65,8 @@
             this.label6 = new System.Windows.Forms.Label();
             this.splitter1 = new System.Windows.Forms.Splitter();
             this.lblGitHub = new System.Windows.Forms.LinkLabel();
+            this.lblDownload = new System.Windows.Forms.LinkLabel();
+            this.label7 = new System.Windows.Forms.Label();
             this.grpTarget.SuspendLayout();
             this.grpExportStats.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -101,7 +103,7 @@
             this.tabTimerDays.Location = new System.Drawing.Point(12, 169);
             this.tabTimerDays.Name = "tabTimerDays";
             this.tabTimerDays.SelectedIndex = 0;
-            this.tabTimerDays.Size = new System.Drawing.Size(951, 414);
+            this.tabTimerDays.Size = new System.Drawing.Size(951, 328);
             this.tabTimerDays.TabIndex = 15;
             this.tabTimerDays.DragDrop += new System.Windows.Forms.DragEventHandler(this.tabTimerDays_DragDrop);
             this.tabTimerDays.DragOver += new System.Windows.Forms.DragEventHandler(this.tabTimerDays_DragOver);
@@ -456,11 +458,38 @@
             this.lblGitHub.Text = "GitHub";
             this.lblGitHub.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lblGitHub_LinkClicked);
             // 
+            // lblDownload
+            // 
+            this.lblDownload.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblDownload.AutoSize = true;
+            this.lblDownload.Font = new System.Drawing.Font("Segoe UI Semibold", 20F, System.Drawing.FontStyle.Bold);
+            this.lblDownload.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
+            this.lblDownload.Location = new System.Drawing.Point(539, 537);
+            this.lblDownload.Name = "lblDownload";
+            this.lblDownload.Size = new System.Drawing.Size(397, 37);
+            this.lblDownload.TabIndex = 28;
+            this.lblDownload.TabStop = true;
+            this.lblDownload.Text = "click here to download installer";
+            this.lblDownload.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lblDownload_LinkClicked);
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Segoe UI Semibold", 20F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7.Location = new System.Drawing.Point(12, 500);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(839, 74);
+            this.label7.TabIndex = 27;
+            this.label7.Text = "Please Note: An update server change means you need to uninstall \r\nand re-install" +
+    ".  ALL timers will be retained!";
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(975, 608);
+            this.Controls.Add(this.lblDownload);
+            this.Controls.Add(this.label7);
             this.Controls.Add(this.lblGitHub);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.splitter1);
@@ -545,6 +574,8 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Splitter splitter1;
         private System.Windows.Forms.LinkLabel lblGitHub;
+        private System.Windows.Forms.LinkLabel lblDownload;
+        private System.Windows.Forms.Label label7;
     }
 }
 

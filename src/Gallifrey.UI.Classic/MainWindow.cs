@@ -1237,8 +1237,16 @@ namespace Gallifrey.UI.Classic
 
         #endregion
 
-        
-
-
+        private void lblDownload_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            if (isBeta)
+            {
+                System.Diagnostics.Process.Start("http://blythmeister.github.io/Gallifrey.Releases/deploy/beta/setup.exe");
+            }
+            else
+            {
+                System.Diagnostics.Process.Start("http://blythmeister.github.io/Gallifrey.Releases/deploy/stable/setup.exe");
+            }
+        }
     }
 }
