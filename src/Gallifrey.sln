@@ -1,12 +1,11 @@
-
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30723.0
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".paket", ".paket", "{022CD35E-A7A7-42D4-A70D-C2171C169D9E}"
 	ProjectSection(SolutionItems) = preProject
-		..\src\paket.dependencies = ..\src\paket.dependencies
-		..\src\paket.lock = ..\src\paket.lock
+		paket.dependencies = paket.dependencies
+		paket.lock = paket.lock
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gallifrey", "Gallifrey\Gallifrey.csproj", "{4C344D86-4086-4F87-BD0F-4F8E23610CD7}"
@@ -18,6 +17,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gallifrey.Jira", "Gallifrey.Jira\Gallifrey.Jira.csproj", "{FFCFED07-CD7C-46F9-98E5-B9D9116E40B1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtendedTextBox", "ExtendedTextBox\ExtendedTextBox.csproj", "{0C7C5D10-74AA-4A92-B75F-EBBFC9156172}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gallifrey.Jira.Tester", "Gallifrey.Jira.Tester\Gallifrey.Jira.Tester.csproj", "{8B41B7BC-C380-49A6-A84C-C40E4167AFF8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +46,10 @@ Global
 		{0C7C5D10-74AA-4A92-B75F-EBBFC9156172}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0C7C5D10-74AA-4A92-B75F-EBBFC9156172}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0C7C5D10-74AA-4A92-B75F-EBBFC9156172}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B41B7BC-C380-49A6-A84C-C40E4167AFF8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B41B7BC-C380-49A6-A84C-C40E4167AFF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B41B7BC-C380-49A6-A84C-C40E4167AFF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B41B7BC-C380-49A6-A84C-C40E4167AFF8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
