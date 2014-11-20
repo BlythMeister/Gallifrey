@@ -61,6 +61,7 @@ Gallifrey makes use of the following libraries:
 * App icon provided by Jack Cai (http://www.doublejdesign.co.uk)
 * Digital-7 font by Style7 (http://www.styleseven.com/)
 * Paket (http://fsprojects.github.io/Paket/index.html)
+* Atlassian .Net SDK (https://bitbucket.org/farmas/atlassian.net-sdk/wiki/Home)
 
 Licence
 =========
