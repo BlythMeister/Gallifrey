@@ -1,12 +1,11 @@
-
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30723.0
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".paket", ".paket", "{022CD35E-A7A7-42D4-A70D-C2171C169D9E}"
 	ProjectSection(SolutionItems) = preProject
-		..\src\paket.dependencies = ..\src\paket.dependencies
-		..\src\paket.lock = ..\src\paket.lock
+		paket.dependencies = paket.dependencies
+		paket.lock = paket.lock
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gallifrey", "Gallifrey\Gallifrey.csproj", "{4C344D86-4086-4F87-BD0F-4F8E23610CD7}"

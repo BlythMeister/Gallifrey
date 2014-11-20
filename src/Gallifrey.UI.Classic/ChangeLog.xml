@@ -149,6 +149,15 @@
       <Bug>Make Alt + Enter on export work again, bug introduced in 1.2.0.</Bug>
       <Bug>Handle my companys standard method of setting in progress.</Bug>
     </Bugs>
-    <Others />    
+    <Others />
+  </Version>
+  <Version Number="2.1.0" Name="">
+    <Features>
+      <Feature>Add Jira SOAP client as optional with REST being default. - SOAP Client not as full featured</Feature>
+    </Features>
+    <Bugs>
+      <Bug>Pressing cancel on forced settings window when no connection to Jira will close the app.</Bug>
+    </Bugs>
+    <Others />
   </Version>
 </Versions>

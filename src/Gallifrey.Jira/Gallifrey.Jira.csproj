@@ -40,12 +40,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Enum\WorkLogStrategy.cs" />
+    <Compile Include="IJiraClient.cs" />
+    <Compile Include="JiraRestClient.cs" />
+    <Compile Include="JiraSoapClient.cs" />
     <Compile Include="Model\Error.cs" />
     <Compile Include="Exception\JiraClientException.cs" />
     <Compile Include="Model\Fields.cs" />
     <Compile Include="Model\Filter.cs" />
     <Compile Include="Model\Issue.cs" />
-    <Compile Include="JiraClient.cs" />
     <Compile Include="Model\Project.cs" />
     <Compile Include="Model\TimeTracking.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -178,4 +180,11 @@
       </ItemGroup>
     </Otherwise>
   </Choose>
+  <ItemGroup>
+    <Reference Include="Atlassian.Jira">
+      <HintPath>..\packages\Atlassian.SDK\lib\Atlassian.Jira.dll</HintPath>
+      <Private>True</Private>
+      <Paket>True</Paket>
+    </Reference>
+  </ItemGroup>
 </Project>

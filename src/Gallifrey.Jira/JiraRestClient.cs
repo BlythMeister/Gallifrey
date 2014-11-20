@@ -11,14 +11,14 @@ using RestSharp.Deserializers;
 
 namespace Gallifrey.Jira
 {
-    public class JiraClient
+    public class JiraRestClient : IJiraClient
     {
         private readonly string username;
         private readonly string password;
         private readonly RestClient client;
         private readonly JsonDeserializer deserializer;
 
-        public JiraClient(string baseUrl, string username, string password)
+        public JiraRestClient(string baseUrl, string username, string password)
         {
             this.username = username;
             this.password = password;
@@ -160,13 +160,6 @@ namespace Gallifrey.Jira
             var response = ExectuteRequest(Method.GET, HttpStatusCode.OK, "project");
 
             return deserializer.Deserialize<List<Project>>(response);
-        }
-
-        public IEnumerable<Status> GetAllStatuses()
-        {
-            var response = ExectuteRequest(Method.GET, HttpStatusCode.OK, "status");
-
-            return deserializer.Deserialize<List<Status>>(response);
         }
 
         public IEnumerable<Filter> GetFilters()

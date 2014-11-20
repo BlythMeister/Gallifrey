@@ -33,7 +33,7 @@ namespace Gallifrey.JiraIntegration
         private readonly List<JiraProject> jiraProjectCache;
         private IJiraConnectionSettings jiraConnectionSettings;
         private IExportSettings exportSettings;
-        private JiraClient jira;
+        private IJiraClient jira;
 
         public User CurrentUser { get; private set; }
 
@@ -65,7 +65,15 @@ namespace Gallifrey.JiraIntegration
 
                 try
                 {
-                    jira = new JiraClient(jiraConnectionSettings.JiraUrl.Replace("/secure/Dashboard.jspa", ""), jiraConnectionSettings.JiraUsername, jiraConnectionSettings.JiraPassword);
+                    if (jiraConnectionSettings.JiraUseSoapApi)
+                    {
+                        jira = new JiraSoapClient(jiraConnectionSettings.JiraUrl.Replace("/secure/Dashboard.jspa", ""), jiraConnectionSettings.JiraUsername, jiraConnectionSettings.JiraPassword);
+                    }
+                    else
+                    {
+                        jira = new JiraRestClient(jiraConnectionSettings.JiraUrl.Replace("/secure/Dashboard.jspa", ""), jiraConnectionSettings.JiraUsername, jiraConnectionSettings.JiraPassword);
+                    }
+
                     CurrentUser = jira.GetCurrentUser();
                 }
                 catch (Exception ex)

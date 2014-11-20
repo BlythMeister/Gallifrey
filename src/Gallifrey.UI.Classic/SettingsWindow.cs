@@ -18,6 +18,7 @@ namespace Gallifrey.UI.Classic
             if (gallifrey.Settings.JiraConnectionSettings.JiraUrl != null) txtJiraUrl.Text = gallifrey.Settings.JiraConnectionSettings.JiraUrl;
             if (gallifrey.Settings.JiraConnectionSettings.JiraUsername != null) txtJiraUsername.Text = gallifrey.Settings.JiraConnectionSettings.JiraUsername;
             if (gallifrey.Settings.JiraConnectionSettings.JiraPassword != null) txtJiraPassword.Text = gallifrey.Settings.JiraConnectionSettings.JiraPassword;
+            chkUseRest.Checked = !gallifrey.Settings.JiraConnectionSettings.JiraUseSoapApi;
 
             chkAlert.Checked = gallifrey.Settings.AppSettings.AlertWhenNotRunning;
             chkAutoUpdate.Checked = gallifrey.Settings.AppSettings.AutoUpdate;
@@ -69,7 +70,7 @@ namespace Gallifrey.UI.Classic
 
         private void btnCancelEditSettings_Click(object sender, EventArgs e)
         {
-            CloseWindow();
+            CloseWindow(true);
         }
 
         private void btnSaveSettings_Click(object sender, EventArgs e)
@@ -122,29 +123,43 @@ namespace Gallifrey.UI.Classic
             gallifrey.Settings.JiraConnectionSettings.JiraUrl = txtJiraUrl.Text;
             gallifrey.Settings.JiraConnectionSettings.JiraUsername = txtJiraUsername.Text;
             gallifrey.Settings.JiraConnectionSettings.JiraPassword = txtJiraPassword.Text;
+            gallifrey.Settings.JiraConnectionSettings.JiraUseSoapApi = !chkUseRest.Checked;
 
             TopMost = true;
-            CloseWindow();
+            CloseWindow(false);
         }
 
-        private void CloseWindow()
+        private void CloseWindow(bool cancelClicked)
         {
             TopMost = false;
+
+            var settingsWork = false;
 
             try
             {
                 gallifrey.SaveSettings();
+                settingsWork = true;
             }
             catch (JiraConnectionException)
             {
-                if (!HandleInvalidDetails(false)) return;
+                if (!HandleInvalidDetails(false));
             }
             catch (MissingJiraConfigException)
             {
-                if (!HandleInvalidDetails(true)) return;
+                if (!HandleInvalidDetails(true));
             }
 
-            Close();
+            if (settingsWork)
+            {
+                Close(); 
+            }
+            else if (cancelClicked)
+            {
+                if (MessageBox.Show("You Pressed Cancel, But Couldn't Connect To Jira\nDo You Want To Close The App?", "Sure You Want To Close", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    Application.Exit();
+                }
+            }
         }
 
         private bool HandleInvalidDetails(bool isMissingConfig)
