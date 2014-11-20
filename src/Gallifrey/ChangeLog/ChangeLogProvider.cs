@@ -17,6 +17,7 @@ namespace Gallifrey.ChangeLog
                 changeLog.Add(changeLogItem.Key, changeLogItem.Value);
             }
 
+
             if (fromVersion < toVersion && changeLog.Any(x => x.Key > fromVersion && x.Key <= toVersion))
             {
                 return changeLog.Where(x => x.Key > fromVersion && x.Key <= toVersion).OrderByDescending(detail => detail.Key).ToDictionary(detail => detail.Key, detail => detail.Value);
@@ -27,9 +28,10 @@ namespace Gallifrey.ChangeLog
                 return changeLog.Where(x => x.Key == changeLog.Keys.Max()).ToDictionary(detail => detail.Key, detail => detail.Value);
             }
 
-            if (fromVersion < toVersion && toVersion.Revision > 0 && changeLog.Any(x => x.Key == new Version(toVersion.Major, toVersion.Minor, toVersion.Build + 1)))
+            if (fromVersion < toVersion && toVersion.Revision > 0 && changeLog.Any() && toVersion < changeLog.Keys.Max())
             {
-                return changeLog.Where(x => x.Key == new Version(toVersion.Major, toVersion.Minor, toVersion.Build + 1)).ToDictionary(detail => detail.Key, detail => detail.Value);
+                var versionWithoutRevision = new Version(toVersion.Major, toVersion.Minor, toVersion.Build);
+                return changeLog.Where(x => x.Key > versionWithoutRevision).ToDictionary(detail => detail.Key, detail => detail.Value);
             }
 
             return changeLog.OrderByDescending(detail => detail.Key).ToDictionary(detail => detail.Key, detail => detail.Value);

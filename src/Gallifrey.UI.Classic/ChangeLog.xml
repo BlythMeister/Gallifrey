@@ -157,6 +157,7 @@
     </Features>
     <Bugs>
       <Bug>Pressing cancel on forced settings window when no connection to Jira will close the app.</Bug>
+      <Bug>Attempt to fix change log & only show correct versions.</Bug>
     </Bugs>
     <Others />
   </Version>
