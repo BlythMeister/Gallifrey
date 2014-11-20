@@ -151,7 +151,7 @@
     </Bugs>
     <Others />
   </Version>
-  <Version Number="2.1.0" Name="">
+  <Version Number="2.1.0" Name="Pre Release">
     <Features>
       <Feature>Add Jira SOAP client as optional with REST being default. - SOAP Client not as full featured</Feature>
     </Features>
