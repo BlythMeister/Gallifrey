@@ -46,7 +46,7 @@ namespace Gallifrey.UI.Classic
 
             if (!adjustmentSuccess)
             {
-                MessageBox.Show("You Cannot Subtract More Time Than You Have Already Exported\nHave Subtracted All Un-Exported Time", "Adjustment Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("You Cannot Subtract More Time Than You Have Left To Export\nHave Subtracted All Un-Exported Time", "Adjustment Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
 
             return true;

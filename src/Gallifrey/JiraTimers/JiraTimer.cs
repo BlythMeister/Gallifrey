@@ -189,7 +189,13 @@ namespace Gallifrey.JiraTimers
 
         public bool ManualAdjustment(TimeSpan changeTimespan, bool addTime)
         {
-            var calculatedNewTime = addTime ? CurrentTime.Add(changeTimespan) : CurrentTime.Subtract(changeTimespan > ExactCurrentTime ? ExactCurrentTime : changeTimespan);
+            var shouldRestart = false;
+            if (IsRunning)
+            {
+                StopTimer();
+                shouldRestart = true;
+            }
+            var calculatedNewTime = addTime ? CurrentTime.Add(changeTimespan) : CurrentTime.Subtract(changeTimespan > CurrentTime ? CurrentTime : changeTimespan);
             var returnValue = true;
             if (!addTime && ExportedTime > calculatedNewTime)
             {
@@ -198,6 +204,12 @@ namespace Gallifrey.JiraTimers
             }
 
             CurrentTime = calculatedNewTime;
+
+            if (shouldRestart)
+            {
+                StartTimer();
+            }
+
             if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("ExactCurrentTime"));
             return returnValue;
         }
