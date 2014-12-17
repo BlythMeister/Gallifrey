@@ -159,6 +159,7 @@
       <Bug>Pressing cancel on forced settings window when no connection to Jira will close the app.</Bug>
       <Bug>Attempt to fix change log and only show correct versions.</Bug>
       <Bug>Fix Issue with subtracting time before a timer has been stopped.</Bug>
+      <Bug>Added helpers to handle an update location change (ready for releases.gallifreyapp.co.uk).</Bug>
     </Bugs>
     <Others />
   </Version>

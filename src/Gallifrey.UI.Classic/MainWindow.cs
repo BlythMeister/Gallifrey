@@ -75,7 +75,7 @@ namespace Gallifrey.UI.Classic
 
             if (ApplicationDeployment.IsNetworkDeployed)
             {
-                var updateResult = CheckForUpdates();
+                var updateResult = CheckForUpdates(showUserFeedback: true);
                 updateResult.Wait();
 
                 if (updateResult.Result)
@@ -332,7 +332,7 @@ namespace Gallifrey.UI.Classic
 
         private void lblEmail_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start("mailto:GallifreyApp@gmail.com?subject=Gallifrey App Contact");
+            System.Diagnostics.Process.Start("mailto:contact@gallifreyapp.co.uk?subject=Gallifrey App Contact");
         }
 
         private void lblGitHub_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -1004,7 +1004,7 @@ namespace Gallifrey.UI.Classic
                     else
                     {
                         SetVersionNumber(true);
-                        var updateResult = CheckForUpdates(true);
+                        var updateResult = CheckForUpdates(manualCheck: true, showUserFeedback: true);
                         await updateResult;
 
                         if (updateResult.Result)
@@ -1059,7 +1059,7 @@ namespace Gallifrey.UI.Classic
             }
         }
 
-        private Task<bool> CheckForUpdates(bool manualCheck = false)
+        private Task<bool> CheckForUpdates(bool manualCheck = false, bool showUserFeedback = false)
         {
             try
             {
@@ -1078,6 +1078,20 @@ namespace Gallifrey.UI.Classic
                         Task.Delay(1500);
                         return false;
                     });
+                }
+            }
+            catch (TrustNotGrantedException)
+            {
+                if (showUserFeedback)
+                {
+                    if (MessageBox.Show("There Was An Issue With Automatic Update\nGallifrey Will Attempt To Re-Install\nNo Timers Will Be Lost\nPress OK To Continue, Or Cancel To Delay Update",
+                        "Update Error", MessageBoxButtons.OKCancel) == DialogResult.OK)
+                    {
+                        var intallUrl = ApplicationDeployment.CurrentDeployment.UpdateLocation.AbsoluteUri;
+                        DeploymentUtils.Uninstaller.UninstallMe();
+                        DeploymentUtils.Uninstaller.AutoInstall(intallUrl);
+                        Application.Exit();
+                    }
                 }
             }
             catch (Exception)
