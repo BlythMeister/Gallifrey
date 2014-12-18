@@ -53,6 +53,7 @@ Gallifrey makes use of the following libraries:
 
 * Exceptionless (http://exceptionless.com/)
 * Spell Check Winforms TextBox (http://spellchecktextbox.codeplex.com/)
+* Atlassian .Net SDK (https://bitbucket.org/farmas/atlassian.net-sdk/wiki/Home)
 
 3rd Party Resources
 =========

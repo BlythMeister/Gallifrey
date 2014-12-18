@@ -1,6 +1,7 @@
 NUGET
   remote: https://nuget.org/api/v2
   specs:
+    Atlassian.SDK (2.4.0)
     Exceptionless (1.5.2092)
     Exceptionless.Windows (1.5.2092)
       Exceptionless (1.5.2092)
