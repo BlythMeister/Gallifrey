@@ -38,6 +38,8 @@
             this.label4 = new System.Windows.Forms.Label();
             this.txtJiraPassword = new System.Windows.Forms.TextBox();
             this.grpJira = new System.Windows.Forms.GroupBox();
+            this.chkUseRest = new System.Windows.Forms.CheckBox();
+            this.label21 = new System.Windows.Forms.Label();
             this.grpAppSettings = new System.Windows.Forms.GroupBox();
             this.chkAutoUpdate = new System.Windows.Forms.CheckBox();
             this.label16 = new System.Windows.Forms.Label();
@@ -74,8 +76,8 @@
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.label20 = new System.Windows.Forms.Label();
             this.label19 = new System.Windows.Forms.Label();
-            this.chkUseRest = new System.Windows.Forms.CheckBox();
-            this.label21 = new System.Windows.Forms.Label();
+            this.txtDefaultComment = new System.Windows.Forms.TextBox();
+            this.label22 = new System.Windows.Forms.Label();
             this.grpJira.SuspendLayout();
             this.grpAppSettings.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -162,6 +164,26 @@
             this.grpJira.TabStop = false;
             this.grpJira.Text = "Jira Connection Settings";
             // 
+            // chkUseRest
+            // 
+            this.chkUseRest.AutoSize = true;
+            this.chkUseRest.Location = new System.Drawing.Point(102, 117);
+            this.chkUseRest.Name = "chkUseRest";
+            this.chkUseRest.Size = new System.Drawing.Size(15, 14);
+            this.chkUseRest.TabIndex = 5;
+            this.toolTip.SetToolTip(this.chkUseRest, "Using REST API Gives More Features, Using The Old API Will Result In Some Feature" +
+        "s Not Working");
+            this.chkUseRest.UseVisualStyleBackColor = true;
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Location = new System.Drawing.Point(5, 115);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(91, 17);
+            this.label21.TabIndex = 4;
+            this.label21.Text = "Use REST API?";
+            // 
             // grpAppSettings
             // 
             this.grpAppSettings.Controls.Add(this.chkAutoUpdate);
@@ -178,7 +200,7 @@
             this.grpAppSettings.Controls.Add(this.label7);
             this.grpAppSettings.Location = new System.Drawing.Point(12, 46);
             this.grpAppSettings.Name = "grpAppSettings";
-            this.grpAppSettings.Size = new System.Drawing.Size(302, 176);
+            this.grpAppSettings.Size = new System.Drawing.Size(302, 154);
             this.grpAppSettings.TabIndex = 1;
             this.grpAppSettings.TabStop = false;
             this.grpAppSettings.Text = "App Settings";
@@ -498,13 +520,15 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.txtDefaultComment);
+            this.groupBox2.Controls.Add(this.label22);
             this.groupBox2.Controls.Add(this.txtCommentPrefix);
             this.groupBox2.Controls.Add(this.label18);
             this.groupBox2.Controls.Add(this.cmdDefaultExport);
             this.groupBox2.Controls.Add(this.label17);
-            this.groupBox2.Location = new System.Drawing.Point(12, 228);
+            this.groupBox2.Location = new System.Drawing.Point(12, 206);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(302, 99);
+            this.groupBox2.Size = new System.Drawing.Size(302, 121);
             this.groupBox2.TabIndex = 2;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Export Settings";
@@ -549,25 +573,22 @@
             this.label19.TabIndex = 0;
             this.label19.Text = "Events";
             // 
-            // chkUseRest
+            // txtDefaultComment
             // 
-            this.chkUseRest.AutoSize = true;
-            this.chkUseRest.Location = new System.Drawing.Point(102, 117);
-            this.chkUseRest.Name = "chkUseRest";
-            this.chkUseRest.Size = new System.Drawing.Size(15, 14);
-            this.chkUseRest.TabIndex = 5;
-            this.toolTip.SetToolTip(this.chkUseRest, "Using REST API Gives More Features, Using The Old API Will Result In Some Feature" +
-        "s Not Working");
-            this.chkUseRest.UseVisualStyleBackColor = true;
+            this.txtDefaultComment.Location = new System.Drawing.Point(121, 86);
+            this.txtDefaultComment.Name = "txtDefaultComment";
+            this.txtDefaultComment.Size = new System.Drawing.Size(175, 25);
+            this.txtDefaultComment.TabIndex = 5;
+            this.toolTip.SetToolTip(this.txtDefaultComment, "Comment Prefix, Fomat: \"Prefix: Comment\"");
             // 
-            // label21
+            // label22
             // 
-            this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(5, 115);
-            this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(91, 17);
-            this.label21.TabIndex = 4;
-            this.label21.Text = "Use REST API?";
+            this.label22.AutoSize = true;
+            this.label22.Location = new System.Drawing.Point(6, 89);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(109, 17);
+            this.label22.TabIndex = 4;
+            this.label22.Text = "Default Comment";
             // 
             // SettingsWindow
             // 
@@ -659,5 +680,7 @@
         private System.Windows.Forms.Label label20;
         private System.Windows.Forms.CheckBox chkUseRest;
         private System.Windows.Forms.Label label21;
+        private System.Windows.Forms.TextBox txtDefaultComment;
+        private System.Windows.Forms.Label label22;
     }
 }

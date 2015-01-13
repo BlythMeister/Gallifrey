@@ -27,6 +27,7 @@ namespace Gallifrey.UI.Classic
 
             cmdDefaultExport.SelectedIndex = (int)gallifrey.Settings.ExportSettings.DefaultRemainingValue;
             txtCommentPrefix.Text = gallifrey.Settings.ExportSettings.ExportCommentPrefix;
+            txtDefaultComment.Text = gallifrey.Settings.ExportSettings.EmptyExportComment;
 
             txtTargetHours.Text = gallifrey.Settings.AppSettings.TargetLogPerDay.Hours.ToString();
             txtTargetMins.Text = gallifrey.Settings.AppSettings.TargetLogPerDay.Minutes.ToString();
@@ -89,6 +90,7 @@ namespace Gallifrey.UI.Classic
 
             gallifrey.Settings.ExportSettings.DefaultRemainingValue = (DefaultRemaining)cmdDefaultExport.SelectedIndex;
             gallifrey.Settings.ExportSettings.ExportCommentPrefix = txtCommentPrefix.Text;
+            gallifrey.Settings.ExportSettings.EmptyExportComment = txtDefaultComment.Text;
 
             int hours, minutes;
 

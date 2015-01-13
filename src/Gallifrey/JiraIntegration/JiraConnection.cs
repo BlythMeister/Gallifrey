@@ -248,12 +248,12 @@ namespace Gallifrey.JiraIntegration
 
             var wasClosed = TryReopenJira(jiraIssue);
 
-            if (string.IsNullOrWhiteSpace(comment)) comment = "No Comment Entered";
+            if (string.IsNullOrWhiteSpace(comment)) comment = exportSettings.EmptyExportComment;
             if (!string.IsNullOrWhiteSpace(exportSettings.ExportCommentPrefix))
             {
                 comment = string.Format("{0}: {1}", exportSettings.ExportCommentPrefix, comment);
             }
-
+            
             try
             {
                 jira.AddWorkLog(jiraRef, strategy, comment, exportTime, DateTime.SpecifyKind(exportTimeStamp, DateTimeKind.Local), remainingTime);

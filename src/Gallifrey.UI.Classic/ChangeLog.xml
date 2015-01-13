@@ -163,4 +163,11 @@
     </Bugs>
     <Others />
   </Version>
+  <Version Number="2.1.1" Name="Pre Release">
+    <Features>
+      <Feature>Added functionality to change the default empty comment on export.</Feature>
+    </Features>
+    <Bugs />
+    <Others />
+  </Version>
 </Versions>
