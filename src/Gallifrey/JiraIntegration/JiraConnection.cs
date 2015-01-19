@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gallifrey.AppTracking;
 using Gallifrey.Exceptions.JiraIntegration;
 using Gallifrey.Jira;
 using Gallifrey.Jira.Enum;
@@ -29,6 +30,7 @@ namespace Gallifrey.JiraIntegration
 
     public class JiraConnection : IJiraConnection
     {
+        private readonly ITrackUsage trackUsage;
         private readonly IRecentJiraCollection recentJiraCollection;
         private readonly List<JiraProject> jiraProjectCache;
         private IJiraConnectionSettings jiraConnectionSettings;
@@ -37,8 +39,9 @@ namespace Gallifrey.JiraIntegration
 
         public User CurrentUser { get; private set; }
 
-        public JiraConnection()
+        public JiraConnection(ITrackUsage trackUsage)
         {
+            this.trackUsage = trackUsage;
             recentJiraCollection = new RecentJiraCollection();
             jiraProjectCache = new List<JiraProject>();
         }
@@ -244,6 +247,8 @@ namespace Gallifrey.JiraIntegration
 
         public void LogTime(string jiraRef, DateTime exportTimeStamp, TimeSpan exportTime, WorkLogStrategy strategy, string comment = "", TimeSpan? remainingTime = null)
         {
+            trackUsage.TrackAppUsage(TrackingType.ExportOccured);
+
             var jiraIssue = jira.GetIssue(jiraRef);
 
             var wasClosed = TryReopenJira(jiraIssue);

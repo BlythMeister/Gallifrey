@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using Exceptionless;
+using Gallifrey.AppTracking;
 using Gallifrey.Comparers;
 using Gallifrey.Exceptions.IdleTimers;
 using Gallifrey.Exceptions.JiraIntegration;
@@ -1061,6 +1062,8 @@ namespace Gallifrey.UI.Classic
 
         private Task<bool> CheckForUpdates(bool manualCheck = false, bool showUserFeedback = false)
         {
+            gallifrey.TrackEvent(TrackingType.UpdateCheck);
+
             try
             {
                 var updateInfo = ApplicationDeployment.CurrentDeployment.CheckForDetailedUpdate(false);

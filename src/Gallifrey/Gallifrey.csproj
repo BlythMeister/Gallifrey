@@ -43,6 +43,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppTracking\TrackingType.cs" />
+    <Compile Include="AppTracking\TrackUsage.cs" />
     <Compile Include="Backend.cs" />
     <Compile Include="ChangeLog\ChangeLogProvider.cs" />
     <Compile Include="ChangeLog\ChangeLogVersion.cs" />

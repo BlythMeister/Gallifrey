@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Timers;
 using System.Xml.Linq;
+using Gallifrey.AppTracking;
 using Gallifrey.ChangeLog;
 using Gallifrey.Exceptions.IdleTimers;
 using Gallifrey.IdleTimers;
@@ -23,6 +24,7 @@ namespace Gallifrey
         event EventHandler<ExportPromptDetail> ExportPromptEvent;
         void Initialise();
         void Close();
+        void TrackEvent(TrackingType trackingType);
         void SaveSettings();
         bool StartIdleTimer();
         Guid StopIdleTimer();
@@ -34,7 +36,8 @@ namespace Gallifrey
         private readonly JiraTimerCollection jiraTimerCollection;
         private readonly IdleTimerCollection idleTimerCollection;
         private readonly SettingsCollection settingsCollection;
-        private JiraConnection jiraConnection;
+        private readonly ITrackUsage trackUsage;
+        private readonly JiraConnection jiraConnection;
         public event EventHandler<int> NoActivityEvent;
         public event EventHandler<ExportPromptDetail> ExportPromptEvent;
         internal ActivityChecker ActivityChecker;
@@ -43,10 +46,12 @@ namespace Gallifrey
 
         public Backend()
         {
+            trackUsage = new TrackUsage();
+            trackUsage.TrackAppUsage(TrackingType.AppLoad);
             settingsCollection = SettingsCollectionSerializer.DeSerialize();
             jiraTimerCollection = new JiraTimerCollection(settingsCollection.AppSettings);
             jiraTimerCollection.exportPrompt += OnExportPromptEvent;
-            jiraConnection = new JiraConnection();
+            jiraConnection = new JiraConnection(trackUsage);
             idleTimerCollection = new IdleTimerCollection();
             ActivityChecker = new ActivityChecker(jiraTimerCollection, settingsCollection.AppSettings);
             ActivityChecker.NoActivityEvent += OnNoActivityEvent;
@@ -111,6 +116,7 @@ namespace Gallifrey
 
         public void Close()
         {
+            trackUsage.TrackAppUsage(TrackingType.AppClose);
             var runningTimer = jiraTimerCollection.GetRunningTimerId();
             if (runningTimer.HasValue)
             {
@@ -127,6 +133,11 @@ namespace Gallifrey
             jiraTimerCollection.SaveTimers();
             idleTimerCollection.SaveTimers();
             settingsCollection.SaveSettings();
+        }
+
+        public void TrackEvent(TrackingType trackingType)
+        {
+            trackUsage.TrackAppUsage(trackingType);
         }
 
         public void SaveSettings()
