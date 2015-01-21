@@ -6,6 +6,7 @@
         ExportOccured,
         UpdateCheck,
         AppClose,
-        DailyHearbeat
+        DailyHearbeat,
+        OptOut
     }
 }

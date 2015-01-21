@@ -46,10 +46,8 @@ namespace Gallifrey
         
         public Backend()
         {
-            trackUsage = new TrackUsage();
-            trackUsage.TrackAppUsage(TrackingType.AppLoad);
-            
             settingsCollection = SettingsCollectionSerializer.DeSerialize();
+            trackUsage = new TrackUsage(settingsCollection.AppSettings);
             jiraTimerCollection = new JiraTimerCollection(settingsCollection.AppSettings);
             jiraTimerCollection.exportPrompt += OnExportPromptEvent;
             jiraConnection = new JiraConnection(trackUsage);
@@ -157,6 +155,7 @@ namespace Gallifrey
             
             ActivityChecker.UpdateAppSettings(settingsCollection.AppSettings);
             jiraTimerCollection.UpdateAppSettings(settingsCollection.AppSettings);
+            trackUsage.UpdateAppSettings(settingsCollection.AppSettings);
         }
 
         public bool StartIdleTimer()
