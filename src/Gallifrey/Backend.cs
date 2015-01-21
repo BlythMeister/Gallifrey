@@ -43,11 +43,12 @@ namespace Gallifrey
         internal ActivityChecker ActivityChecker;
         private readonly Timer hearbeat;
         private Guid? runningTimerWhenIdle;
-
+        
         public Backend()
         {
             trackUsage = new TrackUsage();
             trackUsage.TrackAppUsage(TrackingType.AppLoad);
+            
             settingsCollection = SettingsCollectionSerializer.DeSerialize();
             jiraTimerCollection = new JiraTimerCollection(settingsCollection.AppSettings);
             jiraTimerCollection.exportPrompt += OnExportPromptEvent;
@@ -58,7 +59,7 @@ namespace Gallifrey
             hearbeat = new Timer(1800000);
             hearbeat.Elapsed += HearbeatOnElapsed;
             hearbeat.Start();
-
+            
             if (Settings.AppSettings.TimerRunningOnShutdown.HasValue)
             {
                 var timer = jiraTimerCollection.GetTimer(Settings.AppSettings.TimerRunningOnShutdown.Value);
@@ -70,6 +71,8 @@ namespace Gallifrey
                 Settings.AppSettings.TimerRunningOnShutdown = null;
                 SaveSettings();
             }
+
+            HearbeatOnElapsed(this, null);
         }
 
         private void OnExportPromptEvent(object sender, ExportPromptDetail promptDetail)
@@ -104,6 +107,13 @@ namespace Gallifrey
                         jiraTimerCollection.StopTimer(runningTimerId.Value);
                         jiraTimerCollection.StartTimer(runningTimerId.Value);
                     }
+                }
+
+                if (settingsCollection.InternalSettings.LastHeartbeatTracked.Date < DateTime.UtcNow.Date)
+                {
+                    trackUsage.TrackAppUsage(TrackingType.DailyHearbeat);
+                    settingsCollection.InternalSettings.LastHeartbeatTracked = DateTime.UtcNow;
+                    settingsCollection.SaveSettings();
                 }
             }
             catch { /*Surpress Errors, if this fails timers won't be removed*/}

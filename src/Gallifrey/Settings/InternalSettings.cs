@@ -5,6 +5,7 @@ namespace Gallifrey.Settings
     public interface IInternalSettings
     {
         Version LastChangeLogVersion { get; }
+        DateTime LastHeartbeatTracked { get; set; }
         void SetLastChangeLogVersion(Version currentVersion);
     }
 
@@ -14,8 +15,10 @@ namespace Gallifrey.Settings
         public int Minor { get; set; }
         public int Build { get; set; }
         public int Revision { get; set; }
+        public DateTime LastHeartbeatTracked { get; set; }
 
         public Version LastChangeLogVersion { get { return new Version(Major, Minor, Build, Revision); } }
+
         public void SetLastChangeLogVersion(Version currentVersion)
         {
             Major = currentVersion.Major < 0 ? 0 : currentVersion.Major;

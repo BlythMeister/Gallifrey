@@ -5,6 +5,7 @@
         AppLoad,
         ExportOccured,
         UpdateCheck,
-        AppClose
+        AppClose,
+        DailyHearbeat
     }
 }
