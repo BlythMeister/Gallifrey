@@ -1,4 +1,6 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
+using System.Windows.Forms;
 
 namespace Gallifrey.AppTracking
 {
@@ -9,11 +11,26 @@ namespace Gallifrey.AppTracking
 
     public class TrackUsage : ITrackUsage
     {
+        private readonly WebBrowser webBrowser;
+
+        public TrackUsage()
+        {
+            webBrowser = new WebBrowser();
+            webBrowser.ScrollBarsEnabled = false;
+            webBrowser.ScriptErrorsSuppressed = true;
+        }
+
         public void TrackAppUsage(TrackingType trackingType)
         {
-            var request = WebRequest.Create(string.Format("http://blythmeister.github.io/Gallifrey.Releases/{0}.html", trackingType.ToString()));
-
-            request.GetResponseAsync();
+            try
+            {
+                webBrowser.Navigate(string.Format("http://releases.gallifreyapp.co.uk/{0}.html", trackingType));
+                while (webBrowser.ReadyState != WebBrowserReadyState.Complete) { Application.DoEvents(); }
+            }
+            catch (Exception)
+            {
+                
+            }
         }
     }
 }
