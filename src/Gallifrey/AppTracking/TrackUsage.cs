@@ -66,7 +66,7 @@ namespace Gallifrey.AppTracking
 
         public void UpdateAppSettings(IAppSettings newAppSettings)
         {
-            if (appSettings.UsageTracking && !newAppSettings.UsageTracking)
+            if (webBrowser != null && !newAppSettings.UsageTracking)
             {
                 TrackAppUsage(TrackingType.OptOut);
             }
