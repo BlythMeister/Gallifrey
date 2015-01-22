@@ -13,12 +13,12 @@ namespace Gallifrey.AppTracking
 
     public class TrackUsage : ITrackUsage
     {
-        private IAppSettings appSettings;
+        private bool trackingEnabled;
         private WebBrowser webBrowser;
 
         public TrackUsage(IAppSettings appSettings)
         {
-            this.appSettings = appSettings;
+            trackingEnabled = appSettings.UsageTracking;
             SetupBrowser();
             TrackAppUsage(TrackingType.AppLoad);
         }
@@ -27,7 +27,7 @@ namespace Gallifrey.AppTracking
         {
             try
             {
-                if (appSettings.UsageTracking)
+                if (trackingEnabled)
                 {
                     webBrowser = new WebBrowser
                     {
@@ -50,8 +50,13 @@ namespace Gallifrey.AppTracking
 
         public void TrackAppUsage(TrackingType trackingType)
         {
-            if (webBrowser != null)
+            if (trackingEnabled)
             {
+                if (webBrowser == null)
+                {
+                    SetupBrowser();
+                }
+
                 try
                 {
                     webBrowser.Navigate(string.Format("http://releases.gallifreyapp.co.uk/{0}.html", trackingType));
@@ -64,14 +69,14 @@ namespace Gallifrey.AppTracking
             }
         }
 
-        public void UpdateAppSettings(IAppSettings newAppSettings)
+        public void UpdateAppSettings(IAppSettings appSettings)
         {
-            if (webBrowser != null && !newAppSettings.UsageTracking)
+            if (trackingEnabled && !appSettings.UsageTracking)
             {
                 TrackAppUsage(TrackingType.OptOut);
             }
 
-            appSettings = newAppSettings;
+            trackingEnabled = appSettings.UsageTracking;
             SetupBrowser();
         }
     }
