@@ -1043,7 +1043,7 @@ namespace Gallifrey.UI.Classic
 
         private async void CheckIfUpdateCallNeeded()
         {
-            if (ApplicationDeployment.IsNetworkDeployed && lastUpdateCheck < DateTime.UtcNow.AddMinutes(-10))
+            if (ApplicationDeployment.IsNetworkDeployed && lastUpdateCheck < DateTime.UtcNow.AddMinutes(-5))
             {
                 SetVersionNumber();
                 var updateResult = CheckForUpdates();
