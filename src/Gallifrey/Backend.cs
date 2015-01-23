@@ -20,6 +20,7 @@ namespace Gallifrey
         IIdleTimerCollection IdleTimerCollection { get; }
         ISettingsCollection Settings { get; }
         IJiraConnection JiraConnection { get; }
+        bool IsBeta { get; }
         event EventHandler<int> NoActivityEvent;
         event EventHandler<ExportPromptDetail> ExportPromptEvent;
         void Initialise();
@@ -38,16 +39,18 @@ namespace Gallifrey
         private readonly SettingsCollection settingsCollection;
         private readonly ITrackUsage trackUsage;
         private readonly JiraConnection jiraConnection;
+        public bool IsBeta { get; private set; }
         public event EventHandler<int> NoActivityEvent;
         public event EventHandler<ExportPromptDetail> ExportPromptEvent;
         internal ActivityChecker ActivityChecker;
         private readonly Timer hearbeat;
         private Guid? runningTimerWhenIdle;
         
-        public Backend()
+        public Backend(bool isBeta)
         {
+            IsBeta = isBeta;
             settingsCollection = SettingsCollectionSerializer.DeSerialize();
-            trackUsage = new TrackUsage(settingsCollection.AppSettings);
+            trackUsage = new TrackUsage(settingsCollection.AppSettings, settingsCollection.InternalSettings,isBeta);
             jiraTimerCollection = new JiraTimerCollection(settingsCollection.AppSettings);
             jiraTimerCollection.exportPrompt += OnExportPromptEvent;
             jiraConnection = new JiraConnection(trackUsage);

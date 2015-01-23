@@ -10,18 +10,18 @@ namespace Gallifrey.UI.Classic
 {
     public partial class ChangeLogWindow : Form
     {
-        public ChangeLogWindow(bool isBeta, IDictionary<Version, ChangeLogVersionDetails> changeLog)
+        public ChangeLogWindow(IBackend gallifrey, IDictionary<Version, ChangeLogVersionDetails> changeLog)
         {
             InitializeComponent();
             var networkDeploy = ApplicationDeployment.IsNetworkDeployed;
             var myVersion = networkDeploy ? ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString() : Application.ProductVersion;
-            if (networkDeploy && !isBeta)
+            if (networkDeploy && !gallifrey.IsBeta)
             {
                 myVersion = myVersion.Substring(0, myVersion.LastIndexOf("."));
             }
             myVersion = string.Format("Current Version: {0}", myVersion);
             if (!networkDeploy) myVersion = string.Format("{0} (manual)", myVersion);
-            if (isBeta) myVersion = string.Format("{0} (beta)", myVersion);
+            if (gallifrey.IsBeta) myVersion = string.Format("{0} (beta)", myVersion);
             lblCurrentVersion.Text = myVersion;
 
             foreach (var changeLogDetail in changeLog)

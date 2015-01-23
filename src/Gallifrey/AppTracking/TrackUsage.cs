@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Deployment.Application;
 using System.Net;
 using System.Windows.Forms;
 using Gallifrey.Settings;
@@ -13,11 +14,19 @@ namespace Gallifrey.AppTracking
 
     public class TrackUsage : ITrackUsage
     {
+        private readonly string trackingQueryString;
         private bool trackingEnabled;
         private WebBrowser webBrowser;
 
-        public TrackUsage(IAppSettings appSettings)
+        public TrackUsage(IAppSettings appSettings, IInternalSettings internalSettings, bool isBeta)
         {
+            var betaText = isBeta ? "Beta" : "Stable";
+            if (!ApplicationDeployment.IsNetworkDeployed)
+            {
+                betaText = "Debug";
+            }
+            
+            trackingQueryString = string.Format("utm_source=GallifreyApp&utm_medium={0}&utm_campaign={1}", betaText, internalSettings.LastChangeLogVersion);
             trackingEnabled = appSettings.UsageTracking;
             SetupBrowser();
             TrackAppUsage(TrackingType.AppLoad);
@@ -45,7 +54,7 @@ namespace Gallifrey.AppTracking
             {
                 webBrowser = null;
             }
-            
+
         }
 
         public void TrackAppUsage(TrackingType trackingType)
@@ -59,7 +68,7 @@ namespace Gallifrey.AppTracking
 
                 try
                 {
-                    webBrowser.Navigate(string.Format("http://releases.gallifreyapp.co.uk/{0}.html", trackingType));
+                    webBrowser.Navigate(string.Format("http://releases.gallifreyapp.co.uk/{0}.html?{1}", trackingType, trackingQueryString));
                     while (webBrowser.ReadyState != WebBrowserReadyState.Complete) { Application.DoEvents(); }
                 }
                 catch (Exception)
