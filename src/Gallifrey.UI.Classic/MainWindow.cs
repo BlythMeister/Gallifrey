@@ -1061,12 +1061,12 @@ namespace Gallifrey.UI.Classic
         private Task<bool> CheckForUpdates(bool manualCheck = false, bool showUserFeedback = false)
         {
             gallifrey.TrackEvent(TrackingType.UpdateCheck);
+            lastUpdateCheck = DateTime.UtcNow;
 
             try
             {
                 var updateInfo = ApplicationDeployment.CurrentDeployment.CheckForDetailedUpdate(false);
-                lastUpdateCheck = DateTime.UtcNow;
-
+                
                 if (updateInfo.UpdateAvailable && updateInfo.AvailableVersion > ApplicationDeployment.CurrentDeployment.CurrentVersion)
                 {
                     return Task.Factory.StartNew(() => ApplicationDeployment.CurrentDeployment.Update());
