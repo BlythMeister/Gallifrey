@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Deployment.Application;
-using System.Net;
 using System.Windows.Forms;
 using Gallifrey.Settings;
 
@@ -9,25 +8,21 @@ namespace Gallifrey.AppTracking
     public interface ITrackUsage
     {
         void TrackAppUsage(TrackingType trackingType);
-        void UpdateAppSettings(IAppSettings appSettings);
+        void UpdateSettings(IAppSettings appSettings, IInternalSettings internalSettings);
     }
 
     public class TrackUsage : ITrackUsage
     {
-        private readonly string trackingQueryString;
+        private readonly bool isBeta;
+        private string trackingQueryString;
         private bool trackingEnabled;
         private WebBrowser webBrowser;
 
         public TrackUsage(IAppSettings appSettings, IInternalSettings internalSettings, bool isBeta)
         {
-            var betaText = isBeta ? "Beta" : "Stable";
-            if (!ApplicationDeployment.IsNetworkDeployed)
-            {
-                betaText = "Debug";
-            }
-            
-            trackingQueryString = string.Format("utm_source=GallifreyApp&utm_medium={0}&utm_campaign={1}", betaText, internalSettings.LastChangeLogVersion);
+            this.isBeta = isBeta;
             trackingEnabled = appSettings.UsageTracking;
+            SetTrackingQueryString(internalSettings);
             SetupBrowser();
             TrackAppUsage(TrackingType.AppLoad);
         }
@@ -78,8 +73,10 @@ namespace Gallifrey.AppTracking
             }
         }
 
-        public void UpdateAppSettings(IAppSettings appSettings)
+        public void UpdateSettings(IAppSettings appSettings, IInternalSettings internalSettings)
         {
+            SetTrackingQueryString(internalSettings);
+
             if (trackingEnabled && !appSettings.UsageTracking)
             {
                 TrackAppUsage(TrackingType.OptOut);
@@ -87,6 +84,17 @@ namespace Gallifrey.AppTracking
 
             trackingEnabled = appSettings.UsageTracking;
             SetupBrowser();
+        }
+        
+        private void SetTrackingQueryString(IInternalSettings internalSettings)
+        {
+            var betaText = isBeta ? "Beta" : "Stable";
+            if (!ApplicationDeployment.IsNetworkDeployed)
+            {
+                betaText = "Debug";
+            }
+
+            trackingQueryString = string.Format("utm_source=GallifreyApp&utm_medium={0}&utm_campaign={1}", betaText, internalSettings.LastChangeLogVersion);
         }
     }
 }
