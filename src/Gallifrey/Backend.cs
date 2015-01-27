@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Timers;
 using System.Xml.Linq;
+using Gallifrey.AppTracking;
 using Gallifrey.ChangeLog;
 using Gallifrey.Exceptions.IdleTimers;
 using Gallifrey.IdleTimers;
@@ -19,10 +20,12 @@ namespace Gallifrey
         IIdleTimerCollection IdleTimerCollection { get; }
         ISettingsCollection Settings { get; }
         IJiraConnection JiraConnection { get; }
+        bool IsBeta { get; }
         event EventHandler<int> NoActivityEvent;
         event EventHandler<ExportPromptDetail> ExportPromptEvent;
         void Initialise();
         void Close();
+        void TrackEvent(TrackingType trackingType);
         void SaveSettings();
         bool StartIdleTimer();
         Guid StopIdleTimer();
@@ -34,26 +37,30 @@ namespace Gallifrey
         private readonly JiraTimerCollection jiraTimerCollection;
         private readonly IdleTimerCollection idleTimerCollection;
         private readonly SettingsCollection settingsCollection;
-        private JiraConnection jiraConnection;
+        private readonly ITrackUsage trackUsage;
+        private readonly JiraConnection jiraConnection;
+        public bool IsBeta { get; private set; }
         public event EventHandler<int> NoActivityEvent;
         public event EventHandler<ExportPromptDetail> ExportPromptEvent;
         internal ActivityChecker ActivityChecker;
         private readonly Timer hearbeat;
         private Guid? runningTimerWhenIdle;
-
-        public Backend()
+        
+        public Backend(bool isBeta)
         {
+            IsBeta = isBeta;
             settingsCollection = SettingsCollectionSerializer.DeSerialize();
+            trackUsage = new TrackUsage(settingsCollection.AppSettings, settingsCollection.InternalSettings,isBeta);
             jiraTimerCollection = new JiraTimerCollection(settingsCollection.AppSettings);
             jiraTimerCollection.exportPrompt += OnExportPromptEvent;
-            jiraConnection = new JiraConnection();
+            jiraConnection = new JiraConnection(trackUsage);
             idleTimerCollection = new IdleTimerCollection();
             ActivityChecker = new ActivityChecker(jiraTimerCollection, settingsCollection.AppSettings);
             ActivityChecker.NoActivityEvent += OnNoActivityEvent;
             hearbeat = new Timer(1800000);
             hearbeat.Elapsed += HearbeatOnElapsed;
             hearbeat.Start();
-
+            
             if (Settings.AppSettings.TimerRunningOnShutdown.HasValue)
             {
                 var timer = jiraTimerCollection.GetTimer(Settings.AppSettings.TimerRunningOnShutdown.Value);
@@ -65,6 +72,8 @@ namespace Gallifrey
                 Settings.AppSettings.TimerRunningOnShutdown = null;
                 SaveSettings();
             }
+
+            HearbeatOnElapsed(this, null);
         }
 
         private void OnExportPromptEvent(object sender, ExportPromptDetail promptDetail)
@@ -100,6 +109,13 @@ namespace Gallifrey
                         jiraTimerCollection.StartTimer(runningTimerId.Value);
                     }
                 }
+
+                if (settingsCollection.InternalSettings.LastHeartbeatTracked.Date < DateTime.UtcNow.Date)
+                {
+                    trackUsage.TrackAppUsage(TrackingType.DailyHearbeat);
+                    settingsCollection.InternalSettings.LastHeartbeatTracked = DateTime.UtcNow;
+                    settingsCollection.SaveSettings();
+                }
             }
             catch { /*Surpress Errors, if this fails timers won't be removed*/}
         }
@@ -111,6 +127,7 @@ namespace Gallifrey
 
         public void Close()
         {
+            trackUsage.TrackAppUsage(TrackingType.AppClose);
             var runningTimer = jiraTimerCollection.GetRunningTimerId();
             if (runningTimer.HasValue)
             {
@@ -129,6 +146,11 @@ namespace Gallifrey
             settingsCollection.SaveSettings();
         }
 
+        public void TrackEvent(TrackingType trackingType)
+        {
+            trackUsage.TrackAppUsage(trackingType);
+        }
+
         public void SaveSettings()
         {
             settingsCollection.SaveSettings();
@@ -136,6 +158,7 @@ namespace Gallifrey
             
             ActivityChecker.UpdateAppSettings(settingsCollection.AppSettings);
             jiraTimerCollection.UpdateAppSettings(settingsCollection.AppSettings);
+            trackUsage.UpdateAppSettings(settingsCollection.AppSettings);
         }
 
         public bool StartIdleTimer()

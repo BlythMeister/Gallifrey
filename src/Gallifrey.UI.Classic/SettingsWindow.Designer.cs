@@ -38,6 +38,8 @@
             this.label4 = new System.Windows.Forms.Label();
             this.txtJiraPassword = new System.Windows.Forms.TextBox();
             this.grpJira = new System.Windows.Forms.GroupBox();
+            this.chkUseRest = new System.Windows.Forms.CheckBox();
+            this.label21 = new System.Windows.Forms.Label();
             this.grpAppSettings = new System.Windows.Forms.GroupBox();
             this.chkAutoUpdate = new System.Windows.Forms.CheckBox();
             this.label16 = new System.Windows.Forms.Label();
@@ -68,14 +70,16 @@
             this.txtCommentPrefix = new System.Windows.Forms.TextBox();
             this.chklstExportPrompt = new System.Windows.Forms.CheckedListBox();
             this.chkExportAll = new System.Windows.Forms.CheckBox();
+            this.txtDefaultComment = new System.Windows.Forms.TextBox();
             this.label17 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.label22 = new System.Windows.Forms.Label();
             this.label18 = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.label20 = new System.Windows.Forms.Label();
             this.label19 = new System.Windows.Forms.Label();
-            this.chkUseRest = new System.Windows.Forms.CheckBox();
-            this.label21 = new System.Windows.Forms.Label();
+            this.label23 = new System.Windows.Forms.Label();
+            this.chkUsageTracking = new System.Windows.Forms.CheckBox();
             this.grpJira.SuspendLayout();
             this.grpAppSettings.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -157,13 +161,35 @@
             this.grpJira.Controls.Add(this.txtJiraUsername);
             this.grpJira.Location = new System.Drawing.Point(628, 46);
             this.grpJira.Name = "grpJira";
-            this.grpJira.Size = new System.Drawing.Size(302, 141);
+            this.grpJira.Size = new System.Drawing.Size(302, 151);
             this.grpJira.TabIndex = 4;
             this.grpJira.TabStop = false;
             this.grpJira.Text = "Jira Connection Settings";
             // 
+            // chkUseRest
+            // 
+            this.chkUseRest.AutoSize = true;
+            this.chkUseRest.Location = new System.Drawing.Point(102, 117);
+            this.chkUseRest.Name = "chkUseRest";
+            this.chkUseRest.Size = new System.Drawing.Size(15, 14);
+            this.chkUseRest.TabIndex = 5;
+            this.toolTip.SetToolTip(this.chkUseRest, "Using REST API Gives More Features, Using The Old API Will Result In Some Feature" +
+        "s Not Working");
+            this.chkUseRest.UseVisualStyleBackColor = true;
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Location = new System.Drawing.Point(5, 115);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(91, 17);
+            this.label21.TabIndex = 4;
+            this.label21.Text = "Use REST API?";
+            // 
             // grpAppSettings
             // 
+            this.grpAppSettings.Controls.Add(this.label23);
+            this.grpAppSettings.Controls.Add(this.chkUsageTracking);
             this.grpAppSettings.Controls.Add(this.chkAutoUpdate);
             this.grpAppSettings.Controls.Add(this.label16);
             this.grpAppSettings.Controls.Add(this.label13);
@@ -178,7 +204,7 @@
             this.grpAppSettings.Controls.Add(this.label7);
             this.grpAppSettings.Location = new System.Drawing.Point(12, 46);
             this.grpAppSettings.Name = "grpAppSettings";
-            this.grpAppSettings.Size = new System.Drawing.Size(302, 176);
+            this.grpAppSettings.Size = new System.Drawing.Size(302, 178);
             this.grpAppSettings.TabIndex = 1;
             this.grpAppSettings.TabStop = false;
             this.grpAppSettings.Text = "App Settings";
@@ -186,7 +212,7 @@
             // chkAutoUpdate
             // 
             this.chkAutoUpdate.AutoSize = true;
-            this.chkAutoUpdate.Location = new System.Drawing.Point(148, 112);
+            this.chkAutoUpdate.Location = new System.Drawing.Point(178, 112);
             this.chkAutoUpdate.Name = "chkAutoUpdate";
             this.chkAutoUpdate.Size = new System.Drawing.Size(15, 14);
             this.chkAutoUpdate.TabIndex = 9;
@@ -196,7 +222,7 @@
             // label16
             // 
             this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(54, 134);
+            this.label16.Location = new System.Drawing.Point(84, 133);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(88, 17);
             this.label16.TabIndex = 10;
@@ -205,7 +231,7 @@
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(190, 81);
+            this.label13.Location = new System.Drawing.Point(219, 81);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(36, 17);
             this.label13.TabIndex = 7;
@@ -214,7 +240,7 @@
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(190, 54);
+            this.label12.Location = new System.Drawing.Point(219, 55);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(54, 17);
             this.label12.TabIndex = 4;
@@ -223,7 +249,7 @@
             // chkAlwaysTop
             // 
             this.chkAlwaysTop.AutoSize = true;
-            this.chkAlwaysTop.Location = new System.Drawing.Point(148, 134);
+            this.chkAlwaysTop.Location = new System.Drawing.Point(178, 136);
             this.chkAlwaysTop.Name = "chkAlwaysTop";
             this.chkAlwaysTop.Size = new System.Drawing.Size(15, 14);
             this.chkAlwaysTop.TabIndex = 11;
@@ -233,7 +259,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(41, 110);
+            this.label11.Location = new System.Drawing.Point(71, 109);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(101, 17);
             this.label11.TabIndex = 8;
@@ -242,7 +268,7 @@
             // chkAlert
             // 
             this.chkAlert.AutoSize = true;
-            this.chkAlert.Location = new System.Drawing.Point(148, 26);
+            this.chkAlert.Location = new System.Drawing.Point(177, 26);
             this.chkAlert.Name = "chkAlert";
             this.chkAlert.Size = new System.Drawing.Size(15, 14);
             this.chkAlert.TabIndex = 1;
@@ -252,7 +278,7 @@
             // 
             // txtTimerDays
             // 
-            this.txtTimerDays.Location = new System.Drawing.Point(148, 78);
+            this.txtTimerDays.Location = new System.Drawing.Point(177, 78);
             this.txtTimerDays.Name = "txtTimerDays";
             this.txtTimerDays.Size = new System.Drawing.Size(39, 25);
             this.txtTimerDays.TabIndex = 6;
@@ -263,7 +289,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(38, 81);
+            this.label5.Location = new System.Drawing.Point(68, 80);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(104, 17);
             this.label5.TabIndex = 5;
@@ -272,7 +298,7 @@
             // txtAlertMins
             // 
             this.txtAlertMins.Enabled = false;
-            this.txtAlertMins.Location = new System.Drawing.Point(148, 47);
+            this.txtAlertMins.Location = new System.Drawing.Point(177, 48);
             this.txtAlertMins.Name = "txtAlertMins";
             this.txtAlertMins.Size = new System.Drawing.Size(39, 25);
             this.txtAlertMins.TabIndex = 3;
@@ -283,7 +309,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(50, 50);
+            this.label6.Location = new System.Drawing.Point(80, 49);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(92, 17);
             this.label6.TabIndex = 2;
@@ -292,7 +318,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(39, 23);
+            this.label7.Location = new System.Drawing.Point(69, 22);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(103, 17);
             this.label7.TabIndex = 0;
@@ -349,7 +375,7 @@
             // 
             this.btnCancelEditSettings.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancelEditSettings.Image = global::Gallifrey.UI.Classic.Properties.Resources.Cancel_48x48;
-            this.btnCancelEditSettings.Location = new System.Drawing.Point(468, 335);
+            this.btnCancelEditSettings.Location = new System.Drawing.Point(468, 367);
             this.btnCancelEditSettings.Name = "btnCancelEditSettings";
             this.btnCancelEditSettings.Size = new System.Drawing.Size(65, 65);
             this.btnCancelEditSettings.TabIndex = 7;
@@ -362,7 +388,7 @@
             // 
             this.btnSaveSettings.Image = global::Gallifrey.UI.Classic.Properties.Resources.Check_48x48;
             this.btnSaveSettings.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.btnSaveSettings.Location = new System.Drawing.Point(383, 335);
+            this.btnSaveSettings.Location = new System.Drawing.Point(383, 367);
             this.btnSaveSettings.Name = "btnSaveSettings";
             this.btnSaveSettings.Size = new System.Drawing.Size(65, 65);
             this.btnSaveSettings.TabIndex = 6;
@@ -383,7 +409,7 @@
             this.groupBox1.Controls.Add(this.txtTargetHours);
             this.groupBox1.Location = new System.Drawing.Point(320, 46);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(302, 281);
+            this.groupBox1.Size = new System.Drawing.Size(302, 305);
             this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Target Export";
@@ -487,6 +513,14 @@
             this.toolTip.SetToolTip(this.chkExportAll, "Export Prompt Shows All Time Or Just Changed Time");
             this.chkExportAll.UseVisualStyleBackColor = true;
             // 
+            // txtDefaultComment
+            // 
+            this.txtDefaultComment.Location = new System.Drawing.Point(121, 86);
+            this.txtDefaultComment.Name = "txtDefaultComment";
+            this.txtDefaultComment.Size = new System.Drawing.Size(175, 25);
+            this.txtDefaultComment.TabIndex = 5;
+            this.toolTip.SetToolTip(this.txtDefaultComment, "Default Comment When No Comment Is Entered");
+            // 
             // label17
             // 
             this.label17.AutoSize = true;
@@ -498,16 +532,27 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.txtDefaultComment);
+            this.groupBox2.Controls.Add(this.label22);
             this.groupBox2.Controls.Add(this.txtCommentPrefix);
             this.groupBox2.Controls.Add(this.label18);
             this.groupBox2.Controls.Add(this.cmdDefaultExport);
             this.groupBox2.Controls.Add(this.label17);
-            this.groupBox2.Location = new System.Drawing.Point(12, 228);
+            this.groupBox2.Location = new System.Drawing.Point(12, 230);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(302, 99);
+            this.groupBox2.Size = new System.Drawing.Size(302, 121);
             this.groupBox2.TabIndex = 2;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Export Settings";
+            // 
+            // label22
+            // 
+            this.label22.AutoSize = true;
+            this.label22.Location = new System.Drawing.Point(6, 89);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(109, 17);
+            this.label22.TabIndex = 4;
+            this.label22.Text = "Default Comment";
             // 
             // label18
             // 
@@ -524,9 +569,9 @@
             this.groupBox3.Controls.Add(this.label20);
             this.groupBox3.Controls.Add(this.label19);
             this.groupBox3.Controls.Add(this.chklstExportPrompt);
-            this.groupBox3.Location = new System.Drawing.Point(628, 193);
+            this.groupBox3.Location = new System.Drawing.Point(628, 202);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(302, 134);
+            this.groupBox3.Size = new System.Drawing.Size(302, 149);
             this.groupBox3.TabIndex = 5;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Export Prompt";
@@ -549,25 +594,24 @@
             this.label19.TabIndex = 0;
             this.label19.Text = "Events";
             // 
-            // chkUseRest
+            // label23
             // 
-            this.chkUseRest.AutoSize = true;
-            this.chkUseRest.Location = new System.Drawing.Point(102, 117);
-            this.chkUseRest.Name = "chkUseRest";
-            this.chkUseRest.Size = new System.Drawing.Size(15, 14);
-            this.chkUseRest.TabIndex = 5;
-            this.toolTip.SetToolTip(this.chkUseRest, "Using REST API Gives More Features, Using The Old API Will Result In Some Feature" +
-        "s Not Working");
-            this.chkUseRest.UseVisualStyleBackColor = true;
+            this.label23.AutoSize = true;
+            this.label23.Location = new System.Drawing.Point(2, 156);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(170, 17);
+            this.label23.TabIndex = 12;
+            this.label23.Text = "Anonymous Usage Tracking";
             // 
-            // label21
+            // chkUsageTracking
             // 
-            this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(5, 115);
-            this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(91, 17);
-            this.label21.TabIndex = 4;
-            this.label21.Text = "Use REST API?";
+            this.chkUsageTracking.AutoSize = true;
+            this.chkUsageTracking.Location = new System.Drawing.Point(178, 159);
+            this.chkUsageTracking.Name = "chkUsageTracking";
+            this.chkUsageTracking.Size = new System.Drawing.Size(15, 14);
+            this.chkUsageTracking.TabIndex = 13;
+            this.toolTip.SetToolTip(this.chkUsageTracking, "Allow Gallifrey To Capture Anonymous App Usage Data");
+            this.chkUsageTracking.UseVisualStyleBackColor = true;
             // 
             // SettingsWindow
             // 
@@ -575,7 +619,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancelEditSettings;
-            this.ClientSize = new System.Drawing.Size(943, 412);
+            this.ClientSize = new System.Drawing.Size(943, 444);
             this.ControlBox = false;
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
@@ -659,5 +703,9 @@
         private System.Windows.Forms.Label label20;
         private System.Windows.Forms.CheckBox chkUseRest;
         private System.Windows.Forms.Label label21;
+        private System.Windows.Forms.TextBox txtDefaultComment;
+        private System.Windows.Forms.Label label22;
+        private System.Windows.Forms.Label label23;
+        private System.Windows.Forms.CheckBox chkUsageTracking;
     }
 }

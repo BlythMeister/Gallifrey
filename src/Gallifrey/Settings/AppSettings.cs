@@ -17,6 +17,7 @@ namespace Gallifrey.Settings
         bool AutoUpdate { get; set; }
         ExportPrompt ExportPrompt { get; set; }
         bool ExportPromptAll { get; set; }
+        bool UsageTracking { get; set; }
     }
 
     public class AppSettings : IAppSettings
@@ -31,6 +32,7 @@ namespace Gallifrey.Settings
         public bool AutoUpdate { get; set; }
         public ExportPrompt ExportPrompt { get; set; }
         public bool ExportPromptAll { get; set; }
+        public bool UsageTracking { get; set; }
 
         public AppSettings()
         {
@@ -45,6 +47,7 @@ namespace Gallifrey.Settings
                 };
             StartOfWeek = DayOfWeek.Monday;
             ExportPrompt = new ExportPrompt();
+            UsageTracking = true;
         }
 
         public TimeSpan GetTargetThisWeek()

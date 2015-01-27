@@ -163,4 +163,12 @@
     </Bugs>
     <Others />
   </Version>
+  <Version Number="2.1.1" Name="">
+    <Features>
+      <Feature>Added functionality to change the default empty comment on export.</Feature>
+      <Feature>Added anonymous usage data capture (with Opt-Out functionality).</Feature>
+    </Features>
+    <Bugs />
+    <Others />
+  </Version>
 </Versions>

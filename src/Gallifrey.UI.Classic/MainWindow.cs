@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using Exceptionless;
+using Gallifrey.AppTracking;
 using Gallifrey.Comparers;
 using Gallifrey.Exceptions.IdleTimers;
 using Gallifrey.Exceptions.JiraIntegration;
@@ -23,7 +24,6 @@ namespace Gallifrey.UI.Classic
 {
     public partial class MainWindow : Form
     {
-        private readonly bool isBeta;
         private readonly IBackend gallifrey;
         private readonly Dictionary<DateTime, ThreadedBindingList<JiraTimer>> internalTimerList;
 
@@ -38,7 +38,6 @@ namespace Gallifrey.UI.Classic
         {
             InitializeComponent();
 
-            this.isBeta = isBeta;
             updateReady = false;
             lastUpdateCheck = DateTime.UtcNow;
 
@@ -50,7 +49,7 @@ namespace Gallifrey.UI.Classic
 
             internalTimerList = new Dictionary<DateTime, ThreadedBindingList<JiraTimer>>();
 
-            gallifrey = new Backend();
+            gallifrey = new Backend(isBeta);
             try
             {
                 gallifrey.Initialise();
@@ -107,7 +106,7 @@ namespace Gallifrey.UI.Classic
         {
             Height = gallifrey.Settings.UiSettings.Height;
             Width = gallifrey.Settings.UiSettings.Width;
-            Text = isBeta ? "Gallifrey (Beta)" : "Gallifrey";
+            Text = gallifrey.IsBeta ? "Gallifrey (Beta)" : "Gallifrey";
 
             SetVersionNumber();
             RefreshInternalTimerList();
@@ -127,7 +126,7 @@ namespace Gallifrey.UI.Classic
 
                 if (changeLog.Any())
                 {
-                    var changeLogWindow = new ChangeLogWindow(isBeta, changeLog);
+                    var changeLogWindow = new ChangeLogWindow(gallifrey, changeLog);
                     changeLogWindow.ShowDialog();
                 }
             }
@@ -448,7 +447,7 @@ namespace Gallifrey.UI.Classic
 
         private void btnAbout_Click(object sender, EventArgs e)
         {
-            var aboutForm = new AboutWindow(isBeta, gallifrey);
+            var aboutForm = new AboutWindow(gallifrey);
             aboutForm.ShowDialog();
         }
 
@@ -598,12 +597,12 @@ namespace Gallifrey.UI.Classic
             var networkDeploy = ApplicationDeployment.IsNetworkDeployed;
             myVersion = networkDeploy ? ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString() : Application.ProductVersion;
 
-            if (networkDeploy && !isBeta)
+            if (networkDeploy && !gallifrey.IsBeta)
             {
                 myVersion = myVersion.Substring(0, myVersion.LastIndexOf("."));
             }
 
-            var betaText = isBeta ? " (beta)" : "";
+            var betaText = gallifrey.IsBeta ? " (beta)" : "";
             var upToDateText = "Invalid Deployment";
 
             if (networkDeploy) upToDateText = "Up To Date!";
@@ -1042,7 +1041,7 @@ namespace Gallifrey.UI.Classic
 
         private async void CheckIfUpdateCallNeeded()
         {
-            if (ApplicationDeployment.IsNetworkDeployed && lastUpdateCheck < DateTime.UtcNow.AddMinutes(-10))
+            if (ApplicationDeployment.IsNetworkDeployed && lastUpdateCheck < DateTime.UtcNow.AddMinutes(-5))
             {
                 SetVersionNumber();
                 var updateResult = CheckForUpdates();
@@ -1061,11 +1060,13 @@ namespace Gallifrey.UI.Classic
 
         private Task<bool> CheckForUpdates(bool manualCheck = false, bool showUserFeedback = false)
         {
+            gallifrey.TrackEvent(TrackingType.UpdateCheck);
+            lastUpdateCheck = DateTime.UtcNow;
+
             try
             {
                 var updateInfo = ApplicationDeployment.CurrentDeployment.CheckForDetailedUpdate(false);
-                lastUpdateCheck = DateTime.UtcNow;
-
+                
                 if (updateInfo.UpdateAvailable && updateInfo.AvailableVersion > ApplicationDeployment.CurrentDeployment.CurrentVersion)
                 {
                     return Task.Factory.StartNew(() => ApplicationDeployment.CurrentDeployment.Update());

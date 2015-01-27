@@ -23,7 +23,7 @@ namespace Gallifrey.Jira
             this.username = username;
             this.password = password;
             deserializer = new JsonDeserializer();
-            client = new RestClient { BaseUrl = baseUrl + (baseUrl.EndsWith("/") ? "" : "/") + "rest/api/2/" };
+            client = new RestClient { BaseUrl = new Uri(baseUrl + (baseUrl.EndsWith("/") ? "" : "/") + "rest/api/2/") };
         }
 
         private RestRequest CreateRequest(Method method, string path)

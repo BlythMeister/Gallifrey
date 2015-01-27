@@ -9,25 +9,23 @@ namespace Gallifrey.UI.Classic
 {
     public partial class AboutWindow : Form
     {
-        private readonly bool isBeta;
         private readonly IBackend gallifrey;
         private readonly List<string> contributors;
         private int position;
 
-        public AboutWindow(bool isBeta, IBackend gallifrey)
+        public AboutWindow(IBackend gallifrey)
         {
-            this.isBeta = isBeta;
             this.gallifrey = gallifrey;
             InitializeComponent();
             var networkDeploy = ApplicationDeployment.IsNetworkDeployed;
             var myVersion = networkDeploy ? ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString() : Application.ProductVersion;
-            if (networkDeploy && !isBeta)
+            if (networkDeploy && !gallifrey.IsBeta)
             {
                 myVersion = myVersion.Substring(0, myVersion.LastIndexOf("."));
             }
             myVersion = string.Format("Current Version: {0}", myVersion);
             if (!networkDeploy) myVersion = string.Format("{0} (manual)", myVersion);
-            if (isBeta) myVersion = string.Format("{0} (beta)", myVersion);
+            if (gallifrey.IsBeta) myVersion = string.Format("{0} (beta)", myVersion);
             lblCurrentVersion.Text = myVersion;
 
             contributors = new List<string>()
@@ -79,7 +77,7 @@ namespace Gallifrey.UI.Classic
 
             if (changeLog.Any())
             {
-                var changeLogWindow = new ChangeLogWindow(isBeta, changeLog);
+                var changeLogWindow = new ChangeLogWindow(gallifrey, changeLog);
                 changeLogWindow.ShowDialog();
             }
         }
