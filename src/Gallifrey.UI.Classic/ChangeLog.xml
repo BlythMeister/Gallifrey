@@ -171,4 +171,11 @@
     <Bugs />
     <Others />
   </Version>
+  <Version Number="2.1.2" Name="">
+    <Features />
+    <Bugs>
+      <Bug>Fix issue with tracking under the wrong version.</Bug>
+    </Bugs>
+    <Others />
+  </Version>
 </Versions>

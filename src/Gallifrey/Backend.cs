@@ -158,7 +158,7 @@ namespace Gallifrey
             
             ActivityChecker.UpdateAppSettings(settingsCollection.AppSettings);
             jiraTimerCollection.UpdateAppSettings(settingsCollection.AppSettings);
-            trackUsage.UpdateAppSettings(settingsCollection.AppSettings);
+            trackUsage.UpdateSettings(settingsCollection.AppSettings, settingsCollection.InternalSettings);
         }
 
         public bool StartIdleTimer()
@@ -194,6 +194,7 @@ namespace Gallifrey
             var changeLogItems = ChangeLogProvider.GetChangeLog(settingsCollection.InternalSettings.LastChangeLogVersion, currentVersion, changeLogContent);
             settingsCollection.InternalSettings.SetLastChangeLogVersion(currentVersion);
             settingsCollection.SaveSettings();
+            trackUsage.UpdateSettings(settingsCollection.AppSettings, settingsCollection.InternalSettings);
             return changeLogItems;
         }
 
