@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Deployment.Application;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -13,16 +12,8 @@ namespace Gallifrey.UI.Classic
         public ChangeLogWindow(IBackend gallifrey, IDictionary<Version, ChangeLogVersionDetails> changeLog)
         {
             InitializeComponent();
-            var networkDeploy = ApplicationDeployment.IsNetworkDeployed;
-            var myVersion = networkDeploy ? ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString() : Application.ProductVersion;
-            if (networkDeploy && !gallifrey.IsBeta)
-            {
-                myVersion = myVersion.Substring(0, myVersion.LastIndexOf("."));
-            }
-            myVersion = string.Format("Current Version: {0}", myVersion);
-            if (!networkDeploy) myVersion = string.Format("{0} (manual)", myVersion);
-            if (gallifrey.IsBeta) myVersion = string.Format("{0} (beta)", myVersion);
-            lblCurrentVersion.Text = myVersion;
+            
+            lblCurrentVersion.Text = string.Format("Current Version: {0}", gallifrey.VersionControl.VersionName);
 
             foreach (var changeLogDetail in changeLog)
             {

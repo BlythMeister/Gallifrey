@@ -1,9 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Timers;
 using System.Xml.Linq;
 using Gallifrey.AppTracking;
 using Gallifrey.ChangeLog;
+using Gallifrey.Exceptions;
 using Gallifrey.Exceptions.IdleTimers;
 using Gallifrey.IdleTimers;
 using Gallifrey.InactiveMonitor;
@@ -11,6 +16,8 @@ using Gallifrey.JiraIntegration;
 using Gallifrey.JiraTimers;
 using Gallifrey.Serialization;
 using Gallifrey.Settings;
+using Gallifrey.Versions;
+using Timer = System.Timers.Timer;
 
 namespace Gallifrey
 {
@@ -20,7 +27,7 @@ namespace Gallifrey
         IIdleTimerCollection IdleTimerCollection { get; }
         ISettingsCollection Settings { get; }
         IJiraConnection JiraConnection { get; }
-        bool IsBeta { get; }
+        IVersionControl VersionControl { get; }
         event EventHandler<int> NoActivityEvent;
         event EventHandler<ExportPromptDetail> ExportPromptEvent;
         void Initialise();
@@ -39,18 +46,18 @@ namespace Gallifrey
         private readonly SettingsCollection settingsCollection;
         private readonly ITrackUsage trackUsage;
         private readonly JiraConnection jiraConnection;
-        public bool IsBeta { get; private set; }
+        private readonly VersionControl versionControl;
         public event EventHandler<int> NoActivityEvent;
         public event EventHandler<ExportPromptDetail> ExportPromptEvent;
         internal ActivityChecker ActivityChecker;
         private readonly Timer hearbeat;
         private Guid? runningTimerWhenIdle;
-        
-        public Backend(bool isBeta)
+
+        public Backend(InstanceType instanceType, AppType appType)
         {
-            IsBeta = isBeta;
             settingsCollection = SettingsCollectionSerializer.DeSerialize();
-            trackUsage = new TrackUsage(settingsCollection.AppSettings, settingsCollection.InternalSettings,isBeta);
+            trackUsage = new TrackUsage(settingsCollection.AppSettings, settingsCollection.InternalSettings, instanceType, appType);
+            versionControl = new VersionControl(instanceType, appType, trackUsage);
             jiraTimerCollection = new JiraTimerCollection(settingsCollection.AppSettings);
             jiraTimerCollection.exportPrompt += OnExportPromptEvent;
             jiraConnection = new JiraConnection(trackUsage);
@@ -60,7 +67,7 @@ namespace Gallifrey
             hearbeat = new Timer(1800000);
             hearbeat.Elapsed += HearbeatOnElapsed;
             hearbeat.Start();
-            
+
             if (Settings.AppSettings.TimerRunningOnShutdown.HasValue)
             {
                 var timer = jiraTimerCollection.GetTimer(Settings.AppSettings.TimerRunningOnShutdown.Value);
@@ -81,7 +88,7 @@ namespace Gallifrey
             if (promptDetail.ExportTime.TotalSeconds >= 60)
             {
                 var handler = ExportPromptEvent;
-                if (handler != null) handler(sender, promptDetail);    
+                if (handler != null) handler(sender, promptDetail);
             }
         }
 
@@ -122,6 +129,12 @@ namespace Gallifrey
 
         public void Initialise()
         {
+            var processes = Process.GetProcesses();
+            if (processes.Count(process => process.ProcessName.Contains("Gallifrey") && !process.ProcessName.Contains("vshost")) > 1)
+            {
+                throw new MultipleGallifreyRunningException();
+            }
+
             jiraConnection.ReConnect(settingsCollection.JiraConnectionSettings, settingsCollection.ExportSettings);
         }
 
@@ -155,7 +168,7 @@ namespace Gallifrey
         {
             settingsCollection.SaveSettings();
             jiraConnection.ReConnect(settingsCollection.JiraConnectionSettings, settingsCollection.ExportSettings);
-            
+
             ActivityChecker.UpdateAppSettings(settingsCollection.AppSettings);
             jiraTimerCollection.UpdateAppSettings(settingsCollection.AppSettings);
             trackUsage.UpdateSettings(settingsCollection.AppSettings, settingsCollection.InternalSettings);
@@ -216,6 +229,11 @@ namespace Gallifrey
         public IJiraConnection JiraConnection
         {
             get { return jiraConnection; }
+        }
+
+        public IVersionControl VersionControl
+        {
+            get { return versionControl; }
         }
     }
 }

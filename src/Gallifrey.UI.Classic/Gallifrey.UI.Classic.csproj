@@ -22,10 +22,11 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>true</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <InstallUrl>http://blythmeister.github.io/Gallifrey.Releases/deploy/stable/</InstallUrl>
+    <InstallUrl>http://releases.gallifreyapp.co.uk/deploy/stable/</InstallUrl>
+    <UpdateUrl>http://releases.gallifreyapp.co.uk/deploy/stable/</UpdateUrl>
     <SupportUrl>https://github.com/BlythMeister/Gallifrey</SupportUrl>
     <ErrorReportUrl>https://github.com/BlythMeister/Gallifrey</ErrorReportUrl>
-    <ProductName>Gallifrey</ProductName>
+    <ProductName>Gallifrey Classic</ProductName>
     <PublisherName>Gallifrey</PublisherName>
     <MinimumRequiredVersion>1.0.0.0</MinimumRequiredVersion>
     <ApplicationRevision>0</ApplicationRevision>

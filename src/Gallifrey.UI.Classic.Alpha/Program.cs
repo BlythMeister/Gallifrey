@@ -2,7 +2,7 @@
 using System.Windows.Forms;
 using Gallifrey.Versions;
 
-namespace Gallifrey.UI.Classic
+namespace Gallifrey.UI.Classic.Alpha
 {
     static class Program
     {
@@ -14,7 +14,7 @@ namespace Gallifrey.UI.Classic
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainWindow(new Backend(InstanceType.Stable, AppType.Classic)));
+            Application.Run(new MainWindow(new Backend(InstanceType.Alpha, AppType.Classic)));
         }
     }
 }

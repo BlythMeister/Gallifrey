@@ -172,9 +172,12 @@
     <Others />
   </Version>
   <Version Number="2.1.2" Name="">
-    <Features />
+    <Features>
+      <Feature>Only allow 1 instance of Gallifrey to run at a time</Feature>
+    </Features>
     <Bugs>
       <Bug>Fix issue with tracking under the wrong version.</Bug>
+      <Bug>Fix issue where process remains running as a background process.</Bug>
     </Bugs>
     <Others />
   </Version>

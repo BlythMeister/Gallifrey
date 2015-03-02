@@ -1,18 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{262B6082-A86E-4989-96FC-7EB72B05C675}</ProjectGuid>
+    <ProjectGuid>{DE2AB87D-5FCB-4480-B848-D98AC5E5DDA0}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Gallifrey.UI.Classic.Beta</RootNamespace>
-    <AssemblyName>Gallifrey.UI.Classic.Beta</AssemblyName>
+    <RootNamespace>Gallifrey.UI.Classic.Alpha</RootNamespace>
+    <AssemblyName>Gallifrey.UI.Classic.Alpha</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <IsWebBootstrapper>true</IsWebBootstrapper>
-    <PublishUrl>..\..\..\Gallifrey.Releases\deploy\beta\</PublishUrl>
+    <PublishUrl>..\..\..\Gallifrey.Releases\deploy\alpha\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Web</InstallFrom>
     <UpdateEnabled>false</UpdateEnabled>
@@ -22,13 +22,13 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>true</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <InstallUrl>http://blythmeister.github.io/Gallifrey.Releases/deploy/beta/</InstallUrl>
-    <UpdateUrl>http://blythmeister.github.io/Gallifrey.Releases/deploy/beta/</UpdateUrl>
+    <InstallUrl>http://blythmeister.github.io/Gallifrey.Releases/deploy/alpha/</InstallUrl>
+    <UpdateUrl>http://blythmeister.github.io/Gallifrey.Releases/deploy/alpha/</UpdateUrl>
     <SupportUrl>https://github.com/BlythMeister/Gallifrey</SupportUrl>
     <ErrorReportUrl>https://github.com/BlythMeister/Gallifrey</ErrorReportUrl>
-    <ProductName>Gallifrey Classic %28Beta%29</ProductName>
+    <ProductName>Gallifrey Classic %28Alpha%29</ProductName>
     <PublisherName>Gallifrey</PublisherName>
-    <MinimumRequiredVersion>1.0.0.0</MinimumRequiredVersion>
+    <MinimumRequiredVersion>2.1.2.9</MinimumRequiredVersion>
     <ApplicationRevision>13</ApplicationRevision>
     <ApplicationVersion>2.1.2.%2a</ApplicationVersion>
     <UseApplicationTrust>true</UseApplicationTrust>
@@ -59,7 +59,7 @@
     <GenerateManifests>true</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>Gallifrey.UI.Classic.Beta.Program</StartupObject>
+    <StartupObject>Gallifrey.UI.Classic.Alpha.Program</StartupObject>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>clock_blue.ico</ApplicationIcon>
@@ -77,7 +77,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="Program.cs">
+      <SubType>
+      </SubType>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -142,7 +145,7 @@
       <IncludeHash>True</IncludeHash>
       <FileType>File</FileType>
     </PublishFile>
-    <PublishFile Include="Gallifrey.UI.Classic.Beta.pdb">
+    <PublishFile Include="Gallifrey.UI.Classic.Alpha.pdb">
       <Visible>False</Visible>
       <Group>
       </Group>

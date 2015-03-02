@@ -2,6 +2,7 @@
 using System.Deployment.Application;
 using System.Windows.Forms;
 using Gallifrey.Settings;
+using Gallifrey.Versions;
 
 namespace Gallifrey.AppTracking
 {
@@ -13,14 +14,16 @@ namespace Gallifrey.AppTracking
 
     public class TrackUsage : ITrackUsage
     {
-        private readonly bool isBeta;
+        private readonly InstanceType instanceType;
+        private readonly AppType appType;
         private string trackingQueryString;
         private bool trackingEnabled;
         private WebBrowser webBrowser;
 
-        public TrackUsage(IAppSettings appSettings, IInternalSettings internalSettings, bool isBeta)
+        public TrackUsage(IAppSettings appSettings, IInternalSettings internalSettings, InstanceType instanceType, AppType appType)
         {
-            this.isBeta = isBeta;
+            this.instanceType = instanceType;
+            this.appType = appType;
             trackingEnabled = appSettings.UsageTracking;
             SetTrackingQueryString(internalSettings);
             SetupBrowser();
@@ -88,13 +91,9 @@ namespace Gallifrey.AppTracking
         
         private void SetTrackingQueryString(IInternalSettings internalSettings)
         {
-            var betaText = isBeta ? "Beta" : "Stable";
-            if (!ApplicationDeployment.IsNetworkDeployed)
-            {
-                betaText = "Debug";
-            }
-
-            trackingQueryString = string.Format("utm_source=GallifreyApp&utm_medium={0}&utm_campaign={1}", betaText, internalSettings.LastChangeLogVersion);
+            var versionName = ApplicationDeployment.IsNetworkDeployed ? instanceType.ToString() : "Debug";
+            
+            trackingQueryString = string.Format("utm_source=GallifreyApp_{0}&utm_medium={1}&utm_campaign={2}", appType,versionName, internalSettings.LastChangeLogVersion);
         }
     }
 }
