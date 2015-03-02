@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Versions>
+  <Version Number="2.1.2" Name="">
+    <Features>
+      <Feature>Only allow 1 instance of Gallifrey to run at a time</Feature>
+    </Features>
+    <Bugs>
+      <Bug>Fix issue with tracking under the wrong version.</Bug>
+    </Bugs>
+    <Others />
+  </Version>
+</Versions>

@@ -1,0 +1,8 @@
+﻿<Controls:Flyout x:Class="Gallifrey.UI.Modern.Flyouts.EditTimer"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro" IsModal="True" Theme="Adapt" IsPinned="False" Position="Right" Header="Edit Timer">
+    <Grid Width="300" Margin="5,5,5,5" >
+        
+    </Grid>
+</Controls:Flyout>

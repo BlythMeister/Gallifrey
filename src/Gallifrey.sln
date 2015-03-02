@@ -12,6 +12,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gallifrey.Jira", "Gallifrey
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtendedTextBox", "ExtendedTextBox\ExtendedTextBox.csproj", "{0C7C5D10-74AA-4A92-B75F-EBBFC9156172}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gallifrey.UI.Modern", "Gallifrey.UI.Modern\Gallifrey.UI.Modern.csproj", "{9B3ED134-BA6F-433E-AE78-F6B53D1B4E50}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gallifrey.UI.Classic.Alpha", "Gallifrey.UI.Classic.Alpha\Gallifrey.UI.Classic.Alpha.csproj", "{DE2AB87D-5FCB-4480-B848-D98AC5E5DDA0}"
 EndProject
 Global
@@ -40,6 +42,10 @@ Global
 		{0C7C5D10-74AA-4A92-B75F-EBBFC9156172}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0C7C5D10-74AA-4A92-B75F-EBBFC9156172}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0C7C5D10-74AA-4A92-B75F-EBBFC9156172}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B3ED134-BA6F-433E-AE78-F6B53D1B4E50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B3ED134-BA6F-433E-AE78-F6B53D1B4E50}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B3ED134-BA6F-433E-AE78-F6B53D1B4E50}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B3ED134-BA6F-433E-AE78-F6B53D1B4E50}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DE2AB87D-5FCB-4480-B848-D98AC5E5DDA0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DE2AB87D-5FCB-4480-B848-D98AC5E5DDA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DE2AB87D-5FCB-4480-B848-D98AC5E5DDA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
