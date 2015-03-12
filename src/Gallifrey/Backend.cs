@@ -36,7 +36,7 @@ namespace Gallifrey
         void SaveSettings();
         bool StartIdleTimer();
         Guid StopIdleTimer();
-        IDictionary<Version, ChangeLogVersionDetails> GetChangeLog(Version currentVersion, XDocument changeLogContent);
+        IDictionary<Version, ChangeLogVersionDetails> GetChangeLog(XDocument changeLogContent);
     }
 
     public class Backend : IBackend
@@ -87,15 +87,13 @@ namespace Gallifrey
         {
             if (promptDetail.ExportTime.TotalSeconds >= 60)
             {
-                var handler = ExportPromptEvent;
-                if (handler != null) handler(sender, promptDetail);
+                if (ExportPromptEvent != null) ExportPromptEvent(sender, promptDetail);
             }
         }
 
         private void OnNoActivityEvent(object sender, int millisecondsSinceActivity)
         {
-            var handler = NoActivityEvent;
-            if (handler != null) handler(sender, millisecondsSinceActivity);
+            if (NoActivityEvent != null) NoActivityEvent(sender, millisecondsSinceActivity);
         }
 
         private void HearbeatOnElapsed(object sender, ElapsedEventArgs e)
@@ -202,10 +200,10 @@ namespace Gallifrey
             return idleTimerCollection.StopLockedTimers();
         }
 
-        public IDictionary<Version, ChangeLogVersionDetails> GetChangeLog(Version currentVersion, XDocument changeLogContent)
+        public IDictionary<Version, ChangeLogVersionDetails> GetChangeLog(XDocument changeLogContent)
         {
-            var changeLogItems = ChangeLogProvider.GetChangeLog(settingsCollection.InternalSettings.LastChangeLogVersion, currentVersion, changeLogContent);
-            settingsCollection.InternalSettings.SetLastChangeLogVersion(currentVersion);
+            var changeLogItems = ChangeLogProvider.GetChangeLog(settingsCollection.InternalSettings.LastChangeLogVersion, versionControl.DeployedVersion, changeLogContent);
+            settingsCollection.InternalSettings.SetLastChangeLogVersion(versionControl.DeployedVersion);
             settingsCollection.SaveSettings();
             trackUsage.UpdateSettings(settingsCollection.AppSettings, settingsCollection.InternalSettings);
             return changeLogItems;

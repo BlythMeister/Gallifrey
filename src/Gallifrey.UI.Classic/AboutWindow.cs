@@ -65,7 +65,7 @@ namespace Gallifrey.UI.Classic
 
         private void btnChangeLog_Click(object sender, EventArgs e)
         {
-            var changeLog = gallifrey.GetChangeLog(gallifrey.VersionControl.DeployedVersion, XDocument.Parse(Resources.ChangeLog));
+            var changeLog = gallifrey.GetChangeLog(XDocument.Parse(Resources.ChangeLog));
 
             if (changeLog.Any())
             {

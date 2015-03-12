@@ -1,4 +1,7 @@
-﻿using Gallifrey.UI.Modern.Models;
+﻿using System;
+using System.Collections.Generic;
+using Gallifrey.ChangeLog;
+using Gallifrey.UI.Modern.Models;
 
 namespace Gallifrey.UI.Modern.Flyouts
 {
@@ -9,7 +12,7 @@ namespace Gallifrey.UI.Modern.Flyouts
     {
         private readonly MainViewModel viewModel;
 
-        public ChangeLog(MainViewModel viewModel)
+        public ChangeLog(MainViewModel viewModel, IDictionary<Version, ChangeLogVersionDetails> changeLog)
         {
             this.viewModel = viewModel;
             InitializeComponent();

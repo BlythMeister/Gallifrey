@@ -24,6 +24,9 @@ namespace Gallifrey.UI.Modern.Models
         public string Exported { get { return Gallifrey.JiraTimerCollection.GetTotalExportedTimeThisWeek(Gallifrey.Settings.AppSettings.StartOfWeek).FormatAsString(false); } }
         public string ExportedTargetTotalMinutes { get { return Gallifrey.Settings.AppSettings.GetTargetThisWeek().TotalMinutes.ToString(); } }
         public string VersionName { get { return Gallifrey.VersionControl.AlreadyInstalledUpdate ? "Click To Install New Version" : Gallifrey.VersionControl.VersionName; } }
+        public bool HasUpdate { get { return Gallifrey.VersionControl.AlreadyInstalledUpdate; } }
+        public bool HasInactiveTime { get { return !string.IsNullOrWhiteSpace(InactiveMinutes); } }
+        public string InactiveMinutes { get; private set; }
 
         public string ExportedTotalMinutes
         {
@@ -68,6 +71,7 @@ namespace Gallifrey.UI.Modern.Models
                 PropertyChanged(this, new PropertyChangedEventArgs("ExportTarget"));
                 PropertyChanged(this, new PropertyChangedEventArgs("Exported"));
                 PropertyChanged(this, new PropertyChangedEventArgs("ExportedTargetTotalMinutes"));
+                PropertyChanged(this, new PropertyChangedEventArgs("HasUpdate"));
             }
         }
 
@@ -158,6 +162,31 @@ namespace Gallifrey.UI.Modern.Models
                         SetSelectedTimer(topTimer.UniqueId);
                     }
                 }
+            }
+        }
+
+        public void SetNoActivityMilliseconds(int millisecondsSinceActivity)
+        {
+            if (millisecondsSinceActivity == 0)
+            {
+                InactiveMinutes = string.Empty;
+            }
+            else
+            {
+                var minutesSinceActivity = (millisecondsSinceActivity / 1000) / 60;
+                var minutesPlural = string.Empty;
+                if (minutesSinceActivity > 1)
+                {
+                    minutesPlural = "s";
+                }
+
+                InactiveMinutes = string.Format("No Timer Running For {0} Minute{1}", minutesSinceActivity, minutesPlural);
+            }
+
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs("InactiveMinutes"));
+                PropertyChanged(this, new PropertyChangedEventArgs("HasInactiveTime"));
             }
         }
     }

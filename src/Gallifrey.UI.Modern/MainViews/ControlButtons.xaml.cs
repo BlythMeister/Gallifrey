@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using Gallifrey.UI.Modern.Flyouts;
 using Gallifrey.UI.Modern.Models;
@@ -55,7 +56,11 @@ namespace Gallifrey.UI.Modern.MainViews
 
         private void ExportButton(object sender, RoutedEventArgs e)
         {
-            ViewModel.MainWindow.OpenFlyout(new Export(ViewModel));
+            var selectedTimerId = ViewModel.GetSelectedTimerId();
+            if (selectedTimerId != null)
+            {
+                ViewModel.MainWindow.OpenFlyout(new Export(ViewModel, selectedTimerId.Value, null));
+            }
         }
 
         private void LockTimerButton(object sender, RoutedEventArgs e)

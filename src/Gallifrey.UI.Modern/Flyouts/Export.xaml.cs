@@ -1,4 +1,5 @@
-﻿using Gallifrey.UI.Modern.Models;
+﻿using System;
+using Gallifrey.UI.Modern.Models;
 
 namespace Gallifrey.UI.Modern.Flyouts
 {
@@ -9,7 +10,7 @@ namespace Gallifrey.UI.Modern.Flyouts
     {
         private readonly MainViewModel viewModel;
 
-        public Export(MainViewModel viewModel)
+        public Export(MainViewModel viewModel, Guid timerId, TimeSpan? exportTime)
         {
             this.viewModel = viewModel;
             InitializeComponent();

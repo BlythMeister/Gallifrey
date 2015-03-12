@@ -91,6 +91,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Extensions\WindowExtensions.cs" />
+    <Compile Include="MainViews\Notices.xaml.cs">
+      <DependentUpon>Notices.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AddTimerModel.cs" />
     <Compile Include="Flyouts\ChangeLog.xaml.cs">
       <DependentUpon>ChangeLog.xaml</DependentUpon>
     </Compile>
@@ -186,6 +191,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="MainViews\Notices.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainViews\TimerSummary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -235,6 +244,10 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Gallifrey.Jira\Gallifrey.Jira.csproj">
+      <Project>{FFCFED07-CD7C-46F9-98E5-B9D9116E40B1}</Project>
+      <Name>Gallifrey.Jira</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Gallifrey\Gallifrey.csproj">
       <Project>{4C344D86-4086-4F87-BD0F-4F8E23610CD7}</Project>
       <Name>Gallifrey</Name>

@@ -18,6 +18,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition MaxHeight="50" />
+            <RowDefinition Height="Auto"/>
             <RowDefinition />
             <RowDefinition MaxHeight="30"/>
             <RowDefinition MaxHeight="25"/>
@@ -25,11 +26,13 @@
 
         <mainViews:ControlButtons DataContext="{Binding}" Grid.Row="0" />
 
-        <mainViews:TimerTabs DataContext="{Binding}" Grid.Row="1" />
+        <mainViews:Notices DataContext="{Binding}" Grid.Row="1" />
+        
+        <mainViews:TimerTabs DataContext="{Binding}" Grid.Row="2" />
 
-        <mainViews:TimerSummary DataContext="{Binding}" Grid.Row="2" />
+        <mainViews:TimerSummary DataContext="{Binding}" Grid.Row="3" />
 
-        <mainViews:BottomBar DataContext="{Binding}" Grid.Row="3" />
+        <mainViews:BottomBar DataContext="{Binding}" Grid.Row="4" />
     </Grid>
 
     

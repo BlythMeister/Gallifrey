@@ -32,17 +32,15 @@ namespace Gallifrey.UI.Modern.MainViews
                     try
                     {
                         ViewModel.Gallifrey.JiraTimerCollection.StartTimer(timerId.Value);
+                        ViewModel.RefreshModel();
+                        ViewModel.SelectRunningTimer();
                     }
                     catch (DuplicateTimerException)
                     {
-                        ViewModel.MainWindow.ShowMessageAsync("Wrong Day!", "Use The Version Of This Timer For Today!");
-
-                        
+                        ViewModel.MainWindow.ShowMessageAsync("Wrong Day!", "Use The Version Of This Timer For Today!");                       
                     }
                 }
-
-                ViewModel.RefreshModel();
-                ViewModel.SelectRunningTimer();
+                
             }
         }
     }

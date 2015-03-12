@@ -2,14 +2,18 @@
 using System.Deployment.Application;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Xml.Linq;
 using Exceptionless;
 using Gallifrey.Exceptions;
 using Gallifrey.Exceptions.IdleTimers;
 using Gallifrey.Exceptions.JiraIntegration;
 using Gallifrey.Exceptions.Versions;
+using Gallifrey.ExtensionMethods;
 using Gallifrey.JiraTimers;
+using Gallifrey.UI.Modern.Extensions;
 using Gallifrey.UI.Modern.Flyouts;
 using Gallifrey.UI.Modern.Models;
 using Gallifrey.Versions;
@@ -42,11 +46,13 @@ namespace Gallifrey.UI.Modern.MainViews
             }
             catch (MissingJiraConfigException)
             {
-                OpenFlyout(new Flyouts.Settings(viewModel));
+                var flyout = OpenFlyout(new Flyouts.Settings(viewModel));
+                flyout.Wait();
             }
             catch (JiraConnectionException)
             {
-                OpenFlyout(new Flyouts.Settings(viewModel));
+                var flyout = OpenFlyout(new Flyouts.Settings(viewModel));
+                flyout.Wait();
             }
             catch (MultipleGallifreyRunningException)
             {
@@ -55,7 +61,7 @@ namespace Gallifrey.UI.Modern.MainViews
 
             viewModel.RefreshModel();
             viewModel.SelectRunningTimer();
-            
+
             DataContext = viewModel;
 
             gallifrey.NoActivityEvent += GallifreyOnNoActivityEvent;
@@ -66,19 +72,65 @@ namespace Gallifrey.UI.Modern.MainViews
             Width = gallifrey.Settings.UiSettings.Width;
             Title = gallifrey.VersionControl.AppName;
 
-            //TODO Show Change Log
-        }
-        
-        private void GallifreyOnExportPromptEvent(object sender, ExportPromptDetail e)
-        {
-            //TODO prompt user to do an export
+            if (gallifrey.VersionControl.IsAutomatedDeploy && gallifrey.VersionControl.IsFirstRun)
+            {
+                var changeLog = gallifrey.GetChangeLog(XDocument.Parse(Properties.Resources.ChangeLog));
+
+                if (changeLog.Any())
+                {
+                    ViewModel.MainWindow.OpenFlyout(new Flyouts.ChangeLog(ViewModel, changeLog));
+                }
+            }
         }
 
-        private void GallifreyOnNoActivityEvent(object sender, int e)
+        private async void GallifreyOnExportPromptEvent(object sender, ExportPromptDetail e)
         {
-            //TODO somehow show a balloon type of thing
-            //http://www.jarloo.com/flashing-a-wpf-window/
-            //Make UI taskbar flash
+            var timer = ViewModel.Gallifrey.JiraTimerCollection.GetTimer(e.TimerId);
+            if (timer != null)
+            {
+                var exportTime = e.ExportTime;
+                var message = string.Format("Do You Want To Export '{0}'?\n", timer.JiraReference);
+                if (ViewModel.Gallifrey.Settings.AppSettings.ExportPromptAll || (new TimeSpan(exportTime.Ticks - (exportTime.Ticks % 600000000)) == new TimeSpan(timer.TimeToExport.Ticks - (timer.TimeToExport.Ticks % 600000000))))
+                {
+                    exportTime = timer.TimeToExport;
+                    message += string.Format("You Have '{0}' To Export", exportTime.FormatAsString(false));
+                }
+                else
+                {
+                    message += string.Format("You Have '{0}' To Export For This Change", exportTime.FormatAsString(false));
+                }
+
+                var messageResult = await this.ShowMessageAsync("Do You Want To Export?", message, MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No" });
+
+                if (messageResult == MessageDialogResult.Affirmative)
+                {
+                    if (ViewModel.Gallifrey.Settings.AppSettings.ExportPromptAll)
+                    {
+                        ViewModel.MainWindow.OpenFlyout(new Export(ViewModel, e.TimerId, e.ExportTime));
+                    }
+                    else
+                    {
+                        ViewModel.MainWindow.OpenFlyout(new Export(ViewModel, e.TimerId, null));
+                    }
+                }
+            }
+        }
+
+        private void GallifreyOnNoActivityEvent(object sender, int millisecondsSinceActivity)
+        {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                ViewModel.SetNoActivityMilliseconds(millisecondsSinceActivity);
+
+                if (millisecondsSinceActivity == 0)
+                {
+                    this.StopFlashingWindow();
+                }
+                else
+                {
+                    this.FlashWindow();
+                }
+            });
         }
 
         private void OnUnhandledExceptionReporting(object sender, UnhandledExceptionReportingEventArgs e)
@@ -131,19 +183,23 @@ namespace Gallifrey.UI.Modern.MainViews
             PerformUpdate(true, true);
         }
 
-        public void OpenFlyout(Flyout flyout)
+        public Task<Flyout> OpenFlyout(Flyout flyout, bool holdExecution = false)
         {
+            var a = new TaskCompletionSource<Flyout>();
             RoutedEventHandler closingFinishedHandler = null;
             closingFinishedHandler = (o, args) =>
             {
                 flyout.ClosingFinished -= closingFinishedHandler;
                 FlyoutsControl.Items.Remove(flyout);
+                a.TrySetResult(flyout);
             };
             flyout.ClosingFinished += closingFinishedHandler;
 
             FlyoutsControl.Items.Add(flyout);
 
             flyout.IsOpen = true;
+
+            return a.Task;
         }
 
         private async void OnLoaded(object sender, RoutedEventArgs e)

@@ -31,6 +31,7 @@ namespace Gallifrey.UI.Modern.Models
             timerModel.PropertyChanged += TimerModelOnPropertyChanged;
             Timers.Add(timerModel);
             Timers = new ObservableCollection<TimerModel>(Timers.OrderBy(x => x.JiraTimer.JiraReference, new JiraReferenceComparer()));
+            if (PropertyChanged != null)  PropertyChanged(this, new PropertyChangedEventArgs("Timers"));
         }
 
         public void RemoveTimerModel(TimerModel timerModel)
