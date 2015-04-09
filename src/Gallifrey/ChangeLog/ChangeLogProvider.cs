@@ -14,10 +14,12 @@ namespace Gallifrey.ChangeLog
             foreach (var changeVersion in changeLogContent.Descendants("Version"))
             {
                 var changeLogItem = BuildChangeLogItem(changeVersion);
-                changeLog.Add(changeLogItem.Key, changeLogItem.Value);
+                if (!changeLog.ContainsKey(changeLogItem.Key))
+                {
+                    changeLog.Add(changeLogItem.Key, changeLogItem.Value);    
+                }
             }
-
-
+            
             if (fromVersion < toVersion && changeLog.Any(x => x.Key > fromVersion && x.Key <= toVersion))
             {
                 return changeLog.Where(x => x.Key > fromVersion && x.Key <= toVersion).OrderByDescending(detail => detail.Key).ToDictionary(detail => detail.Key, detail => detail.Value);

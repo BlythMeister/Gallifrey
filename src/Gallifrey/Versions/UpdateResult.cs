@@ -4,6 +4,7 @@
     {
         NotDeployable,
         Updated,
-        NoUpdate
+        NoUpdate,
+        TooSoon
     }
 }

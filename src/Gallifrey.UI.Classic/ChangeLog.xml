@@ -181,7 +181,7 @@
     </Bugs>
     <Others />
   </Version>
-  <Version Number="2.1.2" Name="Pre Release">
+  <Version Number="3.0.0" Name="Pre Release">
     <Features>
       <Feature>Improvements to the search window</Feature>
       <Feature>Changes to how settings are stored</Feature>

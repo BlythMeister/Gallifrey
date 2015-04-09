@@ -144,7 +144,7 @@ namespace Gallifrey.Versions
                 }
             }
 
-            return Task.Factory.StartNew(() => UpdateResult.NoUpdate);
+            return Task.Factory.StartNew(() => UpdateResult.TooSoon);
         }
         
         public void ManualReinstall()
