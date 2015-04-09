@@ -39,19 +39,19 @@ namespace Gallifrey.JiraTimers
 
     public class JiraTimerCollection : IJiraTimerCollection
     {
-        private IAppSettings appSettings;
+        private IExportSettings exportSettings;
         private readonly List<JiraTimer> timerList;
         internal event EventHandler<ExportPromptDetail> exportPrompt;
 
-        internal JiraTimerCollection(IAppSettings appSettings)
+        internal JiraTimerCollection(IExportSettings exportSettings)
         {
-            this.appSettings = appSettings;
+            this.exportSettings = exportSettings;
             timerList = JiraTimerCollectionSerializer.DeSerialize();
         }
 
-        internal void UpdateAppSettings(IAppSettings newAppSettings)
+        internal void UpdateAppSettings(IExportSettings newExportSettings)
         {
-            appSettings = newAppSettings;
+            exportSettings = newExportSettings;
         }
 
         internal void SaveTimers()
@@ -113,7 +113,7 @@ namespace Gallifrey.JiraTimers
             }
             else
             {
-                if (appSettings.ExportPrompt != null && appSettings.ExportPrompt.OnCreatePreloaded && !newTimer.FullyExported)
+                if (exportSettings.ExportPrompt != null && exportSettings.ExportPrompt.OnCreatePreloaded && !newTimer.FullyExported)
                 {
                     exportPrompt.Invoke(this, new ExportPromptDetail(newTimer.UniqueId, seedTime));
                 }
@@ -154,7 +154,7 @@ namespace Gallifrey.JiraTimers
             var stopTime = timerForInteration.StopTimer();
 
             SaveTimers();
-            if (appSettings.ExportPrompt != null && appSettings.ExportPrompt.OnStop && !timerForInteration.FullyExported)
+            if (exportSettings.ExportPrompt != null && exportSettings.ExportPrompt.OnStop && !timerForInteration.FullyExported)
             {
                 exportPrompt.Invoke(this, new ExportPromptDetail(uniqueId, stopTime));
             }
@@ -253,7 +253,7 @@ namespace Gallifrey.JiraTimers
             }
 
             SaveTimers();
-            if (appSettings.ExportPrompt != null && appSettings.ExportPrompt.OnManualAdjust && !timer.FullyExported)
+            if (exportSettings.ExportPrompt != null && exportSettings.ExportPrompt.OnManualAdjust && !timer.FullyExported)
             {
                 if (!addTime) adjustment = adjustment.Negate();
                 exportPrompt.Invoke(this, new ExportPromptDetail(uniqueId, adjustment));
@@ -274,7 +274,7 @@ namespace Gallifrey.JiraTimers
             var timer = GetTimer(uniqueId);
             timer.AddIdleTimer(idleTimer);
             SaveTimers();
-            if (appSettings.ExportPrompt != null && appSettings.ExportPrompt.OnAddIdle && !timer.FullyExported)
+            if (exportSettings.ExportPrompt != null && exportSettings.ExportPrompt.OnAddIdle && !timer.FullyExported)
             {
                 exportPrompt.Invoke(this, new ExportPromptDetail(uniqueId, idleTimer.IdleTimeValue));
             }

@@ -1,47 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using Gallifrey.IdleTimers;
-using Gallifrey.Settings;
-using Newtonsoft.Json;
 
 namespace Gallifrey.Serialization
 {
     internal static class IdleTimerCollectionSerializer
     {
-        private readonly static string SavePath = Path.Combine(FilePathSettings.DataSavePath, "IdleTimerCollection.dat");
+        private static ItemSerializer<List<IdleTimer>> serializer;
 
-        internal static void Serialize(List<IdleTimer> timerCollection)
+        internal static void Serialize(List<IdleTimer> idleTimeCollection)
         {
-            if (!Directory.Exists(FilePathSettings.DataSavePath)) Directory.CreateDirectory(FilePathSettings.DataSavePath);
+            if (serializer == null)
+            {
+                serializer = new ItemSerializer<List<IdleTimer>>("IdleTimerCollection.dat");
+            }
 
-            
-            File.WriteAllText(SavePath, DataEncryption.Encrypt(JsonConvert.SerializeObject(timerCollection)));
+            serializer.Serialize(idleTimeCollection);
         }
 
         internal static List<IdleTimer> DeSerialize()
         {
-            List<IdleTimer> timers;
-            
-            if (File.Exists(SavePath))
+            if (serializer == null)
             {
-                try
-                {
-                    var text = DataEncryption.Decrypt(File.ReadAllText(SavePath));
-                    timers = JsonConvert.DeserializeObject<List<IdleTimer>>(text);
-                }
-                catch (Exception)
-                {
-                    timers = new List<IdleTimer>();
-                }
-
-            }
-            else
-            {
-                timers = new List<IdleTimer>();
+                serializer = new ItemSerializer<List<IdleTimer>>("IdleTimerCollection.dat");
             }
 
-            return timers;
+            return serializer.DeSerialize();
         }
     }
 }

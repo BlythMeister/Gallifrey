@@ -65,6 +65,7 @@
     <Compile Include="Exceptions\JiraTimers\DuplicateTimerException.cs" />
     <Compile Include="InactiveMonitor\ActivityChecker.cs" />
     <Compile Include="Exceptions\MultipleGallifreyRunningException.cs" />
+    <Compile Include="Serialization\ItemSerializer.cs" />
     <Compile Include="Versions\InstanceType.cs" />
     <Compile Include="JiraIntegration\JiraProject.cs" />
     <Compile Include="JiraIntegration\RecentJiraCollection.cs" />
@@ -91,7 +92,6 @@
     <Compile Include="Settings\SettingsCollection.cs" />
     <Compile Include="Settings\UISettings.cs" />
     <Compile Include="Settings\JiraConnnectionSettings.cs" />
-    <Compile Include="Settings\FilePathSettings.cs" />
     <Compile Include="Versions\UpdateResult.cs" />
     <Compile Include="Versions\VersionControl.cs" />
   </ItemGroup>

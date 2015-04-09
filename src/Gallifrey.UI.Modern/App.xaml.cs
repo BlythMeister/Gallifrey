@@ -9,9 +9,9 @@ namespace Gallifrey.UI.Modern
     /// </summary>
     public partial class App : Application
     {
-        protected override void OnStartup(StartupEventArgs e)
+        public static void Run(InstanceType instance, AppType appType)
         {
-            var mainWindow = new MainWindow(new Backend(InstanceType.Stable, AppType.Modern));
+            var mainWindow = new MainWindow(instance, appType);
             mainWindow.Show();
         }
     }

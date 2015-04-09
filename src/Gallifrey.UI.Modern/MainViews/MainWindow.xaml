@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:mainViews="clr-namespace:Gallifrey.UI.Modern.MainViews"
-        Height="500" Width="600" MinWidth="600" MinHeight="350" Icon="/Icons/clock_blue.ico" GlowBrush="{DynamicResource AccentColorBrush}" Loaded="OnLoaded" Closed="MainWindow_OnClosed">
+        Height="500" Width="600" MinWidth="600" MinHeight="500" Icon="/Icons/clock_blue.ico" GlowBrush="{DynamicResource AccentColorBrush}" Loaded="OnLoaded" Closed="MainWindow_OnClosed">
 
     <Controls:MetroWindow.Flyouts>
         <Controls:FlyoutsControl x:Name="FlyoutsControl" />

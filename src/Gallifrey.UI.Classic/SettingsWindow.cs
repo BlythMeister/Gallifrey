@@ -40,9 +40,9 @@ namespace Gallifrey.UI.Classic
                 chklstWorkingDays.SetItemChecked(i, foundItem);
             }
 
-            if (gallifrey.Settings.AppSettings.ExportPrompt == null)
+            if (gallifrey.Settings.ExportSettings.ExportPrompt == null)
             {
-                gallifrey.Settings.AppSettings.ExportPrompt = new ExportPrompt();
+                gallifrey.Settings.ExportSettings.ExportPrompt = new ExportPrompt();
             }
 
             for (var i = 0; i < chklstExportPrompt.Items.Count; i++)
@@ -50,20 +50,20 @@ namespace Gallifrey.UI.Classic
                 switch (chklstExportPrompt.Items[i].ToString())
                 {
                     case "Add Idle Time":
-                        chklstExportPrompt.SetItemChecked(i, gallifrey.Settings.AppSettings.ExportPrompt.OnAddIdle);
+                        chklstExportPrompt.SetItemChecked(i, gallifrey.Settings.ExportSettings.ExportPrompt.OnAddIdle);
                         break;
                     case "Manual Timer Adjustment":
-                        chklstExportPrompt.SetItemChecked(i, gallifrey.Settings.AppSettings.ExportPrompt.OnManualAdjust);
+                        chklstExportPrompt.SetItemChecked(i, gallifrey.Settings.ExportSettings.ExportPrompt.OnManualAdjust);
                         break;
                     case "Stop Timer":
-                        chklstExportPrompt.SetItemChecked(i, gallifrey.Settings.AppSettings.ExportPrompt.OnStop);
+                        chklstExportPrompt.SetItemChecked(i, gallifrey.Settings.ExportSettings.ExportPrompt.OnStop);
                         break;
                     case "Add Pre-Loaded Timer":
-                        chklstExportPrompt.SetItemChecked(i, gallifrey.Settings.AppSettings.ExportPrompt.OnCreatePreloaded);
+                        chklstExportPrompt.SetItemChecked(i, gallifrey.Settings.ExportSettings.ExportPrompt.OnCreatePreloaded);
                         break;
                 }
             }
-            chkExportAll.Checked = gallifrey.Settings.AppSettings.ExportPromptAll;
+            chkExportAll.Checked = gallifrey.Settings.ExportSettings.ExportPromptAll;
 
             cmdWeekStart.Text = gallifrey.Settings.AppSettings.StartOfWeek.ToString();
 
@@ -109,20 +109,20 @@ namespace Gallifrey.UI.Classic
                 switch (chklstExportPrompt.Items[i].ToString())
                 {
                     case "Add Idle Time":
-                        gallifrey.Settings.AppSettings.ExportPrompt.OnAddIdle = chklstExportPrompt.GetItemChecked(i);
+                        gallifrey.Settings.ExportSettings.ExportPrompt.OnAddIdle = chklstExportPrompt.GetItemChecked(i);
                         break;
                     case "Manual Timer Adjustment":
-                        gallifrey.Settings.AppSettings.ExportPrompt.OnManualAdjust = chklstExportPrompt.GetItemChecked(i);
+                        gallifrey.Settings.ExportSettings.ExportPrompt.OnManualAdjust = chklstExportPrompt.GetItemChecked(i);
                         break;
                     case "Stop Timers":
-                        gallifrey.Settings.AppSettings.ExportPrompt.OnStop = chklstExportPrompt.GetItemChecked(i);
+                        gallifrey.Settings.ExportSettings.ExportPrompt.OnStop = chklstExportPrompt.GetItemChecked(i);
                         break;
                     case "Add Pre-Loaded Timer":
-                        gallifrey.Settings.AppSettings.ExportPrompt.OnCreatePreloaded = chklstExportPrompt.GetItemChecked(i);
+                        gallifrey.Settings.ExportSettings.ExportPrompt.OnCreatePreloaded = chklstExportPrompt.GetItemChecked(i);
                         break;
                 }
             }
-            gallifrey.Settings.AppSettings.ExportPromptAll = chkExportAll.Checked;
+            gallifrey.Settings.ExportSettings.ExportPromptAll = chkExportAll.Checked;
 
             gallifrey.Settings.JiraConnectionSettings.JiraUrl = txtJiraUrl.Text;
             gallifrey.Settings.JiraConnectionSettings.JiraUsername = txtJiraUsername.Text;
@@ -141,7 +141,7 @@ namespace Gallifrey.UI.Classic
 
             try
             {
-                gallifrey.SaveSettings();
+                gallifrey.SaveSettings(true);
                 settingsWork = true;
             }
             catch (JiraConnectionException)

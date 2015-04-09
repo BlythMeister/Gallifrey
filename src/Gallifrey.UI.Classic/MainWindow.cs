@@ -40,11 +40,11 @@ namespace Gallifrey.UI.Classic
 
             gallifrey = gallifreyBackend;
 
-            if (ApplicationDeployment.IsNetworkDeployed)
-            {
-                ExceptionlessClient.Current.UnhandledExceptionReporting += OnUnhandledExceptionReporting;
-                ExceptionlessClient.Current.Register();
-            }
+            ExceptionlessClient.Default.Configuration.ApiKey = "e7ac6366507547639ce69fea261d6545";
+            ExceptionlessClient.Default.Configuration.Enabled = true;
+            ExceptionlessClient.Default.Configuration.DefaultTags.Add(gallifrey.VersionControl.VersionName.Replace("\n", " - "));
+            ExceptionlessClient.Default.SubmittingEvent += OnSubmittingExceptionlessEvent;
+            ExceptionlessClient.Default.Register();
 
             internalTimerList = new Dictionary<DateTime, ThreadedBindingList<JiraTimer>>();
 
@@ -98,18 +98,12 @@ namespace Gallifrey.UI.Classic
                 }
             }
         }
-
-        private void OnUnhandledExceptionReporting(object sender, UnhandledExceptionReportingEventArgs e)
+        
+        private void OnSubmittingExceptionlessEvent(object sender, EventSubmittingEventArgs e)
         {
             foreach (var form in Application.OpenForms.Cast<Form>())
             {
                 form.TopMost = false;
-            }
-
-            e.Error.Tags.Add(gallifrey.VersionControl.VersionName.Replace("\n", " - "));
-            foreach (var module in e.Error.Modules.Where(module => module.Name.ToLower().Contains("gallifrey.ui")))
-            {
-                module.Version = gallifrey.VersionControl.VersionName.Replace("\n", " - ");
             }
         }
 
@@ -138,7 +132,7 @@ namespace Gallifrey.UI.Classic
                     var changeLogWindow = new ChangeLogWindow(gallifrey, changeLog);
                     changeLogWindow.ShowDialog();
                 }
-            }
+            }            
         }
 
         private void MainWindow_KeyUp(object sender, KeyEventArgs e)
@@ -190,7 +184,7 @@ namespace Gallifrey.UI.Classic
                         tabList.Focus();
                         break;
                     case Keys.Right:
-                        if (selectedTab.TabIndex < tabTimerDays.TabPages.Count - 1)
+                        if (tabTimerDays.SelectedIndex < tabTimerDays.TabPages.Count - 1)
                         {
                             tabTimerDays.SelectedIndex++;
                             tabList = (ListBox)tabTimerDays.SelectedTab.Controls[string.Format("lst_{0}", tabTimerDays.SelectedTab.Name)];
@@ -199,7 +193,7 @@ namespace Gallifrey.UI.Classic
                         }
                         break;
                     case Keys.Left:
-                        if (selectedTab.TabIndex > 0)
+                        if (tabTimerDays.SelectedIndex > 0)
                         {
                             tabTimerDays.SelectedIndex--;
                             tabList = (ListBox)tabTimerDays.SelectedTab.Controls[string.Format("lst_{0}", tabTimerDays.SelectedTab.Name)];
@@ -296,7 +290,7 @@ namespace Gallifrey.UI.Classic
             {
                 var exportTime = e.ExportTime;
                 var message = string.Format("Do You Want To Export '{0}'?\n", timer.JiraReference);
-                if (gallifrey.Settings.AppSettings.ExportPromptAll || (new TimeSpan(exportTime.Ticks - (exportTime.Ticks % 600000000)) == new TimeSpan(timer.TimeToExport.Ticks - (timer.TimeToExport.Ticks % 600000000))))
+                if (gallifrey.Settings.ExportSettings.ExportPromptAll || (new TimeSpan(exportTime.Ticks - (exportTime.Ticks % 600000000)) == new TimeSpan(timer.TimeToExport.Ticks - (timer.TimeToExport.Ticks % 600000000))))
                 {
                     exportTime = timer.TimeToExport;
                     message += string.Format("You Have '{0}' To Export", exportTime.FormatAsString(false));
@@ -311,7 +305,7 @@ namespace Gallifrey.UI.Classic
                     var exportTimerWindow = new ExportTimerWindow(gallifrey, e.TimerId);
                     if (exportTimerWindow.DisplayForm)
                     {
-                        if (!gallifrey.Settings.AppSettings.ExportPromptAll)
+                        if (!gallifrey.Settings.ExportSettings.ExportPromptAll)
                         {
                             exportTimerWindow.PreLoadExportTime(e.ExportTime);
                         }
@@ -352,6 +346,14 @@ namespace Gallifrey.UI.Classic
         private void lblDonate_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             System.Diagnostics.Process.Start("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=G3MWL8E6UG4RS");
+        }
+
+        private void tabTimerDays_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Left || e.KeyCode == Keys.Right)
+            {
+                e.Handled = true;
+            }
         }
 
         #endregion
@@ -467,15 +469,18 @@ namespace Gallifrey.UI.Classic
 
         private void GallifreyOnNoActivityEvent(object sender, int millisecondsSinceActivity)
         {
-            var minutesSinceActivity = (millisecondsSinceActivity / 1000) / 60;
-            var minutesPlural = string.Empty;
-            if (minutesSinceActivity > 1)
+            if (millisecondsSinceActivity > 0)
             {
-                minutesPlural = "s";
-            }
+                var minutesSinceActivity = (millisecondsSinceActivity / 1000) / 60;
+                var minutesPlural = string.Empty;
+                if (minutesSinceActivity > 1)
+                {
+                    minutesPlural = "s";
+                }
 
-            notifyAlert.BalloonTipText = string.Format("No Timer Running For {0} Minute{1}", minutesSinceActivity, minutesPlural);
-            notifyAlert.ShowBalloonTip(3000);
+                notifyAlert.BalloonTipText = string.Format("No Timer Running For {0} Minute{1}", minutesSinceActivity, minutesPlural);
+                notifyAlert.ShowBalloonTip(3000);
+            }
         }
 
         private void notifyAlert_BalloonTipClicked(object sender, EventArgs e)
@@ -1057,10 +1062,6 @@ namespace Gallifrey.UI.Classic
             if (updateResult.Result == UpdateResult.Updated)
             {
                 UpdateComplete();
-            }
-            else if (updateResult.Result == UpdateResult.NoUpdate)
-            {
-                SetVersionNumber(noUpdate: true);
             }
         }
 

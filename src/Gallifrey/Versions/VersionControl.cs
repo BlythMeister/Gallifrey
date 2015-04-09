@@ -14,6 +14,7 @@ namespace Gallifrey.Versions
         InstanceType InstanceType { get; }
         AppType AppType { get; }
         bool IsAutomatedDeploy { get; }
+        string ActivationUrl { get; }
         bool AlreadyInstalledUpdate { get; }
         string VersionName { get; }
         Version DeployedVersion { get; }
@@ -75,6 +76,11 @@ namespace Gallifrey.Versions
         public bool IsAutomatedDeploy
         {
             get { return ApplicationDeployment.IsNetworkDeployed; }
+        }
+
+        public string ActivationUrl
+        {
+            get { return ApplicationDeployment.CurrentDeployment.ActivationUri != null ? ApplicationDeployment.CurrentDeployment.ActivationUri.ToString() : string.Empty; }
         }
 
         public bool AlreadyInstalledUpdate

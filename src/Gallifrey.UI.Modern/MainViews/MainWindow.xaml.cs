@@ -2,9 +2,10 @@
 using System.Deployment.Application;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
+using System.Timers;
 using System.Windows;
+using System.Windows.Documents;
 using System.Xml.Linq;
 using Exceptionless;
 using Gallifrey.Exceptions;
@@ -15,6 +16,7 @@ using Gallifrey.ExtensionMethods;
 using Gallifrey.JiraTimers;
 using Gallifrey.UI.Modern.Extensions;
 using Gallifrey.UI.Modern.Flyouts;
+using Gallifrey.UI.Modern.Helpers;
 using Gallifrey.UI.Modern.Models;
 using Gallifrey.Versions;
 using MahApps.Metro.Controls;
@@ -26,42 +28,25 @@ namespace Gallifrey.UI.Modern.MainViews
     public partial class MainWindow : MetroWindow
     {
         private MainViewModel ViewModel { get { return (MainViewModel)DataContext; } }
-        private readonly bool multipleInstances;
 
-        public MainWindow(Backend gallifrey)
+        public MainWindow(InstanceType instance, AppType appType)
         {
             InitializeComponent();
 
-            if (ApplicationDeployment.IsNetworkDeployed)
-            {
-                ExceptionlessClient.Current.UnhandledExceptionReporting += OnUnhandledExceptionReporting;
-                ExceptionlessClient.Current.Register();
-            }
+            ExceptionlessClient.Default.Configuration.ApiKey = "e7ac6366507547639ce69fea261d6545";
+            ExceptionlessClient.Default.Configuration.DefaultTags.Add("Unknown_Version_Pre_Startup");
+            ExceptionlessClient.Default.Configuration.Enabled = true;
+            ExceptionlessClient.Default.SubmittingEvent += ExceptionlessSubmittingEvent;
+            ExceptionlessClient.Default.Register();
+
+            var gallifrey = new Backend(instance, appType);
+
+            ExceptionlessClient.Default.Configuration.DefaultTags.Clear();
+            ExceptionlessClient.Default.Configuration.DefaultTags.Add(gallifrey.VersionControl.VersionName.Replace("\n", " - "));
 
             var viewModel = new MainViewModel(gallifrey, this);
-
-            try
-            {
-                gallifrey.Initialise();
-            }
-            catch (MissingJiraConfigException)
-            {
-                var flyout = OpenFlyout(new Flyouts.Settings(viewModel));
-                flyout.Wait();
-            }
-            catch (JiraConnectionException)
-            {
-                var flyout = OpenFlyout(new Flyouts.Settings(viewModel));
-                flyout.Wait();
-            }
-            catch (MultipleGallifreyRunningException)
-            {
-                multipleInstances = true;
-            }
-
             viewModel.RefreshModel();
             viewModel.SelectRunningTimer();
-
             DataContext = viewModel;
 
             gallifrey.NoActivityEvent += GallifreyOnNoActivityEvent;
@@ -71,10 +56,61 @@ namespace Gallifrey.UI.Modern.MainViews
             Height = gallifrey.Settings.UiSettings.Height;
             Width = gallifrey.Settings.UiSettings.Width;
             Title = gallifrey.VersionControl.AppName;
+            ThemeHelper.ChangeTheme(gallifrey.Settings.UiSettings.Theme);
 
-            if (gallifrey.VersionControl.IsAutomatedDeploy && gallifrey.VersionControl.IsFirstRun)
+            if (gallifrey.VersionControl.IsAutomatedDeploy)
             {
-                var changeLog = gallifrey.GetChangeLog(XDocument.Parse(Properties.Resources.ChangeLog));
+                PerformUpdate(false, true);
+                var updateHeartbeat = new Timer(60000);
+                updateHeartbeat.Elapsed += delegate { PerformUpdate(false, false); };
+                updateHeartbeat.Enabled = true;
+            }
+        }
+
+        private async void ExceptionlessSubmittingEvent(object sender, EventSubmittingEventArgs e)
+        {
+            if (!e.IsUnhandledError)
+                return;
+
+            e.Cancel = true;
+            await OpenFlyout(new Error(ViewModel, e.Event));
+            CloseApp(true);
+        }
+
+        private async void OnLoaded(object sender, RoutedEventArgs e)
+        {
+            var missingConfig = false;
+            var showSettings = false;
+            try
+            {
+                ViewModel.Gallifrey.Initialise();
+            }
+            catch (MissingJiraConfigException)
+            {
+                showSettings = true;
+            }
+            catch (JiraConnectionException)
+            {
+                showSettings = true;
+            }
+            catch (MultipleGallifreyRunningException)
+            {
+                missingConfig = true;
+            }
+
+            if (missingConfig)
+            {
+                await this.ShowMessageAsync("Multiple Instances", "You Can Only Have One Instance Of Gallifrey Running At A Time\nPlease Close The Other Instance");
+                CloseApp();
+            }
+            else if (showSettings)
+            {
+                await OpenFlyout(new Flyouts.Settings(ViewModel));
+            }
+
+            if (ViewModel.Gallifrey.VersionControl.IsAutomatedDeploy && ViewModel.Gallifrey.VersionControl.IsFirstRun)
+            {
+                var changeLog = ViewModel.Gallifrey.GetChangeLog(XDocument.Parse(Properties.Resources.ChangeLog));
 
                 if (changeLog.Any())
                 {
@@ -90,7 +126,7 @@ namespace Gallifrey.UI.Modern.MainViews
             {
                 var exportTime = e.ExportTime;
                 var message = string.Format("Do You Want To Export '{0}'?\n", timer.JiraReference);
-                if (ViewModel.Gallifrey.Settings.AppSettings.ExportPromptAll || (new TimeSpan(exportTime.Ticks - (exportTime.Ticks % 600000000)) == new TimeSpan(timer.TimeToExport.Ticks - (timer.TimeToExport.Ticks % 600000000))))
+                if (ViewModel.Gallifrey.Settings.ExportSettings.ExportPromptAll || (new TimeSpan(exportTime.Ticks - (exportTime.Ticks % 600000000)) == new TimeSpan(timer.TimeToExport.Ticks - (timer.TimeToExport.Ticks % 600000000))))
                 {
                     exportTime = timer.TimeToExport;
                     message += string.Format("You Have '{0}' To Export", exportTime.FormatAsString(false));
@@ -104,7 +140,7 @@ namespace Gallifrey.UI.Modern.MainViews
 
                 if (messageResult == MessageDialogResult.Affirmative)
                 {
-                    if (ViewModel.Gallifrey.Settings.AppSettings.ExportPromptAll)
+                    if (ViewModel.Gallifrey.Settings.ExportSettings.ExportPromptAll)
                     {
                         ViewModel.MainWindow.OpenFlyout(new Export(ViewModel, e.TimerId, e.ExportTime));
                     }
@@ -131,15 +167,6 @@ namespace Gallifrey.UI.Modern.MainViews
                     this.FlashWindow();
                 }
             });
-        }
-
-        private void OnUnhandledExceptionReporting(object sender, UnhandledExceptionReportingEventArgs e)
-        {
-            e.Error.Tags.Add(ViewModel.Gallifrey.VersionControl.VersionName.Replace("\n", " - "));
-            foreach (var module in e.Error.Modules.Where(module => module.Name.ToLower().Contains("gallifrey.ui")))
-            {
-                module.Version = ViewModel.Gallifrey.VersionControl.VersionName.Replace("\n", " - ");
-            }
         }
 
         private void SessionSwitchHandler(object sender, SessionSwitchEventArgs e)
@@ -183,7 +210,7 @@ namespace Gallifrey.UI.Modern.MainViews
             PerformUpdate(true, true);
         }
 
-        public Task<Flyout> OpenFlyout(Flyout flyout, bool holdExecution = false)
+        public Task<Flyout> OpenFlyout(Flyout flyout)
         {
             var a = new TaskCompletionSource<Flyout>();
             RoutedEventHandler closingFinishedHandler = null;
@@ -200,17 +227,6 @@ namespace Gallifrey.UI.Modern.MainViews
             flyout.IsOpen = true;
 
             return a.Task;
-        }
-
-        private async void OnLoaded(object sender, RoutedEventArgs e)
-        {
-            if (multipleInstances)
-            {
-                await this.ShowMessageAsync("Multiple Instances", "You Can Only Have One Instance Of Gallifrey Running At A Time\nPlease Close The Other Instance");
-                Application.Current.Shutdown();
-            }
-
-            PerformUpdate(false, true);
         }
 
         private async void PerformUpdate(bool manualUpdateCheck, bool promptReinstall)
@@ -234,20 +250,21 @@ namespace Gallifrey.UI.Modern.MainViews
 
                 if (updateResult == UpdateResult.Updated)
                 {
-                    if (!manualUpdateCheck && ViewModel.Gallifrey.Settings.AppSettings.AutoUpdate)
-                    {
-                        Process.Start(Application.ResourceAssembly.Location);
-                        Application.Current.Shutdown();
-                    }
-                    else
+                    if (manualUpdateCheck)
                     {
                         var messageResult = await this.ShowMessageAsync("Update Found", "Restart Now To Install Update?", MessageDialogStyle.AffirmativeAndNegative,
                                                                     new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No" });
 
                         if (messageResult == MessageDialogResult.Affirmative)
                         {
-                            Process.Start(Application.ResourceAssembly.Location);
-                            Application.Current.Shutdown();
+                            CloseApp(true);
+                        }
+                    }
+                    else
+                    {
+                        if (ViewModel.Gallifrey.Settings.AppSettings.AutoUpdate)
+                        {
+                            CloseApp(true);
                         }
                     }
                 }
@@ -280,6 +297,16 @@ namespace Gallifrey.UI.Modern.MainViews
                     ViewModel.Gallifrey.VersionControl.ManualReinstall();
                 }
             }
+        }
+
+        private void CloseApp(bool restart = false)
+        {
+            if (restart && ViewModel.Gallifrey.VersionControl.IsAutomatedDeploy)
+            {
+                Process.Start(ViewModel.Gallifrey.VersionControl.ActivationUrl);
+            }
+
+            Application.Current.Shutdown();
         }
 
         private void MainWindow_OnClosed(object sender, EventArgs e)

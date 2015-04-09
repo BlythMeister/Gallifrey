@@ -33,7 +33,7 @@
             </Rectangle>
         </Button>
         <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="ExportButton">
-            <Rectangle Width="23" Height="18" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
+            <Rectangle Width="30" Height="20" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
                 <Rectangle.OpacityMask>
                     <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_cloud_upload}" />
                 </Rectangle.OpacityMask>
@@ -42,7 +42,7 @@
         <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="LockTimerButton">
             <Rectangle Width="23" Height="23" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
                 <Rectangle.OpacityMask>
-                    <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_door_lock_open}" />
+                    <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_lock}" />
                 </Rectangle.OpacityMask>
             </Rectangle>
         </Button>

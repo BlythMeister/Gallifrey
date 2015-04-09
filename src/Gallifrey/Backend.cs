@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Timers;
 using System.Xml.Linq;
 using Gallifrey.AppTracking;
@@ -17,7 +15,6 @@ using Gallifrey.JiraTimers;
 using Gallifrey.Serialization;
 using Gallifrey.Settings;
 using Gallifrey.Versions;
-using Timer = System.Timers.Timer;
 
 namespace Gallifrey
 {
@@ -33,7 +30,7 @@ namespace Gallifrey
         void Initialise();
         void Close();
         void TrackEvent(TrackingType trackingType);
-        void SaveSettings();
+        void SaveSettings(bool jiraSettingsChanged);
         bool StartIdleTimer();
         Guid StopIdleTimer();
         IDictionary<Version, ChangeLogVersionDetails> GetChangeLog(XDocument changeLogContent);
@@ -47,6 +44,7 @@ namespace Gallifrey
         private readonly ITrackUsage trackUsage;
         private readonly JiraConnection jiraConnection;
         private readonly VersionControl versionControl;
+
         public event EventHandler<int> NoActivityEvent;
         public event EventHandler<ExportPromptDetail> ExportPromptEvent;
         internal ActivityChecker ActivityChecker;
@@ -58,7 +56,7 @@ namespace Gallifrey
             settingsCollection = SettingsCollectionSerializer.DeSerialize();
             trackUsage = new TrackUsage(settingsCollection.AppSettings, settingsCollection.InternalSettings, instanceType, appType);
             versionControl = new VersionControl(instanceType, appType, trackUsage);
-            jiraTimerCollection = new JiraTimerCollection(settingsCollection.AppSettings);
+            jiraTimerCollection = new JiraTimerCollection(settingsCollection.ExportSettings);
             jiraTimerCollection.exportPrompt += OnExportPromptEvent;
             jiraConnection = new JiraConnection(trackUsage);
             idleTimerCollection = new IdleTimerCollection();
@@ -77,7 +75,7 @@ namespace Gallifrey
                 }
 
                 Settings.AppSettings.TimerRunningOnShutdown = null;
-                SaveSettings();
+                SaveSettings(false);
             }
 
             HearbeatOnElapsed(this, null);
@@ -162,13 +160,17 @@ namespace Gallifrey
             trackUsage.TrackAppUsage(trackingType);
         }
 
-        public void SaveSettings()
+        public void SaveSettings(bool jiraSettingsChanged)
         {
             settingsCollection.SaveSettings();
-            jiraConnection.ReConnect(settingsCollection.JiraConnectionSettings, settingsCollection.ExportSettings);
+
+            if (jiraSettingsChanged)
+            {
+                jiraConnection.ReConnect(settingsCollection.JiraConnectionSettings, settingsCollection.ExportSettings);
+            }
 
             ActivityChecker.UpdateAppSettings(settingsCollection.AppSettings);
-            jiraTimerCollection.UpdateAppSettings(settingsCollection.AppSettings);
+            jiraTimerCollection.UpdateAppSettings(settingsCollection.ExportSettings);
             trackUsage.UpdateSettings(settingsCollection.AppSettings, settingsCollection.InternalSettings);
         }
 

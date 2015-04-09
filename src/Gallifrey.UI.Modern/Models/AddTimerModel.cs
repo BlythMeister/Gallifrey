@@ -77,5 +77,14 @@ namespace Gallifrey.UI.Modern.Models
             if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("StartNow"));
             if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("StartNowEditable"));
         }
+
+        public void SetJiraReference(string jiraRef)
+        {
+            JiraReference = jiraRef;
+            JiraReferenceEditable = false;
+
+            if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("JiraReference"));
+            if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("JiraReferenceEditable"));
+        }
     }
 }

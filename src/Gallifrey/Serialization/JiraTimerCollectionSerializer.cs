@@ -1,47 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using Gallifrey.JiraTimers;
-using Gallifrey.Settings;
-using Newtonsoft.Json;
 
 namespace Gallifrey.Serialization
 {
     internal static class JiraTimerCollectionSerializer
     {
-        private readonly static string SavePath = Path.Combine(FilePathSettings.DataSavePath, "TimerCollection.dat");
+        private static ItemSerializer<List<JiraTimer>> serializer;
 
         internal static void Serialize(List<JiraTimer> timerCollection)
         {
-            if (!Directory.Exists(FilePathSettings.DataSavePath)) Directory.CreateDirectory(FilePathSettings.DataSavePath);
+            if (serializer == null)
+            {
+                serializer = new ItemSerializer<List<JiraTimer>>("TimerCollection.dat");
+            }
 
-            
-            File.WriteAllText(SavePath, DataEncryption.Encrypt(JsonConvert.SerializeObject(timerCollection)));
+            serializer.Serialize(timerCollection);
         }
 
         internal static List<JiraTimer> DeSerialize()
         {
-            List<JiraTimer> timers;
-            
-            if (File.Exists(SavePath))
+            if (serializer == null)
             {
-                try
-                {
-                    var text = DataEncryption.Decrypt(File.ReadAllText(SavePath));
-                    timers = JsonConvert.DeserializeObject<List<JiraTimer>>(text);
-                }
-                catch (Exception)
-                {
-                    timers = new List<JiraTimer>();
-                }
-
-            }
-            else
-            {
-                timers = new List<JiraTimer>();
+                serializer = new ItemSerializer<List<JiraTimer>>("TimerCollection.dat");
             }
 
-            return timers;
+            return serializer.DeSerialize();
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Gallifrey.Exceptions.JiraIntegration;
 using Gallifrey.Jira.Model;
@@ -42,6 +43,7 @@ namespace Gallifrey.UI.Classic
             catch (NoResultsFoundException)
             {
                 lstResults.Enabled = false;
+                btnAddTimer.Enabled = false;
             }
 
             TopMost = gallifrey.Settings.UiSettings.AlwaysOnTop;
@@ -98,9 +100,9 @@ namespace Gallifrey.UI.Classic
             Close();
         }
 
-        private void btnRefresh_Click(object sender, EventArgs e)
+        private async void btnRefresh_Click(object sender, EventArgs e)
         {
-            var freeSearch = txtJiraRef.Text;
+            var freeSearch = txtSearchText.Text;
             var filterSearch = (string)cmbUserFilters.SelectedItem;
 
             if (string.IsNullOrWhiteSpace(freeSearch) && string.IsNullOrWhiteSpace(filterSearch))
@@ -115,32 +117,52 @@ namespace Gallifrey.UI.Classic
                 return;
             }
 
+            txtSearchText.Enabled = false;
+            cmbUserFilters.Enabled = false;
+            btnRefresh.Enabled = false;
+            lstResults.Enabled = false;
+            btnAddTimer.Enabled = false;
+            
             try
             {
                 IEnumerable<Issue> searchResults;
+                Task<IEnumerable<Issue>> searchTask;
                 if (!string.IsNullOrWhiteSpace(freeSearch))
                 {
-                    searchResults = gallifrey.JiraConnection.GetJiraIssuesFromSearchText(freeSearch);
+                    searchTask = Task.Factory.StartNew(() => gallifrey.JiraConnection.GetJiraIssuesFromSearchText(freeSearch));
                 }
                 else
                 {
-                    searchResults = gallifrey.JiraConnection.GetJiraIssuesFromFilter(filterSearch);
+                    searchTask = Task.Factory.StartNew(() => gallifrey.JiraConnection.GetJiraIssuesFromFilter(filterSearch));
                 }
 
-                if (searchResults.Any())
+                await searchTask;
+
+                if (searchTask.IsCompleted)
                 {
-                    lstResults.DataSource = searchResults.Select(issue => new JiraSearchResult(issue)).ToList();
-                    lstResults.Enabled = true;
+                    searchResults = searchTask.Result;
+
+                    if (searchResults.Any())
+                    {
+                        lstResults.DataSource = searchResults.Select(issue => new JiraSearchResult(issue)).ToList();
+                        lstResults.Enabled = true;
+                        btnRefresh.Enabled = true;
+                        btnAddTimer.Enabled = true;
+                        txtSearchText.Enabled = true;
+                        cmbUserFilters.Enabled = true;
+                        return;
+                    }
                 }
-                else
-                {
-                    throw new NoResultsFoundException("No Results In Collection");
-                }
+
+                throw new NoResultsFoundException("No Results were found");
             }
             catch (NoResultsFoundException)
             {
-                lstResults.Enabled = false;
+                Cursor.Current = Cursors.Default;
                 MessageBox.Show("No Results Found, Try A Different Search", "No Results", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                btnRefresh.Enabled = true;
+                txtSearchText.Enabled = true;
+                cmbUserFilters.Enabled = true;
             }
         }
 
@@ -186,6 +208,16 @@ namespace Gallifrey.UI.Classic
         private void lstResults_DoubleClick(object sender, EventArgs e)
         {
             btnAddTimer_Click(sender, e);
+        }
+
+        private void txtSearchText_TextChanged(object sender, EventArgs e)
+        {
+            cmbUserFilters.Enabled = string.IsNullOrWhiteSpace(txtSearchText.Text);
+        }
+
+        private void cmbUserFilters_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            txtSearchText.Enabled = string.IsNullOrWhiteSpace((string)cmbUserFilters.SelectedItem);
         }
     }
 }

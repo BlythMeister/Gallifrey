@@ -60,7 +60,7 @@
             this.lblTwitter = new System.Windows.Forms.LinkLabel();
             this.label4 = new System.Windows.Forms.Label();
             this.lblEmail = new System.Windows.Forms.LinkLabel();
-            this.label5 = new System.Windows.Forms.Label();
+            this.lblDonateDesc = new System.Windows.Forms.Label();
             this.lblDonate = new System.Windows.Forms.LinkLabel();
             this.label6 = new System.Windows.Forms.Label();
             this.splitter1 = new System.Windows.Forms.Splitter();
@@ -105,6 +105,7 @@
             this.tabTimerDays.TabIndex = 15;
             this.tabTimerDays.DragDrop += new System.Windows.Forms.DragEventHandler(this.tabTimerDays_DragDrop);
             this.tabTimerDays.DragOver += new System.Windows.Forms.DragEventHandler(this.tabTimerDays_DragOver);
+            this.tabTimerDays.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tabTimerDays_KeyDown);
             // 
             // formTimer
             // 
@@ -402,15 +403,15 @@
             this.lblEmail.Text = "E-Mail";
             this.lblEmail.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lblEmail_LinkClicked);
             // 
-            // label5
+            // lblDonateDesc
             // 
-            this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(730, 586);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(154, 13);
-            this.label5.TabIndex = 22;
-            this.label5.Text = "Please help support Gallifrey";
+            this.lblDonateDesc.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblDonateDesc.AutoSize = true;
+            this.lblDonateDesc.Location = new System.Drawing.Point(730, 586);
+            this.lblDonateDesc.Name = "lblDonateDesc";
+            this.lblDonateDesc.Size = new System.Drawing.Size(154, 13);
+            this.lblDonateDesc.TabIndex = 22;
+            this.lblDonateDesc.Text = "Please help support Gallifrey";
             // 
             // lblDonate
             // 
@@ -465,7 +466,7 @@
             this.Controls.Add(this.label6);
             this.Controls.Add(this.splitter1);
             this.Controls.Add(this.lblDonate);
-            this.Controls.Add(this.label5);
+            this.Controls.Add(this.lblDonateDesc);
             this.Controls.Add(this.lblEmail);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.lblTwitter);
@@ -540,7 +541,7 @@
         private System.Windows.Forms.LinkLabel lblTwitter;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.LinkLabel lblEmail;
-        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label lblDonateDesc;
         private System.Windows.Forms.LinkLabel lblDonate;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Splitter splitter1;

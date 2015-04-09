@@ -77,7 +77,9 @@ namespace Gallifrey.UI.Modern.Models
 
         public void RefreshModel()
         {
-            foreach (var timerDate in Gallifrey.JiraTimerCollection.GetValidTimerDates())
+            var validTimerDates = Gallifrey.JiraTimerCollection.GetValidTimerDates().ToList();
+
+            foreach (var timerDate in validTimerDates)
             {
                 var dateModel = TimerDates.FirstOrDefault(x => x.TimerDate.Date == timerDate.Date);
 
@@ -105,7 +107,9 @@ namespace Gallifrey.UI.Modern.Models
                 }
             }
 
-            TimerDates = new ObservableCollection<TimerDateModel>(TimerDates.OrderByDescending(x => x.TimerDate));
+            TimerDates = new ObservableCollection<TimerDateModel>(TimerDates.Where(x=>validTimerDates.Contains(x.TimerDate)).OrderByDescending(x => x.TimerDate));
+
+            if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("TimerDates"));
         }
 
         public Guid? GetSelectedTimerId()

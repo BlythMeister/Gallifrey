@@ -2,7 +2,27 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro" IsModal="True" Theme="Adapt" Position="Right" Header="App Information">
-    <Grid Width="300" Margin="5,5,5,5" >
-        
-    </Grid>
+    <WrapPanel Width="300" Margin="5,5,5,5" >
+        <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0">
+            <Rectangle Width="23" Height="23" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
+                <Rectangle.OpacityMask>
+                    <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_paypal}" />
+                </Rectangle.OpacityMask>
+            </Rectangle>
+        </Button>
+        <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0">
+            <Rectangle Width="25" Height="20" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
+                <Rectangle.OpacityMask>
+                    <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_twitter_bird}" />
+                </Rectangle.OpacityMask>
+            </Rectangle>
+        </Button>
+        <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0">
+            <Rectangle Width="23" Height="18" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
+                <Rectangle.OpacityMask>
+                    <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_email}" />
+                </Rectangle.OpacityMask>
+            </Rectangle>
+        </Button>
+    </WrapPanel>
 </Controls:Flyout>

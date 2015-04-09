@@ -46,7 +46,7 @@ namespace Gallifrey.UI.Modern.MainViews
 
         private void SearchButton(object sender, RoutedEventArgs e)
         {
-            ViewModel.MainWindow.OpenFlyout(new Search(ViewModel));
+            ViewModel.MainWindow.OpenFlyout(new Search(ViewModel, false));
         }
 
         private void EditButton(object sender, RoutedEventArgs e)

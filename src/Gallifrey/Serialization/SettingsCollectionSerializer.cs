@@ -1,44 +1,29 @@
-﻿using System;
-using System.IO;
-using Gallifrey.Settings;
-using Newtonsoft.Json;
+﻿using Gallifrey.Settings;
 
 namespace Gallifrey.Serialization
 {
     internal static class SettingsCollectionSerializer
     {
-        private readonly static string SavePath = Path.Combine(FilePathSettings.DataSavePath, "Settings.dat");
-        
+        private static ItemSerializer<SettingsCollection> serializer;
+
         internal static void Serialize(SettingsCollection settingsCollection)
         {
-            if (!Directory.Exists(FilePathSettings.DataSavePath)) Directory.CreateDirectory(FilePathSettings.DataSavePath);
+            if (serializer == null)
+            {
+                serializer = new ItemSerializer<SettingsCollection>("Settings.dat");
+            }
 
-            File.WriteAllText(SavePath, DataEncryption.Encrypt(JsonConvert.SerializeObject(settingsCollection)));
+            serializer.Serialize(settingsCollection);
         }
 
         internal static SettingsCollection DeSerialize()
         {
-            SettingsCollection settingsCollection;
-            
-            if (File.Exists(SavePath))
+            if (serializer == null)
             {
-                try
-                {
-                    var text = DataEncryption.Decrypt(File.ReadAllText(SavePath));
-                    settingsCollection = JsonConvert.DeserializeObject<SettingsCollection>(text);
-                }
-                catch (Exception)
-                {
-                    settingsCollection = new SettingsCollection();    
-                }
-                
-            }
-            else
-            {
-                settingsCollection = new SettingsCollection();    
+                serializer = new ItemSerializer<SettingsCollection>("Settings.dat");
             }
 
-            return settingsCollection;
+            return serializer.DeSerialize();
         }
     }
 }

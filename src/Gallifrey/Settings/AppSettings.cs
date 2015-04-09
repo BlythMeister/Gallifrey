@@ -15,8 +15,6 @@ namespace Gallifrey.Settings
         Guid? TimerRunningOnShutdown { get; set; }
         TimeSpan GetTargetThisWeek();
         bool AutoUpdate { get; set; }
-        ExportPrompt ExportPrompt { get; set; }
-        bool ExportPromptAll { get; set; }
         bool UsageTracking { get; set; }
     }
 
@@ -30,8 +28,6 @@ namespace Gallifrey.Settings
         public DayOfWeek StartOfWeek { get; set; }
         public Guid? TimerRunningOnShutdown { get; set; }
         public bool AutoUpdate { get; set; }
-        public ExportPrompt ExportPrompt { get; set; }
-        public bool ExportPromptAll { get; set; }
         public bool UsageTracking { get; set; }
 
         public AppSettings()
@@ -46,7 +42,6 @@ namespace Gallifrey.Settings
                     DayOfWeek.Friday
                 };
             StartOfWeek = DayOfWeek.Monday;
-            ExportPrompt = new ExportPrompt();
             UsageTracking = true;
         }
 

@@ -181,4 +181,15 @@
     </Bugs>
     <Others />
   </Version>
+  <Version Number="2.1.2" Name="Pre Release">
+    <Features>
+      <Feature>Improvements to the search window</Feature>
+      <Feature>Changes to how settings are stored</Feature>
+      <Feature>Updated Exception handling client</Feature>
+    </Features>
+    <Bugs>
+      <Bug>Fix issue with update checker refreshing UI constantly</Bug>
+    </Bugs>
+    <Others />
+  </Version>
 </Versions>

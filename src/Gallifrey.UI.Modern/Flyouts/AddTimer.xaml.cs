@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using Gallifrey.Exceptions.JiraIntegration;
@@ -103,18 +102,16 @@ namespace Gallifrey.UI.Modern.Flyouts
 
         private void SearchButton(object sender, RoutedEventArgs e)
         {
-            var searchFlyout = new Search(viewModel);
-
+            var searchFlyout = new Search(viewModel, true);
+            
             searchFlyout.IsOpenChanged += (o, args) =>
             {
                 if (!searchFlyout.IsOpen)
                 {
-                    //TODO get selected jira and update the add form
-                    Visibility = Visibility.Visible;    
-                }
-                else
-                {
-                    Visibility = Visibility.Hidden;
+                    if (searchFlyout.SelectedJira != null)
+                    {
+                        DataModel.SetJiraReference(searchFlyout.SelectedJira.Reference);
+                    }
                 }
             };
             

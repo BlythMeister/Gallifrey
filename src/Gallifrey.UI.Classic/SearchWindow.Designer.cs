@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SearchWindow));
-            this.txtJiraRef = new System.Windows.Forms.TextBox();
+            this.txtSearchText = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -44,13 +44,14 @@
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // txtJiraRef
+            // txtSearchText
             // 
-            this.txtJiraRef.Location = new System.Drawing.Point(95, 24);
-            this.txtJiraRef.Name = "txtJiraRef";
-            this.txtJiraRef.Size = new System.Drawing.Size(357, 25);
-            this.txtJiraRef.TabIndex = 1;
-            this.toolTip.SetToolTip(this.txtJiraRef, "Enter Search Term (Press Enter To Submit)");
+            this.txtSearchText.Location = new System.Drawing.Point(95, 24);
+            this.txtSearchText.Name = "txtSearchText";
+            this.txtSearchText.Size = new System.Drawing.Size(357, 25);
+            this.txtSearchText.TabIndex = 1;
+            this.toolTip.SetToolTip(this.txtSearchText, "Enter Search Term (Press Enter To Submit)");
+            this.txtSearchText.TextChanged += new System.EventHandler(this.txtSearchText_TextChanged);
             // 
             // label1
             // 
@@ -76,7 +77,7 @@
             this.groupBox1.Controls.Add(this.btnRefresh);
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.cmbUserFilters);
-            this.groupBox1.Controls.Add(this.txtJiraRef);
+            this.groupBox1.Controls.Add(this.txtSearchText);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Location = new System.Drawing.Point(17, 49);
             this.groupBox1.Name = "groupBox1";
@@ -114,6 +115,7 @@
             this.cmbUserFilters.Size = new System.Drawing.Size(357, 25);
             this.cmbUserFilters.TabIndex = 3;
             this.toolTip.SetToolTip(this.cmbUserFilters, "Choose One Of Your Saved Filters");
+            this.cmbUserFilters.SelectedIndexChanged += new System.EventHandler(this.cmbUserFilters_SelectedIndexChanged);
             // 
             // lstResults
             // 
@@ -187,7 +189,7 @@
 
         #endregion
 
-        private System.Windows.Forms.TextBox txtJiraRef;
+        private System.Windows.Forms.TextBox txtSearchText;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button btnAddTimer;

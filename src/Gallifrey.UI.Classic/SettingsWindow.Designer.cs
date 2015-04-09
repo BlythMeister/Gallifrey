@@ -41,6 +41,8 @@
             this.chkUseRest = new System.Windows.Forms.CheckBox();
             this.label21 = new System.Windows.Forms.Label();
             this.grpAppSettings = new System.Windows.Forms.GroupBox();
+            this.label23 = new System.Windows.Forms.Label();
+            this.chkUsageTracking = new System.Windows.Forms.CheckBox();
             this.chkAutoUpdate = new System.Windows.Forms.CheckBox();
             this.label16 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
@@ -78,8 +80,6 @@
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.label20 = new System.Windows.Forms.Label();
             this.label19 = new System.Windows.Forms.Label();
-            this.label23 = new System.Windows.Forms.Label();
-            this.chkUsageTracking = new System.Windows.Forms.CheckBox();
             this.grpJira.SuspendLayout();
             this.grpAppSettings.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -208,6 +208,25 @@
             this.grpAppSettings.TabIndex = 1;
             this.grpAppSettings.TabStop = false;
             this.grpAppSettings.Text = "App Settings";
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.Location = new System.Drawing.Point(2, 156);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(170, 17);
+            this.label23.TabIndex = 12;
+            this.label23.Text = "Anonymous Usage Tracking";
+            // 
+            // chkUsageTracking
+            // 
+            this.chkUsageTracking.AutoSize = true;
+            this.chkUsageTracking.Location = new System.Drawing.Point(178, 159);
+            this.chkUsageTracking.Name = "chkUsageTracking";
+            this.chkUsageTracking.Size = new System.Drawing.Size(15, 14);
+            this.chkUsageTracking.TabIndex = 13;
+            this.toolTip.SetToolTip(this.chkUsageTracking, "Allow Gallifrey To Capture Anonymous App Usage Data");
+            this.chkUsageTracking.UseVisualStyleBackColor = true;
             // 
             // chkAutoUpdate
             // 
@@ -593,25 +612,6 @@
             this.label19.Size = new System.Drawing.Size(45, 17);
             this.label19.TabIndex = 0;
             this.label19.Text = "Events";
-            // 
-            // label23
-            // 
-            this.label23.AutoSize = true;
-            this.label23.Location = new System.Drawing.Point(2, 156);
-            this.label23.Name = "label23";
-            this.label23.Size = new System.Drawing.Size(170, 17);
-            this.label23.TabIndex = 12;
-            this.label23.Text = "Anonymous Usage Tracking";
-            // 
-            // chkUsageTracking
-            // 
-            this.chkUsageTracking.AutoSize = true;
-            this.chkUsageTracking.Location = new System.Drawing.Point(178, 159);
-            this.chkUsageTracking.Name = "chkUsageTracking";
-            this.chkUsageTracking.Size = new System.Drawing.Size(15, 14);
-            this.chkUsageTracking.TabIndex = 13;
-            this.toolTip.SetToolTip(this.chkUsageTracking, "Allow Gallifrey To Capture Anonymous App Usage Data");
-            this.chkUsageTracking.UseVisualStyleBackColor = true;
             // 
             // SettingsWindow
             // 

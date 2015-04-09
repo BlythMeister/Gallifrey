@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro">
 
-    <Controls:MetroAnimatedSingleRowTabControl TabStripPlacement="Left" Controls:TabControlHelper.IsUnderlined="True" ItemsSource="{Binding TimerDates}">
+    <Controls:MetroAnimatedSingleRowTabControl TabStripPlacement="Left" ItemsSource="{Binding TimerDates}">
         <TabControl.ItemContainerStyle>
             <Style TargetType="TabItem">
                 <Setter Property="Header" Value="{Binding Header}" />
@@ -14,7 +14,7 @@
         </TabControl.ItemContainerStyle>
         <TabControl.ContentTemplate>
             <DataTemplate>
-                <ListView ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemsSource="{Binding Timers}" MouseDoubleClick="TimerList_MouseDoubleClick">
+                <ListView ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemsSource="{Binding Timers}" MouseDoubleClick="TimerList_MouseDoubleClick" BorderThickness="0">
                     <ListView.ItemContainerStyle>
                         <Style TargetType="{x:Type ListViewItem}">
                             <Setter Property="Margin" Value="3" />

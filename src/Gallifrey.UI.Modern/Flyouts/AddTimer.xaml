@@ -19,10 +19,30 @@
         </Grid.ColumnDefinitions>
 
         <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center">Jira Reference</TextBlock>
-        <TextBox Grid.Row="0" Grid.Column="1" Margin="0,5" Text="{Binding JiraReference}" IsEnabled="{Binding JiraReferenceEditable}" />
+        <TextBox Grid.Row="0" Grid.Column="1" Margin="0,5" Text="{Binding JiraReference}">
+            <TextBox.Style>
+                <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding JiraReferenceEditable}" Value="False" >
+                            <Setter Property="IsEnabled" Value="False"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBox.Style>
+        </TextBox>
 
         <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Padding="2">Starting Date</TextBlock>
-        <DatePicker Grid.Row="1" Grid.Column="1" Margin="0,5" IsTodayHighlighted="False" DisplayDate="{Binding DisplayDate}" DisplayDateStart="{Binding MinDate}" DisplayDateEnd="{Binding MaxDate}" SelectedDate="{Binding StartDate}" IsEnabled="{Binding DateEditable}" SelectedDateChanged="StartDateChanged"/>
+        <DatePicker Grid.Row="1" Grid.Column="1" Margin="0,5" IsTodayHighlighted="False" DisplayDate="{Binding DisplayDate}" DisplayDateStart="{Binding MinDate}" DisplayDateEnd="{Binding MaxDate}" SelectedDate="{Binding StartDate}" SelectedDateChanged="StartDateChanged">
+            <DatePicker.Style>
+                <Style TargetType="DatePicker" BasedOn="{StaticResource {x:Type DatePicker}}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding DateEditable}" Value="False" >
+                            <Setter Property="IsEnabled" Value="False"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DatePicker.Style>
+        </DatePicker>
 
         <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Padding="2">Pre Loaded Time</TextBlock>
         <WrapPanel Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Margin="0,5" Orientation="Horizontal">
@@ -33,7 +53,17 @@
         </WrapPanel>
 
         <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Padding="2">Start Now?</TextBlock>
-        <CheckBox Grid.Row="3" Grid.Column="1" Margin="0,5" IsChecked="{Binding StartNow}" IsEnabled="{Binding StartNowEditable}"/>
+        <CheckBox Grid.Row="3" Grid.Column="1" Margin="0,5" IsChecked="{Binding StartNow}" >
+            <CheckBox.Style>
+                <Style TargetType="CheckBox" BasedOn="{StaticResource {x:Type CheckBox}}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding StartNowEditable}" Value="False" >
+                            <Setter Property="IsEnabled" Value="False"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </CheckBox.Style>
+        </CheckBox>
 
         <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Padding="2">Assign To Me?</TextBlock>
         <CheckBox Grid.Row="4" Grid.Column="1" Margin="0,5" IsChecked="{Binding AssignToMe}" />
