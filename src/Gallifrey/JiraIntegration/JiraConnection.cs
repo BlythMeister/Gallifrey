@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Gallifrey.AppTracking;
 using Gallifrey.Exceptions.JiraIntegration;
 using Gallifrey.Jira;
@@ -144,10 +145,7 @@ namespace Gallifrey.JiraIntegration
             {
                 CheckAndConnectJira();
                 var issues = jira.GetIssuesFromFilter(filterName);
-                foreach (var issue in issues)
-                {
-                    recentJiraCollection.AddRecentJira(issue);
-                }
+                recentJiraCollection.AddRecentJiras(issues);
                 return issues;
             }
             catch (Exception ex)
@@ -162,10 +160,7 @@ namespace Gallifrey.JiraIntegration
             {
                 CheckAndConnectJira();
                 var issues = jira.GetIssuesFromJql(GetJql(searchText));
-                foreach (var issue in issues)
-                {
-                    recentJiraCollection.AddRecentJira(issue);
-                }
+                recentJiraCollection.AddRecentJiras(issues);
                 return issues;
             }
             catch (Exception ex)
@@ -174,16 +169,14 @@ namespace Gallifrey.JiraIntegration
             }
         }
 
+        /// <exception cref="NoResultsFoundException">Error loading jiras from search text</exception>
         public IEnumerable<Issue> GetJiraCurrentUserOpenIssues()
         {
             try
             {
                 CheckAndConnectJira();
                 var issues = jira.GetIssuesFromJql("assignee in (currentUser()) AND status not in (Closed,Resolved)");
-                foreach (var issue in issues)
-                {
-                    recentJiraCollection.AddRecentJira(issue);
-                }
+                recentJiraCollection.AddRecentJiras(issues);
                 return issues;
             }
             catch (Exception ex)
@@ -258,7 +251,7 @@ namespace Gallifrey.JiraIntegration
             {
                 comment = string.Format("{0}: {1}", exportSettings.ExportCommentPrefix, comment);
             }
-            
+
             try
             {
                 jira.AddWorkLog(jiraRef, strategy, comment, exportTime, DateTime.SpecifyKind(exportTimeStamp, DateTimeKind.Local), remainingTime);

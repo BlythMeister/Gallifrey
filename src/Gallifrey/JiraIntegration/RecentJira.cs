@@ -52,5 +52,18 @@ namespace Gallifrey.JiraIntegration
                 return string.Format("{0} ({1}) - Parent [ {2} - {3} ]", JiraReference, JiraName, JiraParentReference, JiraParentName);
             }
         }
+
+        public override bool Equals(object obj)
+        {
+            // Try to cast the object to compare to to be a Person
+            var otherRecentJira = obj as RecentJira;
+
+            return otherRecentJira != null && JiraReference == otherRecentJira.JiraReference;
+        }
+
+        public override int GetHashCode()
+        {
+            return JiraReference.GetHashCode();
+        }
     }
 }

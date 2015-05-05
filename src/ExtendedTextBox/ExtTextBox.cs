@@ -254,8 +254,8 @@ namespace ExtendedTextBox
         [Description("Set the initial value of the textbox")]
         public void SetValue(string theValue)
         {
-            this.OriginalText = theValue;
-            this.Text = theValue;
+            OriginalText = theValue;
+            Text = theValue;
             wfpExtTextBox1.BackColor = ConvertColor(System.Drawing.SystemColors.Window);
         }
 

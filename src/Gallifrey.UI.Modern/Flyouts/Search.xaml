@@ -68,30 +68,47 @@
             </Button.Style>
         </Button>
 
-        <ListView Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding SearchResults}" SelectedItem="{Binding SelectedSearchResult, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" BorderThickness="0">
+        <ListView Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding SearchResults}" SelectedItem="{Binding SelectedSearchResult, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" BorderThickness="0">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <WrapPanel Orientation="Vertical" Margin="5">
-                        <WrapPanel Orientation="Horizontal">
-                            <TextBlock Text="{Binding Reference}" />
-                            <TextBlock TextWrapping="Wrap" Text=" - " />
-                            <TextBlock TextWrapping="Wrap" Text="{Binding Description}" />
-                        </WrapPanel>
-                        <WrapPanel Orientation="Horizontal" Margin="10,0,0,0">
-                            <TextBlock TextWrapping="Wrap" Text="{Binding ParentReference}" />
-                            <TextBlock TextWrapping="Wrap" Text=" - " />
-                            <TextBlock TextWrapping="Wrap" Text="{Binding ParentDescription}" />
-                            <WrapPanel.Style>
-                                <Style TargetType="WrapPanel">
+                    <StackPanel>
+                        <TextBlock VerticalAlignment="Center" Margin="5">
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="{}{0} - {1}">
+                                    <Binding Path="Reference" />
+                                    <Binding Path="Description" />
+                                </MultiBinding>
+                            </TextBlock.Text>
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding HasParent}" Value="True" >
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                        <TextBlock VerticalAlignment="Center" Margin="5">
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="{}{0} - {1} (Parent: {2} - {3})">
+                                    <Binding Path="Reference" />
+                                    <Binding Path="Description" />
+                                    <Binding Path="ParentReference" />
+                                    <Binding Path="ParentDescription" />
+                                </MultiBinding>
+                            </TextBlock.Text>
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding HasParent}" Value="False" >
                                             <Setter Property="Visibility" Value="Collapsed"/>
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
-                            </WrapPanel.Style>
-                        </WrapPanel>
-                    </WrapPanel>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </StackPanel>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>

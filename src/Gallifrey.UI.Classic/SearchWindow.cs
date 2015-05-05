@@ -148,8 +148,8 @@ namespace Gallifrey.UI.Classic
                         lstResults.Enabled = true;
                         btnRefresh.Enabled = true;
                         btnAddTimer.Enabled = true;
-                        txtSearchText.Enabled = true;
-                        cmbUserFilters.Enabled = true;
+                        txtSearchText.Enabled = !string.IsNullOrWhiteSpace(txtSearchText.Text);
+                        cmbUserFilters.Enabled = !string.IsNullOrWhiteSpace((string)cmbUserFilters.SelectedItem);
                         return;
                     }
                 }

@@ -243,7 +243,7 @@ namespace Gallifrey.JiraTimers
         {
             if (jiraIssue == null) return;
 
-            ExportedTime = jiraIssue.GetCurrentLoggedTimeForDate(DateStarted, currentUserName);
+            SetJiraExportedTime(jiraIssue.GetCurrentLoggedTimeForDate(DateStarted, currentUserName));
             JiraReference = jiraIssue.key;
             JiraProjectName = jiraIssue.fields.project.key;
             JiraName = jiraIssue.fields.summary;

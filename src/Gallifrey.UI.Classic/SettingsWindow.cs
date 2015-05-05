@@ -146,11 +146,15 @@ namespace Gallifrey.UI.Classic
             }
             catch (JiraConnectionException)
             {
-                if (!HandleInvalidDetails(false));
+                MessageBox.Show("Unable to connect to Jira with these settings!\nAt present Gallifrey Required Active Connection To Jira", "Unable to connect");
+                DialogResult = DialogResult.None;
+                TopMost = true;
             }
             catch (MissingJiraConfigException)
             {
-                if (!HandleInvalidDetails(true));
+                MessageBox.Show("You have to populate the Jira Credentials!\nAt present Gallifrey Required Active Connection To Jira", "Missing Config");
+                DialogResult = DialogResult.None;
+                TopMost = true;
             }
 
             if (settingsWork)
@@ -164,22 +168,6 @@ namespace Gallifrey.UI.Classic
                     Application.Exit();
                 }
             }
-        }
-
-        private bool HandleInvalidDetails(bool isMissingConfig)
-        {
-            if (isMissingConfig)
-            {
-                MessageBox.Show("You have to populate the Jira Credentials!\nAt present Gallifrey Required Active Connection To Jira", "Missing Config");
-            }
-            else
-            {
-                MessageBox.Show("Unable to connect to Jira with these settings!\nAt present Gallifrey Required Active Connection To Jira", "Unable to connect");
-            }
-
-            DialogResult = DialogResult.None;
-            TopMost = true;
-            return false;
         }
 
         private void chkAlert_CheckedChanged(object sender, EventArgs e)

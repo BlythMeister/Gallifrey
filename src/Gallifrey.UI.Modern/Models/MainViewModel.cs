@@ -42,7 +42,6 @@ namespace Gallifrey.UI.Modern.Models
 
                 return value.ToString();
             }
-            set { }
         }
 
 

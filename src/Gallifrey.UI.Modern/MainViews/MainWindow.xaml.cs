@@ -69,12 +69,16 @@ namespace Gallifrey.UI.Modern.MainViews
 
         private async void ExceptionlessSubmittingEvent(object sender, EventSubmittingEventArgs e)
         {
-            if (!e.IsUnhandledError)
-                return;
+            await Application.Current.Dispatcher.Invoke(async () =>
+            {
+                if (!e.IsUnhandledError)
+                    return;
 
-            e.Cancel = true;
-            await OpenFlyout(new Error(ViewModel, e.Event));
-            CloseApp(true);
+                e.Cancel = true;
+                await OpenFlyout(new Error(ViewModel, e.Event));
+                CloseApp(true);
+            });
+
         }
 
         private async void OnLoaded(object sender, RoutedEventArgs e)
@@ -240,7 +244,7 @@ namespace Gallifrey.UI.Modern.MainViews
                 {
                     var controller = await this.ShowProgressAsync("Please Wait", "Checking For Updates");
 
-                    updateResult = await ViewModel.Gallifrey.VersionControl.CheckForUpdates();
+                    updateResult = await ViewModel.Gallifrey.VersionControl.CheckForUpdates(true);
                     await controller.CloseAsync();
                 }
                 else
@@ -268,16 +272,11 @@ namespace Gallifrey.UI.Modern.MainViews
                         }
                     }
                 }
-                else if (!manualUpdateCheck)
-                {
-                    //if it's not manual there is nothing more to do.
-                    return;
-                }
-                else if (updateResult == UpdateResult.NoUpdate)
+                else if (manualUpdateCheck && updateResult == UpdateResult.NoUpdate)
                 {
                     await this.ShowMessageAsync("No Update Found", "There Are No Updates At This Time, Check Back Soon!");
                 }
-                else
+                else if (manualUpdateCheck && updateResult == UpdateResult.NotDeployable)
                 {
                     await this.ShowMessageAsync("Unable To Update", "You Cannot Auto Update This Version Of Gallifrey");
                 }

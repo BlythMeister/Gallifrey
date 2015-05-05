@@ -22,7 +22,7 @@ namespace Gallifrey.DeploymentUtils
             //System.Diagnostics.Debugger.Break();
             string publicKeyToken = GetPublicKeyToken();
             // Find Uninstall string in registry    
-            string DisplayName = null;
+            string DisplayName;
             string uninstallString = GetUninstallString(publicKeyToken, out DisplayName);
             string runDLL32 = uninstallString.Substring(0, 12);
             string args = uninstallString.Substring(13);
@@ -84,6 +84,7 @@ namespace Gallifrey.DeploymentUtils
         /// Registry.
         /// </summary>
         /// <param name="PublicKeyToken">The public key token of the app.</param>
+        /// <param name="DisplayName"></param>
         /// <returns>The command line to execute that will uninstall the app.</returns>
         private static string GetUninstallString(string PublicKeyToken, out string DisplayName)
         {

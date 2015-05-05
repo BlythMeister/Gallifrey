@@ -69,7 +69,6 @@ namespace Gallifrey.UI.Classic
             gallifrey.NoActivityEvent += GallifreyOnNoActivityEvent;
             gallifrey.ExportPromptEvent += GallifreyOnExportPromptEvent;
             SystemEvents.SessionSwitch += SessionSwitchHandler;
-            Application.ApplicationExit += new EventHandler(this.OnApplicationExit);
         }
 
         protected override void OnLoad(EventArgs e)
@@ -208,20 +207,20 @@ namespace Gallifrey.UI.Classic
 
         private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
         {
-            gallifrey.Settings.UiSettings.Height = Height;
-            gallifrey.Settings.UiSettings.Width = Width;
-            gallifrey.Close();
-        }
-        
-        private void OnApplicationExit(object sender, EventArgs e)
-        {
             if (notifyAlert != null)
             {
-                notifyAlert.Visible = false;
-                notifyAlert.Icon = null; // required to make icon disappear
+                if (notifyAlert.Icon != null)
+                {
+                    notifyAlert.Visible = false;
+                    notifyAlert.Icon = null; // required to make icon disappear    
+                }
                 notifyAlert.Dispose();
                 notifyAlert = null;
             }
+
+            gallifrey.Settings.UiSettings.Height = Height;
+            gallifrey.Settings.UiSettings.Width = Width;
+            gallifrey.Close();
         }
 
         #endregion
@@ -514,7 +513,7 @@ namespace Gallifrey.UI.Classic
                         WindowState = FormWindowState.Normal;
                         break;
                     default:
-                        this.BringToFront();
+                        BringToFront();
                         break;
                 }
             }

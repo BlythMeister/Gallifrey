@@ -136,13 +136,13 @@ namespace Gallifrey.Jira
 
             while (moreToGet)
             {
-                var response = ExectuteRequest(Method.GET, HttpStatusCode.OK, string.Format("search?jql={0}&maxResults=500&startAt={1}&fields=summary,project,parent", jql, startAt));
+                var response = ExectuteRequest(Method.GET, HttpStatusCode.OK, string.Format("search?jql={0}&maxResults=999&startAt={1}&fields=summary,project,parent", jql, startAt));
 
                 var searchResult = deserializer.Deserialize<SearchResult>(response);
 
                 returnIssues.AddRange(searchResult.issues);
 
-                if (searchResult.total > returnIssues.Count && returnIssues.Count < 1000)
+                if (searchResult.total > returnIssues.Count)
                 {
                     startAt = startAt + searchResult.maxResults;
                 }

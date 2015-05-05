@@ -86,6 +86,8 @@
     <Compile Include="Flyouts\EditTimer.xaml.cs">
       <DependentUpon>EditTimer.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Flyouts\JiraIssueDisplayModel.cs" />
+    <Compile Include="Flyouts\SearchModel.cs" />
     <Compile Include="Models\ErrorModel.cs" />
     <Compile Include="Flyouts\Export.xaml.cs">
       <DependentUpon>Export.xaml</DependentUpon>
@@ -146,6 +148,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
