@@ -109,6 +109,8 @@ namespace Gallifrey.UI.Modern.Models
             TimerDates = new ObservableCollection<TimerDateModel>(TimerDates.Where(x=>validTimerDates.Contains(x.TimerDate)).OrderByDescending(x => x.TimerDate));
 
             if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("TimerDates"));
+
+            runningWatcherElapsed(this, null);
         }
 
         public Guid? GetSelectedTimerId()

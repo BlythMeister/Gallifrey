@@ -84,9 +84,9 @@ namespace Gallifrey.UI.Classic
                 {
                     UpdateComplete();
                 }
-                else if (updateResult.Result == UpdateResult.NoUpdate)
+                else if (updateResult.Result == UpdateResult.NoUpdate || updateResult.Result == UpdateResult.TooSoon)
                 {
-                    SetVersionNumber(noUpdate: true);
+                    SetVersionNumber();
                 }
             }
             catch (ManualReinstallRequiredException)
@@ -326,15 +326,32 @@ namespace Gallifrey.UI.Classic
 
         private void lblUnexportedTime_Click(object sender, EventArgs e)
         {
-            var timer = gallifrey.JiraTimerCollection.GetOldestUnexportedTimer();
-            if (timer != null)
+            var timers = gallifrey.JiraTimerCollection.GetAllUnexportedTimersInStartOrder();
+
+            if (timers.Any())
             {
-                SelectTimer(timer.UniqueId);
+                foreach (var jiraTimer in timers)
+                {
+                    var exportTimerWindow = new ExportTimerWindow(gallifrey, jiraTimer.UniqueId);
+                    if (exportTimerWindow.DisplayForm)
+                    {
+                        exportTimerWindow.ShowDialog();
+                    }
+
+                    var updatedTimer = gallifrey.JiraTimerCollection.GetTimer(jiraTimer.UniqueId);
+                    if (!updatedTimer.FullyExported)
+                    {
+                        MessageBox.Show("Will Stop Bulk Export As Timer Was Not Fully Exported\n\nWill Select The Cancelled Timer", "Stopping Bulk Export");
+                        SelectTimer(jiraTimer.UniqueId);
+                    }
+                }
             }
             else
             {
-                MessageBox.Show("No Un-Exported Timers To Show", "Nothing To Export");
+                MessageBox.Show("No Un-Exported Timers To Bulk Export", "Nothing To Export");
             }
+
+            RefreshInternalTimerList();
         }
 
         private void lblTwitter_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -623,14 +640,18 @@ namespace Gallifrey.UI.Classic
             if (checkingUpdate) upToDateText = "Checking Updates!";
             if (noUpdate) upToDateText = "No New Updates!";
 
-            var myVersion = string.Format("{0}\n{1}", gallifrey.VersionControl.VersionName, upToDateText);
+            var myVersion = string.Format("Currently Running {0}\n{1}", gallifrey.VersionControl.VersionName, upToDateText);
+
+            if (lblUpdate.Text != myVersion)
+            {
+                lblUpdate.Text = myVersion;
+            }
 
             if (!gallifrey.VersionControl.IsAutomatedDeploy)
             {
                 lblUpdate.BackColor = Color.Red;
                 lblUpdate.BorderStyle = BorderStyle.FixedSingle;
             }
-            lblUpdate.Text = string.Format("Currently Running {0}", myVersion);
         }
 
         private void RefreshInternalTimerList()
@@ -1017,7 +1038,7 @@ namespace Gallifrey.UI.Classic
                     }
                     else
                     {
-                        SetVersionNumber(true);
+                        SetVersionNumber(checkingUpdate: true);
                         var updateResult = gallifrey.VersionControl.CheckForUpdates(true);
                         await updateResult;
 
@@ -1028,6 +1049,10 @@ namespace Gallifrey.UI.Classic
                         else if (updateResult.Result == UpdateResult.NoUpdate)
                         {
                             SetVersionNumber(noUpdate: true);
+                        }
+                        else if (updateResult.Result == UpdateResult.TooSoon)
+                        {
+                            SetVersionNumber();
                         }
                     }
                 }
@@ -1071,7 +1096,7 @@ namespace Gallifrey.UI.Classic
             {
                 UpdateComplete();
             }
-            else if(updateResult.Result == UpdateResult.NoUpdate)
+            else if(updateResult.Result == UpdateResult.NoUpdate || updateResult.Result == UpdateResult.TooSoon)
             {
                 SetVersionNumber();
             }

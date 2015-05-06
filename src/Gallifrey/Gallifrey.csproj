@@ -54,6 +54,7 @@
     <Compile Include="DeploymentUtils\W322Utils.cs" />
     <Compile Include="Exceptions\IdleTimers\NoIdleTimerRunningException.cs" />
     <Compile Include="Exceptions\JiraTimers\IdleTimerRunningException.cs" />
+    <Compile Include="Exceptions\Serialization\SerializerError.cs" />
     <Compile Include="ExtensionMethods\DateTimeExtensionMethods.cs" />
     <Compile Include="IdleTimers\IdleTimer.cs" />
     <Compile Include="IdleTimers\IdleTimerCollection.cs" />

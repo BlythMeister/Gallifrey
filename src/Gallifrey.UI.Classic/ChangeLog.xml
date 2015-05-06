@@ -186,6 +186,7 @@
       <Feature>Improvements to the search window</Feature>
       <Feature>Changes to how settings are stored</Feature>
       <Feature>Updated Exception handling client</Feature>
+      <Feature>Double click on unexported total now prompts export of timers</Feature>
     </Features>
     <Bugs>
       <Bug>Fix issue with update checker refreshing UI constantly</Bug>

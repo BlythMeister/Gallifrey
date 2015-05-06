@@ -14,7 +14,14 @@ namespace Gallifrey.Jira.Model
 
             foreach (var worklog in fields.worklog.worklogs.Where(worklog => worklog.started.Date == date.Date && worklog.author.name.ToLower() == userName.ToLower()))
             {
-                loggedTime = loggedTime.Add(new TimeSpan(0, 0, (int)worklog.timeSpentSeconds));
+                try
+                {
+                    loggedTime = loggedTime.Add(new TimeSpan(0, 0, (int)worklog.timeSpentSeconds));    
+                }
+                catch (OverflowException)
+                {
+                    //If overflow just omit that value
+                }
             }
 
             return loggedTime;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using Gallifrey.Exceptions.Serialization;
 using Newtonsoft.Json;
 
 namespace Gallifrey.Serialization
@@ -7,33 +8,52 @@ namespace Gallifrey.Serialization
     public class ItemSerializer<T> where T : new()
     {
         private readonly string savePath;
-        
+
         public ItemSerializer(string directory, string fileName)
         {
-            if (!Directory.Exists(directory)) Directory.CreateDirectory(directory);
-            savePath = Path.Combine(directory, fileName);
+            try
+            {
+                if (!Directory.Exists(directory)) Directory.CreateDirectory(directory);
+                savePath = Path.Combine(directory, fileName);
+            }
+            catch (Exception)
+            {
+                savePath = null;
+                // this will be evaluated later
+            }
+
         }
-        
-        public ItemSerializer(string fileName) : this(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Gallifrey"), fileName)
+
+        public ItemSerializer(string fileName)
+            : this(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Gallifrey"), fileName)
         {
-            
+
         }
 
-        public ItemSerializer() 
+        public ItemSerializer()
         {
 
         }
 
+        /// <exception cref="SerializerError">Something has gone wrong with serialization, message contain more information</exception>
         public void Serialize(T obj)
         {
-            if(savePath == null) throw new NotImplementedException();
+            if (savePath == null) throw new SerializerError("No Save Path");
 
-            File.WriteAllText(savePath, DataEncryption.Encrypt(JsonConvert.SerializeObject(obj)));
+            try
+            {
+                File.WriteAllText(savePath, DataEncryption.Encrypt(JsonConvert.SerializeObject(obj)));
+            }
+            catch (Exception ex)
+            {
+                throw new SerializerError("Error in serialization", ex);
+            }
         }
 
+        /// <exception cref="SerializerError">Something has gone wrong with deserialization, message contain more information</exception>
         public T DeSerialize()
         {
-            if (savePath == null) throw new NotImplementedException();
+            if (savePath == null) throw new SerializerError("No Save Path");
 
             T obj;
 
@@ -48,7 +68,6 @@ namespace Gallifrey.Serialization
                 {
                     obj = new T();
                 }
-
             }
             else
             {

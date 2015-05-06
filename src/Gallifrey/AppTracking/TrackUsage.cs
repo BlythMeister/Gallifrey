@@ -66,7 +66,7 @@ namespace Gallifrey.AppTracking
 
                 try
                 {
-                    webBrowser.Navigate(string.Format("http://releases.gallifreyapp.co.uk/{0}.html?{1}", trackingType, trackingQueryString));
+                    webBrowser.Navigate(string.Format("http://releases.gallifreyapp.co.uk/tracking/{0}.html?{1}", trackingType, trackingQueryString));
                     while (webBrowser.ReadyState != WebBrowserReadyState.Complete) { Application.DoEvents(); }
                 }
                 catch (Exception)
