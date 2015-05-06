@@ -326,7 +326,7 @@ namespace Gallifrey.UI.Classic
 
         private void lblUnexportedTime_Click(object sender, EventArgs e)
         {
-            var timers = gallifrey.JiraTimerCollection.GetAllUnexportedTimersInStartOrder();
+            var timers = gallifrey.JiraTimerCollection.GetStoppedUnexportedTimers();
 
             if (timers.Any())
             {
@@ -343,6 +343,7 @@ namespace Gallifrey.UI.Classic
                     {
                         MessageBox.Show("Will Stop Bulk Export As Timer Was Not Fully Exported\n\nWill Select The Cancelled Timer", "Stopping Bulk Export");
                         SelectTimer(jiraTimer.UniqueId);
+                        break;
                     }
                 }
             }

@@ -21,7 +21,7 @@ namespace Gallifrey.UI.Modern.MainViews
 
         private async void UnExportedClick(object sender, MouseButtonEventArgs e)
         {
-            var timers = ViewModel.Gallifrey.JiraTimerCollection.GetAllUnexportedTimersInStartOrder();
+            var timers = ViewModel.Gallifrey.JiraTimerCollection.GetStoppedUnexportedTimers();
 
             if (timers.Any())
             {
@@ -34,6 +34,7 @@ namespace Gallifrey.UI.Modern.MainViews
                     {
                         ViewModel.MainWindow.ShowMessageAsync("Stopping Bulk Export", "Will Stop Bulk Export As Timer Was Not Fully Exported\n\nWill Select The Cancelled Timer");
                         ViewModel.SetSelectedTimer(jiraTimer.UniqueId);
+                        break;
                     }
                 }
             }

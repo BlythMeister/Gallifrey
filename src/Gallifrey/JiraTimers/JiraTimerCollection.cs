@@ -16,7 +16,7 @@ namespace Gallifrey.JiraTimers
         IEnumerable<DateTime> GetValidTimerDates();
         IEnumerable<JiraTimer> GetTimersForADate(DateTime timerDate);
         IEnumerable<JiraTimer> GetUnexportedTimers(DateTime timerDate);
-        IEnumerable<JiraTimer> GetAllUnexportedTimersInStartOrder();
+        IEnumerable<JiraTimer> GetStoppedUnexportedTimers();
         IEnumerable<RecentJira> GetJiraReferencesForLastDays(int days);
         Guid AddTimer(Issue jiraIssue, DateTime startDate, TimeSpan seedTime, bool startNow);
         void RemoveTimer(Guid uniqueId);
@@ -74,9 +74,9 @@ namespace Gallifrey.JiraTimers
             return timerList.Where(timer => timer.DateStarted.Date == timerDate.Date && !timer.FullyExported).OrderBy(timer => timer.JiraReference, new JiraReferenceComparer());
         }
 
-        public IEnumerable<JiraTimer> GetAllUnexportedTimersInStartOrder()
+        public IEnumerable<JiraTimer> GetStoppedUnexportedTimers()
         {
-            return timerList.Where(timer => !timer.FullyExported).OrderBy(timer => timer.DateStarted);
+            return timerList.Where(timer => !timer.FullyExported && !timer.IsRunning).OrderByDescending(timer => timer.DateStarted);
         }
 
         public IEnumerable<RecentJira> GetJiraReferencesForLastDays(int days)
