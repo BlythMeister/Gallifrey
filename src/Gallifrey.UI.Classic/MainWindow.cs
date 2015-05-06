@@ -1051,10 +1051,6 @@ namespace Gallifrey.UI.Classic
                         {
                             SetVersionNumber(noUpdate: true);
                         }
-                        else if (updateResult.Result == UpdateResult.TooSoon)
-                        {
-                            SetVersionNumber();
-                        }
                     }
                 }
                 catch (ManualReinstallRequiredException)
@@ -1097,7 +1093,7 @@ namespace Gallifrey.UI.Classic
             {
                 UpdateComplete();
             }
-            else if(updateResult.Result == UpdateResult.NoUpdate || updateResult.Result == UpdateResult.TooSoon)
+            else if(updateResult.Result == UpdateResult.NoUpdate)
             {
                 SetVersionNumber();
             }
