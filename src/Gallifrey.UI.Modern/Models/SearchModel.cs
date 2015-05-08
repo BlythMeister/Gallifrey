@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using Gallifrey.Jira.Model;
 
-namespace Gallifrey.UI.Modern.Flyouts
+namespace Gallifrey.UI.Modern.Models
 {
     public class SearchModel : INotifyPropertyChanged
     {

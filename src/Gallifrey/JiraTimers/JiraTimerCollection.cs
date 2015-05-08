@@ -76,7 +76,7 @@ namespace Gallifrey.JiraTimers
 
         public IEnumerable<JiraTimer> GetStoppedUnexportedTimers()
         {
-            return timerList.Where(timer => !timer.FullyExported && !timer.IsRunning).OrderByDescending(timer => timer.DateStarted);
+            return timerList.Where(timer => !timer.FullyExported && !timer.IsRunning).OrderBy(timer => timer.DateStarted);
         }
 
         public IEnumerable<RecentJira> GetJiraReferencesForLastDays(int days)

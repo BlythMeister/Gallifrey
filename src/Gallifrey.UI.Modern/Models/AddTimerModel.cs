@@ -1,5 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
+using Gallifrey.JiraIntegration;
 
 namespace Gallifrey.UI.Modern.Models
 {
@@ -19,7 +22,7 @@ namespace Gallifrey.UI.Modern.Models
         public bool StartNowEditable { get; set; }
         public bool AssignToMe { get; set; }
         public bool InProgress { get; set; }
-        
+
         public AddTimerModel(IBackend gallifrey, string jiraRef, DateTime? startDate, bool? enableDateChange, TimeSpan? preloadTime, bool? startNow)
         {
             var dateToday = DateTime.Now;

@@ -63,6 +63,7 @@ namespace Gallifrey.UI.Classic
             catch (MultipleGallifreyRunningException)
             {
                 MessageBox.Show("You Can Only Have One Instance Of Gallifrey Running At A Time\nPlease Close The Other Instance", "Multiple Instances", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                CloseNotifyIcon();
                 Application.Exit();
             }
 
@@ -207,6 +208,15 @@ namespace Gallifrey.UI.Classic
 
         private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
         {
+            CloseNotifyIcon();
+
+            gallifrey.Settings.UiSettings.Height = Height;
+            gallifrey.Settings.UiSettings.Width = Width;
+            gallifrey.Close();
+        }
+
+        private void CloseNotifyIcon()
+        {
             if (notifyAlert != null)
             {
                 if (notifyAlert.Icon != null)
@@ -217,10 +227,6 @@ namespace Gallifrey.UI.Classic
                 notifyAlert.Dispose();
                 notifyAlert = null;
             }
-
-            gallifrey.Settings.UiSettings.Height = Height;
-            gallifrey.Settings.UiSettings.Width = Width;
-            gallifrey.Close();
         }
 
         #endregion

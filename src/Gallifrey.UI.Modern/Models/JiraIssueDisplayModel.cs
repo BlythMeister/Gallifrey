@@ -1,6 +1,6 @@
 ﻿using Gallifrey.Jira.Model;
 
-namespace Gallifrey.UI.Modern.Flyouts
+namespace Gallifrey.UI.Modern.Models
 {
     public class JiraIssueDisplayModel
     {

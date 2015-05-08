@@ -41,24 +41,27 @@
     </ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Exceptionless.Extras">
-      <HintPath>..\packages\Exceptionless.Wpf.2.0.1288\lib\net45\Exceptionless.Extras.dll</HintPath>
-    </Reference>
-    <Reference Include="Exceptionless.Portable">
-      <HintPath>..\packages\Exceptionless.Portable.2.0.1288\lib\portable-net40+sl50+win+wpa81+wp80\Exceptionless.Portable.dll</HintPath>
-    </Reference>
-    <Reference Include="Exceptionless.Wpf, Version=2.0.1288.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Exceptionless.Extras, Version=3.0.1326.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Exceptionless.Wpf.2.0.1288\lib\net45\Exceptionless.Wpf.dll</HintPath>
+      <HintPath>..\packages\Exceptionless.Wpf.3.0.1326\lib\net45\Exceptionless.Extras.dll</HintPath>
     </Reference>
-    <Reference Include="MahApps.Metro">
-      <HintPath>..\packages\MahApps.Metro.1.1.3-ALPHA005\lib\net45\MahApps.Metro.dll</HintPath>
+    <Reference Include="Exceptionless.Portable, Version=3.0.1326.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Exceptionless.Portable.3.0.1326\lib\portable-net40+sl50+win+wpa81+wp80\Exceptionless.Portable.dll</HintPath>
+    </Reference>
+    <Reference Include="Exceptionless.Wpf, Version=3.0.1326.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Exceptionless.Wpf.3.0.1326\lib\net45\Exceptionless.Wpf.dll</HintPath>
+    </Reference>
+    <Reference Include="MahApps.Metro, Version=1.1.3.28, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\MahApps.Metro.1.1.3-ALPHA028\lib\net45\MahApps.Metro.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\MahApps.Metro.1.1.3-ALPHA005\lib\net45\System.Windows.Interactivity.dll</HintPath>
+      <HintPath>..\packages\MahApps.Metro.1.1.3-ALPHA028\lib\net45\System.Windows.Interactivity.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -86,8 +89,8 @@
     <Compile Include="Flyouts\EditTimer.xaml.cs">
       <DependentUpon>EditTimer.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Flyouts\JiraIssueDisplayModel.cs" />
-    <Compile Include="Flyouts\SearchModel.cs" />
+    <Compile Include="Models\JiraIssueDisplayModel.cs" />
+    <Compile Include="Models\SearchModel.cs" />
     <Compile Include="Models\ErrorModel.cs" />
     <Compile Include="Flyouts\Export.xaml.cs">
       <DependentUpon>Export.xaml</DependentUpon>

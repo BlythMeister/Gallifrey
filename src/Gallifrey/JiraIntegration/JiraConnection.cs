@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Gallifrey.AppTracking;
+using Gallifrey.Comparers;
 using Gallifrey.Exceptions.JiraIntegration;
 using Gallifrey.Jira;
 using Gallifrey.Jira.Enum;
@@ -146,7 +147,7 @@ namespace Gallifrey.JiraIntegration
                 CheckAndConnectJira();
                 var issues = jira.GetIssuesFromFilter(filterName);
                 recentJiraCollection.AddRecentJiras(issues);
-                return issues;
+                return issues.OrderBy(x => x.key, new JiraReferenceComparer());
             }
             catch (Exception ex)
             {
@@ -161,7 +162,7 @@ namespace Gallifrey.JiraIntegration
                 CheckAndConnectJira();
                 var issues = jira.GetIssuesFromJql(GetJql(searchText));
                 recentJiraCollection.AddRecentJiras(issues);
-                return issues;
+                return issues.OrderBy(x => x.key, new JiraReferenceComparer());
             }
             catch (Exception ex)
             {
@@ -177,7 +178,7 @@ namespace Gallifrey.JiraIntegration
                 CheckAndConnectJira();
                 var issues = jira.GetIssuesFromJql("assignee in (currentUser()) AND status not in (Closed,Resolved)");
                 recentJiraCollection.AddRecentJiras(issues);
-                return issues;
+                return issues.OrderBy(x => x.key, new JiraReferenceComparer());
             }
             catch (Exception ex)
             {

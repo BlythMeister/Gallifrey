@@ -17,15 +17,15 @@
                 </WrapPanel>
 
                 <WrapPanel HorizontalAlignment="Right" VerticalAlignment="Center" DockPanel.Dock="Right" Margin="10,0,5,0">
-                    <ProgressBar Width="100" Maximum="{Binding ExportedTargetTotalMinutes}" Value="{Binding ExportedTotalMinutes}"></ProgressBar>
+                    <ProgressBar Width="100" Maximum="{Binding ExportedTargetTotalMinutes, Mode=OneWay}" Value="{Binding ExportedTotalMinutes, Mode=OneWay}"></ProgressBar>
                 </WrapPanel>
                 <WrapPanel HorizontalAlignment="Right" VerticalAlignment="Center" DockPanel.Dock="Right" Margin="10,0,0,0">
                     <TextBlock Text="Exported: " />
-                    <TextBlock Text="{Binding Exported}" />
+                    <TextBlock Text="{Binding Exported, Mode=OneWay}" />
                 </WrapPanel>
                 <WrapPanel HorizontalAlignment="Right"  VerticalAlignment="Center" DockPanel.Dock="Right">
                     <TextBlock Text="Export Target: "/>
-                    <TextBlock Text="{Binding ExportTarget}" />
+                    <TextBlock Text="{Binding ExportTarget, Mode=OneWay}" />
                 </WrapPanel>
             </DockPanel>
         </Border>
