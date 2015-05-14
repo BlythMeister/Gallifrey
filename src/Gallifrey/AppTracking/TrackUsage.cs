@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Deployment.Application;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Gallifrey.Settings;
 using Gallifrey.Versions;
@@ -55,7 +56,7 @@ namespace Gallifrey.AppTracking
 
         }
 
-        public void TrackAppUsage(TrackingType trackingType)
+        public async void TrackAppUsage(TrackingType trackingType)
         {
             if (trackingEnabled)
             {
@@ -67,7 +68,10 @@ namespace Gallifrey.AppTracking
                 try
                 {
                     webBrowser.Navigate(string.Format("http://releases.gallifreyapp.co.uk/tracking/{0}.html?{1}", trackingType, trackingQueryString));
-                    while (webBrowser.ReadyState != WebBrowserReadyState.Complete) { Application.DoEvents(); }
+                    while (webBrowser.ReadyState != WebBrowserReadyState.Complete)
+                    {
+                        await Task.Delay(1000);
+                    }
                 }
                 catch (Exception)
                 {

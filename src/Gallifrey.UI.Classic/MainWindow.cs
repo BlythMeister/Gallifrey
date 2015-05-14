@@ -1127,7 +1127,7 @@ namespace Gallifrey.UI.Classic
 
                 try
                 {
-                    lblUpdate.Text = string.Format("     v{0}\nClick Here To Restart.", gallifrey.VersionControl.VersionName);
+                    lblUpdate.Text = string.Format("    {0}\nClick Here To Restart.", gallifrey.VersionControl.VersionName);
 
                     notifyAlert.ShowBalloonTip(10000, "Update Avaliable", string.Format("An Update To v{0} Has Been Downloaded!", gallifrey.VersionControl.VersionName), ToolTipIcon.Info);
                 }

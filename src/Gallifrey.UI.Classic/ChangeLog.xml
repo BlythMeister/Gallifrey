@@ -190,6 +190,7 @@
     </Features>
     <Bugs>
       <Bug>Fix issue with update checker refreshing UI constantly</Bug>
+      <Bug>Fix issue with tracking causing stack overflow error</Bug>
     </Bugs>
     <Others />
   </Version>
