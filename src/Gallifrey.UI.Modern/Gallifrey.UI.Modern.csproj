@@ -86,9 +86,11 @@
     <Compile Include="Flyouts\ChangeLog.xaml.cs">
       <DependentUpon>ChangeLog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\ContributorsModel.cs" />
     <Compile Include="Flyouts\EditTimer.xaml.cs">
       <DependentUpon>EditTimer.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\EditTimerModel.cs" />
     <Compile Include="Models\JiraIssueDisplayModel.cs" />
     <Compile Include="Models\SearchModel.cs" />
     <Compile Include="Models\ErrorModel.cs" />

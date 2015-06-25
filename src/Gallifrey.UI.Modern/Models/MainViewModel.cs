@@ -106,7 +106,18 @@ namespace Gallifrey.UI.Modern.Models
                 }
             }
 
-            TimerDates = new ObservableCollection<TimerDateModel>(TimerDates.Where(x=>validTimerDates.Contains(x.TimerDate)).OrderByDescending(x => x.TimerDate));
+            var orderedCollection = TimerDates.Where(x => validTimerDates.Contains(x.TimerDate)).OrderByDescending(x => x.TimerDate).ToList();
+            for (int i = 0; i < TimerDates.Count; i++)
+            {
+                var main = TimerDates[i];
+                var ordered = orderedCollection[i];
+
+                if (main.TimerDate != ordered.TimerDate)
+                {
+                    TimerDates = new ObservableCollection<TimerDateModel>(orderedCollection);
+                    break;
+                }
+            }
 
             if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("TimerDates"));
 

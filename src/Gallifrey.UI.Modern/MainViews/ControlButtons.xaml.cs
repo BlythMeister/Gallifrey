@@ -51,7 +51,11 @@ namespace Gallifrey.UI.Modern.MainViews
 
         private void EditButton(object sender, RoutedEventArgs e)
         {
-            ViewModel.MainWindow.OpenFlyout(new EditTimer(ViewModel));
+            var selectedTimerId = ViewModel.GetSelectedTimerId();
+            if (selectedTimerId != null)
+            {
+                ViewModel.MainWindow.OpenFlyout(new EditTimer(ViewModel, selectedTimerId.Value));
+            }
         }
 
         private void ExportButton(object sender, RoutedEventArgs e)

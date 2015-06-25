@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows;
 using Gallifrey.UI.Modern.Models;
 
 namespace Gallifrey.UI.Modern.Flyouts
@@ -14,6 +15,11 @@ namespace Gallifrey.UI.Modern.Flyouts
         {
             this.viewModel = viewModel;
             InitializeComponent();
+        }
+
+        private void ExportButton(object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
         }
     }
 }
