@@ -32,7 +32,7 @@ namespace Gallifrey.UI.Classic
                 DisplayForm = false;
             }
             
-            gallifrey.JiraTimerCollection.RefreshFromJira(timerGuid, jiraIssue, gallifrey.JiraConnection.CurrentUser.name);
+            gallifrey.JiraTimerCollection.RefreshFromJira(timerGuid, jiraIssue, gallifrey.JiraConnection.CurrentUser);
 
             timerToShow = gallifrey.JiraTimerCollection.GetTimer(timerGuid);
 

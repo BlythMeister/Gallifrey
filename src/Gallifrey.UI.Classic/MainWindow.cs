@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xaml.Schema;
 using System.Xml.Linq;
 using Exceptionless;
 using Gallifrey.AppTracking;
@@ -29,6 +30,7 @@ namespace Gallifrey.UI.Classic
     {
         private readonly IBackend gallifrey;
         private readonly Dictionary<DateTime, ThreadedBindingList<JiraTimer>> internalTimerList;
+        private readonly bool exitOnStart;
 
         private PrivateFontCollection privateFontCollection;
 
@@ -64,7 +66,7 @@ namespace Gallifrey.UI.Classic
             {
                 MessageBox.Show("You Can Only Have One Instance Of Gallifrey Running At A Time\nPlease Close The Other Instance", "Multiple Instances", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 CloseNotifyIcon();
-                Application.Exit();
+                exitOnStart = true;
             }
 
             gallifrey.NoActivityEvent += GallifreyOnNoActivityEvent;
@@ -75,6 +77,10 @@ namespace Gallifrey.UI.Classic
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
+            if (exitOnStart)
+            {
+                Application.Exit();
+            }
 
             try
             {
@@ -1014,9 +1020,17 @@ namespace Gallifrey.UI.Classic
                 {
                     try
                     {
-                        selectedTimer = (JiraTimer)selectedList.SelectedItem;
+                        selectedTimer = (JiraTimer) selectedList.SelectedItem;
                     }
-                    catch (IndexOutOfRangeException) { /* There Seems to be some situations this throws, for no good reason */}
+                    catch (IndexOutOfRangeException)
+                    {
+                        /* There Seems to be some situations this throws, for no good reason */
+                    }
+                    catch (NullReferenceException)
+                    {
+                        RefreshInternalTimerList();
+                        return GetSelectedTimer();
+                    }
                 }
             }
 

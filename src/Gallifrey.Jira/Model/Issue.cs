@@ -8,11 +8,11 @@ namespace Gallifrey.Jira.Model
         public string key { get; set; }
         public Fields fields { get; set; }
 
-        public TimeSpan GetCurrentLoggedTimeForDate(DateTime date, string userName)
+        public TimeSpan GetCurrentLoggedTimeForDate(DateTime date, User user)
         {
             var loggedTime = new TimeSpan();
 
-            foreach (var worklog in fields.worklog.worklogs.Where(worklog => worklog.started.Date == date.Date && worklog.author.name.ToLower() == userName.ToLower()))
+            foreach (var worklog in fields.worklog.worklogs.Where(worklog => worklog.started.Date == date.Date && worklog.author.name.ToLower() == user.key.ToLower()))
             {
                 try
                 {

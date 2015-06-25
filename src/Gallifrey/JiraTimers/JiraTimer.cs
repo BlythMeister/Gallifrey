@@ -239,11 +239,11 @@ namespace Gallifrey.JiraTimers
             if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("TimeToExport"));
         }
 
-        public void RefreshFromJira(Issue jiraIssue, string currentUserName)
+        public void RefreshFromJira(Issue jiraIssue, User currentUser)
         {
             if (jiraIssue == null) return;
 
-            SetJiraExportedTime(jiraIssue.GetCurrentLoggedTimeForDate(DateStarted, currentUserName));
+            SetJiraExportedTime(jiraIssue.GetCurrentLoggedTimeForDate(DateStarted, currentUser));
             JiraReference = jiraIssue.key;
             JiraProjectName = jiraIssue.fields.project.key;
             JiraName = jiraIssue.fields.summary;

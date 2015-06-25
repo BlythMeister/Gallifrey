@@ -181,7 +181,7 @@
     </Bugs>
     <Others />
   </Version>
-  <Version Number="3.0.0" Name="Pre Release">
+  <Version Number="2.2.0" Name="Pre Release">
     <Features>
       <Feature>Improvements to the search window</Feature>
       <Feature>Changes to how settings are stored</Feature>
@@ -191,6 +191,8 @@
     <Bugs>
       <Bug>Fix issue with update checker refreshing UI constantly</Bug>
       <Bug>Fix issue with tracking causing stack overflow error</Bug>
+      <Bug>Fix issue with REST API and users who have changed name</Bug>
+      <Bug>Fix issue with timers showing in the list twice</Bug>
     </Bugs>
     <Others />
   </Version>

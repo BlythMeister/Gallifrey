@@ -25,8 +25,8 @@ namespace Gallifrey.JiraTimers
         Guid? GetRunningTimerId();
         void RemoveTimersOlderThanDays(int keepTimersForDays);
         JiraTimer GetTimer(Guid timerGuid);
-        void RenameTimer(Guid timerGuid, Issue newIssue);
-        void ChangeTimerDate(Guid timerGuid, DateTime newStartDate);
+        Guid RenameTimer(Guid timerGuid, Issue newIssue);
+        Guid ChangeTimerDate(Guid timerGuid, DateTime newStartDate);
         Tuple<int, int> GetNumberExported();
         TimeSpan GetTotalUnexportedTime();
         TimeSpan GetTotalExportedTimeThisWeek(DayOfWeek startOfWeek);
@@ -34,7 +34,7 @@ namespace Gallifrey.JiraTimers
         bool AdjustTime(Guid uniqueId, int hours, int minutes, bool addTime);
         void AddJiraExportedTime(Guid uniqueId, int hours, int minutes);
         void AddIdleTimer(Guid uniqueId, IdleTimer idleTimer);
-        void RefreshFromJira(Guid uniqueId, Issue jiraIssue, string currentUsername);
+        void RefreshFromJira(Guid uniqueId, Issue jiraIssue, User currentUser);
     }
 
     public class JiraTimerCollection : IJiraTimerCollection
@@ -185,7 +185,7 @@ namespace Gallifrey.JiraTimers
             return timerList.FirstOrDefault(timer => timer.UniqueId == timerGuid);
         }
 
-        public void RenameTimer(Guid timerGuid, Issue newIssue)
+        public Guid RenameTimer(Guid timerGuid, Issue newIssue)
         {
             var currentTimer = GetTimer(timerGuid);
             if (currentTimer.IsRunning) currentTimer.StopTimer();
@@ -199,9 +199,10 @@ namespace Gallifrey.JiraTimers
             RemoveTimer(timerGuid);
             AddTimer(newTimer);
             SaveTimers();
+            return newTimer.UniqueId;
         }
 
-        public void ChangeTimerDate(Guid timerGuid, DateTime newStartDate)
+        public Guid ChangeTimerDate(Guid timerGuid, DateTime newStartDate)
         {
             var currentTimer = GetTimer(timerGuid);
             if (currentTimer.IsRunning) currentTimer.StopTimer();
@@ -215,6 +216,7 @@ namespace Gallifrey.JiraTimers
             RemoveTimer(timerGuid);
             AddTimer(newTimer);
             SaveTimers();
+            return newTimer.UniqueId;
         }
 
         public Tuple<int, int> GetNumberExported()
@@ -278,10 +280,10 @@ namespace Gallifrey.JiraTimers
             }
         }
 
-        public void RefreshFromJira(Guid uniqueId, Issue jiraIssue, string currentUsername)
+        public void RefreshFromJira(Guid uniqueId, Issue jiraIssue, User currentUser)
         {
             var timer = GetTimer(uniqueId);
-            timer.RefreshFromJira(jiraIssue, currentUsername);
+            timer.RefreshFromJira(jiraIssue, currentUser);
             SaveTimers();
         }
     }
