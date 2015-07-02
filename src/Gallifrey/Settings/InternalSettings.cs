@@ -16,7 +16,8 @@ namespace Gallifrey.Settings
         public int Build { get; set; }
         public int Revision { get; set; }
         public DateTime LastHeartbeatTracked { get; set; }
-
+        public Guid? UniqueId { get; set; }
+        
         public Version LastChangeLogVersion { get { return new Version(Major, Minor, Build, Revision); } }
 
         public void SetLastChangeLogVersion(Version currentVersion)

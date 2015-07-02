@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Gallifrey.AppTracking;
+using Gallifrey.Comparers;
 using Gallifrey.Exceptions.JiraIntegration;
 using Gallifrey.Jira;
 using Gallifrey.Jira.Enum;
@@ -55,7 +57,7 @@ namespace Gallifrey.JiraIntegration
             UpdateJiraProjectCache();
         }
 
-        private void CheckAndConnectJira()
+        private void CheckAndConnectJira(bool useRestApi = true)
         {
             if (jira == null)
             {
@@ -68,20 +70,28 @@ namespace Gallifrey.JiraIntegration
 
                 try
                 {
-                    if (jiraConnectionSettings.JiraUseSoapApi)
+                    if (useRestApi)
                     {
-                        jira = new JiraSoapClient(jiraConnectionSettings.JiraUrl.Replace("/secure/Dashboard.jspa", ""), jiraConnectionSettings.JiraUsername, jiraConnectionSettings.JiraPassword);
+                        jira = new JiraRestClient(jiraConnectionSettings.JiraUrl.Replace("/secure/Dashboard.jspa", ""), jiraConnectionSettings.JiraUsername, jiraConnectionSettings.JiraPassword);
                     }
                     else
                     {
-                        jira = new JiraRestClient(jiraConnectionSettings.JiraUrl.Replace("/secure/Dashboard.jspa", ""), jiraConnectionSettings.JiraUsername, jiraConnectionSettings.JiraPassword);
+                        jira = new JiraSoapClient(jiraConnectionSettings.JiraUrl.Replace("/secure/Dashboard.jspa", ""), jiraConnectionSettings.JiraUsername, jiraConnectionSettings.JiraPassword); 
                     }
 
                     CurrentUser = jira.GetCurrentUser();
                 }
                 catch (Exception ex)
                 {
-                    throw new JiraConnectionException("Error creating instance of Jira", ex);
+                    jira = null;
+                    if (useRestApi)
+                    {
+                        CheckAndConnectJira(false);   
+                    }
+                    else
+                    {
+                        throw new JiraConnectionException("Error creating instance of Jira", ex);    
+                    }
                 }
             }
         }
@@ -144,11 +154,8 @@ namespace Gallifrey.JiraIntegration
             {
                 CheckAndConnectJira();
                 var issues = jira.GetIssuesFromFilter(filterName);
-                foreach (var issue in issues)
-                {
-                    recentJiraCollection.AddRecentJira(issue);
-                }
-                return issues;
+                recentJiraCollection.AddRecentJiras(issues);
+                return issues.OrderBy(x => x.key, new JiraReferenceComparer());
             }
             catch (Exception ex)
             {
@@ -162,11 +169,8 @@ namespace Gallifrey.JiraIntegration
             {
                 CheckAndConnectJira();
                 var issues = jira.GetIssuesFromJql(GetJql(searchText));
-                foreach (var issue in issues)
-                {
-                    recentJiraCollection.AddRecentJira(issue);
-                }
-                return issues;
+                recentJiraCollection.AddRecentJiras(issues);
+                return issues.OrderBy(x => x.key, new JiraReferenceComparer());
             }
             catch (Exception ex)
             {
@@ -174,17 +178,15 @@ namespace Gallifrey.JiraIntegration
             }
         }
 
+        /// <exception cref="NoResultsFoundException">Error loading jiras from search text</exception>
         public IEnumerable<Issue> GetJiraCurrentUserOpenIssues()
         {
             try
             {
                 CheckAndConnectJira();
                 var issues = jira.GetIssuesFromJql("assignee in (currentUser()) AND status not in (Closed,Resolved)");
-                foreach (var issue in issues)
-                {
-                    recentJiraCollection.AddRecentJira(issue);
-                }
-                return issues;
+                recentJiraCollection.AddRecentJiras(issues);
+                return issues.OrderBy(x => x.key, new JiraReferenceComparer());
             }
             catch (Exception ex)
             {
@@ -258,7 +260,7 @@ namespace Gallifrey.JiraIntegration
             {
                 comment = string.Format("{0}: {1}", exportSettings.ExportCommentPrefix, comment);
             }
-            
+
             try
             {
                 jira.AddWorkLog(jiraRef, strategy, comment, exportTime, DateTime.SpecifyKind(exportTimeStamp, DateTimeKind.Local), remainingTime);

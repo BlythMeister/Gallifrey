@@ -9,8 +9,13 @@ namespace Gallifrey.Comparers
             var xParts = x.Split('-');
             var yParts = y.Split('-');
 
+            int xNumber, yNumber;
+
+            int.TryParse(xParts[1], out xNumber);
+            int.TryParse(yParts[1], out yNumber);
+
             return xParts[0] == yParts[0]
-                       ? int.Parse(xParts[1]).CompareTo(int.Parse(yParts[1]))
+                       ? xNumber.CompareTo(yNumber)
                        : x.CompareTo(y);
         }
     }

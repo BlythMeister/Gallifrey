@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Deployment.Application;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using Gallifrey.UI.Classic.Properties;
 
 namespace Gallifrey.UI.Classic
 {
@@ -17,23 +18,14 @@ namespace Gallifrey.UI.Classic
         {
             this.gallifrey = gallifrey;
             InitializeComponent();
-            var networkDeploy = ApplicationDeployment.IsNetworkDeployed;
-            var myVersion = networkDeploy ? ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString() : Application.ProductVersion;
-            if (networkDeploy && !gallifrey.IsBeta)
-            {
-                myVersion = myVersion.Substring(0, myVersion.LastIndexOf("."));
-            }
-            myVersion = string.Format("Current Version: {0}", myVersion);
-            if (!networkDeploy) myVersion = string.Format("{0} (manual)", myVersion);
-            if (gallifrey.IsBeta) myVersion = string.Format("{0} (beta)", myVersion);
-            lblCurrentVersion.Text = myVersion;
+            lblCurrentVersion.Text = string.Format("Current Version: {0}", gallifrey.VersionControl.VersionName);
 
             contributors = new List<string>()
                 {
                     "Mark Harrison\nTwitter: @HarrisonMeister\nGitHub: @HarrisonMeister",
                 };
 
-            btnChangeLog.Visible = networkDeploy;
+            btnChangeLog.Visible = gallifrey.VersionControl.IsAutomatedDeploy;
         }
 
         private void btnOK_Click(object sender, EventArgs e)
@@ -53,27 +45,27 @@ namespace Gallifrey.UI.Classic
 
         private void btnPayPal_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=G3MWL8E6UG4RS");
+            Process.Start("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=G3MWL8E6UG4RS");
         }
 
         private void btnGitHub_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start("https://github.com/BlythMeister/Gallifrey");
+            Process.Start("https://github.com/BlythMeister/Gallifrey");
         }
 
         private void btnEmail_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start("mailto:contact@gallifreyapp.co.uk?subject=Gallifrey App Contact");
+            Process.Start("mailto:contact@gallifreyapp.co.uk?subject=Gallifrey App Contact");
         }
 
         private void btnTwitter_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start("https://twitter.com/GallifreyApp");
+            Process.Start("https://twitter.com/GallifreyApp");
         }
 
         private void btnChangeLog_Click(object sender, EventArgs e)
         {
-            var changeLog = gallifrey.GetChangeLog(ApplicationDeployment.CurrentDeployment.CurrentVersion, XDocument.Parse(Properties.Resources.ChangeLog));
+            var changeLog = gallifrey.GetChangeLog(XDocument.Parse(Resources.ChangeLog));
 
             if (changeLog.Any())
             {

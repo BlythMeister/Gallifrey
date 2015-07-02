@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using Gallifrey.Versions;
 
 namespace Gallifrey.UI.Classic
 {
@@ -13,7 +14,7 @@ namespace Gallifrey.UI.Classic
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainWindow(false));
+            Application.Run(new MainWindow(new Backend(InstanceType.Stable, AppType.Classic)));
         }
     }
 }

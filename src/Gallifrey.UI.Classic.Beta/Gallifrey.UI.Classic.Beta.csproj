@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -25,11 +25,11 @@
     <InstallUrl>http://blythmeister.github.io/Gallifrey.Releases/deploy/beta/</InstallUrl>
     <SupportUrl>https://github.com/BlythMeister/Gallifrey</SupportUrl>
     <ErrorReportUrl>https://github.com/BlythMeister/Gallifrey</ErrorReportUrl>
-    <ProductName>Gallifrey %28Beta%29</ProductName>
+    <ProductName>Gallifrey Classic %28Beta%29</ProductName>
     <PublisherName>Gallifrey</PublisherName>
-    <MinimumRequiredVersion>1.0.0.0</MinimumRequiredVersion>
-    <ApplicationRevision>1</ApplicationRevision>
-    <ApplicationVersion>2.1.2.%2a</ApplicationVersion>
+    <MinimumRequiredVersion>2.2.0.0</MinimumRequiredVersion>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>2.2.0.0</ApplicationVersion>
     <UseApplicationTrust>true</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -98,12 +98,13 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Gallifrey.UI.Classic\Gallifrey.UI.Classic.csproj">
       <Project>{22a3fe08-499a-4818-8b1d-292fd11998b3}</Project>
       <Name>Gallifrey.UI.Classic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Gallifrey\Gallifrey.csproj">
+      <Project>{4C344D86-4086-4F87-BD0F-4F8E23610CD7}</Project>
+      <Name>Gallifrey</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -127,34 +128,44 @@
     <Content Include="clock_blue.ico" />
   </ItemGroup>
   <ItemGroup>
-    <PublishFile Include="Gallifrey.pdb">
+    <PublishFile Include="Gallifrey.Jira.pdb">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
+      <FileType>File</FileType>
+    </PublishFile>
+    <PublishFile Include="Gallifrey.pdb">
+      <Visible>False</Visible>
       <PublishState>Include</PublishState>
       <IncludeHash>True</IncludeHash>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
       <FileType>File</FileType>
     </PublishFile>
     <PublishFile Include="Gallifrey.UI.Classic.Beta.pdb">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>File</FileType>
     </PublishFile>
     <PublishFile Include="Gallifrey.UI.Classic.pdb">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>File</FileType>
     </PublishFile>
   </ItemGroup>

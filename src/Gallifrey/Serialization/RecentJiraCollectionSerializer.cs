@@ -1,46 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using Gallifrey.JiraIntegration;
-using Gallifrey.Settings;
-using Newtonsoft.Json;
 
 namespace Gallifrey.Serialization
 {
     internal static class RecentJiraCollectionSerializer
     {
-        private readonly static string SavePath = Path.Combine(FilePathSettings.DataSavePath, "RecentJira.dat");
+        private static ItemSerializer<List<RecentJira>> serializer;
 
         internal static void Serialize(List<RecentJira> recentJiraCollection)
         {
-            if (!Directory.Exists(FilePathSettings.DataSavePath)) Directory.CreateDirectory(FilePathSettings.DataSavePath);
+            if (serializer == null)
+            {
+                serializer = new ItemSerializer<List<RecentJira>>("RecentJira.dat");
+            }
 
-            File.WriteAllText(SavePath, DataEncryption.Encrypt(JsonConvert.SerializeObject(recentJiraCollection)));
+            serializer.Serialize(recentJiraCollection);
         }
 
         internal static List<RecentJira> DeSerialize()
         {
-            List<RecentJira> recentJiraCollection;
-            
-            if (File.Exists(SavePath))
+            if (serializer == null)
             {
-                try
-                {
-                    var text = DataEncryption.Decrypt(File.ReadAllText(SavePath));
-                    recentJiraCollection = JsonConvert.DeserializeObject<List<RecentJira>>(text);
-                }
-                catch (Exception)
-                {
-                    recentJiraCollection = new List<RecentJira>();    
-                }
-                
-            }
-            else
-            {
-                recentJiraCollection = new List<RecentJira>();    
+                serializer = new ItemSerializer<List<RecentJira>>("RecentJira.dat");
             }
 
-            return recentJiraCollection;
+            return serializer.DeSerialize();
         }
     }
 }

@@ -1,0 +1,95 @@
+﻿<Controls:Flyout x:Class="Gallifrey.UI.Modern.Flyouts.Export"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro" IsModal="True" Theme="Adapt" Position="Right" Header="Export">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid Width="400" Margin="5,5,5,5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Visibility="Collapsed">Jira Parent Reference</TextBlock>
+            <TextBox Grid.Row="0" Grid.Column="1" Margin="0,5" Text="Parent Ref" IsEnabled="False" Visibility="Collapsed"/>
+
+            <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Visibility="Collapsed">Jira Parent Name</TextBlock>
+            <TextBox Grid.Row="1" Grid.Column="1" Margin="0,5" Text="Parent Desc" IsEnabled="False" TextWrapping="Wrap" Visibility="Collapsed" MaxLines="2"/>
+
+            <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center">Jira Reference</TextBlock>
+            <TextBox Grid.Row="2" Grid.Column="1" Margin="0,5" Text="Ref-1" IsEnabled="False"/>
+
+            <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center">Jira Name</TextBlock>
+            <TextBox Grid.Row="3" Grid.Column="1" Margin="0,5" Text="Some Long Jira Description that can go over multiple lines adgafgadfg afg adfg dfg sdfg sdg sdasd sd adf gadf gdfg dfg dgf dfgffg" IsEnabled="False" TextWrapping="Wrap" MaxLines="2"/>
+
+            <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Padding="2">Already Exported</TextBlock>
+            <WrapPanel Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" Margin="0,5" Orientation="Horizontal">
+                <TextBox Text="0" TextAlignment="Left" Width="80" IsEnabled="False" />
+                <TextBlock VerticalAlignment="Center" Margin="2,0">Hours</TextBlock>
+                <TextBox Text="10" TextAlignment="Left" Width="80" IsEnabled="False" />
+                <TextBlock VerticalAlignment="Center" Margin="2,0">Minutes</TextBlock>
+            </WrapPanel>
+
+            <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Padding="2">To Export</TextBlock>
+            <WrapPanel Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" Margin="0,5" Orientation="Horizontal">
+                <Controls:NumericUpDown Value="1" TextAlignment="Left" Minimum="0" Maximum="9" Width="80" />
+                <TextBlock VerticalAlignment="Center" Margin="2,0">Hours</TextBlock>
+                <Controls:NumericUpDown Value="15" TextAlignment="Left" Minimum="0" Maximum="59" Width="80" />
+                <TextBlock VerticalAlignment="Center" Margin="2,0">Minutes</TextBlock>
+            </WrapPanel>
+
+            <TextBlock Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" Padding="2">Export Date</TextBlock>
+            <DatePicker Grid.Row="6" Grid.Column="1" Margin="0,5" IsTodayHighlighted="False"  />
+            <!--DisplayDate="" DisplayDateStart="{Binding MinDate}" DisplayDateEnd="{Binding MaxDate}" SelectedDate="{Binding RunDate}"-->
+
+            <TextBlock Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" Padding="2" TextWrapping="Wrap">Remaining Estimate<LineBreak/>Action</TextBlock>
+            <WrapPanel Grid.Row="7" Grid.Column="1" VerticalAlignment="Center" Margin="0,5" Orientation="Vertical">
+                <RadioButton GroupName="Export" Content="Adjust Automatically" />
+                <RadioButton GroupName="Export" Content="Leave Remaining" />
+                <RadioButton GroupName="Export" Content="Set Value" />
+            </WrapPanel>
+
+            <TextBlock Grid.Row="8" Grid.Column="0" VerticalAlignment="Center" Padding="2" Visibility="Visible">Remaining Estimate</TextBlock>
+            <WrapPanel Grid.Row="8" Grid.Column="1" VerticalAlignment="Center" Margin="0,5" Orientation="Horizontal" Visibility="Visible">
+                <Controls:NumericUpDown Value="0" TextAlignment="Left" Minimum="0" Maximum="99" Width="80" />
+                <TextBlock VerticalAlignment="Center" Margin="2,0">Hours</TextBlock>
+                <Controls:NumericUpDown Value="5" TextAlignment="Left" Minimum="0" Maximum="59" Width="80" />
+                <TextBlock VerticalAlignment="Center" Margin="2,0">Minutes</TextBlock>
+            </WrapPanel>
+
+            <TextBlock Grid.Row="9" Grid.Column="0" VerticalAlignment="Center" Padding="2" Visibility="Collapsed">Remaining Estimate</TextBlock>
+            <WrapPanel Grid.Row="9" Grid.Column="1" VerticalAlignment="Center" Margin="0,5" Orientation="Horizontal" Visibility="Collapsed">
+                <TextBox Text="0" TextAlignment="Left" Width="80" IsEnabled="False" />
+                <TextBlock VerticalAlignment="Center" Margin="2,0">Hours</TextBlock>
+                <TextBox Text="10" TextAlignment="Left" Width="80" IsEnabled="False" />
+                <TextBlock VerticalAlignment="Center" Margin="2,0">Minutes</TextBlock>
+            </WrapPanel>
+
+            <TextBlock Grid.Row="10" Grid.Column="0" VerticalAlignment="Center">Comment</TextBlock>
+            <TextBox Grid.Row="10" Grid.Column="1" Margin="0,5" Text="" TextWrapping="Wrap" AcceptsReturn="True" SpellCheck.IsEnabled="True"/>
+
+            <StackPanel Orientation="Horizontal" Grid.Row="11" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center">
+                <Button  Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="ExportButton">
+                    <Rectangle Width="23" Height="23" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
+                        <Rectangle.OpacityMask>
+                            <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_save}" />
+                        </Rectangle.OpacityMask>
+                    </Rectangle>
+                </Button>
+            </StackPanel>
+        </Grid>
+    </ScrollViewer>
+</Controls:Flyout>

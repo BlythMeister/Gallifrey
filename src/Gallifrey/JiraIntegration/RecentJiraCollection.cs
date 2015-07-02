@@ -11,13 +11,14 @@ namespace Gallifrey.JiraIntegration
     {
         IEnumerable<RecentJira> GetRecentJiraCollection();
         void AddRecentJira(Issue jiraIssue);
+        void AddRecentJiras(IEnumerable<Issue> jiraIssues);
         void RemoveExpiredCache();
         void Remove(string jiraReference);
     }
 
     public class RecentJiraCollection : IRecentJiraCollection
     {
-        private readonly List<RecentJira> recentJiraList;
+        private List<RecentJira> recentJiraList;
 
         internal RecentJiraCollection()
         {
@@ -36,6 +37,17 @@ namespace Gallifrey.JiraIntegration
 
         public void AddRecentJira(Issue jiraIssue)
         {
+            AddRecentJiras(new [] {jiraIssue});
+        }
+
+        public void AddRecentJiras(IEnumerable<Issue> jiraIssues)
+        {
+            recentJiraList = jiraIssues.Select(BuildRecentJira).Union(recentJiraList).ToList();
+            SaveCache();
+        }
+
+        private RecentJira BuildRecentJira(Issue jiraIssue)
+        {
             string jiraParentReference = string.Empty, jiraParentName = string.Empty;
             var jiraReference = jiraIssue.key;
             var jiraProjectName = jiraIssue.fields.project.key;
@@ -47,16 +59,7 @@ namespace Gallifrey.JiraIntegration
                 jiraParentName = jiraIssue.fields.parent.fields.summary;
             }
 
-            if (recentJiraList.Any(x => x.JiraReference == jiraReference))
-            {
-                var recentJira = recentJiraList.First(x => x.JiraReference == jiraReference);
-                recentJira.UpdateDetail(jiraProjectName, jiraName, jiraParentReference, jiraParentName, DateTime.Now);
-            }
-            else
-            {
-                recentJiraList.Add(new RecentJira(jiraReference, jiraProjectName, jiraName, jiraParentReference, jiraParentName, DateTime.Now));
-            }
-            SaveCache();
+            return new RecentJira(jiraReference, jiraProjectName, jiraName, jiraParentReference, jiraParentName, DateTime.Now);
         }
 
         public void RemoveExpiredCache()

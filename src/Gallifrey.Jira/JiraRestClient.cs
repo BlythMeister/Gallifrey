@@ -33,6 +33,7 @@ namespace Gallifrey.Jira
             return request;
         }
 
+        /// <exception cref="JiraClientException">When the status returned from Jira was not the expected status or an error message was included.</exception>
         private void AssertStatus(IRestResponse response, HttpStatusCode status)
         {
             if (response.ErrorException != null)
@@ -52,9 +53,13 @@ namespace Gallifrey.Jira
                         throw new JiraClientException(string.Format("JIRA returned wrong status: {0}", response.StatusDescription));
                     }
                 }
-                catch (System.Exception)
+                catch (JiraClientException)
                 {
-                    throw new JiraClientException(string.Format("JIRA returned wrong status: {0}", response.StatusDescription));
+                    throw;
+                }
+                catch (System.Exception ex)
+                {
+                    throw new JiraClientException(string.Format("JIRA returned wrong status: {0}", response.StatusDescription), ex);
                 }
             }
         }
@@ -136,13 +141,13 @@ namespace Gallifrey.Jira
 
             while (moreToGet)
             {
-                var response = ExectuteRequest(Method.GET, HttpStatusCode.OK, string.Format("search?jql={0}&maxResults=500&startAt={1}&fields=summary,project,parent", jql, startAt));
+                var response = ExectuteRequest(Method.GET, HttpStatusCode.OK, string.Format("search?jql={0}&maxResults=999&startAt={1}&fields=summary,project,parent", jql, startAt));
 
                 var searchResult = deserializer.Deserialize<SearchResult>(response);
 
                 returnIssues.AddRange(searchResult.issues);
 
-                if (searchResult.total > returnIssues.Count && returnIssues.Count < 1000)
+                if (searchResult.total > returnIssues.Count)
                 {
                     startAt = startAt + searchResult.maxResults;
                 }
@@ -176,6 +181,7 @@ namespace Gallifrey.Jira
             return deserializer.Deserialize<Transitions>(response);
         }
 
+        /// <exception cref="JiraClientException">When unable to transition issue.</exception>
         public void TransitionIssue(string issueRef, string transitionName)
         {
             var transitions = GetIssueTransitions(issueRef);

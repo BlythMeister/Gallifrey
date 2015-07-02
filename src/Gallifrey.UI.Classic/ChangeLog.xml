@@ -172,9 +172,28 @@
     <Others />
   </Version>
   <Version Number="2.1.2" Name="">
-    <Features />
+    <Features>
+      <Feature>Only allow 1 instance of Gallifrey to run at a time</Feature>
+    </Features>
     <Bugs>
       <Bug>Fix issue with tracking under the wrong version.</Bug>
+      <Bug>Fix issue where process remains running as a background process.</Bug>
+    </Bugs>
+    <Others />
+  </Version>
+  <Version Number="2.2.0" Name="Pre Release">
+    <Features>
+      <Feature>Improvements to the search window</Feature>
+      <Feature>Changes to how settings are stored</Feature>
+      <Feature>Updated Exception handling client</Feature>
+      <Feature>Double click on unexported total now prompts export of timers</Feature>
+      <Feature>Default to REST api and use SOAP if REST fails</Feature>
+    </Features>
+    <Bugs>
+      <Bug>Fix issue with update checker refreshing UI constantly</Bug>
+      <Bug>Fix issue with tracking causing stack overflow error</Bug>
+      <Bug>Fix issue with REST API and users who have changed name</Bug>
+      <Bug>Fix issue with timers showing in the list twice</Bug>
     </Bugs>
     <Others />
   </Version>

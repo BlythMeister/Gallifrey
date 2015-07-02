@@ -54,6 +54,7 @@
     <Compile Include="DeploymentUtils\W322Utils.cs" />
     <Compile Include="Exceptions\IdleTimers\NoIdleTimerRunningException.cs" />
     <Compile Include="Exceptions\JiraTimers\IdleTimerRunningException.cs" />
+    <Compile Include="Exceptions\Serialization\SerializerError.cs" />
     <Compile Include="ExtensionMethods\DateTimeExtensionMethods.cs" />
     <Compile Include="IdleTimers\IdleTimer.cs" />
     <Compile Include="IdleTimers\IdleTimerCollection.cs" />
@@ -64,6 +65,9 @@
     <Compile Include="Exceptions\JiraIntegration\JiraConnectionException.cs" />
     <Compile Include="Exceptions\JiraTimers\DuplicateTimerException.cs" />
     <Compile Include="InactiveMonitor\ActivityChecker.cs" />
+    <Compile Include="Exceptions\MultipleGallifreyRunningException.cs" />
+    <Compile Include="Serialization\ItemSerializer.cs" />
+    <Compile Include="Versions\InstanceType.cs" />
     <Compile Include="JiraIntegration\JiraProject.cs" />
     <Compile Include="JiraIntegration\RecentJiraCollection.cs" />
     <Compile Include="JiraIntegration\JiraConnection.cs" />
@@ -74,6 +78,7 @@
     <Compile Include="JiraTimers\JiraTimer.cs" />
     <Compile Include="JiraTimers\JiraTimerCollection.cs" />
     <Compile Include="ExtensionMethods\TimespanExtensionMethods.cs" />
+    <Compile Include="Exceptions\Versions\ManualReinstallRequiredException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Serialization\RecentJiraCollectionSerializer.cs" />
     <Compile Include="Serialization\SettingsCollectionSerializer.cs" />
@@ -88,7 +93,8 @@
     <Compile Include="Settings\SettingsCollection.cs" />
     <Compile Include="Settings\UISettings.cs" />
     <Compile Include="Settings\JiraConnnectionSettings.cs" />
-    <Compile Include="Settings\FilePathSettings.cs" />
+    <Compile Include="Versions\UpdateResult.cs" />
+    <Compile Include="Versions\VersionControl.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Gallifrey.Jira\Gallifrey.Jira.csproj">

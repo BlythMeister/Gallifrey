@@ -9,15 +9,19 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xaml.Schema;
 using System.Xml.Linq;
 using Exceptionless;
 using Gallifrey.AppTracking;
 using Gallifrey.Comparers;
+using Gallifrey.Exceptions;
 using Gallifrey.Exceptions.IdleTimers;
 using Gallifrey.Exceptions.JiraIntegration;
 using Gallifrey.Exceptions.JiraTimers;
+using Gallifrey.Exceptions.Versions;
 using Gallifrey.ExtensionMethods;
 using Gallifrey.JiraTimers;
+using Gallifrey.Versions;
 using Microsoft.Win32;
 
 namespace Gallifrey.UI.Classic
@@ -26,30 +30,26 @@ namespace Gallifrey.UI.Classic
     {
         private readonly IBackend gallifrey;
         private readonly Dictionary<DateTime, ThreadedBindingList<JiraTimer>> internalTimerList;
+        private readonly bool exitOnStart;
 
-        private DateTime lastUpdateCheck;
-        private string myVersion;
         private PrivateFontCollection privateFontCollection;
-        private bool updateReady;
 
         #region "Main Window & Error"
 
-        public MainWindow(bool isBeta)
+        public MainWindow(IBackend gallifreyBackend)
         {
             InitializeComponent();
 
-            updateReady = false;
-            lastUpdateCheck = DateTime.UtcNow;
+            gallifrey = gallifreyBackend;
 
-            if (ApplicationDeployment.IsNetworkDeployed)
-            {
-                ExceptionlessClient.Current.UnhandledExceptionReporting += OnUnhandledExceptionReporting;
-                ExceptionlessClient.Current.Register();
-            }
+            ExceptionlessClient.Default.Configuration.ApiKey = "e7ac6366507547639ce69fea261d6545";
+            ExceptionlessClient.Default.Configuration.Enabled = true;
+            ExceptionlessClient.Default.Configuration.DefaultTags.Add(gallifrey.VersionControl.VersionName.Replace("\n", " - "));
+            ExceptionlessClient.Default.SubmittingEvent += OnSubmittingExceptionlessEvent;
+            ExceptionlessClient.Default.Register();
 
             internalTimerList = new Dictionary<DateTime, ThreadedBindingList<JiraTimer>>();
 
-            gallifrey = new Backend(isBeta);
             try
             {
                 gallifrey.Initialise();
@@ -62,6 +62,12 @@ namespace Gallifrey.UI.Classic
             {
                 ShowSettings(false);
             }
+            catch (MultipleGallifreyRunningException)
+            {
+                MessageBox.Show("You Can Only Have One Instance Of Gallifrey Running At A Time\nPlease Close The Other Instance", "Multiple Instances", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                CloseNotifyIcon();
+                exitOnStart = true;
+            }
 
             gallifrey.NoActivityEvent += GallifreyOnNoActivityEvent;
             gallifrey.ExportPromptEvent += GallifreyOnExportPromptEvent;
@@ -71,34 +77,40 @@ namespace Gallifrey.UI.Classic
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-
-            if (ApplicationDeployment.IsNetworkDeployed)
+            if (exitOnStart)
             {
-                var updateResult = CheckForUpdates(showUserFeedback: true);
+                Application.Exit();
+            }
+
+            try
+            {
+                var updateResult = gallifrey.VersionControl.CheckForUpdates(true);
                 updateResult.Wait();
 
-                if (updateResult.Result)
+                if (updateResult.Result == UpdateResult.Updated)
                 {
                     UpdateComplete();
                 }
-                else
+                else if (updateResult.Result == UpdateResult.NoUpdate || updateResult.Result == UpdateResult.TooSoon)
                 {
-                    SetVersionNumber(noUpdate: true);
+                    SetVersionNumber();
+                }
+            }
+            catch (ManualReinstallRequiredException)
+            {
+                if (MessageBox.Show("There Was An Issue With Automatic Update\nGallifrey Will Attempt To Re-Install\nNo Timers Will Be Lost\nPress OK To Continue, Or Cancel To Delay Update",
+                       "Update Error", MessageBoxButtons.OKCancel) == DialogResult.OK)
+                {
+                    gallifrey.VersionControl.ManualReinstall();
                 }
             }
         }
-
-        private void OnUnhandledExceptionReporting(object sender, UnhandledExceptionReportingEventArgs e)
+        
+        private void OnSubmittingExceptionlessEvent(object sender, EventSubmittingEventArgs e)
         {
             foreach (var form in Application.OpenForms.Cast<Form>())
             {
                 form.TopMost = false;
-            }
-
-            e.Error.Tags.Add(myVersion.Replace("\n", " - "));
-            foreach (var module in e.Error.Modules.Where(module => module.Name.ToLower().Contains("gallifrey.ui")))
-            {
-                module.Version = myVersion.Replace("\n", " - ");
             }
         }
 
@@ -106,7 +118,7 @@ namespace Gallifrey.UI.Classic
         {
             Height = gallifrey.Settings.UiSettings.Height;
             Width = gallifrey.Settings.UiSettings.Width;
-            Text = gallifrey.IsBeta ? "Gallifrey (Beta)" : "Gallifrey";
+            Text = gallifrey.VersionControl.AppName;
 
             SetVersionNumber();
             RefreshInternalTimerList();
@@ -118,18 +130,16 @@ namespace Gallifrey.UI.Classic
                 SelectTimer(gallifrey.JiraTimerCollection.GetRunningTimerId().Value);
             }
 
-            if (ApplicationDeployment.IsNetworkDeployed && ApplicationDeployment.CurrentDeployment.IsFirstRun)
+            if (gallifrey.VersionControl.IsAutomatedDeploy && gallifrey.VersionControl.IsFirstRun)
             {
-                var version = ApplicationDeployment.CurrentDeployment.CurrentVersion;
-
-                var changeLog = gallifrey.GetChangeLog(version, XDocument.Parse(Properties.Resources.ChangeLog));
+                var changeLog = gallifrey.GetChangeLog(XDocument.Parse(Properties.Resources.ChangeLog));
 
                 if (changeLog.Any())
                 {
                     var changeLogWindow = new ChangeLogWindow(gallifrey, changeLog);
                     changeLogWindow.ShowDialog();
                 }
-            }
+            }            
         }
 
         private void MainWindow_KeyUp(object sender, KeyEventArgs e)
@@ -181,7 +191,7 @@ namespace Gallifrey.UI.Classic
                         tabList.Focus();
                         break;
                     case Keys.Right:
-                        if (selectedTab.TabIndex < tabTimerDays.TabPages.Count - 1)
+                        if (tabTimerDays.SelectedIndex < tabTimerDays.TabPages.Count - 1)
                         {
                             tabTimerDays.SelectedIndex++;
                             tabList = (ListBox)tabTimerDays.SelectedTab.Controls[string.Format("lst_{0}", tabTimerDays.SelectedTab.Name)];
@@ -190,7 +200,7 @@ namespace Gallifrey.UI.Classic
                         }
                         break;
                     case Keys.Left:
-                        if (selectedTab.TabIndex > 0)
+                        if (tabTimerDays.SelectedIndex > 0)
                         {
                             tabTimerDays.SelectedIndex--;
                             tabList = (ListBox)tabTimerDays.SelectedTab.Controls[string.Format("lst_{0}", tabTimerDays.SelectedTab.Name)];
@@ -202,12 +212,27 @@ namespace Gallifrey.UI.Classic
             }
         }
 
-        private void MainWindow_FormClosed(object sender, FormClosedEventArgs e)
+        private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
         {
+            CloseNotifyIcon();
+
             gallifrey.Settings.UiSettings.Height = Height;
             gallifrey.Settings.UiSettings.Width = Width;
             gallifrey.Close();
-            notifyAlert.Visible = false;
+        }
+
+        private void CloseNotifyIcon()
+        {
+            if (notifyAlert != null)
+            {
+                if (notifyAlert.Icon != null)
+                {
+                    notifyAlert.Visible = false;
+                    notifyAlert.Icon = null; // required to make icon disappear    
+                }
+                notifyAlert.Dispose();
+                notifyAlert = null;
+            }
         }
 
         #endregion
@@ -286,7 +311,7 @@ namespace Gallifrey.UI.Classic
             {
                 var exportTime = e.ExportTime;
                 var message = string.Format("Do You Want To Export '{0}'?\n", timer.JiraReference);
-                if (gallifrey.Settings.AppSettings.ExportPromptAll || (new TimeSpan(exportTime.Ticks - (exportTime.Ticks % 600000000)) == new TimeSpan(timer.TimeToExport.Ticks - (timer.TimeToExport.Ticks % 600000000))))
+                if (gallifrey.Settings.ExportSettings.ExportPromptAll || (new TimeSpan(exportTime.Ticks - (exportTime.Ticks % 600000000)) == new TimeSpan(timer.TimeToExport.Ticks - (timer.TimeToExport.Ticks % 600000000))))
                 {
                     exportTime = timer.TimeToExport;
                     message += string.Format("You Have '{0}' To Export", exportTime.FormatAsString(false));
@@ -301,7 +326,7 @@ namespace Gallifrey.UI.Classic
                     var exportTimerWindow = new ExportTimerWindow(gallifrey, e.TimerId);
                     if (exportTimerWindow.DisplayForm)
                     {
-                        if (!gallifrey.Settings.AppSettings.ExportPromptAll)
+                        if (!gallifrey.Settings.ExportSettings.ExportPromptAll)
                         {
                             exportTimerWindow.PreLoadExportTime(e.ExportTime);
                         }
@@ -313,15 +338,33 @@ namespace Gallifrey.UI.Classic
 
         private void lblUnexportedTime_Click(object sender, EventArgs e)
         {
-            var timer = gallifrey.JiraTimerCollection.GetOldestUnexportedTimer();
-            if (timer != null)
+            var timers = gallifrey.JiraTimerCollection.GetStoppedUnexportedTimers();
+
+            if (timers.Any())
             {
-                SelectTimer(timer.UniqueId);
+                foreach (var jiraTimer in timers)
+                {
+                    var exportTimerWindow = new ExportTimerWindow(gallifrey, jiraTimer.UniqueId);
+                    if (exportTimerWindow.DisplayForm)
+                    {
+                        exportTimerWindow.ShowDialog();
+                    }
+
+                    var updatedTimer = gallifrey.JiraTimerCollection.GetTimer(jiraTimer.UniqueId);
+                    if (!updatedTimer.FullyExported)
+                    {
+                        MessageBox.Show("Will Stop Bulk Export As Timer Was Not Fully Exported\n\nWill Select The Cancelled Timer", "Stopping Bulk Export");
+                        SelectTimer(jiraTimer.UniqueId);
+                        break;
+                    }
+                }
             }
             else
             {
-                MessageBox.Show("No Un-Exported Timers To Show", "Nothing To Export");
+                MessageBox.Show("No Un-Exported Timers To Bulk Export", "Nothing To Export");
             }
+
+            RefreshInternalTimerList();
         }
 
         private void lblTwitter_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -342,6 +385,14 @@ namespace Gallifrey.UI.Classic
         private void lblDonate_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             System.Diagnostics.Process.Start("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=G3MWL8E6UG4RS");
+        }
+
+        private void tabTimerDays_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Left || e.KeyCode == Keys.Right)
+            {
+                e.Handled = true;
+            }
         }
 
         #endregion
@@ -457,20 +508,23 @@ namespace Gallifrey.UI.Classic
 
         private void GallifreyOnNoActivityEvent(object sender, int millisecondsSinceActivity)
         {
-            var minutesSinceActivity = (millisecondsSinceActivity / 1000) / 60;
-            var minutesPlural = string.Empty;
-            if (minutesSinceActivity > 1)
+            if (millisecondsSinceActivity > 0)
             {
-                minutesPlural = "s";
-            }
+                var minutesSinceActivity = (millisecondsSinceActivity / 1000) / 60;
+                var minutesPlural = string.Empty;
+                if (minutesSinceActivity > 1)
+                {
+                    minutesPlural = "s";
+                }
 
-            notifyAlert.BalloonTipText = string.Format("No Timer Running For {0} Minute{1}", minutesSinceActivity, minutesPlural);
-            notifyAlert.ShowBalloonTip(3000);
+                notifyAlert.BalloonTipText = string.Format("No Timer Running For {0} Minute{1}", minutesSinceActivity, minutesPlural);
+                notifyAlert.ShowBalloonTip(3000);
+            }
         }
 
         private void notifyAlert_BalloonTipClicked(object sender, EventArgs e)
         {
-            if (updateReady)
+            if (gallifrey.VersionControl.AlreadyInstalledUpdate)
             {
                 try
                 {
@@ -489,7 +543,7 @@ namespace Gallifrey.UI.Classic
                         WindowState = FormWindowState.Normal;
                         break;
                     default:
-                        this.BringToFront();
+                        BringToFront();
                         break;
                 }
             }
@@ -594,28 +648,23 @@ namespace Gallifrey.UI.Classic
 
         private void SetVersionNumber(bool checkingUpdate = false, bool noUpdate = false)
         {
-            var networkDeploy = ApplicationDeployment.IsNetworkDeployed;
-            myVersion = networkDeploy ? ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString() : Application.ProductVersion;
-
-            if (networkDeploy && !gallifrey.IsBeta)
-            {
-                myVersion = myVersion.Substring(0, myVersion.LastIndexOf("."));
-            }
-
-            var betaText = gallifrey.IsBeta ? " (beta)" : "";
             var upToDateText = "Invalid Deployment";
-
-            if (networkDeploy) upToDateText = "Up To Date!";
+            if (gallifrey.VersionControl.IsAutomatedDeploy) upToDateText = "Up To Date!";
             if (checkingUpdate) upToDateText = "Checking Updates!";
             if (noUpdate) upToDateText = "No New Updates!";
 
-            myVersion = string.Format("v{0}{1}\n{2}", myVersion, betaText, upToDateText);
-            if (!networkDeploy)
+            var myVersion = string.Format("Currently Running {0}\n{1}", gallifrey.VersionControl.VersionName, upToDateText);
+
+            if (lblUpdate.Text != myVersion)
+            {
+                lblUpdate.Text = myVersion;
+            }
+
+            if (!gallifrey.VersionControl.IsAutomatedDeploy)
             {
                 lblUpdate.BackColor = Color.Red;
                 lblUpdate.BorderStyle = BorderStyle.FixedSingle;
             }
-            lblUpdate.Text = string.Format("Currently Running {0}", myVersion);
         }
 
         private void RefreshInternalTimerList()
@@ -971,9 +1020,17 @@ namespace Gallifrey.UI.Classic
                 {
                     try
                     {
-                        selectedTimer = (JiraTimer)selectedList.SelectedItem;
+                        selectedTimer = (JiraTimer) selectedList.SelectedItem;
                     }
-                    catch (IndexOutOfRangeException) { /* There Seems to be some situations this throws, for no good reason */}
+                    catch (IndexOutOfRangeException)
+                    {
+                        /* There Seems to be some situations this throws, for no good reason */
+                    }
+                    catch (NullReferenceException)
+                    {
+                        RefreshInternalTimerList();
+                        return GetSelectedTimer();
+                    }
                 }
             }
 
@@ -991,29 +1048,37 @@ namespace Gallifrey.UI.Classic
 
         private async void lblUpdate_Click(object sender, EventArgs e)
         {
-            if (ApplicationDeployment.IsNetworkDeployed)
+            if (gallifrey.VersionControl.IsAutomatedDeploy)
             {
                 var restart = false;
                 try
                 {
-                    if (ApplicationDeployment.CurrentDeployment != null && ApplicationDeployment.CurrentDeployment.UpdatedVersion != ApplicationDeployment.CurrentDeployment.CurrentVersion)
+                    if (gallifrey.VersionControl.AlreadyInstalledUpdate)
                     {
                         restart = true;
                     }
                     else
                     {
-                        SetVersionNumber(true);
-                        var updateResult = CheckForUpdates(manualCheck: true, showUserFeedback: true);
+                        SetVersionNumber(checkingUpdate: true);
+                        var updateResult = gallifrey.VersionControl.CheckForUpdates(true);
                         await updateResult;
 
-                        if (updateResult.Result)
+                        if (updateResult.Result == UpdateResult.Updated)
                         {
                             UpdateComplete();
                         }
-                        else
+                        else if (updateResult.Result == UpdateResult.NoUpdate)
                         {
                             SetVersionNumber(noUpdate: true);
                         }
+                    }
+                }
+                catch (ManualReinstallRequiredException)
+                {
+                    if (MessageBox.Show("There Was An Issue With Automatic Update\nGallifrey Will Attempt To Re-Install\nNo Timers Will Be Lost\nPress OK To Continue, Or Cancel To Delay Update",
+                           "Update Error", MessageBoxButtons.OKCancel) == DialogResult.OK)
+                    {
+                        gallifrey.VersionControl.ManualReinstall();
                     }
                 }
                 catch (Exception)
@@ -1041,65 +1106,17 @@ namespace Gallifrey.UI.Classic
 
         private async void CheckIfUpdateCallNeeded()
         {
-            if (ApplicationDeployment.IsNetworkDeployed && lastUpdateCheck < DateTime.UtcNow.AddMinutes(-5))
+            var updateResult = gallifrey.VersionControl.CheckForUpdates();
+            await updateResult;
+
+            if (updateResult.Result == UpdateResult.Updated)
+            {
+                UpdateComplete();
+            }
+            else if(updateResult.Result == UpdateResult.NoUpdate)
             {
                 SetVersionNumber();
-                var updateResult = CheckForUpdates();
-                await updateResult;
-
-                if (updateResult.Result)
-                {
-                    UpdateComplete();
-                }
-                else
-                {
-                    SetVersionNumber(noUpdate: true);
-                }
             }
-        }
-
-        private Task<bool> CheckForUpdates(bool manualCheck = false, bool showUserFeedback = false)
-        {
-            gallifrey.TrackEvent(TrackingType.UpdateCheck);
-            lastUpdateCheck = DateTime.UtcNow;
-
-            try
-            {
-                var updateInfo = ApplicationDeployment.CurrentDeployment.CheckForDetailedUpdate(false);
-                
-                if (updateInfo.UpdateAvailable && updateInfo.AvailableVersion > ApplicationDeployment.CurrentDeployment.CurrentVersion)
-                {
-                    return Task.Factory.StartNew(() => ApplicationDeployment.CurrentDeployment.Update());
-                }
-
-                if (manualCheck)
-                {
-                    return Task.Factory.StartNew(() =>
-                    {
-                        Task.Delay(1500);
-                        return false;
-                    });
-                }
-            }
-            catch (TrustNotGrantedException)
-            {
-                if (showUserFeedback)
-                {
-                    if (MessageBox.Show("There Was An Issue With Automatic Update\nGallifrey Will Attempt To Re-Install\nNo Timers Will Be Lost\nPress OK To Continue, Or Cancel To Delay Update",
-                        "Update Error", MessageBoxButtons.OKCancel) == DialogResult.OK)
-                    {
-                        var intallUrl = ApplicationDeployment.CurrentDeployment.UpdateLocation.AbsoluteUri;
-                        DeploymentUtils.Uninstaller.UninstallMe();
-                        DeploymentUtils.Uninstaller.AutoInstall(intallUrl);
-                        Application.Exit();
-                    }
-                }
-            }
-            catch (Exception)
-            {
-            }
-
-            return Task.Factory.StartNew(() => false);
         }
 
         private void UpdateComplete()
@@ -1121,13 +1138,12 @@ namespace Gallifrey.UI.Classic
                 lblUpdate.BackColor = Color.OrangeRed;
                 lblUpdate.BorderStyle = BorderStyle.FixedSingle;
                 lblUpdate.Image = Properties.Resources.Download_16x16;
-                updateReady = true;
 
                 try
                 {
-                    lblUpdate.Text = string.Format("     v{0}\nClick Here To Restart.", ApplicationDeployment.CurrentDeployment.UpdatedVersion);
+                    lblUpdate.Text = string.Format("    {0}\nClick Here To Restart.", gallifrey.VersionControl.VersionName);
 
-                    notifyAlert.ShowBalloonTip(10000, "Update Avaliable", string.Format("An Update To v{0} Has Been Downloaded!", ApplicationDeployment.CurrentDeployment.UpdatedVersion), ToolTipIcon.Info);
+                    notifyAlert.ShowBalloonTip(10000, "Update Avaliable", string.Format("An Update To v{0} Has Been Downloaded!", gallifrey.VersionControl.VersionName), ToolTipIcon.Info);
                 }
                 catch (Exception)
                 {
@@ -1251,6 +1267,5 @@ namespace Gallifrey.UI.Classic
         }
 
         #endregion
-
     }
 }

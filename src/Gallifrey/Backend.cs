@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Timers;
 using System.Xml.Linq;
 using Gallifrey.AppTracking;
 using Gallifrey.ChangeLog;
+using Gallifrey.Exceptions;
 using Gallifrey.Exceptions.IdleTimers;
 using Gallifrey.IdleTimers;
 using Gallifrey.InactiveMonitor;
@@ -11,6 +14,7 @@ using Gallifrey.JiraIntegration;
 using Gallifrey.JiraTimers;
 using Gallifrey.Serialization;
 using Gallifrey.Settings;
+using Gallifrey.Versions;
 
 namespace Gallifrey
 {
@@ -20,16 +24,16 @@ namespace Gallifrey
         IIdleTimerCollection IdleTimerCollection { get; }
         ISettingsCollection Settings { get; }
         IJiraConnection JiraConnection { get; }
-        bool IsBeta { get; }
+        IVersionControl VersionControl { get; }
         event EventHandler<int> NoActivityEvent;
         event EventHandler<ExportPromptDetail> ExportPromptEvent;
         void Initialise();
         void Close();
         void TrackEvent(TrackingType trackingType);
-        void SaveSettings();
+        void SaveSettings(bool jiraSettingsChanged);
         bool StartIdleTimer();
         Guid StopIdleTimer();
-        IDictionary<Version, ChangeLogVersionDetails> GetChangeLog(Version currentVersion, XDocument changeLogContent);
+        IDictionary<Version, ChangeLogVersionDetails> GetChangeLog(XDocument changeLogContent);
     }
 
     public class Backend : IBackend
@@ -39,19 +43,20 @@ namespace Gallifrey
         private readonly SettingsCollection settingsCollection;
         private readonly ITrackUsage trackUsage;
         private readonly JiraConnection jiraConnection;
-        public bool IsBeta { get; private set; }
+        private readonly VersionControl versionControl;
+
         public event EventHandler<int> NoActivityEvent;
         public event EventHandler<ExportPromptDetail> ExportPromptEvent;
         internal ActivityChecker ActivityChecker;
         private readonly Timer hearbeat;
         private Guid? runningTimerWhenIdle;
-        
-        public Backend(bool isBeta)
+
+        public Backend(InstanceType instanceType, AppType appType)
         {
-            IsBeta = isBeta;
             settingsCollection = SettingsCollectionSerializer.DeSerialize();
-            trackUsage = new TrackUsage(settingsCollection.AppSettings, settingsCollection.InternalSettings,isBeta);
-            jiraTimerCollection = new JiraTimerCollection(settingsCollection.AppSettings);
+            trackUsage = new TrackUsage(settingsCollection.AppSettings, settingsCollection.InternalSettings, instanceType, appType);
+            versionControl = new VersionControl(instanceType, appType, trackUsage);
+            jiraTimerCollection = new JiraTimerCollection(settingsCollection.ExportSettings);
             jiraTimerCollection.exportPrompt += OnExportPromptEvent;
             jiraConnection = new JiraConnection(trackUsage);
             idleTimerCollection = new IdleTimerCollection();
@@ -60,7 +65,7 @@ namespace Gallifrey
             hearbeat = new Timer(1800000);
             hearbeat.Elapsed += HearbeatOnElapsed;
             hearbeat.Start();
-            
+
             if (Settings.AppSettings.TimerRunningOnShutdown.HasValue)
             {
                 var timer = jiraTimerCollection.GetTimer(Settings.AppSettings.TimerRunningOnShutdown.Value);
@@ -70,7 +75,7 @@ namespace Gallifrey
                 }
 
                 Settings.AppSettings.TimerRunningOnShutdown = null;
-                SaveSettings();
+                SaveSettings(false);
             }
 
             HearbeatOnElapsed(this, null);
@@ -80,15 +85,13 @@ namespace Gallifrey
         {
             if (promptDetail.ExportTime.TotalSeconds >= 60)
             {
-                var handler = ExportPromptEvent;
-                if (handler != null) handler(sender, promptDetail);    
+                if (ExportPromptEvent != null) ExportPromptEvent(sender, promptDetail);
             }
         }
 
         private void OnNoActivityEvent(object sender, int millisecondsSinceActivity)
         {
-            var handler = NoActivityEvent;
-            if (handler != null) handler(sender, millisecondsSinceActivity);
+            if (NoActivityEvent != null) NoActivityEvent(sender, millisecondsSinceActivity);
         }
 
         private void HearbeatOnElapsed(object sender, ElapsedEventArgs e)
@@ -122,6 +125,12 @@ namespace Gallifrey
 
         public void Initialise()
         {
+            var processes = Process.GetProcesses();
+            if (processes.Count(process => process.ProcessName.Contains("Gallifrey") && !process.ProcessName.Contains("vshost")) > 1)
+            {
+                throw new MultipleGallifreyRunningException();
+            }
+
             jiraConnection.ReConnect(settingsCollection.JiraConnectionSettings, settingsCollection.ExportSettings);
         }
 
@@ -151,13 +160,17 @@ namespace Gallifrey
             trackUsage.TrackAppUsage(trackingType);
         }
 
-        public void SaveSettings()
+        public void SaveSettings(bool jiraSettingsChanged)
         {
             settingsCollection.SaveSettings();
-            jiraConnection.ReConnect(settingsCollection.JiraConnectionSettings, settingsCollection.ExportSettings);
-            
+
+            if (jiraSettingsChanged)
+            {
+                jiraConnection.ReConnect(settingsCollection.JiraConnectionSettings, settingsCollection.ExportSettings);
+            }
+
             ActivityChecker.UpdateAppSettings(settingsCollection.AppSettings);
-            jiraTimerCollection.UpdateAppSettings(settingsCollection.AppSettings);
+            jiraTimerCollection.UpdateAppSettings(settingsCollection.ExportSettings);
             trackUsage.UpdateSettings(settingsCollection.AppSettings, settingsCollection.InternalSettings);
         }
 
@@ -189,10 +202,10 @@ namespace Gallifrey
             return idleTimerCollection.StopLockedTimers();
         }
 
-        public IDictionary<Version, ChangeLogVersionDetails> GetChangeLog(Version currentVersion, XDocument changeLogContent)
+        public IDictionary<Version, ChangeLogVersionDetails> GetChangeLog(XDocument changeLogContent)
         {
-            var changeLogItems = ChangeLogProvider.GetChangeLog(settingsCollection.InternalSettings.LastChangeLogVersion, currentVersion, changeLogContent);
-            settingsCollection.InternalSettings.SetLastChangeLogVersion(currentVersion);
+            var changeLogItems = ChangeLogProvider.GetChangeLog(settingsCollection.InternalSettings.LastChangeLogVersion, versionControl.DeployedVersion, changeLogContent);
+            settingsCollection.InternalSettings.SetLastChangeLogVersion(versionControl.DeployedVersion);
             settingsCollection.SaveSettings();
             trackUsage.UpdateSettings(settingsCollection.AppSettings, settingsCollection.InternalSettings);
             return changeLogItems;
@@ -216,6 +229,11 @@ namespace Gallifrey
         public IJiraConnection JiraConnection
         {
             get { return jiraConnection; }
+        }
+
+        public IVersionControl VersionControl
+        {
+            get { return versionControl; }
         }
     }
 }

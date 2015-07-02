@@ -54,6 +54,7 @@ Gallifrey makes use of the following libraries:
 * Exceptionless (http://exceptionless.com/)
 * Spell Check Winforms TextBox (http://spellchecktextbox.codeplex.com/)
 * Atlassian .Net SDK (https://bitbucket.org/farmas/atlassian.net-sdk/wiki/Home)
+* MahApps.Metro (http://mahapps.com/) - New Modern UI Only
 
 3rd Party Resources
 =========
@@ -61,6 +62,7 @@ Gallifrey makes use of the following libraries:
 * Button icons provided by VisualPharm (http://www.visualpharm.com)
 * App icon provided by Jack Cai (http://www.doublejdesign.co.uk)
 * Digital-7 font by Style7 (http://www.styleseven.com/)
+* Modern UI Icons (http://modernuiicons.com/) - New Modern UI Only
 
 Licence
 =========

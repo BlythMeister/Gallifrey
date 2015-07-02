@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Versions>
+  <Version Number="3.0.0" Name="Pre Release">
+    <Features/>
+    <Bugs />
+    <Others>
+      <Other>Brand new UI</Other>
+    </Others>
+  </Version>
+</Versions>

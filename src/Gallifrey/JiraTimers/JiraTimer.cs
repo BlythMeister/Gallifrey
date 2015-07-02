@@ -85,6 +85,7 @@ namespace Gallifrey.JiraTimers
             if (PropertyChanged != null && currentRunningTime.IsRunning)
             {
                 PropertyChanged(this, new PropertyChangedEventArgs("ExactCurrentTime"));
+                PropertyChanged(this, new PropertyChangedEventArgs("TimeToExport"));
             }
         }
 
@@ -128,6 +129,8 @@ namespace Gallifrey.JiraTimers
             runningWatcher.Start();
             currentRunningTime.Start();
             IsRunning = true;
+
+            if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("IsRunning"));
         }
 
         public TimeSpan StopTimer()
@@ -138,6 +141,9 @@ namespace Gallifrey.JiraTimers
             var elapsed = currentRunningTime.Elapsed;
             CurrentTime = CurrentTime.Add(elapsed);
             currentRunningTime.Reset();
+
+            if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("IsRunning"));
+
             return elapsed;
         }
 
@@ -223,19 +229,21 @@ namespace Gallifrey.JiraTimers
                 ManualAdjustment(exportedvsActual, true);
             }
             if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("ExactCurrentTime"));
+            if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("TimeToExport"));
         }
 
         public void AddJiraExportedTime(TimeSpan loggedTime)
         {
             ExportedTime = ExportedTime.Add(loggedTime);
             if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("ExactCurrentTime"));
+            if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("TimeToExport"));
         }
 
-        public void RefreshFromJira(Issue jiraIssue, string currentUserName)
+        public void RefreshFromJira(Issue jiraIssue, User currentUser)
         {
             if (jiraIssue == null) return;
 
-            ExportedTime = jiraIssue.GetCurrentLoggedTimeForDate(DateStarted, currentUserName);
+            SetJiraExportedTime(jiraIssue.GetCurrentLoggedTimeForDate(DateStarted, currentUser));
             JiraReference = jiraIssue.key;
             JiraProjectName = jiraIssue.fields.project.key;
             JiraName = jiraIssue.fields.summary;
@@ -251,6 +259,13 @@ namespace Gallifrey.JiraTimers
             }
 
             if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("ExactCurrentTime"));
+            if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("TimeToExport"));
+            if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("JiraReference"));
+            if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("JiraProjectName"));
+            if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("JiraName"));
+            if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("JiraParentReference"));
+            if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("JiraParentName"));
+            if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("HasParent"));
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

@@ -25,6 +25,7 @@ namespace Gallifrey.Jira
             client.GetAccessToken();
             return new User
             {
+                key = username,
                 name = username,
                 active = true
             };
