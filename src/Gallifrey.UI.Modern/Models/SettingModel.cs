@@ -26,7 +26,6 @@ namespace Gallifrey.UI.Modern.Models
         public string JiraUrl { get; set; }
         public string JiraUsername { get; set; }
         public string JiraPassword { get; set; }
-        public bool UseJiraRest { get; set; }
 
         //Export Settings
         public bool ExportAll { get; set; }
@@ -68,7 +67,6 @@ namespace Gallifrey.UI.Modern.Models
             JiraUrl = settings.JiraConnectionSettings.JiraUrl;
             JiraUsername = settings.JiraConnectionSettings.JiraUsername;
             JiraPassword = settings.JiraConnectionSettings.JiraPassword;
-            UseJiraRest = !settings.JiraConnectionSettings.JiraUseSoapApi;
 
             //Export Settings
             ExportAll = settings.ExportSettings.ExportPromptAll;
@@ -112,8 +110,7 @@ namespace Gallifrey.UI.Modern.Models
             //Jira Settings
             if (settings.JiraConnectionSettings.JiraUrl != JiraUrl ||
                 settings.JiraConnectionSettings.JiraUsername != JiraUsername ||
-                settings.JiraConnectionSettings.JiraPassword != JiraPassword ||
-                settings.JiraConnectionSettings.JiraUseSoapApi != !UseJiraRest)
+                settings.JiraConnectionSettings.JiraPassword != JiraPassword)
             {
                 JiraSettingsChanged = true;
             }
@@ -121,7 +118,6 @@ namespace Gallifrey.UI.Modern.Models
             settings.JiraConnectionSettings.JiraUrl = JiraUrl;
             settings.JiraConnectionSettings.JiraUsername = JiraUsername;
             settings.JiraConnectionSettings.JiraPassword = JiraPassword;
-            settings.JiraConnectionSettings.JiraUseSoapApi = !UseJiraRest;
 
             //Export Settings
             settings.ExportSettings.ExportPrompt.OnAddIdle = ExportPrompts.First(x => x.Key == "Idle").IsChecked;

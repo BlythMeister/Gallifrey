@@ -18,7 +18,6 @@ namespace Gallifrey.UI.Classic
             if (gallifrey.Settings.JiraConnectionSettings.JiraUrl != null) txtJiraUrl.Text = gallifrey.Settings.JiraConnectionSettings.JiraUrl;
             if (gallifrey.Settings.JiraConnectionSettings.JiraUsername != null) txtJiraUsername.Text = gallifrey.Settings.JiraConnectionSettings.JiraUsername;
             if (gallifrey.Settings.JiraConnectionSettings.JiraPassword != null) txtJiraPassword.Text = gallifrey.Settings.JiraConnectionSettings.JiraPassword;
-            chkUseRest.Checked = !gallifrey.Settings.JiraConnectionSettings.JiraUseSoapApi;
             
             chkAlert.Checked = gallifrey.Settings.AppSettings.AlertWhenNotRunning;
             chkAutoUpdate.Checked = gallifrey.Settings.AppSettings.AutoUpdate;
@@ -127,7 +126,6 @@ namespace Gallifrey.UI.Classic
             gallifrey.Settings.JiraConnectionSettings.JiraUrl = txtJiraUrl.Text;
             gallifrey.Settings.JiraConnectionSettings.JiraUsername = txtJiraUsername.Text;
             gallifrey.Settings.JiraConnectionSettings.JiraPassword = txtJiraPassword.Text;
-            gallifrey.Settings.JiraConnectionSettings.JiraUseSoapApi = !chkUseRest.Checked;
 
             TopMost = true;
             CloseWindow(false);

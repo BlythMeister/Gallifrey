@@ -75,9 +75,6 @@
 
                     <TextBlock Grid.Row="2" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right">Password</TextBlock>
                     <PasswordBox Grid.Row="2" Grid.Column="1" Margin="5" VerticalAlignment="Center" helpers:PasswordBoxHelper.BindPassword="true" helpers:PasswordBoxHelper.BoundPassword="{Binding JiraPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-
-                    <TextBlock Grid.Row="3" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right">Use REST API?</TextBlock>
-                    <CheckBox Grid.Row="3" Grid.Column="1" Margin="5" VerticalAlignment="Center" IsChecked="{Binding UseJiraRest}"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Targets">

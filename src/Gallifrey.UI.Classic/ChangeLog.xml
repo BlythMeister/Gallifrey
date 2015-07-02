@@ -187,6 +187,7 @@
       <Feature>Changes to how settings are stored</Feature>
       <Feature>Updated Exception handling client</Feature>
       <Feature>Double click on unexported total now prompts export of timers</Feature>
+      <Feature>Default to REST api and use SOAP if REST fails</Feature>
     </Features>
     <Bugs>
       <Bug>Fix issue with update checker refreshing UI constantly</Bug>

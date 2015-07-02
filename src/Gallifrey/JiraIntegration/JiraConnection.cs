@@ -57,7 +57,7 @@ namespace Gallifrey.JiraIntegration
             UpdateJiraProjectCache();
         }
 
-        private void CheckAndConnectJira()
+        private void CheckAndConnectJira(bool useRestApi = true)
         {
             if (jira == null)
             {
@@ -70,20 +70,28 @@ namespace Gallifrey.JiraIntegration
 
                 try
                 {
-                    if (jiraConnectionSettings.JiraUseSoapApi)
+                    if (useRestApi)
                     {
-                        jira = new JiraSoapClient(jiraConnectionSettings.JiraUrl.Replace("/secure/Dashboard.jspa", ""), jiraConnectionSettings.JiraUsername, jiraConnectionSettings.JiraPassword);
+                        jira = new JiraRestClient(jiraConnectionSettings.JiraUrl.Replace("/secure/Dashboard.jspa", ""), jiraConnectionSettings.JiraUsername, jiraConnectionSettings.JiraPassword);
                     }
                     else
                     {
-                        jira = new JiraRestClient(jiraConnectionSettings.JiraUrl.Replace("/secure/Dashboard.jspa", ""), jiraConnectionSettings.JiraUsername, jiraConnectionSettings.JiraPassword);
+                        jira = new JiraSoapClient(jiraConnectionSettings.JiraUrl.Replace("/secure/Dashboard.jspa", ""), jiraConnectionSettings.JiraUsername, jiraConnectionSettings.JiraPassword); 
                     }
 
                     CurrentUser = jira.GetCurrentUser();
                 }
                 catch (Exception ex)
                 {
-                    throw new JiraConnectionException("Error creating instance of Jira", ex);
+                    jira = null;
+                    if (useRestApi)
+                    {
+                        CheckAndConnectJira(false);   
+                    }
+                    else
+                    {
+                        throw new JiraConnectionException("Error creating instance of Jira", ex);    
+                    }
                 }
             }
         }
