@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using Gallifrey.ExtensionMethods;
 using Gallifrey.JiraTimers;
 
@@ -38,11 +37,13 @@ namespace Gallifrey.UI.Modern.Models
                         PropertyChanged(this, new PropertyChangedEventArgs("CurrentTime"));
                         PropertyChanged(this, new PropertyChangedEventArgs("IsRunning"));
                         PropertyChanged(this, new PropertyChangedEventArgs("HasTimeToExportAndNotRunning"));
+                        PropertyChanged(this, new PropertyChangedEventArgs("HasTimeToExport"));
                         PropertyChanged(this, new PropertyChangedEventArgs("ExportTime"));
                         break;
                     case "IsRunning":
                         PropertyChanged(this, new PropertyChangedEventArgs("IsRunning"));
                         PropertyChanged(this, new PropertyChangedEventArgs("HasTimeToExportAndNotRunning"));
+                        PropertyChanged(this, new PropertyChangedEventArgs("HasTimeToExport"));
                         break;
                     case "TimeToExport":
                         PropertyChanged(this, new PropertyChangedEventArgs("ExportTime"));

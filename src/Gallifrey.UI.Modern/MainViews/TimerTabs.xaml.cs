@@ -37,7 +37,7 @@ namespace Gallifrey.UI.Modern.MainViews
                     }
                     catch (DuplicateTimerException)
                     {
-                        ViewModel.MainWindow.ShowMessageAsync("Wrong Day!", "Use The Version Of This Timer For Today!");                       
+                        ViewModel.DialogCoordinator.ShowMessageAsync(ViewModel, "Wrong Day!", "Use The Version Of This Timer For Today!");                       
                     }
                 }
                 

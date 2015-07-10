@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using Gallifrey.UI.Modern.Flyouts;
 using Gallifrey.UI.Modern.Models;
+using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 
 namespace Gallifrey.UI.Modern.MainViews
@@ -21,7 +22,7 @@ namespace Gallifrey.UI.Modern.MainViews
 
         private void AddButton(object sender, RoutedEventArgs e)
         {
-            ViewModel.MainWindow.OpenFlyout(new AddTimer(ViewModel));
+            ViewModel.OpenFlyout(new AddTimer(ViewModel));
         }
 
         private async void DeleteButton(object sender, RoutedEventArgs e)
@@ -32,7 +33,7 @@ namespace Gallifrey.UI.Modern.MainViews
             {
                 var timer = ViewModel.Gallifrey.JiraTimerCollection.GetTimer(selectedTimer.Value);
 
-                var result = ViewModel.MainWindow.ShowMessageAsync("Are You Sure?", string.Format("Are You Sure You Want To Delete {0}\n\n{1}\nFor: {2}", timer.JiraReference, timer.JiraName, timer.DateStarted.Date.ToString("ddd, dd MMM")), MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No" });
+                var result = ViewModel.DialogCoordinator.ShowMessageAsync(ViewModel, "Are You Sure?", string.Format("Are You Sure You Want To Delete {0}\n\n{1}\nFor: {2}", timer.JiraReference, timer.JiraName, timer.DateStarted.Date.ToString("ddd, dd MMM")), MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No" });
 
                 await result;
 
@@ -46,7 +47,7 @@ namespace Gallifrey.UI.Modern.MainViews
 
         private void SearchButton(object sender, RoutedEventArgs e)
         {
-            ViewModel.MainWindow.OpenFlyout(new Search(ViewModel, false));
+            ViewModel.OpenFlyout(new Search(ViewModel, false));
         }
 
         private void EditButton(object sender, RoutedEventArgs e)
@@ -54,7 +55,7 @@ namespace Gallifrey.UI.Modern.MainViews
             var selectedTimerId = ViewModel.GetSelectedTimerId();
             if (selectedTimerId != null)
             {
-                ViewModel.MainWindow.OpenFlyout(new EditTimer(ViewModel, selectedTimerId.Value));
+                ViewModel.OpenFlyout(new EditTimer(ViewModel, selectedTimerId.Value));
             }
         }
 
@@ -63,23 +64,23 @@ namespace Gallifrey.UI.Modern.MainViews
             var selectedTimerId = ViewModel.GetSelectedTimerId();
             if (selectedTimerId != null)
             {
-                ViewModel.MainWindow.OpenFlyout(new Export(ViewModel, selectedTimerId.Value, null));
+                ViewModel.OpenFlyout(new Export(ViewModel, selectedTimerId.Value, null));
             }
         }
 
         private void LockTimerButton(object sender, RoutedEventArgs e)
         {
-            ViewModel.MainWindow.OpenFlyout(new LockedTimer(ViewModel));
+            ViewModel.OpenFlyout(new LockedTimer(ViewModel));
         }
 
         private void InfoButton(object sender, RoutedEventArgs e)
         {
-            ViewModel.MainWindow.OpenFlyout(new Information(ViewModel));
+            ViewModel.OpenFlyout(new Information(ViewModel));
         }
 
         private void SettingsButton(object sender, RoutedEventArgs e)
         {
-            ViewModel.MainWindow.OpenFlyout(new Flyouts.Settings(ViewModel));
+            ViewModel.OpenFlyout(new Flyouts.Settings(ViewModel));
         }
     }
 }

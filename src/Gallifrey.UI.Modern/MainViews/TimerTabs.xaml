@@ -1,13 +1,13 @@
 ﻿<UserControl x:Class="Gallifrey.UI.Modern.MainViews.TimerTabs"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro">
+             xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro">
 
-    <Controls:MetroAnimatedSingleRowTabControl TabStripPlacement="Left" ItemsSource="{Binding TimerDates}">
+    <controls:MetroAnimatedSingleRowTabControl TabStripPlacement="Left" ItemsSource="{Binding TimerDates}">
         <TabControl.ItemContainerStyle>
             <Style TargetType="TabItem">
                 <Setter Property="Header" Value="{Binding Header}" />
-                <Setter Property="Controls:ControlsHelper.HeaderFontSize" Value="17" />
+                <Setter Property="controls:ControlsHelper.HeaderFontSize" Value="17" />
                 <Setter Property="HorizontalAlignment" Value="Right" />
                 <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             </Style>
@@ -130,5 +130,5 @@
                 </ListView>
             </DataTemplate>
         </TabControl.ContentTemplate>
-    </Controls:MetroAnimatedSingleRowTabControl>
+    </controls:MetroAnimatedSingleRowTabControl>
 </UserControl>

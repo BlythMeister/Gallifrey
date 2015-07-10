@@ -12,6 +12,7 @@ namespace Gallifrey.UI.Modern.Flyouts
     public partial class Settings
     {
         private readonly MainViewModel viewModel;
+        private SettingModel DataModel { get { return (SettingModel)DataContext; } }
 
         public Settings(MainViewModel viewModel)
         {
@@ -24,13 +25,11 @@ namespace Gallifrey.UI.Modern.Flyouts
         private async void SaveSettings(object sender, RoutedEventArgs e)
         {
             var successfulSave = true;
-            var settingsModel = (SettingModel)DataContext;
-
-            settingsModel.UpdateSettings(viewModel.Gallifrey.Settings);
+            DataModel.UpdateSettings(viewModel.Gallifrey.Settings);
 
             try
             {
-                viewModel.Gallifrey.SaveSettings(settingsModel.JiraSettingsChanged);
+                viewModel.Gallifrey.SaveSettings(DataModel.JiraSettingsChanged);
             }
             catch (MissingJiraConfigException)
             {
@@ -44,11 +43,11 @@ namespace Gallifrey.UI.Modern.Flyouts
             if (successfulSave)
             {
                 IsOpen = false;
-                ThemeHelper.ChangeTheme(settingsModel.Theme);
+                ThemeHelper.ChangeTheme(DataModel.Theme);
             }
             else
             {
-                await viewModel.MainWindow.ShowMessageAsync("Invalid Jira Configuration", "You Cannot Save With Invalid Jira Configuration.\nTo Save You Have To Have A Valid Connection To Jira");
+                await viewModel.DialogCoordinator.ShowMessageAsync(viewModel,"Invalid Jira Configuration", "You Cannot Save With Invalid Jira Configuration.\nTo Save You Have To Have A Valid Connection To Jira");
             }
         }
     }

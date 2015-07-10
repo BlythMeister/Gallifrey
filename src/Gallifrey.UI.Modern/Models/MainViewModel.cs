@@ -2,20 +2,26 @@ using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Timers;
+using System.Windows;
 using Gallifrey.Comparers;
 using Gallifrey.ExtensionMethods;
 using Gallifrey.UI.Modern.MainViews;
+using MahApps.Metro.Controls;
+using MahApps.Metro.Controls.Dialogs;
 
 namespace Gallifrey.UI.Modern.Models
 {
     public class MainViewModel : INotifyPropertyChanged
     {
+        private readonly FlyoutsControl flyoutsControl;
         public event PropertyChangedEventHandler PropertyChanged;
 
         private readonly Timer runningWatcher;
         public IBackend Gallifrey { get; private set; }
-        public MainWindow MainWindow { get; private set; }
+        //public MainWindow MainWindow { get; private set; }
+        public IDialogCoordinator DialogCoordinator { get; set; }
         public ObservableCollection<TimerDateModel> TimerDates { get; private set; }
         public string ExportedNumber { get { return Gallifrey.JiraTimerCollection.GetNumberExported().Item1.ToString(); } }
         public string TotalTimerCount { get { return Gallifrey.JiraTimerCollection.GetNumberExported().Item2.ToString(); } }
@@ -45,10 +51,11 @@ namespace Gallifrey.UI.Modern.Models
         }
 
 
-        public MainViewModel(IBackend gallifrey, MainWindow mainWindow)
+        public MainViewModel(IBackend gallifrey, IDialogCoordinator dialogCoordinator, FlyoutsControl flyoutsControl)
         {
+            this.flyoutsControl = flyoutsControl;
             Gallifrey = gallifrey;
-            MainWindow = mainWindow;
+            DialogCoordinator = dialogCoordinator;
             TimerDates = new ObservableCollection<TimerDateModel>();
             runningWatcher = new Timer(1000);
             runningWatcher.Elapsed += runningWatcherElapsed;
@@ -204,6 +211,35 @@ namespace Gallifrey.UI.Modern.Models
                 PropertyChanged(this, new PropertyChangedEventArgs("InactiveMinutes"));
                 PropertyChanged(this, new PropertyChangedEventArgs("HasInactiveTime"));
             }
+        }
+
+        public void CloseAllFlyouts()
+        {
+            foreach (Flyout item in flyoutsControl.Items)
+            {
+                item.IsOpen = false;
+            }
+        }
+
+        public Task<Flyout> OpenFlyout(Flyout flyout)
+        {
+            var taskCompletion = new TaskCompletionSource<Flyout>();
+
+            // when the flyout is closed, remove it from the hosting FlyoutsControl
+            RoutedEventHandler closingFinishedHandler = null;
+            closingFinishedHandler = (o, args) =>
+            {
+                flyout.ClosingFinished -= closingFinishedHandler;
+                flyoutsControl.Items.Remove(flyout);
+                taskCompletion.SetResult(flyout);
+            };
+            flyout.ClosingFinished += closingFinishedHandler;
+
+            flyoutsControl.Items.Add(flyout);
+
+            flyout.IsOpen = true;
+
+            return taskCompletion.Task;
         }
     }
 }

@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using Gallifrey.Jira.Model;
 using Gallifrey.UI.Modern.Models;
-using MahApps.Metro.Controls.Dialogs;
 
 namespace Gallifrey.UI.Modern.Flyouts
 {
@@ -16,6 +14,7 @@ namespace Gallifrey.UI.Modern.Flyouts
     public partial class Search
     {
         public JiraIssueDisplayModel SelectedJira { get; private set; }
+        private SearchModel DataModel { get { return (SearchModel)DataContext; } }
 
         private readonly MainViewModel viewModel;
         private readonly bool openFromAdd;
@@ -33,29 +32,28 @@ namespace Gallifrey.UI.Modern.Flyouts
 
         private async void SearchButton(object sender, RoutedEventArgs e)
         {
-            var model = (SearchModel)DataContext;
             Task<IEnumerable<Issue>> searchTask = null;
-            model.SetIsSearching();
+            DataModel.SetIsSearching();
             var cancellationTokenSource = new CancellationTokenSource();
 
-            if (!string.IsNullOrWhiteSpace(model.SearchTerm))
+            if (!string.IsNullOrWhiteSpace(DataModel.SearchTerm))
             {
-                searchTask = Task.Factory.StartNew(() => viewModel.Gallifrey.JiraConnection.GetJiraIssuesFromSearchText(model.SearchTerm), cancellationTokenSource.Token);
+                searchTask = Task.Factory.StartNew(() => viewModel.Gallifrey.JiraConnection.GetJiraIssuesFromSearchText(DataModel.SearchTerm), cancellationTokenSource.Token);
             }
-            else if (!string.IsNullOrWhiteSpace(model.SelectedFilter))
+            else if (!string.IsNullOrWhiteSpace(DataModel.SelectedFilter))
             {
-                searchTask = Task.Factory.StartNew(() => viewModel.Gallifrey.JiraConnection.GetJiraIssuesFromFilter(model.SelectedFilter), cancellationTokenSource.Token);
+                searchTask = Task.Factory.StartNew(() => viewModel.Gallifrey.JiraConnection.GetJiraIssuesFromFilter(DataModel.SelectedFilter), cancellationTokenSource.Token);
             }
             else
             {
-                viewModel.MainWindow.ShowMessageAsync("No Results", "Your Search Returned No Results");
+                viewModel.DialogCoordinator.ShowMessageAsync(viewModel,"No Results", "Your Search Returned No Results");
             }
 
             if (searchTask != null)
             {
                 try
                 {
-                    var controller = await viewModel.MainWindow.ShowProgressAsync("Please Wait", "Search In Progress", true);
+                    var controller = await viewModel.DialogCoordinator.ShowProgressAsync(viewModel, "Please Wait", "Search In Progress", true);
                     var controllerCancel = Task.Factory.StartNew(() => 
                     {
                         while (!controller.IsCanceled)
@@ -77,44 +75,42 @@ namespace Gallifrey.UI.Modern.Flyouts
                     {
                         if (searchTask.IsCompleted)
                         {
-                            model.UpdateSearchResults(searchTask.Result);
+                            DataModel.UpdateSearchResults(searchTask.Result);
                         }
                         else
                         {
-                            viewModel.MainWindow.ShowMessageAsync("No Results", "There Was An Error Getting Search Results");
-                            model.ClearSearchResults();
+                            throw new Exception("NoResults");
                         }
                     }
                     else
                     {
-                        model.ClearSearchResults();
+                        DataModel.ClearSearchResults();
                     }
                 }
                 catch (Exception)
                 {
-                    viewModel.MainWindow.ShowMessageAsync("No Results", "There Was An Error Getting Search Results");
-                    model.ClearSearchResults();
+                    viewModel.DialogCoordinator.ShowMessageAsync(viewModel,"No Results", "There Was An Error Getting Search Results");
+                    DataModel.ClearSearchResults();
                 }
             }
         }
 
         private void AddTimer(object sender, RoutedEventArgs e)
         {
-            var model = (SearchModel)DataContext;
-            if (model.SelectedSearchResult == null)
+            if (DataModel.SelectedSearchResult == null)
             {
-                viewModel.MainWindow.ShowMessageAsync("No Selected Item", "You Need To Select An Item To Add A Timer For It");
+                viewModel.DialogCoordinator.ShowMessageAsync(viewModel,"No Selected Item", "You Need To Select An Item To Add A Timer For It");
                 return;
             }
 
             if (openFromAdd)
             {
-                SelectedJira = model.SelectedSearchResult;
+                SelectedJira = DataModel.SelectedSearchResult;
             }
             else
             {
-                var addFlyout = new AddTimer(viewModel, model.SelectedSearchResult.Reference);
-                viewModel.MainWindow.OpenFlyout(addFlyout);
+                var addFlyout = new AddTimer(viewModel, DataModel.SelectedSearchResult.Reference);
+                viewModel.OpenFlyout(addFlyout);
             }
 
             IsOpen = false;

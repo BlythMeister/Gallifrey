@@ -65,15 +65,17 @@
   </PropertyGroup>
   <PropertyGroup />
   <ItemGroup>
-    <Reference Include="Exceptionless.Extras">
-      <HintPath>..\packages\Exceptionless.Windows.2.0.1288\lib\net45\Exceptionless.Extras.dll</HintPath>
-    </Reference>
-    <Reference Include="Exceptionless.Portable">
-      <HintPath>..\packages\Exceptionless.Portable.2.0.1288\lib\portable-net40+sl50+win+wpa81+wp80\Exceptionless.Portable.dll</HintPath>
-    </Reference>
-    <Reference Include="Exceptionless.Windows, Version=2.0.1288.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Exceptionless.Extras, Version=3.1.1349.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Exceptionless.Windows.2.0.1288\lib\net45\Exceptionless.Windows.dll</HintPath>
+      <HintPath>..\packages\Exceptionless.Windows.3.1.1349\lib\net45\Exceptionless.Extras.dll</HintPath>
+    </Reference>
+    <Reference Include="Exceptionless.Portable, Version=3.1.1349.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Exceptionless.Portable.3.1.1349\lib\net45\Exceptionless.Portable.dll</HintPath>
+    </Reference>
+    <Reference Include="Exceptionless.Windows, Version=3.1.1349.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Exceptionless.Windows.3.1.1349\lib\net45\Exceptionless.Windows.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />

@@ -27,12 +27,12 @@ namespace Gallifrey.UI.Modern.MainViews
             {
                 foreach (var jiraTimer in timers)
                 {
-                    await ViewModel.MainWindow.OpenFlyout(new Export(ViewModel, jiraTimer.UniqueId, null));
+                    await ViewModel.OpenFlyout(new Export(ViewModel, jiraTimer.UniqueId, null));
 
                     var updatedTimer = ViewModel.Gallifrey.JiraTimerCollection.GetTimer(jiraTimer.UniqueId);
                     if (!updatedTimer.FullyExported)
                     {
-                        ViewModel.MainWindow.ShowMessageAsync("Stopping Bulk Export", "Will Stop Bulk Export As Timer Was Not Fully Exported\n\nWill Select The Cancelled Timer");
+                        ViewModel.DialogCoordinator.ShowMessageAsync(ViewModel, "Stopping Bulk Export", "Will Stop Bulk Export As Timer Was Not Fully Exported\n\nWill Select The Cancelled Timer");
                         ViewModel.SetSelectedTimer(jiraTimer.UniqueId);
                         break;
                     }
@@ -40,7 +40,7 @@ namespace Gallifrey.UI.Modern.MainViews
             }
             else
             {
-                ViewModel.MainWindow.ShowMessageAsync("Nothing To Export", "No Un-Exported Timers To Bulk Export");
+                ViewModel.DialogCoordinator.ShowMessageAsync(ViewModel, "Nothing To Export", "No Un-Exported Timers To Bulk Export");
             }
 
             ViewModel.RefreshModel();

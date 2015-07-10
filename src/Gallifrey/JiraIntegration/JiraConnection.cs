@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Gallifrey.AppTracking;
 using Gallifrey.Comparers;
 using Gallifrey.Exceptions.JiraIntegration;
@@ -76,7 +75,7 @@ namespace Gallifrey.JiraIntegration
                     }
                     else
                     {
-                        jira = new JiraSoapClient(jiraConnectionSettings.JiraUrl.Replace("/secure/Dashboard.jspa", ""), jiraConnectionSettings.JiraUsername, jiraConnectionSettings.JiraPassword); 
+                        jira = new JiraSoapClient(jiraConnectionSettings.JiraUrl.Replace("/secure/Dashboard.jspa", ""), jiraConnectionSettings.JiraUsername, jiraConnectionSettings.JiraPassword);
                     }
 
                     CurrentUser = jira.GetCurrentUser();
@@ -86,11 +85,11 @@ namespace Gallifrey.JiraIntegration
                     jira = null;
                     if (useRestApi)
                     {
-                        CheckAndConnectJira(false);   
+                        CheckAndConnectJira(false);
                     }
                     else
                     {
-                        throw new JiraConnectionException("Error creating instance of Jira", ex);    
+                        throw new JiraConnectionException("Error creating instance of Jira", ex);
                     }
                 }
             }
@@ -122,7 +121,7 @@ namespace Gallifrey.JiraIntegration
             try
             {
                 CheckAndConnectJira();
-                var issue = includeWorkLogs ? jira.GetIssueWithWorklogs(jiraRef) : jira.GetIssue(jiraRef);
+                var issue = includeWorkLogs ? jira.GetIssueWithWorklogs(jiraRef, CurrentUser.key) : jira.GetIssue(jiraRef);
 
                 recentJiraCollection.AddRecentJira(issue);
                 return issue;

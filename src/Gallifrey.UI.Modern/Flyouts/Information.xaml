@@ -1,7 +1,7 @@
-﻿<Controls:Flyout x:Class="Gallifrey.UI.Modern.Flyouts.Information"
+﻿<controls:Flyout x:Class="Gallifrey.UI.Modern.Flyouts.Information"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro" IsModal="True" Theme="Adapt" Position="Right" Header="App Information">
+             xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro" IsModal="True" Theme="Adapt" Position="Right" Header="App Information">
     <Grid Width="450" Margin="5,5,5,5" >
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -110,5 +110,5 @@
             </Button>
         </Grid>
     </Grid>
-</Controls:Flyout>
+</controls:Flyout>
 

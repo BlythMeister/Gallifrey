@@ -28,13 +28,13 @@ namespace Gallifrey.UI.Modern.Flyouts
         {
             if (!DataModel.StartDate.HasValue)
             {
-                viewModel.MainWindow.ShowMessageAsync("Missing Date", "You Must Enter A Start Date");
+                viewModel.DialogCoordinator.ShowMessageAsync(viewModel, "Missing Date", "You Must Enter A Start Date");
                 return;
             }
 
             if (DataModel.StartDate.Value < DataModel.MinDate || DataModel.StartDate.Value > DataModel.MaxDate)
             {
-                viewModel.MainWindow.ShowMessageAsync("Invalid Date", string.Format("You Must Enter A Start Date Between {0} And {1}", DataModel.MinDate.ToShortDateString(), DataModel.MaxDate.ToShortDateString()));
+                viewModel.DialogCoordinator.ShowMessageAsync(viewModel, "Invalid Date", string.Format("You Must Enter A Start Date Between {0} And {1}", DataModel.MinDate.ToShortDateString(), DataModel.MaxDate.ToShortDateString()));
                 return;
             }
 
@@ -45,13 +45,13 @@ namespace Gallifrey.UI.Modern.Flyouts
             }
             catch (NoResultsFoundException)
             {
-                viewModel.MainWindow.ShowMessageAsync("Invalid Jira", "Unable To Locate The Jira");
+                viewModel.DialogCoordinator.ShowMessageAsync(viewModel, "Invalid Jira", "Unable To Locate The Jira");
                 return;
             }
 
             if (DataModel.JiraReferenceEditable)
             {
-                var result = await viewModel.MainWindow.ShowMessageAsync("Correct Jira?", string.Format("Jira found!\n\nRef: {0}\nName: {1}\n\nIs that correct?", jiraIssue.key, jiraIssue.fields.summary), MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No" });
+                var result = await viewModel.DialogCoordinator.ShowMessageAsync(viewModel, "Correct Jira?", string.Format("Jira found!\n\nRef: {0}\nName: {1}\n\nIs that correct?", jiraIssue.key, jiraIssue.fields.summary), MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No" });
 
                 if (result == MessageDialogResult.Negative)
                 {
@@ -67,7 +67,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             }
             catch (DuplicateTimerException)
             {
-                viewModel.MainWindow.ShowMessageAsync("Duplicate Timer", "This Timer Already Exists!");
+                viewModel.DialogCoordinator.ShowMessageAsync(viewModel, "Duplicate Timer", "This Timer Already Exists!");
                 return;
             }
 
@@ -79,7 +79,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                 }
                 catch (JiraConnectionException)
                 {
-                    viewModel.MainWindow.ShowMessageAsync("Assign Jira Error", "Unable To Locate Assign Jira To Current User");
+                    viewModel.DialogCoordinator.ShowMessageAsync(viewModel, "Assign Jira Error", "Unable To Locate Assign Jira To Current User");
                 }
             }
 
@@ -91,7 +91,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                 }
                 catch (StateChangedException)
                 {
-                    viewModel.MainWindow.ShowMessageAsync("Error Changing Status", "Unable To Set Issue As In Progress");
+                    viewModel.DialogCoordinator.ShowMessageAsync(viewModel, "Error Changing Status", "Unable To Set Issue As In Progress");
                 }
             }
 
@@ -115,7 +115,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                 }
             };
             
-            viewModel.MainWindow.OpenFlyout(searchFlyout);
+            viewModel.OpenFlyout(searchFlyout);
             
         }
 

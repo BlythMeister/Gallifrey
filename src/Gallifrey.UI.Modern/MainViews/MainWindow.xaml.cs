@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Deployment.Application;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
-using System.Windows.Documents;
 using System.Xml.Linq;
 using Exceptionless;
 using Gallifrey.Exceptions;
@@ -44,7 +41,7 @@ namespace Gallifrey.UI.Modern.MainViews
             ExceptionlessClient.Default.Configuration.DefaultTags.Clear();
             ExceptionlessClient.Default.Configuration.DefaultTags.Add(gallifrey.VersionControl.VersionName.Replace("\n", " - "));
 
-            var viewModel = new MainViewModel(gallifrey, this);
+            var viewModel = new MainViewModel(gallifrey, DialogCoordinator.Instance, FlyoutsControl);
             viewModel.RefreshModel();
             viewModel.SelectRunningTimer();
             DataContext = viewModel;
@@ -75,7 +72,8 @@ namespace Gallifrey.UI.Modern.MainViews
                     return;
 
                 e.Cancel = true;
-                await OpenFlyout(new Error(ViewModel, e.Event));
+                ViewModel.CloseAllFlyouts();
+                await ViewModel.OpenFlyout(new Error(ViewModel, e.Event));
                 CloseApp(true);
             });
 
@@ -104,12 +102,12 @@ namespace Gallifrey.UI.Modern.MainViews
 
             if (missingConfig)
             {
-                await this.ShowMessageAsync("Multiple Instances", "You Can Only Have One Instance Of Gallifrey Running At A Time\nPlease Close The Other Instance");
+                await ViewModel.DialogCoordinator.ShowMessageAsync(ViewModel, "Multiple Instances", "You Can Only Have One Instance Of Gallifrey Running At A Time\nPlease Close The Other Instance");
                 CloseApp();
             }
             else if (showSettings)
             {
-                await OpenFlyout(new Flyouts.Settings(ViewModel));
+                await ViewModel.OpenFlyout(new Flyouts.Settings(ViewModel));
             }
 
             if (ViewModel.Gallifrey.VersionControl.IsAutomatedDeploy && ViewModel.Gallifrey.VersionControl.IsFirstRun)
@@ -118,7 +116,7 @@ namespace Gallifrey.UI.Modern.MainViews
 
                 if (changeLog.Any())
                 {
-                    ViewModel.MainWindow.OpenFlyout(new Flyouts.ChangeLog(ViewModel, changeLog));
+                    ViewModel.OpenFlyout(new Flyouts.ChangeLog(ViewModel, changeLog));
                 }
             }
         }
@@ -140,17 +138,17 @@ namespace Gallifrey.UI.Modern.MainViews
                     message += string.Format("You Have '{0}' To Export For This Change", exportTime.FormatAsString(false));
                 }
 
-                var messageResult = await this.ShowMessageAsync("Do You Want To Export?", message, MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No" });
+                var messageResult = await ViewModel.DialogCoordinator.ShowMessageAsync(ViewModel, "Do You Want To Export?", message, MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No" });
 
                 if (messageResult == MessageDialogResult.Affirmative)
                 {
                     if (ViewModel.Gallifrey.Settings.ExportSettings.ExportPromptAll)
                     {
-                        ViewModel.MainWindow.OpenFlyout(new Export(ViewModel, e.TimerId, e.ExportTime));
+                        ViewModel.OpenFlyout(new Export(ViewModel, e.TimerId, e.ExportTime));
                     }
                     else
                     {
-                        ViewModel.MainWindow.OpenFlyout(new Export(ViewModel, e.TimerId, null));
+                        ViewModel.OpenFlyout(new Export(ViewModel, e.TimerId, null));
                     }
                 }
             }
@@ -200,7 +198,7 @@ namespace Gallifrey.UI.Modern.MainViews
                         }
                         else
                         {
-                            OpenFlyout(new LockedTimer(ViewModel));
+                            ViewModel.OpenFlyout(new LockedTimer(ViewModel));
                         }
                     }
                     catch (NoIdleTimerRunningException) { }
@@ -214,25 +212,6 @@ namespace Gallifrey.UI.Modern.MainViews
             PerformUpdate(true, true);
         }
 
-        public Task<Flyout> OpenFlyout(Flyout flyout)
-        {
-            var a = new TaskCompletionSource<Flyout>();
-            RoutedEventHandler closingFinishedHandler = null;
-            closingFinishedHandler = (o, args) =>
-            {
-                flyout.ClosingFinished -= closingFinishedHandler;
-                FlyoutsControl.Items.Remove(flyout);
-                a.TrySetResult(flyout);
-            };
-            flyout.ClosingFinished += closingFinishedHandler;
-
-            FlyoutsControl.Items.Add(flyout);
-
-            flyout.IsOpen = true;
-
-            return a.Task;
-        }
-
         private async void PerformUpdate(bool manualUpdateCheck, bool promptReinstall)
         {
             var manualReinstall = false;
@@ -242,7 +221,7 @@ namespace Gallifrey.UI.Modern.MainViews
                 UpdateResult updateResult;
                 if (manualUpdateCheck)
                 {
-                    var controller = await this.ShowProgressAsync("Please Wait", "Checking For Updates");
+                    var controller = await ViewModel.DialogCoordinator.ShowProgressAsync(ViewModel, "Please Wait", "Checking For Updates");
 
                     updateResult = await ViewModel.Gallifrey.VersionControl.CheckForUpdates(true);
                     await controller.CloseAsync();
@@ -256,7 +235,7 @@ namespace Gallifrey.UI.Modern.MainViews
                 {
                     if (manualUpdateCheck)
                     {
-                        var messageResult = await this.ShowMessageAsync("Update Found", "Restart Now To Install Update?", MessageDialogStyle.AffirmativeAndNegative,
+                        var messageResult = await ViewModel.DialogCoordinator.ShowMessageAsync(ViewModel, "Update Found", "Restart Now To Install Update?", MessageDialogStyle.AffirmativeAndNegative,
                                                                     new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No" });
 
                         if (messageResult == MessageDialogResult.Affirmative)
@@ -274,11 +253,11 @@ namespace Gallifrey.UI.Modern.MainViews
                 }
                 else if (manualUpdateCheck && updateResult == UpdateResult.NoUpdate)
                 {
-                    await this.ShowMessageAsync("No Update Found", "There Are No Updates At This Time, Check Back Soon!");
+                    await ViewModel.DialogCoordinator.ShowMessageAsync(ViewModel, "No Update Found", "There Are No Updates At This Time, Check Back Soon!");
                 }
                 else if (manualUpdateCheck && updateResult == UpdateResult.NotDeployable)
                 {
-                    await this.ShowMessageAsync("Unable To Update", "You Cannot Auto Update This Version Of Gallifrey");
+                    await ViewModel.DialogCoordinator.ShowMessageAsync(ViewModel, "Unable To Update", "You Cannot Auto Update This Version Of Gallifrey");
                 }
             }
             catch (ManualReinstallRequiredException)
@@ -288,7 +267,7 @@ namespace Gallifrey.UI.Modern.MainViews
 
             if (manualReinstall && promptReinstall)
             {
-                var messageResult = await this.ShowMessageAsync("Update Error", "To Update An Uninstall/Reinstall Is Required.\nThis Can Happen Automatically\nNo Timers Will Be Lost\nDo You Want To Update Now?", MessageDialogStyle.AffirmativeAndNegative,
+                var messageResult = await ViewModel.DialogCoordinator.ShowMessageAsync(ViewModel, "Update Error", "To Update An Uninstall/Reinstall Is Required.\nThis Can Happen Automatically\nNo Timers Will Be Lost\nDo You Want To Update Now?", MessageDialogStyle.AffirmativeAndNegative,
                                                                     new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No" });
 
                 if (messageResult == MessageDialogResult.Affirmative)

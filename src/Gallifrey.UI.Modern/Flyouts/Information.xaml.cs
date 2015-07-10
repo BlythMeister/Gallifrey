@@ -42,16 +42,16 @@ namespace Gallifrey.UI.Modern.Flyouts
 
                 if (changeLog.Any())
                 {
-                    viewModel.MainWindow.OpenFlyout(new ChangeLog(viewModel, changeLog));
+                    viewModel.OpenFlyout(new ChangeLog(viewModel, changeLog));
                 }
                 else
                 {
-                    viewModel.MainWindow.ShowMessageAsync("No Change Log", "There Is No Change Log To Show");
+                    viewModel.DialogCoordinator.ShowMessageAsync(viewModel,"No Change Log", "There Is No Change Log To Show");
                 }
             }
             else
             {
-                viewModel.MainWindow.ShowMessageAsync("No Change Log", "You Cannot Display Change Log On Non Deployed Versions");
+                viewModel.DialogCoordinator.ShowMessageAsync(viewModel,"No Change Log", "You Cannot Display Change Log On Non Deployed Versions");
             }
         }
 

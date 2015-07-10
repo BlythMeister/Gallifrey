@@ -1,8 +1,8 @@
-﻿<Controls:Flyout x:Class="Gallifrey.UI.Modern.Flyouts.ChangeLog"
+﻿<controls:Flyout x:Class="Gallifrey.UI.Modern.Flyouts.ChangeLog"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro" IsModal="True" Theme="Adapt" Position="Right" Header="Change Log">
+             xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro" IsModal="True" Theme="Adapt" Position="Right" Header="Change Log">
     <Grid Width="300" Margin="5,5,5,5" >
         
     </Grid>
-</Controls:Flyout>
+</controls:Flyout>

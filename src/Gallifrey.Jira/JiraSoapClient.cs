@@ -53,10 +53,12 @@ namespace Gallifrey.Jira
             };
         }
 
-        public Issue GetIssueWithWorklogs(string issueRef)
+        public Issue GetIssueWithWorklogs(string issueRef, string userName)
         {
             var issue = client.GetIssue(issueRef);
-            var worklogs = issue.GetWorklogs().Select(worklog => new WorkLog { author = new User { name = worklog.Author }, comment = worklog.Comment, started = worklog.StartDate.Value, timeSpent = worklog.TimeSpent, timeSpentSeconds = worklog.TimeSpentInSeconds }).ToList();
+            var worklogs = issue.GetWorklogs().Where(worklog => worklog.Author == userName)
+                                              .Select(worklog => new WorkLog { author = new User { name = worklog.Author }, comment = worklog.Comment, started = worklog.StartDate.Value, timeSpent = worklog.TimeSpent, timeSpentSeconds = worklog.TimeSpentInSeconds })
+                                              .ToList();
             return new Issue
             {
                 key = issue.Key.Value,
