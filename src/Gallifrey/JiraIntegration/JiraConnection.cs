@@ -14,20 +14,20 @@ namespace Gallifrey.JiraIntegration
 {
     public interface IJiraConnection
     {
-        void ReConnect(IJiraConnectionSettings newJiraConnectionSettings, IExportSettings newExportSettings);
-        bool DoesJiraExist(string jiraRef);
-        Issue GetJiraIssue(string jiraRef, bool includeWorkLogs = false);
-        IEnumerable<string> GetJiraFilters();
-        IEnumerable<Issue> GetJiraIssuesFromFilter(string filterName);
-        IEnumerable<Issue> GetJiraIssuesFromSearchText(string searchText);
-        void LogTime(string jiraRef, DateTime exportTimeStamp, TimeSpan exportTime, WorkLogStrategy strategy, string comment = "", TimeSpan? remainingTime = null);
-        IEnumerable<Issue> GetJiraCurrentUserOpenIssues();
+        Task ReConnect(IJiraConnectionSettings newJiraConnectionSettings, IExportSettings newExportSettings);
+        Task<bool> DoesJiraExist(string jiraRef);
+        Task<Issue> GetJiraIssue(string jiraRef, bool includeWorkLogs = false);
+        Task<IEnumerable<string>> GetJiraFilters();
+        Task<IEnumerable<Issue>> GetJiraIssuesFromFilter(string filterName);
+        Task<IEnumerable<Issue>> GetJiraIssuesFromSearchText(string searchText);
+        Task LogTime(string jiraRef, DateTime exportTimeStamp, TimeSpan exportTime, WorkLogStrategy strategy, string comment = "", TimeSpan? remainingTime = null);
+        Task<IEnumerable<Issue>> GetJiraCurrentUserOpenIssues();
         IEnumerable<JiraProject> GetJiraProjects();
         IEnumerable<RecentJira> GetRecentJirasFound();
-        void UpdateCache();
-        void AssignToCurrentUser(string jiraRef);
+        Task UpdateCache();
+        Task AssignToCurrentUser(string jiraRef);
         User CurrentUser { get; }
-        void SetInProgress(string jiraRef);
+        Task SetInProgress(string jiraRef);
     }
 
     public class JiraConnection : IJiraConnection
@@ -48,16 +48,16 @@ namespace Gallifrey.JiraIntegration
             jiraProjectCache = new List<JiraProject>();
         }
 
-        public void ReConnect(IJiraConnectionSettings newJiraConnectionSettings, IExportSettings newExportSettings)
+        public async Task ReConnect(IJiraConnectionSettings newJiraConnectionSettings, IExportSettings newExportSettings)
         {
             exportSettings = newExportSettings;
             jiraConnectionSettings = newJiraConnectionSettings;
             jira = null;
-            CheckAndConnectJira();
-            UpdateJiraProjectCache();
+            await CheckAndConnectJira();
+            await UpdateJiraProjectCache();
         }
 
-        private void CheckAndConnectJira(bool useRestApi = true)
+        private async Task CheckAndConnectJira(bool useRestApi = true)
         {
             if (jira == null)
             {
@@ -79,29 +79,21 @@ namespace Gallifrey.JiraIntegration
                         jira = new JiraSoapClient(jiraConnectionSettings.JiraUrl.Replace("/secure/Dashboard.jspa", ""), jiraConnectionSettings.JiraUsername, jiraConnectionSettings.JiraPassword); 
                     }
 
-                    CurrentUser = jira.GetCurrentUser();
+                    CurrentUser = await jira.GetCurrentUser();
                 }
                 catch (Exception ex)
                 {
-                    jira = null;
-                    if (useRestApi)
-                    {
-                        CheckAndConnectJira(false);   
-                    }
-                    else
-                    {
-                        throw new JiraConnectionException("Error creating instance of Jira", ex);    
-                    }
+                    throw new JiraConnectionException("Error creating instance of Jira", ex);    
                 }
             }
         }
 
-        public bool DoesJiraExist(string jiraRef)
+        public async Task<bool> DoesJiraExist(string jiraRef)
         {
             try
             {
-                CheckAndConnectJira();
-                var issue = GetJiraIssue(jiraRef);
+                await CheckAndConnectJira();
+                var issue = await GetJiraIssue(jiraRef);
                 if (issue != null)
                 {
                     return true;
@@ -117,12 +109,13 @@ namespace Gallifrey.JiraIntegration
             return false;
         }
 
-        public Issue GetJiraIssue(string jiraRef, bool includeWorkLogs = false)
+        public async Task<Issue> GetJiraIssue(string jiraRef, bool includeWorkLogs = false)
         {
             try
             {
-                CheckAndConnectJira();
-                var issue = includeWorkLogs ? jira.GetIssueWithWorklogs(jiraRef) : jira.GetIssue(jiraRef);
+                await CheckAndConnectJira();
+                var issue = includeWorkLogs ? await jira.GetIssueWithWorklogs(jiraRef) :
+                                              await jira.GetIssue(jiraRef);
 
                 recentJiraCollection.AddRecentJira(issue);
                 return issue;
@@ -134,12 +127,12 @@ namespace Gallifrey.JiraIntegration
             }
         }
 
-        public IEnumerable<string> GetJiraFilters()
+        public async Task<IEnumerable<string>> GetJiraFilters()
         {
             try
             {
-                CheckAndConnectJira();
-                var returnedFilters = jira.GetFilters();
+                await CheckAndConnectJira();
+                var returnedFilters = await jira.GetFilters();
                 return returnedFilters.Select(returned => returned.name);
             }
             catch (Exception ex)
@@ -148,12 +141,12 @@ namespace Gallifrey.JiraIntegration
             }
         }
 
-        public IEnumerable<Issue> GetJiraIssuesFromFilter(string filterName)
+        public async Task<IEnumerable<Issue>> GetJiraIssuesFromFilter(string filterName)
         {
             try
             {
-                CheckAndConnectJira();
-                var issues = jira.GetIssuesFromFilter(filterName);
+                await CheckAndConnectJira();
+                var issues = await jira.GetIssuesFromFilter(filterName);
                 recentJiraCollection.AddRecentJiras(issues);
                 return issues.OrderBy(x => x.key, new JiraReferenceComparer());
             }
@@ -163,12 +156,12 @@ namespace Gallifrey.JiraIntegration
             }
         }
 
-        public IEnumerable<Issue> GetJiraIssuesFromSearchText(string searchText)
+        public async Task<IEnumerable<Issue>> GetJiraIssuesFromSearchText(string searchText)
         {
             try
             {
-                CheckAndConnectJira();
-                var issues = jira.GetIssuesFromJql(GetJql(searchText));
+                await CheckAndConnectJira();
+                var issues = await jira.GetIssuesFromJql(await GetJql(searchText));
                 recentJiraCollection.AddRecentJiras(issues);
                 return issues.OrderBy(x => x.key, new JiraReferenceComparer());
             }
@@ -179,12 +172,12 @@ namespace Gallifrey.JiraIntegration
         }
 
         /// <exception cref="NoResultsFoundException">Error loading jiras from search text</exception>
-        public IEnumerable<Issue> GetJiraCurrentUserOpenIssues()
+        public async Task<IEnumerable<Issue>> GetJiraCurrentUserOpenIssues()
         {
             try
             {
-                CheckAndConnectJira();
-                var issues = jira.GetIssuesFromJql("assignee in (currentUser()) AND status not in (Closed,Resolved)");
+                await CheckAndConnectJira();
+                var issues = await jira.GetIssuesFromJql("assignee in (currentUser()) AND status not in (Closed,Resolved)");
                 recentJiraCollection.AddRecentJiras(issues);
                 return issues.OrderBy(x => x.key, new JiraReferenceComparer());
             }
@@ -194,12 +187,12 @@ namespace Gallifrey.JiraIntegration
             }
         }
 
-        private void UpdateJiraProjectCache()
+        private async Task UpdateJiraProjectCache()
         {
             try
             {
-                CheckAndConnectJira();
-                var projects = jira.GetProjects();
+                await CheckAndConnectJira();
+                var projects = await jira.GetProjects();
                 jiraProjectCache.Clear();
                 jiraProjectCache.AddRange(projects.Select(project => new JiraProject(project.key, project.name)));
             }
@@ -216,18 +209,18 @@ namespace Gallifrey.JiraIntegration
             return recentJiraCollection.GetRecentJiraCollection();
         }
 
-        public void UpdateCache()
+        public async Task UpdateCache()
         {
             recentJiraCollection.RemoveExpiredCache();
-            UpdateJiraProjectCache();
+            await UpdateJiraProjectCache();
         }
 
-        public void AssignToCurrentUser(string jiraRef)
+        public async Task AssignToCurrentUser(string jiraRef)
         {
             try
             {
-                CheckAndConnectJira();
-                jira.AssignIssue(jiraRef, CurrentUser.name);
+                await CheckAndConnectJira();
+                await jira.AssignIssue(jiraRef, CurrentUser.name);
             }
             catch (Exception ex)
             {
@@ -236,7 +229,7 @@ namespace Gallifrey.JiraIntegration
 
         }
 
-        public void SetInProgress(string jiraRef)
+        public async Task SetInProgress(string jiraRef)
         {
             var inProgressStatuses = new List<string>
             {
@@ -244,16 +237,15 @@ namespace Gallifrey.JiraIntegration
                 "Start Progress"
             };
 
-            TransitionIssue(jiraRef, inProgressStatuses);
+            await TransitionIssue(jiraRef, inProgressStatuses);
         }
 
-        public void LogTime(string jiraRef, DateTime exportTimeStamp, TimeSpan exportTime, WorkLogStrategy strategy, string comment = "", TimeSpan? remainingTime = null)
+        public async Task LogTime(string jiraRef, DateTime exportTimeStamp, TimeSpan exportTime, WorkLogStrategy strategy, string comment = "", TimeSpan? remainingTime = null)
         {
             trackUsage.TrackAppUsage(TrackingType.ExportOccured);
 
-            var jiraIssue = jira.GetIssue(jiraRef);
-
-            var wasClosed = TryReopenJira(jiraIssue);
+            var jiraIssue = await jira.GetIssue(jiraRef);
+            var wasClosed = await TryReopenJira(jiraIssue);
 
             if (string.IsNullOrWhiteSpace(comment)) comment = exportSettings.EmptyExportComment;
             if (!string.IsNullOrWhiteSpace(exportSettings.ExportCommentPrefix))
@@ -263,7 +255,7 @@ namespace Gallifrey.JiraIntegration
 
             try
             {
-                jira.AddWorkLog(jiraRef, strategy, comment, exportTime, DateTime.SpecifyKind(exportTimeStamp, DateTimeKind.Local), remainingTime);
+                await jira.AddWorkLog(jiraRef, strategy, comment, exportTime, DateTime.SpecifyKind(exportTimeStamp, DateTimeKind.Local), remainingTime);
             }
             catch (Exception ex)
             {
@@ -274,7 +266,7 @@ namespace Gallifrey.JiraIntegration
             {
                 try
                 {
-                    ReCloseJira(jiraRef);
+                    await ReCloseJira(jiraRef);
                 }
                 catch (Exception ex)
                 {
@@ -283,7 +275,7 @@ namespace Gallifrey.JiraIntegration
             }
         }
 
-        private void ReCloseJira(string jiraRef)
+        private async Task ReCloseJira(string jiraRef)
         {
             var inProgressStatuses = new List<string>
             {
@@ -291,10 +283,10 @@ namespace Gallifrey.JiraIntegration
                 "Closed"
             };
 
-            TransitionIssue(jiraRef, inProgressStatuses);
+            await TransitionIssue(jiraRef, inProgressStatuses);
         }
 
-        private bool TryReopenJira(Issue jiraIssue)
+        private async Task<bool> TryReopenJira(Issue jiraIssue)
         {
             var wasClosed = false;
             if (jiraIssue.fields.status.name == "Closed")
@@ -307,7 +299,7 @@ namespace Gallifrey.JiraIntegration
                         "Open"
                     };
 
-                    TransitionIssue(jiraIssue.key, inProgressStatuses);
+                    await TransitionIssue(jiraIssue.key, inProgressStatuses);
                     wasClosed = true;
                 }
                 catch (Exception)
@@ -318,14 +310,14 @@ namespace Gallifrey.JiraIntegration
             return wasClosed;
         }
 
-        private void TransitionIssue(string jiraRef, IEnumerable<string> possibleTransitionValues)
+        private async Task TransitionIssue(string jiraRef, IEnumerable<string> possibleTransitionValues)
         {
             Exception lastex = null;
             foreach (var possibleTransitionValue in possibleTransitionValues)
             {
                 try
                 {
-                    jira.TransitionIssue(jiraRef, possibleTransitionValue);
+                    await jira.TransitionIssue(jiraRef, possibleTransitionValue);
                     return;
                 }
                 catch (Exception ex)
@@ -337,11 +329,11 @@ namespace Gallifrey.JiraIntegration
             throw new StateChangedException("Cannot Set In Progress Status", lastex);
         }
 
-        private string GetJql(string searchText)
+        private async Task<string> GetJql(string searchText)
         {
             var jql = string.Empty;
             var searchTerm = string.Empty;
-            var projects = jira.GetProjects();
+            var projects = await jira.GetProjects();
             foreach (var keyword in searchText.Split(' '))
             {
                 var foundProject = false;

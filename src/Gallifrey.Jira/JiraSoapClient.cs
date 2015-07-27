@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Atlassian.Jira;
 using Gallifrey.Jira.Enum;
 using Gallifrey.Jira.Model;
@@ -20,9 +21,10 @@ namespace Gallifrey.Jira
             client = new Atlassian.Jira.Jira(baseUrl, username, password) { MaxIssuesPerRequest = 999 };
         }
 
-        public User GetCurrentUser()
+        public async Task<User> GetCurrentUser()
         {
-            client.GetAccessToken();
+            var token = await Task.Run(() => client.GetAccessToken());
+
             return new User
             {
                 key = username,
@@ -31,9 +33,10 @@ namespace Gallifrey.Jira
             };
         }
 
-        public Issue GetIssue(string issueRef)
+        public async Task<Issue> GetIssue(string issueRef)
         {
-            var issue = client.GetIssue(issueRef);
+            var issue = await Task.Run(() => client.GetIssue(issueRef));
+
             return new Issue
             {
                 key = issue.Key.Value,
@@ -53,10 +56,11 @@ namespace Gallifrey.Jira
             };
         }
 
-        public Issue GetIssueWithWorklogs(string issueRef)
+        public async Task<Issue> GetIssueWithWorklogs(string issueRef)
         {
-            var issue = client.GetIssue(issueRef);
-            var worklogs = issue.GetWorklogs().Select(worklog => new WorkLog { author = new User { name = worklog.Author }, comment = worklog.Comment, started = worklog.StartDate.Value, timeSpent = worklog.TimeSpent, timeSpentSeconds = worklog.TimeSpentInSeconds }).ToList();
+            var issue = await Task.Run(() => client.GetIssue(issueRef));
+            var worklogs = await Task.Run(() => issue.GetWorklogs().Select(worklog => new WorkLog { author = new User { name = worklog.Author }, comment = worklog.Comment, started = worklog.StartDate.Value, timeSpent = worklog.TimeSpent, timeSpentSeconds = worklog.TimeSpentInSeconds }).ToList());
+
             return new Issue
             {
                 key = issue.Key.Value,
@@ -82,9 +86,10 @@ namespace Gallifrey.Jira
             };
         }
 
-        public IEnumerable<Issue> GetIssuesFromFilter(string filterName)
+        public async Task<IEnumerable<Issue>> GetIssuesFromFilter(string filterName)
         {
-            var issues = client.GetIssuesFromFilter(filterName, 0, 999);
+            var issues = await Task.Run(() => client.GetIssuesFromFilter(filterName, 0, 999));
+
             return issues.Select(issue => new Issue
             {
                 key = issue.Key.Value,
@@ -104,9 +109,10 @@ namespace Gallifrey.Jira
             });
         }
 
-        public IEnumerable<Issue> GetIssuesFromJql(string jql)
+        public async Task<IEnumerable<Issue>> GetIssuesFromJql(string jql)
         {
-            var issues = client.GetIssuesFromJql(jql, 999);
+            var issues = await Task.Run(() => client.GetIssuesFromJql(jql, 999));
+
             return issues.Select(issue => new Issue
             {
                 key = issue.Key.Value,
@@ -126,36 +132,36 @@ namespace Gallifrey.Jira
             });
         }
 
-        public IEnumerable<Project> GetProjects()
+        public async Task<IEnumerable<Project>> GetProjects()
         {
-            var projects = client.GetProjects();
+            var projects = await Task.Run(() => client.GetProjects());
             return projects.Select(project => new Project { key = project.Key, name = project.Name });
         }
 
-        public IEnumerable<Filter> GetFilters()
+        public async Task<IEnumerable<Filter>> GetFilters()
         {
-            var returnedFilters = client.GetFilters();
+            var returnedFilters = await Task.Run(() => client.GetFilters());
             return returnedFilters.Select(filter => new Filter { name = filter.Name });
         }
 
-        public Transitions GetIssueTransitions(string issueRef)
+        public async Task<Transitions> GetIssueTransitions(string issueRef)
         {
-            var issue = client.GetIssue(issueRef);
-            var statuses = issue.GetAvailableActions().Select(action => new Status { name = action.Name, id = action.Id });
+            var issue = await Task.Run(() => client.GetIssue(issueRef));
+            var statuses = await Task.Run(() => issue.GetAvailableActions().Select(action => new Status { name = action.Name, id = action.Id }));
             return new Transitions { transitions = statuses.ToList() };
         }
 
-        public void TransitionIssue(string issueRef, string transitionName)
+        public async Task TransitionIssue(string issueRef, string transitionName)
         {
-            var issue = client.GetIssue(issueRef);
+            var issue = await Task.Run(() => client.GetIssue(issueRef));
             issue.WorkflowTransition(transitionName);
         }
 
-        public void AddWorkLog(string issueRef, WorkLogStrategy workLogStrategy, string comment, TimeSpan timeSpent, DateTime logDate, TimeSpan? remainingTime = null)
+        public async Task AddWorkLog(string issueRef, WorkLogStrategy workLogStrategy, string comment, TimeSpan timeSpent, DateTime logDate, TimeSpan? remainingTime = null)
         {
             if (logDate.Kind != DateTimeKind.Local) logDate = DateTime.SpecifyKind(logDate, DateTimeKind.Local);
 
-            var issue = client.GetIssue(issueRef);
+            var issue = await Task.Run(() => client.GetIssue(issueRef));
 
             var worklog = new Worklog(string.Format("{0}h {1}m", timeSpent.Hours, timeSpent.Minutes), logDate, comment);
             string remaining = null;
@@ -181,12 +187,12 @@ namespace Gallifrey.Jira
                     break;
             }
 
-            issue.AddWorklog(worklog, strategy, remaining);
+            await Task.Run(() => issue.AddWorklog(worklog, strategy, remaining));
         }
 
-        public void AssignIssue(string issueRef, string userName)
+        public async Task AssignIssue(string issueRef, string userName)
         {
-            var issue = client.GetIssue(issueRef);
+            var issue = await Task.Run(() => client.GetIssue(issueRef));
             issue.Assignee = userName;
             issue.SaveChanges();
         }

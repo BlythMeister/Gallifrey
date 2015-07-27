@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Timers;
 using System.Xml.Linq;
 using Gallifrey.AppTracking;
@@ -100,7 +101,7 @@ namespace Gallifrey
             {
                 jiraTimerCollection.RemoveTimersOlderThanDays(settingsCollection.AppSettings.KeepTimersForDays);
                 idleTimerCollection.RemoveOldTimers();
-                jiraConnection.UpdateCache();
+                jiraConnection.UpdateCache().RunSynchronously();
 
                 var runningTimerId = jiraTimerCollection.GetRunningTimerId();
                 if (runningTimerId.HasValue)
@@ -120,7 +121,7 @@ namespace Gallifrey
                     settingsCollection.SaveSettings();
                 }
             }
-            catch { /*Surpress Errors, if this fails timers won't be removed*/}
+            catch { /*Suppress Errors, if this fails timers won't be removed*/}
         }
 
         public void Initialise()
@@ -131,7 +132,7 @@ namespace Gallifrey
                 throw new MultipleGallifreyRunningException();
             }
 
-            jiraConnection.ReConnect(settingsCollection.JiraConnectionSettings, settingsCollection.ExportSettings);
+            jiraConnection.ReConnect(settingsCollection.JiraConnectionSettings, settingsCollection.ExportSettings).RunSynchronously();
         }
 
         public void Close()
@@ -166,7 +167,7 @@ namespace Gallifrey
 
             if (jiraSettingsChanged)
             {
-                jiraConnection.ReConnect(settingsCollection.JiraConnectionSettings, settingsCollection.ExportSettings);
+                jiraConnection.ReConnect(settingsCollection.JiraConnectionSettings, settingsCollection.ExportSettings).RunSynchronously();
             }
 
             ActivityChecker.UpdateAppSettings(settingsCollection.AppSettings);

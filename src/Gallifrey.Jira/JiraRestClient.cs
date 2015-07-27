@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Threading.Tasks;
 using Gallifrey.Jira.Enum;
 using Gallifrey.Jira.Exception;
 using Gallifrey.Jira.Model;
@@ -64,7 +65,7 @@ namespace Gallifrey.Jira
             }
         }
 
-        private IRestResponse ExectuteRequest(Method method, HttpStatusCode expectedStatus, string path, Dictionary<string, object> data = null)
+        private async Task<IRestResponse> ExecuteRequest(Method method, HttpStatusCode expectedStatus, string path, Dictionary<string, object> data = null)
         {
             var request = CreateRequest(method, path);
             if (data != null)
@@ -73,34 +74,34 @@ namespace Gallifrey.Jira
                 request.AddBody(data);
             }
 
-            var response = client.Execute(request);
+            var response = await client.ExecuteTaskAsync(request);
 
             AssertStatus(response, expectedStatus);
 
             return response;
         }
 
-        public User GetCurrentUser()
+        public async Task<User> GetCurrentUser()
         {
-            var response = ExectuteRequest(Method.GET, HttpStatusCode.OK, "myself");
+            var response = await ExecuteRequest(Method.GET, HttpStatusCode.OK, "myself");
 
             return deserializer.Deserialize<User>(response);
         }
 
-        public Issue GetIssue(string issueRef)
+        public async Task<Issue> GetIssue(string issueRef)
         {
-            var response = ExectuteRequest(Method.GET, HttpStatusCode.OK, string.Format("issue/{0}", issueRef));
+            var response = await ExecuteRequest(Method.GET, HttpStatusCode.OK, string.Format("issue/{0}", issueRef));
 
             return deserializer.Deserialize<Issue>(response);
         }
 
-        public Issue GetIssueWithWorklogs(string issueRef)
+        public async Task<Issue> GetIssueWithWorklogs(string issueRef)
         {
-            var issue = GetIssue(issueRef);
+            var issue = await GetIssue(issueRef);
 
             if (issue.fields.worklog.total > issue.fields.worklog.maxResults)
             {
-                var worklogResponse = ExectuteRequest(Method.GET, HttpStatusCode.OK, string.Format("issue/{0}/worklog", issueRef));
+                var worklogResponse = await ExecuteRequest(Method.GET, HttpStatusCode.OK, string.Format("issue/{0}/worklog", issueRef));
 
                 var worklogs = deserializer.Deserialize<WorkLogs>(worklogResponse);
 
@@ -110,16 +111,16 @@ namespace Gallifrey.Jira
             return issue;
         }
 
-        public IEnumerable<Issue> GetIssuesFromFilter(string filterName)
+        public async Task<IEnumerable<Issue>> GetIssuesFromFilter(string filterName)
         {
-            var filterResponse = ExectuteRequest(Method.GET, HttpStatusCode.OK, "filter/favourite");
+            var filterResponse = await ExecuteRequest(Method.GET, HttpStatusCode.OK, "filter/favourite");
 
             var filters = deserializer.Deserialize<List<Filter>>(filterResponse);
             var selectedFilter = filters.FirstOrDefault(f => f.name == filterName);
 
             if (selectedFilter != null)
             {
-                return GetIssuesFromJql(selectedFilter.jql);
+                return await GetIssuesFromJql(selectedFilter.jql);
             }
             else
             {
@@ -127,7 +128,7 @@ namespace Gallifrey.Jira
             }
         }
 
-        public IEnumerable<Issue> GetIssuesFromJql(string jql)
+        public async Task<IEnumerable<Issue>> GetIssuesFromJql(string jql)
         {
             var returnIssues = new List<Issue>();
 
@@ -141,7 +142,7 @@ namespace Gallifrey.Jira
 
             while (moreToGet)
             {
-                var response = ExectuteRequest(Method.GET, HttpStatusCode.OK, string.Format("search?jql={0}&maxResults=999&startAt={1}&fields=summary,project,parent", jql, startAt));
+                var response = await ExecuteRequest(Method.GET, HttpStatusCode.OK, string.Format("search?jql={0}&maxResults=999&startAt={1}&fields=summary,project,parent", jql, startAt));
 
                 var searchResult = deserializer.Deserialize<SearchResult>(response);
 
@@ -160,31 +161,31 @@ namespace Gallifrey.Jira
             return returnIssues;
         }
 
-        public IEnumerable<Project> GetProjects()
+        public async Task<IEnumerable<Project>> GetProjects()
         {
-            var response = ExectuteRequest(Method.GET, HttpStatusCode.OK, "project");
+            var response = await ExecuteRequest(Method.GET, HttpStatusCode.OK, "project");
 
             return deserializer.Deserialize<List<Project>>(response);
         }
 
-        public IEnumerable<Filter> GetFilters()
+        public async Task<IEnumerable<Filter>> GetFilters()
         {
-            var response = ExectuteRequest(Method.GET, HttpStatusCode.OK, "filter/favourite");
+            var response = await ExecuteRequest(Method.GET, HttpStatusCode.OK, "filter/favourite");
 
             return deserializer.Deserialize<List<Filter>>(response);
         }
 
-        public Transitions GetIssueTransitions(string issueRef)
+        public async Task<Transitions> GetIssueTransitions(string issueRef)
         {
-            var response = ExectuteRequest(Method.GET, HttpStatusCode.OK, string.Format("issue/{0}/transitions?expand=transitions.fields", issueRef));
+            var response = await ExecuteRequest(Method.GET, HttpStatusCode.OK, string.Format("issue/{0}/transitions?expand=transitions.fields", issueRef));
 
             return deserializer.Deserialize<Transitions>(response);
         }
 
         /// <exception cref="JiraClientException">When unable to transition issue.</exception>
-        public void TransitionIssue(string issueRef, string transitionName)
+        public async Task TransitionIssue(string issueRef, string transitionName)
         {
-            var transitions = GetIssueTransitions(issueRef);
+            var transitions = await GetIssueTransitions(issueRef);
             var transition = transitions.transitions.FirstOrDefault(t => t.name == transitionName);
 
             if (transition == null)
@@ -197,10 +198,10 @@ namespace Gallifrey.Jira
                 { "transition", new { id = transition.id } }
             };
 
-            ExectuteRequest(Method.POST, HttpStatusCode.NoContent, string.Format("issue/{0}/transitions", issueRef), postData);
+            await ExecuteRequest(Method.POST, HttpStatusCode.NoContent, string.Format("issue/{0}/transitions", issueRef), postData);
         }
 
-        public void AddWorkLog(string issueRef, WorkLogStrategy workLogStrategy, string comment, TimeSpan timeSpent, DateTime logDate, TimeSpan? remainingTime = null)
+        public async Task AddWorkLog(string issueRef, WorkLogStrategy workLogStrategy, string comment, TimeSpan timeSpent, DateTime logDate, TimeSpan? remainingTime = null)
         {
             if (logDate.Kind != DateTimeKind.Local) logDate = DateTime.SpecifyKind(logDate, DateTimeKind.Local);
 
@@ -231,17 +232,17 @@ namespace Gallifrey.Jira
                     break;
             }
 
-            ExectuteRequest(Method.POST, HttpStatusCode.Created, string.Format("issue/{0}/worklog?adjustEstimate={1}&newEstimate={2}&reduceBy=", issueRef, adjustmentMethod, newEstimate), postData);
+            await ExecuteRequest(Method.POST, HttpStatusCode.Created, string.Format("issue/{0}/worklog?adjustEstimate={1}&newEstimate={2}&reduceBy=", issueRef, adjustmentMethod, newEstimate), postData);
         }
 
-        public void AssignIssue(string issueRef, string userName)
+        public async Task AssignIssue(string issueRef, string userName)
         {
             var postData = new Dictionary<string, object>
             {
                 { "name", userName }
             };
 
-            ExectuteRequest(Method.PUT, HttpStatusCode.NoContent, string.Format("issue/{0}/assignee", issueRef), postData);
+            await ExecuteRequest(Method.PUT, HttpStatusCode.NoContent, string.Format("issue/{0}/assignee", issueRef), postData);
         }
     }
 }
