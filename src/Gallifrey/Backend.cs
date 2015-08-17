@@ -27,13 +27,14 @@ namespace Gallifrey
         IVersionControl VersionControl { get; }
         event EventHandler<int> NoActivityEvent;
         event EventHandler<ExportPromptDetail> ExportPromptEvent;
+        event EventHandler DailyTrackingEvent;
         void Initialise();
         void Close();
         void TrackEvent(TrackingType trackingType);
         void SaveSettings(bool jiraSettingsChanged);
         bool StartIdleTimer();
         Guid StopIdleTimer();
-        IDictionary<Version, ChangeLogVersionDetails> GetChangeLog(XDocument changeLogContent);
+        IEnumerable<ChangeLogVersion> GetChangeLog(XDocument changeLogContent);
     }
 
     public class Backend : IBackend
@@ -47,6 +48,7 @@ namespace Gallifrey
 
         public event EventHandler<int> NoActivityEvent;
         public event EventHandler<ExportPromptDetail> ExportPromptEvent;
+        public event EventHandler DailyTrackingEvent;
         internal ActivityChecker ActivityChecker;
         private readonly Timer hearbeat;
         private Guid? runningTimerWhenIdle;
@@ -77,8 +79,6 @@ namespace Gallifrey
                 Settings.AppSettings.TimerRunningOnShutdown = null;
                 SaveSettings(false);
             }
-
-            HearbeatOnElapsed(this, null);
         }
 
         private void OnExportPromptEvent(object sender, ExportPromptDetail promptDetail)
@@ -115,6 +115,7 @@ namespace Gallifrey
 
                 if (settingsCollection.InternalSettings.LastHeartbeatTracked.Date < DateTime.UtcNow.Date)
                 {
+                    if(DailyTrackingEvent != null) DailyTrackingEvent.Invoke(this, null);
                     trackUsage.TrackAppUsage(TrackingType.DailyHearbeat);
                     settingsCollection.InternalSettings.LastHeartbeatTracked = DateTime.UtcNow;
                     settingsCollection.SaveSettings();
@@ -132,6 +133,8 @@ namespace Gallifrey
             }
 
             jiraConnection.ReConnect(settingsCollection.JiraConnectionSettings, settingsCollection.ExportSettings);
+
+            HearbeatOnElapsed(this, null);
         }
 
         public void Close()
@@ -202,12 +205,21 @@ namespace Gallifrey
             return idleTimerCollection.StopLockedTimers();
         }
 
-        public IDictionary<Version, ChangeLogVersionDetails> GetChangeLog(XDocument changeLogContent)
+        public IEnumerable<ChangeLogVersion> GetChangeLog(XDocument changeLogContent)
         {
-            var changeLogItems = ChangeLogProvider.GetChangeLog(settingsCollection.InternalSettings.LastChangeLogVersion, versionControl.DeployedVersion, changeLogContent);
-            settingsCollection.InternalSettings.SetLastChangeLogVersion(versionControl.DeployedVersion);
-            settingsCollection.SaveSettings();
-            trackUsage.UpdateSettings(settingsCollection.AppSettings, settingsCollection.InternalSettings);
+            List<ChangeLogVersion> changeLogItems;
+            if (versionControl.IsAutomatedDeploy)
+            {
+                changeLogItems = ChangeLogProvider.GetChangeLog(settingsCollection.InternalSettings.LastChangeLogVersion, versionControl.DeployedVersion, changeLogContent);
+                settingsCollection.InternalSettings.SetLastChangeLogVersion(versionControl.DeployedVersion);
+                settingsCollection.SaveSettings();
+                trackUsage.UpdateSettings(settingsCollection.AppSettings, settingsCollection.InternalSettings);
+            }
+            else
+            {
+                changeLogItems = ChangeLogProvider.GetFullChangeLog(changeLogContent);
+            }
+            
             return changeLogItems;
         }
 

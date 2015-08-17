@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using Gallifrey.Jira.Enum;
+using Gallifrey.Jira.Model;
 using Gallifrey.JiraTimers;
 using Gallifrey.Settings;
 
@@ -28,7 +29,9 @@ namespace Gallifrey.UI.Modern.Models
         public bool ShowRemaining { get { return workLogStrategy == WorkLogStrategy.SetValue; } }
         public DateTime ExportDate { get; set; }
         public string Comment { get; set; }
+        public TimeSpan OriginalRemaining { get; set; }
         public TimeSpan ToExport { get { return new TimeSpan(ToExportHours, ToExportMinutes, 0); } }
+        public TimeSpan? Remaining { get { return WorkLogStrategy == WorkLogStrategy.SetValue ? new TimeSpan(RemainingHours, RemainingMinutes, 0) : (TimeSpan?)null; } }
 
         public WorkLogStrategy WorkLogStrategy
         {
@@ -36,26 +39,18 @@ namespace Gallifrey.UI.Modern.Models
             set
             {
                 workLogStrategy = value;
-                if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("ShowRemaining"));
-            }
-        }
-        
-        public TimeSpan? Remaining
-        {
-            get
-            {
-                if (WorkLogStrategy == WorkLogStrategy.SetValue)
+                SetRemaining();
+                if (PropertyChanged != null)
                 {
-                    return new TimeSpan(RemainingHours, RemainingMinutes, 0);
+                    PropertyChanged(this, new PropertyChangedEventArgs("ShowRemaining"));
                 }
-                return null;
             }
         }
 
         public ExportModel(JiraTimer timer, TimeSpan? exportTime, DefaultRemaining defaultWorkLogStrategy)
         {
             UpdateTimer(timer, exportTime);
-            
+
             ExportDate = timer.DateStarted.Date != DateTime.Now.Date ? timer.DateStarted.Date.AddHours(12) : DateTime.Now;
 
             switch (defaultWorkLogStrategy)
@@ -72,9 +67,13 @@ namespace Gallifrey.UI.Modern.Models
             }
         }
 
-        public void UpdateTimer(JiraTimer timer)
+        public void UpdateTimer(JiraTimer timer, Issue jiraIssue)
         {
             UpdateTimer(timer, optionalExportLimit);
+
+            OriginalRemaining = jiraIssue.fields.timetracking != null ? TimeSpan.FromSeconds(jiraIssue.fields.timetracking.remainingEstimateSeconds) : new TimeSpan();
+
+            SetRemaining();
         }
 
         private void UpdateTimer(JiraTimer timer, TimeSpan? exportTime)
@@ -111,6 +110,32 @@ namespace Gallifrey.UI.Modern.Models
                 PropertyChanged(this, new PropertyChangedEventArgs("JiraDesc"));
                 PropertyChanged(this, new PropertyChangedEventArgs("ExportedHours"));
                 PropertyChanged(this, new PropertyChangedEventArgs("ExportedMinutes"));
+            }
+        }
+
+        private void SetRemaining()
+        {
+            switch (workLogStrategy)
+            {
+                case WorkLogStrategy.Automatic:
+                    var autoNewRemaining = OriginalRemaining.Subtract(ToExport);
+                    RemainingHours = autoNewRemaining.Hours;
+                    RemainingMinutes = autoNewRemaining.Minutes;
+                    break;
+                case WorkLogStrategy.LeaveRemaining:
+                    RemainingHours = OriginalRemaining.Hours;
+                    RemainingMinutes = OriginalRemaining.Minutes;
+                    break;
+                case WorkLogStrategy.SetValue:
+                    RemainingHours = 0;
+                    RemainingMinutes = 0;
+                    break;
+            }
+
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs("RemainingHours"));
+                PropertyChanged(this, new PropertyChangedEventArgs("RemainingMinutes"));
             }
         }
     }

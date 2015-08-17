@@ -1,10 +1,25 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Versions>
   <Version Number="3.0.0" Name="Pre Release">
-    <Features/>
-    <Bugs />
+    <Features>
+      <Feature>A Feature </Feature>
+    </Features>
+    <Bugs>
+      <Bug>A Bug Fix</Bug>
+    </Bugs>
     <Others>
       <Other>Brand new UI</Other>
+    </Others>
+  </Version>
+  <Version Number="3.1.0" Name="Pre Release 2">
+    <Features>
+      <Feature>A Feature 2</Feature>
+    </Features>
+    <Bugs>
+      <Bug>A Bug Fix 2</Bug>
+    </Bugs>
+    <Others>
+      <Other>Other 2</Other>
     </Others>
   </Version>
 </Versions>

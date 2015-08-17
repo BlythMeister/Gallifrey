@@ -9,7 +9,6 @@ using Gallifrey.Jira.Model;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RestSharp;
-using RestSharp.Deserializers;
 
 namespace Gallifrey.Jira
 {
@@ -106,7 +105,7 @@ namespace Gallifrey.Jira
         {
             var issue = GetIssue(issueRef);
 
-            if (issue.fields.worklog.total > 0)
+            if (issue.fields.worklog.total > issue.fields.worklog.worklogs.Count())
             {
                 var worklogs = ExectuteRequest(HttpStatusCode.OK, string.Format("issue/{0}/worklog", issueRef), customDeserialize: s => FilterWorklogsToUser(s, user));
                 

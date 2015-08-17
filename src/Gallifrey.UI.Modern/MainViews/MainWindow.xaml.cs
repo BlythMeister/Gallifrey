@@ -48,6 +48,7 @@ namespace Gallifrey.UI.Modern.MainViews
 
             gallifrey.NoActivityEvent += GallifreyOnNoActivityEvent;
             gallifrey.ExportPromptEvent += GallifreyOnExportPromptEvent;
+            gallifrey.DailyTrackingEvent += GallifreyOnDailyTrackingEvent;
             SystemEvents.SessionSwitch += SessionSwitchHandler;
 
             Height = gallifrey.Settings.UiSettings.Height;
@@ -66,17 +67,21 @@ namespace Gallifrey.UI.Modern.MainViews
 
         private async void ExceptionlessSubmittingEvent(object sender, EventSubmittingEventArgs e)
         {
-            await Application.Current.Dispatcher.Invoke(async () =>
+            if (e.IsUnhandledError)
             {
-                if (!e.IsUnhandledError)
-                    return;
-
                 e.Cancel = true;
-                ViewModel.CloseAllFlyouts();
-                await ViewModel.OpenFlyout(new Error(ViewModel, e.Event));
-                CloseApp(true);
-            });
 
+                await Application.Current.Dispatcher.Invoke(async () =>
+                {
+                    ViewModel.CloseAllFlyouts();
+                    await ViewModel.OpenFlyout(new Error(ViewModel, e.Event));
+                    CloseApp(true);
+                });
+            }
+            else
+            {
+                return;
+            }
         }
 
         private async void OnLoaded(object sender, RoutedEventArgs e)
@@ -151,6 +156,21 @@ namespace Gallifrey.UI.Modern.MainViews
                         ViewModel.OpenFlyout(new Export(ViewModel, e.TimerId, null));
                     }
                 }
+            }
+        }
+
+        private void GallifreyOnDailyTrackingEvent(object sender, EventArgs eventArgs)
+        {
+            try
+            {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    ExceptionlessClient.Default.SubmitFeatureUsage(ViewModel.Gallifrey.VersionControl.VersionName);
+                });
+            }
+            catch (Exception)
+            {
+                //supress errors if tracking fails
             }
         }
 

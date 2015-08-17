@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Gallifrey.UI.Modern.Flyouts;
@@ -13,14 +14,17 @@ namespace Gallifrey.UI.Modern.MainViews
     public partial class TimerSummary : UserControl
     {
         private MainViewModel ViewModel { get { return (MainViewModel)DataContext; } }
+        private Mutex UnexportedMutex;
 
         public TimerSummary()
         {
             InitializeComponent();
+            UnexportedMutex = new Mutex(false);
         }
 
         private async void UnExportedClick(object sender, MouseButtonEventArgs e)
         {
+            UnexportedMutex.WaitOne();
             var timers = ViewModel.Gallifrey.JiraTimerCollection.GetStoppedUnexportedTimers();
 
             if (timers.Any())
@@ -44,6 +48,7 @@ namespace Gallifrey.UI.Modern.MainViews
             }
 
             ViewModel.RefreshModel();
+            UnexportedMutex.ReleaseMutex();
         }
     }
 }

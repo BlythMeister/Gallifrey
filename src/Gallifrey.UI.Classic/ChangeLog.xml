@@ -197,4 +197,11 @@
     </Bugs>
     <Others />
   </Version>
+  <Version Number="2.2.1" Name="Pre Release">
+    <Features />
+    <Bugs>
+      <Bug>Fix issue with balloon icon caused crash</Bug>
+    </Bugs>
+    <Others />
+  </Version>
 </Versions>

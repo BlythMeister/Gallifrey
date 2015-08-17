@@ -2,7 +2,36 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro" IsModal="True" Theme="Adapt" Position="Right" Header="Change Log">
-    <Grid Width="300" Margin="5,5,5,5" >
-        
-    </Grid>
+    <WrapPanel Width="500" Margin="5,5,5,5" >
+        <controls:MetroAnimatedSingleRowTabControl TabStripPlacement="Left" ItemsSource="{Binding ChangeLogs}">
+            <TabControl.ItemContainerStyle>
+                <Style TargetType="TabItem">
+                    <Setter Property="Header" Value="{Binding VersionNumber}" />
+                    <Setter Property="controls:ControlsHelper.HeaderFontSize" Value="17" />
+                    <Setter Property="HorizontalAlignment" Value="Right" />
+                    <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                </Style>
+            </TabControl.ItemContainerStyle>
+            <TabControl.ContentTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Row="0">
+                            <TextBlock Text="Features"></TextBlock>
+                        </StackPanel>
+                        <StackPanel Grid.Row="1">
+                            <TextBlock Text="Bug Fixes"></TextBlock>
+                        </StackPanel>
+                        <StackPanel Grid.Row="2">
+                            <TextBlock Text="Other"></TextBlock>
+                        </StackPanel>
+                    </Grid>
+                </DataTemplate>
+            </TabControl.ContentTemplate>
+        </controls:MetroAnimatedSingleRowTabControl>
+    </WrapPanel>
 </controls:Flyout>

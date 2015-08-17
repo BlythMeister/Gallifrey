@@ -1,18 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Deployment.Application;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Text;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Xaml.Schema;
 using System.Xml.Linq;
 using Exceptionless;
-using Gallifrey.AppTracking;
 using Gallifrey.Comparers;
 using Gallifrey.Exceptions;
 using Gallifrey.Exceptions.IdleTimers;
@@ -21,6 +18,7 @@ using Gallifrey.Exceptions.JiraTimers;
 using Gallifrey.Exceptions.Versions;
 using Gallifrey.ExtensionMethods;
 using Gallifrey.JiraTimers;
+using Gallifrey.UI.Classic.Properties;
 using Gallifrey.Versions;
 using Microsoft.Win32;
 
@@ -50,6 +48,12 @@ namespace Gallifrey.UI.Classic
 
             internalTimerList = new Dictionary<DateTime, ThreadedBindingList<JiraTimer>>();
 
+
+            gallifrey.NoActivityEvent += GallifreyOnNoActivityEvent;
+            gallifrey.ExportPromptEvent += GallifreyOnExportPromptEvent;
+            gallifrey.DailyTrackingEvent += GallifreyOnDailyTrackingEvent;
+            SystemEvents.SessionSwitch += SessionSwitchHandler;
+
             try
             {
                 gallifrey.Initialise();
@@ -68,12 +72,8 @@ namespace Gallifrey.UI.Classic
                 CloseNotifyIcon();
                 exitOnStart = true;
             }
-
-            gallifrey.NoActivityEvent += GallifreyOnNoActivityEvent;
-            gallifrey.ExportPromptEvent += GallifreyOnExportPromptEvent;
-            SystemEvents.SessionSwitch += SessionSwitchHandler;
         }
-
+        
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
@@ -105,7 +105,7 @@ namespace Gallifrey.UI.Classic
                 }
             }
         }
-        
+
         private void OnSubmittingExceptionlessEvent(object sender, EventSubmittingEventArgs e)
         {
             foreach (var form in Application.OpenForms.Cast<Form>())
@@ -132,14 +132,14 @@ namespace Gallifrey.UI.Classic
 
             if (gallifrey.VersionControl.IsAutomatedDeploy && gallifrey.VersionControl.IsFirstRun)
             {
-                var changeLog = gallifrey.GetChangeLog(XDocument.Parse(Properties.Resources.ChangeLog));
+                var changeLog = gallifrey.GetChangeLog(XDocument.Parse(Resources.ChangeLog));
 
                 if (changeLog.Any())
                 {
                     var changeLogWindow = new ChangeLogWindow(gallifrey, changeLog);
                     changeLogWindow.ShowDialog();
                 }
-            }            
+            }
         }
 
         private void MainWindow_KeyUp(object sender, KeyEventArgs e)
@@ -336,6 +336,18 @@ namespace Gallifrey.UI.Classic
             }
         }
 
+        private void GallifreyOnDailyTrackingEvent(object sender, EventArgs eventArgs)
+        {
+            try
+            {
+                ExceptionlessClient.Default.SubmitFeatureUsage(gallifrey.VersionControl.VersionName);    
+            }
+            catch (Exception)
+            {
+                //supress errors if tracking fails
+            }
+        }
+
         private void lblUnexportedTime_Click(object sender, EventArgs e)
         {
             var timers = gallifrey.JiraTimerCollection.GetStoppedUnexportedTimers();
@@ -369,22 +381,22 @@ namespace Gallifrey.UI.Classic
 
         private void lblTwitter_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start("https://twitter.com/GallifreyApp");
+            Process.Start("https://twitter.com/GallifreyApp");
         }
 
         private void lblEmail_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start("mailto:contact@gallifreyapp.co.uk?subject=Gallifrey App Contact");
+            Process.Start("mailto:contact@gallifreyapp.co.uk?subject=Gallifrey App Contact");
         }
 
         private void lblGitHub_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start("https://github.com/BlythMeister/Gallifrey");
+            Process.Start("https://github.com/BlythMeister/Gallifrey");
         }
 
         private void lblDonate_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=G3MWL8E6UG4RS");
+            Process.Start("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=G3MWL8E6UG4RS");
         }
 
         private void tabTimerDays_KeyDown(object sender, KeyEventArgs e)
@@ -524,18 +536,29 @@ namespace Gallifrey.UI.Classic
 
         private void notifyAlert_BalloonTipClicked(object sender, EventArgs e)
         {
-            if (gallifrey.VersionControl.AlreadyInstalledUpdate)
+            var restart = false;
+
+            try
             {
-                try
+                if (gallifrey.VersionControl.AlreadyInstalledUpdate)
                 {
-                    Application.Restart();
-                }
-                catch (Exception)
-                {
-                    MessageBox.Show("An Error Occured When Trying To Restart, Please Restart Manually", "Restart Failure", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    restart = true;
+                    try
+                    {
+                        Application.Restart();
+                    }
+                    catch (Exception)
+                    {
+                        MessageBox.Show("An Error Occured When Trying To Restart, Please Restart Manually", "Restart Failure", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    }
                 }
             }
-            else
+            catch (Exception)
+            {
+                //supress error
+            }
+            
+            if (!restart)
             {
                 switch (WindowState)
                 {
@@ -632,7 +655,7 @@ namespace Gallifrey.UI.Classic
                 var fontPath = Path.Combine(Environment.CurrentDirectory, "digital7.ttf");
                 if (!File.Exists(fontPath))
                 {
-                    File.WriteAllBytes(fontPath, Properties.Resources.digital7);
+                    File.WriteAllBytes(fontPath, Resources.digital7);
                 }
 
                 privateFontCollection.AddFontFile(fontPath);
@@ -1020,7 +1043,7 @@ namespace Gallifrey.UI.Classic
                 {
                     try
                     {
-                        selectedTimer = (JiraTimer) selectedList.SelectedItem;
+                        selectedTimer = (JiraTimer)selectedList.SelectedItem;
                     }
                     catch (IndexOutOfRangeException)
                     {
@@ -1113,7 +1136,7 @@ namespace Gallifrey.UI.Classic
             {
                 UpdateComplete();
             }
-            else if(updateResult.Result == UpdateResult.NoUpdate)
+            else if (updateResult.Result == UpdateResult.NoUpdate)
             {
                 SetVersionNumber();
             }
@@ -1137,7 +1160,7 @@ namespace Gallifrey.UI.Classic
                 grpUpdates.Text = "Update Avaliable";
                 lblUpdate.BackColor = Color.OrangeRed;
                 lblUpdate.BorderStyle = BorderStyle.FixedSingle;
-                lblUpdate.Image = Properties.Resources.Download_16x16;
+                lblUpdate.Image = Resources.Download_16x16;
 
                 try
                 {

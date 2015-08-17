@@ -36,22 +36,15 @@ namespace Gallifrey.UI.Modern.Flyouts
 
         private void ChangeLogButton(object sender, RoutedEventArgs e)
         {
-            if (viewModel.Gallifrey.VersionControl.IsAutomatedDeploy)
-            {
-                var changeLog = viewModel.Gallifrey.GetChangeLog(XDocument.Parse(Properties.Resources.ChangeLog));
+            var changeLog = viewModel.Gallifrey.GetChangeLog(XDocument.Parse(Properties.Resources.ChangeLog));
 
-                if (changeLog.Any())
-                {
-                    viewModel.OpenFlyout(new ChangeLog(viewModel, changeLog));
-                }
-                else
-                {
-                    viewModel.DialogCoordinator.ShowMessageAsync(viewModel,"No Change Log", "There Is No Change Log To Show");
-                }
+            if (changeLog.Any())
+            {
+                viewModel.OpenFlyout(new ChangeLog(viewModel, changeLog));
             }
             else
             {
-                viewModel.DialogCoordinator.ShowMessageAsync(viewModel,"No Change Log", "You Cannot Display Change Log On Non Deployed Versions");
+                viewModel.DialogCoordinator.ShowMessageAsync(viewModel, "No Change Log", "There Is No Change Log To Show");
             }
         }
 

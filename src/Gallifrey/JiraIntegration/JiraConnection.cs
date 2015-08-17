@@ -37,6 +37,7 @@ namespace Gallifrey.JiraIntegration
         private IJiraConnectionSettings jiraConnectionSettings;
         private IExportSettings exportSettings;
         private IJiraClient jira;
+        private DateTime lastCacheUpdate;
 
         public User CurrentUser { get; private set; }
 
@@ -45,6 +46,7 @@ namespace Gallifrey.JiraIntegration
             this.trackUsage = trackUsage;
             recentJiraCollection = new RecentJiraCollection();
             jiraProjectCache = new List<JiraProject>();
+            lastCacheUpdate = DateTime.MinValue;
         }
 
         public void ReConnect(IJiraConnectionSettings newJiraConnectionSettings, IExportSettings newExportSettings)
@@ -195,14 +197,18 @@ namespace Gallifrey.JiraIntegration
 
         private void UpdateJiraProjectCache()
         {
-            try
+            if (lastCacheUpdate < DateTime.UtcNow.AddMinutes(-30))
             {
-                CheckAndConnectJira();
-                var projects = jira.GetProjects();
-                jiraProjectCache.Clear();
-                jiraProjectCache.AddRange(projects.Select(project => new JiraProject(project.key, project.name)));
+                try
+                {
+                    CheckAndConnectJira();
+                    var projects = jira.GetProjects();
+                    jiraProjectCache.Clear();
+                    jiraProjectCache.AddRange(projects.Select(project => new JiraProject(project.key, project.name)));
+                    lastCacheUpdate = DateTime.UtcNow;
+                }
+                catch (Exception) { }
             }
-            catch (Exception) { }
         }
 
         public IEnumerable<JiraProject> GetJiraProjects()
