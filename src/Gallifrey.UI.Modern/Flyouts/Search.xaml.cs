@@ -36,6 +36,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             DataModel.SetIsSearching();
             var cancellationTokenSource = new CancellationTokenSource();
 
+            //TODO This shouldn't do task factory!
             if (!string.IsNullOrWhiteSpace(DataModel.SearchTerm))
             {
                 searchTask = Task.Factory.StartNew(() => viewModel.Gallifrey.JiraConnection.GetJiraIssuesFromSearchText(DataModel.SearchTerm), cancellationTokenSource.Token);

@@ -125,6 +125,7 @@ namespace Gallifrey.UI.Classic
             
             try
             {
+                //TODO This shouldn't do task factory!
                 IEnumerable<Issue> searchResults;
                 Task<IEnumerable<Issue>> searchTask;
                 if (!string.IsNullOrWhiteSpace(freeSearch))

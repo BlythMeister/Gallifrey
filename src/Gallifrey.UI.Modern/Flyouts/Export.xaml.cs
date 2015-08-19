@@ -36,6 +36,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             var showError = false;
             try
             {
+                //TODO This shouldn't do task factory!
                 var cancellationTokenSource = new CancellationTokenSource();
                 var jiraDownloadTask = Task.Factory.StartNew(() => viewModel.Gallifrey.JiraConnection.GetJiraIssue(timerToShow.JiraReference, true), cancellationTokenSource.Token);
 
