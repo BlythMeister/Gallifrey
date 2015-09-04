@@ -50,7 +50,6 @@ namespace Gallifrey
         public event EventHandler<ExportPromptDetail> ExportPromptEvent;
         public event EventHandler DailyTrackingEvent;
         internal ActivityChecker ActivityChecker;
-        private readonly Timer hearbeat;
         private Guid? runningTimerWhenIdle;
 
         public Backend(InstanceType instanceType, AppType appType)
@@ -64,9 +63,12 @@ namespace Gallifrey
             idleTimerCollection = new IdleTimerCollection();
             ActivityChecker = new ActivityChecker(jiraTimerCollection, settingsCollection.AppSettings);
             ActivityChecker.NoActivityEvent += OnNoActivityEvent;
-            hearbeat = new Timer(1800000);
-            hearbeat.Elapsed += HearbeatOnElapsed;
-            hearbeat.Start();
+            var cleanUpAndTrackingHearbeat = new Timer(1800000); // 30 minutes
+            cleanUpAndTrackingHearbeat.Elapsed += CleanUpAndTrackingHearbeatOnElapsed;
+            cleanUpAndTrackingHearbeat.Start();
+            var jiraExportHearbeat = new Timer(120000); //2 minutes
+            jiraExportHearbeat.Elapsed += JiraExportHearbeatHearbeatOnElapsed;
+            jiraExportHearbeat.Start();
 
             if (Settings.AppSettings.TimerRunningOnShutdown.HasValue)
             {
@@ -94,7 +96,7 @@ namespace Gallifrey
             if (NoActivityEvent != null) NoActivityEvent(sender, millisecondsSinceActivity);
         }
 
-        private void HearbeatOnElapsed(object sender, ElapsedEventArgs e)
+        private void CleanUpAndTrackingHearbeatOnElapsed(object sender, ElapsedEventArgs e)
         {
             try
             {
@@ -115,13 +117,48 @@ namespace Gallifrey
 
                 if (settingsCollection.InternalSettings.LastHeartbeatTracked.Date < DateTime.UtcNow.Date)
                 {
-                    if(DailyTrackingEvent != null) DailyTrackingEvent.Invoke(this, null);
+                    if (DailyTrackingEvent != null) DailyTrackingEvent.Invoke(this, null);
                     trackUsage.TrackAppUsage(TrackingType.DailyHearbeat);
                     settingsCollection.InternalSettings.LastHeartbeatTracked = DateTime.UtcNow;
                     settingsCollection.SaveSettings();
                 }
             }
             catch { /*Surpress Errors, if this fails timers won't be removed*/}
+        }
+
+        private void JiraExportHearbeatHearbeatOnElapsed(object sender, ElapsedEventArgs e)
+        {
+            try
+            {
+                var unexportedTimers = jiraTimerCollection.GetAllUnexportedTimers().ToList();
+
+                var jiraSearches = new Dictionary<string, List<Guid>>();
+
+                foreach (var unexportedTimer in unexportedTimers)
+                {
+                    if (!unexportedTimer.LastJiraTimeCheck.HasValue || unexportedTimer.LastJiraTimeCheck.Value < DateTime.UtcNow.AddMinutes(-10))
+                    {
+                        if (jiraSearches.ContainsKey(unexportedTimer.JiraReference))
+                        {
+                            jiraSearches[unexportedTimer.JiraReference].Add(unexportedTimer.UniqueId);
+                        }
+                        else
+                        {
+                            jiraSearches.Add(unexportedTimer.JiraReference, new List<Guid> { unexportedTimer.UniqueId });
+                        }
+                    }
+                }
+
+                foreach (var jiraSearch in jiraSearches)
+                {
+                    var issueWithWorklogs = jiraConnection.GetJiraIssue(jiraSearch.Key, true);
+                    foreach (var uniqueTimer in jiraSearch.Value)
+                    {
+                        jiraTimerCollection.RefreshFromJira(uniqueTimer, issueWithWorklogs, jiraConnection.CurrentUser);
+                    }
+                }
+            }
+            catch { /*Surpress the error*/ }
         }
 
         public void Initialise()
@@ -134,7 +171,7 @@ namespace Gallifrey
 
             jiraConnection.ReConnect(settingsCollection.JiraConnectionSettings, settingsCollection.ExportSettings);
 
-            HearbeatOnElapsed(this, null);
+            CleanUpAndTrackingHearbeatOnElapsed(this, null);
         }
 
         public void Close()
@@ -219,7 +256,7 @@ namespace Gallifrey
             {
                 changeLogItems = ChangeLogProvider.GetFullChangeLog(changeLogContent);
             }
-            
+
             return changeLogItems;
         }
 

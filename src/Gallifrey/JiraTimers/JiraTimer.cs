@@ -12,6 +12,7 @@ namespace Gallifrey.JiraTimers
 {
     public class JiraTimer : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
         public string JiraReference { get; private set; }
         public string JiraProjectName { get; private set; }
         public string JiraName { get; private set; }
@@ -22,11 +23,12 @@ namespace Gallifrey.JiraTimers
         public TimeSpan ExportedTime { get; private set; }
         public Guid UniqueId { get; private set; }
         public bool IsRunning { get; private set; }
+        public DateTime? LastJiraTimeCheck { get; private set; }
         private readonly Stopwatch currentRunningTime;
         private readonly Timer runningWatcher;
 
         [JsonConstructor]
-        public JiraTimer(string jiraReference, string jiraProjectName, string jiraName, DateTime dateStarted, TimeSpan currentTime, TimeSpan exportedTime, Guid uniqueId, string jiraParentReference, string jiraParentName)
+        public JiraTimer(string jiraReference, string jiraProjectName, string jiraName, DateTime dateStarted, TimeSpan currentTime, TimeSpan exportedTime, Guid uniqueId, string jiraParentReference, string jiraParentName, DateTime? lastJiraTimeCheck)
         {
             JiraReference = jiraReference;
             JiraProjectName = jiraProjectName;
@@ -41,6 +43,7 @@ namespace Gallifrey.JiraTimers
             currentRunningTime = new Stopwatch();
             runningWatcher = new Timer(100);
             runningWatcher.Elapsed += runningWatcherElapsed;
+            LastJiraTimeCheck = lastJiraTimeCheck;
         }
 
         public JiraTimer(Issue jiraIssue, DateTime dateStarted, TimeSpan currentTime)
@@ -61,6 +64,7 @@ namespace Gallifrey.JiraTimers
             currentRunningTime = new Stopwatch();
             runningWatcher = new Timer(100);
             runningWatcher.Elapsed += runningWatcherElapsed;
+            LastJiraTimeCheck = null;
         }
 
         public JiraTimer(JiraTimer previousTimer, DateTime dateStarted, bool resetTimes)
@@ -78,6 +82,7 @@ namespace Gallifrey.JiraTimers
             currentRunningTime = new Stopwatch();
             runningWatcher = new Timer(100);
             runningWatcher.Elapsed += runningWatcherElapsed;
+            LastJiraTimeCheck = null;
         }
 
         void runningWatcherElapsed(object sender, ElapsedEventArgs e)
@@ -258,6 +263,8 @@ namespace Gallifrey.JiraTimers
                 JiraParentName = string.Empty;
             }
 
+            LastJiraTimeCheck = DateTime.UtcNow;
+
             if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("ExactCurrentTime"));
             if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("TimeToExport"));
             if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("JiraReference"));
@@ -266,8 +273,7 @@ namespace Gallifrey.JiraTimers
             if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("JiraParentReference"));
             if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("JiraParentName"));
             if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("HasParent"));
+            if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("LastJiraTimeCheck"));
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

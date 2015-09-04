@@ -198,7 +198,9 @@
     <Others />
   </Version>
   <Version Number="2.2.1" Name="Pre Release">
-    <Features />
+    <Features>
+      <Feature>Added background check of unexported timers to improve export window load time</Feature>
+    </Features>
     <Bugs>
       <Bug>Fix issue with balloon icon caused crash</Bug>
     </Bugs>

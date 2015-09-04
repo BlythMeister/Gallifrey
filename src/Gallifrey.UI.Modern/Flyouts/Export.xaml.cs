@@ -33,12 +33,14 @@ namespace Gallifrey.UI.Modern.Flyouts
 
             DataContext = new ExportModel(timerToShow, exportTime, viewModel.Gallifrey.Settings.ExportSettings.DefaultRemainingValue);
 
+            var requireRefresh = !timerToShow.LastJiraTimeCheck.HasValue || timerToShow.LastJiraTimeCheck < DateTime.UtcNow.AddMinutes(-15);
+
             var showError = false;
             try
             {
                 //TODO This shouldn't do task factory!
                 var cancellationTokenSource = new CancellationTokenSource();
-                var jiraDownloadTask = Task.Factory.StartNew(() => viewModel.Gallifrey.JiraConnection.GetJiraIssue(timerToShow.JiraReference, true), cancellationTokenSource.Token);
+                var jiraDownloadTask = Task.Factory.StartNew(() => viewModel.Gallifrey.JiraConnection.GetJiraIssue(timerToShow.JiraReference, requireRefresh), cancellationTokenSource.Token);
 
                 var controller = await viewModel.DialogCoordinator.ShowProgressAsync(viewModel, "Please Wait", "Downloading Jira Work Logs To Ensure Accurate Export", true);
                 var controllerCancel = Task.Factory.StartNew(() =>
@@ -87,9 +89,12 @@ namespace Gallifrey.UI.Modern.Flyouts
                 return;
             }
 
-            viewModel.Gallifrey.JiraTimerCollection.RefreshFromJira(timerId, jiraIssue, viewModel.Gallifrey.JiraConnection.CurrentUser);
+            if (requireRefresh)
+            {
+                viewModel.Gallifrey.JiraTimerCollection.RefreshFromJira(timerId, jiraIssue, viewModel.Gallifrey.JiraConnection.CurrentUser);
 
-            timerToShow = viewModel.Gallifrey.JiraTimerCollection.GetTimer(timerId);
+                timerToShow = viewModel.Gallifrey.JiraTimerCollection.GetTimer(timerId);
+            }
 
             if (timerToShow.FullyExported)
             {

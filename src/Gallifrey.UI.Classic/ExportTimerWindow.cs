@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
 using Gallifrey.Exceptions.JiraIntegration;
 using Gallifrey.Jira.Enum;
 using Gallifrey.Jira.Model;
@@ -22,19 +23,24 @@ namespace Gallifrey.UI.Classic
             timerToShow = gallifrey.JiraTimerCollection.GetTimer(timerGuid);
             InitializeComponent();
 
+            var requireRefresh = !timerToShow.LastJiraTimeCheck.HasValue || timerToShow.LastJiraTimeCheck < DateTime.UtcNow.AddMinutes(-15);
+
             try
             {
-                jiraIssue = gallifrey.JiraConnection.GetJiraIssue(timerToShow.JiraReference, true);
+                jiraIssue = gallifrey.JiraConnection.GetJiraIssue(timerToShow.JiraReference, requireRefresh);
             }
             catch (NoResultsFoundException)
             {
                 MessageBox.Show(string.Format("Unable To Locate Jira {0}!\nCannot Export Time\nPlease Verify/Correct Jira Reference", timerToShow.JiraReference), "Unable To Locate Jira", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 DisplayForm = false;
             }
-            
-            gallifrey.JiraTimerCollection.RefreshFromJira(timerGuid, jiraIssue, gallifrey.JiraConnection.CurrentUser);
 
-            timerToShow = gallifrey.JiraTimerCollection.GetTimer(timerGuid);
+            if (requireRefresh)
+            {
+                gallifrey.JiraTimerCollection.RefreshFromJira(timerGuid, jiraIssue, gallifrey.JiraConnection.CurrentUser);
+
+                timerToShow = gallifrey.JiraTimerCollection.GetTimer(timerGuid);    
+            }
 
             if (timerToShow.FullyExported)
             {
