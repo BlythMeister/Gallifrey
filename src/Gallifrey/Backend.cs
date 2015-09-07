@@ -101,7 +101,7 @@ namespace Gallifrey
             {
                 jiraTimerCollection.RemoveTimersOlderThanDays(settingsCollection.AppSettings.KeepTimersForDays);
                 idleTimerCollection.RemoveOldTimers();
-                jiraConnection.UpdateCache().RunSynchronously();
+                jiraConnection.UpdateCache().Start();
 
                 var runningTimerId = jiraTimerCollection.GetRunningTimerId();
                 if (runningTimerId.HasValue)
@@ -124,7 +124,7 @@ namespace Gallifrey
             catch { /*Suppress Errors, if this fails timers won't be removed*/}
         }
 
-        public void Initialise()
+        public async void Initialise()
         {
             var processes = Process.GetProcesses();
             if (processes.Count(process => process.ProcessName.Contains("Gallifrey") && !process.ProcessName.Contains("vshost")) > 1)
@@ -132,7 +132,7 @@ namespace Gallifrey
                 throw new MultipleGallifreyRunningException();
             }
 
-            jiraConnection.ReConnect(settingsCollection.JiraConnectionSettings, settingsCollection.ExportSettings).RunSynchronously();
+            await jiraConnection.ReConnect(settingsCollection.JiraConnectionSettings, settingsCollection.ExportSettings);
         }
 
         public void Close()
@@ -161,13 +161,13 @@ namespace Gallifrey
             trackUsage.TrackAppUsage(trackingType);
         }
 
-        public void SaveSettings(bool jiraSettingsChanged)
+        public async void SaveSettings(bool jiraSettingsChanged)
         {
             settingsCollection.SaveSettings();
 
             if (jiraSettingsChanged)
             {
-                jiraConnection.ReConnect(settingsCollection.JiraConnectionSettings, settingsCollection.ExportSettings).RunSynchronously();
+                await jiraConnection.ReConnect(settingsCollection.JiraConnectionSettings, settingsCollection.ExportSettings);
             }
 
             ActivityChecker.UpdateAppSettings(settingsCollection.AppSettings);

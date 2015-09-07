@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Gallifrey.Exceptions.JiraIntegration;
 using Gallifrey.IdleTimers;
@@ -84,7 +85,7 @@ namespace Gallifrey.UI.Classic
             }
         }
 
-        private void btnOK_Click(object sender, EventArgs e)
+        private async void btnOK_Click(object sender, EventArgs e)
         {
             if (lstLockedTimers.SelectedItems.Count == 0)
             {
@@ -124,7 +125,7 @@ namespace Gallifrey.UI.Classic
                     Issue jiraIssue;
                     try
                     {
-                        jiraIssue = gallifrey.JiraConnection.GetJiraIssue(selectedRecent.JiraReference);
+                        jiraIssue = await gallifrey.JiraConnection.GetJiraIssue(selectedRecent.JiraReference);
                     }
                     catch (NoResultsFoundException)
                     {

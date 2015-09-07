@@ -23,7 +23,7 @@ namespace Gallifrey.UI.Classic
             try
             {
                 cmbUserFilters.Items.Add(string.Empty);
-                foreach (var jiraFilter in gallifrey.JiraConnection.GetJiraFilters())
+                foreach (var jiraFilter in gallifrey.JiraConnection.GetJiraFilters().Result)
                 {
                     cmbUserFilters.Items.Add(jiraFilter);
                 }
@@ -36,7 +36,7 @@ namespace Gallifrey.UI.Classic
 
             try
             {
-                var currentUserIssues = gallifrey.JiraConnection.GetJiraCurrentUserOpenIssues();
+                var currentUserIssues = gallifrey.JiraConnection.GetJiraCurrentUserOpenIssues().Result;
                 lstResults.DataSource = currentUserIssues.Select(issue => new JiraSearchResult(issue)).ToList();
                 lstResults.Enabled = true;
             }
@@ -126,32 +126,25 @@ namespace Gallifrey.UI.Classic
             try
             {
                 IEnumerable<Issue> searchResults;
-                Task<IEnumerable<Issue>> searchTask;
+
                 if (!string.IsNullOrWhiteSpace(freeSearch))
                 {
-                    searchTask = Task.Factory.StartNew(() => gallifrey.JiraConnection.GetJiraIssuesFromSearchText(freeSearch));
+                    searchResults = await gallifrey.JiraConnection.GetJiraIssuesFromSearchText(freeSearch);
                 }
                 else
                 {
-                    searchTask = Task.Factory.StartNew(() => gallifrey.JiraConnection.GetJiraIssuesFromFilter(filterSearch));
+                    searchResults = await gallifrey.JiraConnection.GetJiraIssuesFromFilter(filterSearch);
                 }
 
-                await searchTask;
-
-                if (searchTask.IsCompleted)
+                if (searchResults.Any())
                 {
-                    searchResults = searchTask.Result;
-
-                    if (searchResults.Any())
-                    {
-                        lstResults.DataSource = searchResults.Select(issue => new JiraSearchResult(issue)).ToList();
-                        lstResults.Enabled = true;
-                        btnRefresh.Enabled = true;
-                        btnAddTimer.Enabled = true;
-                        txtSearchText.Enabled = !string.IsNullOrWhiteSpace(txtSearchText.Text);
-                        cmbUserFilters.Enabled = !string.IsNullOrWhiteSpace((string)cmbUserFilters.SelectedItem);
-                        return;
-                    }
+                    lstResults.DataSource = searchResults.Select(issue => new JiraSearchResult(issue)).ToList();
+                    lstResults.Enabled = true;
+                    btnRefresh.Enabled = true;
+                    btnAddTimer.Enabled = true;
+                    txtSearchText.Enabled = !string.IsNullOrWhiteSpace(txtSearchText.Text);
+                    cmbUserFilters.Enabled = !string.IsNullOrWhiteSpace((string)cmbUserFilters.SelectedItem);
+                    return;
                 }
 
                 throw new NoResultsFoundException("No Results were found");

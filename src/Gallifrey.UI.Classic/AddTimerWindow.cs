@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Gallifrey.Exceptions.JiraIntegration;
 using Gallifrey.Exceptions.JiraTimers;
@@ -62,10 +63,10 @@ namespace Gallifrey.UI.Classic
             chkStartNow.Checked = true;
         }
 
-        private void btnAddTimer_Click(object sender, EventArgs e)
+        private async void btnAddTimer_Click(object sender, EventArgs e)
         {
             TopMost = false;
-            if (AddJira())
+            if (await AddJira())
             {
                 Close();
             }
@@ -76,7 +77,7 @@ namespace Gallifrey.UI.Classic
             TopMost = gallifrey.Settings.UiSettings.AlwaysOnTop;
         }
 
-        private bool AddJira()
+        private async Task<bool> AddJira()
         {
             var jiraReference = txtJiraRef.Text;
             var startDate = calStartDate.Value.Date;
@@ -101,7 +102,7 @@ namespace Gallifrey.UI.Classic
             Issue jiraIssue;
             try
             {
-                jiraIssue = gallifrey.JiraConnection.GetJiraIssue(jiraReference);
+                jiraIssue = await gallifrey.JiraConnection.GetJiraIssue(jiraReference);
             }
             catch (NoResultsFoundException)
             {
@@ -131,7 +132,7 @@ namespace Gallifrey.UI.Classic
             {
                 try
                 {
-                    gallifrey.JiraConnection.AssignToCurrentUser(jiraReference);
+                    await gallifrey.JiraConnection.AssignToCurrentUser(jiraReference);
                 }
                 catch (JiraConnectionException)
                 {
@@ -143,7 +144,7 @@ namespace Gallifrey.UI.Classic
             {
                 try
                 {
-                    gallifrey.JiraConnection.SetInProgress(jiraReference);
+                    await gallifrey.JiraConnection.SetInProgress(jiraReference);
                 }
                 catch (StateChangedException)
                 {

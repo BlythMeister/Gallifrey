@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Gallifrey.Exceptions.JiraIntegration;
 using Gallifrey.Exceptions.JiraTimers;
@@ -32,14 +33,14 @@ namespace Gallifrey.UI.Classic
             TopMost = gallifrey.Settings.UiSettings.AlwaysOnTop;
         }
 
-        private bool RenameTimer()
+        private async Task<Boolean> RenameTimer()
         {
             var jiraReference = txtJiraRef.Text;
 
             Issue jiraIssue;
             try
             {
-                jiraIssue = gallifrey.JiraConnection.GetJiraIssue(jiraReference);
+                jiraIssue = await gallifrey.JiraConnection.GetJiraIssue(jiraReference);
             }
             catch (NoResultsFoundException)
             {
@@ -87,34 +88,25 @@ namespace Gallifrey.UI.Classic
             Close();
         }
 
-        private void btnOK_Click(object sender, EventArgs e)
+        private async void btnOK_Click(object sender, EventArgs e)
         {
             TopMost = false;
-            Func<bool> actionFunction = null;
+
             if (txtJiraRef.Text != timerToShow.JiraReference)
             {
-                actionFunction = RenameTimer;
+                if (await RenameTimer()) Close();
             }
             else if (calStartDate.Value.Date != timerToShow.DateStarted.Date)
             {
-                actionFunction = ChangeTimerDate;
-            }
-
-            if (actionFunction == null)
-            {
-                Close();
+                if (ChangeTimerDate()) Close();
             }
             else
             {
-                if (actionFunction.Invoke())
-                {
-                    Close();
-                }
-                else
-                {
-                    DialogResult = DialogResult.None;
-                }
+                Close();
             }
+
+            DialogResult = DialogResult.None;
+
             TopMost = gallifrey.Settings.UiSettings.AlwaysOnTop;
         }
 

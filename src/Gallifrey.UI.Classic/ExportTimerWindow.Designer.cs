@@ -75,6 +75,7 @@
             this.txtParentDesc = new System.Windows.Forms.TextBox();
             this.lblParentRef = new System.Windows.Forms.Label();
             this.txtParentRef = new System.Windows.Forms.TextBox();
+            this.lblPleaseWait = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -546,6 +547,16 @@
             this.txtParentRef.Size = new System.Drawing.Size(173, 25);
             this.txtParentRef.TabIndex = 10;
             // 
+            // lblPleaseWait
+            // 
+            this.lblPleaseWait.BackColor = System.Drawing.SystemColors.Control;
+            this.lblPleaseWait.Location = new System.Drawing.Point(7, 38);
+            this.lblPleaseWait.Name = "lblPleaseWait";
+            this.lblPleaseWait.Size = new System.Drawing.Size(570, 473);
+            this.lblPleaseWait.TabIndex = 15;
+            this.lblPleaseWait.Text = "Please wait...";
+            this.lblPleaseWait.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // ExportTimerWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
@@ -553,6 +564,7 @@
             this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(587, 520);
             this.ControlBox = false;
+            this.Controls.Add(this.lblPleaseWait);
             this.Controls.Add(this.txtComment);
             this.Controls.Add(this.lblParentDesc);
             this.Controls.Add(this.txtParentDesc);
@@ -636,5 +648,6 @@
         private System.Windows.Forms.Label lblParentRef;
         private System.Windows.Forms.TextBox txtParentRef;
         private ExtendedTextBox.ExtTextBox txtComment;
+        private System.Windows.Forms.Label lblPleaseWait;
     }
 }

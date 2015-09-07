@@ -26,25 +26,25 @@ namespace Gallifrey.UI.Modern.Flyouts
             this.openFromAdd = openFromAdd;
             InitializeComponent();
 
-            var filters = viewModel.Gallifrey.JiraConnection.GetJiraFilters();
-            var issues = viewModel.Gallifrey.JiraConnection.GetJiraCurrentUserOpenIssues();
+            var filters = viewModel.Gallifrey.JiraConnection.GetJiraFilters().Result;
+            var issues = viewModel.Gallifrey.JiraConnection.GetJiraCurrentUserOpenIssues().Result;
             DataContext = new SearchModel(filters, issues);
         }
 
         private async void SearchButton(object sender, RoutedEventArgs e)
         {
             var model = (SearchModel)DataContext;
-            Task<IEnumerable<Issue>> searchTask = null;
+            IEnumerable<Issue> searchTask = null;
             model.SetIsSearching();
             var cancellationTokenSource = new CancellationTokenSource();
 
             if (!string.IsNullOrWhiteSpace(model.SearchTerm))
             {
-                searchTask = Task.Factory.StartNew(() => viewModel.Gallifrey.JiraConnection.GetJiraIssuesFromSearchText(model.SearchTerm), cancellationTokenSource.Token);
+                searchTask = await viewModel.Gallifrey.JiraConnection.GetJiraIssuesFromSearchText(model.SearchTerm);
             }
             else if (!string.IsNullOrWhiteSpace(model.SelectedFilter))
             {
-                searchTask = Task.Factory.StartNew(() => viewModel.Gallifrey.JiraConnection.GetJiraIssuesFromFilter(model.SelectedFilter), cancellationTokenSource.Token);
+                searchTask = await viewModel.Gallifrey.JiraConnection.GetJiraIssuesFromFilter(model.SelectedFilter);
             }
             else
             {

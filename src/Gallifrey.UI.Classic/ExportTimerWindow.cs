@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Gallifrey.Exceptions.JiraIntegration;
 using Gallifrey.Jira.Enum;
@@ -10,9 +11,9 @@ namespace Gallifrey.UI.Classic
 {
     public partial class ExportTimerWindow : Form
     {
-        private readonly IBackend gallifrey;
-        private readonly JiraTimer timerToShow;
-        private readonly Issue jiraIssue;
+        private IBackend gallifrey;
+        private JiraTimer timerToShow;
+        private Issue jiraIssue;
         internal bool DisplayForm { get; private set; }
 
         public ExportTimerWindow(IBackend gallifrey, Guid timerGuid)
@@ -21,17 +22,23 @@ namespace Gallifrey.UI.Classic
             this.gallifrey = gallifrey;
             timerToShow = gallifrey.JiraTimerCollection.GetTimer(timerGuid);
             InitializeComponent();
+            Initialise(timerGuid);
+        }
+
+        private async void Initialise(Guid timerGuid)
+        {
+            lblPleaseWait.Visible = true;
 
             try
             {
-                jiraIssue = gallifrey.JiraConnection.GetJiraIssue(timerToShow.JiraReference, true);
+                jiraIssue = await gallifrey.JiraConnection.GetJiraIssue(timerToShow.JiraReference, true);
             }
             catch (NoResultsFoundException)
             {
                 MessageBox.Show(string.Format("Unable To Locate Jira {0}!\nCannot Export Time\nPlease Verify/Correct Jira Reference", timerToShow.JiraReference), "Unable To Locate Jira", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 DisplayForm = false;
             }
-            
+
             gallifrey.JiraTimerCollection.RefreshFromJira(timerGuid, jiraIssue, gallifrey.JiraConnection.CurrentUser);
 
             timerToShow = gallifrey.JiraTimerCollection.GetTimer(timerGuid);
@@ -77,8 +84,6 @@ namespace Gallifrey.UI.Classic
                 txtRemainingMinutes.Text = remainingTime.Minutes.ToString();
             }
 
-            
-
             if (timerToShow.DateStarted.Date != DateTime.Now.Date)
             {
                 calExportDate.Value = timerToShow.DateStarted.Date.AddHours(12);
@@ -96,6 +101,7 @@ namespace Gallifrey.UI.Classic
             TopMost = gallifrey.Settings.UiSettings.AlwaysOnTop;
 
             txtComment.AltEnterEvent += btnOK_Click;
+            lblPleaseWait.Visible = false;
         }
         
         public void PreLoadExportTime(TimeSpan exportTime)
@@ -109,7 +115,7 @@ namespace Gallifrey.UI.Classic
             }
         }
 
-        private bool ExportTime()
+        private async Task<bool> ExportTime()
         {
             int hours, minutes;
 
@@ -153,7 +159,7 @@ namespace Gallifrey.UI.Classic
 
             try
             {
-                gallifrey.JiraConnection.LogTime(jiraIssue.key, calExportDate.Value, exportTimespan, worklogStrategy, txtComment.Text, newEstimate);
+                await gallifrey.JiraConnection.LogTime(jiraIssue.key, calExportDate.Value, exportTimespan, worklogStrategy, txtComment.Text, newEstimate);
             }
             catch (WorkLogException)
             {
@@ -214,10 +220,10 @@ namespace Gallifrey.UI.Classic
             Close();
         }
 
-        private void btnOK_Click(object sender, EventArgs e)
+        private async void btnOK_Click(object sender, EventArgs e)
         {
             TopMost = false;
-            if (ExportTime())
+            if (await ExportTime())
             {
                 Close();
             }
