@@ -6,6 +6,7 @@ using System.Timers;
 using System.Xml.Linq;
 using Gallifrey.AppTracking;
 using Gallifrey.ChangeLog;
+using Gallifrey.Contributors;
 using Gallifrey.Exceptions;
 using Gallifrey.Exceptions.IdleTimers;
 using Gallifrey.IdleTimers;
@@ -25,6 +26,7 @@ namespace Gallifrey
         ISettingsCollection Settings { get; }
         IJiraConnection JiraConnection { get; }
         IVersionControl VersionControl { get; }
+        List<WithThanksDefinition> WithThanksDefinitions { get; }
         event EventHandler<int> NoActivityEvent;
         event EventHandler<ExportPromptDetail> ExportPromptEvent;
         event EventHandler DailyTrackingEvent;
@@ -45,6 +47,7 @@ namespace Gallifrey
         private readonly ITrackUsage trackUsage;
         private readonly JiraConnection jiraConnection;
         private readonly VersionControl versionControl;
+        private readonly WithThanksCreator withThanksCreator;
 
         public event EventHandler<int> NoActivityEvent;
         public event EventHandler<ExportPromptDetail> ExportPromptEvent;
@@ -62,6 +65,8 @@ namespace Gallifrey
             jiraConnection = new JiraConnection(trackUsage);
             idleTimerCollection = new IdleTimerCollection();
             ActivityChecker = new ActivityChecker(jiraTimerCollection, settingsCollection.AppSettings);
+            withThanksCreator = new WithThanksCreator();
+
             ActivityChecker.NoActivityEvent += OnNoActivityEvent;
             var cleanUpAndTrackingHearbeat = new Timer(1800000); // 30 minutes
             cleanUpAndTrackingHearbeat.Elapsed += CleanUpAndTrackingHearbeatOnElapsed;
@@ -283,6 +288,11 @@ namespace Gallifrey
         public IVersionControl VersionControl
         {
             get { return versionControl; }
+        }
+
+        public List<WithThanksDefinition> WithThanksDefinitions
+        {
+            get { return withThanksCreator.WithThanksDefinitions; }
         }
     }
 }

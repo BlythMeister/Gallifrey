@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Text;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using Gallifrey.Contributors;
 using Gallifrey.UI.Classic.Properties;
 
 namespace Gallifrey.UI.Classic
@@ -20,12 +22,23 @@ namespace Gallifrey.UI.Classic
             InitializeComponent();
             lblCurrentVersion.Text = string.Format("Current Version: {0}", gallifrey.VersionControl.VersionName);
 
-            contributors = new List<string>()
-                {
-                    "Mark Harrison\nTwitter: @HarrisonMeister\nGitHub: @HarrisonMeister",
-                };
+            contributors = gallifrey.WithThanksDefinitions.Select(BuildThanksString).ToList();
+            timerContributor_Tick(this, null);
 
             btnChangeLog.Visible = gallifrey.VersionControl.IsAutomatedDeploy;
+        }
+
+        private string BuildThanksString(WithThanksDefinition withThanksDefinition)
+        {
+            var returnString = new StringBuilder();
+
+            returnString.AppendLine(withThanksDefinition.Name);
+
+            if (!string.IsNullOrWhiteSpace(withThanksDefinition.ThanksReason)) returnString.AppendLine(string.Format("Reason: {0}", withThanksDefinition.ThanksReason));
+            if (!string.IsNullOrWhiteSpace(withThanksDefinition.TwitterHandle)) returnString.AppendLine(string.Format("Twitter: {0}", withThanksDefinition.TwitterHandle));
+            if (!string.IsNullOrWhiteSpace(withThanksDefinition.GitHubHandle)) returnString.AppendLine(string.Format("GitHub: {0}", withThanksDefinition.GitHubHandle));
+
+            return returnString.ToString();
         }
 
         private void btnOK_Click(object sender, EventArgs e)

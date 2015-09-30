@@ -1,10 +1,8 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Xml.Linq;
 using Gallifrey.UI.Modern.Models;
-using MahApps.Metro.Controls.Dialogs;
 
 namespace Gallifrey.UI.Modern.Flyouts
 {
@@ -19,7 +17,7 @@ namespace Gallifrey.UI.Modern.Flyouts
         {
             this.viewModel = viewModel;
             InitializeComponent();
-            DataContext = new ContributorsModel();
+            DataContext = new ContributorsModel(viewModel.Gallifrey.WithThanksDefinitions);
         }
 
         private void EmailButton(object sender, RoutedEventArgs e)

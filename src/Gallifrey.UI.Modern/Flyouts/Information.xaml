@@ -40,7 +40,7 @@
                 <ColumnDefinition Width="50*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <TextBlock Grid.Row="0" Grid.Column="0" FontSize="18" Margin="0,0,0,5" Text="Owner/Maintainer"/>
-            <TextBlock Grid.Row="1" Grid.Column="0" TextWrapping="Wrap" Margin="0,0,0,5">Chris Blyth<LineBreak />Twitter: @BlythMeister<LineBreak />GitHub: @BlythMeister</TextBlock>
+            <TextBlock Grid.Row="1" Grid.Column="0" TextWrapping="Wrap" Margin="0,0,0,5">Chris Blyth<LineBreak />Twitter: @BlythMeister<LineBreak />GitHub: @BlythMeister<LineBreak /> <LineBreak /></TextBlock>
             <TextBlock Grid.Row="0" Grid.Column="1" FontSize="18" Margin="0,0,0,5" Text="Contributors (With Thanks)"/>
             <TextBlock Grid.Row="1" Grid.Column="1" TextWrapping="Wrap" Margin="0,0,0,5" Text="{Binding Contributors}" />
         </Grid>
