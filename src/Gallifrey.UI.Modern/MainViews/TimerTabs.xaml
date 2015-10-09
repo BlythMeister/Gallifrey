@@ -19,7 +19,7 @@
                         <Style TargetType="{x:Type ListViewItem}">
                             <Setter Property="Margin" Value="3" />
                             <Setter Property="Padding" Value="4" />
-                            <Setter Property="BorderBrush" Value="LightGray" />
+                            <Setter Property="BorderBrush" Value="{DynamicResource GrayBrush2}" />
                             <Setter Property="BorderThickness" Value="2" />
                             <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                             <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
@@ -28,18 +28,20 @@
                                     <Setter Property="CornerRadius" Value="5"/>
                                 </Style>
                                 <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="{DynamicResource AccentColor3}"/>
-                                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="{DynamicResource AccentColor3}" />
-                                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="{DynamicResource IdealForegroundColor}" />
+                                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="{DynamicResource BlackColor}" />
+                                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="{DynamicResource Gray10}" />
+                                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="{DynamicResource BlackColor}" />
                             </Style.Resources>
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding IsRunning}" Value="True" >
-                                    <Setter Property="BorderBrush" Value="ForestGreen"/>
+                                    <Setter Property="BorderBrush" Value="{DynamicResource AccentColorBrush}"/>
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding HasTimeToExportAndNotRunning}" Value="True" >
-                                    <Setter Property="BorderBrush" Value="OrangeRed"/>
+                                    <Setter Property="BorderBrush" Value="{DynamicResource AccentColorBrush}"/>
                                 </DataTrigger>
                                 <Trigger Property="IsMouseOver" Value="True">
                                     <Setter Property="Background" Value="{DynamicResource AccentColorBrush4}" />
+                                    <Setter Property="BorderBrush" Value="{DynamicResource GrayBrush7}"/>
                                 </Trigger>
                             </Style.Triggers>
                         </Style>
@@ -67,7 +69,7 @@
                                         <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
 
-                                    <TextBlock Grid.Column="0" Grid.Row="1" FontSize="12" Margin="3,0,3,0" Text="To Export:">
+                                    <TextBlock Grid.Column="0" Grid.Row="1" FontSize="16" Margin="3,0,3,0" Text="To Export:">
                                         <TextBlock.Style>
                                             <Style TargetType="TextBlock">
                                                 <Setter Property="Visibility" Value="Collapsed" />
@@ -84,21 +86,19 @@
                                             <Style TargetType="TextBlock">
                                                 <Style.Triggers>
                                                     <DataTrigger Binding="{Binding IsRunning}" Value="True" >
-                                                        <Setter Property="Foreground" Value="ForestGreen"/>
-                                                        <Setter Property="FontWeight" Value="Bold" />
+                                                        <Setter Property="Foreground" Value="{DynamicResource AccentColorBrush}"/>
                                                     </DataTrigger>
                                                 </Style.Triggers>
                                             </Style>
                                         </TextBlock.Style>
                                     </TextBlock>
-                                    <TextBlock Grid.Column="1" Grid.Row="1" FontSize="12" Margin="3,0,0,0" Text="{Binding ExportTime}">
+                                    <TextBlock Grid.Column="1" Grid.Row="1" FontSize="16" Margin="3,0,0,0" Text="{Binding ExportTime}">
                                         <TextBlock.Style>
                                             <Style TargetType="TextBlock">
                                                 <Setter Property="Visibility" Value="Collapsed" />
                                                 <Style.Triggers>
                                                     <DataTrigger Binding="{Binding HasTimeToExport}" Value="True" >
-                                                        <Setter Property="Foreground" Value="OrangeRed"/>
-                                                        <Setter Property="FontWeight" Value="Bold" />
+                                                        <Setter Property="Foreground" Value="{DynamicResource AccentColorBrush}"/>
                                                         <Setter Property="Visibility" Value="Visible" />
                                                     </DataTrigger>
                                                 </Style.Triggers>

@@ -21,6 +21,7 @@ namespace Gallifrey.UI.Modern.Models
         
         //UI Settings
         public string Theme { get; set; }
+        public string Accent { get; set; }
 
         //Jira Settings
         public string JiraUrl { get; set; }
@@ -37,6 +38,7 @@ namespace Gallifrey.UI.Modern.Models
 
         //Static Data
         public List<string> AvaliableThemes { get; set; }
+        public List<string> AvaliableAccents { get; set; }
 
         //Data Change Flags
         public bool JiraSettingsChanged { get; set; }
@@ -62,6 +64,7 @@ namespace Gallifrey.UI.Modern.Models
 
             //UI Settings
             Theme = settings.UiSettings.Theme;
+            Accent = settings.UiSettings.Accent;
 
             //Jira Settings
             JiraUrl = settings.JiraConnectionSettings.JiraUrl;
@@ -90,6 +93,7 @@ namespace Gallifrey.UI.Modern.Models
 
             //Static Data
             AvaliableThemes = ThemeManager.AppThemes.Select(x => x.Name.Replace("Base", "")).ToList();
+            AvaliableAccents = ThemeManager.Accents.Select(x=>x.Name).ToList();
         }
 
         public void UpdateSettings(ISettingsCollection settings)
@@ -106,6 +110,7 @@ namespace Gallifrey.UI.Modern.Models
 
             //UI Settings
             settings.UiSettings.Theme = Theme;
+            settings.UiSettings.Accent = Accent;
 
             //Jira Settings
             if (settings.JiraConnectionSettings.JiraUrl != JiraUrl ||

@@ -43,7 +43,15 @@ namespace Gallifrey.UI.Modern.Flyouts
             if (successfulSave)
             {
                 IsOpen = false;
-                ThemeHelper.ChangeTheme(DataModel.Theme);
+                var themeChanged = ThemeHelper.ChangeTheme(DataModel.Theme, DataModel.Accent);
+
+                if (themeChanged)
+                {
+                    //This is a really ugly solution!!
+                    //The overides of system colours do not update automatically which is not good.
+                    //This message will hopefully make people restart...
+                    await DialogCoordinator.Instance.ShowMessageAsync(viewModel, "Restart Needed", "When Changing Theme, Some Colours Will Not Change Automatically\nIt Is Recommended To Restart The App");
+                }
             }
             else
             {

@@ -6,6 +6,7 @@
         int Width { get; set; }
         bool AlwaysOnTop { get; set; }
         string Theme { get; set; }
+        string Accent { get; set; }
     }
 
     public class UiSettings : IUiSettings
@@ -14,6 +15,7 @@
         public int Width { get; set; }
         public bool AlwaysOnTop { get; set; }
         public string Theme { get; set; }
+        public string Accent { get; set; }
 
         public UiSettings()
         {

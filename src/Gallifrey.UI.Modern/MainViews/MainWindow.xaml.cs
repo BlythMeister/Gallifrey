@@ -54,7 +54,7 @@ namespace Gallifrey.UI.Modern.MainViews
             Height = gallifrey.Settings.UiSettings.Height;
             Width = gallifrey.Settings.UiSettings.Width;
             Title = gallifrey.VersionControl.AppName;
-            ThemeHelper.ChangeTheme(gallifrey.Settings.UiSettings.Theme);
+            ThemeHelper.ChangeTheme(gallifrey.Settings.UiSettings.Theme, gallifrey.Settings.UiSettings.Accent);
 
             if (gallifrey.VersionControl.IsAutomatedDeploy)
             {

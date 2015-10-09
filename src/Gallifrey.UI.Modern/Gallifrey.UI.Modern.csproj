@@ -91,6 +91,7 @@
     <Compile Include="Helpers\JiraHelper.cs" />
     <Compile Include="Helpers\JiraHelperResult.cs" />
     <Compile Include="Helpers\EnumMatchToBooleanConverter.cs" />
+    <Compile Include="Helpers\ThemeHelper.cs" />
     <Compile Include="Models\ContributorsModel.cs" />
     <Compile Include="Flyouts\EditTimer.xaml.cs">
       <DependentUpon>EditTimer.xaml</DependentUpon>
@@ -120,7 +121,6 @@
       <DependentUpon>Settings.xaml</DependentUpon>
     </Compile>
     <Compile Include="Helpers\PasswordBoxHelper.cs" />
-    <Compile Include="Helpers\ThemeHelper.cs" />
     <Compile Include="MainViews\BottomBar.xaml.cs">
       <DependentUpon>BottomBar.xaml</DependentUpon>
     </Compile>

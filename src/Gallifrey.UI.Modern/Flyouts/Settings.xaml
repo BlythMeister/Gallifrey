@@ -23,6 +23,7 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
                     <TextBlock Grid.Row="0" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right">Alert When Idle?</TextBlock>
@@ -52,6 +53,9 @@
 
                     <TextBlock Grid.Row="5" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right">Theme</TextBlock>
                     <ComboBox Grid.Row="5" Grid.Column="1" Margin="5" SelectedItem="{Binding Theme}" ItemsSource="{Binding AvaliableThemes}" />
+
+                    <TextBlock Grid.Row="6" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right">Main Colour</TextBlock>
+                    <ComboBox Grid.Row="6" Grid.Column="1" Margin="5" SelectedItem="{Binding Accent}" ItemsSource="{Binding AvaliableAccents}"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Jira">
