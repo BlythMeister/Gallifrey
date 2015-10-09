@@ -86,6 +86,8 @@
     <Compile Include="Flyouts\ChangeLog.xaml.cs">
       <DependentUpon>ChangeLog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\JiraHelper.cs" />
+    <Compile Include="Helpers\JiraHelperResult.cs" />
     <Compile Include="Helpers\EnumMatchToBooleanConverter.cs" />
     <Compile Include="Models\ContributorsModel.cs" />
     <Compile Include="Flyouts\EditTimer.xaml.cs">

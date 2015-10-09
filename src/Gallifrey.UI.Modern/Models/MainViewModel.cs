@@ -20,8 +20,6 @@ namespace Gallifrey.UI.Modern.Models
 
         private readonly Timer runningWatcher;
         public IBackend Gallifrey { get; private set; }
-        //public MainWindow MainWindow { get; private set; }
-        public IDialogCoordinator DialogCoordinator { get; set; }
         public ObservableCollection<TimerDateModel> TimerDates { get; private set; }
         public string ExportedNumber { get { return Gallifrey.JiraTimerCollection.GetNumberExported().Item1.ToString(); } }
         public string TotalTimerCount { get { return Gallifrey.JiraTimerCollection.GetNumberExported().Item2.ToString(); } }
@@ -51,11 +49,10 @@ namespace Gallifrey.UI.Modern.Models
         }
 
 
-        public MainViewModel(IBackend gallifrey, IDialogCoordinator dialogCoordinator, FlyoutsControl flyoutsControl)
+        public MainViewModel(IBackend gallifrey, FlyoutsControl flyoutsControl)
         {
             this.flyoutsControl = flyoutsControl;
             Gallifrey = gallifrey;
-            DialogCoordinator = dialogCoordinator;
             TimerDates = new ObservableCollection<TimerDateModel>();
             runningWatcher = new Timer(1000);
             runningWatcher.Elapsed += runningWatcherElapsed;

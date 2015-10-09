@@ -32,7 +32,6 @@ namespace Gallifrey.Jira
             return request;
         }
 
-        /// <exception cref="JiraClientException">When the status returned from Jira was not the expected status or an error message was included.</exception>
         private void AssertStatus(IRestResponse response, HttpStatusCode status)
         {
             if (response.ErrorException != null)
@@ -185,7 +184,6 @@ namespace Gallifrey.Jira
             return ExectuteRequest<Transitions>(HttpStatusCode.OK, string.Format("issue/{0}/transitions?expand=transitions.fields", issueRef));
         }
 
-        /// <exception cref="JiraClientException">When unable to transition issue.</exception>
         public void TransitionIssue(string issueRef, string transitionName)
         {
             var transitions = GetIssueTransitions(issueRef);

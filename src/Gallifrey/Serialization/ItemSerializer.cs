@@ -35,7 +35,6 @@ namespace Gallifrey.Serialization
 
         }
 
-        /// <exception cref="SerializerError">Something has gone wrong with serialization, message contain more information</exception>
         public void Serialize(T obj)
         {
             if (savePath == null) throw new SerializerError("No Save Path");
@@ -50,7 +49,6 @@ namespace Gallifrey.Serialization
             }
         }
 
-        /// <exception cref="SerializerError">Something has gone wrong with deserialization, message contain more information</exception>
         public T DeSerialize()
         {
             if (savePath == null) throw new SerializerError("No Save Path");

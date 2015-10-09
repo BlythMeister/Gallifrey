@@ -28,7 +28,7 @@ namespace Gallifrey.UI.Modern.Flyouts
 
             ExceptionlessClient.Default.SubmitEvent(DataModel.ExceptionlessEvent);
 
-            await viewModel.DialogCoordinator.ShowMessageAsync(viewModel,"Thank You", "You're Helping Make Gallifrey Better!");
+            await DialogCoordinator.Instance.ShowMessageAsync(viewModel,"Thank You", "You're Helping Make Gallifrey Better!");
 
             IsOpen = false;
         }

@@ -32,13 +32,13 @@ namespace Gallifrey.UI.Modern.Flyouts
             {
                 if (!DataModel.RunDate.HasValue)
                 {
-                    viewModel.DialogCoordinator.ShowMessageAsync(viewModel,"Missing Date", "You Must Enter A Start Date");
+                    DialogCoordinator.Instance.ShowMessageAsync(viewModel,"Missing Date", "You Must Enter A Start Date");
                     return;
                 }
 
                 if (DataModel.RunDate.Value < DataModel.MinDate || DataModel.RunDate.Value > DataModel.MaxDate)
                 {
-                    viewModel.DialogCoordinator.ShowMessageAsync(viewModel,"Invalid Date", string.Format("You Must Enter A Start Date Between {0} And {1}", DataModel.MinDate.ToShortDateString(), DataModel.MaxDate.ToShortDateString()));
+                    DialogCoordinator.Instance.ShowMessageAsync(viewModel,"Invalid Date", string.Format("You Must Enter A Start Date Between {0} And {1}", DataModel.MinDate.ToShortDateString(), DataModel.MaxDate.ToShortDateString()));
                     return;
                 }
 
@@ -48,7 +48,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                 }
                 catch (Exception)
                 {
-                    viewModel.DialogCoordinator.ShowMessageAsync(viewModel,"Duplicate Timer", "This Timer Already Exists On That Date!");
+                    DialogCoordinator.Instance.ShowMessageAsync(viewModel,"Duplicate Timer", "This Timer Already Exists On That Date!");
                     return;
                 }
             }
@@ -62,11 +62,11 @@ namespace Gallifrey.UI.Modern.Flyouts
                 }
                 catch (NoResultsFoundException)
                 {
-                    viewModel.DialogCoordinator.ShowMessageAsync(viewModel,"Invalid Jira", "Unable To Locate The Jira");
+                    DialogCoordinator.Instance.ShowMessageAsync(viewModel,"Invalid Jira", "Unable To Locate The Jira");
                     return;
                 }
 
-                var result = await viewModel.DialogCoordinator.ShowMessageAsync(viewModel,"Correct Jira?", string.Format("Jira found!\n\nRef: {0}\nName: {1}\n\nIs that correct?", jiraIssue.key, jiraIssue.fields.summary), MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No" });
+                var result = await DialogCoordinator.Instance.ShowMessageAsync(viewModel,"Correct Jira?", string.Format("Jira found!\n\nRef: {0}\nName: {1}\n\nIs that correct?", jiraIssue.key, jiraIssue.fields.summary), MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No" });
 
                 if (result == MessageDialogResult.Negative)
                 {
@@ -79,7 +79,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                 }
                 catch (Exception)
                 {
-                    viewModel.DialogCoordinator.ShowMessageAsync(viewModel,"Duplicate Timer", "This Timer Already Exists On That Date!");
+                    DialogCoordinator.Instance.ShowMessageAsync(viewModel,"Duplicate Timer", "This Timer Already Exists On That Date!");
                     return;
                 }
             }

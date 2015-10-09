@@ -179,7 +179,6 @@ namespace Gallifrey.JiraIntegration
             }
         }
 
-        /// <exception cref="NoResultsFoundException">Error loading jiras from search text</exception>
         public IEnumerable<Issue> GetJiraCurrentUserOpenIssues()
         {
             try
