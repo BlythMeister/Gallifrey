@@ -7,24 +7,26 @@ using Gallifrey.Contributors;
 
 namespace Gallifrey.UI.Modern.Models
 {
-    public class ContributorsModel : INotifyPropertyChanged
+    public class InformationModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-        private readonly Timer contributorTimer;
         public string Contributors { get; set; }
+        public string InstallationId { get; set; }
         private readonly List<string> contributorList;
         private int position;
 
-        public ContributorsModel(List<WithThanksDefinition> withThanksDefinitions)
+        public InformationModel(IBackend gallifrey)
         {
-            contributorTimer = new Timer(1000);
+            var contributorTimer = new Timer(1000);
             contributorTimer.Elapsed += ContributorTimerOnElapsed;
             contributorTimer.Start();
 
-            contributorList = withThanksDefinitions.Select(BuildThanksString).ToList();
+            contributorList = gallifrey.WithThanksDefinitions.Select(BuildThanksString).ToList();
 
             position = 0;
             Contributors = contributorList[position];
+
+            InstallationId = string.Format("Your installation has an identifier of: {0}", gallifrey.Settings.InternalSettings.InstallationInstaceId);
         }
 
         private string BuildThanksString(WithThanksDefinition withThanksDefinition)

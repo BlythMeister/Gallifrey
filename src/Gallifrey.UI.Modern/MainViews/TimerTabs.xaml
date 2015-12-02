@@ -27,7 +27,7 @@
                                 <Style TargetType="Border">
                                     <Setter Property="CornerRadius" Value="5"/>
                                 </Style>
-                                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="{DynamicResource AccentColor3}"/>
+                                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="{DynamicResource Gray8}"/>
                                 <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="{DynamicResource BlackColor}" />
                                 <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="{DynamicResource Gray10}" />
                                 <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="{DynamicResource BlackColor}" />
@@ -41,7 +41,6 @@
                                 </DataTrigger>
                                 <Trigger Property="IsMouseOver" Value="True">
                                     <Setter Property="Background" Value="{DynamicResource AccentColorBrush4}" />
-                                    <Setter Property="BorderBrush" Value="{DynamicResource GrayBrush7}"/>
                                 </Trigger>
                             </Style.Triggers>
                         </Style>
@@ -92,7 +91,7 @@
                                             </Style>
                                         </TextBlock.Style>
                                     </TextBlock>
-                                    <TextBlock Grid.Column="1" Grid.Row="1" FontSize="16" Margin="3,0,0,0" Text="{Binding ExportTime}">
+                                    <TextBlock Grid.Column="1" Grid.Row="1" FontSize="16" Margin="3,0,0,0" Text="{Binding ExportTime}" FontWeight="Bold">
                                         <TextBlock.Style>
                                             <Style TargetType="TextBlock">
                                                 <Setter Property="Visibility" Value="Collapsed" />

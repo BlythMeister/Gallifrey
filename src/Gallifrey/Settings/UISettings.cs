@@ -7,6 +7,7 @@
         bool AlwaysOnTop { get; set; }
         string Theme { get; set; }
         string Accent { get; set; }
+        bool SetDefaults();
     }
 
     public class UiSettings : IUiSettings
@@ -16,10 +17,29 @@
         public bool AlwaysOnTop { get; set; }
         public string Theme { get; set; }
         public string Accent { get; set; }
-
+        
         public UiSettings()
         {
             AlwaysOnTop = true;
+        }
+
+        public bool SetDefaults()
+        {
+            var setANewDefault = false;
+
+            if (string.IsNullOrWhiteSpace(Theme))
+            {
+                setANewDefault = true;
+                Theme = "Dark";
+            }
+
+            if (string.IsNullOrWhiteSpace(Accent))
+            {
+                setANewDefault = true;
+                Accent = "Blue";
+            }
+
+            return setANewDefault;
         }
     }
 }

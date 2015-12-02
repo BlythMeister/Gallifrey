@@ -42,27 +42,27 @@
     </ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Exceptionless.Extras, Version=3.1.1412.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Exceptionless.Wpf.3.1.1412\lib\net45\Exceptionless.Extras.dll</HintPath>
+    <Reference Include="Exceptionless.Extras, Version=3.1.1416.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Exceptionless.Wpf.3.1.1416\lib\net45\Exceptionless.Extras.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Exceptionless.Portable, Version=3.1.1412.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Exceptionless.Portable.3.1.1412\lib\net45\Exceptionless.Portable.dll</HintPath>
+    <Reference Include="Exceptionless.Portable, Version=3.1.1416.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Exceptionless.Portable.3.1.1416\lib\net45\Exceptionless.Portable.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Exceptionless.Wpf, Version=3.1.1412.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Exceptionless.Wpf.3.1.1412\lib\net45\Exceptionless.Wpf.dll</HintPath>
+    <Reference Include="Exceptionless.Wpf, Version=3.1.1416.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Exceptionless.Wpf.3.1.1416\lib\net45\Exceptionless.Wpf.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="MahApps.Metro, Version=1.1.3.196, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MahApps.Metro.1.1.3-ALPHA196\lib\net45\MahApps.Metro.dll</HintPath>
+    <Reference Include="MahApps.Metro, Version=1.1.3.225, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MahApps.Metro.1.1.3-ALPHA225\lib\net45\MahApps.Metro.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\MahApps.Metro.1.1.3-ALPHA196\lib\net45\System.Windows.Interactivity.dll</HintPath>
+      <HintPath>..\packages\MahApps.Metro.1.1.3-ALPHA225\lib\net45\System.Windows.Interactivity.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Xml" />
@@ -85,14 +85,18 @@
     <Compile Include="Flyouts\AddTimer.xaml.cs">
       <DependentUpon>AddTimer.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Flyouts\LockedTimer.xaml.cs">
+      <DependentUpon>LockedTimer.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Flyouts\ChangeLog.xaml.cs">
       <DependentUpon>ChangeLog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\ChangeLogModel.cs" />
     <Compile Include="Helpers\JiraHelper.cs" />
     <Compile Include="Helpers\JiraHelperResult.cs" />
     <Compile Include="Helpers\EnumMatchToBooleanConverter.cs" />
     <Compile Include="Helpers\ThemeHelper.cs" />
-    <Compile Include="Models\ContributorsModel.cs" />
+    <Compile Include="Models\InformationModel.cs" />
     <Compile Include="Flyouts\EditTimer.xaml.cs">
       <DependentUpon>EditTimer.xaml</DependentUpon>
     </Compile>
@@ -106,9 +110,6 @@
     </Compile>
     <Compile Include="Flyouts\Information.xaml.cs">
       <DependentUpon>Information.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Flyouts\LockedTimer.xaml.cs">
-      <DependentUpon>LockedTimer.xaml</DependentUpon>
     </Compile>
     <Compile Include="Flyouts\Error.xaml.cs">
       <DependentUpon>Error.xaml</DependentUpon>
@@ -177,6 +178,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Flyouts\LockedTimer.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Flyouts\ChangeLog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -190,10 +195,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Flyouts\Information.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Flyouts\LockedTimer.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

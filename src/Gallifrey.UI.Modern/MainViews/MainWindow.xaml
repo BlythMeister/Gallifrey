@@ -35,8 +35,4 @@
 
         <mainViews:BottomBar DataContext="{Binding}" Grid.Row="4" />
     </Grid>
-
-    
-
-    
 </controls:MetroWindow>

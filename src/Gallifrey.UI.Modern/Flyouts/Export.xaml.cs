@@ -24,7 +24,6 @@ namespace Gallifrey.UI.Modern.Flyouts
             this.viewModel = viewModel;
             InitializeComponent();
             SetupContext(timerId, exportTime);
-
         }
 
         private async void SetupContext(Guid timerId, TimeSpan? exportTime)

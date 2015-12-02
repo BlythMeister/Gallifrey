@@ -95,7 +95,7 @@ namespace Gallifrey.AppTracking
         {
             var versionName = ApplicationDeployment.IsNetworkDeployed ? instanceType.ToString() : "Debug";
 
-            trackingQueryString = string.Format("utm_source=GallifreyApp_{0}&utm_medium={1}&utm_campaign={2}", appType, versionName, internalSettings.LastChangeLogVersion);
+            trackingQueryString = string.Format("utm_source=GallifreyApp_{0}&utm_medium={1}&utm_campaign={2}&uid={3}", appType, versionName, internalSettings.LastChangeLogVersion, internalSettings.InstallationInstaceId);
         }
     }
 }

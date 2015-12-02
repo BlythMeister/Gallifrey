@@ -21,6 +21,7 @@ namespace Gallifrey.UI.Classic
             this.gallifrey = gallifrey;
             InitializeComponent();
             lblCurrentVersion.Text = string.Format("Current Version: {0}", gallifrey.VersionControl.VersionName);
+            lblInstallId.Text = string.Format("Install ID: {0}", gallifrey.Settings.InternalSettings.InstallationInstaceId);
 
             contributors = gallifrey.WithThanksDefinitions.Select(BuildThanksString).ToList();
             timerContributor_Tick(this, null);

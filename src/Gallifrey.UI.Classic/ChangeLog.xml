@@ -200,6 +200,7 @@
   <Version Number="2.2.1" Name="Pre Release">
     <Features>
       <Feature>Added background check of unexported timers to improve export window load time</Feature>
+      <Feature>WHen adding a timer, if you already have the timer will add the time to it.</Feature>
     </Features>
     <Bugs>
       <Bug>Fix issue with balloon icon caused crash</Bug>

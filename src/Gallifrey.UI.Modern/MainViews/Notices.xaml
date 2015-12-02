@@ -27,5 +27,29 @@
                 </Style>
             </TextBlock.Style>
         </TextBlock>
+        <TextBlock Background="{DynamicResource AccentColorBrush}" FontSize="17" Foreground="{DynamicResource IdealForegroundColorBrush}" TextAlignment="Center" Margin="0,1,0,1" Text="{Binding CurrentRunningTimerDescription}">
+            <TextBlock.Style>
+                <Style TargetType="TextBlock">
+                    <Setter Property="Visibility" Value="Visible" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding TimerRunning}" Value="False" >
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
+        <TextBlock Background="{DynamicResource AccentColorBrush}" FontSize="17" Foreground="{DynamicResource IdealForegroundColorBrush}" TextAlignment="Center" Margin="0,1,0,1" Text="{Binding TimeToExportMessage}" MouseDown="UnExportedClick">
+            <TextBlock.Style>
+                <Style TargetType="TextBlock">
+                    <Setter Property="Visibility" Value="Visible" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding HaveTimeToExport}" Value="False" >
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
     </StackPanel>
 </UserControl>

@@ -84,7 +84,7 @@ namespace Gallifrey.Serialization
                 var text = DataEncryption.Decrypt(encryptedString);
                 obj = JsonConvert.DeserializeObject<T>(text);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 obj = new T();
             }

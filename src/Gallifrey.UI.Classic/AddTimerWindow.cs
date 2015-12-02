@@ -121,10 +121,37 @@ namespace Gallifrey.UI.Classic
             {
                 NewTimerId = gallifrey.JiraTimerCollection.AddTimer(jiraIssue, startDate, seedTime, chkStartNow.Checked);
             }
-            catch (DuplicateTimerException)
+            catch (DuplicateTimerException ex)
             {
-                MessageBox.Show("This Timer Already Exists!", "Duplicate Timer", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
+                var doneSomething = false;
+                if (seedTime.TotalMinutes > 0)
+                {
+                    var result = MessageBox.Show("The Timer Already Exists, Would You Like To Add The Time?", "Duplicate Timer", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                    if (result == DialogResult.Yes)
+                    {
+                        gallifrey.JiraTimerCollection.AdjustTime(ex.TimerId, seedTime.Hours, seedTime.Minutes, true);
+                        doneSomething = true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+
+                if (chkStartNow.Checked)
+                {
+                    gallifrey.JiraTimerCollection.StartTimer(ex.TimerId);
+                    doneSomething = true;
+                }
+
+                if (!doneSomething)
+                {
+                    MessageBox.Show("This Timer Already Exists!", "Duplicate Timer", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return false;
+                }
+
+                NewTimerId = ex.TimerId;
             }
 
             if (chkAssign.Checked)

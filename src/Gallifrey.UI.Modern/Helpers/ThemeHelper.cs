@@ -13,12 +13,12 @@ namespace Gallifrey.UI.Modern.Helpers
 
             if (!string.IsNullOrWhiteSpace(themeName))
             {
-                appTheme = ThemeManager.GetAppTheme(string.Format("Base{0}", themeName));
+                appTheme = ThemeManager.GetAppTheme(string.Format("Base{0}", themeName)) ?? theme.Item1;
             }
 
             if (!string.IsNullOrWhiteSpace(accentName))
             {
-                accent = ThemeManager.GetAccent(accentName);
+                accent = ThemeManager.GetAccent(accentName) ?? theme.Item2;
             }
 
             if (theme.Item1 != appTheme || theme.Item2 != accent)
@@ -30,8 +30,6 @@ namespace Gallifrey.UI.Modern.Helpers
             {
                 return false;
             }
-
-            
         }
     }
 }

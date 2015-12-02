@@ -16,12 +16,14 @@ namespace Gallifrey.UI.Modern.Flyouts
     {
         private readonly MainViewModel viewModel;
         private AddTimerModel DataModel { get { return (AddTimerModel)DataContext; } }
+        public bool AddedTimer;
 
-        public AddTimer(MainViewModel viewModel, string jiraRef = null, DateTime? startDate = null, bool? enableDateChange = null, TimeSpan? preloadTime = null, bool? startNow = null)
+        public AddTimer(MainViewModel viewModel, string jiraRef = null, DateTime? startDate = null, bool? enableDateChange = null, TimeSpan? preloadTime = null, bool? enableTimeChange = null, bool? startNow = null)
         {
             this.viewModel = viewModel;
             InitializeComponent();
-            DataContext = new AddTimerModel(viewModel.Gallifrey, jiraRef, startDate, enableDateChange, preloadTime, startNow);
+            DataContext = new AddTimerModel(viewModel.Gallifrey, jiraRef, startDate, enableDateChange, preloadTime, enableTimeChange, startNow);
+            AddedTimer = false;
         }
 
         private async void AddButton(object sender, RoutedEventArgs e)
@@ -60,15 +62,43 @@ namespace Gallifrey.UI.Modern.Flyouts
             }
 
             Guid NewTimerId;
+            var seedTime = new TimeSpan(DataModel.StartHours, DataModel.StartMinutes, 0);
             try
             {
-                var seedTime = new TimeSpan(DataModel.StartHours, DataModel.StartMinutes, 0);
                 NewTimerId = viewModel.Gallifrey.JiraTimerCollection.AddTimer(jiraIssue, DataModel.StartDate.Value, seedTime, DataModel.StartNow);
+                AddedTimer = true;
             }
-            catch (DuplicateTimerException)
+            catch (DuplicateTimerException ex)
             {
-                DialogCoordinator.Instance.ShowMessageAsync(viewModel, "Duplicate Timer", "This Timer Already Exists!");
-                return;
+                var doneSomething = false;
+                if (seedTime.TotalMinutes > 0)
+                {
+                    var result = await DialogCoordinator.Instance.ShowMessageAsync(viewModel, "Duplicate Timer", "The Timer Already Exists, Would You Like To Add The Time?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings {AffirmativeButtonText = "Yes", NegativeButtonText = "No"});
+
+                    if (result == MessageDialogResult.Affirmative)
+                    {
+                        viewModel.Gallifrey.JiraTimerCollection.AdjustTime(ex.TimerId, seedTime.Hours, seedTime.Minutes, true);
+                        doneSomething = true;
+                    }
+                    else
+                    {
+                        return;
+                    }
+                }
+
+                if (DataModel.StartNow)
+                {
+                    viewModel.Gallifrey.JiraTimerCollection.StartTimer(ex.TimerId);
+                    doneSomething = true;
+                }
+
+                if(!doneSomething)
+                {
+                    DialogCoordinator.Instance.ShowMessageAsync(viewModel, "Duplicate Timer", "This Timer Already Exists!");
+                    return;
+                }
+
+                NewTimerId = ex.TimerId;
             }
 
             if (DataModel.AssignToMe)
@@ -97,6 +127,7 @@ namespace Gallifrey.UI.Modern.Flyouts
 
             viewModel.RefreshModel();
             viewModel.SetSelectedTimer(NewTimerId);
+            AddedTimer = true;
             IsOpen = false;
         }
 

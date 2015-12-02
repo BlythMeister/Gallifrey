@@ -21,7 +21,7 @@
                 <ColumnDefinition Width="Auto"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <TextBlock Grid.Row="0" Grid.ColumnSpan="2" FontSize="18" Margin="0,0,0,5" Text="About"/>
-            <TextBlock Grid.Row="1" Grid.Column="0" TextWrapping="Wrap" Margin="0,0,0,5">Gallifrey is a time logging companion designed to work with Jira time logs.<LineBreak />Gallifrey is open sourced on GitHub and free to download and contribute!</TextBlock>
+            <TextBlock Grid.Row="1" Grid.Column="0" TextWrapping="Wrap" Margin="0,0,0,5" VerticalAlignment="Center">Gallifrey is a time logging companion designed to work with Jira time logs.<LineBreak />Gallifrey is open sourced on GitHub and free to download and contribute!</TextBlock>
             <Button Grid.Row="1" Grid.Column="1" Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="ChangeLogButton">
                 <Rectangle Width="27" Height="20" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
                     <Rectangle.OpacityMask>
@@ -55,7 +55,7 @@
                 <ColumnDefinition Width="Auto"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <TextBlock Grid.Row="0" Grid.ColumnSpan="3" FontSize="18" Margin="0,0,0,5" Text="Support"/>
-            <TextBlock Grid.Row="1" Grid.Column="0" TextWrapping="Wrap" Margin="0,0,0,5">Contact Us By Email Or Social Networks!<LineBreak />Email: GallifreyApp@gmail.com<LineBreak />Twitter: @GallifreyApp</TextBlock>
+            <TextBlock Grid.Row="1" Grid.Column="0" TextWrapping="Wrap" Margin="0,0,0,5" VerticalAlignment="Center">Contact Us By Email Or Social Networks!<LineBreak />Email: GallifreyApp@gmail.com<LineBreak />Twitter: @GallifreyApp</TextBlock>
             <Button Grid.Row="1" Grid.Column="1" Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="EmailButton">
                 <Rectangle Width="23" Height="18" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
                     <Rectangle.OpacityMask>
@@ -81,7 +81,7 @@
                 <ColumnDefinition Width="Auto"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <TextBlock Grid.Row="0" Grid.ColumnSpan="2" FontSize="18" Margin="0,0,0,5" Text="Donate"/>
-            <TextBlock Grid.Row="1" Grid.Column="0" TextWrapping="Wrap" Margin="0,0,0,5">Help us keep the project alive by donating via PayPal.</TextBlock>
+            <TextBlock Grid.Row="1" Grid.Column="0" TextWrapping="Wrap" Margin="0,0,0,5" VerticalAlignment="Center">Help us keep the project alive by donating via PayPal.</TextBlock>
             <Button Grid.Row="1" Grid.Column="1" Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="PayPalButton">
                 <Rectangle Width="23" Height="23" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
                     <Rectangle.OpacityMask>
@@ -100,7 +100,7 @@
                 <ColumnDefinition Width="Auto"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <TextBlock Grid.Row="0" Grid.ColumnSpan="2" FontSize="18" Margin="0,0,0,5" Text="Source Code"/>
-            <TextBlock Grid.Row="1" Grid.Column="0" TextWrapping="Wrap" Margin="0,0,0,5">All our code and websites are hosted on GitHub<LineBreak/>You can download and fork to join the community</TextBlock>
+            <TextBlock Grid.Row="1" Grid.Column="0" TextWrapping="Wrap" Margin="0,0,0,5" VerticalAlignment="Center">All our code and websites are hosted on GitHub<LineBreak/>You can download and fork to join the community</TextBlock>
             <Button Grid.Row="1" Grid.Column="1" Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="GitHubButton">
                 <Rectangle Width="28" Height="24" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
                     <Rectangle.OpacityMask>
@@ -108,6 +108,14 @@
                     </Rectangle.OpacityMask>
                 </Rectangle>
             </Button>
+        </Grid>
+        <Grid Grid.Row="5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0" FontSize="18" Margin="0,0,0,5" Text="Installation Identifier"/>
+            <TextBlock Grid.Row="1" TextWrapping="Wrap" Margin="0,0,0,5" VerticalAlignment="Center" Text="{Binding InstallationId}"/>
         </Grid>
     </Grid>
 </controls:Flyout>

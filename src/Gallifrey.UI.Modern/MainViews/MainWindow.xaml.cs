@@ -29,18 +29,18 @@ namespace Gallifrey.UI.Modern.MainViews
         public MainWindow(InstanceType instance, AppType appType)
         {
             InitializeComponent();
-
-            ExceptionlessClient.Default.Configuration.ApiKey = "e7ac6366507547639ce69fea261d6545";
-            ExceptionlessClient.Default.Configuration.DefaultTags.Add("Unknown_Version_Pre_Startup");
-            ExceptionlessClient.Default.Configuration.Enabled = true;
-            ExceptionlessClient.Default.SubmittingEvent += ExceptionlessSubmittingEvent;
-            ExceptionlessClient.Default.Register();
-
+           
             var gallifrey = new Backend(instance, appType);
 
-            ExceptionlessClient.Default.Configuration.DefaultTags.Clear();
-            ExceptionlessClient.Default.Configuration.DefaultTags.Add(gallifrey.VersionControl.VersionName.Replace("\n", " - "));
-
+            if (gallifrey.VersionControl.IsAutomatedDeploy)
+            {
+                ExceptionlessClient.Default.Configuration.ApiKey = "e7ac6366507547639ce69fea261d6545";
+                ExceptionlessClient.Default.Configuration.DefaultTags.Add(gallifrey.VersionControl.VersionName.Replace("\n", " - "));
+                ExceptionlessClient.Default.Configuration.Enabled = true;
+                ExceptionlessClient.Default.SubmittingEvent += ExceptionlessSubmittingEvent;
+                ExceptionlessClient.Default.Register();
+            }
+            
             var viewModel = new MainViewModel(gallifrey, FlyoutsControl);
             viewModel.RefreshModel();
             viewModel.SelectRunningTimer();

@@ -11,7 +11,7 @@
                     <TextBlock Text="/" />
                     <TextBlock Text="{Binding TotalTimerCount}" />
                 </WrapPanel>
-                <WrapPanel HorizontalAlignment="Left" VerticalAlignment="Center" DockPanel.Dock="Left" Margin="10,0,0,0" MouseDown="UnExportedClick">
+                <WrapPanel HorizontalAlignment="Left" VerticalAlignment="Center" DockPanel.Dock="Left" Margin="10,0,0,0">
                     <TextBlock Text="Unexported Time: "/>
                     <TextBlock Text="{Binding UnexportedTime}" />
                 </WrapPanel>

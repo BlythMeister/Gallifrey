@@ -30,12 +30,13 @@ namespace Gallifrey.JiraTimers
         Guid ChangeTimerDate(Guid timerGuid, DateTime newStartDate);
         Tuple<int, int> GetNumberExported();
         TimeSpan GetTotalUnexportedTime();
+        TimeSpan GetTotalExportableTime();
         TimeSpan GetTotalExportedTimeThisWeek(DayOfWeek startOfWeek);
         TimeSpan GetTotalTimeForDate(DateTime timerDate);
         bool AdjustTime(Guid uniqueId, int hours, int minutes, bool addTime);
         void AddJiraExportedTime(Guid uniqueId, int hours, int minutes);
         void AddIdleTimer(Guid uniqueId, IdleTimer idleTimer);
-        void RefreshFromJira(Guid uniqueId, Issue jiraIssue, User currentUser);
+        void RefreshFromJira(Guid uniqueId, Issue jiraIssue, User currentUser);        
     }
 
     public class JiraTimerCollection : IJiraTimerCollection
@@ -98,9 +99,11 @@ namespace Gallifrey.JiraTimers
 
         private void AddTimer(JiraTimer newTimer)
         {
-            if (timerList.Any(timer => timer.JiraReference == newTimer.JiraReference && timer.DateStarted.Date == newTimer.DateStarted.Date))
+            var timerSearch = timerList.FirstOrDefault(timer => timer.JiraReference == newTimer.JiraReference && timer.DateStarted.Date == newTimer.DateStarted.Date);
+
+            if (timerSearch != null)
             {
-                throw new DuplicateTimerException("Already have a timer for this task on this day!");
+                throw new DuplicateTimerException("Already have a timer for this task on this day!", timerSearch.UniqueId);
             }
 
             timerList.Add(newTimer);
@@ -197,9 +200,11 @@ namespace Gallifrey.JiraTimers
             if (currentTimer.IsRunning) currentTimer.StopTimer();
             var newTimer = new JiraTimer(newIssue, currentTimer.DateStarted, currentTimer.ExactCurrentTime);
 
-            if (timerList.Any(timer => timer.JiraReference == newTimer.JiraReference && timer.DateStarted.Date == newTimer.DateStarted.Date && timer.UniqueId != timerGuid))
+            var timerSearch = timerList.FirstOrDefault(timer => timer.JiraReference == newTimer.JiraReference && timer.DateStarted.Date == newTimer.DateStarted.Date);
+
+            if (timerSearch != null)
             {
-                throw new DuplicateTimerException("Already have a timer for this task on this day!");
+                throw new DuplicateTimerException("Already have a timer for this task on this day!", timerSearch.UniqueId);
             }
 
             RemoveTimer(timerGuid);
@@ -214,9 +219,11 @@ namespace Gallifrey.JiraTimers
             if (currentTimer.IsRunning) currentTimer.StopTimer();
             var newTimer = new JiraTimer(currentTimer, newStartDate.Date, false);
 
-            if (timerList.Any(timer => timer.JiraReference == newTimer.JiraReference && timer.DateStarted.Date == newTimer.DateStarted.Date && timer.UniqueId != timerGuid))
+            var timerSearch = timerList.FirstOrDefault(timer => timer.JiraReference == newTimer.JiraReference && timer.DateStarted.Date == newTimer.DateStarted.Date);
+
+            if (timerSearch != null)
             {
-                throw new DuplicateTimerException("Already have a timer for this task on this day!");
+                throw new DuplicateTimerException("Already have a timer for this task on this day!", timerSearch.UniqueId);
             }
 
             RemoveTimer(timerGuid);
@@ -233,7 +240,13 @@ namespace Gallifrey.JiraTimers
         public TimeSpan GetTotalUnexportedTime()
         {
             var unexportedTime = new TimeSpan();
-            return timerList.Aggregate(unexportedTime, (current, jiraTimer) => current.Add(new TimeSpan(jiraTimer.TimeToExport.Hours, jiraTimer.TimeToExport.Minutes, 0)));
+            return timerList.Where(timer => !timer.FullyExported).Aggregate(unexportedTime, (current, jiraTimer) => current.Add(new TimeSpan(jiraTimer.TimeToExport.Hours, jiraTimer.TimeToExport.Minutes, 0)));
+        }
+
+        public TimeSpan GetTotalExportableTime()
+        {
+            var unexportedTime = new TimeSpan();
+            return timerList.Where(timer => !timer.IsRunning && !timer.FullyExported).Aggregate(unexportedTime, (current, jiraTimer) => current.Add(new TimeSpan(jiraTimer.TimeToExport.Hours, jiraTimer.TimeToExport.Minutes, 0)));
         }
 
         public TimeSpan GetTotalExportedTimeThisWeek(DayOfWeek startOfWeek)

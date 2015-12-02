@@ -1,5 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
+using Gallifrey.JiraIntegration;
 
 namespace Gallifrey.UI.Modern.Models
 {
@@ -13,14 +16,16 @@ namespace Gallifrey.UI.Modern.Models
         public DateTime? StartDate { get; set; }
         public DateTime DisplayDate { get; set; }
         public bool DateEditable { get; set; }
+        public bool TimeEditable { get; set; }
         public int StartHours { get; set; }
         public int StartMinutes { get; set; }
         public bool StartNow { get; set; }
         public bool StartNowEditable { get; set; }
         public bool AssignToMe { get; set; }
         public bool InProgress { get; set; }
+        public List<string> RecentJiras { get; set; }
 
-        public AddTimerModel(IBackend gallifrey, string jiraRef, DateTime? startDate, bool? enableDateChange, TimeSpan? preloadTime, bool? startNow)
+        public AddTimerModel(IBackend gallifrey, string jiraRef, DateTime? startDate, bool? enableDateChange, TimeSpan? preloadTime, bool? enableTimeChange, bool? startNow)
         {
             var dateToday = DateTime.Now;
 
@@ -52,6 +57,7 @@ namespace Gallifrey.UI.Modern.Models
             }
 
             DateEditable = !enableDateChange.HasValue || enableDateChange.Value;
+            TimeEditable = !enableTimeChange.HasValue || enableTimeChange.Value;
 
             if (preloadTime.HasValue)
             {
@@ -60,6 +66,8 @@ namespace Gallifrey.UI.Modern.Models
             }
 
             StartNow = startNow.HasValue && startNow.Value;
+
+            RecentJiras = gallifrey.JiraConnection.GetRecentJirasFound().Select(x=>x.JiraReference).ToList();
         }
 
         public void SetStartNowEnabled(bool enabled)

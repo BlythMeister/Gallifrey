@@ -1,4 +1,6 @@
-﻿using Gallifrey.Settings;
+﻿using System;
+using System.Security.AccessControl;
+using Gallifrey.Settings;
 
 namespace Gallifrey.Serialization
 {
@@ -23,7 +25,31 @@ namespace Gallifrey.Serialization
                 serializer = new ItemSerializer<SettingsCollection>("Settings.dat");
             }
 
-            return serializer.DeSerialize();
+            var settings = serializer.DeSerialize();
+
+            return SetMissingDefaults(settings);
+        }
+
+        private static SettingsCollection SetMissingDefaults(SettingsCollection settings)
+        {
+            var setANewDefault = false;
+
+            if (settings.UiSettings.SetDefaults())
+            {
+                setANewDefault = true;
+            }
+
+            if (settings.InternalSettings.SetDefaults())
+            {
+                setANewDefault = true;
+            }
+
+            if (setANewDefault)
+            {
+                Serialize(settings);
+            }
+
+            return settings;
         }
     }
 }

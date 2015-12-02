@@ -18,7 +18,7 @@ namespace Gallifrey.UI.Modern.Flyouts
         {
             this.viewModel = viewModel;
             InitializeComponent();
-            DataContext = new ContributorsModel(viewModel.Gallifrey.WithThanksDefinitions);
+            DataContext = new InformationModel(viewModel.Gallifrey);
         }
 
         private void EmailButton(object sender, RoutedEventArgs e)
