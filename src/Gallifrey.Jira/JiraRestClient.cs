@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -104,11 +105,18 @@ namespace Gallifrey.Jira
         {
             var issue = GetIssue(issueRef);
 
-            if (issue.fields.worklog.total > issue.fields.worklog.worklogs.Count())
+            if (issue.fields.worklog == null)
+            {
+                issue.fields.worklog = new WorkLogs { worklogs = null };
+            }
+
+            if (issue.fields.worklog.worklogs == null || issue.fields.worklog.total > issue.fields.worklog.worklogs.Count())
             {
                 var worklogs = ExectuteRequest(HttpStatusCode.OK, string.Format("issue/{0}/worklog", issueRef), customDeserialize: s => FilterWorklogsToUser(s, user));
-                
+
                 issue.fields.worklog.worklogs = worklogs.worklogs;
+                issue.fields.worklog.total = worklogs.total;
+                issue.fields.worklog.maxResults = worklogs.maxResults;
             }
 
             return issue;

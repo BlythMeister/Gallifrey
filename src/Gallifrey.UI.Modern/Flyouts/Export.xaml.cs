@@ -18,11 +18,13 @@ namespace Gallifrey.UI.Modern.Flyouts
     {
         private readonly MainViewModel viewModel;
         private ExportModel DataModel { get { return (ExportModel)DataContext; } }
+        private readonly JiraHelper jiraHelper;
 
         public Export(MainViewModel viewModel, Guid timerId, TimeSpan? exportTime)
         {
             this.viewModel = viewModel;
             InitializeComponent();
+            jiraHelper = new JiraHelper(viewModel.DialogContext);
             SetupContext(timerId, exportTime);
         }
 
@@ -38,16 +40,20 @@ namespace Gallifrey.UI.Modern.Flyouts
             var showError = false;
             try
             {
-                var jiraDownloadResult = await JiraHelper.Do(() => viewModel.Gallifrey.JiraConnection.GetJiraIssue(timerToShow.JiraReference, requireRefresh), viewModel, "Downloading Jira Work Logs To Ensure Accurate Export", true);
+                var jiraDownloadResult = await jiraHelper.Do(() => viewModel.Gallifrey.JiraConnection.GetJiraIssue(timerToShow.JiraReference, requireRefresh), "Downloading Jira Work Logs To Ensure Accurate Export", true, false);
 
-                if (jiraDownloadResult.Cancelled)
+                switch (jiraDownloadResult.Status)
                 {
-                    IsOpen = false;
-                    return; 
+                    case JiraHelperResult<Issue>.JiraHelperStatus.Cancelled:
+                        IsOpen = false;
+                        return;
+                    case JiraHelperResult<Issue>.JiraHelperStatus.Errored:
+                        showError = true;
+                        break;
+                    default:
+                        jiraIssue = jiraDownloadResult.RetVal;
+                        break;
                 }
-
-                jiraIssue = jiraDownloadResult.RetVal;
-                
             }
             catch (Exception)
             {
@@ -56,7 +62,7 @@ namespace Gallifrey.UI.Modern.Flyouts
 
             if (showError)
             {
-                await DialogCoordinator.Instance.ShowMessageAsync(viewModel, "Unable To Locate Jira", string.Format("Unable To Locate Jira {0}!\nCannot Export Time\nPlease Verify/Correct Jira Reference", timerToShow.JiraReference));
+                await DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext, "Unable To Locate Jira", string.Format("Unable To Locate Jira {0}!\nCannot Export Time\nPlease Verify/Correct Jira Reference", timerToShow.JiraReference));
                 IsOpen = false;
                 return;
             }
@@ -70,14 +76,14 @@ namespace Gallifrey.UI.Modern.Flyouts
 
             if (timerToShow.FullyExported)
             {
-                await DialogCoordinator.Instance.ShowMessageAsync(viewModel, "Nothing To Export", "There Is No Time To Export");
+                await DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext, "Nothing To Export", "There Is No Time To Export");
                 IsOpen = false;
                 return;
             }
 
             if (timerToShow.IsRunning)
             {
-                await DialogCoordinator.Instance.ShowMessageAsync(viewModel, "Timer Is Running", "You Cannot Export A Timer While It Is Running");
+                await DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext, "Timer Is Running", "You Cannot Export A Timer While It Is Running");
                 IsOpen = false;
                 return;
             }
@@ -89,22 +95,28 @@ namespace Gallifrey.UI.Modern.Flyouts
         {
             if (DataModel.Timer.TimeToExport < DataModel.ToExport)
             {
-                await DialogCoordinator.Instance.ShowMessageAsync(viewModel, "Invalid Export", string.Format("You Cannot Export More Than The Timer States Un-Exported\nThis Value Is {0}!", DataModel.ToExport.ToString(@"hh\:mm")));
+                await DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext, "Invalid Export", string.Format("You Cannot Export More Than The Timer States Un-Exported\nThis Value Is {0}!", DataModel.ToExport.ToString(@"hh\:mm")));
                 return;
             }
 
             Task<MessageDialogResult> dialog = null;
             try
             {
-                viewModel.Gallifrey.JiraConnection.LogTime(DataModel.JiraRef, DataModel.ExportDate, DataModel.ToExport, DataModel.WorkLogStrategy, DataModel.Comment, DataModel.Remaining);
+                var jiraRef = DataModel.JiraRef;
+                var date = DataModel.ExportDate;
+                var toExport = DataModel.ToExport;
+                var strategy = DataModel.WorkLogStrategy;
+                var comment = DataModel.Comment;
+                var remaining = DataModel.Remaining;
+                await jiraHelper.Do(() => viewModel.Gallifrey.JiraConnection.LogTime(jiraRef, date, toExport, strategy, comment, remaining), "Exporting Time To Jira", false, true);
             }
             catch (WorkLogException)
             {
-                dialog = DialogCoordinator.Instance.ShowMessageAsync(viewModel, "Error Exporting", "Unable To Log Work!");
+                dialog = DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext, "Error Exporting", "Unable To Log Work!");
             }
             catch (StateChangedException)
             {
-                dialog = DialogCoordinator.Instance.ShowMessageAsync(viewModel, "Error Exporting", "Unable To Re-Close A The Jira, Manually Check!!");
+                dialog = DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext, "Error Exporting", "Unable To Re-Close A The Jira, Manually Check!!");
             }
 
             if (dialog != null)

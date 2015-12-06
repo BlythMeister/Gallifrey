@@ -115,7 +115,7 @@ namespace Gallifrey
                     var runningTimer = jiraTimerCollection.GetTimer(runningTimerId.Value);
                     if (runningTimer.DateStarted.Date != DateTime.Now.Date)
                     {
-                        jiraTimerCollection.StopTimer(runningTimerId.Value);
+                        jiraTimerCollection.StopTimer(runningTimerId.Value, true);
                         jiraTimerCollection.StartTimer(runningTimerId.Value);
                     }
                 }
@@ -185,7 +185,7 @@ namespace Gallifrey
             var runningTimer = jiraTimerCollection.GetRunningTimerId();
             if (runningTimer.HasValue)
             {
-                jiraTimerCollection.StopTimer(runningTimer.Value);
+                jiraTimerCollection.StopTimer(runningTimer.Value, false);
             }
             settingsCollection.AppSettings.TimerRunningOnShutdown = runningTimer;
 
@@ -226,7 +226,7 @@ namespace Gallifrey
             runningTimerWhenIdle = JiraTimerCollection.GetRunningTimerId();
             if (runningTimerWhenIdle.HasValue)
             {
-                jiraTimerCollection.StopTimer(runningTimerWhenIdle.Value);
+                jiraTimerCollection.StopTimer(runningTimerWhenIdle.Value, true);
             }
             return idleTimerCollection.NewLockTimer();
         }

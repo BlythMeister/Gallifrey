@@ -20,16 +20,19 @@ namespace Gallifrey.UI.Modern.Flyouts
 
         private readonly MainViewModel viewModel;
         private readonly bool openFromAdd;
+        private readonly JiraHelper jiraHelper;
 
         public Search(MainViewModel viewModel, bool openFromAdd)
         {
             this.viewModel = viewModel;
             this.openFromAdd = openFromAdd;
             InitializeComponent();
+            jiraHelper = new JiraHelper(viewModel.DialogContext);
 
             var filters = viewModel.Gallifrey.JiraConnection.GetJiraFilters();
             var issues = viewModel.Gallifrey.JiraConnection.GetJiraCurrentUserOpenIssues();
-            DataContext = new SearchModel(filters, issues);
+            var recent = viewModel.Gallifrey.JiraTimerCollection.GetJiraReferencesForLastDays(100);
+            DataContext = new SearchModel(filters, recent, issues);
         }
 
         private async void SearchButton(object sender, RoutedEventArgs e)
@@ -39,34 +42,40 @@ namespace Gallifrey.UI.Modern.Flyouts
                 JiraHelperResult<IEnumerable<Issue>> searchResult = null;
                 DataModel.SetIsSearching();
 
+                Func<IEnumerable<Issue>> searchFunc;
                 if (!string.IsNullOrWhiteSpace(DataModel.SearchTerm))
                 {
-                    searchResult = await JiraHelper.Do(() => viewModel.Gallifrey.JiraConnection.GetJiraIssuesFromSearchText(DataModel.SearchTerm), viewModel, "Search In Progress", true);
+                    var searchTerm = DataModel.SearchTerm;
+                    searchFunc = () => viewModel.Gallifrey.JiraConnection.GetJiraIssuesFromSearchText(searchTerm);
                 }
                 else if (!string.IsNullOrWhiteSpace(DataModel.SelectedFilter))
                 {
-                    searchResult = await JiraHelper.Do(() => viewModel.Gallifrey.JiraConnection.GetJiraIssuesFromFilter(DataModel.SelectedFilter), viewModel, "Search In Progress", true);
+                    var searchFilter = DataModel.SelectedFilter;
+                    searchFunc = () => viewModel.Gallifrey.JiraConnection.GetJiraIssuesFromFilter(searchFilter);
                 }
                 else
                 {
-                    DialogCoordinator.Instance.ShowMessageAsync(viewModel, "No Results", "Your Search Returned No Results");
+                    await DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext, "No Results", "Your Search Returned No Results");
+                    return;
                 }
 
-                if (searchResult != null)
+                searchResult = await jiraHelper.Do(searchFunc, "Search In Progress", true, false);
+
+                switch (searchResult.Status)
                 {
-                    if (searchResult.Cancelled)
-                    {
+                    case JiraHelperResult<IEnumerable<Issue>>.JiraHelperStatus.Cancelled:
                         DataModel.ClearSearchResults();
-                    }
-                    else
-                    {
+                        return;
+                    case JiraHelperResult<IEnumerable<Issue>>.JiraHelperStatus.Errored:
+                        throw new Exception();
+                    default:
                         DataModel.UpdateSearchResults(searchResult.RetVal);
-                    }
+                        break;
                 }
             }
             catch (Exception)
             {
-                DialogCoordinator.Instance.ShowMessageAsync(viewModel, "No Results", "There Was An Error Getting Search Results");
+                DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext, "No Results", "There Was An Error Getting Search Results");
                 DataModel.ClearSearchResults();
             }
         }
@@ -75,7 +84,7 @@ namespace Gallifrey.UI.Modern.Flyouts
         {
             if (DataModel.SelectedSearchResult == null)
             {
-                DialogCoordinator.Instance.ShowMessageAsync(viewModel, "No Selected Item", "You Need To Select An Item To Add A Timer For It");
+                DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext, "No Selected Item", "You Need To Select An Item To Add A Timer For It");
                 return;
             }
 

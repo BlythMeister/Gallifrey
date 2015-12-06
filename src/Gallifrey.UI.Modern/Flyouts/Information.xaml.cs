@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Linq;
 using System.Windows;
+using System.Windows.Navigation;
 using System.Xml.Linq;
 using Gallifrey.UI.Modern.Models;
 using MahApps.Metro.Controls.Dialogs;
@@ -21,15 +22,9 @@ namespace Gallifrey.UI.Modern.Flyouts
             DataContext = new InformationModel(viewModel.Gallifrey);
         }
 
-        private void EmailButton(object sender, RoutedEventArgs e)
+        private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
         {
-            Process.Start(new ProcessStartInfo("mailto:contact@gallifreyapp.co.uk?subject=Gallifrey App Contact"));
-            e.Handled = true;
-        }
-
-        private void TwitterButton(object sender, RoutedEventArgs e)
-        {
-            Process.Start(new ProcessStartInfo("https://twitter.com/GallifreyApp"));
+            Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
             e.Handled = true;
         }
 
@@ -43,20 +38,8 @@ namespace Gallifrey.UI.Modern.Flyouts
             }
             else
             {
-                DialogCoordinator.Instance.ShowMessageAsync(viewModel, "No Change Log", "There Is No Change Log To Show");
+                DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext, "No Change Log", "There Is No Change Log To Show");
             }
-        }
-
-        private void PayPalButton(object sender, RoutedEventArgs e)
-        {
-            Process.Start(new ProcessStartInfo("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=G3MWL8E6UG4RS"));
-            e.Handled = true;
-        }
-
-        private void GitHubButton(object sender, RoutedEventArgs e)
-        {
-            Process.Start(new ProcessStartInfo("https://github.com/BlythMeister/Gallifrey"));
-            e.Handled = true;
         }
     }
 }

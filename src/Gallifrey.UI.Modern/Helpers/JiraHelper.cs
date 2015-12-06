@@ -6,36 +6,88 @@ using MahApps.Metro.Controls.Dialogs;
 
 namespace Gallifrey.UI.Modern.Helpers
 {
-    public static class JiraHelper
+    public class JiraHelper
     {
-        public static async Task<JiraHelperResult<T>> Do<T>(Func<T> jiraAction, MainViewModel viewModel, string message, bool canCancel = false)
+        private readonly DialogContext dialogContext;
+
+        public JiraHelper(DialogContext dialogContext)
         {
-            JiraHelperResult<T> result;
-            var cancellationTokenSource = new CancellationTokenSource();
-            var jiraDownloadTask = Task.Factory.StartNew(jiraAction, cancellationTokenSource.Token);
+            this.dialogContext = dialogContext;
+        }
 
-            var controller = await DialogCoordinator.Instance.ShowProgressAsync(viewModel, "Please Wait", message, canCancel);
-            var controllerCancel = Task.Factory.StartNew(() =>
+        public Task<JiraHelperResult<bool>> Do(Action jiraAction, string message, bool canCancel, bool throwErrors)
+        {
+            var jiraFunc = new Func<bool>(() =>
             {
-                while (!controller.IsCanceled)
+                try
                 {
-
+                    jiraAction.Invoke();
+                    return true;
+                }
+                catch (Exception)
+                {
+                    return false;
                 }
             });
+            return Do(jiraFunc, message, canCancel, throwErrors);
+        }
 
-            if (await Task.WhenAny(jiraDownloadTask, controllerCancel) == controllerCancel)
+        public async Task<JiraHelperResult<T>> Do<T>(Func<T> jiraAction, string message, bool canCancel, bool throwErrors)
+        {
+            var cancellationTokenSource = new CancellationTokenSource();
+            ProgressDialogController controller = null;
+
+            try
+            {
+                JiraHelperResult<T> result;
+                controller = await DialogCoordinator.Instance.ShowProgressAsync(dialogContext, "Please Wait", message, canCancel);
+                var controllerCancel = Task.Factory.StartNew(() =>
+                {
+                    while (!controller.IsCanceled)
+                    {
+
+                    }
+                });
+
+                var jiraDownloadTask = new Task<T>(jiraAction, cancellationTokenSource.Token);
+                jiraDownloadTask.Start();
+                if (await Task.WhenAny(jiraDownloadTask, controllerCancel) == controllerCancel)
+                {
+                    cancellationTokenSource.Cancel();
+                    result = JiraHelperResult<T>.GetCancelled();
+                }
+                else
+                {
+                    if (jiraDownloadTask.Status == TaskStatus.RanToCompletion)
+                    {
+                        result = JiraHelperResult<T>.GetSuccess(jiraDownloadTask.Result);
+                    }
+                    else
+                    {
+                        result = JiraHelperResult<T>.GetErrored();
+                    }
+                }
+
+                return result;
+            }
+            catch (Exception)
+            {
+                if (throwErrors)
+                {
+                    throw;
+                }
+
+                return JiraHelperResult<T>.GetErrored();
+            }
+            finally
             {
                 cancellationTokenSource.Cancel();
-                result = JiraHelperResult<T>.GetCancelled();
-            }
-            else
-            {
-                result = JiraHelperResult<T>.GetSuccess(jiraDownloadTask.Result);
-            }
 
-            await controller.CloseAsync();
-
-            return result;
+                if (controller != null)
+                {
+                    await controller.CloseAsync();
+                }
+            }
         }
     }
 }

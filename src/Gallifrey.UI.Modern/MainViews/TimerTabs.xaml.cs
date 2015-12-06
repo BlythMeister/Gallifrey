@@ -25,7 +25,7 @@ namespace Gallifrey.UI.Modern.MainViews
 
                 if (runningTimer.HasValue && runningTimer.Value == timerId.Value)
                 {
-                    ViewModel.Gallifrey.JiraTimerCollection.StopTimer(timerId.Value);
+                    ViewModel.Gallifrey.JiraTimerCollection.StopTimer(timerId.Value, false);
                 }
                 else
                 {
@@ -37,7 +37,7 @@ namespace Gallifrey.UI.Modern.MainViews
                     }
                     catch (DuplicateTimerException)
                     {
-                        DialogCoordinator.Instance.ShowMessageAsync(ViewModel, "Wrong Day!", "Use The Version Of This Timer For Today!");                       
+                        DialogCoordinator.Instance.ShowMessageAsync(ViewModel.DialogContext, "Wrong Day!", "Use The Version Of This Timer For Today!");                       
                     }
                 }
                 

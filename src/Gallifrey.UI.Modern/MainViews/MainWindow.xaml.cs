@@ -29,7 +29,7 @@ namespace Gallifrey.UI.Modern.MainViews
         public MainWindow(InstanceType instance, AppType appType)
         {
             InitializeComponent();
-           
+
             var gallifrey = new Backend(instance, appType);
 
             if (gallifrey.VersionControl.IsAutomatedDeploy)
@@ -40,7 +40,7 @@ namespace Gallifrey.UI.Modern.MainViews
                 ExceptionlessClient.Default.SubmittingEvent += ExceptionlessSubmittingEvent;
                 ExceptionlessClient.Default.Register();
             }
-            
+
             var viewModel = new MainViewModel(gallifrey, FlyoutsControl);
             viewModel.RefreshModel();
             viewModel.SelectRunningTimer();
@@ -60,7 +60,7 @@ namespace Gallifrey.UI.Modern.MainViews
             {
                 PerformUpdate(false, true);
                 var updateHeartbeat = new Timer(60000);
-                updateHeartbeat.Elapsed += delegate { PerformUpdate(false, false); };
+                updateHeartbeat.Elapsed += AutoUpdateCheck;
                 updateHeartbeat.Enabled = true;
             }
         }
@@ -107,7 +107,7 @@ namespace Gallifrey.UI.Modern.MainViews
 
             if (missingConfig)
             {
-                await DialogCoordinator.Instance.ShowMessageAsync(ViewModel, "Multiple Instances", "You Can Only Have One Instance Of Gallifrey Running At A Time\nPlease Close The Other Instance");
+                await DialogCoordinator.Instance.ShowMessageAsync(ViewModel.DialogContext, "Multiple Instances", "You Can Only Have One Instance Of Gallifrey Running At A Time\nPlease Close The Other Instance");
                 CloseApp();
             }
             else if (showSettings)
@@ -143,7 +143,7 @@ namespace Gallifrey.UI.Modern.MainViews
                     message += string.Format("You Have '{0}' To Export For This Change", exportTime.FormatAsString(false));
                 }
 
-                var messageResult = await DialogCoordinator.Instance.ShowMessageAsync(ViewModel, "Do You Want To Export?", message, MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No" });
+                var messageResult = await DialogCoordinator.Instance.ShowMessageAsync(ViewModel.DialogContext, "Do You Want To Export?", message, MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No" });
 
                 if (messageResult == MessageDialogResult.Affirmative)
                 {
@@ -191,7 +191,7 @@ namespace Gallifrey.UI.Modern.MainViews
             });
         }
 
-        private void SessionSwitchHandler(object sender, SessionSwitchEventArgs e)
+        private async void SessionSwitchHandler(object sender, SessionSwitchEventArgs e)
         {
             switch (e.Reason)
             {
@@ -218,7 +218,11 @@ namespace Gallifrey.UI.Modern.MainViews
                         }
                         else
                         {
-                            ViewModel.OpenFlyout(new LockedTimer(ViewModel));
+                            this.FlashWindow();
+                            Activate();
+                            ViewModel.CloseAllFlyouts();
+                            await ViewModel.OpenFlyout(new LockedTimer(ViewModel));
+                            this.StopFlashingWindow();
                         }
                     }
                     catch (NoIdleTimerRunningException) { }
@@ -232,6 +236,14 @@ namespace Gallifrey.UI.Modern.MainViews
             PerformUpdate(true, true);
         }
 
+        private void AutoUpdateCheck(object sender, ElapsedEventArgs e)
+        {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                PerformUpdate(false, false);
+            });
+        }
+
         private async void PerformUpdate(bool manualUpdateCheck, bool promptReinstall)
         {
             var manualReinstall = false;
@@ -241,7 +253,7 @@ namespace Gallifrey.UI.Modern.MainViews
                 UpdateResult updateResult;
                 if (manualUpdateCheck)
                 {
-                    var controller = await DialogCoordinator.Instance.ShowProgressAsync(ViewModel, "Please Wait", "Checking For Updates");
+                    var controller = await DialogCoordinator.Instance.ShowProgressAsync(ViewModel.DialogContext, "Please Wait", "Checking For Updates");
 
                     updateResult = await ViewModel.Gallifrey.VersionControl.CheckForUpdates(true);
                     await controller.CloseAsync();
@@ -255,7 +267,7 @@ namespace Gallifrey.UI.Modern.MainViews
                 {
                     if (manualUpdateCheck)
                     {
-                        var messageResult = await DialogCoordinator.Instance.ShowMessageAsync(ViewModel, "Update Found", "Restart Now To Install Update?", MessageDialogStyle.AffirmativeAndNegative,
+                        var messageResult = await DialogCoordinator.Instance.ShowMessageAsync(ViewModel.DialogContext, "Update Found", "Restart Now To Install Update?", MessageDialogStyle.AffirmativeAndNegative,
                                                                     new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No" });
 
                         if (messageResult == MessageDialogResult.Affirmative)
@@ -273,11 +285,11 @@ namespace Gallifrey.UI.Modern.MainViews
                 }
                 else if (manualUpdateCheck && updateResult == UpdateResult.NoUpdate)
                 {
-                    await DialogCoordinator.Instance.ShowMessageAsync(ViewModel, "No Update Found", "There Are No Updates At This Time, Check Back Soon!");
+                    await DialogCoordinator.Instance.ShowMessageAsync(ViewModel.DialogContext, "No Update Found", "There Are No Updates At This Time, Check Back Soon!");
                 }
                 else if (manualUpdateCheck && updateResult == UpdateResult.NotDeployable)
                 {
-                    await DialogCoordinator.Instance.ShowMessageAsync(ViewModel, "Unable To Update", "You Cannot Auto Update This Version Of Gallifrey");
+                    await DialogCoordinator.Instance.ShowMessageAsync(ViewModel.DialogContext, "Unable To Update", "You Cannot Auto Update This Version Of Gallifrey");
                 }
             }
             catch (ManualReinstallRequiredException)
@@ -287,7 +299,7 @@ namespace Gallifrey.UI.Modern.MainViews
 
             if (manualReinstall && promptReinstall)
             {
-                var messageResult = await DialogCoordinator.Instance.ShowMessageAsync(ViewModel, "Update Error", "To Update An Uninstall/Reinstall Is Required.\nThis Can Happen Automatically\nNo Timers Will Be Lost\nDo You Want To Update Now?", MessageDialogStyle.AffirmativeAndNegative,
+                var messageResult = await DialogCoordinator.Instance.ShowMessageAsync(ViewModel.DialogContext, "Update Error", "To Update An Uninstall/Reinstall Is Required.\nThis Can Happen Automatically\nNo Timers Will Be Lost\nDo You Want To Update Now?", MessageDialogStyle.AffirmativeAndNegative,
                                                                     new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No" });
 
                 if (messageResult == MessageDialogResult.Affirmative)
@@ -301,10 +313,11 @@ namespace Gallifrey.UI.Modern.MainViews
         {
             if (restart && ViewModel.Gallifrey.VersionControl.IsAutomatedDeploy)
             {
-                Process.Start(ViewModel.Gallifrey.VersionControl.ActivationUrl);
+                System.Windows.Forms.Application.Restart();
             }
 
             Application.Current.Shutdown();
+            
         }
 
         private void MainWindow_OnClosed(object sender, EventArgs e)

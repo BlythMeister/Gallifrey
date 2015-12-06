@@ -14,8 +14,7 @@ namespace Gallifrey.Versions
         InstanceType InstanceType { get; }
         AppType AppType { get; }
         bool IsAutomatedDeploy { get; }
-        string ActivationUrl { get; }
-        bool AlreadyInstalledUpdate { get; }
+        bool UpdateInstalled { get; }
         string VersionName { get; }
         Version DeployedVersion { get; }
         bool IsFirstRun { get; }
@@ -33,9 +32,9 @@ namespace Gallifrey.Versions
         public InstanceType InstanceType { get; private set; }
         public AppType AppType { get; private set; }
         public string VersionName { get; private set; }
-
         public string AppName { get; private set; }
-        
+        public bool UpdateInstalled { get; private set; }
+
         private DateTime lastUpdateCheck;
 
         public VersionControl(InstanceType instanceType, AppType appType, ITrackUsage trackUsage)
@@ -78,19 +77,9 @@ namespace Gallifrey.Versions
             get { return ApplicationDeployment.IsNetworkDeployed; }
         }
 
-        public string ActivationUrl
-        {
-            get { return ApplicationDeployment.CurrentDeployment.ActivationUri != null ? ApplicationDeployment.CurrentDeployment.ActivationUri.ToString() : string.Empty; }
-        }
-
-        public bool AlreadyInstalledUpdate
-        {
-            get { return ApplicationDeployment.IsNetworkDeployed && ApplicationDeployment.CurrentDeployment != null && ApplicationDeployment.CurrentDeployment.UpdatedVersion != ApplicationDeployment.CurrentDeployment.CurrentVersion; }
-        }
-
         public Version DeployedVersion
         {
-            get { return AlreadyInstalledUpdate ? ApplicationDeployment.CurrentDeployment.UpdatedVersion : ApplicationDeployment.CurrentDeployment.CurrentVersion; }
+            get { return UpdateInstalled ? ApplicationDeployment.CurrentDeployment.UpdatedVersion : ApplicationDeployment.CurrentDeployment.CurrentVersion; }
         }
 
         public bool IsFirstRun
@@ -119,6 +108,7 @@ namespace Gallifrey.Versions
                         return Task.Factory.StartNew(() => ApplicationDeployment.CurrentDeployment.Update()).ContinueWith(task =>
                         {
                             SetVersionName();
+                            UpdateInstalled = true;
                             return UpdateResult.Updated;
                         });
                     }

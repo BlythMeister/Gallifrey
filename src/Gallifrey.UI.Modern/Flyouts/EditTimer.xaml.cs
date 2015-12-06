@@ -15,40 +15,40 @@ namespace Gallifrey.UI.Modern.Flyouts
     {
         private readonly MainViewModel viewModel;
         private EditTimerModel DataModel { get { return (EditTimerModel)DataContext; } }
+        public Guid EditedTimerId { get; set; }
 
         public EditTimer(MainViewModel viewModel, Guid selected)
         {
             this.viewModel = viewModel;
             InitializeComponent();
 
+            EditedTimerId = selected;
             DataContext = new EditTimerModel(viewModel.Gallifrey, selected);
         }
 
         private async void SaveButton(object sender, RoutedEventArgs e)
         {
-            var uniqueId = DataModel.UniqueId;
-
             if (DataModel.HasModifiedRunDate())
             {
                 if (!DataModel.RunDate.HasValue)
                 {
-                    DialogCoordinator.Instance.ShowMessageAsync(viewModel,"Missing Date", "You Must Enter A Start Date");
+                    DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext,"Missing Date", "You Must Enter A Start Date");
                     return;
                 }
 
                 if (DataModel.RunDate.Value < DataModel.MinDate || DataModel.RunDate.Value > DataModel.MaxDate)
                 {
-                    DialogCoordinator.Instance.ShowMessageAsync(viewModel,"Invalid Date", string.Format("You Must Enter A Start Date Between {0} And {1}", DataModel.MinDate.ToShortDateString(), DataModel.MaxDate.ToShortDateString()));
+                    DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext,"Invalid Date", string.Format("You Must Enter A Start Date Between {0} And {1}", DataModel.MinDate.ToShortDateString(), DataModel.MaxDate.ToShortDateString()));
                     return;
                 }
 
                 try
                 {
-                    uniqueId = viewModel.Gallifrey.JiraTimerCollection.ChangeTimerDate(uniqueId, DataModel.RunDate.Value);
+                    EditedTimerId = viewModel.Gallifrey.JiraTimerCollection.ChangeTimerDate(EditedTimerId, DataModel.RunDate.Value);
                 }
                 catch (Exception)
                 {
-                    DialogCoordinator.Instance.ShowMessageAsync(viewModel,"Duplicate Timer", "This Timer Already Exists On That Date!");
+                    DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext,"Duplicate Timer", "This Timer Already Exists On That Date!");
                     return;
                 }
             }
@@ -62,11 +62,11 @@ namespace Gallifrey.UI.Modern.Flyouts
                 }
                 catch (NoResultsFoundException)
                 {
-                    DialogCoordinator.Instance.ShowMessageAsync(viewModel,"Invalid Jira", "Unable To Locate The Jira");
+                    DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext,"Invalid Jira", "Unable To Locate The Jira");
                     return;
                 }
 
-                var result = await DialogCoordinator.Instance.ShowMessageAsync(viewModel,"Correct Jira?", string.Format("Jira found!\n\nRef: {0}\nName: {1}\n\nIs that correct?", jiraIssue.key, jiraIssue.fields.summary), MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No" });
+                var result = await DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext,"Correct Jira?", string.Format("Jira found!\n\nRef: {0}\nName: {1}\n\nIs that correct?", jiraIssue.key, jiraIssue.fields.summary), MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No" });
 
                 if (result == MessageDialogResult.Negative)
                 {
@@ -75,11 +75,11 @@ namespace Gallifrey.UI.Modern.Flyouts
 
                 try
                 {
-                    uniqueId = viewModel.Gallifrey.JiraTimerCollection.RenameTimer(uniqueId, jiraIssue);
+                    EditedTimerId = viewModel.Gallifrey.JiraTimerCollection.RenameTimer(EditedTimerId, jiraIssue);
                 }
                 catch (Exception)
                 {
-                    DialogCoordinator.Instance.ShowMessageAsync(viewModel,"Duplicate Timer", "This Timer Already Exists On That Date!");
+                    DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext,"Duplicate Timer", "This Timer Already Exists On That Date!");
                     return;
                 }
             }
@@ -91,11 +91,11 @@ namespace Gallifrey.UI.Modern.Flyouts
                 var difference = newTime.Subtract(orignalTime);
                 var addTime = difference.TotalSeconds > 0;
 
-                viewModel.Gallifrey.JiraTimerCollection.AdjustTime(uniqueId, Math.Abs(difference.Hours), Math.Abs(difference.Minutes), addTime);
+                viewModel.Gallifrey.JiraTimerCollection.AdjustTime(EditedTimerId, Math.Abs(difference.Hours), Math.Abs(difference.Minutes), addTime);
             }
 
             viewModel.RefreshModel();
-            viewModel.SetSelectedTimer(uniqueId);
+            viewModel.SetSelectedTimer(EditedTimerId);
             IsOpen = false;
         }
     }

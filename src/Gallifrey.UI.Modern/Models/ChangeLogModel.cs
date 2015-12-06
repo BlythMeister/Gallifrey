@@ -1,7 +1,8 @@
 using System.Collections.Generic;
+using System.Linq;
 using Gallifrey.ChangeLog;
 
-namespace Gallifrey.UI.Modern.Flyouts
+namespace Gallifrey.UI.Modern.Models
 {
     public class ChangeLogModel
     {
@@ -20,6 +21,11 @@ namespace Gallifrey.UI.Modern.Flyouts
                     Bugs = changeLogVersion.Bugs,
                     Others = changeLogVersion.Others
                 });
+            }
+
+            if (ChangeLogs.Any())
+            {
+                ChangeLogs[0].IsSelected = true;
             }
         }
 

@@ -26,7 +26,7 @@ namespace Gallifrey.UI.Modern.Models
             position = 0;
             Contributors = contributorList[position];
 
-            InstallationId = string.Format("Your installation has an identifier of: {0}", gallifrey.Settings.InternalSettings.InstallationInstaceId);
+            InstallationId = gallifrey.Settings.InternalSettings.InstallationInstaceId.ToString();
         }
 
         private string BuildThanksString(WithThanksDefinition withThanksDefinition)

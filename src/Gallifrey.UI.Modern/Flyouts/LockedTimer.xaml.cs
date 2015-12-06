@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using Gallifrey.ChangeLog;
 using Gallifrey.ExtensionMethods;
-using Gallifrey.IdleTimers;
 using Gallifrey.JiraTimers;
 using Gallifrey.UI.Modern.Models;
 using MahApps.Metro.Controls.Dialogs;
@@ -30,7 +26,7 @@ namespace Gallifrey.UI.Modern.Flyouts
 
             if (!idleTimers.Any())
             {
-                DialogCoordinator.Instance.ShowMessageAsync(viewModel, "No Timers To Show", "You Have No Locked Timers, Come Back When You Do!");
+                DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext, "No Timers To Show", "You Have No Locked Timers, Come Back When You Do!");
             }
 
             DataContext = new LockedTimerCollectionModel(idleTimers);
@@ -42,7 +38,7 @@ namespace Gallifrey.UI.Modern.Flyouts
 
             if (selected.Count == 0)
             {
-                await DialogCoordinator.Instance.ShowMessageAsync(viewModel, "Nothing Selected", "You Have Not Selected Any Locked Time To Add");
+                await DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext, "Nothing Selected", "You Have Not Selected Any Locked Time To Add");
                 return;
             }
 
@@ -58,7 +54,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                 }
                 else
                 {
-                    await DialogCoordinator.Instance.ShowMessageAsync(viewModel, "Invalid Selection", "All Timers Must Be On The Same Date!");
+                    await DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext, "Invalid Selection", "All Timers Must Be On The Same Date!");
                     return;
                 }
             }
@@ -84,7 +80,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             var selectedTime = new TimeSpan();
             selectedTime = selected.Aggregate(selectedTime, (current, lockedTimerModel) => current.Add(lockedTimerModel.IdleTime));
 
-            var result = await DialogCoordinator.Instance.ShowMessageAsync(viewModel, "Are You Sure?", string.Format("Are you Sure You Want To Delete Locked Timers Worth {0}?", selectedTime.FormatAsString()), MessageDialogStyle.AffirmativeAndNegative);
+            var result = await DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext, "Are You Sure?", string.Format("Are you Sure You Want To Delete Locked Timers Worth {0}?", selectedTime.FormatAsString()), MessageDialogStyle.AffirmativeAndNegative);
 
             if (result == MessageDialogResult.Affirmative)
             {
@@ -95,44 +91,6 @@ namespace Gallifrey.UI.Modern.Flyouts
 
                 DataModel.RefreshLockedTimers(viewModel.Gallifrey.IdleTimerCollection.GetUnusedLockTimers());
             }
-        }
-    }
-
-    public class LockedTimerCollectionModel : INotifyPropertyChanged
-    {
-        public event PropertyChangedEventHandler PropertyChanged;
-        public ObservableCollection<LockedTimerModel> LockedTimers { get; set; }
-
-        public LockedTimerCollectionModel(IEnumerable<IdleTimer> unexportedTimers)
-        {
-            RefreshLockedTimers(unexportedTimers);
-        }
-
-        public void RefreshLockedTimers(IEnumerable<IdleTimer> unexportedTimers)
-        {
-            LockedTimers = new ObservableCollection<LockedTimerModel>(unexportedTimers.Select(x => new LockedTimerModel(x)).OrderBy(x => x.Date));
-            if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("LockedTimers"));
-        }
-    }
-
-    public class LockedTimerModel
-    {
-
-        public Guid UniqueId { get; private set; }
-        public string Date { get; private set; }
-        public string IdleTimeValue { get; private set; }
-        public TimeSpan IdleTime { get; private set; }
-        public bool IsSelected { get; set; }
-        public DateTime DateForTimer { get; private set; }
-
-        public LockedTimerModel(IdleTimer idleTimer)
-        {
-            DateForTimer = idleTimer.DateStarted.Date;
-            Date = string.Format("{0} at {1}", idleTimer.DateStarted.ToString("ddd, dd MMM"), idleTimer.DateStarted.ToString("t"));
-            UniqueId = idleTimer.UniqueId;
-            IdleTimeValue = idleTimer.IdleTimeValue.FormatAsString();
-            IdleTime = idleTimer.IdleTimeValue;
-            IsSelected = false;
         }
     }
 }

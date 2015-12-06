@@ -22,7 +22,7 @@ namespace Gallifrey.JiraTimers
         Guid AddTimer(Issue jiraIssue, DateTime startDate, TimeSpan seedTime, bool startNow);
         void RemoveTimer(Guid uniqueId);
         void StartTimer(Guid uniqueId);
-        void StopTimer(Guid uniqueId);
+        void StopTimer(Guid uniqueId, bool automatedStop);
         Guid? GetRunningTimerId();
         void RemoveTimersOlderThanDays(int keepTimersForDays);
         JiraTimer GetTimer(Guid timerGuid);
@@ -155,13 +155,13 @@ namespace Gallifrey.JiraTimers
             SaveTimers();
         }
 
-        public void StopTimer(Guid uniqueId)
+        public void StopTimer(Guid uniqueId, bool automatedStop)
         {
             var timerForInteration = GetTimer(uniqueId);
             var stopTime = timerForInteration.StopTimer();
 
             SaveTimers();
-            if (exportSettings.ExportPrompt != null && exportSettings.ExportPrompt.OnStop && !timerForInteration.FullyExported)
+            if (exportSettings.ExportPrompt != null && exportSettings.ExportPrompt.OnStop && !timerForInteration.FullyExported && !automatedStop)
             {
                 exportPrompt.Invoke(this, new ExportPromptDetail(uniqueId, stopTime));
             }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using Gallifrey.UI.Modern.Flyouts;
@@ -22,7 +23,14 @@ namespace Gallifrey.UI.Modern.MainViews
 
         private void AddButton(object sender, RoutedEventArgs e)
         {
-            ViewModel.OpenFlyout(new AddTimer(ViewModel));
+            DateTime? startDate = null;
+
+            if (ViewModel.HaveTimerToday())
+            {
+                startDate = ViewModel.GetSelectedDateTab();
+            }
+
+            ViewModel.OpenFlyout(new AddTimer(ViewModel, startDate: startDate));
         }
 
         private async void DeleteButton(object sender, RoutedEventArgs e)
@@ -33,7 +41,7 @@ namespace Gallifrey.UI.Modern.MainViews
             {
                 var timer = ViewModel.Gallifrey.JiraTimerCollection.GetTimer(selectedTimer.Value);
 
-                var result = DialogCoordinator.Instance.ShowMessageAsync(ViewModel, "Are You Sure?", string.Format("Are You Sure You Want To Delete {0}\n\n{1}\nFor: {2}", timer.JiraReference, timer.JiraName, timer.DateStarted.Date.ToString("ddd, dd MMM")), MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No" });
+                var result = DialogCoordinator.Instance.ShowMessageAsync(ViewModel.DialogContext, "Are You Sure?", string.Format("Are You Sure You Want To Delete {0}\n\n{1}\nFor: {2}", timer.JiraReference, timer.JiraName, timer.DateStarted.Date.ToString("ddd, dd MMM")), MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No" });
 
                 await result;
 
@@ -50,12 +58,26 @@ namespace Gallifrey.UI.Modern.MainViews
             ViewModel.OpenFlyout(new Search(ViewModel, false));
         }
 
-        private void EditButton(object sender, RoutedEventArgs e)
+        private async void EditButton(object sender, RoutedEventArgs e)
         {
             var selectedTimerId = ViewModel.GetSelectedTimerId();
-            if (selectedTimerId != null)
+            if (selectedTimerId.HasValue)
             {
-                ViewModel.OpenFlyout(new EditTimer(ViewModel, selectedTimerId.Value));
+                var stoppedTimer = false;
+                var runningTimerId = ViewModel.Gallifrey.JiraTimerCollection.GetRunningTimerId();
+                if (runningTimerId.HasValue && runningTimerId.Value == selectedTimerId.Value)
+                {
+                    ViewModel.Gallifrey.JiraTimerCollection.StopTimer(selectedTimerId.Value, true);
+                    stoppedTimer = true;
+                }
+
+                var editTimerFlyout = new EditTimer(ViewModel, selectedTimerId.Value);
+                await ViewModel.OpenFlyout(editTimerFlyout);
+
+                if (stoppedTimer)
+                {
+                    ViewModel.Gallifrey.JiraTimerCollection.StartTimer(editTimerFlyout.EditedTimerId);
+                }
             }
         }
 
@@ -81,6 +103,30 @@ namespace Gallifrey.UI.Modern.MainViews
         private void SettingsButton(object sender, RoutedEventArgs e)
         {
             ViewModel.OpenFlyout(new Flyouts.Settings(ViewModel));
+        }
+
+        private void EmailButton(object sender, RoutedEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo("mailto:contact@gallifreyapp.co.uk?subject=Gallifrey App Contact"));
+            e.Handled = true;
+        }
+
+        private void TwitterButton(object sender, RoutedEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo("https://twitter.com/GallifreyApp"));
+            e.Handled = true;
+        }
+
+        private void PayPalButton(object sender, RoutedEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=G3MWL8E6UG4RS"));
+            e.Handled = true;
+        }
+
+        private void GitHubButton(object sender, RoutedEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo("https://github.com/BlythMeister/Gallifrey"));
+            e.Handled = true;
         }
     }
 }

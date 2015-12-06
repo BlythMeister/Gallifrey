@@ -1,5 +1,7 @@
-﻿using System.Linq;
+﻿using System.Diagnostics;
+using System.Linq;
 using System.Threading;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Gallifrey.UI.Modern.Flyouts;
@@ -36,7 +38,7 @@ namespace Gallifrey.UI.Modern.MainViews
                     var updatedTimer = ViewModel.Gallifrey.JiraTimerCollection.GetTimer(jiraTimer.UniqueId);
                     if (!updatedTimer.FullyExported)
                     {
-                        DialogCoordinator.Instance.ShowMessageAsync(ViewModel, "Stopping Bulk Export", "Will Stop Bulk Export As Timer Was Not Fully Exported\n\nWill Select The Cancelled Timer");
+                        DialogCoordinator.Instance.ShowMessageAsync(ViewModel.DialogContext, "Stopping Bulk Export", "Will Stop Bulk Export As Timer Was Not Fully Exported\n\nWill Select The Cancelled Timer");
                         ViewModel.SetSelectedTimer(jiraTimer.UniqueId);
                         break;
                     }
@@ -44,11 +46,25 @@ namespace Gallifrey.UI.Modern.MainViews
             }
             else
             {
-                DialogCoordinator.Instance.ShowMessageAsync(ViewModel, "Nothing To Export", "No Un-Exported Timers To Bulk Export");
+                DialogCoordinator.Instance.ShowMessageAsync(ViewModel.DialogContext, "Nothing To Export", "No Un-Exported Timers To Bulk Export");
             }
 
             ViewModel.RefreshModel();
             UnexportedMutex.ReleaseMutex();
+        }
+
+        private void InstallUpdate(object sender, MouseButtonEventArgs e)
+        {
+            if (ViewModel.Gallifrey.VersionControl.UpdateInstalled)
+            {
+                System.Windows.Forms.Application.Restart();
+                Application.Current.Shutdown();
+            }
+        }
+
+        private void GoToRunningTimer(object sender, MouseButtonEventArgs e)
+        {
+            ViewModel.SelectRunningTimer();
         }
     }
 }

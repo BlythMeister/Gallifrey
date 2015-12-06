@@ -246,7 +246,7 @@ namespace Gallifrey.UI.Classic
 
             if (runningTimer.HasValue && runningTimer.Value == timerClicked.UniqueId)
             {
-                gallifrey.JiraTimerCollection.StopTimer(timerClicked.UniqueId);
+                gallifrey.JiraTimerCollection.StopTimer(timerClicked.UniqueId, false);
             }
             else
             {
@@ -540,7 +540,7 @@ namespace Gallifrey.UI.Classic
 
             try
             {
-                if (gallifrey.VersionControl.AlreadyInstalledUpdate)
+                if (gallifrey.VersionControl.UpdateInstalled)
                 {
                     restart = true;
                     try
@@ -1076,7 +1076,7 @@ namespace Gallifrey.UI.Classic
                 var restart = false;
                 try
                 {
-                    if (gallifrey.VersionControl.AlreadyInstalledUpdate)
+                    if (gallifrey.VersionControl.UpdateInstalled)
                     {
                         restart = true;
                     }

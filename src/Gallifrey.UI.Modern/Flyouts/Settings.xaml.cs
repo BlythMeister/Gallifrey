@@ -45,17 +45,17 @@ namespace Gallifrey.UI.Modern.Flyouts
                 IsOpen = false;
                 var themeChanged = ThemeHelper.ChangeTheme(DataModel.Theme, DataModel.Accent);
 
-                if (themeChanged)
+                if (themeChanged == ThemeChangeDetail.Theme || themeChanged == ThemeChangeDetail.Both)
                 {
                     //This is a really ugly solution!!
                     //The overides of system colours do not update automatically which is not good.
                     //This message will hopefully make people restart...
-                    await DialogCoordinator.Instance.ShowMessageAsync(viewModel, "Restart Needed", "When Changing Theme, Some Colours Will Not Change Automatically\nIt Is Recommended To Restart The App");
+                    await DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext, "Restart Needed", "When Changing Theme, Some Colours Will Not Change Automatically\nIt Is Recommended To Restart The App");
                 }
             }
             else
             {
-                await DialogCoordinator.Instance.ShowMessageAsync(viewModel,"Invalid Jira Configuration", "You Cannot Save With Invalid Jira Configuration.\nTo Save You Have To Have A Valid Connection To Jira");
+                await DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext,"Invalid Jira Configuration", "You Cannot Save With Invalid Jira Configuration.\nTo Save You Have To Have A Valid Connection To Jira");
             }
         }
     }

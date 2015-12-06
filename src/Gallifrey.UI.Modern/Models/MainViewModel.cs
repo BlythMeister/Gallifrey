@@ -1,26 +1,36 @@
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Data.SqlTypes;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
 using Gallifrey.Comparers;
 using Gallifrey.ExtensionMethods;
-using Gallifrey.UI.Modern.MainViews;
+using Gallifrey.UI.Modern.Helpers;
 using MahApps.Metro.Controls;
-using MahApps.Metro.Controls.Dialogs;
 
 namespace Gallifrey.UI.Modern.Models
 {
     public class MainViewModel : INotifyPropertyChanged
     {
+        public MainViewModel(IBackend gallifrey, FlyoutsControl flyoutsControl)
+        {
+            this.flyoutsControl = flyoutsControl;
+            DialogContext = new DialogContext();
+            Gallifrey = gallifrey;
+            TimerDates = new ObservableCollection<TimerDateModel>();
+            runningWatcher = new Timer(500);
+            runningWatcher.Elapsed += runningWatcherElapsed;
+            runningWatcher.Start();
+            Gallifrey.VersionControl.PropertyChanged += VersionControlPropertyChanged;
+        }
+
         private readonly FlyoutsControl flyoutsControl;
         public event PropertyChangedEventHandler PropertyChanged;
-
         private readonly Timer runningWatcher;
         public IBackend Gallifrey { get; private set; }
+        public DialogContext DialogContext { get; private set; }
         public ObservableCollection<TimerDateModel> TimerDates { get; private set; }
 
         public string ExportedNumber { get { return Gallifrey.JiraTimerCollection.GetNumberExported().Item1.ToString(); } }
@@ -29,10 +39,10 @@ namespace Gallifrey.UI.Modern.Models
         public string ExportTarget { get { return Gallifrey.Settings.AppSettings.GetTargetThisWeek().FormatAsString(false); } }
         public string Exported { get { return Gallifrey.JiraTimerCollection.GetTotalExportedTimeThisWeek(Gallifrey.Settings.AppSettings.StartOfWeek).FormatAsString(false); } }
         public string ExportedTargetTotalMinutes { get { return Gallifrey.Settings.AppSettings.GetTargetThisWeek().TotalMinutes.ToString(); } }
-        public string VersionName { get { return Gallifrey.VersionControl.AlreadyInstalledUpdate ? "Click To Install New Version" : Gallifrey.VersionControl.VersionName; } }
+        public string VersionName { get { return Gallifrey.VersionControl.UpdateInstalled ? "Click To Install New Version" : Gallifrey.VersionControl.VersionName; } }
         public string InactiveMinutes { get; private set; }
 
-        public bool HasUpdate { get { return Gallifrey.VersionControl.AlreadyInstalledUpdate; } }
+        public bool HasUpdate { get { return Gallifrey.VersionControl.UpdateInstalled; } }
         public bool HasInactiveTime { get { return !string.IsNullOrWhiteSpace(InactiveMinutes); } }
         public bool TimerRunning { get { return !string.IsNullOrWhiteSpace(CurrentRunningTimerDescription); } }
         public bool HaveTimeToExport { get { return !string.IsNullOrWhiteSpace(TimeToExportMessage); } }
@@ -95,18 +105,6 @@ namespace Gallifrey.UI.Modern.Models
             }
         }
 
-
-        public MainViewModel(IBackend gallifrey, FlyoutsControl flyoutsControl)
-        {
-            this.flyoutsControl = flyoutsControl;
-            Gallifrey = gallifrey;
-            TimerDates = new ObservableCollection<TimerDateModel>();
-            runningWatcher = new Timer(500);
-            runningWatcher.Elapsed += runningWatcherElapsed;
-            runningWatcher.Start();
-            Gallifrey.VersionControl.PropertyChanged += VersionControlPropertyChanged;
-        }
-
         private void VersionControlPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("VersionName"));
@@ -144,7 +142,7 @@ namespace Gallifrey.UI.Modern.Models
                     TimerDates.Add(dateModel);
                 }
 
-                var dateTimers = Gallifrey.JiraTimerCollection.GetTimersForADate(timerDate);
+                var dateTimers = Gallifrey.JiraTimerCollection.GetTimersForADate(timerDate).ToList();
 
                 foreach (var timer in dateTimers)
                 {
@@ -191,6 +189,18 @@ namespace Gallifrey.UI.Modern.Models
             }
 
             return null;
+        }
+
+        public DateTime? GetSelectedDateTab()
+        {
+            var selectedDate =  TimerDates.FirstOrDefault(x => x.IsSelected);
+            if (selectedDate == null) return null;
+            return selectedDate.TimerDate;
+        }
+
+        public bool HaveTimerToday()
+        {
+            return TimerDates.Any(x => x.TimerDate.Date == DateTime.Now.Date);
         }
 
         public void SetSelectedTimer(Guid value)

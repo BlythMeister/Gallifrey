@@ -6,7 +6,6 @@ namespace Gallifrey.UI.Modern.Models
     public class EditTimerModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-        public Guid UniqueId { get; private set; }
         public string JiraReference { get; set; }
         public bool JiraReferenceEditable { get; set; }
         public DateTime MinDate { get; set; }
@@ -27,7 +26,6 @@ namespace Gallifrey.UI.Modern.Models
             var dateToday = DateTime.Now;
             var timer = gallifrey.JiraTimerCollection.GetTimer(timerId);
 
-            UniqueId = timerId;
             JiraReference = timer.JiraReference;
 
             if (gallifrey.Settings.AppSettings.KeepTimersForDays > 0)

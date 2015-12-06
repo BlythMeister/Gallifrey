@@ -204,6 +204,8 @@
     </Features>
     <Bugs>
       <Bug>Fix issue with balloon icon caused crash</Bug>
+      <Bug>Fix issue where no work logs prevents export of work logs</Bug>
+      <Bug>Fix issue where Export on stop prompt shows when automatically stopped (by locking machine)</Bug>
     </Bugs>
     <Others />
   </Version>
