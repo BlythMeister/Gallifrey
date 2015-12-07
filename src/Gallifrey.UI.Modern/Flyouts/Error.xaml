@@ -19,7 +19,7 @@
         <TextBlock Padding="5">Description</TextBlock>
         <TextBox Text="{Binding Description}" MaxLines="2" MinLines="2" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" TextWrapping="Wrap" controls:TextBoxHelper.Watermark="Optional"/>
         <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="55" Height="55" Margin="2" Click="SendReport" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
-            <Rectangle Width="30" Height="18" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
+            <Rectangle Width="30" Height="18" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}" ToolTip="Submit Error Report">
                 <Rectangle.OpacityMask>
                     <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_message_send}" />
                 </Rectangle.OpacityMask>

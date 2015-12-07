@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -193,7 +194,7 @@ namespace Gallifrey.UI.Modern.Models
 
         public DateTime? GetSelectedDateTab()
         {
-            var selectedDate =  TimerDates.FirstOrDefault(x => x.IsSelected);
+            var selectedDate = TimerDates.FirstOrDefault(x => x.IsSelected);
             if (selectedDate == null) return null;
             return selectedDate.TimerDate;
         }
@@ -282,21 +283,30 @@ namespace Gallifrey.UI.Modern.Models
 
         public Task<Flyout> OpenFlyout(Flyout flyout)
         {
+            var actualType = flyout.GetType();
             var taskCompletion = new TaskCompletionSource<Flyout>();
 
-            // when the flyout is closed, remove it from the hosting FlyoutsControl
-            RoutedEventHandler closingFinishedHandler = null;
-            closingFinishedHandler = (o, args) =>
+            //Prevent 2 identical flyouts from opening
+            if (flyoutsControl.Items.Cast<Flyout>().Any(item => item.GetType() == actualType))
             {
-                flyout.ClosingFinished -= closingFinishedHandler;
-                flyoutsControl.Items.Remove(flyout);
                 taskCompletion.SetResult(flyout);
-            };
-            flyout.ClosingFinished += closingFinishedHandler;
+            }
+            else
+            {
+                flyoutsControl.Items.Add(flyout);
 
-            flyoutsControl.Items.Add(flyout);
+                // when the flyout is closed, remove it from the hosting FlyoutsControl
+                RoutedEventHandler closingFinishedHandler = null;
+                closingFinishedHandler = (o, args) =>
+                {
+                    flyout.ClosingFinished -= closingFinishedHandler;
+                    flyoutsControl.Items.Remove(flyout);
+                    taskCompletion.SetResult(flyout);
+                };
 
-            flyout.IsOpen = true;
+                flyout.ClosingFinished += closingFinishedHandler;
+                flyout.IsOpen = true;
+            }
 
             return taskCompletion.Task;
         }

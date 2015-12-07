@@ -9,6 +9,10 @@ namespace Gallifrey.Serialization
     {
         private readonly string savePath;
 
+        public ItemSerializer() { }
+
+        public ItemSerializer(string fileName) : this(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Gallifrey"), fileName) { }
+
         public ItemSerializer(string directory, string fileName)
         {
             try
@@ -21,21 +25,14 @@ namespace Gallifrey.Serialization
                 savePath = null;
                 // this will be evaluated later
             }
-
-        }
-
-        public ItemSerializer(string fileName)
-            : this(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Gallifrey"), fileName)
-        {
-
-        }
-
-        public ItemSerializer()
-        {
-
         }
 
         public void Serialize(T obj)
+        {
+            Serialize(obj, 0);
+        }
+
+        private void Serialize(T obj, int retryCount)
         {
             if (savePath == null) throw new SerializerError("No Save Path");
 
@@ -45,7 +42,11 @@ namespace Gallifrey.Serialization
             }
             catch (Exception ex)
             {
-                throw new SerializerError("Error in serialization", ex);
+                if (retryCount >= 3)
+                {
+                    throw new SerializerError("Error in serialization", ex);
+                }
+                Serialize(obj, retryCount + 1);
             }
         }
 
@@ -53,43 +54,31 @@ namespace Gallifrey.Serialization
         {
             if (savePath == null) throw new SerializerError("No Save Path");
 
-            T obj;
-
-            if (File.Exists(savePath))
+            if (!File.Exists(savePath))
             {
-                try
-                {
-                    var text = File.ReadAllText(savePath);
-                    obj = DeSerialize(text);
-                }
-                catch (Exception)
-                {
-                    obj = new T();
-                }
-            }
-            else
-            {
-                obj = new T();
+                return new T();
             }
 
-            return obj;
+            var text = File.ReadAllText(savePath);
+            return DeSerialize(text);
         }
 
         public T DeSerialize(string encryptedString)
         {
-            T obj;
+            return DeSerialize(encryptedString, 0);
+        }
 
+        private T DeSerialize(string encryptedString, int retryCount)
+        {
             try
             {
                 var text = DataEncryption.Decrypt(encryptedString);
-                obj = JsonConvert.DeserializeObject<T>(text);
+                return JsonConvert.DeserializeObject<T>(text);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                obj = new T();
+                return retryCount >= 3 ? new T() : DeSerialize(encryptedString, retryCount + 1);
             }
-
-            return obj;
         }
     }
 }

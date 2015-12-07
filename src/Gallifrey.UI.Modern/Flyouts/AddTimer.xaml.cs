@@ -144,11 +144,11 @@ namespace Gallifrey.UI.Modern.Flyouts
                     {
                         DataModel.SetJiraReference(searchFlyout.SelectedJira.Reference);
                     }
+                    IsOpen = true;
                 }
             };
-            
+
             viewModel.OpenFlyout(searchFlyout);
-            
         }
 
         private void StartDateChanged(object sender, SelectionChangedEventArgs e)

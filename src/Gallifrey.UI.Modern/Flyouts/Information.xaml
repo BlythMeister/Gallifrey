@@ -23,7 +23,7 @@
             <TextBlock Grid.Row="0" Grid.ColumnSpan="2" FontSize="18" Margin="0,0,0,5" Text="About"/>
             <TextBlock Grid.Row="1" Grid.Column="0" TextWrapping="Wrap" Margin="0,0,0,5" VerticalAlignment="Center">Gallifrey is a time logging companion designed to work with Jira time logs.<LineBreak />Gallifrey is open sourced on GitHub and free to download and contribute!</TextBlock>
             <Button Grid.Row="1" Grid.Column="1" Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="ChangeLogButton">
-                <Rectangle Width="27" Height="20" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
+                <Rectangle Width="27" Height="20" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}" ToolTip="View Full Change Log">
                     <Rectangle.OpacityMask>
                         <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_book_open_information}" />
                     </Rectangle.OpacityMask>

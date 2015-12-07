@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Center" Orientation="Vertical">
-        <TextBlock Background="{DynamicResource AccentColorBrush}" FontSize="17" Foreground="{DynamicResource IdealForegroundColorBrush}" TextAlignment="Center" Margin="0,1,0,1" Text="You Have An Update Avaliable, Click Here To Install" MouseDown="InstallUpdate">
+        <TextBlock Background="{DynamicResource AccentColorBrush}" FontSize="17" Foreground="{DynamicResource IdealForegroundColorBrush}" TextAlignment="Center" Margin="0,0,0,2" Text="You Have An Update Avaliable, Click Here To Install" MouseDown="InstallUpdate">
             <TextBlock.Style>
                 <Style TargetType="TextBlock">
                     <Setter Property="Visibility" Value="Visible" />
@@ -15,7 +15,7 @@
                 </Style>
             </TextBlock.Style>
         </TextBlock>
-        <TextBlock Background="{DynamicResource AccentColorBrush}" FontSize="17" Foreground="{DynamicResource IdealForegroundColorBrush}" TextAlignment="Center" Margin="0,1,0,1" Text="{Binding InactiveMinutes}">
+        <TextBlock Background="{DynamicResource AccentColorBrush}" FontSize="17" Foreground="{DynamicResource IdealForegroundColorBrush}" TextAlignment="Center" Margin="0,0,0,2" Text="{Binding InactiveMinutes}">
             <TextBlock.Style>
                 <Style TargetType="TextBlock">
                     <Setter Property="Visibility" Value="Visible" />
@@ -27,7 +27,7 @@
                 </Style>
             </TextBlock.Style>
         </TextBlock>
-        <TextBlock Background="{DynamicResource AccentColorBrush}" FontSize="17" Foreground="{DynamicResource IdealForegroundColorBrush}" TextAlignment="Center" Margin="0,1,0,1" Text="{Binding CurrentRunningTimerDescription}" MouseDown="GoToRunningTimer">
+        <TextBlock Background="{DynamicResource AccentColorBrush}" FontSize="17" Foreground="{DynamicResource IdealForegroundColorBrush}" TextAlignment="Center" Margin="0,0,0,2" Text="{Binding CurrentRunningTimerDescription}" MouseDown="GoToRunningTimer">
             <TextBlock.Style>
                 <Style TargetType="TextBlock">
                     <Setter Property="Visibility" Value="Visible" />
@@ -39,7 +39,7 @@
                 </Style>
             </TextBlock.Style>
         </TextBlock>
-        <TextBlock Background="{DynamicResource AccentColorBrush}" FontSize="17" Foreground="{DynamicResource IdealForegroundColorBrush}" TextAlignment="Center" Margin="0,1,0,1" Text="{Binding TimeToExportMessage}" MouseDown="UnExportedClick">
+        <TextBlock Background="{DynamicResource AccentColorBrush}" FontSize="17" Foreground="{DynamicResource IdealForegroundColorBrush}" TextAlignment="Center" Margin="0,0,0,2" Text="{Binding TimeToExportMessage}" MouseDown="UnExportedClick">
             <TextBlock.Style>
                 <Style TargetType="TextBlock">
                     <Setter Property="Visibility" Value="Visible" />

@@ -39,17 +39,27 @@ namespace Gallifrey.UI.Modern.Helpers
 
             try
             {
+                var jiraDownloadTask = new Task<T>(jiraAction, cancellationTokenSource.Token);
+
                 JiraHelperResult<T> result;
                 controller = await DialogCoordinator.Instance.ShowProgressAsync(dialogContext, "Please Wait", message, canCancel);
                 var controllerCancel = Task.Factory.StartNew(() =>
                 {
-                    while (!controller.IsCanceled)
+                    while (true)
                     {
+                        if (!controller.IsOpen)
+                        {
+                            break;
+                        }
 
+                        if (controller.IsCanceled)
+                        {
+                            break;
+                        }
+                        Thread.Sleep(100);
                     }
-                });
+                }, cancellationTokenSource.Token);
 
-                var jiraDownloadTask = new Task<T>(jiraAction, cancellationTokenSource.Token);
                 jiraDownloadTask.Start();
                 if (await Task.WhenAny(jiraDownloadTask, controllerCancel) == controllerCancel)
                 {

@@ -4,49 +4,49 @@
              xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls">
 
     <WrapPanel HorizontalAlignment="Center">
-        <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="AddButton">
+        <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="AddButton" ToolTip="Add A New Timer">
             <Rectangle Width="23" Height="23" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
                 <Rectangle.OpacityMask>
                     <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_add}" />
                 </Rectangle.OpacityMask>
             </Rectangle>
         </Button>
-        <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="DeleteButton">
+        <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="DeleteButton" ToolTip="Delete The Selected Timer">
             <Rectangle Width="23" Height="23" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
                 <Rectangle.OpacityMask>
                     <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_delete}" />
                 </Rectangle.OpacityMask>
             </Rectangle>
         </Button>
-        <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="SearchButton">
+        <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="SearchButton" ToolTip="Search Jira">
             <Rectangle Width="23" Height="23" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
                 <Rectangle.OpacityMask>
                     <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_magnify}" />
                 </Rectangle.OpacityMask>
             </Rectangle>
         </Button>
-        <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="EditButton">
+        <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="EditButton" ToolTip="Edit The Selected Timer">
             <Rectangle Width="23" Height="23" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
                 <Rectangle.OpacityMask>
                     <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_edit}" />
                 </Rectangle.OpacityMask>
             </Rectangle>
         </Button>
-        <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="ExportButton">
+        <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="ExportButton" ToolTip="Export The Selected Timer">
             <Rectangle Width="30" Height="20" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
                 <Rectangle.OpacityMask>
                     <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_cloud_upload}" />
                 </Rectangle.OpacityMask>
             </Rectangle>
         </Button>
-        <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="LockTimerButton">
+        <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="LockTimerButton" ToolTip="Show Locked Timers">
             <Rectangle Width="23" Height="23" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
                 <Rectangle.OpacityMask>
                     <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_lock}" />
                 </Rectangle.OpacityMask>
             </Rectangle>
         </Button>
-        <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="SettingsButton">
+        <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="SettingsButton" ToolTip="Settings">
             <Rectangle Width="23" Height="23" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
                 <Rectangle.OpacityMask>
                     <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_settings}" />
@@ -63,37 +63,37 @@
                     <Setter Property="Width" Value="3"/>
                 </Style>
             </Separator.Style>
-            </Separator>
+        </Separator>
 
-        <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="InfoButton">
+        <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="InfoButton" ToolTip="Application Information">
             <Rectangle Width="23" Height="23" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
                 <Rectangle.OpacityMask>
                     <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_information_circle}" />
                 </Rectangle.OpacityMask>
             </Rectangle>
         </Button>
-        <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="TwitterButton">
+        <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="TwitterButton" ToolTip="Contact Us By Twitter">
             <Rectangle Width="25" Height="20" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
                 <Rectangle.OpacityMask>
                     <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_twitter_bird}" />
                 </Rectangle.OpacityMask>
             </Rectangle>
         </Button>
-        <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="EmailButton">
+        <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="EmailButton" ToolTip="Contact Us By Email">
             <Rectangle Width="23" Height="18" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
                 <Rectangle.OpacityMask>
                     <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_email}" />
                 </Rectangle.OpacityMask>
             </Rectangle>
         </Button>
-        <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="GitHubButton">
+        <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="GitHubButton" ToolTip="View The Code On GitHub">
             <Rectangle Width="28" Height="24" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
                 <Rectangle.OpacityMask>
                     <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_github}" />
                 </Rectangle.OpacityMask>
             </Rectangle>
         </Button>
-        <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="PayPalButton">
+        <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="PayPalButton" ToolTip="Donate By PayPal">
             <Rectangle Width="23" Height="23" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
                 <Rectangle.OpacityMask>
                     <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_paypal}" />

@@ -54,7 +54,7 @@
 
 
         <Button Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Width="50" Height="50" Margin="2,0" Click="SearchButton">
-            <Rectangle Width="23" Height="23" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
+            <Rectangle Width="23" Height="23" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}" ToolTip="Search Jira (Text/Filter)">
                 <Rectangle.OpacityMask>
                     <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_magnify}" />
                 </Rectangle.OpacityMask>
@@ -70,7 +70,7 @@
             </Button.Style>
         </Button>
 
-        <ListView Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding SearchResults}" SelectedItem="{Binding SelectedSearchResult, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" BorderThickness="0">
+        <ListView Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding SearchResults}" SelectedItem="{Binding SelectedSearchResult, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" BorderThickness="0" SelectionMode="Single">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <StackPanel>
@@ -116,7 +116,7 @@
         </ListView>
 
         <Button Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Width="50" Height="50" Margin="2,0" Click="AddTimer">
-            <Rectangle Width="23" Height="23" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
+            <Rectangle Width="23" Height="23" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}" ToolTip="Create Jira From Selected Search Result">
                 <Rectangle.OpacityMask>
                     <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_add}" />
                 </Rectangle.OpacityMask>

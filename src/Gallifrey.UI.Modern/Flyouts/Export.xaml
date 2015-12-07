@@ -140,11 +140,11 @@
             </WrapPanel>
 
             <TextBlock Grid.Row="9" Grid.Column="0" VerticalAlignment="Center">Comment</TextBlock>
-            <TextBox Grid.Row="9" Grid.Column="1" Margin="0,5" Text="{Binding Comment}" TextWrapping="Wrap" AcceptsReturn="True" controls:TextBoxHelper.IsSpellCheckContextMenuEnabled="True"/>
+            <TextBox Grid.Row="9" Grid.Column="1" Margin="0,5" Text="{Binding Comment}" TextWrapping="Wrap" AcceptsReturn="True" controls:TextBoxHelper.IsSpellCheckContextMenuEnabled="True" Height="70" VerticalScrollBarVisibility="Auto"/>
 
             <StackPanel Orientation="Horizontal" Grid.Row="10" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center">
                 <Button  Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="ExportButton">
-                    <Rectangle Width="23" Height="23" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
+                    <Rectangle Width="23" Height="23" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}" ToolTip="Export Worklog To Jira">
                         <Rectangle.OpacityMask>
                             <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_disk_upload}" />
                         </Rectangle.OpacityMask>

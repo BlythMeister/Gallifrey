@@ -206,6 +206,7 @@
       <Bug>Fix issue with balloon icon caused crash</Bug>
       <Bug>Fix issue where no work logs prevents export of work logs</Bug>
       <Bug>Fix issue where Export on stop prompt shows when automatically stopped (by locking machine)</Bug>
+      <Bug>Added retry logic when saving internal data to prevent crashes due to file locking</Bug>
     </Bugs>
     <Others />
   </Version>
