@@ -23,10 +23,15 @@ We are aiming to maintain a Beta & Stable version of the app.
 
 **Installing on Windows 8 will alert with SmartScreen, you should be able to "Run Anyway" until I can afford a proper certificate, there is no way around this!  After a couple of runs, the warning should stop**
 
+#####Classic UI
+
 * [Stable Release - Click Here](http://blythmeister.github.io/Gallifrey.Releases/deploy/stable/setup.exe)
 * [Beta Release - Click Here](http://blythmeister.github.io/Gallifrey.Releases/deploy/beta/setup.exe)
 
-*Although the "stable" can also be downloaded from the "develop" branch & the "beta" from the "master" branch, i strongly recommend using the links above to guarantee correct updates!*
+#####Modern UI
+
+* [Stable Release - COMING SOON]
+* [Beta Release - Click Here](http://releases.gallifreyapp.co.uk/download/modern/beta/setup.exe)
 
 Donate
 =========
@@ -54,7 +59,10 @@ Gallifrey makes use of the following libraries:
 * Exceptionless (http://exceptionless.com/)
 * Spell Check Winforms TextBox (http://spellchecktextbox.codeplex.com/)
 * Atlassian .Net SDK (https://bitbucket.org/farmas/atlassian.net-sdk/wiki/Home)
-* MahApps.Metro (http://mahapps.com/) - New Modern UI Only
+* MahApps.Metro (http://mahapps.com/)
+* Newtonsoft Json (http://www.newtonsoft.com/json)
+* RestSharp (http://restsharp.org/)
+
 
 3rd Party Resources
 =========
