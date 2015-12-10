@@ -467,20 +467,20 @@
             this.label5.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label5.Location = new System.Drawing.Point(12, 549);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(411, 21);
+            this.label5.Size = new System.Drawing.Size(386, 21);
             this.label5.TabIndex = 27;
-            this.label5.Text = "Gallifrey has a new user interface, you can download from";
+            this.label5.Text = "Gallifrey has a new user interface, you can download it";
             // 
             // label7
             // 
             this.label7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label7.Location = new System.Drawing.Point(465, 549);
+            this.label7.Location = new System.Drawing.Point(458, 549);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(498, 21);
+            this.label7.Size = new System.Drawing.Size(505, 21);
             this.label7.TabIndex = 29;
-            this.label7.Text = "Note: Upgrade is optional but new feature will be to new interface only";
+            this.label7.Text = "Note: Upgrade is optional but new features will be to new interface only";
             // 
             // newUIDownload
             // 
@@ -488,12 +488,12 @@
             this.newUIDownload.AutoSize = true;
             this.newUIDownload.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.newUIDownload.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
-            this.newUIDownload.Location = new System.Drawing.Point(417, 549);
+            this.newUIDownload.Location = new System.Drawing.Point(394, 549);
             this.newUIDownload.Name = "newUIDownload";
-            this.newUIDownload.Size = new System.Drawing.Size(41, 21);
+            this.newUIDownload.Size = new System.Drawing.Size(44, 21);
             this.newUIDownload.TabIndex = 30;
             this.newUIDownload.TabStop = true;
-            this.newUIDownload.Text = "here";
+            this.newUIDownload.Text = "here.";
             this.newUIDownload.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.newUIDownload_LinkClicked);
             // 
             // MainWindow

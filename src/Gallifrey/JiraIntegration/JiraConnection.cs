@@ -257,32 +257,46 @@ namespace Gallifrey.JiraIntegration
 
             var jiraIssue = jira.GetIssue(jiraRef);
 
-            var wasClosed = TryReopenJira(jiraIssue);
-
             if (string.IsNullOrWhiteSpace(comment)) comment = exportSettings.EmptyExportComment;
             if (!string.IsNullOrWhiteSpace(exportSettings.ExportCommentPrefix))
             {
                 comment = string.Format("{0}: {1}", exportSettings.ExportCommentPrefix, comment);
             }
-
+            
+            var erroredOnWorkLogAttempt1 = false;
+            
             try
             {
                 jira.AddWorkLog(jiraRef, strategy, comment, exportTime, DateTime.SpecifyKind(exportTimeStamp, DateTimeKind.Local), remainingTime);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw new WorkLogException("Error logging work", ex);
+                erroredOnWorkLogAttempt1 = true;
             }
 
-            if (wasClosed)
+            if (erroredOnWorkLogAttempt1)
             {
+                var wasClosed = TryReopenJira(jiraIssue);
+
                 try
                 {
-                    ReCloseJira(jiraRef);
+                    jira.AddWorkLog(jiraRef, strategy, comment, exportTime, DateTime.SpecifyKind(exportTimeStamp, DateTimeKind.Local), remainingTime);
                 }
                 catch (Exception ex)
                 {
-                    throw new StateChangedException("Time Logged, but state is now open", ex);
+                    throw new WorkLogException("Error logging work", ex);
+                }
+
+                if (wasClosed)
+                {
+                    try
+                    {
+                        ReCloseJira(jiraRef);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new StateChangedException("Time Logged, but state is now open", ex);
+                    }
                 }
             }
         }
