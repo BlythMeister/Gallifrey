@@ -78,5 +78,25 @@ namespace Gallifrey.UI.Modern.Models
         {
             return OriginalHours != Hours || OriginalMinutes != Minutes;
         }
+
+        public void AdjustTime(TimeSpan timeAdjustmentAmount, bool addTime)
+        {
+            var currentTime = new TimeSpan(Hours, Minutes, 0);
+
+            if (addTime)
+            {
+                currentTime = currentTime.Add(timeAdjustmentAmount);
+            }
+            else
+            {
+                currentTime = currentTime.Subtract(timeAdjustmentAmount);
+            }
+
+            Hours = currentTime.Hours > 9 ? 9 : currentTime.Hours;
+            Minutes = currentTime.Minutes;
+
+            if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("Hours"));
+            if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("Minutes"));
+        }
     }
 }

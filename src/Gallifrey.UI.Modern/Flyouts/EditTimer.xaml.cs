@@ -118,9 +118,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                 return;
             }
 
-            var timeAdjustmentTimespan = TimeSpan.FromMinutes(minutesAdjustment);
-            viewModel.Gallifrey.JiraTimerCollection.AdjustTime(EditedTimerId, timeAdjustmentTimespan.Hours, timeAdjustmentTimespan.Minutes, false);
-            DataContext = new EditTimerModel(viewModel.Gallifrey, EditedTimerId);
+            DataModel.AdjustTime(TimeSpan.FromMinutes(minutesAdjustment), false);
         }
 
         private async void AddTime(object sender, RoutedEventArgs e)
@@ -141,9 +139,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                 return;
             }
 
-            var timeAdjustmentTimespan = TimeSpan.FromMinutes(minutesAdjustment);
-            viewModel.Gallifrey.JiraTimerCollection.AdjustTime(EditedTimerId, timeAdjustmentTimespan.Hours, timeAdjustmentTimespan.Minutes, true);
-            DataContext = new EditTimerModel(viewModel.Gallifrey, EditedTimerId);
+            DataModel.AdjustTime(TimeSpan.FromMinutes(minutesAdjustment), true);
         }
     }
 }
