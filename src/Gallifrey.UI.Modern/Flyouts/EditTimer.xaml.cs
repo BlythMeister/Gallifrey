@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using Gallifrey.Exceptions.JiraIntegration;
@@ -23,7 +24,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             InitializeComponent();
 
             EditedTimerId = selected;
-            DataContext = new EditTimerModel(viewModel.Gallifrey, selected);
+            DataContext = new EditTimerModel(viewModel.Gallifrey, EditedTimerId);
         }
 
         private async void SaveButton(object sender, RoutedEventArgs e)
@@ -97,6 +98,52 @@ namespace Gallifrey.UI.Modern.Flyouts
             viewModel.RefreshModel();
             viewModel.SetSelectedTimer(EditedTimerId);
             IsOpen = false;
+        }
+
+        private async void SubtractTime(object sender, RoutedEventArgs e)
+        {
+            DataModel.SetNotDefaultButton();
+
+            var result = await DialogCoordinator.Instance.ShowInputAsync(viewModel.DialogContext, "Enter Time Adjustment", "Enter The Number Of Minutes To Subtract\nThis Can Be 90 for 1 Hour & 30 Minutes");
+
+            if (result == null)
+            {
+                return;
+            }
+
+            int minutesAdjustment;
+            if (!int.TryParse(result, out minutesAdjustment))
+            {
+                await DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext, "Invalid Time Entry", string.Format("The Value '{0}' was not a number of minutes.", result));
+                return;
+            }
+
+            var timeAdjustmentTimespan = TimeSpan.FromMinutes(minutesAdjustment);
+            viewModel.Gallifrey.JiraTimerCollection.AdjustTime(EditedTimerId, timeAdjustmentTimespan.Hours, timeAdjustmentTimespan.Minutes, false);
+            DataContext = new EditTimerModel(viewModel.Gallifrey, EditedTimerId);
+        }
+
+        private async void AddTime(object sender, RoutedEventArgs e)
+        {
+            DataModel.SetNotDefaultButton();
+
+            var result = await DialogCoordinator.Instance.ShowInputAsync(viewModel.DialogContext, "Enter Time Adjustment", "Enter The Number Of Minutes To Add\nThis Can Be 90 for 1 Hour & 30 Minutes");
+
+            if (result == null)
+            {
+                return;
+            }
+
+            int minutesAdjustment;
+            if (!int.TryParse(result, out minutesAdjustment))
+            {
+                await DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext, "Invalid Time Entry", string.Format("The Value '{0}' was not a number of minutes.", result));
+                return;
+            }
+
+            var timeAdjustmentTimespan = TimeSpan.FromMinutes(minutesAdjustment);
+            viewModel.Gallifrey.JiraTimerCollection.AdjustTime(EditedTimerId, timeAdjustmentTimespan.Hours, timeAdjustmentTimespan.Minutes, true);
+            DataContext = new EditTimerModel(viewModel.Gallifrey, EditedTimerId);
         }
     }
 }

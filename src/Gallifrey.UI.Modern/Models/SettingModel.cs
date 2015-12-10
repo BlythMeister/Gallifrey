@@ -1,13 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Deployment.Application;
+using System.IO;
 using System.Linq;
 using Gallifrey.Settings;
+using Gallifrey.Versions;
 using MahApps.Metro;
+using Microsoft.Win32;
 
 namespace Gallifrey.UI.Modern.Models
 {
     public class SettingModel
     {
+        readonly RegistryKey registryKey = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+
         //AppSettings
         public bool AlertWhenIdle { get; set; }
         public int AlertMinutes { get; set; }
@@ -22,6 +28,7 @@ namespace Gallifrey.UI.Modern.Models
         //UI Settings
         public string Theme { get; set; }
         public string Accent { get; set; }
+        public bool StartOnBoot { get; set; }
 
         //Jira Settings
         public string JiraUrl { get; set; }
@@ -43,7 +50,7 @@ namespace Gallifrey.UI.Modern.Models
         //Data Change Flags
         public bool JiraSettingsChanged { get; set; }
 
-        public SettingModel(ISettingsCollection settings)
+        public SettingModel(ISettingsCollection settings, IVersionControl versionControl)
         {
             //AppSettings
             AlertWhenIdle = settings.AppSettings.AlertWhenNotRunning;
@@ -65,6 +72,7 @@ namespace Gallifrey.UI.Modern.Models
             //UI Settings
             Theme = settings.UiSettings.Theme;
             Accent = settings.UiSettings.Accent;
+            StartOnBoot = versionControl.IsAutomatedDeploy && registryKey.GetValue(versionControl.AppName) != null;
 
             //Jira Settings
             JiraUrl = settings.JiraConnectionSettings.JiraUrl;
@@ -96,7 +104,7 @@ namespace Gallifrey.UI.Modern.Models
             AvaliableAccents = ThemeManager.Accents.Select(x=>x.Name).ToList();
         }
 
-        public void UpdateSettings(ISettingsCollection settings)
+        public void UpdateSettings(ISettingsCollection settings, IVersionControl versionControl)
         {
             //AppSettings
             settings.AppSettings.AlertWhenNotRunning = AlertWhenIdle;
@@ -111,6 +119,18 @@ namespace Gallifrey.UI.Modern.Models
             //UI Settings
             settings.UiSettings.Theme = Theme;
             settings.UiSettings.Accent = Accent;
+            if (versionControl.IsAutomatedDeploy)
+            {
+                if (StartOnBoot)
+                {
+                    var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Programs), "Gallifrey", string.Format("{0}.appref-ms", versionControl.AppName));
+                    registryKey.SetValue(versionControl.AppName, path);
+                }
+                else
+                {
+                    registryKey.DeleteValue(versionControl.AppName, false);
+                }
+            }
 
             //Jira Settings
             if (settings.JiraConnectionSettings.JiraUrl != JiraUrl ||

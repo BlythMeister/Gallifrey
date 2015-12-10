@@ -399,6 +399,28 @@ namespace Gallifrey.UI.Classic
             Process.Start("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=G3MWL8E6UG4RS");
         }
 
+        private void newUIDownload_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            if (!gallifrey.VersionControl.IsAutomatedDeploy)
+            {
+                MessageBox.Show("This is not a valid version so cannot be upgraded", "Invalid Upgrade", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            switch (gallifrey.VersionControl.InstanceType)
+            {
+                case InstanceType.Alpha:
+                    Process.Start("http://releases.gallifreyapp.co.uk/download/modern/alpha/setup.exe");
+                    break;
+                case InstanceType.Beta:
+                    Process.Start("http://releases.gallifreyapp.co.uk/download/modern/beta/setup.exe");
+                    break;
+                default:
+                    Process.Start("http://releases.gallifreyapp.co.uk/download/modern/stable/setup.exe");
+                    break;
+            }
+        }
+
         private void tabTimerDays_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Left || e.KeyCode == Keys.Right)

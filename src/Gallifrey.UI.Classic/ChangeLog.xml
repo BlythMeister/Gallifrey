@@ -208,6 +208,8 @@
       <Bug>Fix issue where Export on stop prompt shows when automatically stopped (by locking machine)</Bug>
       <Bug>Added retry logic when saving internal data to prevent crashes due to file locking</Bug>
     </Bugs>
-    <Others />
+    <Others>
+      <Other>Adding new ui upgrade links</Other>
+    </Others>
   </Version>
 </Versions>

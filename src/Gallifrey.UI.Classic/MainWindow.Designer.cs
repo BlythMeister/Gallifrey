@@ -65,6 +65,9 @@
             this.label6 = new System.Windows.Forms.Label();
             this.splitter1 = new System.Windows.Forms.Splitter();
             this.lblGitHub = new System.Windows.Forms.LinkLabel();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.newUIDownload = new System.Windows.Forms.LinkLabel();
             this.grpTarget.SuspendLayout();
             this.grpExportStats.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -101,7 +104,7 @@
             this.tabTimerDays.Location = new System.Drawing.Point(12, 169);
             this.tabTimerDays.Name = "tabTimerDays";
             this.tabTimerDays.SelectedIndex = 0;
-            this.tabTimerDays.Size = new System.Drawing.Size(951, 414);
+            this.tabTimerDays.Size = new System.Drawing.Size(951, 377);
             this.tabTimerDays.TabIndex = 15;
             this.tabTimerDays.DragDrop += new System.Windows.Forms.DragEventHandler(this.tabTimerDays_DragDrop);
             this.tabTimerDays.DragOver += new System.Windows.Forms.DragEventHandler(this.tabTimerDays_DragOver);
@@ -361,7 +364,7 @@
             // 
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 586);
+            this.label2.Location = new System.Drawing.Point(12, 573);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(179, 13);
             this.label2.TabIndex = 18;
@@ -372,7 +375,7 @@
             this.lblTwitter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblTwitter.AutoSize = true;
             this.lblTwitter.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
-            this.lblTwitter.Location = new System.Drawing.Point(189, 586);
+            this.lblTwitter.Location = new System.Drawing.Point(189, 573);
             this.lblTwitter.Name = "lblTwitter";
             this.lblTwitter.Size = new System.Drawing.Size(60, 13);
             this.lblTwitter.TabIndex = 19;
@@ -384,7 +387,7 @@
             // 
             this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(246, 586);
+            this.label4.Location = new System.Drawing.Point(246, 573);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(33, 13);
             this.label4.TabIndex = 20;
@@ -395,7 +398,7 @@
             this.lblEmail.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblEmail.AutoSize = true;
             this.lblEmail.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
-            this.lblEmail.Location = new System.Drawing.Point(276, 586);
+            this.lblEmail.Location = new System.Drawing.Point(276, 573);
             this.lblEmail.Name = "lblEmail";
             this.lblEmail.Size = new System.Drawing.Size(39, 13);
             this.lblEmail.TabIndex = 21;
@@ -407,7 +410,7 @@
             // 
             this.lblDonateDesc.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.lblDonateDesc.AutoSize = true;
-            this.lblDonateDesc.Location = new System.Drawing.Point(730, 586);
+            this.lblDonateDesc.Location = new System.Drawing.Point(730, 573);
             this.lblDonateDesc.Name = "lblDonateDesc";
             this.lblDonateDesc.Size = new System.Drawing.Size(154, 13);
             this.lblDonateDesc.TabIndex = 22;
@@ -418,7 +421,7 @@
             this.lblDonate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.lblDonate.AutoSize = true;
             this.lblDonate.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
-            this.lblDonate.Location = new System.Drawing.Point(880, 586);
+            this.lblDonate.Location = new System.Drawing.Point(880, 573);
             this.lblDonate.Name = "lblDonate";
             this.lblDonate.Size = new System.Drawing.Size(83, 13);
             this.lblDonate.TabIndex = 23;
@@ -430,7 +433,7 @@
             // 
             this.label6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(310, 586);
+            this.label6.Location = new System.Drawing.Point(310, 573);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(264, 13);
             this.label6.TabIndex = 24;
@@ -440,7 +443,7 @@
             // 
             this.splitter1.Location = new System.Drawing.Point(0, 0);
             this.splitter1.Name = "splitter1";
-            this.splitter1.Size = new System.Drawing.Size(3, 608);
+            this.splitter1.Size = new System.Drawing.Size(3, 595);
             this.splitter1.TabIndex = 25;
             this.splitter1.TabStop = false;
             // 
@@ -449,7 +452,7 @@
             this.lblGitHub.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblGitHub.AutoSize = true;
             this.lblGitHub.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
-            this.lblGitHub.Location = new System.Drawing.Point(570, 586);
+            this.lblGitHub.Location = new System.Drawing.Point(570, 573);
             this.lblGitHub.Name = "lblGitHub";
             this.lblGitHub.Size = new System.Drawing.Size(44, 13);
             this.lblGitHub.TabIndex = 26;
@@ -457,11 +460,50 @@
             this.lblGitHub.Text = "GitHub";
             this.lblGitHub.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lblGitHub_LinkClicked);
             // 
+            // label5
+            // 
+            this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.Location = new System.Drawing.Point(12, 549);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(411, 21);
+            this.label5.TabIndex = 27;
+            this.label5.Text = "Gallifrey has a new user interface, you can download from";
+            // 
+            // label7
+            // 
+            this.label7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7.Location = new System.Drawing.Point(465, 549);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(498, 21);
+            this.label7.TabIndex = 29;
+            this.label7.Text = "Note: Upgrade is optional but new feature will be to new interface only";
+            // 
+            // newUIDownload
+            // 
+            this.newUIDownload.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.newUIDownload.AutoSize = true;
+            this.newUIDownload.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.newUIDownload.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
+            this.newUIDownload.Location = new System.Drawing.Point(417, 549);
+            this.newUIDownload.Name = "newUIDownload";
+            this.newUIDownload.Size = new System.Drawing.Size(41, 21);
+            this.newUIDownload.TabIndex = 30;
+            this.newUIDownload.TabStop = true;
+            this.newUIDownload.Text = "here";
+            this.newUIDownload.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.newUIDownload_LinkClicked);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(975, 608);
+            this.ClientSize = new System.Drawing.Size(975, 595);
+            this.Controls.Add(this.newUIDownload);
+            this.Controls.Add(this.label7);
+            this.Controls.Add(this.label5);
             this.Controls.Add(this.lblGitHub);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.splitter1);
@@ -491,7 +533,7 @@
             this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
-            this.MinimumSize = new System.Drawing.Size(952, 633);
+            this.MinimumSize = new System.Drawing.Size(991, 633);
             this.Name = "MainWindow";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Gallifrey";
@@ -546,6 +588,9 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Splitter splitter1;
         private System.Windows.Forms.LinkLabel lblGitHub;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.LinkLabel newUIDownload;
     }
 }
 

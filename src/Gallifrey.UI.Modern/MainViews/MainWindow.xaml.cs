@@ -220,13 +220,14 @@ namespace Gallifrey.UI.Modern.MainViews
                         {
                             this.FlashWindow();
                             Activate();
+                            Topmost = true;
                             ViewModel.CloseAllFlyouts();
                             await ViewModel.OpenFlyout(new LockedTimer(ViewModel));
                             this.StopFlashingWindow();
+                            Topmost = false;
                         }
                     }
                     catch (NoIdleTimerRunningException) { }
-
                     break;
             }
         }
@@ -317,7 +318,7 @@ namespace Gallifrey.UI.Modern.MainViews
             }
 
             Application.Current.Shutdown();
-            
+
         }
 
         private void MainWindow_OnClosed(object sender, EventArgs e)

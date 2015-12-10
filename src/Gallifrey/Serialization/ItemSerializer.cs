@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Threading;
 using Gallifrey.Exceptions.Serialization;
 using Newtonsoft.Json;
 
@@ -46,6 +47,7 @@ namespace Gallifrey.Serialization
                 {
                     throw new SerializerError("Error in serialization", ex);
                 }
+                Thread.Sleep(100);
                 Serialize(obj, retryCount + 1);
             }
         }
@@ -77,7 +79,13 @@ namespace Gallifrey.Serialization
             }
             catch (Exception)
             {
-                return retryCount >= 3 ? new T() : DeSerialize(encryptedString, retryCount + 1);
+                if (retryCount >= 3)
+                {
+                    return new T();
+                }
+
+                Thread.Sleep(100);
+                return DeSerialize(encryptedString, retryCount + 1);
             }
         }
     }

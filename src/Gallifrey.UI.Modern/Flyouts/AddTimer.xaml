@@ -19,7 +19,7 @@
         </Grid.ColumnDefinitions>
 
         <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center">Jira Reference</TextBlock>
-        <TextBox Grid.Row="0" Grid.Column="1" Margin="0,5" Text="{Binding JiraReference}">
+        <TextBox Grid.Row="0" Grid.Column="1" Margin="0,5" Text="{Binding JiraReference, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" CharacterCasing="Upper">
             <TextBox.Style>
                 <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
                     <Style.Triggers>
@@ -30,20 +30,9 @@
                 </Style>
             </TextBox.Style>
         </TextBox>
-        <!--<ComboBox Grid.Row="0" Grid.Column="1" Margin="0,5" IsEditable="True" ItemsSource="{Binding RecentJiras}" MaxDropDownHeight="200" Text="{Binding Path=JiraReference}">
-            <ComboBox.Style>
-                <Style TargetType="ComboBox" BasedOn="{StaticResource {x:Type ComboBox}}">
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding JiraReferenceEditable}" Value="False" >
-                            <Setter Property="IsEnabled" Value="False"/>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </ComboBox.Style>
-        </ComboBox>-->
 
         <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Padding="2">Starting Date</TextBlock>
-        <DatePicker Grid.Row="1" Grid.Column="1" Margin="0,5" IsTodayHighlighted="False" DisplayDate="{Binding DisplayDate}" DisplayDateStart="{Binding MinDate}" DisplayDateEnd="{Binding MaxDate}" SelectedDate="{Binding StartDate}" SelectedDateChanged="StartDateChanged">
+        <DatePicker Grid.Row="1" Grid.Column="1" Margin="0,5" IsTodayHighlighted="False" DisplayDate="{Binding DisplayDate}" DisplayDateStart="{Binding MinDate}" DisplayDateEnd="{Binding MaxDate}" SelectedDate="{Binding StartDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedDateChanged="StartDateChanged">
             <DatePicker.Style>
                 <Style TargetType="DatePicker" BasedOn="{StaticResource {x:Type DatePicker}}">
                     <Style.Triggers>
@@ -66,14 +55,14 @@
                     </Style.Triggers>
                 </Style>
             </WrapPanel.Style>
-            <controls:NumericUpDown Value="{Binding StartHours}" TextAlignment="Left" Minimum="0" Maximum="9" Width="80"/>
+            <controls:NumericUpDown Value="{Binding StartHours, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Left" Minimum="0" Maximum="9" Width="80"/>
             <TextBlock VerticalAlignment="Center" Margin="2,0">Hours</TextBlock>
-            <controls:NumericUpDown Value="{Binding StartMinutes}" TextAlignment="Left" Minimum="0" Maximum="59" Width="80"/>
+            <controls:NumericUpDown Value="{Binding StartMinutes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Left" Minimum="0" Maximum="59" Width="80"/>
             <TextBlock VerticalAlignment="Center" Margin="2,0">Minutes</TextBlock>
         </WrapPanel>
 
         <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Padding="2">Start Now?</TextBlock>
-        <CheckBox Grid.Row="3" Grid.Column="1" Margin="0,5" IsChecked="{Binding StartNow}" >
+        <CheckBox Grid.Row="3" Grid.Column="1" Margin="0,5" IsChecked="{Binding StartNow, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
             <CheckBox.Style>
                 <Style TargetType="CheckBox" BasedOn="{StaticResource {x:Type CheckBox}}">
                     <Style.Triggers>
@@ -86,14 +75,14 @@
         </CheckBox>
 
         <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Padding="2">Assign To Me?</TextBlock>
-        <CheckBox Grid.Row="4" Grid.Column="1" Margin="0,5" IsChecked="{Binding AssignToMe}" />
+        <CheckBox Grid.Row="4" Grid.Column="1" Margin="0,5" IsChecked="{Binding AssignToMe, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
         <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Padding="2">Set In Progress?</TextBlock>
-        <CheckBox Grid.Row="5" Grid.Column="1" Margin="0,5" IsChecked="{Binding InProgress}" />
+        <CheckBox Grid.Row="5" Grid.Column="1" Margin="0,5" IsChecked="{Binding InProgress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
 
         <StackPanel Orientation="Horizontal" Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center">
-            <Button  Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="AddButton">
+            <Button  Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="AddButton" IsDefault="True">
                 <Rectangle Width="23" Height="23" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}" ToolTip="Add Timer">
                     <Rectangle.OpacityMask>
                         <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_add}" />

@@ -20,6 +20,7 @@ namespace Gallifrey.UI.Modern.Models
         public DateTime? OriginalRunDate { get; set; }
         public int OriginalHours { get; set; }
         public int OriginalMinutes { get; set; }
+        public bool IsDefaultOnButton { get; set; }
         
         public EditTimerModel(IBackend gallifrey, Guid timerId)
         {
@@ -54,6 +55,13 @@ namespace Gallifrey.UI.Modern.Models
             OriginalHours = Hours;
             OriginalMinutes = Minutes;
 
+            IsDefaultOnButton = true;
+        }
+
+        public void SetNotDefaultButton()
+        {
+            IsDefaultOnButton = false;
+            if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("IsDefaultOnButton"));
         }
 
         public bool HasModifiedJiraReference()

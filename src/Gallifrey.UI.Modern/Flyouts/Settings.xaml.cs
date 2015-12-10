@@ -19,13 +19,13 @@ namespace Gallifrey.UI.Modern.Flyouts
             this.viewModel = viewModel;
             InitializeComponent();
 
-            DataContext = new SettingModel(viewModel.Gallifrey.Settings);
+            DataContext = new SettingModel(viewModel.Gallifrey.Settings, viewModel.Gallifrey.VersionControl);
         }
 
         private async void SaveSettings(object sender, RoutedEventArgs e)
         {
             var successfulSave = true;
-            DataModel.UpdateSettings(viewModel.Gallifrey.Settings);
+            DataModel.UpdateSettings(viewModel.Gallifrey.Settings, viewModel.Gallifrey.VersionControl);
 
             try
             {

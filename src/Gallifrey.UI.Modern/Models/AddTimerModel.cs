@@ -23,7 +23,6 @@ namespace Gallifrey.UI.Modern.Models
         public bool StartNowEditable { get; set; }
         public bool AssignToMe { get; set; }
         public bool InProgress { get; set; }
-        public List<string> RecentJiras { get; set; }
 
         public AddTimerModel(IBackend gallifrey, string jiraRef, DateTime? startDate, bool? enableDateChange, TimeSpan? preloadTime, bool? enableTimeChange, bool? startNow)
         {
@@ -66,8 +65,6 @@ namespace Gallifrey.UI.Modern.Models
             }
 
             StartNow = startNow.HasValue && startNow.Value;
-
-            RecentJiras = gallifrey.JiraConnection.GetRecentJirasFound().Select(x=>x.JiraReference).ToList();
         }
 
         public void SetStartNowEnabled(bool enabled)
