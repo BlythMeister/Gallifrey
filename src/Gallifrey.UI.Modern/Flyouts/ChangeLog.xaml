@@ -26,32 +26,30 @@
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
-                        <StackPanel Grid.Row="0" Orientation="Horizontal">
-                            <TextBlock FontSize="17" TextDecorations="Underline" >
-                                <TextBlock.Style>
-                                    <Style TargetType="TextBlock">
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding Path=HasName}" Value="False" >
-                                                <Setter Property="Visibility" Value="Collapsed"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBlock.Style>
+                        <TextBlock Grid.Row="0" FontSize="17" TextDecorations="Underline" >
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Path=HaveVersionName}" Value="False" >
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
                                 <Run Text="Version "/><Run Text="{Binding Path=VersionNumber}"/><Run Text=" ("/><Run Text="{Binding Path=VersionName}"/><Run Text=")"/>
-                            </TextBlock>
-                            <TextBlock FontSize="17" TextDecorations="Underline" >
-                                <TextBlock.Style>
-                                    <Style TargetType="TextBlock">
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding Path=HasName}" Value="True" >
-                                                <Setter Property="Visibility" Value="Collapsed"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBlock.Style>
+                        </TextBlock>
+                        <TextBlock Grid.Row="0" FontSize="17" TextDecorations="Underline" >
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Path=HaveVersionName}" Value="True" >
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
                                 <Run Text="Version "/><Run Text="{Binding Path=VersionNumber}"/>
-                            </TextBlock>
-                        </StackPanel>
+                        </TextBlock>
                         <StackPanel Grid.Row="1" Margin="0,5,0,0">
                             <StackPanel.Style>
                                 <Style TargetType="StackPanel">
