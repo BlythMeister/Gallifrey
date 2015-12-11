@@ -1,8 +1,10 @@
 Gallifrey
 =========
 
-Want Help?
-[![Join the chat at https://gitter.im/BlythMeister/Gallifrey](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/BlythMeister/Gallifrey?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Gitter](https://img.shields.io/badge/Gitter-Join%20Chat-green.svg?style=flat-square)](https://gitter.im/BlythMeister/Gallifrey)
+
+[![Release](https://img.shields.io/github/release/MahApps/MahApps.Metro.svg?style=flat-square)](https://github.com/BlythMeister/Gallifrey/releases/latest)
+[![Issues](https://img.shields.io/github/issues/MahApps/MahApps.Metro.svg?style=flat-square)](https://github.com/BlythMeister/Gallifrey/issues)
 
 Gallifrey will make anyone a Jira time lord!
 
