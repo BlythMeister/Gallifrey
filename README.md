@@ -2,7 +2,6 @@ Gallifrey
 =========
 
 [![Gitter](https://img.shields.io/badge/Gitter-Join%20Chat-green.svg?style=flat-square)](https://gitter.im/BlythMeister/Gallifrey)
-
 [![Release](https://img.shields.io/github/release/BlythMeister/Gallifrey.svg?style=flat-square)](https://github.com/BlythMeister/Gallifrey/releases/latest)
 [![Issues](https://img.shields.io/github/issues/BlythMeister/Gallifrey.svg?style=flat-square)](https://github.com/BlythMeister/Gallifrey/issues)
 
