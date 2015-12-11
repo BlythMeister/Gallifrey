@@ -1,6 +1,8 @@
 Gallifrey
 =========
 
+[![Gitter](https://img.shields.io/badge/Gitter-Join%20Chat-green.svg?style=flat-square)](https://gitter.im/BlythMeister/Gallifrey)
+
 Gallifrey will make anyone a Jira time lord!
 
 A simple, light-weight Jira time logging companion to help you travel the Jira universe!
