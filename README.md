@@ -1,15 +1,13 @@
 Gallifrey
 =========
 
+[![Gitter](https://img.shields.io/badge/Gitter-Join%20Chat-green.svg?style=flat-square)](https://gitter.im/BlythMeister/Gallifrey)
+[![Release](https://img.shields.io/github/release/BlythMeister/Gallifrey.svg?style=flat-square)](https://github.com/BlythMeister/Gallifrey/releases/latest)
+[![Issues](https://img.shields.io/github/issues/BlythMeister/Gallifrey.svg?style=flat-square)](https://github.com/BlythMeister/Gallifrey/issues)
+
 Gallifrey will make anyone a Jira time lord!
 
 A simple, light-weight Jira time logging companion to help you travel the Jira universe!
-
-Why Is The App Called Gallifrey
-=========
-
-Gallifrey is the home of the time lords in the hit BBC TV show Dr Who....Need i say more?
-*This product is in no way linked/affiliated to Dr Who or the BBC (apart from the name)*
 
 Downloads
 =========
@@ -40,10 +38,17 @@ Please help us keep this project up and running by donating.
 We hope to get a domain up and running with a nice GitHub Pages website, but this all costs money.
 [Click Here to donate](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=G3MWL8E6UG4RS)
 
+Why Is The App Called Gallifrey
+=========
+
+Gallifrey is the home of the time lords in the hit BBC TV show Dr Who....Need i say more?
+*This product is in no way linked/affiliated to Dr Who or the BBC (apart from the name)*
+
 Support
 =========
 
 You can get app support via [twitter](https://twitter.com/GallifreyApp) or via email (GallifreyApp@gmail.com).
+There is also a Gitter chat room (https://gitter.im/BlythMeister/Gallifrey).
 We are using GitHub issues to maintain a backlog and track bugs, so feel free to raise issues there (https://github.com/BlythMeister/Gallifrey/issues)
 
 Contributions
