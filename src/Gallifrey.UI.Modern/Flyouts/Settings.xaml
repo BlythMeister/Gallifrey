@@ -27,10 +27,10 @@
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
-                    <TextBlock Grid.Row="0" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right">Alert When Idle?</TextBlock>
+                    <TextBlock Grid.Row="0" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="Should Remind You If You Do Not Have Any Timers Running">Alert When Idle?</TextBlock>
                     <CheckBox Grid.Row="0" Grid.Column="1" Margin="5" VerticalAlignment="Center" IsChecked="{Binding AlertWhenIdle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
-                    <TextBlock Grid.Row="1" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right">Idle Time Alert (Minutes)</TextBlock>
+                    <TextBlock Grid.Row="1" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="How Frequently Alerts Should Be Shown">Idle Time Alert (Minutes)</TextBlock>
                     <controls:NumericUpDown Grid.Row="1" Grid.Column="1" Margin="5" VerticalAlignment="Center" Minimum="0" Maximum="120" Value="{Binding AlertMinutes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                         <controls:NumericUpDown.Style>
                             <Style TargetType="controls:NumericUpDown">
@@ -43,22 +43,22 @@
                         </controls:NumericUpDown.Style>
                     </controls:NumericUpDown>
 
-                    <TextBlock Grid.Row="2" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right">Keep Timers For (Days)</TextBlock>
+                    <TextBlock Grid.Row="2" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="Number Of Days To Keep Timers For In The UI">Keep Timers For (Days)</TextBlock>
                     <controls:NumericUpDown Grid.Row="2" Grid.Column="1" Margin="5" VerticalAlignment="Center" Minimum="2" Maximum="150" Value="{Binding KeepTimersForDays, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
-                    <TextBlock Grid.Row="3" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right">Auto Update?</TextBlock>
+                    <TextBlock Grid.Row="3" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="Should Updated Be Automatically Applied">Auto Update?</TextBlock>
                     <CheckBox Grid.Row="3" Grid.Column="1" Margin="5" VerticalAlignment="Center" IsChecked="{Binding AutoUpdate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
-                    <TextBlock Grid.Row="4" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right">Anonymous Usage Tracking</TextBlock>
+                    <TextBlock Grid.Row="4" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="Allow Gallifrey To Track Your App Usage (Which Functions You Use - No Personal Data Is Captured)">Anonymous Usage Tracking</TextBlock>
                     <CheckBox Grid.Row="4" Grid.Column="1" Margin="5" VerticalAlignment="Center" IsChecked="{Binding AllowTracking, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
-                    <TextBlock Grid.Row="5" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right">Start On Boot</TextBlock>
+                    <TextBlock Grid.Row="5" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="Start Gallifrey When Your Machine Starts">Start On Boot</TextBlock>
                     <CheckBox Grid.Row="5" Grid.Column="1" Margin="5" VerticalAlignment="Center" IsChecked="{Binding StartOnBoot, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                    
-                    <TextBlock Grid.Row="6" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right">Theme</TextBlock>
+
+                    <TextBlock Grid.Row="6" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="UI Theme To Use">Theme</TextBlock>
                     <ComboBox Grid.Row="6" Grid.Column="1" Margin="5" SelectedItem="{Binding Theme}" ItemsSource="{Binding AvaliableThemes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
-                    <TextBlock Grid.Row="7" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right">Main Colour</TextBlock>
+                    <TextBlock Grid.Row="7" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="UI Colour Scheme">Main Colour</TextBlock>
                     <ComboBox Grid.Row="7" Grid.Column="1" Margin="5" SelectedItem="{Binding Accent}" ItemsSource="{Binding AvaliableAccents, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 </Grid>
             </TabItem>
@@ -75,13 +75,13 @@
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
-                    <TextBlock Grid.Row="0" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right">URL</TextBlock>
+                    <TextBlock Grid.Row="0" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="The URL To Connect To Jira">URL</TextBlock>
                     <TextBox Grid.Row="0" Grid.Column="1" Margin="5" VerticalAlignment="Center" Text="{Binding JiraUrl, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
-                    <TextBlock Grid.Row="1" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right">Username</TextBlock>
+                    <TextBlock Grid.Row="1" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="Your Jira Username">Username</TextBlock>
                     <TextBox Grid.Row="1" Grid.Column="1" Margin="5" VerticalAlignment="Center" Text="{Binding JiraUsername, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
-                    <TextBlock Grid.Row="2" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right">Password</TextBlock>
+                    <TextBlock Grid.Row="2" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="Your Jira Password">Password</TextBlock>
                     <PasswordBox Grid.Row="2" Grid.Column="1" Margin="5" VerticalAlignment="Center" helpers:PasswordBoxHelper.BindPassword="true" helpers:PasswordBoxHelper.BoundPassword="{Binding JiraPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 </Grid>
             </TabItem>
@@ -98,22 +98,22 @@
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
-                    <TextBlock Grid.Row="0" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right">Export Time Per Day Hours</TextBlock>
+                    <TextBlock Grid.Row="0" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="How Many Hours/Minutes You Tartget To Export Per Day">Export Time Per Day Hours</TextBlock>
                     <controls:NumericUpDown Grid.Row="0" Grid.Column="1" Margin="5" VerticalAlignment="Center" Minimum="0" Maximum="10" Value="{Binding TargetHoursPerDay, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
-                    <TextBlock Grid.Row="1" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right">Minutes</TextBlock>
+                    <TextBlock Grid.Row="1" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right"  ToolTip="How Many Hours/Minutes You Tartget To Export Per Day">Minutes</TextBlock>
                     <controls:NumericUpDown Grid.Row="1" Grid.Column="1" Margin="5" VerticalAlignment="Center" Minimum="0" Maximum="60" Value="{Binding TargetMinutesPerDay, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
-                    <TextBlock Grid.Row="2" Grid.Column="0" Margin="5" HorizontalAlignment="Right">Working Days</TextBlock>
+                    <TextBlock Grid.Row="2" Grid.Column="0" Margin="5" HorizontalAlignment="Right" ToolTip="Which Days You Work In A Week">Working Days</TextBlock>
                     <ListBox Grid.Row="2" Grid.Column="1" Margin="5" ItemsSource="{Binding WorkingDays, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <CheckBox IsChecked="{Binding IsChecked}" Content="{Binding DisplayName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                <CheckBox IsChecked="{Binding IsChecked}" Content="{Binding DisplayName}" />
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
 
-                    <TextBlock Grid.Row="3" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right">Start Of Week</TextBlock>
+                    <TextBlock Grid.Row="3" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="The Day You Start Your Week On">Start Of Week</TextBlock>
                     <ComboBox Grid.Row="3" Grid.Column="1" Margin="5" Text="{Binding StartOfWeek, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                         <ComboBoxItem Content="Monday" />
                         <ComboBoxItem Content="Tuesday" />
@@ -139,7 +139,7 @@
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
-                    <TextBlock Grid.Row="0" Grid.Column="0" Margin="5" HorizontalAlignment="Right">Events</TextBlock>
+                    <TextBlock Grid.Row="0" Grid.Column="0" Margin="5" HorizontalAlignment="Right" ToolTip="Events Which You Want To Have An Export Prompt For">Events</TextBlock>
                     <ListBox Grid.Row="0" Grid.Column="1" Margin="5" ItemsSource="{Binding ExportPrompts, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
@@ -148,16 +148,16 @@
                         </ListBox.ItemTemplate>
                     </ListBox>
 
-                    <TextBlock Grid.Row="1" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right">Export All</TextBlock>
+                    <TextBlock Grid.Row="1" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="Should Export Prompt Offer You ALL Time To Export, Or Just Changed">Export All</TextBlock>
                     <CheckBox Grid.Row="1" Grid.Column="1" Margin="5" VerticalAlignment="Center" IsChecked="{Binding ExportAll, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
-                    <TextBlock Grid.Row="2" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right">Default Remaining Action</TextBlock>
+                    <TextBlock Grid.Row="2" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="The Default Option On The Export Window For Remaining Time">Default Remaining Action</TextBlock>
                     <ComboBox Grid.Row="2" Grid.Column="1" Margin="5" ItemsSource="{Binding RemainingAdjustmentValues}" SelectedItem="{Binding SelectedRemainingAdjustmentValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
-                    <TextBlock Grid.Row="3" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right">Comment Prefix</TextBlock>
+                    <TextBlock Grid.Row="3" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="A Custom Prefix For All Jira Exports">Comment Prefix</TextBlock>
                     <TextBox Grid.Row="3" Grid.Column="1" Margin="5" VerticalAlignment="Center" Text="{Binding CommentPrefix, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
-                    <TextBlock Grid.Row="4" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right">Default Comment</TextBlock>
+                    <TextBlock Grid.Row="4" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="The Default Comment If You Do Not Enter A Comment">Default Comment</TextBlock>
                     <TextBox Grid.Row="4" Grid.Column="1" Margin="5" VerticalAlignment="Center" Text="{Binding DefaultComment, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 </Grid>
             </TabItem>

@@ -19,7 +19,7 @@
         </Grid.ColumnDefinitions>
 
         <TextBlock Grid.Row="0" Grid.Column="0" Text="Search Term" VerticalAlignment="Center" />
-        <TextBox Grid.Row="0" Grid.Column="1" Margin="0,5" Text="{Binding SearchTerm, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+        <TextBox Grid.Row="0" Grid.Column="1" Margin="5,5,0,5" Text="{Binding SearchTerm, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
             <TextBox.Style>
                 <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
                     <Style.Triggers>
@@ -37,7 +37,7 @@
         <TextBlock Grid.Row="1" Grid.Column="0" Text="OR" TextAlignment="Center" />
 
         <TextBlock Grid.Row="2" Grid.Column="0" Text="Search Filter" VerticalAlignment="Center"/>
-        <ComboBox  Grid.Row="2" Grid.Column="1" Margin="0,5" ItemsSource="{Binding UserFilters}" SelectedItem="{Binding SelectedFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsSynchronizedWithCurrentItem="True" controls:TextBoxHelper.ClearTextButton="True">
+        <ComboBox  Grid.Row="2" Grid.Column="1" Margin="5,5,0,5" ItemsSource="{Binding UserFilters}" SelectedItem="{Binding SelectedFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsSynchronizedWithCurrentItem="True" controls:TextBoxHelper.ClearTextButton="True">
             <ComboBox.Style>
                 <Style TargetType="ComboBox" BasedOn="{StaticResource {x:Type ComboBox}}">
                     <Style.Triggers>

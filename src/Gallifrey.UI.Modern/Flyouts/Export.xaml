@@ -29,7 +29,7 @@
                 <helpers:EnumMatchToBooleanConverter x:Key="EnumConverter" />
             </Grid.Resources>
 
-            <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Text="Jira Parent Reference">
+            <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Text="Jira Parent Reference" Margin="0,0,5,0">
                 <TextBlock.Style>
                     <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
                         <Style.Triggers>
@@ -103,8 +103,8 @@
             <TextBlock Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" Padding="2" TextWrapping="Wrap">Remaining Estimate<LineBreak/>Action</TextBlock>
             <WrapPanel Grid.Row="7" Grid.Column="1" VerticalAlignment="Center" Margin="0,5" Orientation="Vertical">
                 <RadioButton GroupName="Export" Content="Adjust Automatically" IsChecked="{Binding Path=WorkLogStrategy, Mode=TwoWay, Converter={StaticResource EnumConverter}, ConverterParameter={x:Static gallifreyJira:WorkLogStrategy.Automatic}}" />
-                <RadioButton GroupName="Export" Content="Leave Remaining" IsChecked="{Binding Path=WorkLogStrategy, Mode=TwoWay, Converter={StaticResource EnumConverter}, ConverterParameter={x:Static gallifreyJira:WorkLogStrategy.LeaveRemaining}}" />
-                <RadioButton GroupName="Export" Content="Set Value" IsChecked="{Binding Path=WorkLogStrategy, Mode=TwoWay, Converter={StaticResource EnumConverter}, ConverterParameter={x:Static gallifreyJira:WorkLogStrategy.SetValue}}" />
+                <RadioButton Margin="0,3,0,0" GroupName="Export" Content="Leave Remaining" IsChecked="{Binding Path=WorkLogStrategy, Mode=TwoWay, Converter={StaticResource EnumConverter}, ConverterParameter={x:Static gallifreyJira:WorkLogStrategy.LeaveRemaining}}" />
+                <RadioButton Margin="0,3,0,0" GroupName="Export" Content="Set Value" IsChecked="{Binding Path=WorkLogStrategy, Mode=TwoWay, Converter={StaticResource EnumConverter}, ConverterParameter={x:Static gallifreyJira:WorkLogStrategy.SetValue}}" />
             </WrapPanel>
 
             <TextBlock Grid.Row="8" Grid.Column="0" VerticalAlignment="Center" Padding="2" Text="Remaining Estimate" />

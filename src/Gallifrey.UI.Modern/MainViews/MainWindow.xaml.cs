@@ -180,7 +180,7 @@ namespace Gallifrey.UI.Modern.MainViews
             {
                 ViewModel.SetNoActivityMilliseconds(millisecondsSinceActivity);
 
-                if (millisecondsSinceActivity == 0)
+                if (millisecondsSinceActivity == 0 || ViewModel.TimerRunning)
                 {
                     this.StopFlashingWindow();
                 }

@@ -38,6 +38,9 @@ namespace Gallifrey.UI.Modern.Models
             public List<string> Features { get; set; }
             public List<string> Bugs { get; set; }
             public List<string> Others { get; set; }
+            public bool HasFeatures { get { return Features != null && Features.Any(); } }
+            public bool HasBugs { get { return Bugs != null && Bugs.Any(); } }
+            public bool HasOthers { get { return Others != null && Others.Any(); } }
         }
     }
 }
