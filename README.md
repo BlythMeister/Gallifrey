@@ -1,6 +1,8 @@
 Gallifrey
 =========
 
+[![Join the chat at https://gitter.im/BlythMeister/Gallifrey](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/BlythMeister/Gallifrey?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Gallifrey will make anyone a Jira time lord!
 
 A simple, light-weight Jira time logging companion to help you travel the Jira universe!
