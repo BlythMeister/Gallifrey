@@ -20,7 +20,7 @@
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="Auto"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <TextBlock Grid.Row="0" Grid.ColumnSpan="2" FontSize="18" Margin="0,0,0,5" Text="About"/>
+            <TextBlock Grid.Row="0" Grid.ColumnSpan="2" FontSize="18" Margin="0,0,0,5" Text="About" TextDecorations="Underline" />
             <TextBlock Grid.Row="1" Grid.Column="0" TextWrapping="Wrap" Margin="0,0,0,5" VerticalAlignment="Center">Gallifrey is a time logging companion designed to work with Jira time logs.<LineBreak />Gallifrey is open sourced on GitHub and free to download and contribute!</TextBlock>
             <Button Grid.Row="1" Grid.Column="1" Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="ChangeLogButton">
                 <Rectangle Width="27" Height="20" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}" ToolTip="View Full Change Log">
@@ -39,9 +39,9 @@
                 <ColumnDefinition Width="50*"></ColumnDefinition>
                 <ColumnDefinition Width="50*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <TextBlock Grid.Row="0" Grid.Column="0" FontSize="18" Margin="0,0,0,5" Text="Owner/Maintainer"/>
+            <TextBlock Grid.Row="0" Grid.Column="0" FontSize="18" Margin="0,0,0,5" Text="Owner/Maintainer" TextDecorations="Underline" />
             <TextBlock Grid.Row="1" Grid.Column="0" TextWrapping="Wrap" Margin="0,0,0,5">Chris Blyth<LineBreak />Twitter: @BlythMeister<LineBreak />GitHub: @BlythMeister<LineBreak /> <LineBreak /></TextBlock>
-            <TextBlock Grid.Row="0" Grid.Column="1" FontSize="18" Margin="0,0,0,5" Text="Project Contributors"/>
+            <TextBlock Grid.Row="0" Grid.Column="1" FontSize="18" Margin="0,0,0,5" Text="Project Contributors" TextDecorations="Underline" />
             <TextBlock Grid.Row="1" Grid.Column="1" TextWrapping="Wrap" Margin="0,0,0,5" Text="{Binding Contributors}" />
         </Grid>
         <Grid Grid.Row="2">
@@ -49,7 +49,7 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <TextBlock Grid.Row="0" FontSize="18" Margin="0,0,0,5" Text="Support"/>
+            <TextBlock Grid.Row="0" FontSize="18" Margin="0,0,0,5" Text="Support" TextDecorations="Underline" />
             <TextBlock Grid.Row="1" TextWrapping="Wrap" Margin="0,0,0,5" VerticalAlignment="Center">Contact Us By Email Or Social Networks!<LineBreak />Email: <Hyperlink NavigateUri="mailto:contact@gallifreyapp.co.uk?subject=Gallifrey App Contact" Foreground="{DynamicResource IdealForegroundColorBrush}" RequestNavigate="Hyperlink_RequestNavigate">GallifreyApp@gmail.com</Hyperlink><LineBreak />Twitter: <Hyperlink NavigateUri="https://twitter.com/GallifreyApp" Foreground="{DynamicResource IdealForegroundColorBrush}" RequestNavigate="Hyperlink_RequestNavigate">@GallifreyApp</Hyperlink></TextBlock>
         </Grid>
         <Grid Grid.Row="3">
@@ -57,7 +57,7 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <TextBlock Grid.Row="0" FontSize="18" Margin="0,0,0,5" Text="Donate"/>
+            <TextBlock Grid.Row="0" FontSize="18" Margin="0,0,0,5" Text="Donate" TextDecorations="Underline" />
             <TextBlock Grid.Row="1" TextWrapping="Wrap" Margin="0,0,0,5" VerticalAlignment="Center">Help us keep the project alive by donating via <Hyperlink NavigateUri="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=G3MWL8E6UG4RS" Foreground="{DynamicResource IdealForegroundColorBrush}" RequestNavigate="Hyperlink_RequestNavigate">PayPal</Hyperlink>.</TextBlock>
         </Grid>
         <Grid Grid.Row="4">
@@ -65,7 +65,7 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <TextBlock Grid.Row="0" FontSize="18" Margin="0,0,0,5" Text="Source Code"/>
+            <TextBlock Grid.Row="0" FontSize="18" Margin="0,0,0,5" Text="Source Code" TextDecorations="Underline" />
             <TextBlock Grid.Row="1" TextWrapping="Wrap" Margin="0,0,0,5" VerticalAlignment="Center">All our code and websites are hosted on <Hyperlink NavigateUri="https://github.com/BlythMeister/Gallifrey" Foreground="{DynamicResource IdealForegroundColorBrush}" RequestNavigate="Hyperlink_RequestNavigate">GitHub</Hyperlink><LineBreak/>You can download and fork to join the community</TextBlock>
         </Grid>
         <Grid Grid.Row="5">
@@ -74,7 +74,7 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <TextBlock Grid.Row="0" FontSize="18" Margin="0,0,0,5" Text="Installation Identifier"/>
+            <TextBlock Grid.Row="0" FontSize="18" Margin="0,0,0,5" Text="Installation Identifier" TextDecorations="Underline" />
             <TextBlock Grid.Row="1" Text="Your installation has an identifier of:"></TextBlock>
             <TextBlock Grid.Row="2" TextWrapping="Wrap" Margin="0,0,0,5" VerticalAlignment="Center" Text="{Binding InstallationId}"/>
         </Grid>
