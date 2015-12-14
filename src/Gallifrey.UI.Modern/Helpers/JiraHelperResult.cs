@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Gallifrey.UI.Modern.Helpers
+﻿namespace Gallifrey.UI.Modern.Helpers
 {
     public class JiraHelperResult<T>
     {

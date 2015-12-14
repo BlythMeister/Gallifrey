@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Linq;
-using System.Windows.Forms;
 using System.Windows.Input;
-using System.Windows.Interactivity;
 using Gallifrey.Exceptions.JiraTimers;
 using Gallifrey.UI.Modern.Flyouts;
 using Gallifrey.UI.Modern.Models;
-using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 using DragDropEffects = System.Windows.DragDropEffects;
 using DragEventArgs = System.Windows.DragEventArgs;
-using MessageBox = System.Windows.MessageBox;
 using UserControl = System.Windows.Controls.UserControl;
 
 namespace Gallifrey.UI.Modern.MainViews

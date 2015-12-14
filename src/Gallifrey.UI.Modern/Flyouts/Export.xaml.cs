@@ -3,11 +3,9 @@ using System.Threading.Tasks;
 using System.Windows;
 using Gallifrey.Exceptions.JiraIntegration;
 using Gallifrey.Jira.Model;
-using Gallifrey.JiraTimers;
 using Gallifrey.UI.Modern.Helpers;
 using Gallifrey.UI.Modern.Models;
 using MahApps.Metro.Controls.Dialogs;
-using MahApps.Metro.Converters;
 
 namespace Gallifrey.UI.Modern.Flyouts
 {

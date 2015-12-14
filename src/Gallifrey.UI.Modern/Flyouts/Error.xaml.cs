@@ -2,7 +2,6 @@
 using Exceptionless;
 using Exceptionless.Models;
 using Gallifrey.UI.Modern.Models;
-using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 
 namespace Gallifrey.UI.Modern.Flyouts

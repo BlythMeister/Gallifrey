@@ -2,10 +2,8 @@
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 using Gallifrey.UI.Modern.Flyouts;
 using Gallifrey.UI.Modern.Models;
-using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 
 namespace Gallifrey.UI.Modern.MainViews

@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -161,19 +160,27 @@ namespace Gallifrey.UI.Modern.Models
                 }
             }
 
+            //see if the order would be different now, and if so, recreate the TimerDates
             var orderedCollection = TimerDates.Where(x => validTimerDates.Contains(x.TimerDate)).OrderByDescending(x => x.TimerDate).ToList();
-            for (int i = 0; i < TimerDates.Count; i++)
+            if (orderedCollection.Count != TimerDates.Count)
             {
-                var main = TimerDates[i];
-                var ordered = orderedCollection[i];
-
-                if (main.TimerDate != ordered.TimerDate)
+                TimerDates = new ObservableCollection<TimerDateModel>(orderedCollection);
+            }
+            else
+            {
+                for (int i = 0; i < TimerDates.Count; i++)
                 {
-                    TimerDates = new ObservableCollection<TimerDateModel>(orderedCollection);
-                    break;
+                    var main = TimerDates[i];
+                    var ordered = orderedCollection[i];
+
+                    if (main.TimerDate != ordered.TimerDate)
+                    {
+                        TimerDates = new ObservableCollection<TimerDateModel>(orderedCollection);
+                        break;
+                    }
                 }
             }
-
+            
             if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("TimerDates"));
 
             runningWatcherElapsed(this, null);

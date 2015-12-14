@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Windows;
-using Gallifrey.ChangeLog;
 using Gallifrey.ExtensionMethods;
-using Gallifrey.JiraTimers;
 using Gallifrey.UI.Modern.Models;
 using MahApps.Metro.Controls.Dialogs;
 
@@ -27,6 +25,8 @@ namespace Gallifrey.UI.Modern.Flyouts
             if (!idleTimers.Any())
             {
                 DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext, "No Timers To Show", "You Have No Locked Timers, Come Back When You Do!");
+                IsOpen = false;
+                return;
             }
 
             DataContext = new LockedTimerCollectionModel(idleTimers);

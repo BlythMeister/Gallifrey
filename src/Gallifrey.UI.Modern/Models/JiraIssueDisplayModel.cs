@@ -1,5 +1,4 @@
-﻿using System;
-using Gallifrey.Jira.Model;
+﻿using Gallifrey.Jira.Model;
 using Gallifrey.JiraIntegration;
 
 namespace Gallifrey.UI.Modern.Models
