@@ -4,8 +4,7 @@
              xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
              xmlns:helpers="clr-namespace:Gallifrey.UI.Modern.Helpers"
              xmlns:gallifreyJira="clr-namespace:Gallifrey.Jira.Enum;assembly=Gallifrey.Jira"
-             IsModal="True" Theme="Adapt" Position="Right" Header="Export">
-
+             IsModal="True" Theme="Adapt" Position="Right" Header="Export" CloseButtonIsCancel="True">
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <Grid Width="400" Margin="5,5,5,5">
             <Grid.RowDefinitions>

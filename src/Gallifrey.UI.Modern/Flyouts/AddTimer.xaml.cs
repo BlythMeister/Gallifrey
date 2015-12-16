@@ -55,7 +55,7 @@ namespace Gallifrey.UI.Modern.Flyouts
 
             if (DataModel.JiraReferenceEditable)
             {
-                var result = await DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext, "Correct Jira?", string.Format("Jira found!\n\nRef: {0}\nName: {1}\n\nIs that correct?", jiraIssue.key, jiraIssue.fields.summary), MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No" });
+                var result = await DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext, "Correct Jira?", string.Format("Jira found!\n\nRef: {0}\nName: {1}\n\nIs that correct?", jiraIssue.key, jiraIssue.fields.summary), MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
 
                 if (result == MessageDialogResult.Negative)
                 {
@@ -74,7 +74,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                 var doneSomething = false;
                 if (seedTime.TotalMinutes > 0)
                 {
-                    var result = await DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext, "Duplicate Timer", "The Timer Already Exists, Would You Like To Add The Time?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings {AffirmativeButtonText = "Yes", NegativeButtonText = "No"});
+                    var result = await DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext, "Duplicate Timer", "The Timer Already Exists, Would You Like To Add The Time?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings {AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
 
                     if (result == MessageDialogResult.Affirmative)
                     {

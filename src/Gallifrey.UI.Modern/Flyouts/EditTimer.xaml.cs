@@ -65,7 +65,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                     return;
                 }
 
-                var result = await DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext,"Correct Jira?", string.Format("Jira found!\n\nRef: {0}\nName: {1}\n\nIs that correct?", jiraIssue.key, jiraIssue.fields.summary), MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No" });
+                var result = await DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext,"Correct Jira?", string.Format("Jira found!\n\nRef: {0}\nName: {1}\n\nIs that correct?", jiraIssue.key, jiraIssue.fields.summary), MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
 
                 if (result == MessageDialogResult.Negative)
                 {

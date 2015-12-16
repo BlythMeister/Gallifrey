@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
              xmlns:helpers="clr-namespace:Gallifrey.UI.Modern.Helpers"
-             IsModal="True" Theme="Adapt" Position="Right" Header="Settings">
+             IsModal="True" Theme="Adapt" Position="Right" Header="Settings" CloseButtonIsCancel="True">
     <Grid Width="340" Height="400" Margin="5,5,5,5" VerticalAlignment="Top">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />

@@ -40,7 +40,7 @@ namespace Gallifrey.UI.Modern.MainViews
             {
                 var timer = ViewModel.Gallifrey.JiraTimerCollection.GetTimer(selectedTimer.Value);
 
-                var result = DialogCoordinator.Instance.ShowMessageAsync(ViewModel.DialogContext, "Are You Sure?", string.Format("Are You Sure You Want To Delete {0}\n\n{1}\nFor: {2}", timer.JiraReference, timer.JiraName, timer.DateStarted.Date.ToString("ddd, dd MMM")), MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No" });
+                var result = DialogCoordinator.Instance.ShowMessageAsync(ViewModel.DialogContext, "Are You Sure?", string.Format("Are You Sure You Want To Delete {0}\n\n{1}\nFor: {2}", timer.JiraReference, timer.JiraName, timer.DateStarted.Date.ToString("ddd, dd MMM")), MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
 
                 await result;
 

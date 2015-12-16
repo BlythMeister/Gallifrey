@@ -80,7 +80,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             var selectedTime = new TimeSpan();
             selectedTime = selected.Aggregate(selectedTime, (current, lockedTimerModel) => current.Add(lockedTimerModel.IdleTime));
 
-            var result = await DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext, "Are You Sure?", string.Format("Are you Sure You Want To Delete Locked Timers Worth {0}?", selectedTime.FormatAsString()), MessageDialogStyle.AffirmativeAndNegative);
+            var result = await DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext, "Are You Sure?", string.Format("Are you Sure You Want To Delete Locked Timers Worth {0}?", selectedTime.FormatAsString()), MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
 
             if (result == MessageDialogResult.Affirmative)
             {

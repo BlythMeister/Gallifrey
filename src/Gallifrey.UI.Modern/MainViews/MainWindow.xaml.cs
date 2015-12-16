@@ -142,7 +142,7 @@ namespace Gallifrey.UI.Modern.MainViews
                     message += string.Format("You Have '{0}' To Export For This Change", exportTime.FormatAsString(false));
                 }
 
-                var messageResult = await DialogCoordinator.Instance.ShowMessageAsync(ViewModel.DialogContext, "Do You Want To Export?", message, MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No" });
+                var messageResult = await DialogCoordinator.Instance.ShowMessageAsync(ViewModel.DialogContext, "Do You Want To Export?", message, MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
 
                 if (messageResult == MessageDialogResult.Affirmative)
                 {
@@ -267,8 +267,7 @@ namespace Gallifrey.UI.Modern.MainViews
                 {
                     if (manualUpdateCheck)
                     {
-                        var messageResult = await DialogCoordinator.Instance.ShowMessageAsync(ViewModel.DialogContext, "Update Found", "Restart Now To Install Update?", MessageDialogStyle.AffirmativeAndNegative,
-                                                                    new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No" });
+                        var messageResult = await DialogCoordinator.Instance.ShowMessageAsync(ViewModel.DialogContext, "Update Found", "Restart Now To Install Update?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
 
                         if (messageResult == MessageDialogResult.Affirmative)
                         {
@@ -299,8 +298,7 @@ namespace Gallifrey.UI.Modern.MainViews
 
             if (manualReinstall && promptReinstall)
             {
-                var messageResult = await DialogCoordinator.Instance.ShowMessageAsync(ViewModel.DialogContext, "Update Error", "To Update An Uninstall/Reinstall Is Required.\nThis Can Happen Automatically\nNo Timers Will Be Lost\nDo You Want To Update Now?", MessageDialogStyle.AffirmativeAndNegative,
-                                                                    new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No" });
+                var messageResult = await DialogCoordinator.Instance.ShowMessageAsync(ViewModel.DialogContext, "Update Error", "To Update An Uninstall/Reinstall Is Required.\nThis Can Happen Automatically\nNo Timers Will Be Lost\nDo You Want To Update Now?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
 
                 if (messageResult == MessageDialogResult.Affirmative)
                 {
