@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Windows.Media;
 using Gallifrey.Settings;
 using Gallifrey.Versions;
 using MahApps.Metro;
@@ -23,10 +24,10 @@ namespace Gallifrey.UI.Modern.Models
         public int TargetMinutesPerDay { get; set; }
         public string StartOfWeek { get; set; }
         public List<WorkingDay> WorkingDays { get; set; }
-        
+
         //UI Settings
-        public string Theme { get; set; }
-        public string Accent { get; set; }
+        public AccentThemeModel Theme { get; set; }
+        public AccentThemeModel Accent { get; set; }
         public bool StartOnBoot { get; set; }
 
         //Jira Settings
@@ -43,14 +44,18 @@ namespace Gallifrey.UI.Modern.Models
         public string DefaultComment { get; set; }
 
         //Static Data
-        public List<string> AvaliableThemes { get; set; }
-        public List<string> AvaliableAccents { get; set; }
+        public List<AccentThemeModel> AvaliableThemes { get; set; }
+        public List<AccentThemeModel> AvaliableAccents { get; set; }
 
         //Data Change Flags
         public bool JiraSettingsChanged { get; set; }
 
         public SettingModel(ISettingsCollection settings, IVersionControl versionControl)
         {
+            //Static Data
+            AvaliableThemes = ThemeManager.AppThemes.Select(x => new AccentThemeModel { Name = x.Name.Replace("Base", ""), Colour = x.Resources["WhiteColorBrush"] as Brush, BorderColour = x.Resources["BlackColorBrush"] as Brush }).ToList();
+            AvaliableAccents = ThemeManager.Accents.Select(x => new AccentThemeModel { Name = x.Name, Colour = x.Resources["AccentColorBrush"] as Brush, BorderColour = x.Resources["AccentColorBrush"] as Brush }).ToList();
+
             //AppSettings
             AlertWhenIdle = settings.AppSettings.AlertWhenNotRunning;
             AlertMinutes = (settings.AppSettings.AlertTimeMilliseconds / 1000 / 60);
@@ -60,7 +65,7 @@ namespace Gallifrey.UI.Modern.Models
             TargetHoursPerDay = settings.AppSettings.TargetLogPerDay.Hours;
             TargetMinutesPerDay = settings.AppSettings.TargetLogPerDay.Minutes;
             StartOfWeek = settings.AppSettings.StartOfWeek.ToString();
-            
+
             WorkingDays = new List<WorkingDay>();
             foreach (DayOfWeek dayOfWeek in Enum.GetValues(typeof(DayOfWeek)))
             {
@@ -69,8 +74,8 @@ namespace Gallifrey.UI.Modern.Models
             }
 
             //UI Settings
-            Theme = settings.UiSettings.Theme;
-            Accent = settings.UiSettings.Accent;
+            Theme = AvaliableThemes.FirstOrDefault(x => x.Name == settings.UiSettings.Theme) ?? AvaliableThemes.First();
+            Accent = AvaliableAccents.FirstOrDefault(x => x.Name == settings.UiSettings.Accent) ?? AvaliableAccents.First();
             StartOnBoot = versionControl.IsAutomatedDeploy && registryKey.GetValue(versionControl.AppName) != null;
 
             //Jira Settings
@@ -98,9 +103,7 @@ namespace Gallifrey.UI.Modern.Models
             CommentPrefix = settings.ExportSettings.ExportCommentPrefix;
             DefaultComment = settings.ExportSettings.EmptyExportComment;
 
-            //Static Data
-            AvaliableThemes = ThemeManager.AppThemes.Select(x => x.Name.Replace("Base", "")).ToList();
-            AvaliableAccents = ThemeManager.Accents.Select(x=>x.Name).ToList();
+
         }
 
         public void UpdateSettings(ISettingsCollection settings, IVersionControl versionControl)
@@ -116,8 +119,8 @@ namespace Gallifrey.UI.Modern.Models
             settings.AppSettings.StartOfWeek = (DayOfWeek)Enum.Parse(typeof(DayOfWeek), StartOfWeek, true);
 
             //UI Settings
-            settings.UiSettings.Theme = Theme;
-            settings.UiSettings.Accent = Accent;
+            settings.UiSettings.Theme = Theme.Name;
+            settings.UiSettings.Accent = Accent.Name;
             if (versionControl.IsAutomatedDeploy)
             {
                 if (StartOnBoot)

@@ -56,10 +56,28 @@
                     <CheckBox Grid.Row="5" Grid.Column="1" Margin="5" VerticalAlignment="Center" IsChecked="{Binding StartOnBoot, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                     <TextBlock Grid.Row="6" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="UI Theme To Use">Theme</TextBlock>
-                    <ComboBox Grid.Row="6" Grid.Column="1" Margin="5" SelectedItem="{Binding Theme}" ItemsSource="{Binding AvaliableThemes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    <ComboBox Grid.Row="6" Grid.Column="1" Margin="5" SelectedItem="{Binding Theme}" ItemsSource="{Binding AvaliableThemes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <Ellipse Fill="{Binding Colour}" Width="16" Height="16" Margin="0,2,5,2" VerticalAlignment="Center" Stroke="{Binding BorderColour}"/>
+                                    <TextBlock Text="{Binding Name}" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
 
                     <TextBlock Grid.Row="7" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="UI Colour Scheme">Main Colour</TextBlock>
-                    <ComboBox Grid.Row="7" Grid.Column="1" Margin="5" SelectedItem="{Binding Accent}" ItemsSource="{Binding AvaliableAccents, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <ComboBox Grid.Row="7" Grid.Column="1" Margin="5" SelectedItem="{Binding Accent}" ItemsSource="{Binding AvaliableAccents, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <Ellipse Fill="{Binding Colour}" Width="16" Height="16" Margin="0,2,5,2" VerticalAlignment="Center" />
+                                    <TextBlock Text="{Binding Name}" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
                 </Grid>
             </TabItem>
             <TabItem Header="Jira">

@@ -43,7 +43,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             if (successfulSave)
             {
                 IsOpen = false;
-                var themeChanged = ThemeHelper.ChangeTheme(DataModel.Theme, DataModel.Accent);
+                var themeChanged = ThemeHelper.ChangeTheme(DataModel.Theme.Name, DataModel.Accent.Name);
 
                 if (themeChanged == ThemeChangeDetail.Theme || themeChanged == ThemeChangeDetail.Both)
                 {
