@@ -9,17 +9,18 @@ namespace Gallifrey.UI.Modern.Models
         public event PropertyChangedEventHandler PropertyChanged;
 
         public JiraTimer JiraTimer { get; set; }
-        public string ExportTime { get { return JiraTimer.TimeToExport.FormatAsString(false); } }
-        public string CurrentTime { get { return JiraTimer.ExactCurrentTime.FormatAsString(); } }
-        public string Description { get { return JiraTimer.JiraName; } }
-        public string ParentDescription { get { return JiraTimer.JiraParentName; } }
-        public string Reference { get { return JiraTimer.JiraReference; } }
-        public string ParentReference { get { return JiraTimer.JiraParentReference; } }
-        public bool HasParent { get { return JiraTimer.HasParent; } }
-        public bool HasTimeToExport { get { return !JiraTimer.FullyExported; } }
-        public bool HasTimeToExportAndNotRunning { get { return !JiraTimer.FullyExported && !JiraTimer.IsRunning; } }
-        public bool IsRunning { get { return JiraTimer.IsRunning; } }
         public bool IsSelected { get; set; }
+
+        public string ExportTime => JiraTimer.TimeToExport.FormatAsString(false);
+        public string CurrentTime => JiraTimer.ExactCurrentTime.FormatAsString();
+        public string Description => JiraTimer.JiraName;
+        public string ParentDescription => JiraTimer.JiraParentName;
+        public string Reference => JiraTimer.JiraReference;
+        public string ParentReference => JiraTimer.JiraParentReference;
+        public bool HasParent => JiraTimer.HasParent;
+        public bool HasTimeToExport => !JiraTimer.FullyExported;
+        public bool HasTimeToExportAndNotRunning => !JiraTimer.FullyExported && !JiraTimer.IsRunning;
+        public bool IsRunning => JiraTimer.IsRunning;
 
         public TimerModel(JiraTimer timer)
         {
@@ -29,36 +30,33 @@ namespace Gallifrey.UI.Modern.Models
 
         private void JiraTimerOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
         {
-            if (PropertyChanged != null)
+            switch (propertyChangedEventArgs.PropertyName)
             {
-                switch (propertyChangedEventArgs.PropertyName)
-                {
-                    case "ExactCurrentTime":
-                        PropertyChanged(this, new PropertyChangedEventArgs("CurrentTime"));
-                        PropertyChanged(this, new PropertyChangedEventArgs("IsRunning"));
-                        PropertyChanged(this, new PropertyChangedEventArgs("HasTimeToExportAndNotRunning"));
-                        PropertyChanged(this, new PropertyChangedEventArgs("HasTimeToExport"));
-                        PropertyChanged(this, new PropertyChangedEventArgs("ExportTime"));
-                        break;
-                    case "IsRunning":
-                        PropertyChanged(this, new PropertyChangedEventArgs("IsRunning"));
-                        PropertyChanged(this, new PropertyChangedEventArgs("HasTimeToExportAndNotRunning"));
-                        PropertyChanged(this, new PropertyChangedEventArgs("HasTimeToExport"));
-                        break;
-                    case "TimeToExport":
-                        PropertyChanged(this, new PropertyChangedEventArgs("ExportTime"));
-                        PropertyChanged(this, new PropertyChangedEventArgs("HasTimeToExport"));
-                        break;
-                    case "JiraName":
-                        PropertyChanged(this, new PropertyChangedEventArgs("Description"));
-                        break;
-                    case "JiraParentName":
-                        PropertyChanged(this, new PropertyChangedEventArgs("ParentDescription"));
-                        break;
-                    case "HasParent":
-                        PropertyChanged(this, new PropertyChangedEventArgs("HasParent"));
-                        break;
-                }
+                case "ExactCurrentTime":
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("CurrentTime"));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("IsRunning"));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasTimeToExportAndNotRunning"));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasTimeToExport"));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ExportTime"));
+                    break;
+                case "IsRunning":
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("IsRunning"));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasTimeToExportAndNotRunning"));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasTimeToExport"));
+                    break;
+                case "TimeToExport":
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ExportTime"));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasTimeToExport"));
+                    break;
+                case "JiraName":
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Description"));
+                    break;
+                case "JiraParentName":
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ParentDescription"));
+                    break;
+                case "HasParent":
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasParent"));
+                    break;
             }
         }
 
@@ -67,7 +65,7 @@ namespace Gallifrey.UI.Modern.Models
             if (IsSelected != isSelected)
             {
                 IsSelected = isSelected;
-                if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("IsSelected"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("IsSelected"));
             }
         }
     }

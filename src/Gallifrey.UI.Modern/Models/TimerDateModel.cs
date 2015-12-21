@@ -12,10 +12,10 @@ namespace Gallifrey.UI.Modern.Models
         public event PropertyChangedEventHandler PropertyChanged;
 
         private readonly IJiraTimerCollection jiraTimerCollection;
-        public DateTime TimerDate { get; private set; }
+        public DateTime TimerDate { get; }
         public ObservableCollection<TimerModel> Timers { get; set; }
 
-        public string Header { get { return string.Format("{0} [{1}]", TimerDate.ToString("ddd, dd MMM"), jiraTimerCollection.GetTotalTimeForDate(TimerDate)); } }
+        public string Header => $"{TimerDate.ToString("ddd, dd MMM")} [{jiraTimerCollection.GetTotalTimeForDate(TimerDate)}]";
         public bool IsSelected { get; set; }
 
         public TimerDateModel(DateTime timerDate, IJiraTimerCollection jiraTimerCollection)
@@ -30,7 +30,7 @@ namespace Gallifrey.UI.Modern.Models
             timerModel.PropertyChanged += TimerModelOnPropertyChanged;
             Timers.Add(timerModel);
             Timers = new ObservableCollection<TimerModel>(Timers.OrderBy(x => x.JiraTimer.JiraReference, new JiraReferenceComparer()));
-            if (PropertyChanged != null)  PropertyChanged(this, new PropertyChangedEventArgs("Timers"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Timers"));
         }
 
         public void RemoveTimerModel(TimerModel timerModel)
@@ -40,14 +40,11 @@ namespace Gallifrey.UI.Modern.Models
 
         private void TimerModelOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
         {
-            if (PropertyChanged != null)
+            switch (propertyChangedEventArgs.PropertyName)
             {
-                switch (propertyChangedEventArgs.PropertyName)
-                {
-                    case "CurrentTime":
-                        PropertyChanged(this, new PropertyChangedEventArgs("Header"));
-                        break;
-                }
+                case "CurrentTime":
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Header"));
+                    break;
             }
         }
 
@@ -56,7 +53,7 @@ namespace Gallifrey.UI.Modern.Models
             if (IsSelected != isSelected)
             {
                 IsSelected = isSelected;
-                if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("IsSelected"));    
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("IsSelected"));
             }
         }
     }

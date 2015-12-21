@@ -6,7 +6,7 @@ namespace Gallifrey.UI.Modern.Models
 {
     public class ErrorModel
     {
-        public Event ExceptionlessEvent { get; private set; }
+        public Event ExceptionlessEvent { get; }
         public string EmailAddress { get; set; }
         public string Description { get; set; }
 

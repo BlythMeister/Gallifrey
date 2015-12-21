@@ -1,11 +1,9 @@
-﻿using System.Windows.Controls;
-
-namespace Gallifrey.UI.Modern.MainViews
+﻿namespace Gallifrey.UI.Modern.MainViews
 {
     /// <summary>
     /// Interaction logic for TimerSummary.xaml
     /// </summary>
-    public partial class TimerSummary : UserControl
+    public partial class TimerSummary
     {
         public TimerSummary()
         {

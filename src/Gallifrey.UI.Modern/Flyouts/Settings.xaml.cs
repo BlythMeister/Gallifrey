@@ -12,7 +12,7 @@ namespace Gallifrey.UI.Modern.Flyouts
     public partial class Settings
     {
         private readonly MainViewModel viewModel;
-        private SettingModel DataModel { get { return (SettingModel)DataContext; } }
+        private SettingModel DataModel => (SettingModel)DataContext;
 
         public Settings(MainViewModel viewModel)
         {
@@ -56,6 +56,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             else
             {
                 await DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext,"Invalid Jira Configuration", "You Cannot Save With Invalid Jira Configuration.\nTo Save You Have To Have A Valid Connection To Jira");
+                Focus();
             }
         }
     }

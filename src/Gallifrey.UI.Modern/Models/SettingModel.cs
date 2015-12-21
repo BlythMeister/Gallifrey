@@ -102,8 +102,6 @@ namespace Gallifrey.UI.Modern.Models
             SelectedRemainingAdjustmentValue = RemainingAdjustmentValues.First(x => x.Remaining == settings.ExportSettings.DefaultRemainingValue);
             CommentPrefix = settings.ExportSettings.ExportCommentPrefix;
             DefaultComment = settings.ExportSettings.EmptyExportComment;
-
-
         }
 
         public void UpdateSettings(ISettingsCollection settings, IVersionControl versionControl)
@@ -125,7 +123,7 @@ namespace Gallifrey.UI.Modern.Models
             {
                 if (StartOnBoot)
                 {
-                    var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Programs), "Gallifrey", string.Format("{0}.appref-ms", versionControl.AppName));
+                    var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Programs), "Gallifrey", $"{versionControl.AppName}.appref-ms");
                     registryKey.SetValue(versionControl.AppName, path);
                 }
                 else
@@ -161,7 +159,7 @@ namespace Gallifrey.UI.Modern.Models
         {
             public bool IsChecked { get; set; }
             public DayOfWeek DayOfWeek { get; set; }
-            public string DisplayName { get { return DayOfWeek.ToString(); } }
+            public string DisplayName => DayOfWeek.ToString();
 
             public WorkingDay(bool isChecked, DayOfWeek dayOfWeek)
             {

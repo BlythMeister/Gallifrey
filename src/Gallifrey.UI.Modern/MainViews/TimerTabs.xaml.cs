@@ -7,13 +7,12 @@ using Gallifrey.UI.Modern.Models;
 using MahApps.Metro.Controls.Dialogs;
 using DragDropEffects = System.Windows.DragDropEffects;
 using DragEventArgs = System.Windows.DragEventArgs;
-using UserControl = System.Windows.Controls.UserControl;
 
 namespace Gallifrey.UI.Modern.MainViews
 {
-    public partial class TimerTabs : UserControl
+    public partial class TimerTabs
     {
-        private MainViewModel ViewModel { get { return (MainViewModel)DataContext; } }
+        private MainViewModel ViewModel => (MainViewModel)DataContext;
 
         public TimerTabs()
         {
@@ -45,7 +44,6 @@ namespace Gallifrey.UI.Modern.MainViews
                         DialogCoordinator.Instance.ShowMessageAsync(ViewModel.DialogContext, "Wrong Day!", "Use The Version Of This Timer For Today!");
                     }
                 }
-
             }
         }
 
@@ -95,7 +93,7 @@ namespace Gallifrey.UI.Modern.MainViews
                     }
                     catch (Exception)
                     {
-                        DialogCoordinator.Instance.ShowMessageAsync(ViewModel.DialogContext, "Invalid Jira", string.Format("Unable To Locate That Jira.\n\nJira Ref Dropped: '{0}'", jiraRef));
+                        await DialogCoordinator.Instance.ShowMessageAsync(ViewModel.DialogContext, "Invalid Jira", $"Unable To Locate That Jira.\n\nJira Ref Dropped: '{jiraRef}'");
                         return;
                     }
 
@@ -105,7 +103,7 @@ namespace Gallifrey.UI.Modern.MainViews
             }
         }
 
-        private string GetUrl(DragEventArgs e)
+        private static string GetUrl(DragEventArgs e)
         {
             if ((e.Effects & DragDropEffects.Copy) == DragDropEffects.Copy)
             {

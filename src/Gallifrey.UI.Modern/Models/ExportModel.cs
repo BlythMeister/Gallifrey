@@ -14,24 +14,25 @@ namespace Gallifrey.UI.Modern.Models
         public event PropertyChangedEventHandler PropertyChanged;
 
         public JiraTimer Timer { get; set; }
-        public bool HasParent { get { return Timer.HasParent; } }
-        public string JiraParentRef { get { return Timer.JiraParentReference; } }
-        public string JiraParentDesc { get { return Timer.JiraParentName; } }
-        public string JiraRef { get { return Timer.JiraReference; } }
-        public string JiraDesc { get { return Timer.JiraName; } }
-        public int ExportedHours { get { return Timer.ExportedTime.Hours; } }
-        public int ExportedMinutes { get { return Timer.ExportedTime.Minutes; } }
         public int ToExportHours { get; set; }
         public int ToExportMaxHours { get; set; }
         public int ToExportMinutes { get; set; }
         public int RemainingHours { get; set; }
         public int RemainingMinutes { get; set; }
-        public bool ShowRemaining { get { return workLogStrategy == WorkLogStrategy.SetValue; } }
         public DateTime ExportDate { get; set; }
         public string Comment { get; set; }
         public TimeSpan OriginalRemaining { get; set; }
-        public TimeSpan ToExport { get { return new TimeSpan(ToExportHours, ToExportMinutes, 0); } }
-        public TimeSpan? Remaining { get { return WorkLogStrategy == WorkLogStrategy.SetValue ? new TimeSpan(RemainingHours, RemainingMinutes, 0) : (TimeSpan?)null; } }
+
+        public bool ShowRemaining => workLogStrategy == WorkLogStrategy.SetValue;
+        public bool HasParent => Timer.HasParent;
+        public string JiraParentRef => Timer.JiraParentReference;
+        public string JiraParentDesc => Timer.JiraParentName;
+        public string JiraRef => Timer.JiraReference;
+        public string JiraDesc => Timer.JiraName;
+        public int ExportedHours => Timer.ExportedTime.Hours;
+        public int ExportedMinutes => Timer.ExportedTime.Minutes;
+        public TimeSpan ToExport => new TimeSpan(ToExportHours, ToExportMinutes, 0);
+        public TimeSpan? Remaining => WorkLogStrategy == WorkLogStrategy.SetValue ? new TimeSpan(RemainingHours, RemainingMinutes, 0) : (TimeSpan?)null;
 
         public WorkLogStrategy WorkLogStrategy
         {
@@ -40,10 +41,7 @@ namespace Gallifrey.UI.Modern.Models
             {
                 workLogStrategy = value;
                 SetRemaining();
-                if (PropertyChanged != null)
-                {
-                    PropertyChanged(this, new PropertyChangedEventArgs("ShowRemaining"));
-                }
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ShowRemaining"));
             }
         }
 
@@ -93,24 +91,18 @@ namespace Gallifrey.UI.Modern.Models
                 ToExportMaxHours = timer.TimeToExport.Hours;
                 ToExportMinutes = timer.TimeToExport.Minutes;
 
-                if (PropertyChanged != null)
-                {
-                    PropertyChanged(this, new PropertyChangedEventArgs("ToExportHours"));
-                    PropertyChanged(this, new PropertyChangedEventArgs("ToExportMaxHours"));
-                    PropertyChanged(this, new PropertyChangedEventArgs("ToExportMinutes"));
-                }
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ToExportHours"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ToExportMaxHours"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ToExportMinutes"));
             }
 
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs("HasParent"));
-                PropertyChanged(this, new PropertyChangedEventArgs("JiraParentRef"));
-                PropertyChanged(this, new PropertyChangedEventArgs("JiraParentDesc"));
-                PropertyChanged(this, new PropertyChangedEventArgs("JiraRef"));
-                PropertyChanged(this, new PropertyChangedEventArgs("JiraDesc"));
-                PropertyChanged(this, new PropertyChangedEventArgs("ExportedHours"));
-                PropertyChanged(this, new PropertyChangedEventArgs("ExportedMinutes"));
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasParent"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("JiraParentRef"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("JiraParentDesc"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("JiraRef"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("JiraDesc"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ExportedHours"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ExportedMinutes"));
         }
 
         private void SetRemaining()
@@ -119,7 +111,7 @@ namespace Gallifrey.UI.Modern.Models
             {
                 case WorkLogStrategy.Automatic:
                     var autoNewRemaining = OriginalRemaining.Subtract(ToExport);
-                    if(autoNewRemaining.TotalSeconds < 0) autoNewRemaining = new TimeSpan();
+                    if (autoNewRemaining.TotalSeconds < 0) autoNewRemaining = new TimeSpan();
                     RemainingHours = autoNewRemaining.Hours;
                     RemainingMinutes = autoNewRemaining.Minutes;
                     break;
@@ -133,11 +125,8 @@ namespace Gallifrey.UI.Modern.Models
                     break;
             }
 
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs("RemainingHours"));
-                PropertyChanged(this, new PropertyChangedEventArgs("RemainingMinutes"));
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("RemainingHours"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("RemainingMinutes"));
         }
     }
 }

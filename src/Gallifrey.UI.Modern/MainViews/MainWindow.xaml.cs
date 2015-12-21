@@ -15,15 +15,14 @@ using Gallifrey.UI.Modern.Flyouts;
 using Gallifrey.UI.Modern.Helpers;
 using Gallifrey.UI.Modern.Models;
 using Gallifrey.Versions;
-using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 using Microsoft.Win32;
 
 namespace Gallifrey.UI.Modern.MainViews
 {
-    public partial class MainWindow : MetroWindow
+    public partial class MainWindow
     {
-        private MainViewModel ViewModel { get { return (MainViewModel)DataContext; } }
+        private MainViewModel ViewModel => (MainViewModel)DataContext;
 
         public MainWindow(InstanceType instance, AppType appType)
         {
@@ -77,10 +76,6 @@ namespace Gallifrey.UI.Modern.MainViews
                     CloseApp(true);
                 });
             }
-            else
-            {
-                return;
-            }
         }
 
         private async void OnLoaded(object sender, RoutedEventArgs e)
@@ -116,11 +111,11 @@ namespace Gallifrey.UI.Modern.MainViews
 
             if (ViewModel.Gallifrey.VersionControl.IsAutomatedDeploy && ViewModel.Gallifrey.VersionControl.IsFirstRun)
             {
-                var changeLog = ViewModel.Gallifrey.GetChangeLog(XDocument.Parse(Properties.Resources.ChangeLog));
+                var changeLog = ViewModel.Gallifrey.GetChangeLog(XDocument.Parse(Properties.Resources.ChangeLog)).ToList();
 
                 if (changeLog.Any())
                 {
-                    ViewModel.OpenFlyout(new Flyouts.ChangeLog(ViewModel, changeLog));
+                    await ViewModel.OpenFlyout(new Flyouts.ChangeLog(changeLog));
                 }
             }
         }
@@ -131,15 +126,15 @@ namespace Gallifrey.UI.Modern.MainViews
             if (timer != null)
             {
                 var exportTime = e.ExportTime;
-                var message = string.Format("Do You Want To Export '{0}'?\n", timer.JiraReference);
+                var message = $"Do You Want To Export '{timer.JiraReference}'?\n";
                 if (ViewModel.Gallifrey.Settings.ExportSettings.ExportPromptAll || (new TimeSpan(exportTime.Ticks - (exportTime.Ticks % 600000000)) == new TimeSpan(timer.TimeToExport.Ticks - (timer.TimeToExport.Ticks % 600000000))))
                 {
                     exportTime = timer.TimeToExport;
-                    message += string.Format("You Have '{0}' To Export", exportTime.FormatAsString(false));
+                    message += $"You Have '{exportTime.FormatAsString(false)}' To Export";
                 }
                 else
                 {
-                    message += string.Format("You Have '{0}' To Export For This Change", exportTime.FormatAsString(false));
+                    message += $"You Have '{exportTime.FormatAsString(false)}' To Export For This Change";
                 }
 
                 var messageResult = await DialogCoordinator.Instance.ShowMessageAsync(ViewModel.DialogContext, "Do You Want To Export?", message, MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
@@ -148,11 +143,11 @@ namespace Gallifrey.UI.Modern.MainViews
                 {
                     if (ViewModel.Gallifrey.Settings.ExportSettings.ExportPromptAll)
                     {
-                        ViewModel.OpenFlyout(new Export(ViewModel, e.TimerId, e.ExportTime));
+                        await ViewModel.OpenFlyout(new Export(ViewModel, e.TimerId, e.ExportTime));
                     }
                     else
                     {
-                        ViewModel.OpenFlyout(new Export(ViewModel, e.TimerId, null));
+                        await ViewModel.OpenFlyout(new Export(ViewModel, e.TimerId, null));
                     }
                 }
             }
@@ -169,7 +164,7 @@ namespace Gallifrey.UI.Modern.MainViews
             }
             catch (Exception)
             {
-                //supress errors if tracking fails
+                //suppress errors if tracking fails
             }
         }
 

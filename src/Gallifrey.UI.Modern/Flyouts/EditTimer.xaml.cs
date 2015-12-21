@@ -13,7 +13,7 @@ namespace Gallifrey.UI.Modern.Flyouts
     public partial class EditTimer
     {
         private readonly MainViewModel viewModel;
-        private EditTimerModel DataModel { get { return (EditTimerModel)DataContext; } }
+        private EditTimerModel DataModel => (EditTimerModel)DataContext;
         public Guid EditedTimerId { get; set; }
 
         public EditTimer(MainViewModel viewModel, Guid selected)
@@ -31,13 +31,15 @@ namespace Gallifrey.UI.Modern.Flyouts
             {
                 if (!DataModel.RunDate.HasValue)
                 {
-                    DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext,"Missing Date", "You Must Enter A Start Date");
+                    await DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext,"Missing Date", "You Must Enter A Start Date");
+                    Focus();
                     return;
                 }
 
                 if (DataModel.RunDate.Value < DataModel.MinDate || DataModel.RunDate.Value > DataModel.MaxDate)
                 {
-                    DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext,"Invalid Date", string.Format("You Must Enter A Start Date Between {0} And {1}", DataModel.MinDate.ToShortDateString(), DataModel.MaxDate.ToShortDateString()));
+                    await DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext,"Invalid Date", $"You Must Enter A Start Date Between {DataModel.MinDate.ToShortDateString()} And {DataModel.MaxDate.ToShortDateString()}");
+                    Focus();
                     return;
                 }
 
@@ -47,7 +49,8 @@ namespace Gallifrey.UI.Modern.Flyouts
                 }
                 catch (Exception)
                 {
-                    DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext,"Duplicate Timer", "This Timer Already Exists On That Date!");
+                    await DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext,"Duplicate Timer", "This Timer Already Exists On That Date!");
+                    Focus();
                     return;
                 }
             }
@@ -61,11 +64,12 @@ namespace Gallifrey.UI.Modern.Flyouts
                 }
                 catch (NoResultsFoundException)
                 {
-                    DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext,"Invalid Jira", "Unable To Locate The Jira");
+                    await DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext,"Invalid Jira", "Unable To Locate The Jira");
+                    Focus();
                     return;
                 }
 
-                var result = await DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext,"Correct Jira?", string.Format("Jira found!\n\nRef: {0}\nName: {1}\n\nIs that correct?", jiraIssue.key, jiraIssue.fields.summary), MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
+                var result = await DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext,"Correct Jira?", $"Jira found!\n\nRef: {jiraIssue.key}\nName: {jiraIssue.fields.summary}\n\nIs that correct?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
 
                 if (result == MessageDialogResult.Negative)
                 {
@@ -78,16 +82,17 @@ namespace Gallifrey.UI.Modern.Flyouts
                 }
                 catch (Exception)
                 {
-                    DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext,"Duplicate Timer", "This Timer Already Exists On That Date!");
+                    await DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext,"Duplicate Timer", "This Timer Already Exists On That Date!");
+                    Focus();
                     return;
                 }
             }
 
             if (DataModel.HasModifiedTime())
             {
-                var orignalTime = new TimeSpan(DataModel.OriginalHours, DataModel.OriginalMinutes, 0);
+                var originalTime = new TimeSpan(DataModel.OriginalHours, DataModel.OriginalMinutes, 0);
                 var newTime = new TimeSpan(DataModel.Hours, DataModel.Minutes, 0);
-                var difference = newTime.Subtract(orignalTime);
+                var difference = newTime.Subtract(originalTime);
                 var addTime = difference.TotalSeconds > 0;
 
                 viewModel.Gallifrey.JiraTimerCollection.AdjustTime(EditedTimerId, Math.Abs(difference.Hours), Math.Abs(difference.Minutes), addTime);
@@ -106,13 +111,15 @@ namespace Gallifrey.UI.Modern.Flyouts
 
             if (result == null)
             {
+                Focus();
                 return;
             }
 
             int minutesAdjustment;
             if (!int.TryParse(result, out minutesAdjustment))
             {
-                await DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext, "Invalid Time Entry", string.Format("The Value '{0}' was not a number of minutes.", result));
+                await DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext, "Invalid Time Entry", $"The Value '{result}' was not a number of minutes.");
+                Focus();
                 return;
             }
 
@@ -127,13 +134,15 @@ namespace Gallifrey.UI.Modern.Flyouts
 
             if (result == null)
             {
+                Focus();
                 return;
             }
 
             int minutesAdjustment;
             if (!int.TryParse(result, out minutesAdjustment))
             {
-                await DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext, "Invalid Time Entry", string.Format("The Value '{0}' was not a number of minutes.", result));
+                await DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext, "Invalid Time Entry", $"The Value '{result}' was not a number of minutes.");
+                Focus();
                 return;
             }
 

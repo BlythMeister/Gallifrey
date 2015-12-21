@@ -20,7 +20,7 @@ namespace Gallifrey.UI.Modern.Models
             set
             {
                 searchTerm = value;
-                if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("HasSearchTerm"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasSearchTerm"));
             }
         }
 
@@ -30,12 +30,12 @@ namespace Gallifrey.UI.Modern.Models
             set
             {
                 selectedFilter = value;
-                if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("HasFilter"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasFilter"));
             }
         }
 
-        public bool HasFilter { get { return !string.IsNullOrWhiteSpace(SelectedFilter); } }
-        public bool HasSearchTerm { get { return !string.IsNullOrWhiteSpace(SearchTerm); } }
+        public bool HasFilter => !string.IsNullOrWhiteSpace(SelectedFilter);
+        public bool HasSearchTerm => !string.IsNullOrWhiteSpace(SearchTerm);
 
         public bool IsSearching { get; set; }
         public ObservableCollection<string> UserFilters { get; set; }
@@ -57,24 +57,24 @@ namespace Gallifrey.UI.Modern.Models
         {
             SearchResults = new ObservableCollection<JiraIssueDisplayModel>(jiraIssues.Select(x => new JiraIssueDisplayModel(x)));
             IsSearching = false;
-            if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("IsSearching"));
-            if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("SearchResults"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("IsSearching"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("SearchResults"));
         }
 
         public void ClearSearchResults()
         {
             SearchResults = new ObservableCollection<JiraIssueDisplayModel>();
             IsSearching = false;
-            if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("IsSearching"));
-            if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("SearchResults"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("IsSearching"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("SearchResults"));
         }
 
         public void SetIsSearching()
         {
             SearchResults = new ObservableCollection<JiraIssueDisplayModel>();
             IsSearching = true;
-            if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("IsSearching"));
-            if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("SearchResults"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("IsSearching"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("SearchResults"));
         }
     }
 }

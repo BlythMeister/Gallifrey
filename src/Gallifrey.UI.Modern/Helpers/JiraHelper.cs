@@ -67,14 +67,7 @@ namespace Gallifrey.UI.Modern.Helpers
                 }
                 else
                 {
-                    if (jiraDownloadTask.Status == TaskStatus.RanToCompletion)
-                    {
-                        result = JiraHelperResult<T>.GetSuccess(jiraDownloadTask.Result);
-                    }
-                    else
-                    {
-                        result = JiraHelperResult<T>.GetErrored();
-                    }
+                    result = jiraDownloadTask.Status == TaskStatus.RanToCompletion ? JiraHelperResult<T>.GetSuccess(jiraDownloadTask.Result) : JiraHelperResult<T>.GetErrored();
                 }
 
                 return result;

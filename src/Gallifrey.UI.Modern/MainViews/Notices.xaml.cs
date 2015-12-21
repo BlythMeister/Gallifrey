@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using System.Threading;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using Gallifrey.UI.Modern.Flyouts;
 using Gallifrey.UI.Modern.Models;
@@ -12,21 +11,21 @@ namespace Gallifrey.UI.Modern.MainViews
     /// <summary>
     /// Interaction logic for Notices.xaml
     /// </summary>
-    public partial class Notices : UserControl
+    public partial class Notices
     {
-        private MainViewModel ViewModel { get { return (MainViewModel)DataContext; } }
-        private Mutex UnexportedMutex;
+        private MainViewModel ViewModel => (MainViewModel)DataContext;
+        private readonly Mutex unexportedMutex;
 
         public Notices()
         {
             InitializeComponent();
-            UnexportedMutex = new Mutex(false);
+            unexportedMutex = new Mutex(false);
         }
 
         private async void UnExportedClick(object sender, MouseButtonEventArgs e)
         {
-            UnexportedMutex.WaitOne();
-            var timers = ViewModel.Gallifrey.JiraTimerCollection.GetStoppedUnexportedTimers();
+            unexportedMutex.WaitOne();
+            var timers = ViewModel.Gallifrey.JiraTimerCollection.GetStoppedUnexportedTimers().ToList();
 
             if (timers.Any())
             {
@@ -37,7 +36,7 @@ namespace Gallifrey.UI.Modern.MainViews
                     var updatedTimer = ViewModel.Gallifrey.JiraTimerCollection.GetTimer(jiraTimer.UniqueId);
                     if (!updatedTimer.FullyExported)
                     {
-                        DialogCoordinator.Instance.ShowMessageAsync(ViewModel.DialogContext, "Stopping Bulk Export", "Will Stop Bulk Export As Timer Was Not Fully Exported\n\nWill Select The Cancelled Timer");
+                        await DialogCoordinator.Instance.ShowMessageAsync(ViewModel.DialogContext, "Stopping Bulk Export", "Will Stop Bulk Export As Timer Was Not Fully Exported\n\nWill Select The Cancelled Timer");
                         ViewModel.SetSelectedTimer(jiraTimer.UniqueId);
                         break;
                     }
@@ -45,11 +44,11 @@ namespace Gallifrey.UI.Modern.MainViews
             }
             else
             {
-                DialogCoordinator.Instance.ShowMessageAsync(ViewModel.DialogContext, "Nothing To Export", "No Un-Exported Timers To Bulk Export");
+                await DialogCoordinator.Instance.ShowMessageAsync(ViewModel.DialogContext, "Nothing To Export", "No Un-Exported Timers To Bulk Export");
             }
 
             ViewModel.RefreshModel();
-            UnexportedMutex.ReleaseMutex();
+            unexportedMutex.ReleaseMutex();
         }
 
         private void InstallUpdate(object sender, MouseButtonEventArgs e)

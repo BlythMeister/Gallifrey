@@ -21,7 +21,7 @@ namespace Gallifrey.UI.Modern.Helpers
 
             if (!string.IsNullOrWhiteSpace(themeName))
             {
-                appTheme = ThemeManager.GetAppTheme(string.Format("Base{0}", themeName)) ?? theme.Item1;
+                appTheme = ThemeManager.GetAppTheme($"Base{themeName}") ?? theme.Item1;
             }
 
             if (!string.IsNullOrWhiteSpace(accentName))

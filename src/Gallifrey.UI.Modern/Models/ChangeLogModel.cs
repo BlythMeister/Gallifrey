@@ -33,14 +33,16 @@ namespace Gallifrey.UI.Modern.Models
         {
             public string VersionNumber { get; set; }
             public string VersionName { get; set; }
-            public bool HaveVersionName { get { return !string.IsNullOrWhiteSpace(VersionName); } }
             public bool IsSelected { get; set; }
+
             public List<string> Features { get; set; }
             public List<string> Bugs { get; set; }
             public List<string> Others { get; set; }
-            public bool HasFeatures { get { return Features != null && Features.Any(); } }
-            public bool HasBugs { get { return Bugs != null && Bugs.Any(); } }
-            public bool HasOthers { get { return Others != null && Others.Any(); } }
+
+            public bool HaveVersionName => !string.IsNullOrWhiteSpace(VersionName);
+            public bool HasFeatures => Features != null && Features.Any();
+            public bool HasBugs => Bugs != null && Bugs.Any();
+            public bool HasOthers => Others != null && Others.Any();
         }
     }
 }

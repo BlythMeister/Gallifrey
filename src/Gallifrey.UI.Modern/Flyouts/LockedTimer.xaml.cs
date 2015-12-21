@@ -13,14 +13,14 @@ namespace Gallifrey.UI.Modern.Flyouts
     public partial class LockedTimer
     {
         private readonly MainViewModel viewModel;
-        private LockedTimerCollectionModel DataModel { get { return (LockedTimerCollectionModel)DataContext; } }
+        private LockedTimerCollectionModel DataModel => (LockedTimerCollectionModel)DataContext;
 
         public LockedTimer(MainViewModel viewModel)
         {
             this.viewModel = viewModel;
             InitializeComponent();
 
-            var idleTimers = viewModel.Gallifrey.IdleTimerCollection.GetUnusedLockTimers();
+            var idleTimers = viewModel.Gallifrey.IdleTimerCollection.GetUnusedLockTimers().ToList();
 
             if (!idleTimers.Any())
             {
@@ -39,6 +39,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             if (selected.Count == 0)
             {
                 await DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext, "Nothing Selected", "You Have Not Selected Any Locked Time To Add");
+                Focus();
                 return;
             }
 
@@ -55,6 +56,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                 else
                 {
                     await DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext, "Invalid Selection", "All Timers Must Be On The Same Date!");
+                    Focus();
                     return;
                 }
             }
@@ -69,8 +71,16 @@ namespace Gallifrey.UI.Modern.Flyouts
                     viewModel.Gallifrey.IdleTimerCollection.RemoveTimer(lockedTimerModel.UniqueId);
                 }
 
+                if (!viewModel.Gallifrey.IdleTimerCollection.GetUnusedLockTimers().Any())
+                {
+                    IsOpen = false;
+                    return;
+                }
+
                 DataModel.RefreshLockedTimers(viewModel.Gallifrey.IdleTimerCollection.GetUnusedLockTimers());
             }
+
+            Focus();
         }
 
         private async void DeleteButton(object sender, RoutedEventArgs e)
@@ -80,7 +90,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             var selectedTime = new TimeSpan();
             selectedTime = selected.Aggregate(selectedTime, (current, lockedTimerModel) => current.Add(lockedTimerModel.IdleTime));
 
-            var result = await DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext, "Are You Sure?", string.Format("Are you Sure You Want To Delete Locked Timers Worth {0}?", selectedTime.FormatAsString()), MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
+            var result = await DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext, "Are You Sure?", $"Are you Sure You Want To Delete Locked Timers Worth {selectedTime.FormatAsString()}?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
 
             if (result == MessageDialogResult.Affirmative)
             {
@@ -91,6 +101,8 @@ namespace Gallifrey.UI.Modern.Flyouts
 
                 DataModel.RefreshLockedTimers(viewModel.Gallifrey.IdleTimerCollection.GetUnusedLockTimers());
             }
+
+            Focus();
         }
     }
 }

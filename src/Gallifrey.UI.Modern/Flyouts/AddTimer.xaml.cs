@@ -15,7 +15,7 @@ namespace Gallifrey.UI.Modern.Flyouts
     public partial class AddTimer
     {
         private readonly MainViewModel viewModel;
-        private AddTimerModel DataModel { get { return (AddTimerModel)DataContext; } }
+        private AddTimerModel DataModel => (AddTimerModel)DataContext;
         public bool AddedTimer { get; set; }
         public Guid NewTimerId { get; set; }
 
@@ -23,7 +23,7 @@ namespace Gallifrey.UI.Modern.Flyouts
         {
             this.viewModel = viewModel;
             InitializeComponent();
-            
+
             DataContext = new AddTimerModel(viewModel.Gallifrey, jiraRef, startDate, enableDateChange, preloadTime, enableTimeChange, startNow);
             AddedTimer = false;
         }
@@ -32,13 +32,15 @@ namespace Gallifrey.UI.Modern.Flyouts
         {
             if (!DataModel.StartDate.HasValue)
             {
-                DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext, "Missing Date", "You Must Enter A Start Date");
+                await DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext, "Missing Date", "You Must Enter A Start Date");
+                Focus();
                 return;
             }
 
             if (DataModel.StartDate.Value < DataModel.MinDate || DataModel.StartDate.Value > DataModel.MaxDate)
             {
-                DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext, "Invalid Date", string.Format("You Must Enter A Start Date Between {0} And {1}", DataModel.MinDate.ToShortDateString(), DataModel.MaxDate.ToShortDateString()));
+                await DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext, "Invalid Date", $"You Must Enter A Start Date Between {DataModel.MinDate.ToShortDateString()} And {DataModel.MaxDate.ToShortDateString()}");
+                Focus();
                 return;
             }
 
@@ -49,16 +51,18 @@ namespace Gallifrey.UI.Modern.Flyouts
             }
             catch (NoResultsFoundException)
             {
-                DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext, "Invalid Jira", "Unable To Locate The Jira");
+                await DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext, "Invalid Jira", "Unable To Locate The Jira");
+                Focus();
                 return;
             }
 
             if (DataModel.JiraReferenceEditable)
             {
-                var result = await DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext, "Correct Jira?", string.Format("Jira found!\n\nRef: {0}\nName: {1}\n\nIs that correct?", jiraIssue.key, jiraIssue.fields.summary), MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
+                var result = await DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext, "Correct Jira?", $"Jira found!\n\nRef: {jiraIssue.key}\nName: {jiraIssue.fields.summary}\n\nIs that correct?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
 
                 if (result == MessageDialogResult.Negative)
                 {
+                    Focus();
                     return;
                 }
             }
@@ -74,7 +78,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                 var doneSomething = false;
                 if (seedTime.TotalMinutes > 0)
                 {
-                    var result = await DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext, "Duplicate Timer", "The Timer Already Exists, Would You Like To Add The Time?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings {AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
+                    var result = await DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext, "Duplicate Timer", "The Timer Already Exists, Would You Like To Add The Time?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
 
                     if (result == MessageDialogResult.Affirmative)
                     {
@@ -83,6 +87,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                     }
                     else
                     {
+                        Focus();
                         return;
                     }
                 }
@@ -93,9 +98,10 @@ namespace Gallifrey.UI.Modern.Flyouts
                     doneSomething = true;
                 }
 
-                if(!doneSomething)
+                if (!doneSomething)
                 {
-                    DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext, "Duplicate Timer", "This Timer Already Exists!");
+                    await DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext, "Duplicate Timer", "This Timer Already Exists!");
+                    Focus();
                     return;
                 }
 
@@ -110,7 +116,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                 }
                 catch (JiraConnectionException)
                 {
-                    DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext, "Assign Jira Error", "Unable To Locate Assign Jira To Current User");
+                    await DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext, "Assign Jira Error", "Unable To Locate Assign Jira To Current User");
                 }
             }
 
@@ -122,7 +128,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                 }
                 catch (StateChangedException)
                 {
-                    DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext, "Error Changing Status", "Unable To Set Issue As In Progress");
+                    await DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext, "Error Changing Status", "Unable To Set Issue As In Progress");
                 }
             }
 
@@ -135,7 +141,7 @@ namespace Gallifrey.UI.Modern.Flyouts
         private void SearchButton(object sender, RoutedEventArgs e)
         {
             var searchFlyout = new Search(viewModel, true);
-            
+
             searchFlyout.IsOpenChanged += (o, args) =>
             {
                 if (!searchFlyout.IsOpen)

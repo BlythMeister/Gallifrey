@@ -15,7 +15,7 @@ namespace Gallifrey.UI.Modern.Flyouts
     public partial class Export
     {
         private readonly MainViewModel viewModel;
-        private ExportModel DataModel { get { return (ExportModel)DataContext; } }
+        private ExportModel DataModel => (ExportModel)DataContext;
         private readonly JiraHelper jiraHelper;
 
         public Export(MainViewModel viewModel, Guid timerId, TimeSpan? exportTime)
@@ -48,7 +48,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                     case JiraHelperResult<Issue>.JiraHelperStatus.Errored:
                         showError = true;
                         break;
-                    default:
+                    case JiraHelperResult<Issue>.JiraHelperStatus.Success:
                         jiraIssue = jiraDownloadResult.RetVal;
                         break;
                 }
@@ -60,7 +60,7 @@ namespace Gallifrey.UI.Modern.Flyouts
 
             if (showError)
             {
-                await DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext, "Unable To Locate Jira", string.Format("Unable To Locate Jira {0}!\nCannot Export Time\nPlease Verify/Correct Jira Reference", timerToShow.JiraReference));
+                await DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext, "Unable To Locate Jira", $"Unable To Locate Jira {timerToShow.JiraReference}!\nCannot Export Time\nPlease Verify/Correct Jira Reference");
                 IsOpen = false;
                 return;
             }
@@ -93,7 +93,7 @@ namespace Gallifrey.UI.Modern.Flyouts
         {
             if (DataModel.Timer.TimeToExport < DataModel.ToExport)
             {
-                await DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext, "Invalid Export", string.Format("You Cannot Export More Than The Timer States Un-Exported\nThis Value Is {0}!", DataModel.ToExport.ToString(@"hh\:mm")));
+                await DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext, "Invalid Export", $"You Cannot Export More Than The Timer States Un-Exported\nThis Value Is {DataModel.ToExport.ToString(@"hh\:mm")}!");
                 return;
             }
 
@@ -120,6 +120,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             if (dialog != null)
             {
                 await dialog;
+                Focus();
                 return;
             }
 

@@ -28,17 +28,17 @@ namespace Gallifrey.UI.Modern.Flyouts
             e.Handled = true;
         }
 
-        private void ChangeLogButton(object sender, RoutedEventArgs e)
+        private async void ChangeLogButton(object sender, RoutedEventArgs e)
         {
-            var changeLog = viewModel.Gallifrey.GetChangeLog(XDocument.Parse(Properties.Resources.ChangeLog));
+            var changeLog = viewModel.Gallifrey.GetChangeLog(XDocument.Parse(Properties.Resources.ChangeLog)).ToList();
 
             if (changeLog.Any())
             {
-                viewModel.OpenFlyout(new ChangeLog(viewModel, changeLog));
+                await viewModel.OpenFlyout(new ChangeLog(changeLog));
             }
             else
             {
-                DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext, "No Change Log", "There Is No Change Log To Show");
+                await DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext, "No Change Log", "There Is No Change Log To Show");
             }
         }
     }

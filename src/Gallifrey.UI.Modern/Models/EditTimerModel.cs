@@ -61,7 +61,7 @@ namespace Gallifrey.UI.Modern.Models
         public void SetNotDefaultButton()
         {
             IsDefaultOnButton = false;
-            if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("IsDefaultOnButton"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("IsDefaultOnButton"));
         }
 
         public bool HasModifiedJiraReference()
@@ -83,20 +83,13 @@ namespace Gallifrey.UI.Modern.Models
         {
             var currentTime = new TimeSpan(Hours, Minutes, 0);
 
-            if (addTime)
-            {
-                currentTime = currentTime.Add(timeAdjustmentAmount);
-            }
-            else
-            {
-                currentTime = currentTime.Subtract(timeAdjustmentAmount);
-            }
+            currentTime = addTime ? currentTime.Add(timeAdjustmentAmount) : currentTime.Subtract(timeAdjustmentAmount);
 
             Hours = currentTime.Hours > 9 ? 9 : currentTime.Hours;
             Minutes = currentTime.Minutes;
 
-            if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("Hours"));
-            if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("Minutes"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Hours"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Minutes"));
         }
     }
 }

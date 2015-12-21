@@ -14,8 +14,7 @@ namespace Gallifrey.UI.Modern.Flyouts
     public partial class Search
     {
         public JiraIssueDisplayModel SelectedJira { get; private set; }
-        private SearchModel DataModel { get { return (SearchModel)DataContext; } }
-
+        private SearchModel DataModel => (SearchModel)DataContext;
         private readonly MainViewModel viewModel;
         private readonly bool openFromAdd;
         private readonly JiraHelper jiraHelper;
@@ -37,7 +36,6 @@ namespace Gallifrey.UI.Modern.Flyouts
         {
             try
             {
-                JiraHelperResult<IEnumerable<Issue>> searchResult = null;
                 DataModel.SetIsSearching();
 
                 Func<IEnumerable<Issue>> searchFunc;
@@ -54,10 +52,11 @@ namespace Gallifrey.UI.Modern.Flyouts
                 else
                 {
                     await DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext, "No Results", "Your Search Returned No Results");
+                    Focus();
                     return;
                 }
 
-                searchResult = await jiraHelper.Do(searchFunc, "Search In Progress", true, false);
+                var searchResult = await jiraHelper.Do(searchFunc, "Search In Progress", true, false);
 
                 switch (searchResult.Status)
                 {
@@ -66,14 +65,15 @@ namespace Gallifrey.UI.Modern.Flyouts
                         return;
                     case JiraHelperResult<IEnumerable<Issue>>.JiraHelperStatus.Errored:
                         throw new Exception();
-                    default:
+                    case JiraHelperResult<IEnumerable<Issue>>.JiraHelperStatus.Success:
                         DataModel.UpdateSearchResults(searchResult.RetVal);
                         break;
                 }
             }
             catch (Exception)
             {
-                DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext, "No Results", "There Was An Error Getting Search Results");
+                await DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext, "No Results", "There Was An Error Getting Search Results");
+                Focus();
                 DataModel.ClearSearchResults();
             }
         }
@@ -83,6 +83,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             if (DataModel.SelectedSearchResult == null)
             {
                 DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext, "No Selected Item", "You Need To Select An Item To Add A Timer For It");
+                Focus();
                 return;
             }
 

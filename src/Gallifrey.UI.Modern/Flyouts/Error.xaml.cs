@@ -12,7 +12,7 @@ namespace Gallifrey.UI.Modern.Flyouts
     public partial class Error
     {
         private readonly MainViewModel viewModel;
-        private ErrorModel DataModel { get { return (ErrorModel)DataContext; } }
+        private ErrorModel DataModel => (ErrorModel)DataContext;
 
         public Error(MainViewModel viewModel, Event exceptionlessEvent)
         {
@@ -27,7 +27,7 @@ namespace Gallifrey.UI.Modern.Flyouts
 
             ExceptionlessClient.Default.SubmitEvent(DataModel.ExceptionlessEvent);
 
-            await DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext,"Thank You", "You're Helping Make Gallifrey Better!");
+            await DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext, "Thank You", "You're Helping Make Gallifrey Better!");
 
             IsOpen = false;
         }

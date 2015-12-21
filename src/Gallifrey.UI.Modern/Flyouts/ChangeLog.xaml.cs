@@ -9,11 +9,8 @@ namespace Gallifrey.UI.Modern.Flyouts
     /// </summary>
     public partial class ChangeLog
     {
-        private readonly MainViewModel viewModel;
-        
-        public ChangeLog(MainViewModel viewModel, IEnumerable<ChangeLogVersion> changeLog)
+        public ChangeLog(IEnumerable<ChangeLogVersion> changeLog)
         {
-            this.viewModel = viewModel;
             InitializeComponent();
             DataContext = new ChangeLogModel(changeLog);
         }

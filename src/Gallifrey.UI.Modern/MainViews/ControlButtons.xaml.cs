@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Windows;
-using System.Windows.Controls;
 using Gallifrey.UI.Modern.Flyouts;
 using Gallifrey.UI.Modern.Models;
 using MahApps.Metro.Controls.Dialogs;
@@ -11,9 +10,9 @@ namespace Gallifrey.UI.Modern.MainViews
     /// <summary>
     /// Interaction logic for ControlButtons.xaml
     /// </summary>
-    public partial class ControlButtons : UserControl
+    public partial class ControlButtons
     {
-        private MainViewModel ViewModel { get { return (MainViewModel)DataContext; } }
+        private MainViewModel ViewModel => (MainViewModel)DataContext;
 
         public ControlButtons()
         {
@@ -40,11 +39,9 @@ namespace Gallifrey.UI.Modern.MainViews
             {
                 var timer = ViewModel.Gallifrey.JiraTimerCollection.GetTimer(selectedTimer.Value);
 
-                var result = DialogCoordinator.Instance.ShowMessageAsync(ViewModel.DialogContext, "Are You Sure?", string.Format("Are You Sure You Want To Delete {0}\n\n{1}\nFor: {2}", timer.JiraReference, timer.JiraName, timer.DateStarted.Date.ToString("ddd, dd MMM")), MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
+                var result = await DialogCoordinator.Instance.ShowMessageAsync(ViewModel.DialogContext, "Are You Sure?", $"Are You Sure You Want To Delete {timer.JiraReference}\n\n{timer.JiraName}\nFor: {timer.DateStarted.Date.ToString("ddd, dd MMM")}", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
 
-                await result;
-
-                if (result.Result == MessageDialogResult.Affirmative)
+                if (result == MessageDialogResult.Affirmative)
                 {
                     ViewModel.Gallifrey.JiraTimerCollection.RemoveTimer(selectedTimer.Value);
                     ViewModel.RefreshModel();
