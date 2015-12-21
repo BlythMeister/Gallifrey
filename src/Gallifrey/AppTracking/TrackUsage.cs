@@ -65,7 +65,7 @@ namespace Gallifrey.AppTracking
 
                 try
                 {
-                    webBrowser.Navigate(string.Format("http://releases.gallifreyapp.co.uk/tracking/{0}.html?{1}", trackingType, trackingQueryString));
+                    webBrowser.Navigate($"http://releases.gallifreyapp.co.uk/tracking/{trackingType}.html?{trackingQueryString}");
                     while (webBrowser.ReadyState != WebBrowserReadyState.Complete)
                     {
                         await Task.Delay(1000);
@@ -95,7 +95,7 @@ namespace Gallifrey.AppTracking
         {
             var versionName = ApplicationDeployment.IsNetworkDeployed ? instanceType.ToString() : "Debug";
 
-            trackingQueryString = string.Format("utm_source=GallifreyApp_{0}&utm_medium={1}&utm_campaign={2}&uid={3}", appType, versionName, internalSettings.LastChangeLogVersion, internalSettings.InstallationInstaceId);
+            trackingQueryString = $"utm_source=GallifreyApp_{appType}&utm_medium={versionName}&utm_campaign={internalSettings.LastChangeLogVersion}&uid={internalSettings.InstallationInstaceId}";
         }
     }
 }

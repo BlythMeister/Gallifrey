@@ -3,9 +3,6 @@ using System.Windows.Navigation;
 
 namespace Gallifrey.UI.Modern.MainViews
 {
-    /// <summary>
-    /// Interaction logic for BottomBar.xaml
-    /// </summary>
     public partial class BottomBar
     {
         public BottomBar()

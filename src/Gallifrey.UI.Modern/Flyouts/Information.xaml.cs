@@ -8,9 +8,6 @@ using MahApps.Metro.Controls.Dialogs;
 
 namespace Gallifrey.UI.Modern.Flyouts
 {
-    /// <summary>
-    /// Interaction logic for Information.xaml
-    /// </summary>
     public partial class Information
     {
         private readonly MainViewModel viewModel;

@@ -132,7 +132,7 @@ namespace Gallifrey.UI.Classic
 
             if (gallifrey.VersionControl.IsAutomatedDeploy && gallifrey.VersionControl.IsFirstRun)
             {
-                var changeLog = gallifrey.GetChangeLog(XDocument.Parse(Resources.ChangeLog));
+                var changeLog = gallifrey.GetChangeLog(XDocument.Parse(Resources.ChangeLog)).Where(x => x.NewVersion);
 
                 if (changeLog.Any())
                 {

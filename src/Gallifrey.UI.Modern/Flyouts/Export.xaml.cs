@@ -9,9 +9,6 @@ using MahApps.Metro.Controls.Dialogs;
 
 namespace Gallifrey.UI.Modern.Flyouts
 {
-    /// <summary>
-    /// Interaction logic for Export.xaml
-    /// </summary>
     public partial class Export
     {
         private readonly MainViewModel viewModel;

@@ -7,9 +7,6 @@ using MahApps.Metro.Controls.Dialogs;
 
 namespace Gallifrey.UI.Modern.Flyouts
 {
-    /// <summary>
-    /// Interaction logic for ChangeLog.xaml
-    /// </summary>
     public partial class LockedTimer
     {
         private readonly MainViewModel viewModel;
@@ -21,15 +18,17 @@ namespace Gallifrey.UI.Modern.Flyouts
             InitializeComponent();
 
             var idleTimers = viewModel.Gallifrey.IdleTimerCollection.GetUnusedLockTimers().ToList();
-
-            if (!idleTimers.Any())
-            {
-                DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext, "No Timers To Show", "You Have No Locked Timers, Come Back When You Do!");
-                IsOpen = false;
-                return;
-            }
-
+            
             DataContext = new LockedTimerCollectionModel(idleTimers);
+        }
+
+        private async void LockedTimer_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            if (!DataModel.LockedTimers.Any())
+            {
+                await DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext, "No Timers To Show", "You Have No Locked Timers\nThere is Nothing To Show Here!");
+                IsOpen = false;
+            }
         }
 
         private async void AddButton(object sender, RoutedEventArgs e)
@@ -97,6 +96,12 @@ namespace Gallifrey.UI.Modern.Flyouts
                 foreach (var lockedTimerModel in selected)
                 {
                     viewModel.Gallifrey.IdleTimerCollection.RemoveTimer(lockedTimerModel.UniqueId);
+                }
+
+                if (!viewModel.Gallifrey.IdleTimerCollection.GetUnusedLockTimers().Any())
+                {
+                    IsOpen = false;
+                    return;
                 }
 
                 DataModel.RefreshLockedTimers(viewModel.Gallifrey.IdleTimerCollection.GetUnusedLockTimers());

@@ -8,9 +8,6 @@ using MahApps.Metro.Controls.Dialogs;
 
 namespace Gallifrey.UI.Modern.Flyouts
 {
-    /// <summary>
-    /// Interaction logic for Search.xaml
-    /// </summary>
     public partial class Search
     {
         public JiraIssueDisplayModel SelectedJira { get; private set; }

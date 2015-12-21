@@ -111,7 +111,7 @@ namespace Gallifrey.UI.Modern.MainViews
 
             if (ViewModel.Gallifrey.VersionControl.IsAutomatedDeploy && ViewModel.Gallifrey.VersionControl.IsFirstRun)
             {
-                var changeLog = ViewModel.Gallifrey.GetChangeLog(XDocument.Parse(Properties.Resources.ChangeLog)).ToList();
+                var changeLog = ViewModel.Gallifrey.GetChangeLog(XDocument.Parse(Properties.Resources.ChangeLog)).Where(x => x.NewVersion).ToList();
 
                 if (changeLog.Any())
                 {

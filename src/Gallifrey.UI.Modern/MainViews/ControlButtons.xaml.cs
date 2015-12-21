@@ -7,9 +7,6 @@ using MahApps.Metro.Controls.Dialogs;
 
 namespace Gallifrey.UI.Modern.MainViews
 {
-    /// <summary>
-    /// Interaction logic for ControlButtons.xaml
-    /// </summary>
     public partial class ControlButtons
     {
         private MainViewModel ViewModel => (MainViewModel)DataContext;

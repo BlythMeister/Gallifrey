@@ -13,16 +13,15 @@ namespace Gallifrey.ChangeLog
             return changeLog.OrderByDescending(detail => detail.Version).ToList();
         }
 
-        public static List<ChangeLogVersion> GetChangeLog(Version fromVersion, Version toVersion, XDocument changeLogContent)
+        public static List<ChangeLogVersion> GetChangeLog(Version fromVersion, XDocument changeLogContent)
         {
-            var changeLog = changeLogContent.Descendants("Version").Select(x => BuildChangeLogItem(x, fromVersion, toVersion));
+            var changeLog = changeLogContent.Descendants("Version").Select(x => BuildChangeLogItem(x, fromVersion));
             return changeLog.OrderByDescending(detail => detail.Version).ToList();
         }
 
-        private static ChangeLogVersion BuildChangeLogItem(XElement changeVersion, Version fromVersion, Version toVersion)
+        private static ChangeLogVersion BuildChangeLogItem(XElement changeVersion, Version fromVersion)
         {
             var fromCompareVersion = new Version(fromVersion.Major, fromVersion.Minor, fromVersion.Build);
-            var toCompareVersion = new Version(toVersion.Major, toVersion.Minor, toVersion.Build);
             var version = new Version(changeVersion.Attribute("Number").Value);
             var name = changeVersion.Attribute("Name").Value;
             var features = changeVersion.Descendants("Feature").Select(item => item.Value).ToList();
@@ -31,22 +30,16 @@ namespace Gallifrey.ChangeLog
 
             var newVersion = false;
 
-            if (fromCompareVersion <= toCompareVersion)
-            {
-                var compareVersion = version;
-                if (version.Revision > 0)
-                {
-                    compareVersion = new Version(version.Major, version.Minor, version.Build);
-                }
 
-                if (compareVersion == toCompareVersion)
-                {
-                    newVersion = true;
-                }
-                else if (compareVersion > fromCompareVersion && compareVersion < toCompareVersion)
-                {
-                    newVersion = true;
-                }
+            var compareVersion = version;
+            if (version.Revision > 0)
+            {
+                compareVersion = new Version(version.Major, version.Minor, version.Build);
+            }
+
+            if (compareVersion > fromCompareVersion)
+            {
+                newVersion = true;
             }
 
             return new ChangeLogVersion(version, name, newVersion, features, bugs, others);
@@ -56,12 +49,11 @@ namespace Gallifrey.ChangeLog
         {
             var version = new Version(changeVersion.Attribute("Number").Value);
             var name = changeVersion.Attribute("Name").Value;
-            var newVersion = false;
             var features = changeVersion.Descendants("Feature").Select(item => item.Value).ToList();
             var bugs = changeVersion.Descendants("Bug").Select(item => item.Value).ToList();
             var others = changeVersion.Descendants("Other").Select(item => item.Value).ToList();
 
-            return new ChangeLogVersion(version, name, newVersion, features, bugs, others);
+            return new ChangeLogVersion(version, name, false, features, bugs, others);
         }
     }
 }

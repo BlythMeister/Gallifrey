@@ -249,17 +249,13 @@ namespace Gallifrey
 
         public IEnumerable<ChangeLogVersion> GetChangeLog(XDocument changeLogContent)
         {
-            List<ChangeLogVersion> changeLogItems;
+            var changeLogItems = ChangeLogProvider.GetChangeLog(settingsCollection.InternalSettings.LastChangeLogVersion, changeLogContent);
+
             if (versionControl.IsAutomatedDeploy)
             {
-                changeLogItems = ChangeLogProvider.GetChangeLog(settingsCollection.InternalSettings.LastChangeLogVersion, versionControl.DeployedVersion, changeLogContent);
                 settingsCollection.InternalSettings.SetLastChangeLogVersion(versionControl.DeployedVersion);
                 settingsCollection.SaveSettings();
                 trackUsage.UpdateSettings(settingsCollection.AppSettings, settingsCollection.InternalSettings);
-            }
-            else
-            {
-                changeLogItems = ChangeLogProvider.GetFullChangeLog(changeLogContent);
             }
 
             return changeLogItems;

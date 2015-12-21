@@ -7,9 +7,6 @@ using MahApps.Metro.Controls.Dialogs;
 
 namespace Gallifrey.UI.Modern.Flyouts
 {
-    /// <summary>
-    /// Interaction logic for EditTimer.xaml
-    /// </summary>
     public partial class EditTimer
     {
         private readonly MainViewModel viewModel;

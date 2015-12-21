@@ -3,9 +3,6 @@ using Gallifrey.Versions;
 
 namespace Gallifrey.UI.Modern
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
     public partial class App
     {
         public static void Run(InstanceType instance, AppType appType)
