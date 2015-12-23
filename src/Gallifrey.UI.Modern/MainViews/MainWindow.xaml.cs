@@ -75,14 +75,14 @@ namespace Gallifrey.UI.Modern.MainViews
                 {
                     modelHelpers.CloseAllFlyouts();
                     await modelHelpers.OpenFlyout(new Error(modelHelpers, e.Event));
-                    CloseApp(true);
+                    modelHelpers.CloseApp(true);
                 });
             }
         }
 
         private async void OnLoaded(object sender, RoutedEventArgs e)
         {
-            var missingConfig = false;
+            var multipleInstances = false;
             var showSettings = false;
             try
             {
@@ -98,17 +98,22 @@ namespace Gallifrey.UI.Modern.MainViews
             }
             catch (MultipleGallifreyRunningException)
             {
-                missingConfig = true;
+                multipleInstances = true;
             }
 
-            if (missingConfig)
+            if (multipleInstances)
             {
                 await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Multiple Instances", "You Can Only Have One Instance Of Gallifrey Running At A Time\nPlease Close The Other Instance");
-                CloseApp();
+                modelHelpers.CloseApp();
             }
             else if (showSettings)
             {
                 await modelHelpers.OpenFlyout(new Flyouts.Settings(modelHelpers));
+                if (!modelHelpers.Gallifrey.JiraConnection.IsConnected)
+                {
+                    await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Connection Required", "You Must Have A Working Jira Connection To Use Gallifrey");
+                    modelHelpers.CloseApp();
+                }
             }
 
             if (modelHelpers.Gallifrey.VersionControl.IsAutomatedDeploy && modelHelpers.Gallifrey.VersionControl.IsFirstRun)
@@ -268,14 +273,14 @@ namespace Gallifrey.UI.Modern.MainViews
 
                         if (messageResult == MessageDialogResult.Affirmative)
                         {
-                            CloseApp(true);
+                            modelHelpers.CloseApp(true);
                         }
                     }
                     else
                     {
                         if (modelHelpers.Gallifrey.Settings.AppSettings.AutoUpdate)
                         {
-                            CloseApp(true);
+                            modelHelpers.CloseApp(true);
                         }
                     }
                 }
@@ -302,17 +307,6 @@ namespace Gallifrey.UI.Modern.MainViews
                     modelHelpers.Gallifrey.VersionControl.ManualReinstall();
                 }
             }
-        }
-
-        private void CloseApp(bool restart = false)
-        {
-            if (restart && modelHelpers.Gallifrey.VersionControl.IsAutomatedDeploy)
-            {
-                System.Windows.Forms.Application.Restart();
-            }
-
-            Application.Current.Shutdown();
-
         }
 
         private void MainWindow_OnClosed(object sender, EventArgs e)

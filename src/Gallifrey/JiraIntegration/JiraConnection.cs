@@ -26,6 +26,7 @@ namespace Gallifrey.JiraIntegration
         void UpdateCache();
         void AssignToCurrentUser(string jiraRef);
         User CurrentUser { get; }
+        bool IsConnected { get; }
         void SetInProgress(string jiraRef);
     }
 
@@ -40,6 +41,7 @@ namespace Gallifrey.JiraIntegration
         private DateTime lastCacheUpdate;
 
         public User CurrentUser { get; private set; }
+        public bool IsConnected => jira != null;
 
         public JiraConnection(ITrackUsage trackUsage)
         {
@@ -53,7 +55,6 @@ namespace Gallifrey.JiraIntegration
         {
             exportSettings = newExportSettings;
             jiraConnectionSettings = newJiraConnectionSettings;
-            jira = null;
             CheckAndConnectJira();
             UpdateJiraProjectCache();
         }

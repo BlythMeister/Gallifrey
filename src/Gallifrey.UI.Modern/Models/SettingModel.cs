@@ -139,6 +139,10 @@ namespace Gallifrey.UI.Modern.Models
             {
                 JiraSettingsChanged = true;
             }
+            else if (string.IsNullOrWhiteSpace(JiraUrl) || string.IsNullOrWhiteSpace(JiraUsername) || string.IsNullOrWhiteSpace(JiraPassword))
+            {
+                JiraSettingsChanged = true;
+            }
 
             settings.JiraConnectionSettings.JiraUrl = JiraUrl;
             settings.JiraConnectionSettings.JiraUsername = JiraUsername;

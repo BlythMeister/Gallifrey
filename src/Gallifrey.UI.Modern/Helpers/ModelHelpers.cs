@@ -74,5 +74,16 @@ namespace Gallifrey.UI.Modern.Helpers
         {
             RefreshModelEvent?.Invoke(this, null);
         }
+
+        public void CloseApp(bool restart = false)
+        {
+            if (restart && Gallifrey.VersionControl.IsAutomatedDeploy)
+            {
+                System.Windows.Forms.Application.Restart();
+            }
+
+            Application.Current.Shutdown();
+
+        }
     }
 }

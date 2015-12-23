@@ -98,9 +98,14 @@ namespace Gallifrey.UI.Modern.MainViews
             ModelHelpers.OpenFlyout(new Information(ModelHelpers));
         }
 
-        private void SettingsButton(object sender, RoutedEventArgs e)
+        private async void SettingsButton(object sender, RoutedEventArgs e)
         {
-            ModelHelpers.OpenFlyout(new Flyouts.Settings(ModelHelpers));
+            await ModelHelpers.OpenFlyout(new Flyouts.Settings(ModelHelpers));
+            if (!ModelHelpers.Gallifrey.JiraConnection.IsConnected)
+            {
+                await DialogCoordinator.Instance.ShowMessageAsync(ModelHelpers.DialogContext, "Connection Required", "You Must Have A Working Jira Connection To Use Gallifrey");
+                ModelHelpers.CloseApp();
+            }
         }
 
         private void EmailButton(object sender, RoutedEventArgs e)
