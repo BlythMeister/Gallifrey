@@ -14,7 +14,7 @@ namespace Gallifrey.UI.Modern.MainViews
     public partial class TimerTabs
     {
         private MainViewModel ViewModel => (MainViewModel)DataContext;
-        private ModelHelpers ModelHelpers => ViewModel.ModelHelpers;
+        private ModelHelpers ModelHelpers => ((MainViewModel)DataContext).ModelHelpers;
 
         public TimerTabs()
         {

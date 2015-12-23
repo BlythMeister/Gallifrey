@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Gallifrey.AppTracking;
 using Gallifrey.Comparers;
 using Gallifrey.Exceptions.JiraTimers;
 using Gallifrey.IdleTimers;
@@ -42,12 +43,14 @@ namespace Gallifrey.JiraTimers
     public class JiraTimerCollection : IJiraTimerCollection
     {
         private IExportSettings exportSettings;
+        private readonly ITrackUsage trackUsage;
         private readonly List<JiraTimer> timerList;
         internal event EventHandler<ExportPromptDetail> exportPrompt;
 
-        internal JiraTimerCollection(IExportSettings exportSettings)
+        internal JiraTimerCollection(IExportSettings exportSettings, ITrackUsage trackUsage)
         {
             this.exportSettings = exportSettings;
+            this.trackUsage = trackUsage;
             timerList = JiraTimerCollectionSerializer.DeSerialize();
         }
 
@@ -106,6 +109,7 @@ namespace Gallifrey.JiraTimers
                 throw new DuplicateTimerException("Already have a timer for this task on this day!", timerSearch.UniqueId);
             }
 
+            trackUsage.TrackAppUsage(TrackingType.TimerAdded);
             timerList.Add(newTimer);
             SaveTimers();
         }
@@ -129,6 +133,12 @@ namespace Gallifrey.JiraTimers
         }
 
         public void RemoveTimer(Guid uniqueId)
+        {
+            trackUsage.TrackAppUsage(TrackingType.TimerDeleted);
+            RemoveTimerInternal(uniqueId);
+        }
+
+        private void RemoveTimerInternal(Guid uniqueId)
         {
             timerList.Remove(GetTimer(uniqueId));
             SaveTimers();
@@ -207,7 +217,7 @@ namespace Gallifrey.JiraTimers
                 throw new DuplicateTimerException("Already have a timer for this task on this day!", timerSearch.UniqueId);
             }
 
-            RemoveTimer(timerGuid);
+            RemoveTimerInternal(timerGuid);
             AddTimer(newTimer);
             SaveTimers();
             return newTimer.UniqueId;
@@ -226,7 +236,7 @@ namespace Gallifrey.JiraTimers
                 throw new DuplicateTimerException("Already have a timer for this task on this day!", timerSearch.UniqueId);
             }
 
-            RemoveTimer(timerGuid);
+            RemoveTimerInternal(timerGuid);
             AddTimer(newTimer);
             SaveTimers();
             return newTimer.UniqueId;
@@ -290,6 +300,7 @@ namespace Gallifrey.JiraTimers
 
         public void AddIdleTimer(Guid uniqueId, IdleTimer idleTimer)
         {
+            trackUsage.TrackAppUsage(TrackingType.LockedTimerAdd);
             var timer = GetTimer(uniqueId);
             timer.AddIdleTimer(idleTimer);
             SaveTimers();

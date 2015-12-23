@@ -202,6 +202,7 @@
       <Feature>Added background check of unexported timers to improve export window load time</Feature>
       <Feature>When adding a timer, if you already have the timer will add the time to it</Feature>
       <Feature>Exporting time will try to perform export once prior to trying with re-opening jira</Feature>
+      <Feature>Added Additional Tracking Events</Feature>
     </Features>
     <Bugs>
       <Bug>Fix issue with balloon icon caused crash</Bug>

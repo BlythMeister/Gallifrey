@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Windows;
+using Gallifrey.AppTracking;
 using Gallifrey.UI.Modern.Flyouts;
 using Gallifrey.UI.Modern.Helpers;
 using Gallifrey.UI.Modern.Models;
@@ -12,7 +13,7 @@ namespace Gallifrey.UI.Modern.MainViews
     public partial class ControlButtons
     {
         private MainViewModel ViewModel => (MainViewModel)DataContext;
-        private ModelHelpers ModelHelpers => ViewModel.ModelHelpers;
+        private ModelHelpers ModelHelpers => ((MainViewModel)DataContext).ModelHelpers;
 
         public ControlButtons()
         {
@@ -104,24 +105,28 @@ namespace Gallifrey.UI.Modern.MainViews
 
         private void EmailButton(object sender, RoutedEventArgs e)
         {
+            ModelHelpers.Gallifrey.TrackEvent(TrackingType.ContactClick);
             Process.Start(new ProcessStartInfo("mailto:contact@gallifreyapp.co.uk?subject=Gallifrey App Contact"));
             e.Handled = true;
         }
 
         private void TwitterButton(object sender, RoutedEventArgs e)
         {
+            ModelHelpers.Gallifrey.TrackEvent(TrackingType.ContactClick);
             Process.Start(new ProcessStartInfo("https://twitter.com/GallifreyApp"));
             e.Handled = true;
         }
 
         private void PayPalButton(object sender, RoutedEventArgs e)
         {
+            ModelHelpers.Gallifrey.TrackEvent(TrackingType.PayPalClick);
             Process.Start(new ProcessStartInfo("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=G3MWL8E6UG4RS"));
             e.Handled = true;
         }
 
         private void GitHubButton(object sender, RoutedEventArgs e)
         {
+            ModelHelpers.Gallifrey.TrackEvent(TrackingType.GitHubClick);
             Process.Start(new ProcessStartInfo("https://github.com/BlythMeister/Gallifrey"));
             e.Handled = true;
         }

@@ -7,6 +7,16 @@
         UpdateCheck,
         AppClose,
         DailyHearbeat,
-        OptOut
+        OptOut,
+        TimerAdded,
+        TimerDeleted,
+        PayPalClick,
+        GitHubClick,
+        ContactClick,
+        LockedTimerAdd,
+        SearchLoad,
+        SearchFilter,
+        SearchText,
+        InformationShown
     }
 }

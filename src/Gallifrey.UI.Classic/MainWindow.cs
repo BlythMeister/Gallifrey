@@ -10,6 +10,7 @@ using System.Linq;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using Exceptionless;
+using Gallifrey.AppTracking;
 using Gallifrey.Comparers;
 using Gallifrey.Exceptions;
 using Gallifrey.Exceptions.IdleTimers;
@@ -381,21 +382,25 @@ namespace Gallifrey.UI.Classic
 
         private void lblTwitter_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
+            gallifrey.TrackEvent(TrackingType.ContactClick);
             Process.Start("https://twitter.com/GallifreyApp");
         }
 
         private void lblEmail_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
+            gallifrey.TrackEvent(TrackingType.ContactClick);
             Process.Start("mailto:contact@gallifreyapp.co.uk?subject=Gallifrey App Contact");
         }
 
         private void lblGitHub_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
+            gallifrey.TrackEvent(TrackingType.GitHubClick);
             Process.Start("https://github.com/BlythMeister/Gallifrey");
         }
 
         private void lblDonate_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
+            gallifrey.TrackEvent(TrackingType.PayPalClick);
             Process.Start("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=G3MWL8E6UG4RS");
         }
 

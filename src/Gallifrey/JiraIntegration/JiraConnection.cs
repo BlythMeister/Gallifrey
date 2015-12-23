@@ -140,6 +140,7 @@ namespace Gallifrey.JiraIntegration
             try
             {
                 CheckAndConnectJira();
+                trackUsage.TrackAppUsage(TrackingType.SearchLoad);
                 var returnedFilters = jira.GetFilters();
                 return returnedFilters.Select(returned => returned.name);
             }
@@ -154,6 +155,7 @@ namespace Gallifrey.JiraIntegration
             try
             {
                 CheckAndConnectJira();
+                trackUsage.TrackAppUsage(TrackingType.SearchFilter);
                 var issues = jira.GetIssuesFromFilter(filterName);
                 recentJiraCollection.AddRecentJiras(issues);
                 return issues.OrderBy(x => x.key, new JiraReferenceComparer());
@@ -169,6 +171,7 @@ namespace Gallifrey.JiraIntegration
             try
             {
                 CheckAndConnectJira();
+                trackUsage.TrackAppUsage(TrackingType.SearchText);
                 var issues = jira.GetIssuesFromJql(GetJql(searchText));
                 recentJiraCollection.AddRecentJiras(issues);
                 return issues.OrderBy(x => x.key, new JiraReferenceComparer());

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Navigation;
 using System.Xml.Linq;
+using Gallifrey.AppTracking;
 using Gallifrey.UI.Modern.Helpers;
 using Gallifrey.UI.Modern.Models;
 using MahApps.Metro.Controls.Dialogs;
@@ -18,6 +19,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             this.modelHelpers = modelHelpers;
             InitializeComponent();
             DataContext = new InformationModel(modelHelpers.Gallifrey);
+            modelHelpers.Gallifrey.TrackEvent(TrackingType.InformationShown);
         }
 
         private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)

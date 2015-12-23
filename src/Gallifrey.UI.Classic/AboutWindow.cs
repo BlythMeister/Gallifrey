@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using Gallifrey.AppTracking;
 using Gallifrey.Contributors;
 using Gallifrey.UI.Classic.Properties;
 
@@ -27,6 +28,7 @@ namespace Gallifrey.UI.Classic
             timerContributor_Tick(this, null);
 
             btnChangeLog.Visible = gallifrey.VersionControl.IsAutomatedDeploy;
+            gallifrey.TrackEvent(TrackingType.InformationShown);
         }
 
         private string BuildThanksString(WithThanksDefinition withThanksDefinition)
@@ -59,21 +61,25 @@ namespace Gallifrey.UI.Classic
 
         private void btnPayPal_Click(object sender, EventArgs e)
         {
+            gallifrey.TrackEvent(TrackingType.PayPalClick);
             Process.Start("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=G3MWL8E6UG4RS");
         }
 
         private void btnGitHub_Click(object sender, EventArgs e)
         {
+            gallifrey.TrackEvent(TrackingType.GitHubClick);
             Process.Start("https://github.com/BlythMeister/Gallifrey");
         }
 
         private void btnEmail_Click(object sender, EventArgs e)
         {
+            gallifrey.TrackEvent(TrackingType.ContactClick);
             Process.Start("mailto:contact@gallifreyapp.co.uk?subject=Gallifrey App Contact");
         }
 
         private void btnTwitter_Click(object sender, EventArgs e)
         {
+            gallifrey.TrackEvent(TrackingType.ContactClick);
             Process.Start("https://twitter.com/GallifreyApp");
         }
 

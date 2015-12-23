@@ -60,7 +60,7 @@ namespace Gallifrey
             settingsCollection = SettingsCollectionSerializer.DeSerialize();
             trackUsage = new TrackUsage(settingsCollection.AppSettings, settingsCollection.InternalSettings, instanceType, appType);
             versionControl = new VersionControl(instanceType, appType, trackUsage);
-            jiraTimerCollection = new JiraTimerCollection(settingsCollection.ExportSettings);
+            jiraTimerCollection = new JiraTimerCollection(settingsCollection.ExportSettings, trackUsage);
             jiraTimerCollection.exportPrompt += OnExportPromptEvent;
             jiraConnection = new JiraConnection(trackUsage);
             idleTimerCollection = new IdleTimerCollection();
