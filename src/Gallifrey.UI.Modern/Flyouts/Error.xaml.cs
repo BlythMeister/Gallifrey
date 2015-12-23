@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using Exceptionless;
 using Exceptionless.Models;
+using Gallifrey.UI.Modern.Helpers;
 using Gallifrey.UI.Modern.Models;
 using MahApps.Metro.Controls.Dialogs;
 
@@ -8,12 +9,12 @@ namespace Gallifrey.UI.Modern.Flyouts
 {
     public partial class Error
     {
-        private readonly MainViewModel viewModel;
+        private readonly ModelHelpers modelHelpers;
         private ErrorModel DataModel => (ErrorModel)DataContext;
 
-        public Error(MainViewModel viewModel, Event exceptionlessEvent)
+        public Error(ModelHelpers modelHelpers, Event exceptionlessEvent)
         {
-            this.viewModel = viewModel;
+            this.modelHelpers = modelHelpers;
             InitializeComponent();
             DataContext = new ErrorModel(exceptionlessEvent);
         }
@@ -24,7 +25,7 @@ namespace Gallifrey.UI.Modern.Flyouts
 
             ExceptionlessClient.Default.SubmitEvent(DataModel.ExceptionlessEvent);
 
-            await DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext, "Thank You", "You're Helping Make Gallifrey Better!");
+            await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Thank You", "You're Helping Make Gallifrey Better!");
 
             IsOpen = false;
         }

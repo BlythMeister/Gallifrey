@@ -92,6 +92,7 @@
     <Compile Include="Flyouts\ChangeLog.xaml.cs">
       <DependentUpon>ChangeLog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\ModelHelpers.cs" />
     <Compile Include="Helpers\DialogContext.cs" />
     <Compile Include="Models\AccentThemeModel.cs" />
     <Compile Include="Models\LockedTimerCollectionModel.cs" />

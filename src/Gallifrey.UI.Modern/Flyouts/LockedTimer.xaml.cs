@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Windows;
 using Gallifrey.ExtensionMethods;
+using Gallifrey.UI.Modern.Helpers;
 using Gallifrey.UI.Modern.Models;
 using MahApps.Metro.Controls.Dialogs;
 
@@ -9,15 +10,15 @@ namespace Gallifrey.UI.Modern.Flyouts
 {
     public partial class LockedTimer
     {
-        private readonly MainViewModel viewModel;
+        private readonly ModelHelpers modelHelpers;
         private LockedTimerCollectionModel DataModel => (LockedTimerCollectionModel)DataContext;
 
-        public LockedTimer(MainViewModel viewModel)
+        public LockedTimer(ModelHelpers modelHelpers)
         {
-            this.viewModel = viewModel;
+            this.modelHelpers = modelHelpers;
             InitializeComponent();
 
-            var idleTimers = viewModel.Gallifrey.IdleTimerCollection.GetUnusedLockTimers().ToList();
+            var idleTimers = modelHelpers.Gallifrey.IdleTimerCollection.GetUnusedLockTimers().ToList();
             
             DataContext = new LockedTimerCollectionModel(idleTimers);
         }
@@ -26,7 +27,7 @@ namespace Gallifrey.UI.Modern.Flyouts
         {
             if (!DataModel.LockedTimers.Any())
             {
-                await DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext, "No Timers To Show", "You Have No Locked Timers\nThere is Nothing To Show Here!");
+                await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "No Timers To Show", "You Have No Locked Timers\nThere is Nothing To Show Here!");
                 IsOpen = false;
             }
         }
@@ -37,7 +38,7 @@ namespace Gallifrey.UI.Modern.Flyouts
 
             if (selected.Count == 0)
             {
-                await DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext, "Nothing Selected", "You Have Not Selected Any Locked Time To Add");
+                await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Nothing Selected", "You Have Not Selected Any Locked Time To Add");
                 Focus();
                 return;
             }
@@ -54,29 +55,29 @@ namespace Gallifrey.UI.Modern.Flyouts
                 }
                 else
                 {
-                    await DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext, "Invalid Selection", "All Timers Must Be On The Same Date!");
+                    await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Invalid Selection", "All Timers Must Be On The Same Date!");
                     Focus();
                     return;
                 }
             }
 
-            var addFlyout = new AddTimer(viewModel, startDate: lockedTimerDate, enableDateChange: false, preloadTime: selectedTime, enableTimeChange: false);
-            await viewModel.OpenFlyout(addFlyout);
+            var addFlyout = new AddTimer(modelHelpers, startDate: lockedTimerDate, enableDateChange: false, preloadTime: selectedTime, enableTimeChange: false);
+            await modelHelpers.OpenFlyout(addFlyout);
 
             if (addFlyout.AddedTimer)
             {
                 foreach (var lockedTimerModel in selected)
                 {
-                    viewModel.Gallifrey.IdleTimerCollection.RemoveTimer(lockedTimerModel.UniqueId);
+                    modelHelpers.Gallifrey.IdleTimerCollection.RemoveTimer(lockedTimerModel.UniqueId);
                 }
 
-                if (!viewModel.Gallifrey.IdleTimerCollection.GetUnusedLockTimers().Any())
+                if (!modelHelpers.Gallifrey.IdleTimerCollection.GetUnusedLockTimers().Any())
                 {
                     IsOpen = false;
                     return;
                 }
 
-                DataModel.RefreshLockedTimers(viewModel.Gallifrey.IdleTimerCollection.GetUnusedLockTimers());
+                DataModel.RefreshLockedTimers(modelHelpers.Gallifrey.IdleTimerCollection.GetUnusedLockTimers());
             }
 
             Focus();
@@ -89,22 +90,22 @@ namespace Gallifrey.UI.Modern.Flyouts
             var selectedTime = new TimeSpan();
             selectedTime = selected.Aggregate(selectedTime, (current, lockedTimerModel) => current.Add(lockedTimerModel.IdleTime));
 
-            var result = await DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext, "Are You Sure?", $"Are you Sure You Want To Delete Locked Timers Worth {selectedTime.FormatAsString()}?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
+            var result = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Are You Sure?", $"Are you Sure You Want To Delete Locked Timers Worth {selectedTime.FormatAsString()}?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
 
             if (result == MessageDialogResult.Affirmative)
             {
                 foreach (var lockedTimerModel in selected)
                 {
-                    viewModel.Gallifrey.IdleTimerCollection.RemoveTimer(lockedTimerModel.UniqueId);
+                    modelHelpers.Gallifrey.IdleTimerCollection.RemoveTimer(lockedTimerModel.UniqueId);
                 }
 
-                if (!viewModel.Gallifrey.IdleTimerCollection.GetUnusedLockTimers().Any())
+                if (!modelHelpers.Gallifrey.IdleTimerCollection.GetUnusedLockTimers().Any())
                 {
                     IsOpen = false;
                     return;
                 }
 
-                DataModel.RefreshLockedTimers(viewModel.Gallifrey.IdleTimerCollection.GetUnusedLockTimers());
+                DataModel.RefreshLockedTimers(modelHelpers.Gallifrey.IdleTimerCollection.GetUnusedLockTimers());
             }
 
             Focus();

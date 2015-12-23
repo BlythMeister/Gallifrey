@@ -3,6 +3,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Navigation;
 using System.Xml.Linq;
+using Gallifrey.UI.Modern.Helpers;
 using Gallifrey.UI.Modern.Models;
 using MahApps.Metro.Controls.Dialogs;
 
@@ -10,13 +11,13 @@ namespace Gallifrey.UI.Modern.Flyouts
 {
     public partial class Information
     {
-        private readonly MainViewModel viewModel;
+        private readonly ModelHelpers modelHelpers;
 
-        public Information(MainViewModel viewModel)
+        public Information(ModelHelpers modelHelpers)
         {
-            this.viewModel = viewModel;
+            this.modelHelpers = modelHelpers;
             InitializeComponent();
-            DataContext = new InformationModel(viewModel.Gallifrey);
+            DataContext = new InformationModel(modelHelpers.Gallifrey);
         }
 
         private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
@@ -27,15 +28,15 @@ namespace Gallifrey.UI.Modern.Flyouts
 
         private async void ChangeLogButton(object sender, RoutedEventArgs e)
         {
-            var changeLog = viewModel.Gallifrey.GetChangeLog(XDocument.Parse(Properties.Resources.ChangeLog)).ToList();
+            var changeLog = modelHelpers.Gallifrey.GetChangeLog(XDocument.Parse(Properties.Resources.ChangeLog)).ToList();
 
             if (changeLog.Any())
             {
-                await viewModel.OpenFlyout(new ChangeLog(changeLog));
+                await modelHelpers.OpenFlyout(new ChangeLog(changeLog));
             }
             else
             {
-                await DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext, "No Change Log", "There Is No Change Log To Show");
+                await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "No Change Log", "There Is No Change Log To Show");
             }
         }
     }

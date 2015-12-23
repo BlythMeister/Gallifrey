@@ -12,20 +12,20 @@ namespace Gallifrey.UI.Modern.Flyouts
     {
         public JiraIssueDisplayModel SelectedJira { get; private set; }
         private SearchModel DataModel => (SearchModel)DataContext;
-        private readonly MainViewModel viewModel;
+        private readonly ModelHelpers modelHelpers;
         private readonly bool openFromAdd;
         private readonly JiraHelper jiraHelper;
 
-        public Search(MainViewModel viewModel, bool openFromAdd)
+        public Search(ModelHelpers modelHelpers, bool openFromAdd)
         {
-            this.viewModel = viewModel;
+            this.modelHelpers = modelHelpers;
             this.openFromAdd = openFromAdd;
             InitializeComponent();
-            jiraHelper = new JiraHelper(viewModel.DialogContext);
+            jiraHelper = new JiraHelper(modelHelpers.DialogContext);
 
-            var filters = viewModel.Gallifrey.JiraConnection.GetJiraFilters();
-            var issues = viewModel.Gallifrey.JiraConnection.GetJiraCurrentUserOpenIssues();
-            var recent = viewModel.Gallifrey.JiraTimerCollection.GetJiraReferencesForLastDays(100);
+            var filters = modelHelpers.Gallifrey.JiraConnection.GetJiraFilters();
+            var issues = modelHelpers.Gallifrey.JiraConnection.GetJiraCurrentUserOpenIssues();
+            var recent = modelHelpers.Gallifrey.JiraTimerCollection.GetJiraReferencesForLastDays(100);
             DataContext = new SearchModel(filters, recent, issues);
         }
 
@@ -39,16 +39,16 @@ namespace Gallifrey.UI.Modern.Flyouts
                 if (!string.IsNullOrWhiteSpace(DataModel.SearchTerm))
                 {
                     var searchTerm = DataModel.SearchTerm;
-                    searchFunc = () => viewModel.Gallifrey.JiraConnection.GetJiraIssuesFromSearchText(searchTerm);
+                    searchFunc = () => modelHelpers.Gallifrey.JiraConnection.GetJiraIssuesFromSearchText(searchTerm);
                 }
                 else if (!string.IsNullOrWhiteSpace(DataModel.SelectedFilter))
                 {
                     var searchFilter = DataModel.SelectedFilter;
-                    searchFunc = () => viewModel.Gallifrey.JiraConnection.GetJiraIssuesFromFilter(searchFilter);
+                    searchFunc = () => modelHelpers.Gallifrey.JiraConnection.GetJiraIssuesFromFilter(searchFilter);
                 }
                 else
                 {
-                    await DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext, "No Results", "Your Search Returned No Results");
+                    await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "No Results", "Your Search Returned No Results");
                     Focus();
                     return;
                 }
@@ -69,7 +69,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             }
             catch (Exception)
             {
-                await DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext, "No Results", "There Was An Error Getting Search Results");
+                await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "No Results", "There Was An Error Getting Search Results");
                 Focus();
                 DataModel.ClearSearchResults();
             }
@@ -79,7 +79,7 @@ namespace Gallifrey.UI.Modern.Flyouts
         {
             if (DataModel.SelectedSearchResult == null)
             {
-                DialogCoordinator.Instance.ShowMessageAsync(viewModel.DialogContext, "No Selected Item", "You Need To Select An Item To Add A Timer For It");
+                DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "No Selected Item", "You Need To Select An Item To Add A Timer For It");
                 Focus();
                 return;
             }
@@ -90,8 +90,8 @@ namespace Gallifrey.UI.Modern.Flyouts
             }
             else
             {
-                var addFlyout = new AddTimer(viewModel, DataModel.SelectedSearchResult.Reference);
-                viewModel.OpenFlyout(addFlyout);
+                var addFlyout = new AddTimer(modelHelpers, DataModel.SelectedSearchResult.Reference);
+                modelHelpers.OpenFlyout(addFlyout);
             }
 
             IsOpen = false;

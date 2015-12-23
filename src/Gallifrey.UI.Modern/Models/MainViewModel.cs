@@ -2,45 +2,42 @@ using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Timers;
-using System.Windows;
 using Gallifrey.Comparers;
 using Gallifrey.ExtensionMethods;
 using Gallifrey.UI.Modern.Helpers;
-using MahApps.Metro.Controls;
 
 namespace Gallifrey.UI.Modern.Models
 {
     public class MainViewModel : INotifyPropertyChanged
     {
-        public MainViewModel(IBackend gallifrey, FlyoutsControl flyoutsControl)
+        public ModelHelpers ModelHelpers { get; }
+        public event PropertyChangedEventHandler PropertyChanged;
+        public ObservableCollection<TimerDateModel> TimerDates { get; private set; }
+        public string InactiveMinutes { get; private set; }
+
+        public MainViewModel(ModelHelpers modelHelpers)
         {
-            this.flyoutsControl = flyoutsControl;
-            DialogContext = new DialogContext();
-            Gallifrey = gallifrey;
+            ModelHelpers = modelHelpers;
             TimerDates = new ObservableCollection<TimerDateModel>();
             var runningWatcher = new Timer(500);
             runningWatcher.Elapsed += runningWatcherElapsed;
             runningWatcher.Start();
-            Gallifrey.VersionControl.PropertyChanged += VersionControlPropertyChanged;
+
+            modelHelpers.Gallifrey.VersionControl.PropertyChanged += VersionControlPropertyChanged;
+            modelHelpers.RefreshModelEvent += (sender, args) => RefreshModel();
+            modelHelpers.SelectRunningTimerEvent += (sender, args) => SelectRunningTimer();
+            modelHelpers.SelectTimerEvent += (sender, timerId) => SetSelectedTimer(timerId);
         }
 
-        private readonly FlyoutsControl flyoutsControl;
-        public event PropertyChangedEventHandler PropertyChanged;
-        public IBackend Gallifrey { get; }
-        public DialogContext DialogContext { get; private set; }
-        public ObservableCollection<TimerDateModel> TimerDates { get; private set; }
-        public string InactiveMinutes { get; private set; }
-
-        public string ExportedNumber => Gallifrey.JiraTimerCollection.GetNumberExported().Item1.ToString();
-        public string TotalTimerCount => Gallifrey.JiraTimerCollection.GetNumberExported().Item2.ToString();
-        public string UnexportedTime => Gallifrey.JiraTimerCollection.GetTotalUnexportedTime().FormatAsString(false);
-        public string ExportTarget => Gallifrey.Settings.AppSettings.GetTargetThisWeek().FormatAsString(false);
-        public string Exported => Gallifrey.JiraTimerCollection.GetTotalExportedTimeThisWeek(Gallifrey.Settings.AppSettings.StartOfWeek).FormatAsString(false);
-        public string ExportedTargetTotalMinutes => Gallifrey.Settings.AppSettings.GetTargetThisWeek().TotalMinutes.ToString();
-        public string VersionName => Gallifrey.VersionControl.UpdateInstalled ? "Click To Install New Version" : Gallifrey.VersionControl.VersionName;
-        public bool HasUpdate => Gallifrey.VersionControl.UpdateInstalled;
+        public string ExportedNumber => ModelHelpers.Gallifrey.JiraTimerCollection.GetNumberExported().Item1.ToString();
+        public string TotalTimerCount => ModelHelpers.Gallifrey.JiraTimerCollection.GetNumberExported().Item2.ToString();
+        public string UnexportedTime => ModelHelpers.Gallifrey.JiraTimerCollection.GetTotalUnexportedTime().FormatAsString(false);
+        public string ExportTarget => ModelHelpers.Gallifrey.Settings.AppSettings.GetTargetThisWeek().FormatAsString(false);
+        public string Exported => ModelHelpers.Gallifrey.JiraTimerCollection.GetTotalExportedTimeThisWeek(ModelHelpers.Gallifrey.Settings.AppSettings.StartOfWeek).FormatAsString(false);
+        public string ExportedTargetTotalMinutes => ModelHelpers.Gallifrey.Settings.AppSettings.GetTargetThisWeek().TotalMinutes.ToString();
+        public string VersionName => ModelHelpers.Gallifrey.VersionControl.UpdateInstalled ? "Click To Install New Version" : ModelHelpers.Gallifrey.VersionControl.VersionName;
+        public bool HasUpdate => ModelHelpers.Gallifrey.VersionControl.UpdateInstalled;
         public bool HasInactiveTime => !string.IsNullOrWhiteSpace(InactiveMinutes);
         public bool TimerRunning => !string.IsNullOrWhiteSpace(CurrentRunningTimerDescription);
         public bool HaveTimeToExport => !string.IsNullOrWhiteSpace(TimeToExportMessage);
@@ -49,15 +46,15 @@ namespace Gallifrey.UI.Modern.Models
         {
             get
             {
-                var unexportedTime = Gallifrey.JiraTimerCollection.GetTotalExportableTime();
-                var unexportedTimers = Gallifrey.JiraTimerCollection.GetStoppedUnexportedTimers();
+                var unexportedTime = ModelHelpers.Gallifrey.JiraTimerCollection.GetTotalExportableTime();
+                var unexportedTimers = ModelHelpers.Gallifrey.JiraTimerCollection.GetStoppedUnexportedTimers();
                 var unexportedCount = unexportedTimers.Count();
 
                 var excludingRunning = string.Empty;
-                var runningTimerId = Gallifrey.JiraTimerCollection.GetRunningTimerId();
+                var runningTimerId = ModelHelpers.Gallifrey.JiraTimerCollection.GetRunningTimerId();
                 if (runningTimerId.HasValue)
                 {
-                    var runningTimer = Gallifrey.JiraTimerCollection.GetTimer(runningTimerId.Value);
+                    var runningTimer = ModelHelpers.Gallifrey.JiraTimerCollection.GetTimer(runningTimerId.Value);
                     if (!runningTimer.FullyExported)
                     {
                         excludingRunning = "(Excluding 1 Running Timer)";
@@ -72,9 +69,9 @@ namespace Gallifrey.UI.Modern.Models
         {
             get
             {
-                var runningTimerId = Gallifrey.JiraTimerCollection.GetRunningTimerId();
+                var runningTimerId = ModelHelpers.Gallifrey.JiraTimerCollection.GetRunningTimerId();
                 if (!runningTimerId.HasValue) return string.Empty;
-                var runningTimer = Gallifrey.JiraTimerCollection.GetTimer(runningTimerId.Value);
+                var runningTimer = ModelHelpers.Gallifrey.JiraTimerCollection.GetTimer(runningTimerId.Value);
 
                 return $"Currently Running {runningTimer.JiraReference} ({runningTimer.JiraName})";
             }
@@ -84,8 +81,8 @@ namespace Gallifrey.UI.Modern.Models
         {
             get
             {
-                var maximum = Gallifrey.Settings.AppSettings.GetTargetThisWeek().TotalMinutes;
-                var value = Gallifrey.JiraTimerCollection.GetTotalExportedTimeThisWeek(Gallifrey.Settings.AppSettings.StartOfWeek).TotalMinutes;
+                var maximum = ModelHelpers.Gallifrey.Settings.AppSettings.GetTargetThisWeek().TotalMinutes;
+                var value = ModelHelpers.Gallifrey.JiraTimerCollection.GetTotalExportedTimeThisWeek(ModelHelpers.Gallifrey.Settings.AppSettings.StartOfWeek).TotalMinutes;
 
                 if (value > maximum)
                 {
@@ -114,11 +111,12 @@ namespace Gallifrey.UI.Modern.Models
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("CurrentRunningTimerDescription"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TimeToExportMessage"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HaveTimeToExport"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ExportedTotalMinutes"));
         }
 
-        public void RefreshModel()
+        private void RefreshModel()
         {
-            var validTimerDates = Gallifrey.JiraTimerCollection.GetValidTimerDates().ToList();
+            var validTimerDates = ModelHelpers.Gallifrey.JiraTimerCollection.GetValidTimerDates().ToList();
 
             foreach (var timerDate in validTimerDates)
             {
@@ -126,11 +124,11 @@ namespace Gallifrey.UI.Modern.Models
 
                 if (dateModel == null)
                 {
-                    dateModel = new TimerDateModel(timerDate, Gallifrey.JiraTimerCollection);
+                    dateModel = new TimerDateModel(timerDate, ModelHelpers.Gallifrey.JiraTimerCollection);
                     TimerDates.Add(dateModel);
                 }
 
-                var dateTimers = Gallifrey.JiraTimerCollection.GetTimersForADate(timerDate).ToList();
+                var dateTimers = ModelHelpers.Gallifrey.JiraTimerCollection.GetTimersForADate(timerDate).ToList();
 
                 foreach (var timer in dateTimers)
                 {
@@ -174,31 +172,7 @@ namespace Gallifrey.UI.Modern.Models
             runningWatcherElapsed(this, null);
         }
 
-        public Guid? GetSelectedTimerId()
-        {
-            foreach (var timerDateModel in TimerDates.Where(x => x.IsSelected))
-            {
-                foreach (var timerModel in timerDateModel.Timers.Where(timerModel => timerModel.IsSelected))
-                {
-                    return timerModel.JiraTimer.UniqueId;
-                }
-            }
-
-            return null;
-        }
-
-        public DateTime? GetSelectedDateTab()
-        {
-            var selectedDate = TimerDates.FirstOrDefault(x => x.IsSelected);
-            return selectedDate?.TimerDate;
-        }
-
-        public bool HaveTimerToday()
-        {
-            return TimerDates.Any(x => x.TimerDate.Date == DateTime.Now.Date);
-        }
-
-        public void SetSelectedTimer(Guid value)
+        private void SetSelectedTimer(Guid value)
         {
             foreach (var timerDateModel in TimerDates)
             {
@@ -220,20 +194,20 @@ namespace Gallifrey.UI.Modern.Models
             }
         }
 
-        public void SelectRunningTimer()
+        private void SelectRunningTimer()
         {
-            var runningTimer = Gallifrey.JiraTimerCollection.GetRunningTimerId();
+            var runningTimer = ModelHelpers.Gallifrey.JiraTimerCollection.GetRunningTimerId();
             if (runningTimer.HasValue)
             {
                 SetSelectedTimer(runningTimer.Value);
             }
             else
             {
-                var dates = Gallifrey.JiraTimerCollection.GetValidTimerDates();
+                var dates = ModelHelpers.Gallifrey.JiraTimerCollection.GetValidTimerDates();
                 if (dates.Any())
                 {
                     var date = dates.Max();
-                    var topTimer = Gallifrey.JiraTimerCollection.GetTimersForADate(date).OrderBy(x => x.JiraReference, new JiraReferenceComparer()).FirstOrDefault();
+                    var topTimer = ModelHelpers.Gallifrey.JiraTimerCollection.GetTimersForADate(date).OrderBy(x => x.JiraReference, new JiraReferenceComparer()).FirstOrDefault();
                     if (topTimer != null)
                     {
                         SetSelectedTimer(topTimer.UniqueId);
@@ -264,42 +238,17 @@ namespace Gallifrey.UI.Modern.Models
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasInactiveTime"));
         }
 
-        public void CloseAllFlyouts()
+        public Guid? GetSelectedTimerId()
         {
-            foreach (Flyout item in flyoutsControl.Items)
+            foreach (var timerDateModel in TimerDates.Where(x => x.IsSelected))
             {
-                item.IsOpen = false;
-            }
-        }
-
-        public Task<Flyout> OpenFlyout(Flyout flyout)
-        {
-            var actualType = flyout.GetType();
-            var taskCompletion = new TaskCompletionSource<Flyout>();
-
-            //Prevent 2 identical flyouts from opening
-            if (flyoutsControl.Items.Cast<Flyout>().Any(item => item.GetType() == actualType))
-            {
-                taskCompletion.SetResult(flyout);
-            }
-            else
-            {
-                flyoutsControl.Items.Add(flyout);
-
-                // when the flyout is closed, remove it from the hosting FlyoutsControl
-                RoutedEventHandler closingFinishedHandler = null;
-                closingFinishedHandler = (o, args) =>
+                foreach (var timerModel in timerDateModel.Timers.Where(timerModel => timerModel.IsSelected))
                 {
-                    flyout.ClosingFinished -= closingFinishedHandler;
-                    flyoutsControl.Items.Remove(flyout);
-                    taskCompletion.SetResult(flyout);
-                };
-
-                flyout.ClosingFinished += closingFinishedHandler;
-                flyout.IsOpen = true;
+                    return timerModel.JiraTimer.UniqueId;
+                }
             }
 
-            return taskCompletion.Task;
+            return null;
         }
     }
 }
