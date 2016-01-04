@@ -11,6 +11,7 @@ using Gallifrey.Exceptions;
 using Gallifrey.Exceptions.IdleTimers;
 using Gallifrey.IdleTimers;
 using Gallifrey.InactiveMonitor;
+using Gallifrey.Jira.Model;
 using Gallifrey.JiraIntegration;
 using Gallifrey.JiraTimers;
 using Gallifrey.Serialization;
@@ -54,6 +55,8 @@ namespace Gallifrey
         public event EventHandler DailyTrackingEvent;
         internal ActivityChecker ActivityChecker;
         private Guid? runningTimerWhenIdle;
+        private object singleThreadLock = new object();
+        private DateTime lastMissingTimerCheck = DateTime.MinValue;
 
         public Backend(InstanceType instanceType, AppType appType)
         {
@@ -133,37 +136,87 @@ namespace Gallifrey
 
         private void JiraExportHearbeatHearbeatOnElapsed(object sender, ElapsedEventArgs e)
         {
-            try
+            lock (singleThreadLock)
             {
-                var unexportedTimers = jiraTimerCollection.GetAllUnexportedTimers().ToList();
+                var issues = new List<Issue>();
 
-                var jiraSearches = new Dictionary<string, List<Guid>>();
-
-                foreach (var unexportedTimer in unexportedTimers)
+                try
                 {
-                    if (!unexportedTimer.LastJiraTimeCheck.HasValue || unexportedTimer.LastJiraTimeCheck.Value < DateTime.UtcNow.AddMinutes(-10))
+                    if (lastMissingTimerCheck < DateTime.UtcNow.AddHours(2))
                     {
-                        if (jiraSearches.ContainsKey(unexportedTimer.JiraReference))
+                        var keepTimersForDays = settingsCollection.AppSettings.KeepTimersForDays;
+                        if (keepTimersForDays > 0) keepTimersForDays = keepTimersForDays * -1;
+                        var workingDate = DateTime.Now.AddDays(keepTimersForDays + 1);
+
+                        while (workingDate.Date <= DateTime.Now.Date)
                         {
-                            jiraSearches[unexportedTimer.JiraReference].Add(unexportedTimer.UniqueId);
+                            var jirasExportedTo = JiraConnection.GetJiraIssuesFromJQL($"worklogAuthor = currentUser() and worklogDate = {workingDate.ToString("yyyy-MM-dd")}");
+                            var timersOnDate = jiraTimerCollection.GetTimersForADate(workingDate.Date);
+
+                            foreach (var issue in jirasExportedTo)
+                            {
+                                if (!timersOnDate.Any(x => x.JiraReference == issue.key))
+                                {
+                                    var issueWithWorklogs = issues.FirstOrDefault(x => x.key == issue.key);
+
+                                    if (issueWithWorklogs == null)
+                                    {
+                                        issueWithWorklogs = jiraConnection.GetJiraIssue(issue.key, true);
+                                        issues.Add(issueWithWorklogs);
+                                    }
+
+                                    var timerReference = jiraTimerCollection.AddTimer(issueWithWorklogs, workingDate.Date, new TimeSpan(), false);
+                                    jiraTimerCollection.RefreshFromJira(timerReference, issueWithWorklogs, jiraConnection.CurrentUser);
+                                }
+                            }
+
+                            workingDate = workingDate.AddDays(1);
                         }
-                        else
+
+                        lastMissingTimerCheck = DateTime.UtcNow;
+                    }
+                }
+                catch { /*Surpress the error*/ }
+
+                try
+                {
+                    var unexportedTimers = jiraTimerCollection.GetAllUnexportedTimers().ToList();
+
+                    var jiraSearches = new Dictionary<string, List<Guid>>();
+
+                    foreach (var unexportedTimer in unexportedTimers)
+                    {
+                        if (!unexportedTimer.LastJiraTimeCheck.HasValue || unexportedTimer.LastJiraTimeCheck.Value < DateTime.UtcNow.AddMinutes(-10))
                         {
-                            jiraSearches.Add(unexportedTimer.JiraReference, new List<Guid> { unexportedTimer.UniqueId });
+                            if (jiraSearches.ContainsKey(unexportedTimer.JiraReference))
+                            {
+                                jiraSearches[unexportedTimer.JiraReference].Add(unexportedTimer.UniqueId);
+                            }
+                            else
+                            {
+                                jiraSearches.Add(unexportedTimer.JiraReference, new List<Guid> { unexportedTimer.UniqueId });
+                            }
+                        }
+                    }
+
+                    foreach (var jiraSearch in jiraSearches)
+                    {
+                        var issueWithWorklogs = issues.FirstOrDefault(x => x.key == jiraSearch.Key);
+
+                        if (issueWithWorklogs == null)
+                        {
+                            issueWithWorklogs = jiraConnection.GetJiraIssue(jiraSearch.Key, true);
+                            issues.Add(issueWithWorklogs);
+                        }
+
+                        foreach (var uniqueTimer in jiraSearch.Value)
+                        {
+                            jiraTimerCollection.RefreshFromJira(uniqueTimer, issueWithWorklogs, jiraConnection.CurrentUser);
                         }
                     }
                 }
-
-                foreach (var jiraSearch in jiraSearches)
-                {
-                    var issueWithWorklogs = jiraConnection.GetJiraIssue(jiraSearch.Key, true);
-                    foreach (var uniqueTimer in jiraSearch.Value)
-                    {
-                        jiraTimerCollection.RefreshFromJira(uniqueTimer, issueWithWorklogs, jiraConnection.CurrentUser);
-                    }
-                }
+                catch { /*Surpress the error*/ }
             }
-            catch { /*Surpress the error*/ }
         }
 
         public void Initialise()
@@ -175,8 +228,6 @@ namespace Gallifrey
             }
 
             jiraConnection.ReConnect(settingsCollection.JiraConnectionSettings, settingsCollection.ExportSettings);
-
-            CleanUpAndTrackingHearbeatOnElapsed(this, null);
         }
 
         public void Close()

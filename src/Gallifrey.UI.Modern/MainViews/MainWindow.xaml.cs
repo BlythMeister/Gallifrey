@@ -4,6 +4,7 @@ using System.Timers;
 using System.Windows;
 using System.Xml.Linq;
 using Exceptionless;
+using Gallifrey.AppTracking;
 using Gallifrey.Exceptions;
 using Gallifrey.Exceptions.IdleTimers;
 using Gallifrey.Exceptions.JiraIntegration;
@@ -22,8 +23,9 @@ namespace Gallifrey.UI.Modern.MainViews
 {
     public partial class MainWindow
     {
-        private ModelHelpers modelHelpers;
+        private readonly ModelHelpers modelHelpers;
         private MainViewModel ViewModel => (MainViewModel)DataContext;
+        private bool machineLocked;
 
         public MainWindow(InstanceType instance, AppType appType)
         {
@@ -103,11 +105,13 @@ namespace Gallifrey.UI.Modern.MainViews
 
             if (multipleInstances)
             {
+                modelHelpers.Gallifrey.TrackEvent(TrackingType.MultipleInstancesRunning);
                 await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Multiple Instances", "You Can Only Have One Instance Of Gallifrey Running At A Time\nPlease Close The Other Instance");
                 modelHelpers.CloseApp();
             }
             else if (showSettings)
             {
+                modelHelpers.Gallifrey.TrackEvent(TrackingType.SettingsMissing);
                 await modelHelpers.OpenFlyout(new Flyouts.Settings(modelHelpers));
                 if (!modelHelpers.Gallifrey.JiraConnection.IsConnected)
                 {
@@ -202,6 +206,7 @@ namespace Gallifrey.UI.Modern.MainViews
                 case SessionSwitchReason.ConsoleDisconnect:
 
                     modelHelpers.Gallifrey.StartIdleTimer();
+                    machineLocked = true;
                     break;
 
                 case SessionSwitchReason.SessionUnlock:
@@ -229,6 +234,7 @@ namespace Gallifrey.UI.Modern.MainViews
                         }
                     }
                     catch (NoIdleTimerRunningException) { }
+                    machineLocked = false;
                     break;
             }
         }
@@ -242,7 +248,10 @@ namespace Gallifrey.UI.Modern.MainViews
         {
             Application.Current.Dispatcher.Invoke(() =>
             {
-                PerformUpdate(false, false);
+                if (!machineLocked)
+                {
+                    PerformUpdate(false, false);
+                }
             });
         }
 
@@ -255,6 +264,7 @@ namespace Gallifrey.UI.Modern.MainViews
                 UpdateResult updateResult;
                 if (manualUpdateCheck)
                 {
+                    modelHelpers.Gallifrey.TrackEvent(TrackingType.ManualUpdateCheck);
                     var controller = await DialogCoordinator.Instance.ShowProgressAsync(modelHelpers.DialogContext, "Please Wait", "Checking For Updates");
 
                     updateResult = await modelHelpers.Gallifrey.VersionControl.CheckForUpdates(true);
@@ -274,6 +284,7 @@ namespace Gallifrey.UI.Modern.MainViews
                         if (messageResult == MessageDialogResult.Affirmative)
                         {
                             modelHelpers.CloseApp(true);
+                            modelHelpers.Gallifrey.TrackEvent(TrackingType.ManualUpdateRestart);
                         }
                     }
                     else
@@ -281,6 +292,7 @@ namespace Gallifrey.UI.Modern.MainViews
                         if (modelHelpers.Gallifrey.Settings.AppSettings.AutoUpdate)
                         {
                             modelHelpers.CloseApp(true);
+                            modelHelpers.Gallifrey.TrackEvent(TrackingType.AutoUpdateInstalled);
                         }
                     }
                 }

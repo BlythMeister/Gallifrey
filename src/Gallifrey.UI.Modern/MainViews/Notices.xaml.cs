@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Windows;
 using System.Windows.Input;
+using Gallifrey.AppTracking;
 using Gallifrey.UI.Modern.Flyouts;
 using Gallifrey.UI.Modern.Helpers;
 using Gallifrey.UI.Modern.Models;
@@ -23,6 +24,7 @@ namespace Gallifrey.UI.Modern.MainViews
         private async void UnExportedClick(object sender, MouseButtonEventArgs e)
         {
             unexportedMutex.WaitOne();
+            ModelHelpers.Gallifrey.TrackEvent(TrackingType.ExportAll);
             var timers = ModelHelpers.Gallifrey.JiraTimerCollection.GetStoppedUnexportedTimers().ToList();
 
             if (timers.Any())
@@ -53,13 +55,14 @@ namespace Gallifrey.UI.Modern.MainViews
         {
             if (ModelHelpers.Gallifrey.VersionControl.UpdateInstalled)
             {
-                System.Windows.Forms.Application.Restart();
-                Application.Current.Shutdown();
+                ModelHelpers.CloseApp(true);
+                ModelHelpers.Gallifrey.TrackEvent(TrackingType.ManualUpdateRestart);
             }
         }
 
         private void GoToRunningTimer(object sender, MouseButtonEventArgs e)
         {
+            ModelHelpers.Gallifrey.TrackEvent(TrackingType.ShowRunningTimer);
             ModelHelpers.SelectRunningTimer();
         }
     }

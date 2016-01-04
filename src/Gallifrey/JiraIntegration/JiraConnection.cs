@@ -19,6 +19,7 @@ namespace Gallifrey.JiraIntegration
         IEnumerable<string> GetJiraFilters();
         IEnumerable<Issue> GetJiraIssuesFromFilter(string filterName);
         IEnumerable<Issue> GetJiraIssuesFromSearchText(string searchText);
+        IEnumerable<Issue> GetJiraIssuesFromJQL(string jqlText);
         void LogTime(string jiraRef, DateTime exportTimeStamp, TimeSpan exportTime, WorkLogStrategy strategy, string comment = "", TimeSpan? remainingTime = null);
         IEnumerable<Issue> GetJiraCurrentUserOpenIssues();
         IEnumerable<JiraProject> GetJiraProjects();
@@ -72,16 +73,30 @@ namespace Gallifrey.JiraIntegration
 
                 try
                 {
+                    var url = jiraConnectionSettings.JiraUrl.Replace("/secure/Dashboard.jspa", "");
+
                     if (useRestApi)
                     {
-                        jira = new JiraRestClient(jiraConnectionSettings.JiraUrl.Replace("/secure/Dashboard.jspa", ""), jiraConnectionSettings.JiraUsername, jiraConnectionSettings.JiraPassword);
+                        jira = new JiraRestClient(url, jiraConnectionSettings.JiraUsername, jiraConnectionSettings.JiraPassword);
                     }
                     else
                     {
-                        jira = new JiraSoapClient(jiraConnectionSettings.JiraUrl.Replace("/secure/Dashboard.jspa", ""), jiraConnectionSettings.JiraUsername, jiraConnectionSettings.JiraPassword);
+                        jira = new JiraSoapClient(url, jiraConnectionSettings.JiraUsername, jiraConnectionSettings.JiraPassword);
                     }
 
                     CurrentUser = jira.GetCurrentUser();
+
+                    TrackingType trackingType;
+                    if (useRestApi)
+                    {
+                        trackingType = url.Contains(".atlassian.net") ? TrackingType.JiraConnectCloudRest : TrackingType.JiraConnectSelfhostRest;
+                    }
+                    else
+                    {
+                        trackingType = url.Contains(".atlassian.net") ? TrackingType.JiraConnectCloudSoap : TrackingType.JiraConnectSelfhostSoap;
+                    }
+
+                    trackUsage.TrackAppUsage(trackingType);
                 }
                 catch (Exception ex)
                 {
@@ -174,6 +189,21 @@ namespace Gallifrey.JiraIntegration
                 CheckAndConnectJira();
                 trackUsage.TrackAppUsage(TrackingType.SearchText);
                 var issues = jira.GetIssuesFromJql(GetJql(searchText));
+                recentJiraCollection.AddRecentJiras(issues);
+                return issues.OrderBy(x => x.key, new JiraReferenceComparer());
+            }
+            catch (Exception ex)
+            {
+                throw new NoResultsFoundException("Error loading jiras from search text", ex);
+            }
+        }
+
+        public IEnumerable<Issue> GetJiraIssuesFromJQL(string jqlText)
+        {
+            try
+            {
+                CheckAndConnectJira();
+                var issues = jira.GetIssuesFromJql(jqlText);
                 recentJiraCollection.AddRecentJiras(issues);
                 return issues.OrderBy(x => x.key, new JiraReferenceComparer());
             }

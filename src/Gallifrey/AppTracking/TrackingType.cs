@@ -17,6 +17,17 @@
         SearchLoad,
         SearchFilter,
         SearchText,
-        InformationShown
+        InformationShown,
+        JiraConnectCloudRest,
+        JiraConnectCloudSoap,
+        JiraConnectSelfhostRest,
+        JiraConnectSelfhostSoap,
+        AutoUpdateInstalled,
+        ManualUpdateRestart,
+        ManualUpdateCheck,
+        ExportAll,
+        ShowRunningTimer,
+        MultipleInstancesRunning,
+        SettingsMissing
     }
 }

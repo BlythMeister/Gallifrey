@@ -68,7 +68,7 @@ namespace Gallifrey.Versions
 
             VersionName = string.Format("v{0}{1}", VersionName, betaText);
 
-            if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("VersionName")); 
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("VersionName")); 
         }
 
         public bool IsAutomatedDeploy

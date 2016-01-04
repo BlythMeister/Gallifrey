@@ -313,8 +313,11 @@ namespace Gallifrey.JiraTimers
         public void RefreshFromJira(Guid uniqueId, Issue jiraIssue, User currentUser)
         {
             var timer = GetTimer(uniqueId);
-            timer.RefreshFromJira(jiraIssue, currentUser);
-            SaveTimers();
+            if (timer != null)
+            {
+                timer.RefreshFromJira(jiraIssue, currentUser);
+                SaveTimers();
+            }
         }
     }
 }

@@ -31,11 +31,14 @@ namespace Gallifrey.UI.Modern.Models
             Timers.Add(timerModel);
             Timers = new ObservableCollection<TimerModel>(Timers.OrderBy(x => x.JiraTimer.JiraReference, new JiraReferenceComparer()));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Timers"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Header"));
         }
 
         public void RemoveTimerModel(TimerModel timerModel)
         {
             Timers.Remove(timerModel);
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Timers"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Header"));
         }
 
         private void TimerModelOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
