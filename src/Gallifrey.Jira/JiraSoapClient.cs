@@ -75,8 +75,8 @@ namespace Gallifrey.Jira
                     },
                     worklog = new WorkLogs
                     {
-                        maxResults = worklogs.Count(),
-                        total = worklogs.Count(),
+                        maxResults = worklogs.Count,
+                        total = worklogs.Count,
                         worklogs = worklogs
                     },
                     summary = issue.Summary,
@@ -159,11 +159,11 @@ namespace Gallifrey.Jira
 
             var issue = client.GetIssue(issueRef);
 
-            var worklog = new Worklog(string.Format("{0}h {1}m", timeSpent.Hours, timeSpent.Minutes), logDate, comment);
+            var worklog = new Worklog($"{timeSpent.Hours}h {timeSpent.Minutes}m", logDate, comment);
             string remaining = null;
             if (remainingTime.HasValue)
             {
-                remaining = string.Format("{0}h {1}m", remainingTime.Value.Hours, remainingTime.Value.Minutes);
+                remaining = $"{remainingTime.Value.Hours}h {remainingTime.Value.Minutes}m";
             }
 
             WorklogStrategy strategy;

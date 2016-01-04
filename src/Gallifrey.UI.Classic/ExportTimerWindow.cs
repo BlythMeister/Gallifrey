@@ -30,7 +30,7 @@ namespace Gallifrey.UI.Classic
             }
             catch (NoResultsFoundException)
             {
-                MessageBox.Show(string.Format("Unable To Locate Jira {0}!\nCannot Export Time\nPlease Verify/Correct Jira Reference", timerToShow.JiraReference), "Unable To Locate Jira", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Unable To Locate Jira {timerToShow.JiraReference}!\nCannot Export Time\nPlease Verify/Correct Jira Reference", "Unable To Locate Jira", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 DisplayForm = false;
             }
 
@@ -152,7 +152,7 @@ namespace Gallifrey.UI.Classic
 
             if (timerToShow.TimeToExport < exportTimespan)
             {
-                MessageBox.Show(string.Format("You Cannot Export More Than The Timer States Un-Exported\nThis Value Is {0}!", timerToShow.TimeToExport.ToString(@"hh\:mm")), "Invalid Export", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"You Cannot Export More Than The Timer States Un-Exported\nThis Value Is {timerToShow.TimeToExport.ToString(@"hh\:mm")}!", "Invalid Export", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
 

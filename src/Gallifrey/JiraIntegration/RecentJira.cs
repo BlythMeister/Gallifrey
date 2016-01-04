@@ -45,11 +45,11 @@ namespace Gallifrey.JiraIntegration
         {
             if (string.IsNullOrWhiteSpace(JiraParentReference))
             {
-                return string.Format("{0} ({1})", JiraReference, JiraName);    
+                return $"{JiraReference} ({JiraName})";    
             }
             else
             {
-                return string.Format("{0} ({1}) - Parent [ {2} - {3} ]", JiraReference, JiraName, JiraParentReference, JiraParentName);
+                return $"{JiraReference} ({JiraName}) - Parent [ {JiraParentReference} - {JiraParentName} ]";
             }
         }
 

@@ -147,7 +147,7 @@ namespace Gallifrey.JiraIntegration
             catch (Exception ex)
             {
                 recentJiraCollection.Remove(jiraRef);
-                throw new NoResultsFoundException(string.Format("Unable to locate Jira {0}", jiraRef), ex);
+                throw new NoResultsFoundException($"Unable to locate Jira {jiraRef}", ex);
             }
         }
 
@@ -294,7 +294,7 @@ namespace Gallifrey.JiraIntegration
             if (string.IsNullOrWhiteSpace(comment)) comment = exportSettings.EmptyExportComment;
             if (!string.IsNullOrWhiteSpace(exportSettings.ExportCommentPrefix))
             {
-                comment = string.Format("{0}: {1}", exportSettings.ExportCommentPrefix, comment);
+                comment = $"{exportSettings.ExportCommentPrefix}: {comment}";
             }
             
             var erroredOnWorkLogAttempt1 = false;
@@ -399,7 +399,7 @@ namespace Gallifrey.JiraIntegration
                 var foundProject = false;
                 if (projects.Any(project => project.key == keyword))
                 {
-                    jql = string.Format("project = \"{0}\"", keyword);
+                    jql = $"project = \"{keyword}\"";
                     foundProject = true;
                 }
 
@@ -415,14 +415,14 @@ namespace Gallifrey.JiraIntegration
                 {
                     jql += " AND ";
                 }
-                jql += string.Format(" text ~ \"{0}\"", searchTerm);
+                jql += $" text ~ \"{searchTerm}\"";
             }
 
             try
             {
                 if ((jira.GetIssue(searchText) != null))
                 {
-                    jql = string.Format("key = \"{0}\" OR ({1})", searchText, jql);
+                    jql = $"key = \"{searchText}\" OR ({jql})";
                 }
 
             }

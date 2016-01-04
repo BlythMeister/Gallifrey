@@ -87,6 +87,13 @@ namespace Gallifrey.UI.Modern.Flyouts
         {
             var selected = DataModel.LockedTimers.Where(x => x.IsSelected).ToList();
 
+            if (selected.Count == 0)
+            {
+                await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Nothing Selected", "You Have Not Selected Any Locked Time To Delete");
+                Focus();
+                return;
+            }
+
             var selectedTime = new TimeSpan();
             selectedTime = selected.Aggregate(selectedTime, (current, lockedTimerModel) => current.Add(lockedTimerModel.IdleTime));
 

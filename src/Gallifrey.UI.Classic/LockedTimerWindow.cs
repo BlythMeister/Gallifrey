@@ -76,7 +76,7 @@ namespace Gallifrey.UI.Classic
                 lblRunning.Text = "N/A";
                 lblRunning.Enabled = false;
             }
-            else if (runningTimerId.HasValue)
+            else
             {
                 lblRunning.Text = gallifrey.JiraTimerCollection.GetTimer(runningTimerId.Value).ToString();
                 lblRunning.Enabled = true;
@@ -185,7 +185,7 @@ namespace Gallifrey.UI.Classic
         {
             foreach (IdleTimer idleTimer in lstLockedTimers.SelectedItems)
             {
-                if (MessageBox.Show(string.Format("Are You Sure You Want To Remove Idle Timer For\n{0} Between {1} & {2}?", idleTimer.DateStarted.ToString("ddd, dd MMM"), idleTimer.DateStarted.ToString("HH:mm:ss"), idleTimer.DateFinished.Value.ToString("HH:mm:ss")), "Are You Sure", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                if (MessageBox.Show($"Are You Sure You Want To Remove Idle Timer For\n{idleTimer.DateStarted.ToString("ddd, dd MMM")} Between {idleTimer.DateStarted.ToString("HH:mm:ss")} & {idleTimer.DateFinished.Value.ToString("HH:mm:ss")}?", "Are You Sure", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
                     gallifrey.IdleTimerCollection.RemoveTimer(idleTimer.UniqueId);
                 }

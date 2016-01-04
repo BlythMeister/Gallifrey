@@ -11,7 +11,7 @@ namespace Gallifrey.UI.Classic
     public partial class SearchWindow : Form
     {
         private readonly IBackend gallifrey;
-        private bool fromAddWindow = false;
+        private bool fromAddWindow;
         public Guid? NewTimerId { get; private set; }
         public string JiraReference { get; private set; }
 
@@ -189,11 +189,11 @@ namespace Gallifrey.UI.Classic
             {
                 if (string.IsNullOrWhiteSpace(ParentJiraRef))
                 {
-                    return string.Format("[ {0} ] - {1}", JiraRef, JiraDesc);    
+                    return $"[ {JiraRef} ] - {JiraDesc}";    
                 }
                 else
                 {
-                    return string.Format("[ {0} ] - {1} - [ {2} - {3} ]", JiraRef, JiraDesc, ParentJiraRef, ParentJiraDesc);
+                    return $"[ {JiraRef} ] - {JiraDesc} - [ {ParentJiraRef} - {ParentJiraDesc} ]";
                 }                
             }
         }

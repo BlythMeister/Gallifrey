@@ -54,7 +54,7 @@ namespace Gallifrey.InactiveMonitor
                     if (noTimerRunning.IsRunning)
                     {
                         noTimerRunning.Stop();
-                        if (NoActivityEvent != null) NoActivityEvent(this, 0);
+                        NoActivityEvent?.Invoke(this, 0);
                     }
 
                     noTimerRunning.Reset();
@@ -67,7 +67,7 @@ namespace Gallifrey.InactiveMonitor
                     {
                         eventsSent++;
                         noTimerRunning.Reset();
-                        if (NoActivityEvent != null) NoActivityEvent(this, eventsSent * appSettings.AlertTimeMilliseconds);
+                        NoActivityEvent?.Invoke(this, eventsSent * appSettings.AlertTimeMilliseconds);
                     }
                 }
             }

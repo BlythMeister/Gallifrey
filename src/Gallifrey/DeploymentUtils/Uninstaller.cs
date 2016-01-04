@@ -75,7 +75,7 @@ namespace Gallifrey.DeploymentUtils
             byte[] pk = asi.ApplicationId.PublicKeyToken;
             StringBuilder pkt = new StringBuilder();
             for (int i = 0; i < pk.GetLength(0); i++)
-                pkt.Append(String.Format("{0:x}", pk[i]));
+                pkt.Append($"{pk[i]:x}");
             return pkt.ToString();
         }
 

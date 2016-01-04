@@ -36,6 +36,10 @@ namespace Gallifrey.Versions
 
         private DateTime lastUpdateCheck;
 
+        public bool IsAutomatedDeploy => ApplicationDeployment.IsNetworkDeployed;
+        public Version DeployedVersion => UpdateInstalled ? ApplicationDeployment.CurrentDeployment.UpdatedVersion : ApplicationDeployment.CurrentDeployment.CurrentVersion;
+        public bool IsFirstRun => ApplicationDeployment.CurrentDeployment.IsFirstRun;
+
         public VersionControl(InstanceType instanceType, AppType appType, ITrackUsage trackUsage)
         {
             this.trackUsage = trackUsage;
@@ -45,10 +49,10 @@ namespace Gallifrey.Versions
 
             SetVersionName();
 
-            var instance = InstanceType == InstanceType.Stable ? "" : string.Format(" ({0})", InstanceType);
+            var instance = InstanceType == InstanceType.Stable ? "" : $" ({InstanceType})";
             var appName = AppType == AppType.Classic ? "Gallifrey Classic" : "Gallifrey";
 
-            AppName = string.Format("{0}{1}", appName, instance);
+            AppName = $"{appName}{instance}";
         }
 
         private void SetVersionName()
@@ -59,33 +63,18 @@ namespace Gallifrey.Versions
                 VersionName = VersionName.Substring(0, VersionName.LastIndexOf("."));
             }
 
-            var betaText = InstanceType == InstanceType.Stable ? "" : string.Format(" ({0})", InstanceType);
+            var betaText = InstanceType == InstanceType.Stable ? "" : $" ({InstanceType})";
 
             if (!IsAutomatedDeploy)
             {
                 betaText = " (Debug)";
             }
 
-            VersionName = string.Format("v{0}{1}", VersionName, betaText);
+            VersionName = $"v{VersionName}{betaText}";
 
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("VersionName")); 
         }
-
-        public bool IsAutomatedDeploy
-        {
-            get { return ApplicationDeployment.IsNetworkDeployed; }
-        }
-
-        public Version DeployedVersion
-        {
-            get { return UpdateInstalled ? ApplicationDeployment.CurrentDeployment.UpdatedVersion : ApplicationDeployment.CurrentDeployment.CurrentVersion; }
-        }
-
-        public bool IsFirstRun
-        {
-            get { return ApplicationDeployment.CurrentDeployment.IsFirstRun; }
-        }
-
+        
         public Task<UpdateResult> CheckForUpdates(bool manualCheck = false)
         {
             if (!IsAutomatedDeploy)

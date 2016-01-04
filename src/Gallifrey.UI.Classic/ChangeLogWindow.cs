@@ -13,18 +13,18 @@ namespace Gallifrey.UI.Classic
         {
             InitializeComponent();
             
-            lblCurrentVersion.Text = string.Format("Current Version: {0}", gallifrey.VersionControl.VersionName);
+            lblCurrentVersion.Text = $"Current Version: {gallifrey.VersionControl.VersionName}";
 
             foreach (var changeLogDetail in changeLog)
             {
                 txtChangeLog.SelectionFont = new Font(txtChangeLog.SelectionFont.FontFamily, 14, FontStyle.Bold);
                 if (string.IsNullOrWhiteSpace(changeLogDetail.Name))
                 {
-                    txtChangeLog.AppendText(string.Format("Version: {0}\n", changeLogDetail.Version));    
+                    txtChangeLog.AppendText($"Version: {changeLogDetail.Version}\n");    
                 }
                 else
                 {
-                    txtChangeLog.AppendText(string.Format("Version: {0} ({1})\n", changeLogDetail.Version, changeLogDetail.Name));
+                    txtChangeLog.AppendText($"Version: {changeLogDetail.Version} ({changeLogDetail.Name})\n");
                 }
                 
                 if (changeLogDetail.Features.Any())
@@ -34,7 +34,7 @@ namespace Gallifrey.UI.Classic
                     txtChangeLog.SelectionFont = new Font(txtChangeLog.SelectionFont.FontFamily, 10, FontStyle.Regular);
                     foreach (var feature in changeLogDetail.Features)
                     {
-                        txtChangeLog.AppendText(string.Format("  => {0}\n", feature));
+                        txtChangeLog.AppendText($"  => {feature}\n");
                     }
                 }
 
@@ -45,7 +45,7 @@ namespace Gallifrey.UI.Classic
                     txtChangeLog.SelectionFont = new Font(txtChangeLog.SelectionFont.FontFamily, 10, FontStyle.Regular);
                     foreach (var feature in changeLogDetail.Bugs)
                     {
-                        txtChangeLog.AppendText(string.Format("  => {0}\n", feature));
+                        txtChangeLog.AppendText($"  => {feature}\n");
                     }
                 }
 
@@ -56,7 +56,7 @@ namespace Gallifrey.UI.Classic
                     txtChangeLog.SelectionFont = new Font(txtChangeLog.SelectionFont.FontFamily, 10, FontStyle.Regular);
                     foreach (var feature in changeLogDetail.Others)
                     {
-                        txtChangeLog.AppendText(string.Format("  => {0}\n", feature));
+                        txtChangeLog.AppendText($"  => {feature}\n");
                     }
                 }
 

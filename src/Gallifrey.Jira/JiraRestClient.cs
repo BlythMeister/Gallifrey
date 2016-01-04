@@ -28,7 +28,7 @@ namespace Gallifrey.Jira
         private RestRequest CreateRequest(Method method, string path)
         {
             var request = new RestRequest { Method = method, Resource = path, RequestFormat = DataFormat.Json };
-            request.AddHeader("Authorization", "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes(string.Format("{0}:{1}", username, password))));
+            request.AddHeader("Authorization", "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes($"{username}:{password}")));
             return request;
         }
 
@@ -44,11 +44,11 @@ namespace Gallifrey.Jira
 
                     if (errorMessages.errorMessages.Any())
                     {
-                        throw new JiraClientException(string.Format("JIRA returned wrong status: {0}. Message: {1}", response.StatusDescription, errorMessages.errorMessages[0]));
+                        throw new JiraClientException($"JIRA returned wrong status: {response.StatusDescription}. Message: {errorMessages.errorMessages[0]}");
                     }
                     else
                     {
-                        throw new JiraClientException(string.Format("JIRA returned wrong status: {0}", response.StatusDescription));
+                        throw new JiraClientException($"JIRA returned wrong status: {response.StatusDescription}");
                     }
                 }
                 catch (JiraClientException)
@@ -57,12 +57,12 @@ namespace Gallifrey.Jira
                 }
                 catch (System.Exception ex)
                 {
-                    throw new JiraClientException(string.Format("JIRA returned wrong status: {0}", response.StatusDescription), ex);
+                    throw new JiraClientException($"JIRA returned wrong status: {response.StatusDescription}", ex);
                 }
             }
         }
 
-        private IRestResponse ExectuteRequest(Method method, HttpStatusCode expectedStatus, string path, Dictionary<string, object> data = null)
+        private IRestResponse ExecuteRequest(Method method, HttpStatusCode expectedStatus, string path, Dictionary<string, object> data = null)
         {
             var request = CreateRequest(method, path);
             if (data != null)
@@ -78,26 +78,26 @@ namespace Gallifrey.Jira
             return response;
         }
 
-        private T ExectuteRequest<T>(HttpStatusCode expectedStatus, string path, Dictionary<string, object> data = null, Func<string, T> customDeserialize = null) where T : class
+        private T ExecuteRequest<T>(HttpStatusCode expectedStatus, string path, Dictionary<string, object> data = null, Func<string, T> customDeserialize = null) where T : class
         {
             if (customDeserialize == null)
             {
                 customDeserialize = JsonConvert.DeserializeObject<T>;
             }
 
-            var response = ExectuteRequest(Method.GET, expectedStatus, path, data);
+            var response = ExecuteRequest(Method.GET, expectedStatus, path, data);
 
             return customDeserialize(response.Content);
         }
 
         public User GetCurrentUser()
         {
-            return ExectuteRequest<User>(HttpStatusCode.OK, "myself");
+            return ExecuteRequest<User>(HttpStatusCode.OK, "myself");
         }
 
         public Issue GetIssue(string issueRef)
         {
-            return ExectuteRequest<Issue>(HttpStatusCode.OK, string.Format("issue/{0}", issueRef));
+            return ExecuteRequest<Issue>(HttpStatusCode.OK, $"issue/{issueRef}");
         }
 
         public Issue GetIssueWithWorklogs(string issueRef, string user)
@@ -109,9 +109,9 @@ namespace Gallifrey.Jira
                 issue.fields.worklog = new WorkLogs { worklogs = null };
             }
 
-            if (issue.fields.worklog.worklogs == null || issue.fields.worklog.total > issue.fields.worklog.worklogs.Count())
+            if (issue.fields.worklog.worklogs == null || issue.fields.worklog.total > issue.fields.worklog.worklogs.Count)
             {
-                var worklogs = ExectuteRequest(HttpStatusCode.OK, string.Format("issue/{0}/worklog", issueRef), customDeserialize: s => FilterWorklogsToUser(s, user));
+                var worklogs = ExecuteRequest(HttpStatusCode.OK, $"issue/{issueRef}/worklog", customDeserialize: s => FilterWorklogsToUser(s, user));
 
                 issue.fields.worklog.worklogs = worklogs.worklogs;
                 issue.fields.worklog.total = worklogs.total;
@@ -131,7 +131,7 @@ namespace Gallifrey.Jira
 
         public IEnumerable<Issue> GetIssuesFromFilter(string filterName)
         {
-            var filters = ExectuteRequest<List<Filter>>(HttpStatusCode.OK, "filter/favourite");
+            var filters = ExecuteRequest<List<Filter>>(HttpStatusCode.OK, "filter/favourite");
 
             var selectedFilter = filters.FirstOrDefault(f => f.name == filterName);
 
@@ -159,7 +159,7 @@ namespace Gallifrey.Jira
 
             while (moreToGet)
             {
-                var searchResult = ExectuteRequest<SearchResult>(HttpStatusCode.OK, string.Format("search?jql={0}&maxResults=999&startAt={1}&fields=summary,project,parent", jql, startAt));
+                var searchResult = ExecuteRequest<SearchResult>(HttpStatusCode.OK, $"search?jql={jql}&maxResults=999&startAt={startAt}&fields=summary,project,parent");
 
                 returnIssues.AddRange(searchResult.issues);
 
@@ -178,27 +178,28 @@ namespace Gallifrey.Jira
 
         public IEnumerable<Project> GetProjects()
         {
-            return ExectuteRequest<List<Project>>(HttpStatusCode.OK, "project");
+            return ExecuteRequest<List<Project>>(HttpStatusCode.OK, "project");
         }
 
         public IEnumerable<Filter> GetFilters()
         {
-            return ExectuteRequest<List<Filter>>(HttpStatusCode.OK, "filter/favourite");
+            return ExecuteRequest<List<Filter>>(HttpStatusCode.OK, "filter/favourite");
         }
 
         public Transitions GetIssueTransitions(string issueRef)
         {
-            return ExectuteRequest<Transitions>(HttpStatusCode.OK, string.Format("issue/{0}/transitions?expand=transitions.fields", issueRef));
+            return ExecuteRequest<Transitions>(HttpStatusCode.OK, $"issue/{issueRef}/transitions?expand=transitions.fields");
         }
 
         public void TransitionIssue(string issueRef, string transitionName)
         {
+            if (transitionName == null) throw new ArgumentNullException(nameof(transitionName));
             var transitions = GetIssueTransitions(issueRef);
             var transition = transitions.transitions.FirstOrDefault(t => t.name == transitionName);
 
             if (transition == null)
             {
-                throw new JiraClientException(string.Format("Unable to locate transition '{0}'", transitionName));
+                throw new JiraClientException($"Unable to locate transition '{transitionName}'");
             }
 
             var postData = new Dictionary<string, object>
@@ -206,7 +207,7 @@ namespace Gallifrey.Jira
                 { "transition", new { id = transition.id } }
             };
 
-            ExectuteRequest(Method.POST, HttpStatusCode.NoContent, string.Format("issue/{0}/transitions", issueRef), postData);
+            ExecuteRequest(Method.POST, HttpStatusCode.NoContent, $"issue/{issueRef}/transitions", postData);
         }
 
         public void AddWorkLog(string issueRef, WorkLogStrategy workLogStrategy, string comment, TimeSpan timeSpent, DateTime logDate, TimeSpan? remainingTime = null)
@@ -215,16 +216,16 @@ namespace Gallifrey.Jira
 
             var postData = new Dictionary<string, object>
             {
-                { "started", string.Format("{0}{1}", logDate.ToString("yyyy-MM-ddTHH:mm:ss.fff"), logDate.ToString("zzz").Replace(":","")) },
+                { "started", $"{logDate.ToString("yyyy-MM-ddTHH:mm:ss.fff")}{logDate.ToString("zzz").Replace(":", "")}"},
                 { "comment", comment },
-                { "timeSpent", string.Format("{0}h {1}m", timeSpent.Hours, timeSpent.Minutes) },
+                { "timeSpent", $"{timeSpent.Hours}h {timeSpent.Minutes}m"},
             };
             var adjustmentMethod = string.Empty;
             var newEstimate = string.Empty;
 
             if (remainingTime.HasValue)
             {
-                newEstimate = string.Format("{0}h {1}m", remainingTime.Value.Hours, remainingTime.Value.Minutes);
+                newEstimate = $"{remainingTime.Value.Hours}h {remainingTime.Value.Minutes}m";
             }
 
             switch (workLogStrategy)
@@ -240,7 +241,7 @@ namespace Gallifrey.Jira
                     break;
             }
 
-            ExectuteRequest(Method.POST, HttpStatusCode.Created, string.Format("issue/{0}/worklog?adjustEstimate={1}&newEstimate={2}&reduceBy=", issueRef, adjustmentMethod, newEstimate), postData);
+            ExecuteRequest(Method.POST, HttpStatusCode.Created, $"issue/{issueRef}/worklog?adjustEstimate={adjustmentMethod}&newEstimate={newEstimate}&reduceBy=", postData);
         }
 
         public void AssignIssue(string issueRef, string userName)
@@ -250,7 +251,7 @@ namespace Gallifrey.Jira
                 { "name", userName }
             };
 
-            ExectuteRequest(Method.PUT, HttpStatusCode.NoContent, string.Format("issue/{0}/assignee", issueRef), postData);
+            ExecuteRequest(Method.PUT, HttpStatusCode.NoContent, $"issue/{issueRef}/assignee", postData);
         }
     }
 }

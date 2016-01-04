@@ -21,8 +21,8 @@ namespace Gallifrey.UI.Classic
         {
             this.gallifrey = gallifrey;
             InitializeComponent();
-            lblCurrentVersion.Text = string.Format("Current Version: {0}", gallifrey.VersionControl.VersionName);
-            lblInstallId.Text = string.Format("Install ID: {0}", gallifrey.Settings.InternalSettings.InstallationInstaceId);
+            lblCurrentVersion.Text = $"Current Version: {gallifrey.VersionControl.VersionName}";
+            lblInstallId.Text = $"Install ID: {gallifrey.Settings.InternalSettings.InstallationInstaceId}";
 
             contributors = gallifrey.WithThanksDefinitions.Select(BuildThanksString).ToList();
             timerContributor_Tick(this, null);
@@ -37,9 +37,9 @@ namespace Gallifrey.UI.Classic
 
             returnString.AppendLine(withThanksDefinition.Name);
 
-            if (!string.IsNullOrWhiteSpace(withThanksDefinition.ThanksReason)) returnString.AppendLine(string.Format("Reason: {0}", withThanksDefinition.ThanksReason));
-            if (!string.IsNullOrWhiteSpace(withThanksDefinition.TwitterHandle)) returnString.AppendLine(string.Format("Twitter: {0}", withThanksDefinition.TwitterHandle));
-            if (!string.IsNullOrWhiteSpace(withThanksDefinition.GitHubHandle)) returnString.AppendLine(string.Format("GitHub: {0}", withThanksDefinition.GitHubHandle));
+            if (!string.IsNullOrWhiteSpace(withThanksDefinition.ThanksReason)) returnString.AppendLine($"Reason: {withThanksDefinition.ThanksReason}");
+            if (!string.IsNullOrWhiteSpace(withThanksDefinition.TwitterHandle)) returnString.AppendLine($"Twitter: {withThanksDefinition.TwitterHandle}");
+            if (!string.IsNullOrWhiteSpace(withThanksDefinition.GitHubHandle)) returnString.AppendLine($"GitHub: {withThanksDefinition.GitHubHandle}");
 
             return returnString.ToString();
         }

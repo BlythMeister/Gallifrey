@@ -47,7 +47,7 @@ namespace Gallifrey.UI.Classic
                 return false;
             }
 
-            if (MessageBox.Show(string.Format("Jira found!\n\nRef: {0}\nName: {1}\n\nIs that correct?", jiraIssue.key, jiraIssue.fields.summary), "Correct Jira?", MessageBoxButtons.YesNo) == DialogResult.No)
+            if (MessageBox.Show($"Jira found!\n\nRef: {jiraIssue.key}\nName: {jiraIssue.fields.summary}\n\nIs that correct?", "Correct Jira?", MessageBoxButtons.YesNo) == DialogResult.No)
             {
                 return false;
             }

@@ -30,19 +30,7 @@ namespace Gallifrey.Serialization
 
         private static SettingsCollection SetMissingDefaults(SettingsCollection settings)
         {
-            var setANewDefault = false;
-
-            if (settings.UiSettings.SetDefaults())
-            {
-                setANewDefault = true;
-            }
-
-            if (settings.InternalSettings.SetDefaults())
-            {
-                setANewDefault = true;
-            }
-
-            if (setANewDefault)
+            if (settings.UiSettings.SetDefaults() || settings.InternalSettings.SetDefaults())
             {
                 Serialize(settings);
             }

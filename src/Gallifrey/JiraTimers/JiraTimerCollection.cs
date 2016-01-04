@@ -180,12 +180,8 @@ namespace Gallifrey.JiraTimers
         public Guid? GetRunningTimerId()
         {
             var runningTimer = timerList.FirstOrDefault(timer => timer.IsRunning);
-            if (runningTimer == null)
-            {
-                return null;
-            }
 
-            return runningTimer.UniqueId;
+            return runningTimer?.UniqueId;
         }
 
         public void RemoveTimersOlderThanDays(int keepTimersForDays)

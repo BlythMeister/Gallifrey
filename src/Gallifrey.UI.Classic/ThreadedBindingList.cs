@@ -9,7 +9,7 @@ namespace Gallifrey.UI.Classic
         public ThreadedBindingList() : base() { }
         public ThreadedBindingList(IList<T> list) : base(list) { }
 
-        SynchronizationContext ctx = SynchronizationContext.Current;
+        readonly SynchronizationContext ctx = SynchronizationContext.Current;
         protected override void OnAddingNew(AddingNewEventArgs e)
         {
             if (ctx == null)
