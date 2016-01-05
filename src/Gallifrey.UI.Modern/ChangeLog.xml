@@ -1,10 +1,25 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<Versions>
-  <Version Number="2.2.1" Name="Pre Release">
-    <Features />
+<Versions xmlns="http://releases.gallifreyapp.co.uk/ChangeLog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://releases.gallifreyapp.co.uk/schemas/ChangeLogSchema.xsd">
+  <Version Number="2.2.1" Name="New User Interface - Pre Release">
+    <Features>
+      <Feature>Add/Edit/Delete Timers</Feature>
+      <Feature>Manual Time Adjustment</Feature>
+      <Feature>Search For Jira Withing Gallifrey</Feature>
+      <Feature>Export With Comments And Adjust Remaining Estimates</Feature>
+      <Feature>Notify When No Timers Are Running</Feature>
+      <Feature>Auto Assign And Set In Progress Status</Feature>
+      <Feature>Bulk Exporting</Feature>
+      <Feature>Auto Updating</Feature>
+      <Feature>Time Tracking When Machine Is Locked</Feature>
+      <Feature>Many Theme Combinations For Light/Dark and Colours</Feature>
+      <Feature>Targets For How Much Time You Should Export</Feature>
+      <Feature>Export Reminder Prompts</Feature>
+      <Feature>Auto Comment Prefix And Default Comment</Feature>
+      <Feature>Background Sync With Jira</Feature>
+      <Feature>Automatic Clean-Up</Feature>
+    </Features>
     <Bugs />
-    <Others>
-      <Other>Brand New UI</Other>
-    </Others>
+    <Others/>
   </Version>
 </Versions>
+
