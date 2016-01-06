@@ -82,13 +82,13 @@ namespace Gallifrey.UI.Modern.MainViews
             }
         }
 
-        private void ExportButton(object sender, RoutedEventArgs e)
+        private async void ExportButton(object sender, RoutedEventArgs e)
         {
             var selectedTimerIds = ViewModel.GetSelectedTimerIds().ToList();
 
             foreach (var selectedTimerId in selectedTimerIds)
             {
-                ModelHelpers.OpenFlyout(new Export(ModelHelpers, selectedTimerId, null));
+                await ModelHelpers.OpenFlyout(new Export(ModelHelpers, selectedTimerId, null));
             }
         }
 

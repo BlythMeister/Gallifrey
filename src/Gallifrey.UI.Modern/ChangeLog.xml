@@ -17,6 +17,7 @@
       <Feature>Auto Comment Prefix And Default Comment</Feature>
       <Feature>Background Sync With Jira</Feature>
       <Feature>Automatic Clean-Up</Feature>
+      <Feature>Multiple Select Operations On Timers (Delete/Edit/Export)</Feature>
     </Features>
     <Bugs />
     <Others/>
