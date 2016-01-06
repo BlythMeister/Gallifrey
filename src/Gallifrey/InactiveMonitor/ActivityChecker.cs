@@ -79,6 +79,7 @@ namespace Gallifrey.InactiveMonitor
             noTimerRunning.Stop();
             noTimerRunning.Reset();
             eventsSent = 0;
+            NoActivityEvent?.Invoke(this, 0);
         }
 
         public void StartActivityCheck()
@@ -87,6 +88,7 @@ namespace Gallifrey.InactiveMonitor
             noTimerRunning.Stop();
             noTimerRunning.Reset();
             eventsSent = 0;
+            NoActivityEvent?.Invoke(this, 0);
         }
     }
 }
