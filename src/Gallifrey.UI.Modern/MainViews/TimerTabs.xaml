@@ -14,7 +14,7 @@
         </TabControl.ItemContainerStyle>
         <TabControl.ContentTemplate>
             <DataTemplate>
-                <ListView ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemsSource="{Binding Timers}" MouseDoubleClick="TimerList_MouseDoubleClick" BorderThickness="0">
+                <ListView ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemsSource="{Binding Timers}" MouseDoubleClick="TimerList_MouseDoubleClick" BorderThickness="0" SelectionMode="Extended">
                     <ListView.ItemContainerStyle>
                         <Style TargetType="{x:Type ListViewItem}">
                             <Setter Property="Margin" Value="3" />

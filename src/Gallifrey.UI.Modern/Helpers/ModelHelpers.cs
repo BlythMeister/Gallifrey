@@ -26,8 +26,13 @@ namespace Gallifrey.UI.Modern.Helpers
         {
             foreach (Flyout item in flyoutsControl.Items)
             {
-                item.IsOpen = false;
+                CloseFlyout(item);
             }
+        }
+
+        public void CloseFlyout(Flyout flyout)
+        {
+            flyout.IsOpen = false;
         }
 
         public Task<Flyout> OpenFlyout(Flyout flyout)

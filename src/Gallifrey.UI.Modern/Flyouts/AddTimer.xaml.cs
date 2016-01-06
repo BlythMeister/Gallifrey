@@ -133,26 +133,19 @@ namespace Gallifrey.UI.Modern.Flyouts
             modelHelpers.RefreshModel();
             modelHelpers.SetSelectedTimer(NewTimerId);
             AddedTimer = true;
-            IsOpen = false;
+            modelHelpers.CloseFlyout(this);
         }
 
-        private void SearchButton(object sender, RoutedEventArgs e)
+        private async void SearchButton(object sender, RoutedEventArgs e)
         {
+            modelHelpers.CloseFlyout(this);
             var searchFlyout = new Search(modelHelpers, true);
-
-            searchFlyout.IsOpenChanged += (o, args) =>
+            await modelHelpers.OpenFlyout(searchFlyout);
+            if (searchFlyout.SelectedJira != null)
             {
-                if (!searchFlyout.IsOpen)
-                {
-                    if (searchFlyout.SelectedJira != null)
-                    {
-                        DataModel.SetJiraReference(searchFlyout.SelectedJira.Reference);
-                    }
-                    IsOpen = true;
-                }
-            };
-
-            modelHelpers.OpenFlyout(searchFlyout);
+                DataModel.SetJiraReference(searchFlyout.SelectedJira.Reference);
+            }
+            modelHelpers.OpenFlyout(this);
         }
 
         private void StartDateChanged(object sender, SelectionChangedEventArgs e)

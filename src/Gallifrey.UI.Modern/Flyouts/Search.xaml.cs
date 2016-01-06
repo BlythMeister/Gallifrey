@@ -75,15 +75,16 @@ namespace Gallifrey.UI.Modern.Flyouts
             }
         }
 
-        private void AddTimer(object sender, RoutedEventArgs e)
+        private async void AddTimer(object sender, RoutedEventArgs e)
         {
             if (DataModel.SelectedSearchResult == null)
             {
-                DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "No Selected Item", "You Need To Select An Item To Add A Timer For It");
+                await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "No Selected Item", "You Need To Select An Item To Add A Timer For It");
                 Focus();
                 return;
             }
 
+            modelHelpers.CloseFlyout(this);
             if (openFromAdd)
             {
                 SelectedJira = DataModel.SelectedSearchResult;
@@ -91,10 +92,12 @@ namespace Gallifrey.UI.Modern.Flyouts
             else
             {
                 var addFlyout = new AddTimer(modelHelpers, DataModel.SelectedSearchResult.Reference);
-                modelHelpers.OpenFlyout(addFlyout);
+                await modelHelpers.OpenFlyout(addFlyout);
+                if (!addFlyout.AddedTimer)
+                {
+                    modelHelpers.OpenFlyout(this);
+                }
             }
-
-            IsOpen = false;
         }
     }
 }

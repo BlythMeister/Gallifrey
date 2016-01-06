@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using Gallifrey.Exceptions.JiraIntegration;
+using Gallifrey.Exceptions.JiraTimers;
 using Gallifrey.Jira.Model;
 using Gallifrey.UI.Modern.Helpers;
 using Gallifrey.UI.Modern.Models;
@@ -45,7 +46,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                 {
                     EditedTimerId = modelHelpers.Gallifrey.JiraTimerCollection.ChangeTimerDate(EditedTimerId, DataModel.RunDate.Value);
                 }
-                catch (Exception)
+                catch (DuplicateTimerException)
                 {
                     await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext,"Duplicate Timer", "This Timer Already Exists On That Date!");
                     Focus();
@@ -78,7 +79,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                 {
                     EditedTimerId = modelHelpers.Gallifrey.JiraTimerCollection.RenameTimer(EditedTimerId, jiraIssue);
                 }
-                catch (Exception)
+                catch (DuplicateTimerException)
                 {
                     await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext,"Duplicate Timer", "This Timer Already Exists On That Date!");
                     Focus();
@@ -98,7 +99,7 @@ namespace Gallifrey.UI.Modern.Flyouts
 
             modelHelpers.RefreshModel();
             modelHelpers.SetSelectedTimer(EditedTimerId);
-            IsOpen = false;
+            modelHelpers.CloseFlyout(this);
         }
 
         private async void SubtractTime(object sender, RoutedEventArgs e)

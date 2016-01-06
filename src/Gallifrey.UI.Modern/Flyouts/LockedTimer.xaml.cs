@@ -28,7 +28,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             if (!DataModel.LockedTimers.Any())
             {
                 await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "No Timers To Show", "You Have No Locked Timers\nThere is Nothing To Show Here!");
-                IsOpen = false;
+                modelHelpers.CloseFlyout(this);
             }
         }
 
@@ -61,6 +61,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                 }
             }
 
+            modelHelpers.CloseFlyout(this);
             var addFlyout = new AddTimer(modelHelpers, startDate: lockedTimerDate, enableDateChange: false, preloadTime: selectedTime, enableTimeChange: false);
             await modelHelpers.OpenFlyout(addFlyout);
 
@@ -71,13 +72,15 @@ namespace Gallifrey.UI.Modern.Flyouts
                     modelHelpers.Gallifrey.IdleTimerCollection.RemoveTimer(lockedTimerModel.UniqueId);
                 }
 
-                if (!modelHelpers.Gallifrey.IdleTimerCollection.GetUnusedLockTimers().Any())
+                if (modelHelpers.Gallifrey.IdleTimerCollection.GetUnusedLockTimers().Any())
                 {
-                    IsOpen = false;
-                    return;
+                    modelHelpers.OpenFlyout(this);
+                    DataModel.RefreshLockedTimers(modelHelpers.Gallifrey.IdleTimerCollection.GetUnusedLockTimers());
                 }
-
-                DataModel.RefreshLockedTimers(modelHelpers.Gallifrey.IdleTimerCollection.GetUnusedLockTimers());
+            }
+            else
+            {
+                modelHelpers.OpenFlyout(this);
             }
 
             Focus();
@@ -108,7 +111,7 @@ namespace Gallifrey.UI.Modern.Flyouts
 
                 if (!modelHelpers.Gallifrey.IdleTimerCollection.GetUnusedLockTimers().Any())
                 {
-                    IsOpen = false;
+                    modelHelpers.CloseFlyout(this);
                     return;
                 }
 

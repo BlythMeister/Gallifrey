@@ -255,9 +255,9 @@ namespace Gallifrey.UI.Classic
                 {
                     gallifrey.JiraTimerCollection.StartTimer(timerClicked.UniqueId);
                 }
-                catch (DuplicateTimerException)
+                catch (DuplicateTimerException ex)
                 {
-                    MessageBox.Show("Use The Version Of This Timer For Today!", "Wrong Day!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    gallifrey.JiraTimerCollection.StartTimer(ex.TimerId);
                 }
             }
 

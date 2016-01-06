@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -238,17 +239,15 @@ namespace Gallifrey.UI.Modern.Models
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasInactiveTime"));
         }
 
-        public Guid? GetSelectedTimerId()
+        public IEnumerable<Guid> GetSelectedTimerIds()
         {
             foreach (var timerDateModel in TimerDates.Where(x => x.IsSelected))
             {
                 foreach (var timerModel in timerDateModel.Timers.Where(timerModel => timerModel.IsSelected))
                 {
-                    return timerModel.JiraTimer.UniqueId;
+                    yield return timerModel.JiraTimer.UniqueId;
                 }
             }
-
-            return null;
         }
     }
 }

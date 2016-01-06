@@ -35,20 +35,21 @@ namespace Gallifrey.UI.Modern.MainViews
 
         private async void DeleteButton(object sender, RoutedEventArgs e)
         {
-            var selectedTimer = ViewModel.GetSelectedTimerId();
+            var selectedTimerIds = ViewModel.GetSelectedTimerIds().ToList();
 
-            if (selectedTimer.HasValue)
+            foreach (var selectedTimerId in selectedTimerIds)
             {
-                var timer = ModelHelpers.Gallifrey.JiraTimerCollection.GetTimer(selectedTimer.Value);
+                var timer = ModelHelpers.Gallifrey.JiraTimerCollection.GetTimer(selectedTimerId);
 
                 var result = await DialogCoordinator.Instance.ShowMessageAsync(ModelHelpers.DialogContext, "Are You Sure?", $"Are You Sure You Want To Delete {timer.JiraReference}\n\n{timer.JiraName}\nFor: {timer.DateStarted.Date.ToString("ddd, dd MMM")}", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
 
                 if (result == MessageDialogResult.Affirmative)
                 {
-                    ModelHelpers.Gallifrey.JiraTimerCollection.RemoveTimer(selectedTimer.Value);
-                    ModelHelpers.RefreshModel();
+                    ModelHelpers.Gallifrey.JiraTimerCollection.RemoveTimer(selectedTimerId);
                 }
             }
+
+            ModelHelpers.RefreshModel();
         }
 
         private void SearchButton(object sender, RoutedEventArgs e)
@@ -58,18 +59,20 @@ namespace Gallifrey.UI.Modern.MainViews
 
         private async void EditButton(object sender, RoutedEventArgs e)
         {
-            var selectedTimerId = ViewModel.GetSelectedTimerId();
-            if (selectedTimerId.HasValue)
+            var selectedTimerIds = ViewModel.GetSelectedTimerIds().ToList();
+
+            foreach (var selectedTimerId in selectedTimerIds)
             {
                 var stoppedTimer = false;
                 var runningTimerId = ModelHelpers.Gallifrey.JiraTimerCollection.GetRunningTimerId();
-                if (runningTimerId.HasValue && runningTimerId.Value == selectedTimerId.Value)
+
+                if (runningTimerId.HasValue && runningTimerId.Value == selectedTimerId)
                 {
-                    ModelHelpers.Gallifrey.JiraTimerCollection.StopTimer(selectedTimerId.Value, true);
+                    ModelHelpers.Gallifrey.JiraTimerCollection.StopTimer(selectedTimerId, true);
                     stoppedTimer = true;
                 }
 
-                var editTimerFlyout = new EditTimer(ModelHelpers, selectedTimerId.Value);
+                var editTimerFlyout = new EditTimer(ModelHelpers, selectedTimerId);
                 await ModelHelpers.OpenFlyout(editTimerFlyout);
 
                 if (stoppedTimer)
@@ -81,10 +84,11 @@ namespace Gallifrey.UI.Modern.MainViews
 
         private void ExportButton(object sender, RoutedEventArgs e)
         {
-            var selectedTimerId = ViewModel.GetSelectedTimerId();
-            if (selectedTimerId != null)
+            var selectedTimerIds = ViewModel.GetSelectedTimerIds().ToList();
+
+            foreach (var selectedTimerId in selectedTimerIds)
             {
-                ModelHelpers.OpenFlyout(new Export(ModelHelpers, selectedTimerId.Value, null));
+                ModelHelpers.OpenFlyout(new Export(ModelHelpers, selectedTimerId, null));
             }
         }
 

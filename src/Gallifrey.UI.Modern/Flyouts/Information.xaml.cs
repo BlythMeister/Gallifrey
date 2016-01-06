@@ -30,8 +30,8 @@ namespace Gallifrey.UI.Modern.Flyouts
 
         private async void ChangeLogButton(object sender, RoutedEventArgs e)
         {
+            modelHelpers.CloseFlyout(this);
             var changeLog = modelHelpers.Gallifrey.GetChangeLog(XDocument.Parse(Properties.Resources.ChangeLog)).ToList();
-
             if (changeLog.Any())
             {
                 await modelHelpers.OpenFlyout(new ChangeLog(changeLog));
@@ -40,6 +40,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             {
                 await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "No Change Log", "There Is No Change Log To Show");
             }
+            modelHelpers.OpenFlyout(this);
         }
     }
 }

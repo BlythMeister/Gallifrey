@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Windows.Input;
+using Gallifrey.Exceptions.JiraIntegration;
 using Gallifrey.Exceptions.JiraTimers;
 using Gallifrey.UI.Modern.Flyouts;
 using Gallifrey.UI.Modern.Helpers;
@@ -23,28 +24,30 @@ namespace Gallifrey.UI.Modern.MainViews
 
         private void TimerList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            var timerId = ViewModel.GetSelectedTimerId();
+            var timerIds = ViewModel.GetSelectedTimerIds();
 
-            if (timerId.HasValue)
+            if (timerIds.Any())
             {
+                var timerId = timerIds.First();
                 var runningTimer = ModelHelpers.Gallifrey.JiraTimerCollection.GetRunningTimerId();
 
-                if (runningTimer.HasValue && runningTimer.Value == timerId.Value)
+                if (runningTimer.HasValue && runningTimer.Value == timerId)
                 {
-                    ModelHelpers.Gallifrey.JiraTimerCollection.StopTimer(timerId.Value, false);
+                    ModelHelpers.Gallifrey.JiraTimerCollection.StopTimer(timerId, false);
                 }
                 else
                 {
                     try
                     {
-                        ModelHelpers.Gallifrey.JiraTimerCollection.StartTimer(timerId.Value);
-                        ModelHelpers.RefreshModel();
-                        ModelHelpers.SelectRunningTimer();
+                        ModelHelpers.Gallifrey.JiraTimerCollection.StartTimer(timerId);
                     }
-                    catch (DuplicateTimerException)
+                    catch (DuplicateTimerException ex)
                     {
-                        DialogCoordinator.Instance.ShowMessageAsync(ModelHelpers.DialogContext, "Wrong Day!", "Use The Version Of This Timer For Today!");
+                        ModelHelpers.Gallifrey.JiraTimerCollection.StartTimer(ex.TimerId);
                     }
+
+                    ModelHelpers.RefreshModel();
+                    ModelHelpers.SelectRunningTimer();
                 }
             }
         }
@@ -93,7 +96,7 @@ namespace Gallifrey.UI.Modern.MainViews
                     {
                         ModelHelpers.Gallifrey.JiraConnection.GetJiraIssue(jiraRef);
                     }
-                    catch (Exception)
+                    catch (NoResultsFoundException)
                     {
                         await DialogCoordinator.Instance.ShowMessageAsync(ModelHelpers.DialogContext, "Invalid Jira", $"Unable To Locate That Jira.\n\nJira Ref Dropped: '{jiraRef}'");
                         return;

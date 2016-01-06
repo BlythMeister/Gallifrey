@@ -27,7 +27,7 @@ namespace Gallifrey.UI.Modern.Flyouts
 
             await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Thank You", "You're Helping Make Gallifrey Better!");
 
-            IsOpen = false;
+            modelHelpers.CloseFlyout(this);
         }
     }
 }
