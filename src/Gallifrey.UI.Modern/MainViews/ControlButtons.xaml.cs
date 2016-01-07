@@ -146,11 +146,11 @@ namespace Gallifrey.UI.Modern.MainViews
             e.Handled = true;
         }
 
-        private void ModelHelpersOnKeyupEvent(object sender, KeyEventArgs keyEventArgs)
+        private void ModelHelpersOnKeyupEvent(object sender, Key key)
         {
             if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
             {
-                switch (keyEventArgs.Key)
+                switch (key)
                 {
                     case Key.A: AddButton(this, null); break;
                     case Key.D: DeleteButton(this, null); break;
@@ -169,7 +169,7 @@ namespace Gallifrey.UI.Modern.MainViews
             }
             else
             {
-                switch (keyEventArgs.Key)
+                switch (key)
                 {
                     case Key.F1: AddButton(this, null); break;
                     case Key.F2: DeleteButton(this, null); break;

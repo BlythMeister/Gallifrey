@@ -331,7 +331,7 @@ namespace Gallifrey.UI.Modern.MainViews
 
         private void MainWindow_KeyUp(object sender, KeyEventArgs e)
         {
-            modelHelpers.RegisterKeyUp(sender, e);
+            modelHelpers.RegisterKeyUp(sender, e.Key);
         }
     }
 }

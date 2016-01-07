@@ -15,7 +15,7 @@ namespace Gallifrey.UI.Modern.Helpers
         public event EventHandler<Guid> SelectTimerEvent;
         public event EventHandler SelectRunningTimerEvent;
         public event EventHandler RefreshModelEvent;
-        public event EventHandler<KeyEventArgs> KeyupEvent;
+        public event EventHandler<Key> KeyupEvent;
 
         public ModelHelpers(IBackend gallifrey, FlyoutsControl flyoutsControl)
         {
@@ -93,9 +93,9 @@ namespace Gallifrey.UI.Modern.Helpers
 
         }
 
-        public void RegisterKeyUp(object sender, KeyEventArgs e)
+        public void RegisterKeyUp(object sender, Key key)
         {
-            KeyupEvent?.Invoke(sender, e);
+            KeyupEvent?.Invoke(sender, key);
         }
     }
 }
