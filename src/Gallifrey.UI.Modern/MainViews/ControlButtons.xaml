@@ -30,7 +30,7 @@
             <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="SearchButton">
                 <Button.ToolTip>
                     <TextBlock>
-                       Search Jira<LineBreak/>F3 or CTRL + S
+                       Search Jira<LineBreak/>F3 or CTRL + F
                     </TextBlock>
                 </Button.ToolTip>
                 <Rectangle Width="23" Height="23" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
@@ -54,7 +54,7 @@
             <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="ExportButton">
                 <Button.ToolTip>
                     <TextBlock>
-                        Export The Selected Timer(s)<LineBreak/>F5 or CTRL + X
+                        Export The Selected Timer(s)<LineBreak/>F5 or CTRL + S
                     </TextBlock>
                 </Button.ToolTip>
                 <Rectangle Width="30" Height="20" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">

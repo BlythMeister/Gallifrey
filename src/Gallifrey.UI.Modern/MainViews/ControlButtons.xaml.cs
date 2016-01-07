@@ -122,28 +122,24 @@ namespace Gallifrey.UI.Modern.MainViews
         {
             ModelHelpers.Gallifrey.TrackEvent(TrackingType.ContactClick);
             Process.Start(new ProcessStartInfo("mailto:contact@gallifreyapp.co.uk?subject=Gallifrey App Contact"));
-            e.Handled = true;
         }
 
         private void TwitterButton(object sender, RoutedEventArgs e)
         {
             ModelHelpers.Gallifrey.TrackEvent(TrackingType.ContactClick);
             Process.Start(new ProcessStartInfo("https://twitter.com/GallifreyApp"));
-            e.Handled = true;
         }
 
         private void PayPalButton(object sender, RoutedEventArgs e)
         {
             ModelHelpers.Gallifrey.TrackEvent(TrackingType.PayPalClick);
             Process.Start(new ProcessStartInfo("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=G3MWL8E6UG4RS"));
-            e.Handled = true;
         }
 
         private void GitHubButton(object sender, RoutedEventArgs e)
         {
             ModelHelpers.Gallifrey.TrackEvent(TrackingType.GitHubClick);
             Process.Start(new ProcessStartInfo("https://github.com/BlythMeister/Gallifrey"));
-            e.Handled = true;
         }
 
         private void ModelHelpersOnKeyupEvent(object sender, Key key)
@@ -154,9 +150,9 @@ namespace Gallifrey.UI.Modern.MainViews
                 {
                     case Key.A: AddButton(this, null); break;
                     case Key.D: DeleteButton(this, null); break;
-                    case Key.S: SearchButton(this, null); break;
+                    case Key.F: SearchButton(this, null); break;
                     case Key.E: EditButton(this, null); break;
-                    case Key.X: ExportButton(this, null); break;
+                    case Key.S: ExportButton(this, null); break;
                     case Key.L: LockTimerButton(this, null); break;
                     case Key.P: SettingsButton(this, null); break;
                     case Key.I: InfoButton(this, null); break;
