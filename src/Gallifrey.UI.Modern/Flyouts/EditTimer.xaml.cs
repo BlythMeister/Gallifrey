@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
 using System.Windows;
 using Gallifrey.Exceptions.JiraIntegration;
 using Gallifrey.Exceptions.JiraTimers;
@@ -12,7 +14,7 @@ namespace Gallifrey.UI.Modern.Flyouts
     public partial class EditTimer
     {
         private readonly ModelHelpers modelHelpers;
-        private EditTimerModel DataModel => (EditTimerModel)DataContext;
+        private EditTimerModel DataModel => (EditTimerModel) DataContext;
         public Guid EditedTimerId { get; set; }
 
         public EditTimer(ModelHelpers modelHelpers, Guid selected)
@@ -26,18 +28,18 @@ namespace Gallifrey.UI.Modern.Flyouts
 
         private async void SaveButton(object sender, RoutedEventArgs e)
         {
-            if (DataModel.HasModifiedRunDate())
+            if (DataModel.HasModifiedRunDate)
             {
                 if (!DataModel.RunDate.HasValue)
                 {
-                    await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext,"Missing Date", "You Must Enter A Start Date");
+                    await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Missing Date", "You Must Enter A Start Date");
                     Focus();
                     return;
                 }
 
                 if (DataModel.RunDate.Value < DataModel.MinDate || DataModel.RunDate.Value > DataModel.MaxDate)
                 {
-                    await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext,"Invalid Date", $"You Must Enter A Start Date Between {DataModel.MinDate.ToShortDateString()} And {DataModel.MaxDate.ToShortDateString()}");
+                    await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Invalid Date", $"You Must Enter A Start Date Between {DataModel.MinDate.ToShortDateString()} And {DataModel.MaxDate.ToShortDateString()}");
                     Focus();
                     return;
                 }
@@ -46,15 +48,17 @@ namespace Gallifrey.UI.Modern.Flyouts
                 {
                     EditedTimerId = modelHelpers.Gallifrey.JiraTimerCollection.ChangeTimerDate(EditedTimerId, DataModel.RunDate.Value);
                 }
-                catch (DuplicateTimerException)
+                catch (DuplicateTimerException ex)
                 {
-                    await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext,"Duplicate Timer", "This Timer Already Exists On That Date!");
-                    Focus();
-                    return;
+                    var handlerd = await MergeTimers(ex);
+                    if (!handlerd)
+                    {
+                        Focus();
+                        return;
+                    }
                 }
             }
-
-            if (DataModel.HasModifiedJiraReference())
+            else if (DataModel.HasModifiedJiraReference)
             {
                 Issue jiraIssue;
                 try
@@ -63,12 +67,12 @@ namespace Gallifrey.UI.Modern.Flyouts
                 }
                 catch (NoResultsFoundException)
                 {
-                    await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext,"Invalid Jira", "Unable To Locate The Jira");
+                    await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Invalid Jira", "Unable To Locate The Jira");
                     Focus();
                     return;
                 }
 
-                var result = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext,"Correct Jira?", $"Jira found!\n\nRef: {jiraIssue.key}\nName: {jiraIssue.fields.summary}\n\nIs that correct?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
+                var result = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Correct Jira?", $"Jira found!\n\nRef: {jiraIssue.key}\nName: {jiraIssue.fields.summary}\n\nIs that correct?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings {AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative});
 
                 if (result == MessageDialogResult.Negative)
                 {
@@ -79,15 +83,18 @@ namespace Gallifrey.UI.Modern.Flyouts
                 {
                     EditedTimerId = modelHelpers.Gallifrey.JiraTimerCollection.RenameTimer(EditedTimerId, jiraIssue);
                 }
-                catch (DuplicateTimerException)
+                catch (DuplicateTimerException ex)
                 {
-                    await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext,"Duplicate Timer", "This Timer Already Exists On That Date!");
-                    Focus();
-                    return;
+                    var handlerd = await MergeTimers(ex);
+                    if (!handlerd)
+                    {
+                        Focus();
+                        return;
+                    }
                 }
             }
 
-            if (DataModel.HasModifiedTime())
+            if (DataModel.HasModifiedTime)
             {
                 var originalTime = new TimeSpan(DataModel.OriginalHours, DataModel.OriginalMinutes, 0);
                 var newTime = new TimeSpan(DataModel.Hours, DataModel.Minutes, 0);
@@ -146,6 +153,21 @@ namespace Gallifrey.UI.Modern.Flyouts
             }
 
             DataModel.AdjustTime(TimeSpan.FromMinutes(minutesAdjustment), true);
+        }
+
+        private async Task<bool> MergeTimers(DuplicateTimerException ex)
+        {
+            var duplicateTimerMerge = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Timer Already Exists", "This Timer Already Exists On That With That Name On That Date, Would You Like To Merge Them?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings {AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative});
+
+            if (duplicateTimerMerge == MessageDialogResult.Negative)
+            {
+                return false;
+            }
+
+            modelHelpers.Gallifrey.JiraTimerCollection.AdjustTime(ex.TimerId, DataModel.OriginalHours, DataModel.OriginalMinutes, true);
+            modelHelpers.Gallifrey.JiraTimerCollection.RemoveTimer(EditedTimerId);
+            EditedTimerId = ex.TimerId;
+            return true;
         }
     }
 }

@@ -23,7 +23,10 @@
             <TextBox.Style>
                 <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding JiraReferenceEditable}" Value="False" >
+                        <DataTrigger Binding="{Binding JiraReferenceEditable}" Value="False">
+                            <Setter Property="IsEnabled" Value="False"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding HasModifiedRunDate}" Value="True">
                             <Setter Property="IsEnabled" Value="False"/>
                         </DataTrigger>
                     </Style.Triggers>
@@ -37,6 +40,10 @@
                 <Style TargetType="DatePicker" BasedOn="{StaticResource {x:Type DatePicker}}">
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding DateEditable}" Value="False" >
+                            <Setter Property="IsEnabled" Value="False"/>
+                        </DataTrigger>
+
+                        <DataTrigger Binding="{Binding HasModifiedJiraReference}" Value="True">
                             <Setter Property="IsEnabled" Value="False"/>
                         </DataTrigger>
                     </Style.Triggers>

@@ -5,23 +5,29 @@ namespace Gallifrey.UI.Modern.Models
 {
     public class EditTimerModel : INotifyPropertyChanged
     {
+        private string jiraReference;
+        private DateTime? runDate;
+        private int hours;
+        private int minutes;
+
         public event PropertyChangedEventHandler PropertyChanged;
-        public string JiraReference { get; set; }
+        
         public bool JiraReferenceEditable { get; set; }
         public DateTime MinDate { get; set; }
         public DateTime MaxDate { get; set; }
-        public DateTime? RunDate { get; set; }
         public DateTime DisplayDate { get; set; }
         public bool DateEditable { get; set; }
-        public int Hours { get; set; }
-        public int Minutes { get; set; }
         public bool TimeEditable { get; set; }
         public string OriginalJiraReference { get; set; }
         public DateTime? OriginalRunDate { get; set; }
         public int OriginalHours { get; set; }
         public int OriginalMinutes { get; set; }
         public bool IsDefaultOnButton { get; set; }
-        
+
+        public bool HasModifiedJiraReference => OriginalJiraReference != JiraReference;
+        public bool HasModifiedRunDate => OriginalRunDate != RunDate;
+        public bool HasModifiedTime => OriginalHours != Hours || OriginalMinutes != Minutes;
+
         public EditTimerModel(IBackend gallifrey, Guid timerId)
         {
             var dateToday = DateTime.Now;
@@ -58,27 +64,52 @@ namespace Gallifrey.UI.Modern.Models
             IsDefaultOnButton = true;
         }
 
+        public string JiraReference
+        {
+            get { return jiraReference; }
+            set
+            {
+                jiraReference = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasModifiedJiraReference"));
+            }
+        }
+
+        public DateTime? RunDate
+        {
+            get { return runDate; }
+            set
+            {
+                runDate = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasModifiedRunDate"));
+            }
+        }
+
+        public int Hours
+        {
+            get { return hours; }
+            set
+            {
+                hours = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasModifiedTime"));
+            }
+        }
+
+        public int Minutes
+        {
+            get { return minutes; }
+            set
+            {
+                minutes = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasModifiedTime"));
+            }
+        }
+
         public void SetNotDefaultButton()
         {
             IsDefaultOnButton = false;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("IsDefaultOnButton"));
         }
-
-        public bool HasModifiedJiraReference()
-        {
-            return OriginalJiraReference != JiraReference;
-        }
-
-        public bool HasModifiedRunDate()
-        {
-            return OriginalRunDate != RunDate;
-        }
-
-        public bool HasModifiedTime()
-        {
-            return OriginalHours != Hours || OriginalMinutes != Minutes;
-        }
-
+        
         public void AdjustTime(TimeSpan timeAdjustmentAmount, bool addTime)
         {
             var currentTime = new TimeSpan(Hours, Minutes, 0);
