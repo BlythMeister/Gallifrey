@@ -334,34 +334,11 @@ namespace Gallifrey
             return changeLogItems;
         }
 
-        public IJiraTimerCollection JiraTimerCollection
-        {
-            get { return jiraTimerCollection; }
-        }
-
-        public IIdleTimerCollection IdleTimerCollection
-        {
-            get { return idleTimerCollection; }
-        }
-
-        public ISettingsCollection Settings
-        {
-            get { return settingsCollection; }
-        }
-
-        public IJiraConnection JiraConnection
-        {
-            get { return jiraConnection; }
-        }
-
-        public IVersionControl VersionControl
-        {
-            get { return versionControl; }
-        }
-
-        public List<WithThanksDefinition> WithThanksDefinitions
-        {
-            get { return withThanksCreator.WithThanksDefinitions; }
-        }
+        public IJiraTimerCollection JiraTimerCollection => jiraTimerCollection;
+        public IIdleTimerCollection IdleTimerCollection => idleTimerCollection;
+        public ISettingsCollection Settings => settingsCollection;
+        public IJiraConnection JiraConnection => jiraConnection;
+        public IVersionControl VersionControl => versionControl;
+        public List<WithThanksDefinition> WithThanksDefinitions => withThanksCreator.WithThanksDefinitions;
     }
 }

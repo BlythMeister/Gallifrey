@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Windows;
+using System.Windows.Input;
 using Gallifrey.AppTracking;
 using Gallifrey.UI.Modern.Flyouts;
 using Gallifrey.UI.Modern.Helpers;
@@ -18,6 +19,11 @@ namespace Gallifrey.UI.Modern.MainViews
         public ControlButtons()
         {
             InitializeComponent();
+        }
+
+        private void ControlButtons_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            ModelHelpers.KeyupEvent += ModelHelpersOnKeyupEvent;
         }
 
         private void AddButton(object sender, RoutedEventArgs e)
@@ -138,6 +144,48 @@ namespace Gallifrey.UI.Modern.MainViews
             ModelHelpers.Gallifrey.TrackEvent(TrackingType.GitHubClick);
             Process.Start(new ProcessStartInfo("https://github.com/BlythMeister/Gallifrey"));
             e.Handled = true;
+        }
+
+        private void ModelHelpersOnKeyupEvent(object sender, KeyEventArgs keyEventArgs)
+        {
+            if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
+            {
+                switch (keyEventArgs.Key)
+                {
+                    case Key.A: AddButton(this, null); break;
+                    case Key.D: DeleteButton(this, null); break;
+                    case Key.S: SearchButton(this, null); break;
+                    case Key.E: EditButton(this, null); break;
+                    case Key.X: ExportButton(this, null); break;
+                    case Key.L: LockTimerButton(this, null); break;
+                    case Key.P: SettingsButton(this, null); break;
+                    case Key.I: InfoButton(this, null); break;
+                    case Key.T: TwitterButton(this, null); break;
+                    case Key.M: EmailButton(this, null); break;
+                    case Key.G: GitHubButton(this, null); break;
+                    case Key.C: PayPalButton(this, null); break;
+                    default: return;
+                }
+            }
+            else
+            {
+                switch (keyEventArgs.Key)
+                {
+                    case Key.F1: AddButton(this, null); break;
+                    case Key.F2: DeleteButton(this, null); break;
+                    case Key.F3: SearchButton(this, null); break;
+                    case Key.F4: EditButton(this, null); break;
+                    case Key.F5: ExportButton(this, null); break;
+                    case Key.F6: LockTimerButton(this, null); break;
+                    case Key.F7: SettingsButton(this, null); break;
+                    case Key.F8: InfoButton(this, null); break;
+                    case Key.F9: TwitterButton(this, null); break;
+                    case Key.F10: EmailButton(this, null); break;
+                    case Key.F11: GitHubButton(this, null); break;
+                    case Key.F12: PayPalButton(this, null); break;
+                    default: return;
+                }
+            }
         }
     }
 }

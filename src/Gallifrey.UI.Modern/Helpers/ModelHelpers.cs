@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 using MahApps.Metro.Controls;
 
 namespace Gallifrey.UI.Modern.Helpers
@@ -14,6 +15,7 @@ namespace Gallifrey.UI.Modern.Helpers
         public event EventHandler<Guid> SelectTimerEvent;
         public event EventHandler SelectRunningTimerEvent;
         public event EventHandler RefreshModelEvent;
+        public event EventHandler<KeyEventArgs> KeyupEvent;
 
         public ModelHelpers(IBackend gallifrey, FlyoutsControl flyoutsControl)
         {
@@ -89,6 +91,11 @@ namespace Gallifrey.UI.Modern.Helpers
 
             Application.Current.Shutdown();
 
+        }
+
+        public void RegisterKeyUp(object sender, KeyEventArgs e)
+        {
+            KeyupEvent?.Invoke(sender, e);
         }
     }
 }

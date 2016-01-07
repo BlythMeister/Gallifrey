@@ -4,7 +4,7 @@
     <Features>
       <Feature>Add/Edit/Delete Timers</Feature>
       <Feature>Manual Time Adjustment</Feature>
-      <Feature>Search For Jira Withing Gallifrey</Feature>
+      <Feature>Search For Jira Within Gallifrey</Feature>
       <Feature>Export With Comments And Adjust Remaining Estimates</Feature>
       <Feature>Notify When No Timers Are Running</Feature>
       <Feature>Auto Assign And Set In Progress Status</Feature>
@@ -18,6 +18,7 @@
       <Feature>Background Sync With Jira</Feature>
       <Feature>Automatic Clean-Up</Feature>
       <Feature>Multiple Select Operations On Timers (Delete/Edit/Export)</Feature>
+      <Feature>Keyboard Shortcuts</Feature>
     </Features>
     <Bugs />
     <Others/>

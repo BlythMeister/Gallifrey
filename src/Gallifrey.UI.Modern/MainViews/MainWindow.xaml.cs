@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Timers;
 using System.Windows;
+using System.Windows.Input;
 using System.Xml.Linq;
 using Exceptionless;
 using Gallifrey.AppTracking;
@@ -26,7 +27,7 @@ namespace Gallifrey.UI.Modern.MainViews
         private readonly ModelHelpers modelHelpers;
         private MainViewModel ViewModel => (MainViewModel)DataContext;
         private bool machineLocked;
-
+        
         public MainWindow(InstanceType instance, AppType appType)
         {
             InitializeComponent();
@@ -326,6 +327,11 @@ namespace Gallifrey.UI.Modern.MainViews
             modelHelpers.Gallifrey.Settings.UiSettings.Height = (int)Height;
             modelHelpers.Gallifrey.Settings.UiSettings.Width = (int)Width;
             modelHelpers.Gallifrey.Close();
+        }
+
+        private void MainWindow_KeyUp(object sender, KeyEventArgs e)
+        {
+            modelHelpers.RegisterKeyUp(sender, e);
         }
     }
 }
