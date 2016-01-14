@@ -5,6 +5,7 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".paket", ".paket", "{C186DE09-6698-42DE-9D41-C4FBB02B81BA}"
 	ProjectSection(SolutionItems) = preProject
 		..\paket.dependencies = ..\paket.dependencies
+		..\paket.lock = ..\paket.lock
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gallifrey", "Gallifrey\Gallifrey.csproj", "{4C344D86-4086-4F87-BD0F-4F8E23610CD7}"
