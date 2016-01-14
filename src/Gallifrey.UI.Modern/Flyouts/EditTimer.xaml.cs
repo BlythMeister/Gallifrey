@@ -14,7 +14,7 @@ namespace Gallifrey.UI.Modern.Flyouts
     public partial class EditTimer
     {
         private readonly ModelHelpers modelHelpers;
-        private EditTimerModel DataModel => (EditTimerModel) DataContext;
+        private EditTimerModel DataModel => (EditTimerModel)DataContext;
         public Guid EditedTimerId { get; set; }
 
         public EditTimer(ModelHelpers modelHelpers, Guid selected)
@@ -72,7 +72,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                     return;
                 }
 
-                var result = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Correct Jira?", $"Jira found!\n\nRef: {jiraIssue.key}\nName: {jiraIssue.fields.summary}\n\nIs that correct?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings {AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative});
+                var result = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Correct Jira?", $"Jira found!\n\nRef: {jiraIssue.key}\nName: {jiraIssue.fields.summary}\n\nIs that correct?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
 
                 if (result == MessageDialogResult.Negative)
                 {
@@ -113,7 +113,7 @@ namespace Gallifrey.UI.Modern.Flyouts
         {
             DataModel.SetNotDefaultButton();
 
-            var result = await DialogCoordinator.Instance.ShowInputAsync(modelHelpers.DialogContext, "Enter Time Adjustment", "Enter The Number Of Minutes To Subtract\nThis Can Be 90 for 1 Hour & 30 Minutes");
+            var result = await DialogCoordinator.Instance.ShowInputAsync(modelHelpers.DialogContext, "Enter Time Adjustment", "Enter The Number Of Minutes or Time To Subtract\nThis Can Be '90' or '1:30' for 1 Hour & 30 Minutes");
 
             if (result == null)
             {
@@ -121,22 +121,14 @@ namespace Gallifrey.UI.Modern.Flyouts
                 return;
             }
 
-            int minutesAdjustment;
-            if (!int.TryParse(result, out minutesAdjustment))
-            {
-                await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Invalid Time Entry", $"The Value '{result}' was not a number of minutes.");
-                Focus();
-                return;
-            }
-
-            DataModel.AdjustTime(TimeSpan.FromMinutes(minutesAdjustment), false);
+            DoAdjustment(result, false);
         }
 
         private async void AddTime(object sender, RoutedEventArgs e)
         {
             DataModel.SetNotDefaultButton();
 
-            var result = await DialogCoordinator.Instance.ShowInputAsync(modelHelpers.DialogContext, "Enter Time Adjustment", "Enter The Number Of Minutes To Add\nThis Can Be 90 for 1 Hour & 30 Minutes");
+            var result = await DialogCoordinator.Instance.ShowInputAsync(modelHelpers.DialogContext, "Enter Time Adjustment", "Enter The Number Of Minutes Or Time To Add\nThis Can Be '90' or '1:30' for 1 Hour & 30 Minutes");
 
             if (result == null)
             {
@@ -144,20 +136,40 @@ namespace Gallifrey.UI.Modern.Flyouts
                 return;
             }
 
-            int minutesAdjustment;
-            if (!int.TryParse(result, out minutesAdjustment))
+            DoAdjustment(result, true);
+        }
+
+        private async void DoAdjustment(string enteredValue, bool addTime)
+        {
+            var adjustmentTimespan = new TimeSpan();
+            if (enteredValue.Contains(":"))
             {
-                await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Invalid Time Entry", $"The Value '{result}' was not a number of minutes.");
-                Focus();
-                return;
+                if (!TimeSpan.TryParse(enteredValue, out adjustmentTimespan))
+                {
+                    await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Invalid Time Entry", $"The Value '{enteredValue}' was not a valid time representation (e.g. '1:30').");
+                    Focus();
+                    return;
+                }
+            }
+            else
+            {
+                int minutesAdjustment;
+                if (!int.TryParse(enteredValue, out minutesAdjustment))
+                {
+                    await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Invalid Time Entry", $"The Value '{enteredValue}' was not a number of minutes.");
+                    Focus();
+                    return;
+                }
+
+                adjustmentTimespan = TimeSpan.FromMinutes(minutesAdjustment);
             }
 
-            DataModel.AdjustTime(TimeSpan.FromMinutes(minutesAdjustment), true);
+            DataModel.AdjustTime(adjustmentTimespan, addTime);
         }
 
         private async Task<bool> MergeTimers(DuplicateTimerException ex)
         {
-            var duplicateTimerMerge = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Timer Already Exists", "This Timer Already Exists On That With That Name On That Date, Would You Like To Merge Them?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings {AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative});
+            var duplicateTimerMerge = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Timer Already Exists", "This Timer Already Exists On That With That Name On That Date, Would You Like To Merge Them?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
 
             if (duplicateTimerMerge == MessageDialogResult.Negative)
             {
