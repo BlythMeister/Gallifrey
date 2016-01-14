@@ -5,13 +5,13 @@
     <DockPanel HorizontalAlignment="Stretch">
         <Border BorderBrush="{DynamicResource AccentColorBrush}" BorderThickness="0,2,0,0" DockPanel.Dock="Top" HorizontalAlignment="Stretch">
             <DockPanel>
-                <WrapPanel HorizontalAlignment="Left" VerticalAlignment="Center" DockPanel.Dock="Left" Margin="3,0,0,0">
+                <WrapPanel HorizontalAlignment="Left" VerticalAlignment="Center" DockPanel.Dock="Left" Margin="5,0,0,0">
                     <TextBlock Text="Exported: "/>
                     <TextBlock Text="{Binding ExportedNumber}" />
                     <TextBlock Text="/" />
                     <TextBlock Text="{Binding TotalTimerCount}" />
                 </WrapPanel>
-                <WrapPanel HorizontalAlignment="Left" VerticalAlignment="Center" DockPanel.Dock="Left" Margin="10,0,0,0" MouseDown="UnExportedClick">
+                <WrapPanel HorizontalAlignment="Left" VerticalAlignment="Center" DockPanel.Dock="Left" Margin="10,0,0,0">
                     <TextBlock Text="Unexported Time: "/>
                     <TextBlock Text="{Binding UnexportedTime}" />
                 </WrapPanel>

@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Deployment.Application;
-using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
-using System.Windows.Documents;
+using System.Windows.Input;
 using System.Xml.Linq;
 using Exceptionless;
+using Gallifrey.AppTracking;
 using Gallifrey.Exceptions;
 using Gallifrey.Exceptions.IdleTimers;
 using Gallifrey.Exceptions.JiraIntegration;
@@ -19,75 +17,79 @@ using Gallifrey.UI.Modern.Flyouts;
 using Gallifrey.UI.Modern.Helpers;
 using Gallifrey.UI.Modern.Models;
 using Gallifrey.Versions;
-using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 using Microsoft.Win32;
 
 namespace Gallifrey.UI.Modern.MainViews
 {
-    public partial class MainWindow : MetroWindow
+    public partial class MainWindow
     {
-        private MainViewModel ViewModel { get { return (MainViewModel)DataContext; } }
-
+        private readonly ModelHelpers modelHelpers;
+        private MainViewModel ViewModel => (MainViewModel)DataContext;
+        private bool machineLocked;
+        
         public MainWindow(InstanceType instance, AppType appType)
         {
             InitializeComponent();
 
-            ExceptionlessClient.Default.Configuration.ApiKey = "e7ac6366507547639ce69fea261d6545";
-            ExceptionlessClient.Default.Configuration.DefaultTags.Add("Unknown_Version_Pre_Startup");
-            ExceptionlessClient.Default.Configuration.Enabled = true;
-            ExceptionlessClient.Default.SubmittingEvent += ExceptionlessSubmittingEvent;
-            ExceptionlessClient.Default.Register();
-
             var gallifrey = new Backend(instance, appType);
 
-            ExceptionlessClient.Default.Configuration.DefaultTags.Clear();
-            ExceptionlessClient.Default.Configuration.DefaultTags.Add(gallifrey.VersionControl.VersionName.Replace("\n", " - "));
+            if (gallifrey.VersionControl.IsAutomatedDeploy)
+            {
+                ExceptionlessClient.Default.Configuration.ApiKey = "e7ac6366507547639ce69fea261d6545";
+                ExceptionlessClient.Default.Configuration.DefaultTags.Add(gallifrey.VersionControl.VersionName.Replace("\n", " - "));
+                ExceptionlessClient.Default.Configuration.Enabled = true;
+                ExceptionlessClient.Default.SubmittingEvent += ExceptionlessSubmittingEvent;
+                ExceptionlessClient.Default.Register();
+            }
 
-            var viewModel = new MainViewModel(gallifrey, this);
-            viewModel.RefreshModel();
-            viewModel.SelectRunningTimer();
+            modelHelpers = new ModelHelpers(gallifrey, FlyoutsControl);
+            var viewModel = new MainViewModel(modelHelpers);
+            modelHelpers.RefreshModel();
+            modelHelpers.SelectRunningTimer();
             DataContext = viewModel;
 
             gallifrey.NoActivityEvent += GallifreyOnNoActivityEvent;
             gallifrey.ExportPromptEvent += GallifreyOnExportPromptEvent;
+            gallifrey.DailyTrackingEvent += GallifreyOnDailyTrackingEvent;
             SystemEvents.SessionSwitch += SessionSwitchHandler;
 
             Height = gallifrey.Settings.UiSettings.Height;
             Width = gallifrey.Settings.UiSettings.Width;
             Title = gallifrey.VersionControl.AppName;
-            ThemeHelper.ChangeTheme(gallifrey.Settings.UiSettings.Theme);
+            ThemeHelper.ChangeTheme(gallifrey.Settings.UiSettings.Theme, gallifrey.Settings.UiSettings.Accent);
 
             if (gallifrey.VersionControl.IsAutomatedDeploy)
             {
                 PerformUpdate(false, true);
                 var updateHeartbeat = new Timer(60000);
-                updateHeartbeat.Elapsed += delegate { PerformUpdate(false, false); };
+                updateHeartbeat.Elapsed += AutoUpdateCheck;
                 updateHeartbeat.Enabled = true;
             }
         }
 
         private async void ExceptionlessSubmittingEvent(object sender, EventSubmittingEventArgs e)
         {
-            await Application.Current.Dispatcher.Invoke(async () =>
+            if (e.IsUnhandledError)
             {
-                if (!e.IsUnhandledError)
-                    return;
-
                 e.Cancel = true;
-                await OpenFlyout(new Error(ViewModel, e.Event));
-                CloseApp(true);
-            });
 
+                await Application.Current.Dispatcher.Invoke(async () =>
+                {
+                    modelHelpers.CloseAllFlyouts();
+                    await modelHelpers.OpenFlyout(new Error(modelHelpers, e.Event));
+                    modelHelpers.CloseApp(true);
+                });
+            }
         }
 
         private async void OnLoaded(object sender, RoutedEventArgs e)
         {
-            var missingConfig = false;
+            var multipleInstances = false;
             var showSettings = false;
             try
             {
-                ViewModel.Gallifrey.Initialise();
+                modelHelpers.Gallifrey.Initialise();
             }
             catch (MissingJiraConfigException)
             {
@@ -99,60 +101,82 @@ namespace Gallifrey.UI.Modern.MainViews
             }
             catch (MultipleGallifreyRunningException)
             {
-                missingConfig = true;
+                multipleInstances = true;
             }
 
-            if (missingConfig)
+            if (multipleInstances)
             {
-                await this.ShowMessageAsync("Multiple Instances", "You Can Only Have One Instance Of Gallifrey Running At A Time\nPlease Close The Other Instance");
-                CloseApp();
+                modelHelpers.Gallifrey.TrackEvent(TrackingType.MultipleInstancesRunning);
+                await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Multiple Instances", "You Can Only Have One Instance Of Gallifrey Running At A Time\nPlease Close The Other Instance");
+                modelHelpers.CloseApp();
             }
             else if (showSettings)
             {
-                await OpenFlyout(new Flyouts.Settings(ViewModel));
+                modelHelpers.Gallifrey.TrackEvent(TrackingType.SettingsMissing);
+                await modelHelpers.OpenFlyout(new Flyouts.Settings(modelHelpers));
+                if (!modelHelpers.Gallifrey.JiraConnection.IsConnected)
+                {
+                    await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Connection Required", "You Must Have A Working Jira Connection To Use Gallifrey");
+                    modelHelpers.CloseApp();
+                }
             }
 
-            if (ViewModel.Gallifrey.VersionControl.IsAutomatedDeploy && ViewModel.Gallifrey.VersionControl.IsFirstRun)
+            if (modelHelpers.Gallifrey.VersionControl.IsAutomatedDeploy && modelHelpers.Gallifrey.VersionControl.IsFirstRun)
             {
-                var changeLog = ViewModel.Gallifrey.GetChangeLog(XDocument.Parse(Properties.Resources.ChangeLog));
+                var changeLog = modelHelpers.Gallifrey.GetChangeLog(XDocument.Parse(Properties.Resources.ChangeLog)).Where(x => x.NewVersion).ToList();
 
                 if (changeLog.Any())
                 {
-                    ViewModel.MainWindow.OpenFlyout(new Flyouts.ChangeLog(ViewModel, changeLog));
+                    await modelHelpers.OpenFlyout(new Flyouts.ChangeLog(changeLog));
                 }
             }
         }
 
         private async void GallifreyOnExportPromptEvent(object sender, ExportPromptDetail e)
         {
-            var timer = ViewModel.Gallifrey.JiraTimerCollection.GetTimer(e.TimerId);
+            var timer = modelHelpers.Gallifrey.JiraTimerCollection.GetTimer(e.TimerId);
             if (timer != null)
             {
                 var exportTime = e.ExportTime;
-                var message = string.Format("Do You Want To Export '{0}'?\n", timer.JiraReference);
-                if (ViewModel.Gallifrey.Settings.ExportSettings.ExportPromptAll || (new TimeSpan(exportTime.Ticks - (exportTime.Ticks % 600000000)) == new TimeSpan(timer.TimeToExport.Ticks - (timer.TimeToExport.Ticks % 600000000))))
+                var message = $"Do You Want To Export '{timer.JiraReference}'?\n";
+                if (modelHelpers.Gallifrey.Settings.ExportSettings.ExportPromptAll || (new TimeSpan(exportTime.Ticks - (exportTime.Ticks % 600000000)) == new TimeSpan(timer.TimeToExport.Ticks - (timer.TimeToExport.Ticks % 600000000))))
                 {
                     exportTime = timer.TimeToExport;
-                    message += string.Format("You Have '{0}' To Export", exportTime.FormatAsString(false));
+                    message += $"You Have '{exportTime.FormatAsString(false)}' To Export";
                 }
                 else
                 {
-                    message += string.Format("You Have '{0}' To Export For This Change", exportTime.FormatAsString(false));
+                    message += $"You Have '{exportTime.FormatAsString(false)}' To Export For This Change";
                 }
 
-                var messageResult = await this.ShowMessageAsync("Do You Want To Export?", message, MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No" });
+                var messageResult = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Do You Want To Export?", message, MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
 
                 if (messageResult == MessageDialogResult.Affirmative)
                 {
-                    if (ViewModel.Gallifrey.Settings.ExportSettings.ExportPromptAll)
+                    if (modelHelpers.Gallifrey.Settings.ExportSettings.ExportPromptAll)
                     {
-                        ViewModel.MainWindow.OpenFlyout(new Export(ViewModel, e.TimerId, e.ExportTime));
+                        await modelHelpers.OpenFlyout(new Export(modelHelpers, e.TimerId, e.ExportTime));
                     }
                     else
                     {
-                        ViewModel.MainWindow.OpenFlyout(new Export(ViewModel, e.TimerId, null));
+                        await modelHelpers.OpenFlyout(new Export(modelHelpers, e.TimerId, null));
                     }
                 }
+            }
+        }
+
+        private void GallifreyOnDailyTrackingEvent(object sender, EventArgs eventArgs)
+        {
+            try
+            {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    ExceptionlessClient.Default.SubmitFeatureUsage(modelHelpers.Gallifrey.VersionControl.VersionName);
+                });
+            }
+            catch (Exception)
+            {
+                //suppress errors if tracking fails
             }
         }
 
@@ -162,7 +186,7 @@ namespace Gallifrey.UI.Modern.MainViews
             {
                 ViewModel.SetNoActivityMilliseconds(millisecondsSinceActivity);
 
-                if (millisecondsSinceActivity == 0)
+                if (millisecondsSinceActivity == 0 || ViewModel.TimerRunning)
                 {
                     this.StopFlashingWindow();
                 }
@@ -173,7 +197,7 @@ namespace Gallifrey.UI.Modern.MainViews
             });
         }
 
-        private void SessionSwitchHandler(object sender, SessionSwitchEventArgs e)
+        private async void SessionSwitchHandler(object sender, SessionSwitchEventArgs e)
         {
             switch (e.Reason)
             {
@@ -182,7 +206,8 @@ namespace Gallifrey.UI.Modern.MainViews
                 case SessionSwitchReason.RemoteDisconnect:
                 case SessionSwitchReason.ConsoleDisconnect:
 
-                    ViewModel.Gallifrey.StartIdleTimer();
+                    modelHelpers.Gallifrey.StartIdleTimer();
+                    machineLocked = true;
                     break;
 
                 case SessionSwitchReason.SessionUnlock:
@@ -192,19 +217,25 @@ namespace Gallifrey.UI.Modern.MainViews
 
                     try
                     {
-                        var idleTimerId = ViewModel.Gallifrey.StopIdleTimer();
-                        var idleTimer = ViewModel.Gallifrey.IdleTimerCollection.GetTimer(idleTimerId);
+                        var idleTimerId = modelHelpers.Gallifrey.StopIdleTimer();
+                        var idleTimer = modelHelpers.Gallifrey.IdleTimerCollection.GetTimer(idleTimerId);
                         if (idleTimer.IdleTimeValue.TotalSeconds < 60 || idleTimer.IdleTimeValue.TotalHours > 10)
                         {
-                            ViewModel.Gallifrey.IdleTimerCollection.RemoveTimer(idleTimerId);
+                            modelHelpers.Gallifrey.IdleTimerCollection.RemoveTimer(idleTimerId);
                         }
                         else
                         {
-                            OpenFlyout(new LockedTimer(ViewModel));
+                            this.FlashWindow();
+                            Activate();
+                            Topmost = true;
+                            modelHelpers.CloseAllFlyouts();
+                            await modelHelpers.OpenFlyout(new LockedTimer(modelHelpers));
+                            this.StopFlashingWindow();
+                            Topmost = false;
                         }
                     }
                     catch (NoIdleTimerRunningException) { }
-
+                    machineLocked = false;
                     break;
             }
         }
@@ -214,23 +245,15 @@ namespace Gallifrey.UI.Modern.MainViews
             PerformUpdate(true, true);
         }
 
-        public Task<Flyout> OpenFlyout(Flyout flyout)
+        private void AutoUpdateCheck(object sender, ElapsedEventArgs e)
         {
-            var a = new TaskCompletionSource<Flyout>();
-            RoutedEventHandler closingFinishedHandler = null;
-            closingFinishedHandler = (o, args) =>
+            Application.Current.Dispatcher.Invoke(() =>
             {
-                flyout.ClosingFinished -= closingFinishedHandler;
-                FlyoutsControl.Items.Remove(flyout);
-                a.TrySetResult(flyout);
-            };
-            flyout.ClosingFinished += closingFinishedHandler;
-
-            FlyoutsControl.Items.Add(flyout);
-
-            flyout.IsOpen = true;
-
-            return a.Task;
+                if (!machineLocked)
+                {
+                    PerformUpdate(false, false);
+                }
+            });
         }
 
         private async void PerformUpdate(bool manualUpdateCheck, bool promptReinstall)
@@ -242,43 +265,45 @@ namespace Gallifrey.UI.Modern.MainViews
                 UpdateResult updateResult;
                 if (manualUpdateCheck)
                 {
-                    var controller = await this.ShowProgressAsync("Please Wait", "Checking For Updates");
+                    modelHelpers.Gallifrey.TrackEvent(TrackingType.ManualUpdateCheck);
+                    var controller = await DialogCoordinator.Instance.ShowProgressAsync(modelHelpers.DialogContext, "Please Wait", "Checking For Updates");
 
-                    updateResult = await ViewModel.Gallifrey.VersionControl.CheckForUpdates(true);
+                    updateResult = await modelHelpers.Gallifrey.VersionControl.CheckForUpdates(true);
                     await controller.CloseAsync();
                 }
                 else
                 {
-                    updateResult = await ViewModel.Gallifrey.VersionControl.CheckForUpdates();
+                    updateResult = await modelHelpers.Gallifrey.VersionControl.CheckForUpdates();
                 }
 
                 if (updateResult == UpdateResult.Updated)
                 {
                     if (manualUpdateCheck)
                     {
-                        var messageResult = await this.ShowMessageAsync("Update Found", "Restart Now To Install Update?", MessageDialogStyle.AffirmativeAndNegative,
-                                                                    new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No" });
+                        var messageResult = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Update Found", "Restart Now To Install Update?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
 
                         if (messageResult == MessageDialogResult.Affirmative)
                         {
-                            CloseApp(true);
+                            modelHelpers.CloseApp(true);
+                            modelHelpers.Gallifrey.TrackEvent(TrackingType.ManualUpdateRestart);
                         }
                     }
                     else
                     {
-                        if (ViewModel.Gallifrey.Settings.AppSettings.AutoUpdate)
+                        if (modelHelpers.Gallifrey.Settings.AppSettings.AutoUpdate)
                         {
-                            CloseApp(true);
+                            modelHelpers.CloseApp(true);
+                            modelHelpers.Gallifrey.TrackEvent(TrackingType.AutoUpdateInstalled);
                         }
                     }
                 }
                 else if (manualUpdateCheck && updateResult == UpdateResult.NoUpdate)
                 {
-                    await this.ShowMessageAsync("No Update Found", "There Are No Updates At This Time, Check Back Soon!");
+                    await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "No Update Found", "There Are No Updates At This Time, Check Back Soon!");
                 }
                 else if (manualUpdateCheck && updateResult == UpdateResult.NotDeployable)
                 {
-                    await this.ShowMessageAsync("Unable To Update", "You Cannot Auto Update This Version Of Gallifrey");
+                    await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Unable To Update", "You Cannot Auto Update This Version Of Gallifrey");
                 }
             }
             catch (ManualReinstallRequiredException)
@@ -288,31 +313,67 @@ namespace Gallifrey.UI.Modern.MainViews
 
             if (manualReinstall && promptReinstall)
             {
-                var messageResult = await this.ShowMessageAsync("Update Error", "To Update An Uninstall/Reinstall Is Required.\nThis Can Happen Automatically\nNo Timers Will Be Lost\nDo You Want To Update Now?", MessageDialogStyle.AffirmativeAndNegative,
-                                                                    new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No" });
+                var messageResult = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Update Error", "To Update An Uninstall/Reinstall Is Required.\nThis Can Happen Automatically\nNo Timers Will Be Lost\nDo You Want To Update Now?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
 
                 if (messageResult == MessageDialogResult.Affirmative)
                 {
-                    ViewModel.Gallifrey.VersionControl.ManualReinstall();
+                    modelHelpers.Gallifrey.VersionControl.ManualReinstall();
                 }
             }
         }
 
-        private void CloseApp(bool restart = false)
-        {
-            if (restart && ViewModel.Gallifrey.VersionControl.IsAutomatedDeploy)
-            {
-                Process.Start(ViewModel.Gallifrey.VersionControl.ActivationUrl);
-            }
-
-            Application.Current.Shutdown();
-        }
-
         private void MainWindow_OnClosed(object sender, EventArgs e)
         {
-            ViewModel.Gallifrey.Settings.UiSettings.Height = (int)Height;
-            ViewModel.Gallifrey.Settings.UiSettings.Width = (int)Width;
-            ViewModel.Gallifrey.Close();
+            modelHelpers.Gallifrey.Settings.UiSettings.Height = (int)Height;
+            modelHelpers.Gallifrey.Settings.UiSettings.Width = (int)Width;
+            modelHelpers.Gallifrey.Close();
+        }
+
+        private void MainWindow_KeyUp(object sender, KeyEventArgs e)
+        {
+            var key = e.Key;
+            RemoteButtonTrigger trigger ;
+
+            if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
+            {
+                switch (key)
+                {
+                    case Key.A: trigger = RemoteButtonTrigger.Add; break;
+                    case Key.D: trigger = RemoteButtonTrigger.Delete; break;
+                    case Key.F: trigger = RemoteButtonTrigger.Search; break;
+                    case Key.E: trigger = RemoteButtonTrigger.Edit; break;
+                    case Key.S: trigger = RemoteButtonTrigger.Export; break;
+                    case Key.L: trigger = RemoteButtonTrigger.LockTimer; break;
+                    case Key.P: trigger = RemoteButtonTrigger.Settings; break;
+                    case Key.I: trigger = RemoteButtonTrigger.Info; break;
+                    case Key.T: trigger = RemoteButtonTrigger.Twitter; break;
+                    case Key.M: trigger = RemoteButtonTrigger.Email; break;
+                    case Key.G: trigger = RemoteButtonTrigger.GitHub; break;
+                    case Key.C: trigger = RemoteButtonTrigger.PayPal; break;
+                    default: return;
+                }
+            }
+            else
+            {
+                switch (key)
+                {
+                    case Key.F1: trigger = RemoteButtonTrigger.Add; break;
+                    case Key.F2: trigger = RemoteButtonTrigger.Delete; break;
+                    case Key.F3: trigger = RemoteButtonTrigger.Search; break;
+                    case Key.F4: trigger = RemoteButtonTrigger.Edit; break;
+                    case Key.F5: trigger = RemoteButtonTrigger.Export; break;
+                    case Key.F6: trigger = RemoteButtonTrigger.LockTimer; break;
+                    case Key.F7: trigger = RemoteButtonTrigger.Settings; break;
+                    case Key.F8: trigger = RemoteButtonTrigger.Info; break;
+                    case Key.F9: trigger = RemoteButtonTrigger.Twitter; break;
+                    case Key.F10: trigger = RemoteButtonTrigger.Email; break;
+                    case Key.F11: trigger = RemoteButtonTrigger.GitHub; break;
+                    case Key.F12: trigger = RemoteButtonTrigger.PayPal; break;
+                    default: return;
+                }
+            }
+            
+            modelHelpers.TriggerRemoteButtonPress(trigger);
         }
     }
 }

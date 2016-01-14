@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<Versions>
-  <Version Number="1.0.0" Name="">
+<Versions xmlns="http://releases.gallifreyapp.co.uk/ChangeLog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://releases.gallifreyapp.co.uk/schemas/ChangeLogSchema.xsd">
+  <Version Number="1.0.0">
     <Features>
       <Feature>Daily timer management.</Feature>
       <Feature>Manual Timer Adjustment.</Feature>
@@ -14,22 +14,22 @@
     <Bugs />
     <Others />
   </Version>
-  <Version Number="1.0.1" Name="">
+  <Version Number="1.0.1">
     <Features>
-      <Feature>Intergrated updates in spotify style.</Feature>
+      <Feature>Intergrated updates in Spotify style.</Feature>
       <Feature>Nice error reporting back to central store.</Feature>
     </Features>
     <Bugs />
     <Others />
   </Version>
-  <Version Number="1.0.2" Name="">
+  <Version Number="1.0.2">
     <Features />
     <Bugs>
       <Bug>Critical export bug fix.</Bug>
     </Bugs>
     <Others />
   </Version>
-  <Version Number="1.0.3" Name="">
+  <Version Number="1.0.3">
     <Features>
       <Feature>Added viewable change log.</Feature>
       <Feature>Locked timers show recent timers, rather than todays timers (auto create if not already created).</Feature>
@@ -43,7 +43,7 @@
     </Bugs>
     <Others />
   </Version>
-  <Version Number="1.0.4" Name="">
+  <Version Number="1.0.4">
     <Features>
       <Feature>Add ability to set working days &amp; start of week for target calculations.</Feature>
       <Feature>Add ToolTips to all windows to help users.</Feature>
@@ -62,7 +62,7 @@
     </Bugs>
     <Others />
   </Version>
-  <Version Number="1.1.0" Name="">
+  <Version Number="1.1.0">
     <Features>
       <Feature>Drag &amp; Drop can change the tab</Feature>
       <Feature>Clicking update avaliable baloon will restart the app and install the update.</Feature>
@@ -82,7 +82,7 @@
     </Bugs>
     <Others />
   </Version>
-  <Version Number="1.1.1" Name="">
+  <Version Number="1.1.1">
     <Features>
       <Feature>Drag &amp; Drop feature no defaults to "start now".</Feature>
       <Feature>Added Optional Export Prompts With Ability To Select Just Changed Time, Or All Exported Time.</Feature>
@@ -95,7 +95,7 @@
     </Bugs>
     <Others />
   </Version>
-  <Version Number="1.2.0" Name="">
+  <Version Number="1.2.0">
     <Features>
       <Feature>Change Jira interaction to use hand rolled REST API communication layer to open more features.</Feature>
       <Feature>Add display of parent issue when Jira is a sub-task.</Feature>
@@ -121,7 +121,7 @@
     </Bugs>
     <Others />
   </Version>
-  <Version Number="1.2.1" Name="">
+  <Version Number="1.2.1">
     <Features>
       <Feature>Add ability to create same reference timer on a different day.</Feature>
       <Feature>Add timer splitting to move some or all time to a new timer.</Feature>
@@ -151,7 +151,7 @@
     </Bugs>
     <Others />
   </Version>
-  <Version Number="2.1.0" Name="">
+  <Version Number="2.1.0">
     <Features>
       <Feature>Add Jira SOAP client as optional with REST being default. - SOAP Client not as full featured</Feature>
     </Features>
@@ -163,7 +163,7 @@
     </Bugs>
     <Others />
   </Version>
-  <Version Number="2.1.1" Name="">
+  <Version Number="2.1.1">
     <Features>
       <Feature>Added functionality to change the default empty comment on export.</Feature>
       <Feature>Added anonymous usage data capture (with Opt-Out functionality).</Feature>
@@ -171,7 +171,7 @@
     <Bugs />
     <Others />
   </Version>
-  <Version Number="2.1.2" Name="">
+  <Version Number="2.1.2">
     <Features>
       <Feature>Only allow 1 instance of Gallifrey to run at a time</Feature>
     </Features>
@@ -181,7 +181,7 @@
     </Bugs>
     <Others />
   </Version>
-  <Version Number="2.2.0" Name="Pre Release">
+  <Version Number="2.2.0">
     <Features>
       <Feature>Improvements to the search window</Feature>
       <Feature>Changes to how settings are stored</Feature>
@@ -196,5 +196,22 @@
       <Bug>Fix issue with timers showing in the list twice</Bug>
     </Bugs>
     <Others />
+  </Version>
+  <Version Number="3.0.0" Name="New UI Avaliable">
+    <Features>
+      <Feature>Added periodic background check of timers to improve Gallifrey accuracy with Jira</Feature>
+      <Feature>When adding a timer, if you already have the timer will add the time to it</Feature>
+      <Feature>Exporting time will try to perform export once prior to trying with re-opening jira</Feature>
+      <Feature>Added Additional Tracking Events</Feature>
+    </Features>
+    <Bugs>
+      <Bug>Fix issue with balloon icon caused crash</Bug>
+      <Bug>Fix issue where no work logs prevents export of work logs</Bug>
+      <Bug>Fix issue where Export on stop prompt shows when automatically stopped (by locking machine)</Bug>
+      <Bug>Added retry logic when saving internal data to prevent crashes due to file locking</Bug>
+    </Bugs>
+    <Others>
+      <Other>Adding new ui upgrade links</Other>
+    </Others>
   </Version>
 </Versions>

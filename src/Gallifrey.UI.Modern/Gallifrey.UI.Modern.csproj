@@ -9,10 +9,11 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Gallifrey.UI.Modern</RootNamespace>
     <AssemblyName>Gallifrey.UI.Modern</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -41,28 +42,10 @@
     </ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Exceptionless.Extras, Version=3.0.1326.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Exceptionless.Wpf.3.0.1326\lib\net45\Exceptionless.Extras.dll</HintPath>
-    </Reference>
-    <Reference Include="Exceptionless.Portable, Version=3.0.1326.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Exceptionless.Portable.3.0.1326\lib\portable-net40+sl50+win+wpa81+wp80\Exceptionless.Portable.dll</HintPath>
-    </Reference>
-    <Reference Include="Exceptionless.Wpf, Version=3.0.1326.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Exceptionless.Wpf.3.0.1326\lib\net45\Exceptionless.Wpf.dll</HintPath>
-    </Reference>
-    <Reference Include="MahApps.Metro, Version=1.1.3.28, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\MahApps.Metro.1.1.3-ALPHA028\lib\net45\MahApps.Metro.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
-    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\MahApps.Metro.1.1.3-ALPHA028\lib\net45\System.Windows.Interactivity.dll</HintPath>
-    </Reference>
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -83,14 +66,29 @@
     <Compile Include="Flyouts\AddTimer.xaml.cs">
       <DependentUpon>AddTimer.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Flyouts\LockedTimer.xaml.cs">
+      <DependentUpon>LockedTimer.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Flyouts\ChangeLog.xaml.cs">
       <DependentUpon>ChangeLog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Models\ContributorsModel.cs" />
+    <Compile Include="Helpers\ModelHelpers.cs" />
+    <Compile Include="Helpers\DialogContext.cs" />
+    <Compile Include="Models\RemoteButtonTrigger.cs" />
+    <Compile Include="Models\AccentThemeModel.cs" />
+    <Compile Include="Models\LockedTimerCollectionModel.cs" />
+    <Compile Include="Models\LockedTimerModel.cs" />
+    <Compile Include="Models\ChangeLogModel.cs" />
+    <Compile Include="Helpers\JiraHelper.cs" />
+    <Compile Include="Helpers\JiraHelperResult.cs" />
+    <Compile Include="Helpers\EnumMatchToBooleanConverter.cs" />
+    <Compile Include="Helpers\ThemeHelper.cs" />
+    <Compile Include="Models\InformationModel.cs" />
     <Compile Include="Flyouts\EditTimer.xaml.cs">
       <DependentUpon>EditTimer.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\EditTimerModel.cs" />
+    <Compile Include="Models\ExportModel.cs" />
     <Compile Include="Models\JiraIssueDisplayModel.cs" />
     <Compile Include="Models\SearchModel.cs" />
     <Compile Include="Models\ErrorModel.cs" />
@@ -99,9 +97,6 @@
     </Compile>
     <Compile Include="Flyouts\Information.xaml.cs">
       <DependentUpon>Information.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Flyouts\LockedTimer.xaml.cs">
-      <DependentUpon>LockedTimer.xaml</DependentUpon>
     </Compile>
     <Compile Include="Flyouts\Error.xaml.cs">
       <DependentUpon>Error.xaml</DependentUpon>
@@ -114,7 +109,6 @@
       <DependentUpon>Settings.xaml</DependentUpon>
     </Compile>
     <Compile Include="Helpers\PasswordBoxHelper.cs" />
-    <Compile Include="Helpers\ThemeHelper.cs" />
     <Compile Include="MainViews\BottomBar.xaml.cs">
       <DependentUpon>BottomBar.xaml</DependentUpon>
     </Compile>
@@ -155,7 +149,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <None Include="packages.config" />
+    <None Include="paket.references" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -168,6 +162,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Flyouts\AddTimer.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Flyouts\LockedTimer.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -184,10 +182,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Flyouts\Information.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Flyouts\LockedTimer.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -256,4 +250,94 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <Import Project="..\..\.paket\paket.targets" />
+  <Choose>
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.0')">
+      <ItemGroup>
+        <Reference Include="Exceptionless.Portable">
+          <HintPath>..\..\packages\Exceptionless.Portable\lib\net40\Exceptionless.Portable.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.5' Or $(TargetFrameworkVersion) == 'v4.5.1' Or $(TargetFrameworkVersion) == 'v4.5.2' Or $(TargetFrameworkVersion) == 'v4.5.3' Or $(TargetFrameworkVersion) == 'v4.6' Or $(TargetFrameworkVersion) == 'v4.6.1')">
+      <ItemGroup>
+        <Reference Include="Exceptionless.Portable">
+          <HintPath>..\..\packages\Exceptionless.Portable\lib\net45\Exceptionless.Portable.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+    <When Condition="($(TargetFrameworkIdentifier) == 'WindowsPhoneApp') Or ($(TargetFrameworkIdentifier) == '.NETCore') Or ($(TargetFrameworkIdentifier) == 'Silverlight' And $(TargetFrameworkVersion) == 'v5.0') Or ($(TargetFrameworkIdentifier) == 'WindowsPhone' And ($(TargetFrameworkVersion) == 'v8.0' Or $(TargetFrameworkVersion) == 'v8.1')) Or ($(TargetFrameworkIdentifier) == 'MonoAndroid') Or ($(TargetFrameworkIdentifier) == 'MonoTouch') Or ($(TargetFrameworkIdentifier) == 'Xamarin.iOS') Or ($(TargetFrameworkIdentifier) == 'Xamarin.Mac') Or ($(TargetFrameworkProfile) == 'Profile5') Or ($(TargetFrameworkProfile) == 'Profile6') Or ($(TargetFrameworkProfile) == 'Profile7') Or ($(TargetFrameworkProfile) == 'Profile14') Or ($(TargetFrameworkProfile) == 'Profile19') Or ($(TargetFrameworkProfile) == 'Profile24') Or ($(TargetFrameworkProfile) == 'Profile31') Or ($(TargetFrameworkProfile) == 'Profile32') Or ($(TargetFrameworkProfile) == 'Profile37') Or ($(TargetFrameworkProfile) == 'Profile42') Or ($(TargetFrameworkProfile) == 'Profile44') Or ($(TargetFrameworkProfile) == 'Profile47') Or ($(TargetFrameworkProfile) == 'Profile49') Or ($(TargetFrameworkProfile) == 'Profile78') Or ($(TargetFrameworkProfile) == 'Profile84') Or ($(TargetFrameworkProfile) == 'Profile92') Or ($(TargetFrameworkProfile) == 'Profile102') Or ($(TargetFrameworkProfile) == 'Profile111') Or ($(TargetFrameworkProfile) == 'Profile136') Or ($(TargetFrameworkProfile) == 'Profile147') Or ($(TargetFrameworkProfile) == 'Profile151') Or ($(TargetFrameworkProfile) == 'Profile157') Or ($(TargetFrameworkProfile) == 'Profile158') Or ($(TargetFrameworkProfile) == 'Profile225') Or ($(TargetFrameworkProfile) == 'Profile240') Or ($(TargetFrameworkProfile) == 'Profile255') Or ($(TargetFrameworkProfile) == 'Profile259') Or ($(TargetFrameworkProfile) == 'Profile328') Or ($(TargetFrameworkProfile) == 'Profile336') Or ($(TargetFrameworkProfile) == 'Profile344')">
+      <ItemGroup>
+        <Reference Include="Exceptionless.Portable">
+          <HintPath>..\..\packages\Exceptionless.Portable\lib\portable-net40+sl50+win+wpa81+wp80\Exceptionless.Portable.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
+  <Choose>
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.0')">
+      <ItemGroup>
+        <Reference Include="Exceptionless.Extras">
+          <HintPath>..\..\packages\Exceptionless.Wpf\lib\net40\Exceptionless.Extras.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+        <Reference Include="Exceptionless.Wpf">
+          <HintPath>..\..\packages\Exceptionless.Wpf\lib\net40\Exceptionless.Wpf.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.5' Or $(TargetFrameworkVersion) == 'v4.5.1' Or $(TargetFrameworkVersion) == 'v4.5.2' Or $(TargetFrameworkVersion) == 'v4.5.3' Or $(TargetFrameworkVersion) == 'v4.6' Or $(TargetFrameworkVersion) == 'v4.6.1')">
+      <ItemGroup>
+        <Reference Include="Exceptionless.Extras">
+          <HintPath>..\..\packages\Exceptionless.Wpf\lib\net45\Exceptionless.Extras.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+        <Reference Include="Exceptionless.Wpf">
+          <HintPath>..\..\packages\Exceptionless.Wpf\lib\net45\Exceptionless.Wpf.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
+  <Choose>
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.0')">
+      <ItemGroup>
+        <Reference Include="MahApps.Metro">
+          <HintPath>..\..\packages\MahApps.Metro\lib\net40\MahApps.Metro.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+        <Reference Include="System.Windows.Interactivity">
+          <HintPath>..\..\packages\MahApps.Metro\lib\net40\System.Windows.Interactivity.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.5' Or $(TargetFrameworkVersion) == 'v4.5.1' Or $(TargetFrameworkVersion) == 'v4.5.2' Or $(TargetFrameworkVersion) == 'v4.5.3' Or $(TargetFrameworkVersion) == 'v4.6' Or $(TargetFrameworkVersion) == 'v4.6.1')">
+      <ItemGroup>
+        <Reference Include="MahApps.Metro">
+          <HintPath>..\..\packages\MahApps.Metro\lib\net45\MahApps.Metro.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+        <Reference Include="System.Windows.Interactivity">
+          <HintPath>..\..\packages\MahApps.Metro\lib\net45\System.Windows.Interactivity.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
 </Project>

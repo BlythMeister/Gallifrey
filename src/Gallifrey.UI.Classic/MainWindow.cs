@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Deployment.Application;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Text;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Xaml.Schema;
 using System.Xml.Linq;
 using Exceptionless;
 using Gallifrey.AppTracking;
@@ -21,6 +19,7 @@ using Gallifrey.Exceptions.JiraTimers;
 using Gallifrey.Exceptions.Versions;
 using Gallifrey.ExtensionMethods;
 using Gallifrey.JiraTimers;
+using Gallifrey.UI.Classic.Properties;
 using Gallifrey.Versions;
 using Microsoft.Win32;
 
@@ -50,6 +49,12 @@ namespace Gallifrey.UI.Classic
 
             internalTimerList = new Dictionary<DateTime, ThreadedBindingList<JiraTimer>>();
 
+
+            gallifrey.NoActivityEvent += GallifreyOnNoActivityEvent;
+            gallifrey.ExportPromptEvent += GallifreyOnExportPromptEvent;
+            gallifrey.DailyTrackingEvent += GallifreyOnDailyTrackingEvent;
+            SystemEvents.SessionSwitch += SessionSwitchHandler;
+
             try
             {
                 gallifrey.Initialise();
@@ -68,12 +73,8 @@ namespace Gallifrey.UI.Classic
                 CloseNotifyIcon();
                 exitOnStart = true;
             }
-
-            gallifrey.NoActivityEvent += GallifreyOnNoActivityEvent;
-            gallifrey.ExportPromptEvent += GallifreyOnExportPromptEvent;
-            SystemEvents.SessionSwitch += SessionSwitchHandler;
         }
-
+        
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
@@ -105,7 +106,7 @@ namespace Gallifrey.UI.Classic
                 }
             }
         }
-        
+
         private void OnSubmittingExceptionlessEvent(object sender, EventSubmittingEventArgs e)
         {
             foreach (var form in Application.OpenForms.Cast<Form>())
@@ -132,14 +133,14 @@ namespace Gallifrey.UI.Classic
 
             if (gallifrey.VersionControl.IsAutomatedDeploy && gallifrey.VersionControl.IsFirstRun)
             {
-                var changeLog = gallifrey.GetChangeLog(XDocument.Parse(Properties.Resources.ChangeLog));
+                var changeLog = gallifrey.GetChangeLog(XDocument.Parse(Resources.ChangeLog)).Where(x => x.NewVersion);
 
                 if (changeLog.Any())
                 {
                     var changeLogWindow = new ChangeLogWindow(gallifrey, changeLog);
                     changeLogWindow.ShowDialog();
                 }
-            }            
+            }
         }
 
         private void MainWindow_KeyUp(object sender, KeyEventArgs e)
@@ -149,7 +150,7 @@ namespace Gallifrey.UI.Classic
                 var selectedTab = tabTimerDays.SelectedTab;
                 if (selectedTab == null) return;
 
-                var tabList = (ListBox)selectedTab.Controls[string.Format("lst_{0}", selectedTab.Name)];
+                var tabList = (ListBox)selectedTab.Controls[$"lst_{selectedTab.Name}"];
 
                 switch (e.KeyCode)
                 {
@@ -194,7 +195,7 @@ namespace Gallifrey.UI.Classic
                         if (tabTimerDays.SelectedIndex < tabTimerDays.TabPages.Count - 1)
                         {
                             tabTimerDays.SelectedIndex++;
-                            tabList = (ListBox)tabTimerDays.SelectedTab.Controls[string.Format("lst_{0}", tabTimerDays.SelectedTab.Name)];
+                            tabList = (ListBox)tabTimerDays.SelectedTab.Controls[$"lst_{tabTimerDays.SelectedTab.Name}"];
                             tabList.SelectedIndex = 0;
                             tabList.Focus();
                         }
@@ -203,7 +204,7 @@ namespace Gallifrey.UI.Classic
                         if (tabTimerDays.SelectedIndex > 0)
                         {
                             tabTimerDays.SelectedIndex--;
-                            tabList = (ListBox)tabTimerDays.SelectedTab.Controls[string.Format("lst_{0}", tabTimerDays.SelectedTab.Name)];
+                            tabList = (ListBox)tabTimerDays.SelectedTab.Controls[$"lst_{tabTimerDays.SelectedTab.Name}"];
                             tabList.SelectedIndex = 0;
                             tabList.Focus();
                         }
@@ -246,7 +247,7 @@ namespace Gallifrey.UI.Classic
 
             if (runningTimer.HasValue && runningTimer.Value == timerClicked.UniqueId)
             {
-                gallifrey.JiraTimerCollection.StopTimer(timerClicked.UniqueId);
+                gallifrey.JiraTimerCollection.StopTimer(timerClicked.UniqueId, false);
             }
             else
             {
@@ -254,9 +255,9 @@ namespace Gallifrey.UI.Classic
                 {
                     gallifrey.JiraTimerCollection.StartTimer(timerClicked.UniqueId);
                 }
-                catch (DuplicateTimerException)
+                catch (DuplicateTimerException ex)
                 {
-                    MessageBox.Show("Use The Version Of This Timer For Today!", "Wrong Day!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    gallifrey.JiraTimerCollection.StartTimer(ex.TimerId);
                 }
             }
 
@@ -310,15 +311,15 @@ namespace Gallifrey.UI.Classic
             if (timer != null)
             {
                 var exportTime = e.ExportTime;
-                var message = string.Format("Do You Want To Export '{0}'?\n", timer.JiraReference);
+                var message = $"Do You Want To Export '{timer.JiraReference}'?\n";
                 if (gallifrey.Settings.ExportSettings.ExportPromptAll || (new TimeSpan(exportTime.Ticks - (exportTime.Ticks % 600000000)) == new TimeSpan(timer.TimeToExport.Ticks - (timer.TimeToExport.Ticks % 600000000))))
                 {
                     exportTime = timer.TimeToExport;
-                    message += string.Format("You Have '{0}' To Export", exportTime.FormatAsString(false));
+                    message += $"You Have '{exportTime.FormatAsString(false)}' To Export";
                 }
                 else
                 {
-                    message += string.Format("You Have '{0}' To Export For This Change", exportTime.FormatAsString(false));
+                    message += $"You Have '{exportTime.FormatAsString(false)}' To Export For This Change";
                 }
 
                 if (MessageBox.Show(message, "Do You Want To Export?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
@@ -333,6 +334,18 @@ namespace Gallifrey.UI.Classic
                         exportTimerWindow.ShowDialog();
                     }
                 }
+            }
+        }
+
+        private void GallifreyOnDailyTrackingEvent(object sender, EventArgs eventArgs)
+        {
+            try
+            {
+                ExceptionlessClient.Default.SubmitFeatureUsage(gallifrey.VersionControl.VersionName);    
+            }
+            catch (Exception)
+            {
+                //supress errors if tracking fails
             }
         }
 
@@ -369,22 +382,48 @@ namespace Gallifrey.UI.Classic
 
         private void lblTwitter_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start("https://twitter.com/GallifreyApp");
+            gallifrey.TrackEvent(TrackingType.ContactClick);
+            Process.Start("https://twitter.com/GallifreyApp");
         }
 
         private void lblEmail_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start("mailto:contact@gallifreyapp.co.uk?subject=Gallifrey App Contact");
+            gallifrey.TrackEvent(TrackingType.ContactClick);
+            Process.Start("mailto:contact@gallifreyapp.co.uk?subject=Gallifrey App Contact");
         }
 
         private void lblGitHub_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start("https://github.com/BlythMeister/Gallifrey");
+            gallifrey.TrackEvent(TrackingType.GitHubClick);
+            Process.Start("https://github.com/BlythMeister/Gallifrey");
         }
 
         private void lblDonate_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=G3MWL8E6UG4RS");
+            gallifrey.TrackEvent(TrackingType.PayPalClick);
+            Process.Start("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=G3MWL8E6UG4RS");
+        }
+
+        private void newUIDownload_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            if (!gallifrey.VersionControl.IsAutomatedDeploy)
+            {
+                MessageBox.Show("This is not a valid version so cannot be upgraded", "Invalid Upgrade", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            switch (gallifrey.VersionControl.InstanceType)
+            {
+                case InstanceType.Alpha:
+                    Process.Start("http://releases.gallifreyapp.co.uk/download/modern/alpha/setup.exe");
+                    break;
+                case InstanceType.Beta:
+                    Process.Start("http://releases.gallifreyapp.co.uk/download/modern/beta/setup.exe");
+                    break;
+                default:
+                    Process.Start("http://releases.gallifreyapp.co.uk/download/modern/stable/setup.exe");
+                    break;
+            }
         }
 
         private void tabTimerDays_KeyDown(object sender, KeyEventArgs e)
@@ -423,7 +462,7 @@ namespace Gallifrey.UI.Classic
             if (selectedTab == null) return;
             var selectedTimer = GetSelectedTimer();
 
-            if (MessageBox.Show(string.Format("Are You Sure You Want To Remove Timer For '{0}'?", selectedTimer.JiraReference), "Are You Sure", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            if (MessageBox.Show($"Are You Sure You Want To Remove Timer For '{selectedTimer.JiraReference}'?", "Are You Sure", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
                 gallifrey.JiraTimerCollection.RemoveTimer(selectedTimer.UniqueId);
                 RefreshInternalTimerList();
@@ -517,25 +556,36 @@ namespace Gallifrey.UI.Classic
                     minutesPlural = "s";
                 }
 
-                notifyAlert.BalloonTipText = string.Format("No Timer Running For {0} Minute{1}", minutesSinceActivity, minutesPlural);
+                notifyAlert.BalloonTipText = $"No Timer Running For {minutesSinceActivity} Minute{minutesPlural}";
                 notifyAlert.ShowBalloonTip(3000);
             }
         }
 
         private void notifyAlert_BalloonTipClicked(object sender, EventArgs e)
         {
-            if (gallifrey.VersionControl.AlreadyInstalledUpdate)
+            var restart = false;
+
+            try
             {
-                try
+                if (gallifrey.VersionControl.UpdateInstalled)
                 {
-                    Application.Restart();
-                }
-                catch (Exception)
-                {
-                    MessageBox.Show("An Error Occured When Trying To Restart, Please Restart Manually", "Restart Failure", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    restart = true;
+                    try
+                    {
+                        Application.Restart();
+                    }
+                    catch (Exception)
+                    {
+                        MessageBox.Show("An Error Occured When Trying To Restart, Please Restart Manually", "Restart Failure", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    }
                 }
             }
-            else
+            catch (Exception)
+            {
+                //supress error
+            }
+            
+            if (!restart)
             {
                 switch (WindowState)
                 {
@@ -632,7 +682,7 @@ namespace Gallifrey.UI.Classic
                 var fontPath = Path.Combine(Environment.CurrentDirectory, "digital7.ttf");
                 if (!File.Exists(fontPath))
                 {
-                    File.WriteAllBytes(fontPath, Properties.Resources.digital7);
+                    File.WriteAllBytes(fontPath, Resources.digital7);
                 }
 
                 privateFontCollection.AddFontFile(fontPath);
@@ -653,7 +703,7 @@ namespace Gallifrey.UI.Classic
             if (checkingUpdate) upToDateText = "Checking Updates!";
             if (noUpdate) upToDateText = "No New Updates!";
 
-            var myVersion = string.Format("Currently Running {0}\n{1}", gallifrey.VersionControl.VersionName, upToDateText);
+            var myVersion = $"Currently Running {gallifrey.VersionControl.VersionName}\n{upToDateText}";
 
             if (lblUpdate.Text != myVersion)
             {
@@ -702,7 +752,7 @@ namespace Gallifrey.UI.Classic
                     list.ListChanged += OnListChanged;
                     internalTimerList[validDate] = list;
 
-                    var timerList = (ListBox)tabTimerDays.TabPages[validDate.ToString("yyyyMMdd")].Controls[string.Format("lst_{0}", validDate.ToString("yyyyMMdd"))];
+                    var timerList = (ListBox)tabTimerDays.TabPages[validDate.ToString("yyyyMMdd")].Controls[$"lst_{validDate.ToString("yyyyMMdd")}"];
                     timerList.DataSource = internalTimerList[validDate];
                 }
 
@@ -732,8 +782,8 @@ namespace Gallifrey.UI.Classic
             foreach (var timerlistValue in internalTimerList.OrderByDescending(x => x.Key))
             {
                 var tabName = timerlistValue.Key.Date.ToString("yyyyMMdd");
-                var tabListName = string.Format("lst_{0}", tabName);
-                var tabDisplay = string.Format("{0} [ {1} ]", timerlistValue.Key.Date.ToString("ddd, dd MMM"), gallifrey.JiraTimerCollection.GetTotalTimeForDate(timerlistValue.Key).FormatAsString());
+                var tabListName = $"lst_{tabName}";
+                var tabDisplay = $"{timerlistValue.Key.Date.ToString("ddd, dd MMM")} [ {gallifrey.JiraTimerCollection.GetTotalTimeForDate(timerlistValue.Key).FormatAsString()} ]";
                 var page = tabTimerDays.TabPages[tabName];
 
                 if (page == null)
@@ -883,7 +933,7 @@ namespace Gallifrey.UI.Classic
             {
                 var jiraTimer = jiraTimerList.First();
                 var tabName = jiraTimer.DateStarted.Date.ToString("yyyyMMdd");
-                var tabDisplay = string.Format("{0} [ {1} ]", jiraTimer.DateStarted.Date.ToString("ddd, dd MMM"), gallifrey.JiraTimerCollection.GetTotalTimeForDate(jiraTimer.DateStarted).FormatAsString());
+                var tabDisplay = $"{jiraTimer.DateStarted.Date.ToString("ddd, dd MMM")} [ {gallifrey.JiraTimerCollection.GetTotalTimeForDate(jiraTimer.DateStarted).FormatAsString()} ]";
                 var page = tabTimerDays.TabPages[tabName];
 
                 if (page != null && page.Text != tabDisplay) page.Text = tabDisplay;
@@ -897,7 +947,7 @@ namespace Gallifrey.UI.Classic
             foreach (TabPage tabPage in tabTimerDays.TabPages)
             {
                 var foundMatch = false;
-                var tabList = (ListBox)tabPage.Controls[string.Format("lst_{0}", tabPage.Name)];
+                var tabList = (ListBox)tabPage.Controls[$"lst_{tabPage.Name}"];
                 foreach (var item in tabList.Items.Cast<JiraTimer>().Where(item => item.UniqueId == selectedTimerId))
                 {
                     try
@@ -951,9 +1001,9 @@ namespace Gallifrey.UI.Classic
         private void SetExportStats()
         {
             var numbersExported = gallifrey.JiraTimerCollection.GetNumberExported();
-            lblExportStat.Text = string.Format("Exported: {0}/{1}", numbersExported.Item1, numbersExported.Item2);
+            lblExportStat.Text = $"Exported: {numbersExported.Item1}/{numbersExported.Item2}";
 
-            lblUnexportedTime.Text = string.Format("Un-Exported Time: {0}", gallifrey.JiraTimerCollection.GetTotalUnexportedTime().FormatAsString(false));
+            lblUnexportedTime.Text = $"Un-Exported Time: {gallifrey.JiraTimerCollection.GetTotalUnexportedTime().FormatAsString(false)}";
         }
 
         private void SetExportTargetStats()
@@ -961,8 +1011,8 @@ namespace Gallifrey.UI.Classic
             var exportedTime = gallifrey.JiraTimerCollection.GetTotalExportedTimeThisWeek(gallifrey.Settings.AppSettings.StartOfWeek);
             var target = gallifrey.Settings.AppSettings.GetTargetThisWeek();
 
-            lblExportedWeek.Text = string.Format("Exported: {0}", exportedTime.FormatAsString(false));
-            lblExportTargetWeek.Text = string.Format("Target: {0}", target.FormatAsString(false));
+            lblExportedWeek.Text = $"Exported: {exportedTime.FormatAsString(false)}";
+            lblExportTargetWeek.Text = $"Target: {target.FormatAsString(false)}";
             progExportTarget.Maximum = (int)target.TotalMinutes;
 
             if (progExportTarget.Maximum == 0)
@@ -1013,33 +1063,25 @@ namespace Gallifrey.UI.Classic
         {
             JiraTimer selectedTimer = null;
             var selectedTab = tabTimerDays.SelectedTab;
-            if (selectedTab != null)
+            var selectedList = (ListBox) selectedTab?.Controls[$"lst_{selectedTab.Name}"];
+            if (selectedList != null)
             {
-                var selectedList = ((ListBox)selectedTab.Controls[string.Format("lst_{0}", selectedTab.Name)]);
-                if (selectedList != null)
+                try
                 {
-                    try
-                    {
-                        selectedTimer = (JiraTimer) selectedList.SelectedItem;
-                    }
-                    catch (IndexOutOfRangeException)
-                    {
-                        /* There Seems to be some situations this throws, for no good reason */
-                    }
-                    catch (NullReferenceException)
-                    {
-                        RefreshInternalTimerList();
-                        return GetSelectedTimer();
-                    }
+                    selectedTimer = (JiraTimer)selectedList.SelectedItem;
+                }
+                catch (IndexOutOfRangeException)
+                {
+                    /* There Seems to be some situations this throws, for no good reason */
+                }
+                catch (NullReferenceException)
+                {
+                    RefreshInternalTimerList();
+                    return GetSelectedTimer();
                 }
             }
 
-            if (selectedTimer != null)
-            {
-                return selectedTimer;
-            }
-
-            return null;
+            return selectedTimer;
         }
 
         #endregion
@@ -1053,7 +1095,7 @@ namespace Gallifrey.UI.Classic
                 var restart = false;
                 try
                 {
-                    if (gallifrey.VersionControl.AlreadyInstalledUpdate)
+                    if (gallifrey.VersionControl.UpdateInstalled)
                     {
                         restart = true;
                     }
@@ -1113,7 +1155,7 @@ namespace Gallifrey.UI.Classic
             {
                 UpdateComplete();
             }
-            else if(updateResult.Result == UpdateResult.NoUpdate)
+            else if (updateResult.Result == UpdateResult.NoUpdate)
             {
                 SetVersionNumber();
             }
@@ -1137,13 +1179,13 @@ namespace Gallifrey.UI.Classic
                 grpUpdates.Text = "Update Avaliable";
                 lblUpdate.BackColor = Color.OrangeRed;
                 lblUpdate.BorderStyle = BorderStyle.FixedSingle;
-                lblUpdate.Image = Properties.Resources.Download_16x16;
+                lblUpdate.Image = Resources.Download_16x16;
 
                 try
                 {
-                    lblUpdate.Text = string.Format("    {0}\nClick Here To Restart.", gallifrey.VersionControl.VersionName);
+                    lblUpdate.Text = $"    {gallifrey.VersionControl.VersionName}\nClick Here To Restart.";
 
-                    notifyAlert.ShowBalloonTip(10000, "Update Avaliable", string.Format("An Update To v{0} Has Been Downloaded!", gallifrey.VersionControl.VersionName), ToolTipIcon.Info);
+                    notifyAlert.ShowBalloonTip(10000, "Update Avaliable", $"An Update To {gallifrey.VersionControl.VersionName} Has Been Downloaded!", ToolTipIcon.Info);
                 }
                 catch (Exception)
                 {
@@ -1222,7 +1264,7 @@ namespace Gallifrey.UI.Classic
                 }
                 catch (Exception)
                 {
-                    MessageBox.Show(string.Format("Unable To Locate That Jira.\n\nJira Ref Dropped: '{0}'", jiraRef), "Cannot Find Jira", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show($"Unable To Locate That Jira.\n\nJira Ref Dropped: '{jiraRef}'", "Cannot Find Jira", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
 

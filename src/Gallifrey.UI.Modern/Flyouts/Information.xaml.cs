@@ -1,70 +1,46 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Linq;
 using System.Windows;
+using System.Windows.Navigation;
 using System.Xml.Linq;
+using Gallifrey.AppTracking;
+using Gallifrey.UI.Modern.Helpers;
 using Gallifrey.UI.Modern.Models;
 using MahApps.Metro.Controls.Dialogs;
 
 namespace Gallifrey.UI.Modern.Flyouts
 {
-    /// <summary>
-    /// Interaction logic for Information.xaml
-    /// </summary>
     public partial class Information
     {
-        private readonly MainViewModel viewModel;
+        private readonly ModelHelpers modelHelpers;
 
-        public Information(MainViewModel viewModel)
+        public Information(ModelHelpers modelHelpers)
         {
-            this.viewModel = viewModel;
+            this.modelHelpers = modelHelpers;
             InitializeComponent();
-            DataContext = new ContributorsModel();
+            DataContext = new InformationModel(modelHelpers.Gallifrey);
+            modelHelpers.Gallifrey.TrackEvent(TrackingType.InformationShown);
         }
 
-        private void EmailButton(object sender, RoutedEventArgs e)
+        private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
         {
-            Process.Start(new ProcessStartInfo("mailto:contact@gallifreyapp.co.uk?subject=Gallifrey App Contact"));
+            Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
             e.Handled = true;
         }
 
-        private void TwitterButton(object sender, RoutedEventArgs e)
+        private async void ChangeLogButton(object sender, RoutedEventArgs e)
         {
-            Process.Start(new ProcessStartInfo("https://twitter.com/GallifreyApp"));
-            e.Handled = true;
-        }
-
-        private void ChangeLogButton(object sender, RoutedEventArgs e)
-        {
-            if (viewModel.Gallifrey.VersionControl.IsAutomatedDeploy)
+            modelHelpers.CloseFlyout(this);
+            var changeLog = modelHelpers.Gallifrey.GetChangeLog(XDocument.Parse(Properties.Resources.ChangeLog)).ToList();
+            if (changeLog.Any())
             {
-                var changeLog = viewModel.Gallifrey.GetChangeLog(XDocument.Parse(Properties.Resources.ChangeLog));
-
-                if (changeLog.Any())
-                {
-                    viewModel.MainWindow.OpenFlyout(new ChangeLog(viewModel, changeLog));
-                }
-                else
-                {
-                    viewModel.MainWindow.ShowMessageAsync("No Change Log", "There Is No Change Log To Show");
-                }
+                await modelHelpers.OpenFlyout(new ChangeLog(changeLog));
             }
             else
             {
-                viewModel.MainWindow.ShowMessageAsync("No Change Log", "You Cannot Display Change Log On Non Deployed Versions");
+                await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "No Change Log", "There Is No Change Log To Show");
             }
-        }
-
-        private void PayPalButton(object sender, RoutedEventArgs e)
-        {
-            Process.Start(new ProcessStartInfo("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=G3MWL8E6UG4RS"));
-            e.Handled = true;
-        }
-
-        private void GitHubButton(object sender, RoutedEventArgs e)
-        {
-            Process.Start(new ProcessStartInfo("https://github.com/BlythMeister/Gallifrey"));
-            e.Handled = true;
+            modelHelpers.OpenFlyout(this);
         }
     }
 }

@@ -53,6 +53,7 @@
             this.btnGitHub = new System.Windows.Forms.Button();
             this.btnPayPal = new System.Windows.Forms.Button();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.lblInstallId = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label2
@@ -86,12 +87,12 @@
             // 
             // label3
             // 
-            this.label3.Location = new System.Drawing.Point(14, 64);
+            this.label3.Location = new System.Drawing.Point(14, 85);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(356, 93);
+            this.label3.Size = new System.Drawing.Size(356, 72);
             this.label3.TabIndex = 3;
-            this.label3.Text = "Gallifrey is a time logging companion designed to work with Jira time logs.\r\n\r\nGa" +
-    "llifrey is open sourced on GitHub and free to download and contribute!";
+            this.label3.Text = "Gallifrey is a time logging companion designed to work with Jira time logs.\r\nGall" +
+    "ifrey is open sourced on GitHub and free to download and contribute!";
             // 
             // label4
             // 
@@ -270,6 +271,15 @@
             this.btnPayPal.UseVisualStyleBackColor = true;
             this.btnPayPal.Click += new System.EventHandler(this.btnPayPal_Click);
             // 
+            // lblInstallId
+            // 
+            this.lblInstallId.AutoSize = true;
+            this.lblInstallId.Location = new System.Drawing.Point(14, 61);
+            this.lblInstallId.Name = "lblInstallId";
+            this.lblInstallId.Size = new System.Drawing.Size(96, 17);
+            this.lblInstallId.TabIndex = 21;
+            this.lblInstallId.Text = "Install ID: XXXX";
+            // 
             // AboutWindow
             // 
             this.AcceptButton = this.btnOK;
@@ -277,6 +287,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(382, 686);
             this.ControlBox = false;
+            this.Controls.Add(this.lblInstallId);
             this.Controls.Add(this.btnChangeLog);
             this.Controls.Add(this.btnTwitter);
             this.Controls.Add(this.btnEmail);
@@ -339,5 +350,6 @@
         private System.Windows.Forms.Button btnTwitter;
         private System.Windows.Forms.Button btnChangeLog;
         private System.Windows.Forms.ToolTip toolTip;
+        private System.Windows.Forms.Label lblInstallId;
     }
 }

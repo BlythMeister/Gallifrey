@@ -1,25 +1,25 @@
 ﻿<UserControl x:Class="Gallifrey.UI.Modern.MainViews.TimerTabs"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro">
+             xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro">
 
-    <Controls:MetroAnimatedSingleRowTabControl TabStripPlacement="Left" ItemsSource="{Binding TimerDates}">
+    <controls:MetroAnimatedSingleRowTabControl TabStripPlacement="Left" ItemsSource="{Binding TimerDates}" DragOver="TabDragOver" Drop="TagDragDrop" AllowDrop="True" Margin="5,0,0,0" >
         <TabControl.ItemContainerStyle>
             <Style TargetType="TabItem">
                 <Setter Property="Header" Value="{Binding Header}" />
-                <Setter Property="Controls:ControlsHelper.HeaderFontSize" Value="17" />
+                <Setter Property="controls:ControlsHelper.HeaderFontSize" Value="17" />
                 <Setter Property="HorizontalAlignment" Value="Right" />
                 <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             </Style>
         </TabControl.ItemContainerStyle>
         <TabControl.ContentTemplate>
             <DataTemplate>
-                <ListView ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemsSource="{Binding Timers}" MouseDoubleClick="TimerList_MouseDoubleClick" BorderThickness="0">
+                <ListView ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemsSource="{Binding Timers}" MouseDoubleClick="TimerList_MouseDoubleClick" BorderThickness="0" SelectionMode="Extended">
                     <ListView.ItemContainerStyle>
                         <Style TargetType="{x:Type ListViewItem}">
                             <Setter Property="Margin" Value="3" />
                             <Setter Property="Padding" Value="4" />
-                            <Setter Property="BorderBrush" Value="LightGray" />
+                            <Setter Property="BorderBrush" Value="{DynamicResource GrayBrush2}" />
                             <Setter Property="BorderThickness" Value="2" />
                             <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                             <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
@@ -27,16 +27,17 @@
                                 <Style TargetType="Border">
                                     <Setter Property="CornerRadius" Value="5"/>
                                 </Style>
-                                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="{DynamicResource AccentColor3}"/>
-                                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="{DynamicResource AccentColor3}" />
-                                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="{DynamicResource IdealForegroundColor}" />
+                                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="{DynamicResource Gray8}"/>
+                                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="{DynamicResource BlackColor}" />
+                                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="{DynamicResource Gray8}" />
+                                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="{DynamicResource BlackColor}" />
                             </Style.Resources>
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding IsRunning}" Value="True" >
-                                    <Setter Property="BorderBrush" Value="ForestGreen"/>
+                                    <Setter Property="BorderBrush" Value="{DynamicResource AccentColorBrush}"/>
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding HasTimeToExportAndNotRunning}" Value="True" >
-                                    <Setter Property="BorderBrush" Value="OrangeRed"/>
+                                    <Setter Property="BorderBrush" Value="{DynamicResource AccentColorBrush}"/>
                                 </DataTrigger>
                                 <Trigger Property="IsMouseOver" Value="True">
                                     <Setter Property="Background" Value="{DynamicResource AccentColorBrush4}" />
@@ -55,60 +56,11 @@
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
 
-                                <Grid Grid.Row="0" Grid.Column="1">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                    </Grid.RowDefinitions>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition Width="Auto" />
-                                    </Grid.ColumnDefinitions>
-
-                                    <TextBlock Grid.Column="0" Grid.Row="1" FontSize="12" Margin="3,0,3,0" Text="To Export:">
-                                        <TextBlock.Style>
-                                            <Style TargetType="TextBlock">
-                                                <Setter Property="Visibility" Value="Collapsed" />
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding HasTimeToExport}" Value="True" >
-                                                        <Setter Property="Visibility" Value="Visible" />
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </TextBlock.Style>
-                                    </TextBlock>
-                                    <TextBlock Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" FontSize="26" Margin="3,0,0,0" Text="{Binding CurrentTime}">
-                                        <TextBlock.Style>
-                                            <Style TargetType="TextBlock">
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding IsRunning}" Value="True" >
-                                                        <Setter Property="Foreground" Value="ForestGreen"/>
-                                                        <Setter Property="FontWeight" Value="Bold" />
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </TextBlock.Style>
-                                    </TextBlock>
-                                    <TextBlock Grid.Column="1" Grid.Row="1" FontSize="12" Margin="3,0,0,0" Text="{Binding ExportTime}">
-                                        <TextBlock.Style>
-                                            <Style TargetType="TextBlock">
-                                                <Setter Property="Visibility" Value="Collapsed" />
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding HasTimeToExport}" Value="True" >
-                                                        <Setter Property="Foreground" Value="OrangeRed"/>
-                                                        <Setter Property="FontWeight" Value="Bold" />
-                                                        <Setter Property="Visibility" Value="Visible" />
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </TextBlock.Style>
-                                    </TextBlock>
-                                </Grid>
-
                                 <TextBlock Grid.Row="0" Grid.Column="0" FontSize="25" Margin="3,0,0,0" Text="{Binding Reference}" />
-                                <WrapPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="3,0,0,0" >
+                                <WrapPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Margin="3,0,0,0" >
                                     <TextBlock  FontSize="13" TextWrapping="Wrap" Text="{Binding ParentDescription}" />
                                     <TextBlock  FontSize="13" TextWrapping="Wrap" Text=" (" />
                                     <TextBlock  FontSize="13" TextWrapping="Wrap" Text="{Binding ParentReference}" />
@@ -123,12 +75,66 @@
                                         </Style>
                                     </WrapPanel.Style>
                                 </WrapPanel>
-                                <TextBlock Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" FontSize="13" Margin="3,0,0,0" TextWrapping="Wrap" Text="{Binding Description}" />
+                                <TextBlock Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" FontSize="13" Margin="3,0,0,0" TextWrapping="Wrap" Text="{Binding Description}" />
+
+
+                                <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Margin="0,0,6,0" VerticalAlignment="Center">
+                                    <TextBlock FontSize="18" Margin="0,0,5,0" Text="{Binding ExportTime}">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Visibility" Value="Collapsed" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding HasTimeToExport}" Value="True" >
+                                                        <Setter Property="Foreground" Value="{DynamicResource AccentColorBrush}"/>
+                                                        <Setter Property="Visibility" Value="Visible" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                    <TextBlock FontSize="18" Text="To Export">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Visibility" Value="Collapsed" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding HasTimeToExport}" Value="True" >
+                                                        <Setter Property="Visibility" Value="Visible" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </StackPanel>
+
+                                <TextBlock Grid.Row="0" Grid.Column="2" FontSize="26" Margin="3,0,0,0" Text="{Binding CurrentTime}">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsRunning}" Value="True" >
+                                                    <Setter Property="Foreground" Value="{DynamicResource AccentColorBrush}"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                                <Grid.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Header="Delete Timer" Click="ContextMenu_Delete"/>
+                                        <MenuItem Header="Edit Timer" Click="ContextMenu_Edit"/>
+                                        <MenuItem Header="Export Timer" Click="ContextMenu_Export"/>
+                                        <MenuItem Header="Start/Stop Timer" Click="ContextMenu_StartStop"/>
+                                    </ContextMenu>
+                                </Grid.ContextMenu>
                             </Grid>
                         </DataTemplate>
                     </ListView.ItemTemplate>
+                    <ListView.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Add New Timer" Click="ContextMenu_Add"/>
+                        </ContextMenu>
+                    </ListView.ContextMenu>
                 </ListView>
             </DataTemplate>
         </TabControl.ContentTemplate>
-    </Controls:MetroAnimatedSingleRowTabControl>
+    </controls:MetroAnimatedSingleRowTabControl>
 </UserControl>

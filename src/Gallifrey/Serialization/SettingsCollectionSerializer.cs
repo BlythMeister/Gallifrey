@@ -23,7 +23,19 @@ namespace Gallifrey.Serialization
                 serializer = new ItemSerializer<SettingsCollection>("Settings.dat");
             }
 
-            return serializer.DeSerialize();
+            var settings = serializer.DeSerialize();
+
+            return SetMissingDefaults(settings);
+        }
+
+        private static SettingsCollection SetMissingDefaults(SettingsCollection settings)
+        {
+            if (settings.UiSettings.SetDefaults() || settings.InternalSettings.SetDefaults())
+            {
+                Serialize(settings);
+            }
+
+            return settings;
         }
     }
 }

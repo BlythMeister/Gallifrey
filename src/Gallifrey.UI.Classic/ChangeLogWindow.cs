@@ -9,54 +9,54 @@ namespace Gallifrey.UI.Classic
 {
     public partial class ChangeLogWindow : Form
     {
-        public ChangeLogWindow(IBackend gallifrey, IDictionary<Version, ChangeLogVersionDetails> changeLog)
+        public ChangeLogWindow(IBackend gallifrey, IEnumerable<ChangeLogVersion> changeLog)
         {
             InitializeComponent();
             
-            lblCurrentVersion.Text = string.Format("Current Version: {0}", gallifrey.VersionControl.VersionName);
+            lblCurrentVersion.Text = $"Current Version: {gallifrey.VersionControl.VersionName}";
 
             foreach (var changeLogDetail in changeLog)
             {
                 txtChangeLog.SelectionFont = new Font(txtChangeLog.SelectionFont.FontFamily, 14, FontStyle.Bold);
-                if (string.IsNullOrWhiteSpace(changeLogDetail.Value.Name))
+                if (string.IsNullOrWhiteSpace(changeLogDetail.Name))
                 {
-                    txtChangeLog.AppendText(string.Format("Version: {0}\n", changeLogDetail.Key));    
+                    txtChangeLog.AppendText($"Version: {changeLogDetail.Version}\n");    
                 }
                 else
                 {
-                    txtChangeLog.AppendText(string.Format("Version: {0} ({1})\n", changeLogDetail.Key, changeLogDetail.Value.Name));
+                    txtChangeLog.AppendText($"Version: {changeLogDetail.Version} ({changeLogDetail.Name})\n");
                 }
                 
-                if (changeLogDetail.Value.Features.Any())
+                if (changeLogDetail.Features.Any())
                 {
                     txtChangeLog.SelectionFont = new Font(txtChangeLog.SelectionFont.FontFamily, 12, FontStyle.Underline);
                     txtChangeLog.AppendText("New Features\n");
                     txtChangeLog.SelectionFont = new Font(txtChangeLog.SelectionFont.FontFamily, 10, FontStyle.Regular);
-                    foreach (var feature in changeLogDetail.Value.Features)
+                    foreach (var feature in changeLogDetail.Features)
                     {
-                        txtChangeLog.AppendText(string.Format("  => {0}\n", feature));
+                        txtChangeLog.AppendText($"  => {feature}\n");
                     }
                 }
 
-                if (changeLogDetail.Value.Bugs.Any())
+                if (changeLogDetail.Bugs.Any())
                 {
                     txtChangeLog.SelectionFont = new Font(txtChangeLog.SelectionFont.FontFamily, 12, FontStyle.Underline);
                     txtChangeLog.AppendText("Bug Fixes\n");
                     txtChangeLog.SelectionFont = new Font(txtChangeLog.SelectionFont.FontFamily, 10, FontStyle.Regular);
-                    foreach (var feature in changeLogDetail.Value.Bugs)
+                    foreach (var feature in changeLogDetail.Bugs)
                     {
-                        txtChangeLog.AppendText(string.Format("  => {0}\n", feature));
+                        txtChangeLog.AppendText($"  => {feature}\n");
                     }
                 }
 
-                if (changeLogDetail.Value.Others.Any())
+                if (changeLogDetail.Others.Any())
                 {
                     txtChangeLog.SelectionFont = new Font(txtChangeLog.SelectionFont.FontFamily, 12, FontStyle.Underline);
                     txtChangeLog.AppendText("Other Items\n");
                     txtChangeLog.SelectionFont = new Font(txtChangeLog.SelectionFont.FontFamily, 10, FontStyle.Regular);
-                    foreach (var feature in changeLogDetail.Value.Others)
+                    foreach (var feature in changeLogDetail.Others)
                     {
-                        txtChangeLog.AppendText(string.Format("  => {0}\n", feature));
+                        txtChangeLog.AppendText($"  => {feature}\n");
                     }
                 }
 

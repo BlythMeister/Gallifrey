@@ -1,7 +1,8 @@
-﻿<Controls:Flyout x:Class="Gallifrey.UI.Modern.Flyouts.Error"
+﻿<controls:Flyout x:Class="Gallifrey.UI.Modern.Flyouts.Error"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro" IsModal="True" Theme="Adapt" Position="Right" Header="Unexpected Error">
+             xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro" 
+             IsModal="True" Theme="Adapt" Position="Right" Header="Unexpected Error" CloseButtonIsCancel="True">
     <StackPanel Width="350" Margin="5,5,5,5" >
         <TextBlock Padding="5" TextWrapping="Wrap">
             Unfortunately Gallifrey has encountered an unrecoverable error.<LineBreak />
@@ -15,15 +16,15 @@
             The application will need to restart upon closing this message or submitting the report.
         </TextBlock>
         <TextBlock Padding="5">Email Address</TextBlock>
-        <TextBox Text="{Binding EmailAddress}" Controls:TextBoxHelper.Watermark="Optional"/>
+        <TextBox Text="{Binding EmailAddress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" controls:TextBoxHelper.Watermark="Optional"/>
         <TextBlock Padding="5">Description</TextBlock>
-        <TextBox Text="{Binding Description}" MaxLines="2" MinLines="2" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" TextWrapping="Wrap" Controls:TextBoxHelper.Watermark="Optional"/>
-        <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="55" Height="55" Margin="2" Click="SendReport" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
-            <Rectangle Width="30" Height="18" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
+        <TextBox Text="{Binding Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MaxLines="2" MinLines="2" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" TextWrapping="Wrap" controls:TextBoxHelper.Watermark="Optional"/>
+        <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="55" Height="55" Margin="2" Click="SendReport" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsDefault="True">
+            <Rectangle Width="30" Height="18" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}" ToolTip="Submit Error Report">
                 <Rectangle.OpacityMask>
                     <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_message_send}" />
                 </Rectangle.OpacityMask>
             </Rectangle>
         </Button>
     </StackPanel>
-</Controls:Flyout>
+</controls:Flyout>

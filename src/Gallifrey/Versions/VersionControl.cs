@@ -1,5 +1,4 @@
 using System;
-using System.CodeDom;
 using System.ComponentModel;
 using System.Deployment.Application;
 using System.Threading.Tasks;
@@ -14,8 +13,7 @@ namespace Gallifrey.Versions
         InstanceType InstanceType { get; }
         AppType AppType { get; }
         bool IsAutomatedDeploy { get; }
-        string ActivationUrl { get; }
-        bool AlreadyInstalledUpdate { get; }
+        bool UpdateInstalled { get; }
         string VersionName { get; }
         Version DeployedVersion { get; }
         bool IsFirstRun { get; }
@@ -33,10 +31,14 @@ namespace Gallifrey.Versions
         public InstanceType InstanceType { get; private set; }
         public AppType AppType { get; private set; }
         public string VersionName { get; private set; }
-
         public string AppName { get; private set; }
-        
+        public bool UpdateInstalled { get; private set; }
+
         private DateTime lastUpdateCheck;
+
+        public bool IsAutomatedDeploy => ApplicationDeployment.IsNetworkDeployed;
+        public Version DeployedVersion => UpdateInstalled ? ApplicationDeployment.CurrentDeployment.UpdatedVersion : ApplicationDeployment.CurrentDeployment.CurrentVersion;
+        public bool IsFirstRun => ApplicationDeployment.CurrentDeployment.IsFirstRun;
 
         public VersionControl(InstanceType instanceType, AppType appType, ITrackUsage trackUsage)
         {
@@ -47,10 +49,10 @@ namespace Gallifrey.Versions
 
             SetVersionName();
 
-            var instance = InstanceType == InstanceType.Stable ? "" : string.Format(" ({0})", InstanceType);
+            var instance = InstanceType == InstanceType.Stable ? "" : $" ({InstanceType})";
             var appName = AppType == AppType.Classic ? "Gallifrey Classic" : "Gallifrey";
 
-            AppName = string.Format("{0}{1}", appName, instance);
+            AppName = $"{appName}{instance}";
         }
 
         private void SetVersionName()
@@ -61,43 +63,18 @@ namespace Gallifrey.Versions
                 VersionName = VersionName.Substring(0, VersionName.LastIndexOf("."));
             }
 
-            var betaText = InstanceType == InstanceType.Stable ? "" : string.Format(" ({0})", InstanceType);
+            var betaText = InstanceType == InstanceType.Stable ? "" : $" ({InstanceType})";
 
             if (!IsAutomatedDeploy)
             {
                 betaText = " (Debug)";
             }
 
-            VersionName = string.Format("v{0}{1}", VersionName, betaText);
+            VersionName = $"v{VersionName}{betaText}";
 
-            if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("VersionName")); 
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("VersionName")); 
         }
-
-        public bool IsAutomatedDeploy
-        {
-            get { return ApplicationDeployment.IsNetworkDeployed; }
-        }
-
-        public string ActivationUrl
-        {
-            get { return ApplicationDeployment.CurrentDeployment.ActivationUri != null ? ApplicationDeployment.CurrentDeployment.ActivationUri.ToString() : string.Empty; }
-        }
-
-        public bool AlreadyInstalledUpdate
-        {
-            get { return ApplicationDeployment.IsNetworkDeployed && ApplicationDeployment.CurrentDeployment != null && ApplicationDeployment.CurrentDeployment.UpdatedVersion != ApplicationDeployment.CurrentDeployment.CurrentVersion; }
-        }
-
-        public Version DeployedVersion
-        {
-            get { return AlreadyInstalledUpdate ? ApplicationDeployment.CurrentDeployment.UpdatedVersion : ApplicationDeployment.CurrentDeployment.CurrentVersion; }
-        }
-
-        public bool IsFirstRun
-        {
-            get { return ApplicationDeployment.CurrentDeployment.IsFirstRun; }
-        }
-
+        
         public Task<UpdateResult> CheckForUpdates(bool manualCheck = false)
         {
             if (!IsAutomatedDeploy)
@@ -119,6 +96,7 @@ namespace Gallifrey.Versions
                         return Task.Factory.StartNew(() => ApplicationDeployment.CurrentDeployment.Update()).ContinueWith(task =>
                         {
                             SetVersionName();
+                            UpdateInstalled = true;
                             return UpdateResult.Updated;
                         });
                     }

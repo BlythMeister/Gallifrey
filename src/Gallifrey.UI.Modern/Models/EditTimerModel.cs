@@ -5,29 +5,34 @@ namespace Gallifrey.UI.Modern.Models
 {
     public class EditTimerModel : INotifyPropertyChanged
     {
+        private string jiraReference;
+        private DateTime? runDate;
+        private int hours;
+        private int minutes;
+
         public event PropertyChangedEventHandler PropertyChanged;
-        public Guid UniqueId { get; private set; }
-        public string JiraReference { get; set; }
+        
         public bool JiraReferenceEditable { get; set; }
         public DateTime MinDate { get; set; }
         public DateTime MaxDate { get; set; }
-        public DateTime? RunDate { get; set; }
         public DateTime DisplayDate { get; set; }
         public bool DateEditable { get; set; }
-        public int Hours { get; set; }
-        public int Minutes { get; set; }
         public bool TimeEditable { get; set; }
         public string OriginalJiraReference { get; set; }
         public DateTime? OriginalRunDate { get; set; }
         public int OriginalHours { get; set; }
         public int OriginalMinutes { get; set; }
-        
+        public bool IsDefaultOnButton { get; set; }
+
+        public bool HasModifiedJiraReference => OriginalJiraReference != JiraReference;
+        public bool HasModifiedRunDate => OriginalRunDate != RunDate;
+        public bool HasModifiedTime => OriginalHours != Hours || OriginalMinutes != Minutes;
+
         public EditTimerModel(IBackend gallifrey, Guid timerId)
         {
             var dateToday = DateTime.Now;
             var timer = gallifrey.JiraTimerCollection.GetTimer(timerId);
 
-            UniqueId = timerId;
             JiraReference = timer.JiraReference;
 
             if (gallifrey.Settings.AppSettings.KeepTimersForDays > 0)
@@ -56,21 +61,66 @@ namespace Gallifrey.UI.Modern.Models
             OriginalHours = Hours;
             OriginalMinutes = Minutes;
 
+            IsDefaultOnButton = true;
         }
 
-        public bool HasModifiedJiraReference()
+        public string JiraReference
         {
-            return OriginalJiraReference != JiraReference;
+            get { return jiraReference; }
+            set
+            {
+                jiraReference = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasModifiedJiraReference"));
+            }
         }
 
-        public bool HasModifiedRunDate()
+        public DateTime? RunDate
         {
-            return OriginalRunDate != RunDate;
+            get { return runDate; }
+            set
+            {
+                runDate = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasModifiedRunDate"));
+            }
         }
 
-        public bool HasModifiedTime()
+        public int Hours
         {
-            return OriginalHours != Hours || OriginalMinutes != Minutes;
+            get { return hours; }
+            set
+            {
+                hours = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasModifiedTime"));
+            }
+        }
+
+        public int Minutes
+        {
+            get { return minutes; }
+            set
+            {
+                minutes = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasModifiedTime"));
+            }
+        }
+
+        public void SetNotDefaultButton()
+        {
+            IsDefaultOnButton = false;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("IsDefaultOnButton"));
+        }
+        
+        public void AdjustTime(TimeSpan timeAdjustmentAmount, bool addTime)
+        {
+            var currentTime = new TimeSpan(Hours, Minutes, 0);
+
+            currentTime = addTime ? currentTime.Add(timeAdjustmentAmount) : currentTime.Subtract(timeAdjustmentAmount);
+
+            Hours = currentTime.Hours > 9 ? 9 : currentTime.Hours;
+            Minutes = currentTime.Minutes;
+
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Hours"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Minutes"));
         }
     }
 }

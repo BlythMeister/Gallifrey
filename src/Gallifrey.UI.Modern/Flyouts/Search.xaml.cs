@@ -1,123 +1,103 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using Gallifrey.Jira.Model;
+using Gallifrey.UI.Modern.Helpers;
 using Gallifrey.UI.Modern.Models;
 using MahApps.Metro.Controls.Dialogs;
 
 namespace Gallifrey.UI.Modern.Flyouts
 {
-    /// <summary>
-    /// Interaction logic for Search.xaml
-    /// </summary>
     public partial class Search
     {
         public JiraIssueDisplayModel SelectedJira { get; private set; }
-
-        private readonly MainViewModel viewModel;
+        private SearchModel DataModel => (SearchModel)DataContext;
+        private readonly ModelHelpers modelHelpers;
         private readonly bool openFromAdd;
+        private readonly JiraHelper jiraHelper;
 
-        public Search(MainViewModel viewModel, bool openFromAdd)
+        public Search(ModelHelpers modelHelpers, bool openFromAdd)
         {
-            this.viewModel = viewModel;
+            this.modelHelpers = modelHelpers;
             this.openFromAdd = openFromAdd;
             InitializeComponent();
+            jiraHelper = new JiraHelper(modelHelpers.DialogContext);
 
-            var filters = viewModel.Gallifrey.JiraConnection.GetJiraFilters();
-            var issues = viewModel.Gallifrey.JiraConnection.GetJiraCurrentUserOpenIssues();
-            DataContext = new SearchModel(filters, issues);
+            var filters = modelHelpers.Gallifrey.JiraConnection.GetJiraFilters();
+            var issues = modelHelpers.Gallifrey.JiraConnection.GetJiraCurrentUserOpenIssues();
+            var recent = modelHelpers.Gallifrey.JiraTimerCollection.GetJiraReferencesForLastDays(100);
+            DataContext = new SearchModel(filters, recent, issues);
         }
 
         private async void SearchButton(object sender, RoutedEventArgs e)
         {
-            var model = (SearchModel)DataContext;
-            Task<IEnumerable<Issue>> searchTask = null;
-            model.SetIsSearching();
-            var cancellationTokenSource = new CancellationTokenSource();
+            try
+            {
+                DataModel.SetIsSearching();
 
-            if (!string.IsNullOrWhiteSpace(model.SearchTerm))
-            {
-                searchTask = Task.Factory.StartNew(() => viewModel.Gallifrey.JiraConnection.GetJiraIssuesFromSearchText(model.SearchTerm), cancellationTokenSource.Token);
-            }
-            else if (!string.IsNullOrWhiteSpace(model.SelectedFilter))
-            {
-                searchTask = Task.Factory.StartNew(() => viewModel.Gallifrey.JiraConnection.GetJiraIssuesFromFilter(model.SelectedFilter), cancellationTokenSource.Token);
-            }
-            else
-            {
-                viewModel.MainWindow.ShowMessageAsync("No Results", "Your Search Returned No Results");
-            }
-
-            if (searchTask != null)
-            {
-                try
+                Func<IEnumerable<Issue>> searchFunc;
+                if (!string.IsNullOrWhiteSpace(DataModel.SearchTerm))
                 {
-                    var controller = await viewModel.MainWindow.ShowProgressAsync("Please Wait", "Search In Progress", true);
-                    var controllerCancel = Task.Factory.StartNew(() => 
-                    {
-                        while (!controller.IsCanceled)
-                        {
-                            
-                        }
-                    });
-
-                    var cancelled = false;
-                    if (await Task.WhenAny(searchTask, controllerCancel) == controllerCancel)
-                    {
-                        cancellationTokenSource.Cancel();
-                        cancelled = true;
-                    }
-
-                    await controller.CloseAsync();
-
-                    if (!cancelled)
-                    {
-                        if (searchTask.IsCompleted)
-                        {
-                            model.UpdateSearchResults(searchTask.Result);
-                        }
-                        else
-                        {
-                            viewModel.MainWindow.ShowMessageAsync("No Results", "There Was An Error Getting Search Results");
-                            model.ClearSearchResults();
-                        }
-                    }
-                    else
-                    {
-                        model.ClearSearchResults();
-                    }
+                    var searchTerm = DataModel.SearchTerm;
+                    searchFunc = () => modelHelpers.Gallifrey.JiraConnection.GetJiraIssuesFromSearchText(searchTerm);
                 }
-                catch (Exception)
+                else if (!string.IsNullOrWhiteSpace(DataModel.SelectedFilter))
                 {
-                    viewModel.MainWindow.ShowMessageAsync("No Results", "There Was An Error Getting Search Results");
-                    model.ClearSearchResults();
+                    var searchFilter = DataModel.SelectedFilter;
+                    searchFunc = () => modelHelpers.Gallifrey.JiraConnection.GetJiraIssuesFromFilter(searchFilter);
                 }
+                else
+                {
+                    await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "No Results", "Your Search Returned No Results");
+                    Focus();
+                    return;
+                }
+
+                var searchResult = await jiraHelper.Do(searchFunc, "Search In Progress", true, false);
+
+                switch (searchResult.Status)
+                {
+                    case JiraHelperResult<IEnumerable<Issue>>.JiraHelperStatus.Cancelled:
+                        DataModel.ClearSearchResults();
+                        return;
+                    case JiraHelperResult<IEnumerable<Issue>>.JiraHelperStatus.Errored:
+                        throw new Exception();
+                    case JiraHelperResult<IEnumerable<Issue>>.JiraHelperStatus.Success:
+                        DataModel.UpdateSearchResults(searchResult.RetVal);
+                        break;
+                }
+            }
+            catch (Exception)
+            {
+                await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "No Results", "There Was An Error Getting Search Results");
+                Focus();
+                DataModel.ClearSearchResults();
             }
         }
 
-        private void AddTimer(object sender, RoutedEventArgs e)
+        private async void AddTimer(object sender, RoutedEventArgs e)
         {
-            var model = (SearchModel)DataContext;
-            if (model.SelectedSearchResult == null)
+            if (DataModel.SelectedSearchResult == null)
             {
-                viewModel.MainWindow.ShowMessageAsync("No Selected Item", "You Need To Select An Item To Add A Timer For It");
+                await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "No Selected Item", "You Need To Select An Item To Add A Timer For It");
+                Focus();
                 return;
             }
 
+            modelHelpers.CloseFlyout(this);
             if (openFromAdd)
             {
-                SelectedJira = model.SelectedSearchResult;
+                SelectedJira = DataModel.SelectedSearchResult;
             }
             else
             {
-                var addFlyout = new AddTimer(viewModel, model.SelectedSearchResult.Reference);
-                viewModel.MainWindow.OpenFlyout(addFlyout);
+                var addFlyout = new AddTimer(modelHelpers, DataModel.SelectedSearchResult.Reference);
+                await modelHelpers.OpenFlyout(addFlyout);
+                if (!addFlyout.AddedTimer)
+                {
+                    modelHelpers.OpenFlyout(this);
+                }
             }
-
-            IsOpen = false;
         }
     }
 }

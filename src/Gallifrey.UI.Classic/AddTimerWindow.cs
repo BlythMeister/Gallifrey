@@ -111,7 +111,7 @@ namespace Gallifrey.UI.Classic
 
             if (txtJiraRef.Enabled)
             {
-                if (MessageBox.Show(string.Format("Jira found!\n\nRef: {0}\nName: {1}\n\nIs that correct?", jiraIssue.key, jiraIssue.fields.summary), "Correct Jira?", MessageBoxButtons.YesNo) == DialogResult.No)
+                if (MessageBox.Show($"Jira found!\n\nRef: {jiraIssue.key}\nName: {jiraIssue.fields.summary}\n\nIs that correct?", "Correct Jira?", MessageBoxButtons.YesNo) == DialogResult.No)
                 {
                     return false;
                 }
@@ -121,10 +121,37 @@ namespace Gallifrey.UI.Classic
             {
                 NewTimerId = gallifrey.JiraTimerCollection.AddTimer(jiraIssue, startDate, seedTime, chkStartNow.Checked);
             }
-            catch (DuplicateTimerException)
+            catch (DuplicateTimerException ex)
             {
-                MessageBox.Show("This Timer Already Exists!", "Duplicate Timer", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
+                var doneSomething = false;
+                if (seedTime.TotalMinutes > 0)
+                {
+                    var result = MessageBox.Show("The Timer Already Exists, Would You Like To Add The Time?", "Duplicate Timer", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                    if (result == DialogResult.Yes)
+                    {
+                        gallifrey.JiraTimerCollection.AdjustTime(ex.TimerId, seedTime.Hours, seedTime.Minutes, true);
+                        doneSomething = true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+
+                if (chkStartNow.Checked)
+                {
+                    gallifrey.JiraTimerCollection.StartTimer(ex.TimerId);
+                    doneSomething = true;
+                }
+
+                if (!doneSomething)
+                {
+                    MessageBox.Show("This Timer Already Exists!", "Duplicate Timer", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return false;
+                }
+
+                NewTimerId = ex.TimerId;
             }
 
             if (chkAssign.Checked)

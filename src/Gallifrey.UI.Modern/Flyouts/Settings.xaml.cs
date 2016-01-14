@@ -6,31 +6,27 @@ using MahApps.Metro.Controls.Dialogs;
 
 namespace Gallifrey.UI.Modern.Flyouts
 {
-    /// <summary>
-    /// Interaction logic for Settings.xaml
-    /// </summary>
     public partial class Settings
     {
-        private readonly MainViewModel viewModel;
+        private readonly ModelHelpers modelHelpers;
+        private SettingModel DataModel => (SettingModel)DataContext;
 
-        public Settings(MainViewModel viewModel)
+        public Settings(ModelHelpers modelHelpers)
         {
-            this.viewModel = viewModel;
+            this.modelHelpers = modelHelpers;
             InitializeComponent();
 
-            DataContext = new SettingModel(viewModel.Gallifrey.Settings);
+            DataContext = new SettingModel(modelHelpers.Gallifrey.Settings, modelHelpers.Gallifrey.VersionControl);
         }
 
         private async void SaveSettings(object sender, RoutedEventArgs e)
         {
             var successfulSave = true;
-            var settingsModel = (SettingModel)DataContext;
-
-            settingsModel.UpdateSettings(viewModel.Gallifrey.Settings);
+            DataModel.UpdateSettings(modelHelpers.Gallifrey.Settings, modelHelpers.Gallifrey.VersionControl);
 
             try
             {
-                viewModel.Gallifrey.SaveSettings(settingsModel.JiraSettingsChanged);
+                modelHelpers.Gallifrey.SaveSettings(DataModel.JiraSettingsChanged);
             }
             catch (MissingJiraConfigException)
             {
@@ -43,12 +39,21 @@ namespace Gallifrey.UI.Modern.Flyouts
 
             if (successfulSave)
             {
-                IsOpen = false;
-                ThemeHelper.ChangeTheme(settingsModel.Theme);
+                modelHelpers.CloseFlyout(this);
+                var themeChanged = ThemeHelper.ChangeTheme(DataModel.Theme.Name, DataModel.Accent.Name);
+
+                if (themeChanged == ThemeChangeDetail.Theme || themeChanged == ThemeChangeDetail.Both)
+                {
+                    //This is a really ugly solution!!
+                    //The overides of system colours do not update automatically which is not good.
+                    //This message will hopefully make people restart...
+                    await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Restart Needed", "When Changing Theme, Some Colours Will Not Change Automatically\nIt Is Recommended To Restart The App");
+                }
             }
             else
             {
-                await viewModel.MainWindow.ShowMessageAsync("Invalid Jira Configuration", "You Cannot Save With Invalid Jira Configuration.\nTo Save You Have To Have A Valid Connection To Jira");
+                await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext,"Invalid Jira Configuration", "You Cannot Save With Invalid Jira Configuration.\nTo Save You Have To Have A Valid Connection To Jira");
+                Focus();
             }
         }
     }

@@ -1,47 +1,157 @@
-﻿using System.Windows.Controls;
+﻿using System;
+using System.Linq;
+using System.Windows;
 using System.Windows.Input;
+using Gallifrey.Exceptions.JiraIntegration;
 using Gallifrey.Exceptions.JiraTimers;
+using Gallifrey.UI.Modern.Flyouts;
+using Gallifrey.UI.Modern.Helpers;
 using Gallifrey.UI.Modern.Models;
 using MahApps.Metro.Controls.Dialogs;
+using DragDropEffects = System.Windows.DragDropEffects;
+using DragEventArgs = System.Windows.DragEventArgs;
 
 namespace Gallifrey.UI.Modern.MainViews
 {
-    public partial class TimerTabs : UserControl
+    public partial class TimerTabs
     {
-        private MainViewModel ViewModel { get { return (MainViewModel)DataContext; } }
+        private MainViewModel ViewModel => (MainViewModel)DataContext;
+        private ModelHelpers ModelHelpers => ((MainViewModel)DataContext).ModelHelpers;
 
         public TimerTabs()
         {
             InitializeComponent();
         }
 
-        private void TimerList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        private async void TimerList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            var timerId = ViewModel.GetSelectedTimerId();
+            var timerIds = ViewModel.GetSelectedTimerIds().ToList();
 
-            if (timerId.HasValue)
+            if (timerIds.Any())
             {
-                var runningTimer = ViewModel.Gallifrey.JiraTimerCollection.GetRunningTimerId();
-
-                if (runningTimer.HasValue && runningTimer.Value == timerId.Value)
+                var timerId = timerIds.First();
+                
+                if (timerIds.Count > 1)
                 {
-                    ViewModel.Gallifrey.JiraTimerCollection.StopTimer(timerId.Value);
+                    var timer = ModelHelpers.Gallifrey.JiraTimerCollection.GetTimer(timerId);
+                    await DialogCoordinator.Instance.ShowMessageAsync(ModelHelpers.DialogContext, "Multiple Timers Selected", $"You Have 2 Timers Selected, Can Only Start 1.\nWill Start Timer: {timer.JiraReference}\n\n{timer.JiraName}");
+                }
+                
+                var runningTimer = ModelHelpers.Gallifrey.JiraTimerCollection.GetRunningTimerId();
+
+                if (runningTimer.HasValue && runningTimer.Value == timerId)
+                {
+                    ModelHelpers.Gallifrey.JiraTimerCollection.StopTimer(timerId, false);
                 }
                 else
                 {
                     try
                     {
-                        ViewModel.Gallifrey.JiraTimerCollection.StartTimer(timerId.Value);
-                        ViewModel.RefreshModel();
-                        ViewModel.SelectRunningTimer();
+                        ModelHelpers.Gallifrey.JiraTimerCollection.StartTimer(timerId);
                     }
-                    catch (DuplicateTimerException)
+                    catch (DuplicateTimerException ex)
                     {
-                        ViewModel.MainWindow.ShowMessageAsync("Wrong Day!", "Use The Version Of This Timer For Today!");                       
+                        ModelHelpers.Gallifrey.JiraTimerCollection.StartTimer(ex.TimerId);
                     }
+
+                    ModelHelpers.RefreshModel();
+                    ModelHelpers.SelectRunningTimer();
                 }
-                
             }
+        }
+
+        private void TabDragOver(object sender, DragEventArgs e)
+        {
+            var url = GetUrl(e);
+            if (!string.IsNullOrWhiteSpace(url))
+            {
+                var uriDrag = new Uri(url);
+                var jiraUri = new Uri(ModelHelpers.Gallifrey.Settings.JiraConnectionSettings.JiraUrl);
+                if (uriDrag.Host == jiraUri.Host)
+                {
+                    e.Effects = DragDropEffects.Copy;
+                    e.Handled = true;
+                }
+            }
+
+            if (!e.Handled)
+            {
+                e.Effects = DragDropEffects.None;
+                e.Handled = true;
+            }
+        }
+
+        private async void TagDragDrop(object sender, DragEventArgs e)
+        {
+            var url = GetUrl(e);
+            if (!string.IsNullOrWhiteSpace(url))
+            {
+                var uriDrag = new Uri(url).AbsolutePath;
+                var jiraRef = uriDrag.Substring(uriDrag.LastIndexOf("/") + 1);
+                var todaysDate = DateTime.Now.Date;
+                var dayTimers = ModelHelpers.Gallifrey.JiraTimerCollection.GetTimersForADate(todaysDate).ToList();
+
+                if (dayTimers.Any(x => x.JiraReference == jiraRef))
+                {
+                    ModelHelpers.Gallifrey.JiraTimerCollection.StartTimer(dayTimers.First(x => x.JiraReference == jiraRef).UniqueId);
+                    ModelHelpers.RefreshModel();
+                    ModelHelpers.SelectRunningTimer();
+                }
+                else
+                {
+                    //Validate jira is real
+                    try
+                    {
+                        ModelHelpers.Gallifrey.JiraConnection.GetJiraIssue(jiraRef);
+                    }
+                    catch (NoResultsFoundException)
+                    {
+                        await DialogCoordinator.Instance.ShowMessageAsync(ModelHelpers.DialogContext, "Invalid Jira", $"Unable To Locate That Jira.\n\nJira Ref Dropped: '{jiraRef}'");
+                        return;
+                    }
+
+                    //show add form, we know it's a real jira & valid
+                    await ModelHelpers.OpenFlyout(new AddTimer(ModelHelpers, startDate: todaysDate, jiraRef: jiraRef, startNow: true));
+                }
+            }
+        }
+
+        private static string GetUrl(DragEventArgs e)
+        {
+            if ((e.Effects & DragDropEffects.Copy) == DragDropEffects.Copy)
+            {
+                if (e.Data.GetDataPresent("Text"))
+                {
+                    return (string)e.Data.GetData("Text");
+                }
+            }
+
+            return string.Empty;
+        }
+
+        private void ContextMenu_Add(object sender, RoutedEventArgs e)
+        {
+            ModelHelpers.TriggerRemoteButtonPress(RemoteButtonTrigger.Add);
+        }
+
+        private void ContextMenu_Delete(object sender, RoutedEventArgs e)
+        {
+            ModelHelpers.TriggerRemoteButtonPress(RemoteButtonTrigger.Delete);
+        }
+
+        private void ContextMenu_Edit(object sender, RoutedEventArgs e)
+        {
+            ModelHelpers.TriggerRemoteButtonPress(RemoteButtonTrigger.Edit);
+        }
+
+        private void ContextMenu_Export(object sender, RoutedEventArgs e)
+        {
+            ModelHelpers.TriggerRemoteButtonPress(RemoteButtonTrigger.Export);
+        }
+
+        private void ContextMenu_StartStop(object sender, RoutedEventArgs e)
+        {
+            TimerList_MouseDoubleClick(sender, null);
         }
     }
 }

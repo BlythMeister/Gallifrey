@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using Gallifrey.Jira.Model;
+using Gallifrey.JiraIntegration;
 
 namespace Gallifrey.UI.Modern.Models
 {
@@ -19,7 +20,7 @@ namespace Gallifrey.UI.Modern.Models
             set
             {
                 searchTerm = value;
-                if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("HasSearchTerm"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasSearchTerm"));
             }
         }
 
@@ -29,46 +30,51 @@ namespace Gallifrey.UI.Modern.Models
             set
             {
                 selectedFilter = value;
-                if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("HasFilter"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasFilter"));
             }
         }
 
-        public bool HasFilter { get { return !string.IsNullOrWhiteSpace(SelectedFilter); } }
-        public bool HasSearchTerm { get { return !string.IsNullOrWhiteSpace(SearchTerm); } }
-        
+        public bool HasFilter => !string.IsNullOrWhiteSpace(SelectedFilter);
+        public bool HasSearchTerm => !string.IsNullOrWhiteSpace(SearchTerm);
+
         public bool IsSearching { get; set; }
         public ObservableCollection<string> UserFilters { get; set; }
         public ObservableCollection<JiraIssueDisplayModel> SearchResults { get; set; }
         public JiraIssueDisplayModel SelectedSearchResult { get; set; }
-        
-        public SearchModel(IEnumerable<string> filters, IEnumerable<Issue> jiraIssues)
+
+        public SearchModel(IEnumerable<string> filters, IEnumerable<RecentJira> recent, IEnumerable<Issue> issues)
         {
             UserFilters = new ObservableCollection<string>(filters);
-            SearchResults = new ObservableCollection<JiraIssueDisplayModel>(jiraIssues.Select(x=>new JiraIssueDisplayModel(x)));
+
+            var recentDisplay = recent.Select(x => new JiraIssueDisplayModel(x)).ToList();
+            var issuesDisplay = issues.Select(x => new JiraIssueDisplayModel(x)).ToList();
+            recentDisplay.AddRange(issuesDisplay);
+
+            SearchResults = new ObservableCollection<JiraIssueDisplayModel>(recentDisplay.Distinct().ToList());
         }
 
         public void UpdateSearchResults(IEnumerable<Issue> jiraIssues)
         {
             SearchResults = new ObservableCollection<JiraIssueDisplayModel>(jiraIssues.Select(x => new JiraIssueDisplayModel(x)));
             IsSearching = false;
-            if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("IsSearching"));
-            if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("SearchResults"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("IsSearching"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("SearchResults"));
         }
 
         public void ClearSearchResults()
         {
             SearchResults = new ObservableCollection<JiraIssueDisplayModel>();
             IsSearching = false;
-            if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("IsSearching"));
-            if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("SearchResults"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("IsSearching"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("SearchResults"));
         }
 
         public void SetIsSearching()
         {
             SearchResults = new ObservableCollection<JiraIssueDisplayModel>();
             IsSearching = true;
-            if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("IsSearching"));
-            if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("SearchResults"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("IsSearching"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("SearchResults"));
         }
     }
 }

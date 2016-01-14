@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Threading;
 using Gallifrey.Exceptions.Serialization;
 using Newtonsoft.Json;
 
@@ -8,6 +9,10 @@ namespace Gallifrey.Serialization
     public class ItemSerializer<T> where T : new()
     {
         private readonly string savePath;
+
+        public ItemSerializer() { }
+
+        public ItemSerializer(string fileName) : this(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Gallifrey"), fileName) { }
 
         public ItemSerializer(string directory, string fileName)
         {
@@ -21,22 +26,14 @@ namespace Gallifrey.Serialization
                 savePath = null;
                 // this will be evaluated later
             }
-
         }
 
-        public ItemSerializer(string fileName)
-            : this(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Gallifrey"), fileName)
-        {
-
-        }
-
-        public ItemSerializer()
-        {
-
-        }
-
-        /// <exception cref="SerializerError">Something has gone wrong with serialization, message contain more information</exception>
         public void Serialize(T obj)
+        {
+            Serialize(obj, 0);
+        }
+
+        private void Serialize(T obj, int retryCount)
         {
             if (savePath == null) throw new SerializerError("No Save Path");
 
@@ -46,52 +43,50 @@ namespace Gallifrey.Serialization
             }
             catch (Exception ex)
             {
-                throw new SerializerError("Error in serialization", ex);
+                if (retryCount >= 3)
+                {
+                    throw new SerializerError("Error in serialization", ex);
+                }
+                Thread.Sleep(100);
+                Serialize(obj, retryCount + 1);
             }
         }
 
-        /// <exception cref="SerializerError">Something has gone wrong with deserialization, message contain more information</exception>
         public T DeSerialize()
         {
             if (savePath == null) throw new SerializerError("No Save Path");
 
-            T obj;
-
-            if (File.Exists(savePath))
+            if (!File.Exists(savePath))
             {
-                try
-                {
-                    var text = File.ReadAllText(savePath);
-                    obj = DeSerialize(text);
-                }
-                catch (Exception)
-                {
-                    obj = new T();
-                }
-            }
-            else
-            {
-                obj = new T();
+                return new T();
             }
 
-            return obj;
+            var text = File.ReadAllText(savePath);
+            return DeSerialize(text);
         }
 
         public T DeSerialize(string encryptedString)
         {
-            T obj;
+            return DeSerialize(encryptedString, 0);
+        }
 
+        private T DeSerialize(string encryptedString, int retryCount)
+        {
             try
             {
                 var text = DataEncryption.Decrypt(encryptedString);
-                obj = JsonConvert.DeserializeObject<T>(text);
+                return JsonConvert.DeserializeObject<T>(text);
             }
             catch (Exception)
             {
-                obj = new T();
-            }
+                if (retryCount >= 3)
+                {
+                    return new T();
+                }
 
-            return obj;
+                Thread.Sleep(100);
+                return DeSerialize(encryptedString, retryCount + 1);
+            }
         }
     }
 }

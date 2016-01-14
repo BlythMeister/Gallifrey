@@ -1,8 +1,9 @@
-﻿<Controls:Flyout x:Class="Gallifrey.UI.Modern.Flyouts.Information"
+﻿<controls:Flyout x:Class="Gallifrey.UI.Modern.Flyouts.Information"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro" IsModal="True" Theme="Adapt" Position="Right" Header="App Information">
-    <Grid Width="450" Margin="5,5,5,5" >
+             xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro" 
+             IsModal="True" Theme="Adapt" Position="Right" Header="App Information" CloseButtonIsCancel="True">
+    <Grid Width="350" Margin="5,5,5,5" >
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto" />
@@ -17,13 +18,13 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="Auto"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <TextBlock Grid.Row="0" Grid.ColumnSpan="2" FontSize="18" Margin="0,0,0,5" Text="About"/>
-            <TextBlock Grid.Row="1" Grid.Column="0" TextWrapping="Wrap" Margin="0,0,0,5">Gallifrey is a time logging companion designed to work with Jira time logs.<LineBreak />Gallifrey is open sourced on GitHub and free to download and contribute!</TextBlock>
+            <TextBlock Grid.Row="0" Grid.ColumnSpan="2" FontSize="18" Margin="0,0,0,5" Text="About" TextDecorations="Underline" />
+            <TextBlock Grid.Row="1" Grid.Column="0" TextWrapping="Wrap" Margin="0,0,0,5" VerticalAlignment="Center">Gallifrey is a time logging companion designed to work with Jira time logs.<LineBreak />Gallifrey is open sourced on GitHub and free to download and contribute!</TextBlock>
             <Button Grid.Row="1" Grid.Column="1" Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="ChangeLogButton">
-                <Rectangle Width="27" Height="20" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
+                <Rectangle Width="27" Height="20" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}" ToolTip="View Full Change Log">
                     <Rectangle.OpacityMask>
                         <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_book_open_information}" />
                     </Rectangle.OpacityMask>
@@ -39,9 +40,9 @@
                 <ColumnDefinition Width="50*"></ColumnDefinition>
                 <ColumnDefinition Width="50*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <TextBlock Grid.Row="0" Grid.Column="0" FontSize="18" Margin="0,0,0,5" Text="Owner/Maintainer"/>
-            <TextBlock Grid.Row="1" Grid.Column="0" TextWrapping="Wrap" Margin="0,0,0,5">Chris Blyth<LineBreak />Twitter: @BlythMeister<LineBreak />GitHub: @BlythMeister</TextBlock>
-            <TextBlock Grid.Row="0" Grid.Column="1" FontSize="18" Margin="0,0,0,5" Text="Contributors (With Thanks)"/>
+            <TextBlock Grid.Row="0" Grid.Column="0" FontSize="18" Margin="0,0,0,5" Text="Owner/Maintainer" TextDecorations="Underline" />
+            <TextBlock Grid.Row="1" Grid.Column="0" TextWrapping="Wrap" Margin="0,0,0,5">Chris Blyth<LineBreak />Twitter: @BlythMeister<LineBreak />GitHub: @BlythMeister<LineBreak /> <LineBreak /></TextBlock>
+            <TextBlock Grid.Row="0" Grid.Column="1" FontSize="18" Margin="0,0,0,5" Text="Project Contributors" TextDecorations="Underline" />
             <TextBlock Grid.Row="1" Grid.Column="1" TextWrapping="Wrap" Margin="0,0,0,5" Text="{Binding Contributors}" />
         </Grid>
         <Grid Grid.Row="2">
@@ -49,66 +50,35 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"></ColumnDefinition>
-                <ColumnDefinition Width="Auto"></ColumnDefinition>
-                <ColumnDefinition Width="Auto"></ColumnDefinition>
-            </Grid.ColumnDefinitions>
-            <TextBlock Grid.Row="0" Grid.ColumnSpan="3" FontSize="18" Margin="0,0,0,5" Text="Support"/>
-            <TextBlock Grid.Row="1" Grid.Column="0" TextWrapping="Wrap" Margin="0,0,0,5">Contact Us By Email Or Social Networks!<LineBreak />Email: GallifreyApp@gmail.com<LineBreak />Twitter: @GallifreyApp</TextBlock>
-            <Button Grid.Row="1" Grid.Column="1" Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="EmailButton">
-                <Rectangle Width="23" Height="18" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
-                    <Rectangle.OpacityMask>
-                        <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_email}" />
-                    </Rectangle.OpacityMask>
-                </Rectangle>
-            </Button>
-            <Button Grid.Row="1" Grid.Column="2" Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="TwitterButton">
-                <Rectangle Width="25" Height="20" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
-                    <Rectangle.OpacityMask>
-                        <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_twitter_bird}" />
-                    </Rectangle.OpacityMask>
-                </Rectangle>
-            </Button>
+            <TextBlock Grid.Row="0" FontSize="18" Margin="0,0,0,5" Text="Support" TextDecorations="Underline" />
+            <TextBlock Grid.Row="1" TextWrapping="Wrap" Margin="0,0,0,5" VerticalAlignment="Center">Contact Us By Email Or Social Networks!<LineBreak />Email: <Hyperlink NavigateUri="mailto:contact@gallifreyapp.co.uk?subject=Gallifrey App Contact" Foreground="{DynamicResource IdealForegroundColorBrush}" RequestNavigate="Hyperlink_RequestNavigate">GallifreyApp@gmail.com</Hyperlink><LineBreak />Twitter: <Hyperlink NavigateUri="https://twitter.com/GallifreyApp" Foreground="{DynamicResource IdealForegroundColorBrush}" RequestNavigate="Hyperlink_RequestNavigate">@GallifreyApp</Hyperlink></TextBlock>
         </Grid>
         <Grid Grid.Row="3">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"></ColumnDefinition>
-                <ColumnDefinition Width="Auto"></ColumnDefinition>
-            </Grid.ColumnDefinitions>
-            <TextBlock Grid.Row="0" Grid.ColumnSpan="2" FontSize="18" Margin="0,0,0,5" Text="Donate"/>
-            <TextBlock Grid.Row="1" Grid.Column="0" TextWrapping="Wrap" Margin="0,0,0,5">Help us keep the project alive by donating via PayPal.</TextBlock>
-            <Button Grid.Row="1" Grid.Column="1" Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="PayPalButton">
-                <Rectangle Width="23" Height="23" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
-                    <Rectangle.OpacityMask>
-                        <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_paypal}" />
-                    </Rectangle.OpacityMask>
-                </Rectangle>
-            </Button>
+            <TextBlock Grid.Row="0" FontSize="18" Margin="0,0,0,5" Text="Donate" TextDecorations="Underline" />
+            <TextBlock Grid.Row="1" TextWrapping="Wrap" Margin="0,0,0,5" VerticalAlignment="Center">Help us keep the project alive by donating via <Hyperlink NavigateUri="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=G3MWL8E6UG4RS" Foreground="{DynamicResource IdealForegroundColorBrush}" RequestNavigate="Hyperlink_RequestNavigate">PayPal</Hyperlink>.</TextBlock>
         </Grid>
         <Grid Grid.Row="4">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"></ColumnDefinition>
-                <ColumnDefinition Width="Auto"></ColumnDefinition>
-            </Grid.ColumnDefinitions>
-            <TextBlock Grid.Row="0" Grid.ColumnSpan="2" FontSize="18" Margin="0,0,0,5" Text="Source Code"/>
-            <TextBlock Grid.Row="1" Grid.Column="0" TextWrapping="Wrap" Margin="0,0,0,5">All our code and websites are hosted on GitHub<LineBreak/>You can download and fork to join the community</TextBlock>
-            <Button Grid.Row="1" Grid.Column="1" Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="GitHubButton">
-                <Rectangle Width="28" Height="24" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
-                    <Rectangle.OpacityMask>
-                        <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_github}" />
-                    </Rectangle.OpacityMask>
-                </Rectangle>
-            </Button>
+            <TextBlock Grid.Row="0" FontSize="18" Margin="0,0,0,5" Text="Source Code" TextDecorations="Underline" />
+            <TextBlock Grid.Row="1" TextWrapping="Wrap" Margin="0,0,0,5" VerticalAlignment="Center">All our code and websites are hosted on <Hyperlink NavigateUri="https://github.com/BlythMeister/Gallifrey" Foreground="{DynamicResource IdealForegroundColorBrush}" RequestNavigate="Hyperlink_RequestNavigate">GitHub</Hyperlink><LineBreak/>You can download and fork to join the community</TextBlock>
+        </Grid>
+        <Grid Grid.Row="5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0" FontSize="18" Margin="0,0,0,5" Text="Installation Identifier" TextDecorations="Underline" />
+            <TextBlock Grid.Row="1" Text="Your installation has an identifier of:"></TextBlock>
+            <TextBlock Grid.Row="2" TextWrapping="Wrap" Margin="0,0,0,5" VerticalAlignment="Center" Text="{Binding InstallationId}"/>
         </Grid>
     </Grid>
-</Controls:Flyout>
+</controls:Flyout>
 

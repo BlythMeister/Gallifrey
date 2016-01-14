@@ -1,13 +1,9 @@
-﻿using System.Windows;
-using Gallifrey.UI.Modern.MainViews;
+﻿using Gallifrey.UI.Modern.MainViews;
 using Gallifrey.Versions;
 
 namespace Gallifrey.UI.Modern
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
-    public partial class App : Application
+    public partial class App
     {
         public static void Run(InstanceType instance, AppType appType)
         {

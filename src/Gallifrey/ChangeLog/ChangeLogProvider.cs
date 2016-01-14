@@ -7,53 +7,56 @@ namespace Gallifrey.ChangeLog
 {
     internal static class ChangeLogProvider
     {
-        public static IDictionary<Version, ChangeLogVersionDetails> GetChangeLog(Version fromVersion, Version toVersion, XDocument changeLogContent)
+        static readonly XNamespace ChangelogNamespace = "http://releases.gallifreyapp.co.uk/ChangeLog";
+
+        public static List<ChangeLogVersion> GetFullChangeLog(XDocument changeLogContent)
         {
-            var changeLog = new Dictionary<Version, ChangeLogVersionDetails>();
-
-            foreach (var changeVersion in changeLogContent.Descendants("Version"))
-            {
-                var changeLogItem = BuildChangeLogItem(changeVersion);
-                if (!changeLog.ContainsKey(changeLogItem.Key))
-                {
-                    changeLog.Add(changeLogItem.Key, changeLogItem.Value);    
-                }
-            }
-            
-            if (fromVersion < toVersion && changeLog.Any(x => x.Key > fromVersion && x.Key <= toVersion))
-            {
-                return changeLog.Where(x => x.Key > fromVersion && x.Key <= toVersion).OrderByDescending(detail => detail.Key).ToDictionary(detail => detail.Key, detail => detail.Value);
-            }
-
-            if (fromVersion < toVersion && changeLog.Any() && toVersion > changeLog.Keys.Max())
-            {
-                return changeLog.Where(x => x.Key == changeLog.Keys.Max()).ToDictionary(detail => detail.Key, detail => detail.Value);
-            }
-
-            if (fromVersion < toVersion && toVersion.Revision > 0 && changeLog.Any() && toVersion < changeLog.Keys.Max())
-            {
-                var versionWithoutRevision = new Version(toVersion.Major, toVersion.Minor, toVersion.Build);
-                return changeLog.Where(x => x.Key > versionWithoutRevision).ToDictionary(detail => detail.Key, detail => detail.Value);
-            }
-
-            return changeLog.OrderByDescending(detail => detail.Key).ToDictionary(detail => detail.Key, detail => detail.Value);
+            var changeLog = changeLogContent.Descendants(ChangelogNamespace + "Version").Select(x => BuildChangeLogItem(x, false));
+            return changeLog.OrderByDescending(detail => detail.Version).ToList();
         }
 
-        private static KeyValuePair<Version, ChangeLogVersionDetails> BuildChangeLogItem(XElement changeVersion)
+        public static List<ChangeLogVersion> GetChangeLog(Version fromVersion, XDocument changeLogContent)
+        {
+            var changeLog = changeLogContent.Descendants(ChangelogNamespace + "Version").Select(x => BuildChangeLogItem(x, fromVersion));
+            return changeLog.OrderByDescending(detail => detail.Version).ToList();
+        }
+
+        private static ChangeLogVersion BuildChangeLogItem(XElement changeVersion, Version fromVersion)
+        {
+            var fromCompareVersion = new Version(fromVersion.Major, fromVersion.Minor, fromVersion.Build);
+            var version = new Version(changeVersion.Attribute("Number").Value);
+            var newVersion = false;
+            
+            var compareVersion = version;
+            if (version.Revision > 0)
+            {
+                compareVersion = new Version(version.Major, version.Minor, version.Build);
+            }
+
+            if (compareVersion > fromCompareVersion)
+            {
+                newVersion = true;
+            }
+
+            return BuildChangeLogItem(changeVersion, newVersion);
+        }
+
+        private static ChangeLogVersion BuildChangeLogItem(XElement changeVersion, bool newVersion)
         {
             var version = new Version(changeVersion.Attribute("Number").Value);
-            var details = BuildChangeLogVersionDetails(changeVersion);
-            return new KeyValuePair<Version, ChangeLogVersionDetails>(version, details);
-        }
 
-        private static ChangeLogVersionDetails BuildChangeLogVersionDetails(XElement changeVersion)
-        {
-            var name = changeVersion.Attribute("Name").Value;
-            var features = changeVersion.Descendants("Feature").Select(item => item.Value).ToList();
-            var bugs = changeVersion.Descendants("Bug").Select(item => item.Value).ToList();
-            var others = changeVersion.Descendants("Other").Select(item => item.Value).ToList();
+            var nameAttr = changeVersion.Attribute("Name");
+            var name = string.Empty;
+            if (nameAttr != null)
+            {
+                name = nameAttr.Value;
+            }
 
-            return new ChangeLogVersionDetails(name, features, bugs, others);
+            var features = changeVersion.Descendants(ChangelogNamespace + "Feature").Select(item => item.Value).ToList();
+            var bugs = changeVersion.Descendants(ChangelogNamespace + "Bug").Select(item => item.Value).ToList();
+            var others = changeVersion.Descendants(ChangelogNamespace + "Other").Select(item => item.Value).ToList();
+
+            return new ChangeLogVersion(version, name, newVersion, features, bugs, others);
         }
     }
 }

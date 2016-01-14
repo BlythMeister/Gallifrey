@@ -6,8 +6,9 @@ using System.Text;
 using Gallifrey.Jira.Enum;
 using Gallifrey.Jira.Exception;
 using Gallifrey.Jira.Model;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using RestSharp;
-using RestSharp.Deserializers;
 
 namespace Gallifrey.Jira
 {
@@ -16,24 +17,21 @@ namespace Gallifrey.Jira
         private readonly string username;
         private readonly string password;
         private readonly RestClient client;
-        private readonly JsonDeserializer deserializer;
 
         public JiraRestClient(string baseUrl, string username, string password)
         {
             this.username = username;
             this.password = password;
-            deserializer = new JsonDeserializer();
             client = new RestClient { BaseUrl = new Uri(baseUrl + (baseUrl.EndsWith("/") ? "" : "/") + "rest/api/2/") };
         }
 
         private RestRequest CreateRequest(Method method, string path)
         {
             var request = new RestRequest { Method = method, Resource = path, RequestFormat = DataFormat.Json };
-            request.AddHeader("Authorization", "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes(string.Format("{0}:{1}", username, password))));
+            request.AddHeader("Authorization", "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes($"{username}:{password}")));
             return request;
         }
 
-        /// <exception cref="JiraClientException">When the status returned from Jira was not the expected status or an error message was included.</exception>
         private void AssertStatus(IRestResponse response, HttpStatusCode status)
         {
             if (response.ErrorException != null)
@@ -42,15 +40,15 @@ namespace Gallifrey.Jira
             {
                 try
                 {
-                    var errorMessages = deserializer.Deserialize<Error>(response);
+                    var errorMessages = JsonConvert.DeserializeObject<Error>(response.Content);
 
                     if (errorMessages.errorMessages.Any())
                     {
-                        throw new JiraClientException(string.Format("JIRA returned wrong status: {0}. Message: {1}", response.StatusDescription, errorMessages.errorMessages[0]));
+                        throw new JiraClientException($"JIRA returned wrong status: {response.StatusDescription}. Message: {errorMessages.errorMessages[0]}");
                     }
                     else
                     {
-                        throw new JiraClientException(string.Format("JIRA returned wrong status: {0}", response.StatusDescription));
+                        throw new JiraClientException($"JIRA returned wrong status: {response.StatusDescription}");
                     }
                 }
                 catch (JiraClientException)
@@ -59,12 +57,12 @@ namespace Gallifrey.Jira
                 }
                 catch (System.Exception ex)
                 {
-                    throw new JiraClientException(string.Format("JIRA returned wrong status: {0}", response.StatusDescription), ex);
+                    throw new JiraClientException($"JIRA returned wrong status: {response.StatusDescription}", ex);
                 }
             }
         }
 
-        private IRestResponse ExectuteRequest(Method method, HttpStatusCode expectedStatus, string path, Dictionary<string, object> data = null)
+        private IRestResponse ExecuteRequest(Method method, HttpStatusCode expectedStatus, string path, Dictionary<string, object> data = null)
         {
             var request = CreateRequest(method, path);
             if (data != null)
@@ -80,41 +78,61 @@ namespace Gallifrey.Jira
             return response;
         }
 
+        private T ExecuteRequest<T>(HttpStatusCode expectedStatus, string path, Dictionary<string, object> data = null, Func<string, T> customDeserialize = null) where T : class
+        {
+            if (customDeserialize == null)
+            {
+                customDeserialize = JsonConvert.DeserializeObject<T>;
+            }
+
+            var response = ExecuteRequest(Method.GET, expectedStatus, path, data);
+
+            return customDeserialize(response.Content);
+        }
+
         public User GetCurrentUser()
         {
-            var response = ExectuteRequest(Method.GET, HttpStatusCode.OK, "myself");
-
-            return deserializer.Deserialize<User>(response);
+            return ExecuteRequest<User>(HttpStatusCode.OK, "myself");
         }
 
         public Issue GetIssue(string issueRef)
         {
-            var response = ExectuteRequest(Method.GET, HttpStatusCode.OK, string.Format("issue/{0}", issueRef));
-
-            return deserializer.Deserialize<Issue>(response);
+            return ExecuteRequest<Issue>(HttpStatusCode.OK, $"issue/{issueRef}");
         }
 
-        public Issue GetIssueWithWorklogs(string issueRef)
+        public Issue GetIssueWithWorklogs(string issueRef, string user)
         {
             var issue = GetIssue(issueRef);
 
-            if (issue.fields.worklog.total > issue.fields.worklog.maxResults)
+            if (issue.fields.worklog == null)
             {
-                var worklogResponse = ExectuteRequest(Method.GET, HttpStatusCode.OK, string.Format("issue/{0}/worklog", issueRef));
+                issue.fields.worklog = new WorkLogs { worklogs = null };
+            }
 
-                var worklogs = deserializer.Deserialize<WorkLogs>(worklogResponse);
+            if (issue.fields.worklog.worklogs == null || issue.fields.worklog.total > issue.fields.worklog.worklogs.Count)
+            {
+                var worklogs = ExecuteRequest(HttpStatusCode.OK, $"issue/{issueRef}/worklog", customDeserialize: s => FilterWorklogsToUser(s, user));
 
                 issue.fields.worklog.worklogs = worklogs.worklogs;
+                issue.fields.worklog.total = worklogs.total;
+                issue.fields.worklog.maxResults = worklogs.maxResults;
             }
 
             return issue;
         }
 
+        private static WorkLogs FilterWorklogsToUser(string rawJson, string user)
+        {
+            var jsonObject = JObject.Parse(rawJson);
+            var filtered = jsonObject["worklogs"].Children().Where(x => ((string)x["author"]["key"]) == user);
+            jsonObject["worklogs"] = new JArray(filtered);
+            return jsonObject.ToObject<WorkLogs>();
+        }
+
         public IEnumerable<Issue> GetIssuesFromFilter(string filterName)
         {
-            var filterResponse = ExectuteRequest(Method.GET, HttpStatusCode.OK, "filter/favourite");
+            var filters = ExecuteRequest<List<Filter>>(HttpStatusCode.OK, "filter/favourite");
 
-            var filters = deserializer.Deserialize<List<Filter>>(filterResponse);
             var selectedFilter = filters.FirstOrDefault(f => f.name == filterName);
 
             if (selectedFilter != null)
@@ -141,9 +159,7 @@ namespace Gallifrey.Jira
 
             while (moreToGet)
             {
-                var response = ExectuteRequest(Method.GET, HttpStatusCode.OK, string.Format("search?jql={0}&maxResults=999&startAt={1}&fields=summary,project,parent", jql, startAt));
-
-                var searchResult = deserializer.Deserialize<SearchResult>(response);
+                var searchResult = ExecuteRequest<SearchResult>(HttpStatusCode.OK, $"search?jql={jql}&maxResults=999&startAt={startAt}&fields=summary,project,parent");
 
                 returnIssues.AddRange(searchResult.issues);
 
@@ -162,34 +178,28 @@ namespace Gallifrey.Jira
 
         public IEnumerable<Project> GetProjects()
         {
-            var response = ExectuteRequest(Method.GET, HttpStatusCode.OK, "project");
-
-            return deserializer.Deserialize<List<Project>>(response);
+            return ExecuteRequest<List<Project>>(HttpStatusCode.OK, "project");
         }
 
         public IEnumerable<Filter> GetFilters()
         {
-            var response = ExectuteRequest(Method.GET, HttpStatusCode.OK, "filter/favourite");
-
-            return deserializer.Deserialize<List<Filter>>(response);
+            return ExecuteRequest<List<Filter>>(HttpStatusCode.OK, "filter/favourite");
         }
 
         public Transitions GetIssueTransitions(string issueRef)
         {
-            var response = ExectuteRequest(Method.GET, HttpStatusCode.OK, string.Format("issue/{0}/transitions?expand=transitions.fields", issueRef));
-
-            return deserializer.Deserialize<Transitions>(response);
+            return ExecuteRequest<Transitions>(HttpStatusCode.OK, $"issue/{issueRef}/transitions?expand=transitions.fields");
         }
 
-        /// <exception cref="JiraClientException">When unable to transition issue.</exception>
         public void TransitionIssue(string issueRef, string transitionName)
         {
+            if (transitionName == null) throw new ArgumentNullException(nameof(transitionName));
             var transitions = GetIssueTransitions(issueRef);
             var transition = transitions.transitions.FirstOrDefault(t => t.name == transitionName);
 
             if (transition == null)
             {
-                throw new JiraClientException(string.Format("Unable to locate transition '{0}'", transitionName));
+                throw new JiraClientException($"Unable to locate transition '{transitionName}'");
             }
 
             var postData = new Dictionary<string, object>
@@ -197,7 +207,7 @@ namespace Gallifrey.Jira
                 { "transition", new { id = transition.id } }
             };
 
-            ExectuteRequest(Method.POST, HttpStatusCode.NoContent, string.Format("issue/{0}/transitions", issueRef), postData);
+            ExecuteRequest(Method.POST, HttpStatusCode.NoContent, $"issue/{issueRef}/transitions", postData);
         }
 
         public void AddWorkLog(string issueRef, WorkLogStrategy workLogStrategy, string comment, TimeSpan timeSpent, DateTime logDate, TimeSpan? remainingTime = null)
@@ -206,16 +216,16 @@ namespace Gallifrey.Jira
 
             var postData = new Dictionary<string, object>
             {
-                { "started", string.Format("{0}{1}", logDate.ToString("yyyy-MM-ddTHH:mm:ss.fff"), logDate.ToString("zzz").Replace(":","")) },
+                { "started", $"{logDate.ToString("yyyy-MM-ddTHH:mm:ss.fff")}{logDate.ToString("zzz").Replace(":", "")}"},
                 { "comment", comment },
-                { "timeSpent", string.Format("{0}h {1}m", timeSpent.Hours, timeSpent.Minutes) },
+                { "timeSpent", $"{timeSpent.Hours}h {timeSpent.Minutes}m"},
             };
             var adjustmentMethod = string.Empty;
             var newEstimate = string.Empty;
 
             if (remainingTime.HasValue)
             {
-                newEstimate = string.Format("{0}h {1}m", remainingTime.Value.Hours, remainingTime.Value.Minutes);
+                newEstimate = $"{remainingTime.Value.Hours}h {remainingTime.Value.Minutes}m";
             }
 
             switch (workLogStrategy)
@@ -231,7 +241,7 @@ namespace Gallifrey.Jira
                     break;
             }
 
-            ExectuteRequest(Method.POST, HttpStatusCode.Created, string.Format("issue/{0}/worklog?adjustEstimate={1}&newEstimate={2}&reduceBy=", issueRef, adjustmentMethod, newEstimate), postData);
+            ExecuteRequest(Method.POST, HttpStatusCode.Created, $"issue/{issueRef}/worklog?adjustEstimate={adjustmentMethod}&newEstimate={newEstimate}&reduceBy=", postData);
         }
 
         public void AssignIssue(string issueRef, string userName)
@@ -241,7 +251,7 @@ namespace Gallifrey.Jira
                 { "name", userName }
             };
 
-            ExectuteRequest(Method.PUT, HttpStatusCode.NoContent, string.Format("issue/{0}/assignee", issueRef), postData);
+            ExecuteRequest(Method.PUT, HttpStatusCode.NoContent, $"issue/{issueRef}/assignee", postData);
         }
     }
 }

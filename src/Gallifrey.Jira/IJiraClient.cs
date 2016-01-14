@@ -9,7 +9,7 @@ namespace Gallifrey.Jira
     {
         User GetCurrentUser();
         Issue GetIssue(string issueRef);
-        Issue GetIssueWithWorklogs(string issueRef);
+        Issue GetIssueWithWorklogs(string issueRef, string user);
         IEnumerable<Issue> GetIssuesFromFilter(string filterName);
         IEnumerable<Issue> GetIssuesFromJql(string jql);
         IEnumerable<Project> GetProjects();

@@ -13,6 +13,7 @@ namespace Gallifrey.UI.Modern.Models
         public DateTime? StartDate { get; set; }
         public DateTime DisplayDate { get; set; }
         public bool DateEditable { get; set; }
+        public bool TimeEditable { get; set; }
         public int StartHours { get; set; }
         public int StartMinutes { get; set; }
         public bool StartNow { get; set; }
@@ -20,7 +21,7 @@ namespace Gallifrey.UI.Modern.Models
         public bool AssignToMe { get; set; }
         public bool InProgress { get; set; }
 
-        public AddTimerModel(IBackend gallifrey, string jiraRef, DateTime? startDate, bool? enableDateChange, TimeSpan? preloadTime, bool? startNow)
+        public AddTimerModel(IBackend gallifrey, string jiraRef, DateTime? startDate, bool? enableDateChange, TimeSpan? preloadTime, bool? enableTimeChange, bool? startNow)
         {
             var dateToday = DateTime.Now;
 
@@ -52,6 +53,7 @@ namespace Gallifrey.UI.Modern.Models
             }
 
             DateEditable = !enableDateChange.HasValue || enableDateChange.Value;
+            TimeEditable = !enableTimeChange.HasValue || enableTimeChange.Value;
 
             if (preloadTime.HasValue)
             {
@@ -74,8 +76,8 @@ namespace Gallifrey.UI.Modern.Models
                 StartNowEditable = false;
             }
 
-            if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("StartNow"));
-            if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("StartNowEditable"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("StartNow"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("StartNowEditable"));
         }
 
         public void SetJiraReference(string jiraRef)
@@ -83,8 +85,8 @@ namespace Gallifrey.UI.Modern.Models
             JiraReference = jiraRef;
             JiraReferenceEditable = false;
 
-            if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("JiraReference"));
-            if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("JiraReferenceEditable"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("JiraReference"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("JiraReferenceEditable"));
         }
     }
 }

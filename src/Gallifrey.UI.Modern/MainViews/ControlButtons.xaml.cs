@@ -1,85 +1,164 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
+using Gallifrey.AppTracking;
 using Gallifrey.UI.Modern.Flyouts;
+using Gallifrey.UI.Modern.Helpers;
 using Gallifrey.UI.Modern.Models;
 using MahApps.Metro.Controls.Dialogs;
 
 namespace Gallifrey.UI.Modern.MainViews
 {
-    /// <summary>
-    /// Interaction logic for ControlButtons.xaml
-    /// </summary>
-    public partial class ControlButtons : UserControl
+    public partial class ControlButtons
     {
-        private MainViewModel ViewModel { get { return (MainViewModel)DataContext; } }
+        private MainViewModel ViewModel => (MainViewModel)DataContext;
+        private ModelHelpers ModelHelpers => ((MainViewModel)DataContext).ModelHelpers;
 
         public ControlButtons()
         {
             InitializeComponent();
         }
 
+        private void ControlButtons_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            ModelHelpers.RemoteButtonTrigger += ModelHelpersOnRemoteButtonTrigger;
+        }
+
         private void AddButton(object sender, RoutedEventArgs e)
         {
-            ViewModel.MainWindow.OpenFlyout(new AddTimer(ViewModel));
+            DateTime? startDate = null;
+
+            if (ViewModel.TimerDates.Any(x => x.TimerDate.Date == DateTime.Now.Date))
+            {
+                var selectedDate = ViewModel.TimerDates.FirstOrDefault(x => x.IsSelected);
+                startDate = selectedDate?.TimerDate;
+            }
+
+            ModelHelpers.OpenFlyout(new AddTimer(ModelHelpers, startDate: startDate));
         }
 
         private async void DeleteButton(object sender, RoutedEventArgs e)
         {
-            var selectedTimer = ViewModel.GetSelectedTimerId();
+            var selectedTimerIds = ViewModel.GetSelectedTimerIds().ToList();
 
-            if (selectedTimer.HasValue)
+            foreach (var selectedTimerId in selectedTimerIds)
             {
-                var timer = ViewModel.Gallifrey.JiraTimerCollection.GetTimer(selectedTimer.Value);
+                var timer = ModelHelpers.Gallifrey.JiraTimerCollection.GetTimer(selectedTimerId);
 
-                var result = ViewModel.MainWindow.ShowMessageAsync("Are You Sure?", string.Format("Are You Sure You Want To Delete {0}\n\n{1}\nFor: {2}", timer.JiraReference, timer.JiraName, timer.DateStarted.Date.ToString("ddd, dd MMM")), MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No" });
+                var result = await DialogCoordinator.Instance.ShowMessageAsync(ModelHelpers.DialogContext, "Are You Sure?", $"Are You Sure You Want To Delete {timer.JiraReference}\n\n{timer.JiraName}\nFor: {timer.DateStarted.Date.ToString("ddd, dd MMM")}", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
 
-                await result;
-
-                if (result.Result == MessageDialogResult.Affirmative)
+                if (result == MessageDialogResult.Affirmative)
                 {
-                    ViewModel.Gallifrey.JiraTimerCollection.RemoveTimer(selectedTimer.Value);
-                    ViewModel.RefreshModel();
+                    ModelHelpers.Gallifrey.JiraTimerCollection.RemoveTimer(selectedTimerId);
                 }
             }
+
+            ModelHelpers.RefreshModel();
         }
 
         private void SearchButton(object sender, RoutedEventArgs e)
         {
-            ViewModel.MainWindow.OpenFlyout(new Search(ViewModel, false));
+            ModelHelpers.OpenFlyout(new Search(ModelHelpers, false));
         }
 
-        private void EditButton(object sender, RoutedEventArgs e)
+        private async void EditButton(object sender, RoutedEventArgs e)
         {
-            var selectedTimerId = ViewModel.GetSelectedTimerId();
-            if (selectedTimerId != null)
+            var selectedTimerIds = ViewModel.GetSelectedTimerIds().ToList();
+
+            foreach (var selectedTimerId in selectedTimerIds)
             {
-                ViewModel.MainWindow.OpenFlyout(new EditTimer(ViewModel, selectedTimerId.Value));
+                var stoppedTimer = false;
+                var runningTimerId = ModelHelpers.Gallifrey.JiraTimerCollection.GetRunningTimerId();
+
+                if (runningTimerId.HasValue && runningTimerId.Value == selectedTimerId)
+                {
+                    ModelHelpers.Gallifrey.JiraTimerCollection.StopTimer(selectedTimerId, true);
+                    stoppedTimer = true;
+                }
+
+                var editTimerFlyout = new EditTimer(ModelHelpers, selectedTimerId);
+                await ModelHelpers.OpenFlyout(editTimerFlyout);
+
+                if (stoppedTimer)
+                {
+                    ModelHelpers.Gallifrey.JiraTimerCollection.StartTimer(editTimerFlyout.EditedTimerId);
+                }
             }
         }
 
-        private void ExportButton(object sender, RoutedEventArgs e)
+        private async void ExportButton(object sender, RoutedEventArgs e)
         {
-            var selectedTimerId = ViewModel.GetSelectedTimerId();
-            if (selectedTimerId != null)
+            var selectedTimerIds = ViewModel.GetSelectedTimerIds().ToList();
+
+            foreach (var selectedTimerId in selectedTimerIds)
             {
-                ViewModel.MainWindow.OpenFlyout(new Export(ViewModel, selectedTimerId.Value, null));
+                await ModelHelpers.OpenFlyout(new Export(ModelHelpers, selectedTimerId, null));
             }
         }
 
         private void LockTimerButton(object sender, RoutedEventArgs e)
         {
-            ViewModel.MainWindow.OpenFlyout(new LockedTimer(ViewModel));
+            ModelHelpers.OpenFlyout(new LockedTimer(ModelHelpers));
         }
 
         private void InfoButton(object sender, RoutedEventArgs e)
         {
-            ViewModel.MainWindow.OpenFlyout(new Information(ViewModel));
+            ModelHelpers.OpenFlyout(new Information(ModelHelpers));
         }
 
-        private void SettingsButton(object sender, RoutedEventArgs e)
+        private async void SettingsButton(object sender, RoutedEventArgs e)
         {
-            ViewModel.MainWindow.OpenFlyout(new Flyouts.Settings(ViewModel));
+            await ModelHelpers.OpenFlyout(new Flyouts.Settings(ModelHelpers));
+            if (!ModelHelpers.Gallifrey.JiraConnection.IsConnected)
+            {
+                await DialogCoordinator.Instance.ShowMessageAsync(ModelHelpers.DialogContext, "Connection Required", "You Must Have A Working Jira Connection To Use Gallifrey");
+                ModelHelpers.CloseApp();
+            }
+        }
+
+        private void EmailButton(object sender, RoutedEventArgs e)
+        {
+            ModelHelpers.Gallifrey.TrackEvent(TrackingType.ContactClick);
+            Process.Start(new ProcessStartInfo("mailto:contact@gallifreyapp.co.uk?subject=Gallifrey App Contact"));
+        }
+
+        private void TwitterButton(object sender, RoutedEventArgs e)
+        {
+            ModelHelpers.Gallifrey.TrackEvent(TrackingType.ContactClick);
+            Process.Start(new ProcessStartInfo("https://twitter.com/GallifreyApp"));
+        }
+
+        private void PayPalButton(object sender, RoutedEventArgs e)
+        {
+            ModelHelpers.Gallifrey.TrackEvent(TrackingType.PayPalClick);
+            Process.Start(new ProcessStartInfo("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=G3MWL8E6UG4RS"));
+        }
+
+        private void GitHubButton(object sender, RoutedEventArgs e)
+        {
+            ModelHelpers.Gallifrey.TrackEvent(TrackingType.GitHubClick);
+            Process.Start(new ProcessStartInfo("https://github.com/BlythMeister/Gallifrey"));
+        }
+        
+        private void ModelHelpersOnRemoteButtonTrigger(object sender, RemoteButtonTrigger remoteButtonTrigger)
+        {
+            switch (remoteButtonTrigger)
+            {
+                case RemoteButtonTrigger.Add: AddButton(this, null); break;
+                case RemoteButtonTrigger.Delete: DeleteButton(this, null); break;
+                case RemoteButtonTrigger.Search: SearchButton(this, null); break;
+                case RemoteButtonTrigger.Edit: EditButton(this, null); break;
+                case RemoteButtonTrigger.Export: ExportButton(this, null); break;
+                case RemoteButtonTrigger.LockTimer: LockTimerButton(this, null); break;
+                case RemoteButtonTrigger.Settings: SettingsButton(this, null); break;
+                case RemoteButtonTrigger.Info: InfoButton(this, null); break;
+                case RemoteButtonTrigger.Twitter: TwitterButton(this, null); break;
+                case RemoteButtonTrigger.Email: EmailButton(this, null); break;
+                case RemoteButtonTrigger.GitHub: GitHubButton(this, null); break;
+                case RemoteButtonTrigger.PayPal: PayPalButton(this, null); break;
+                default: return;
+            }
         }
     }
 }
