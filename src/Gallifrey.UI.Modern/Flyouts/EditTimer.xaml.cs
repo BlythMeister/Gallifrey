@@ -115,13 +115,11 @@ namespace Gallifrey.UI.Modern.Flyouts
 
             var result = await DialogCoordinator.Instance.ShowInputAsync(modelHelpers.DialogContext, "Enter Time Adjustment", "Enter The Number Of Minutes or Time To Subtract\nThis Can Be '90' or '1:30' for 1 Hour & 30 Minutes");
 
-            if (result == null)
+            if (result != null)
             {
-                Focus();
-                return;
+                DoAdjustment(result, false);
             }
-
-            DoAdjustment(result, false);
+            Focus();
         }
 
         private async void AddTime(object sender, RoutedEventArgs e)
@@ -130,13 +128,11 @@ namespace Gallifrey.UI.Modern.Flyouts
 
             var result = await DialogCoordinator.Instance.ShowInputAsync(modelHelpers.DialogContext, "Enter Time Adjustment", "Enter The Number Of Minutes Or Time To Add\nThis Can Be '90' or '1:30' for 1 Hour & 30 Minutes");
 
-            if (result == null)
+            if (result != null)
             {
-                Focus();
-                return;
+                DoAdjustment(result, true);
             }
-
-            DoAdjustment(result, true);
+            Focus();
         }
 
         private async void DoAdjustment(string enteredValue, bool addTime)
