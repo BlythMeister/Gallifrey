@@ -1,9 +1,7 @@
 NUGET
   remote: https://www.nuget.org/api/v2
   specs:
-    Atlassian.SDK (5.11.0)
-      Newtonsoft.Json (>= 7.0.1)
-      RestSharp (105.1.0)
+    Atlassian.SDK (2.5.0)
     Exceptionless.Portable (3.2.1424)
     Exceptionless.Windows (3.2.1424)
       Exceptionless.Portable (3.2.1424)

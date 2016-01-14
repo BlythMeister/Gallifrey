@@ -214,4 +214,11 @@
       <Other>Adding new ui upgrade links</Other>
     </Others>
   </Version>
+  <Version Number="3.0.1">
+    <Features />
+    <Bugs>
+      <Bug>Change the way the SOAP client is created to fix connection issue</Bug>
+    </Bugs>
+    <Others/>
+  </Version>
 </Versions>
