@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Versions xmlns="http://releases.gallifreyapp.co.uk/ChangeLog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://releases.gallifreyapp.co.uk/schemas/ChangeLogSchema.xsd">
-  <Version Number="2.2.1" Name="New User Interface - Pre Release">
+  <Version Number="3.0.0">
     <Features>
       <Feature>Add/Edit/Delete Timers</Feature>
       <Feature>Manual Time Adjustment</Feature>

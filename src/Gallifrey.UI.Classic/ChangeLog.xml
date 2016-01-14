@@ -197,7 +197,7 @@
     </Bugs>
     <Others />
   </Version>
-  <Version Number="2.2.1" Name="Pre Release">
+  <Version Number="3.0.0" Name="New UI Avaliable">
     <Features>
       <Feature>Added periodic background check of timers to improve Gallifrey accuracy with Jira</Feature>
       <Feature>When adding a timer, if you already have the timer will add the time to it</Feature>

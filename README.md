@@ -28,7 +28,7 @@ We are aiming to maintain a Beta & Stable version of the app.
 
 #####Modern UI
 
-* [Stable Release - COMING SOON]
+* [Stable Release - Click Here](http://releases.gallifreyapp.co.uk/download/modern/stable/setup.exe)
 * [Beta Release - Click Here](http://releases.gallifreyapp.co.uk/download/modern/beta/setup.exe)
 
 Donate
