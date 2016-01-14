@@ -19,6 +19,7 @@
       <Feature>Automatic Clean-Up</Feature>
       <Feature>Multiple Select Operations On Timers (Delete/Edit/Export)</Feature>
       <Feature>Keyboard Shortcuts</Feature>
+      <Feature>Context Menu On Timers</Feature>
     </Features>
     <Bugs />
     <Others/>

@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Windows;
-using System.Windows.Input;
 using Gallifrey.AppTracking;
 using Gallifrey.UI.Modern.Flyouts;
 using Gallifrey.UI.Modern.Helpers;
@@ -23,7 +22,7 @@ namespace Gallifrey.UI.Modern.MainViews
 
         private void ControlButtons_OnLoaded(object sender, RoutedEventArgs e)
         {
-            ModelHelpers.KeyupEvent += ModelHelpersOnKeyupEvent;
+            ModelHelpers.RemoteButtonTrigger += ModelHelpersOnRemoteButtonTrigger;
         }
 
         private void AddButton(object sender, RoutedEventArgs e)
@@ -141,46 +140,24 @@ namespace Gallifrey.UI.Modern.MainViews
             ModelHelpers.Gallifrey.TrackEvent(TrackingType.GitHubClick);
             Process.Start(new ProcessStartInfo("https://github.com/BlythMeister/Gallifrey"));
         }
-
-        private void ModelHelpersOnKeyupEvent(object sender, Key key)
+        
+        private void ModelHelpersOnRemoteButtonTrigger(object sender, RemoteButtonTrigger remoteButtonTrigger)
         {
-            if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
+            switch (remoteButtonTrigger)
             {
-                switch (key)
-                {
-                    case Key.A: AddButton(this, null); break;
-                    case Key.D: DeleteButton(this, null); break;
-                    case Key.F: SearchButton(this, null); break;
-                    case Key.E: EditButton(this, null); break;
-                    case Key.S: ExportButton(this, null); break;
-                    case Key.L: LockTimerButton(this, null); break;
-                    case Key.P: SettingsButton(this, null); break;
-                    case Key.I: InfoButton(this, null); break;
-                    case Key.T: TwitterButton(this, null); break;
-                    case Key.M: EmailButton(this, null); break;
-                    case Key.G: GitHubButton(this, null); break;
-                    case Key.C: PayPalButton(this, null); break;
-                    default: return;
-                }
-            }
-            else
-            {
-                switch (key)
-                {
-                    case Key.F1: AddButton(this, null); break;
-                    case Key.F2: DeleteButton(this, null); break;
-                    case Key.F3: SearchButton(this, null); break;
-                    case Key.F4: EditButton(this, null); break;
-                    case Key.F5: ExportButton(this, null); break;
-                    case Key.F6: LockTimerButton(this, null); break;
-                    case Key.F7: SettingsButton(this, null); break;
-                    case Key.F8: InfoButton(this, null); break;
-                    case Key.F9: TwitterButton(this, null); break;
-                    case Key.F10: EmailButton(this, null); break;
-                    case Key.F11: GitHubButton(this, null); break;
-                    case Key.F12: PayPalButton(this, null); break;
-                    default: return;
-                }
+                case RemoteButtonTrigger.Add: AddButton(this, null); break;
+                case RemoteButtonTrigger.Delete: DeleteButton(this, null); break;
+                case RemoteButtonTrigger.Search: SearchButton(this, null); break;
+                case RemoteButtonTrigger.Edit: EditButton(this, null); break;
+                case RemoteButtonTrigger.Export: ExportButton(this, null); break;
+                case RemoteButtonTrigger.LockTimer: LockTimerButton(this, null); break;
+                case RemoteButtonTrigger.Settings: SettingsButton(this, null); break;
+                case RemoteButtonTrigger.Info: InfoButton(this, null); break;
+                case RemoteButtonTrigger.Twitter: TwitterButton(this, null); break;
+                case RemoteButtonTrigger.Email: EmailButton(this, null); break;
+                case RemoteButtonTrigger.GitHub: GitHubButton(this, null); break;
+                case RemoteButtonTrigger.PayPal: PayPalButton(this, null); break;
+                default: return;
             }
         }
     }

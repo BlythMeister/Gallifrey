@@ -3,6 +3,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using Gallifrey.UI.Modern.MainViews;
+using Gallifrey.UI.Modern.Models;
 using MahApps.Metro.Controls;
 
 namespace Gallifrey.UI.Modern.Helpers
@@ -15,7 +17,7 @@ namespace Gallifrey.UI.Modern.Helpers
         public event EventHandler<Guid> SelectTimerEvent;
         public event EventHandler SelectRunningTimerEvent;
         public event EventHandler RefreshModelEvent;
-        public event EventHandler<Key> KeyupEvent;
+        public event EventHandler<RemoteButtonTrigger> RemoteButtonTrigger;
 
         public ModelHelpers(IBackend gallifrey, FlyoutsControl flyoutsControl)
         {
@@ -93,9 +95,9 @@ namespace Gallifrey.UI.Modern.Helpers
 
         }
 
-        public void RegisterKeyUp(object sender, Key key)
+        public void TriggerRemoteButtonPress(RemoteButtonTrigger buttonTrigger)
         {
-            KeyupEvent?.Invoke(sender, key);
+            RemoteButtonTrigger?.Invoke(null, buttonTrigger);
         }
     }
 }

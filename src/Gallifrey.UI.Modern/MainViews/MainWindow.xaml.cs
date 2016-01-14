@@ -331,7 +331,49 @@ namespace Gallifrey.UI.Modern.MainViews
 
         private void MainWindow_KeyUp(object sender, KeyEventArgs e)
         {
-            modelHelpers.RegisterKeyUp(sender, e.Key);
+            var key = e.Key;
+            RemoteButtonTrigger trigger ;
+
+            if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
+            {
+                switch (key)
+                {
+                    case Key.A: trigger = RemoteButtonTrigger.Add; break;
+                    case Key.D: trigger = RemoteButtonTrigger.Delete; break;
+                    case Key.F: trigger = RemoteButtonTrigger.Search; break;
+                    case Key.E: trigger = RemoteButtonTrigger.Edit; break;
+                    case Key.S: trigger = RemoteButtonTrigger.Export; break;
+                    case Key.L: trigger = RemoteButtonTrigger.LockTimer; break;
+                    case Key.P: trigger = RemoteButtonTrigger.Settings; break;
+                    case Key.I: trigger = RemoteButtonTrigger.Info; break;
+                    case Key.T: trigger = RemoteButtonTrigger.Twitter; break;
+                    case Key.M: trigger = RemoteButtonTrigger.Email; break;
+                    case Key.G: trigger = RemoteButtonTrigger.GitHub; break;
+                    case Key.C: trigger = RemoteButtonTrigger.PayPal; break;
+                    default: return;
+                }
+            }
+            else
+            {
+                switch (key)
+                {
+                    case Key.F1: trigger = RemoteButtonTrigger.Add; break;
+                    case Key.F2: trigger = RemoteButtonTrigger.Delete; break;
+                    case Key.F3: trigger = RemoteButtonTrigger.Search; break;
+                    case Key.F4: trigger = RemoteButtonTrigger.Edit; break;
+                    case Key.F5: trigger = RemoteButtonTrigger.Export; break;
+                    case Key.F6: trigger = RemoteButtonTrigger.LockTimer; break;
+                    case Key.F7: trigger = RemoteButtonTrigger.Settings; break;
+                    case Key.F8: trigger = RemoteButtonTrigger.Info; break;
+                    case Key.F9: trigger = RemoteButtonTrigger.Twitter; break;
+                    case Key.F10: trigger = RemoteButtonTrigger.Email; break;
+                    case Key.F11: trigger = RemoteButtonTrigger.GitHub; break;
+                    case Key.F12: trigger = RemoteButtonTrigger.PayPal; break;
+                    default: return;
+                }
+            }
+            
+            modelHelpers.TriggerRemoteButtonPress(trigger);
         }
     }
 }

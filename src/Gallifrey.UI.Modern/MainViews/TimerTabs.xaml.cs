@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Windows;
 using System.Windows.Input;
 using Gallifrey.Exceptions.JiraIntegration;
 using Gallifrey.Exceptions.JiraTimers;
@@ -22,13 +23,20 @@ namespace Gallifrey.UI.Modern.MainViews
             InitializeComponent();
         }
 
-        private void TimerList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        private async void TimerList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            var timerIds = ViewModel.GetSelectedTimerIds();
+            var timerIds = ViewModel.GetSelectedTimerIds().ToList();
 
             if (timerIds.Any())
             {
                 var timerId = timerIds.First();
+                
+                if (timerIds.Count > 1)
+                {
+                    var timer = ModelHelpers.Gallifrey.JiraTimerCollection.GetTimer(timerId);
+                    await DialogCoordinator.Instance.ShowMessageAsync(ModelHelpers.DialogContext, "Multiple Timers Selected", $"You Have 2 Timers Selected, Can Only Start 1.\nWill Start Timer: {timer.JiraReference}\n\n{timer.JiraName}");
+                }
+                
                 var runningTimer = ModelHelpers.Gallifrey.JiraTimerCollection.GetRunningTimerId();
 
                 if (runningTimer.HasValue && runningTimer.Value == timerId)
@@ -119,6 +127,31 @@ namespace Gallifrey.UI.Modern.MainViews
             }
 
             return string.Empty;
+        }
+
+        private void ContextMenu_Add(object sender, RoutedEventArgs e)
+        {
+            ModelHelpers.TriggerRemoteButtonPress(RemoteButtonTrigger.Add);
+        }
+
+        private void ContextMenu_Delete(object sender, RoutedEventArgs e)
+        {
+            ModelHelpers.TriggerRemoteButtonPress(RemoteButtonTrigger.Delete);
+        }
+
+        private void ContextMenu_Edit(object sender, RoutedEventArgs e)
+        {
+            ModelHelpers.TriggerRemoteButtonPress(RemoteButtonTrigger.Edit);
+        }
+
+        private void ContextMenu_Export(object sender, RoutedEventArgs e)
+        {
+            ModelHelpers.TriggerRemoteButtonPress(RemoteButtonTrigger.Export);
+        }
+
+        private void ContextMenu_StartStop(object sender, RoutedEventArgs e)
+        {
+            TimerList_MouseDoubleClick(sender, null);
         }
     }
 }

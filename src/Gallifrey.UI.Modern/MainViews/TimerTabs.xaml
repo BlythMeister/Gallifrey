@@ -117,10 +117,22 @@
                                         </Style>
                                     </TextBlock.Style>
                                 </TextBlock>
-
+                                <Grid.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Header="Delete Timer" Click="ContextMenu_Delete"/>
+                                        <MenuItem Header="Edit Timer" Click="ContextMenu_Edit"/>
+                                        <MenuItem Header="Export Timer" Click="ContextMenu_Export"/>
+                                        <MenuItem Header="Start/Stop Timer" Click="ContextMenu_StartStop"/>
+                                    </ContextMenu>
+                                </Grid.ContextMenu>
                             </Grid>
                         </DataTemplate>
                     </ListView.ItemTemplate>
+                    <ListView.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Add New Timer" Click="ContextMenu_Add"/>
+                        </ContextMenu>
+                    </ListView.ContextMenu>
                 </ListView>
             </DataTemplate>
         </TabControl.ContentTemplate>
