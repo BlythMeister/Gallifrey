@@ -31,8 +31,8 @@
     <ProductName>Gallifrey %28Beta%29</ProductName>
     <PublisherName>Gallifrey</PublisherName>
     <MinimumRequiredVersion>2.2.0.0</MinimumRequiredVersion>
-    <ApplicationRevision>71</ApplicationRevision>
-    <ApplicationVersion>2.2.0.71</ApplicationVersion>
+    <ApplicationRevision>72</ApplicationRevision>
+    <ApplicationVersion>2.2.0.72</ApplicationVersion>
     <UseApplicationTrust>true</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
