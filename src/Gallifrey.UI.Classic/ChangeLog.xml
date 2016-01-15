@@ -228,4 +228,9 @@
       <Other>No changes to classic UI</Other>
     </Others>
   </Version>
+  <Version Number="3.0.3" Name="Pre-Release">
+    <Features/>
+    <Bugs/>
+    <Others/>
+  </Version>
 </Versions>
