@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -11,7 +12,26 @@ namespace Gallifrey.UI.Modern.Helpers
 {
     public class ModelHelpers
     {
+        internal class OpenFlyoutDetails
+        {
+            public Flyout Flyout { get; set; }
+            public TaskCompletionSource<Flyout> TaskCompletionSource { get; set; }
+            public Type FlyoutType { get; set; }
+            public bool IsHidden { get; set; }
+            public Guid OpenFlyoutDetailGuid { get; set; }
+            
+            public OpenFlyoutDetails(Flyout flyout)
+            {
+                Flyout = flyout;
+                TaskCompletionSource = new TaskCompletionSource<Flyout>();
+                FlyoutType = flyout.GetType();
+                IsHidden = false;
+                OpenFlyoutDetailGuid = Guid.NewGuid();
+            }
+        }
+
         private readonly FlyoutsControl flyoutsControl;
+        private readonly List<OpenFlyoutDetails> openFlyouts;
         public IBackend Gallifrey { get; }
         public DialogContext DialogContext { get; }
         public event EventHandler<Guid> SelectTimerEvent;
@@ -24,6 +44,7 @@ namespace Gallifrey.UI.Modern.Helpers
             this.flyoutsControl = flyoutsControl;
             Gallifrey = gallifrey;
             DialogContext = new DialogContext();
+            openFlyouts = new List<OpenFlyoutDetails>();
         }
 
         public void CloseAllFlyouts()
@@ -39,34 +60,65 @@ namespace Gallifrey.UI.Modern.Helpers
             flyout.IsOpen = false;
         }
 
+        public void HideFlyout(Flyout flyout)
+        {
+            var actualType = flyout.GetType();
+            var openFlyoutDetail = openFlyouts.FirstOrDefault(x => x.FlyoutType == actualType);
+            if (openFlyoutDetail != null)
+                openFlyoutDetail.IsHidden = true;
+
+            flyout.IsOpen = false;
+        }
+
         public Task<Flyout> OpenFlyout(Flyout flyout)
         {
             var actualType = flyout.GetType();
-            var taskCompletion = new TaskCompletionSource<Flyout>();
-
+            var openFlyoutDetail = openFlyouts.FirstOrDefault(x => x.FlyoutType == actualType);
+            var openFlyout = flyoutsControl.Items.Cast<Flyout>().FirstOrDefault(item => item.GetType() == actualType);
             //Prevent 2 identical flyouts from opening
-            if (flyoutsControl.Items.Cast<Flyout>().Any(item => item.GetType() == actualType))
+            if (openFlyout != null)
             {
-                taskCompletion.SetResult(flyout);
-            }
-            else
-            {
-                flyoutsControl.Items.Add(flyout);
-
-                // when the flyout is closed, remove it from the hosting FlyoutsControl
-                RoutedEventHandler closingFinishedHandler = null;
-                closingFinishedHandler = (o, args) =>
+                if (openFlyoutDetail != null)
                 {
-                    flyout.ClosingFinished -= closingFinishedHandler;
-                    flyoutsControl.Items.Remove(flyout);
-                    taskCompletion.SetResult(flyout);
-                };
-
-                flyout.ClosingFinished += closingFinishedHandler;
-                flyout.IsOpen = true;
+                    return openFlyoutDetail.TaskCompletionSource.Task;
+                }
+                else
+                {
+                    openFlyoutDetail = new OpenFlyoutDetails(openFlyout);
+                    openFlyouts.Add(openFlyoutDetail);
+                    return openFlyoutDetail.TaskCompletionSource.Task;
+                }
             }
 
-            return taskCompletion.Task;
+            if (openFlyoutDetail == null)
+            {
+                openFlyoutDetail = new OpenFlyoutDetails(flyout);
+                openFlyouts.Add(openFlyoutDetail);
+            }
+
+            openFlyoutDetail.IsHidden = false;
+            flyoutsControl.Items.Add(flyout);
+
+            // when the flyout is closed, remove it from the hosting FlyoutsControl
+            RoutedEventHandler closingFinishedHandler = null;
+            closingFinishedHandler = (o, args) =>
+            {
+                var openFlyoutCheck = openFlyouts.FirstOrDefault(x => x.OpenFlyoutDetailGuid == openFlyoutDetail.OpenFlyoutDetailGuid);
+                if (openFlyoutCheck == null) return;
+
+                openFlyoutCheck.Flyout.ClosingFinished -= closingFinishedHandler;
+                flyoutsControl.Items.Remove(openFlyoutCheck.Flyout);
+                if (!openFlyoutCheck.IsHidden)
+                {
+                    openFlyoutDetail.TaskCompletionSource.SetResult(flyout);
+                    openFlyouts.Remove(openFlyoutDetail);
+                }
+            };
+
+            flyout.ClosingFinished += closingFinishedHandler;
+            flyout.IsOpen = true;
+
+            return openFlyoutDetail.TaskCompletionSource.Task;
         }
 
         public void SetSelectedTimer(Guid value)
@@ -78,7 +130,7 @@ namespace Gallifrey.UI.Modern.Helpers
         {
             SelectRunningTimerEvent?.Invoke(this, null);
         }
-        
+
         public void RefreshModel()
         {
             RefreshModelEvent?.Invoke(this, null);
@@ -92,7 +144,6 @@ namespace Gallifrey.UI.Modern.Helpers
             }
 
             Application.Current.Shutdown();
-
         }
 
         public void TriggerRemoteButtonPress(RemoteButtonTrigger buttonTrigger)
