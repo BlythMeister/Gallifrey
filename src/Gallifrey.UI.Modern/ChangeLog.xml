@@ -31,5 +31,17 @@
     </Bugs>
     <Others/>
   </Version>
+  <Version Number="3.0.2">
+    <Features/>
+    <Bugs>
+      <Bug>Fix bug with locked timers adding with search</Bug>
+    </Bugs>
+    <Others/>
+  </Version>
+  <Version Number="3.0.3" Name>
+    <Features/>
+    <Bugs/>
+    <Others/>
+  </Version>
 </Versions>
 

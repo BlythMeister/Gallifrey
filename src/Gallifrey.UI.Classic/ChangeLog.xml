@@ -221,4 +221,11 @@
     </Bugs>
     <Others/>
   </Version>
+  <Version Number="3.0.2">
+    <Features/>
+    <Bugs/>
+    <Others>
+      <Other>No changes to classic UI</Other>
+    </Others>
+  </Version>
 </Versions>

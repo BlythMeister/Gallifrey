@@ -64,7 +64,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             modelHelpers.CloseFlyout(this);
             var addFlyout = new AddTimer(modelHelpers, startDate: lockedTimerDate, enableDateChange: false, preloadTime: selectedTime, enableTimeChange: false);
             await modelHelpers.OpenFlyout(addFlyout);
-
+            
             if (addFlyout.AddedTimer)
             {
                 foreach (var lockedTimerModel in selected)
