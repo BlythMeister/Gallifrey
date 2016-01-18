@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using Gallifrey.Exceptions.JiraIntegration;
 using Gallifrey.Exceptions.JiraTimers;
+using Gallifrey.IdleTimers;
 using Gallifrey.Jira.Model;
 using Gallifrey.UI.Modern.Helpers;
 using Gallifrey.UI.Modern.Models;
@@ -17,12 +19,12 @@ namespace Gallifrey.UI.Modern.Flyouts
         public bool AddedTimer { get; set; }
         public Guid NewTimerId { get; set; }
 
-        public AddTimer(ModelHelpers modelHelpers, string jiraRef = null, DateTime? startDate = null, bool? enableDateChange = null, TimeSpan? preloadTime = null, bool? enableTimeChange = null, bool? startNow = null)
+        public AddTimer(ModelHelpers modelHelpers, string jiraRef = null, DateTime? startDate = null, bool? enableDateChange = null, List<IdleTimer> idleTimers = null, bool? startNow = null)
         {
             this.modelHelpers = modelHelpers;
             InitializeComponent();
 
-            DataContext = new AddTimerModel(modelHelpers.Gallifrey, jiraRef, startDate, enableDateChange, preloadTime, enableTimeChange, startNow);
+            DataContext = new AddTimerModel(modelHelpers.Gallifrey, jiraRef, startDate, enableDateChange, idleTimers, startNow);
             AddedTimer = false;
         }
 
@@ -65,7 +67,16 @@ namespace Gallifrey.UI.Modern.Flyouts
                 }
             }
 
-            var seedTime = new TimeSpan(DataModel.StartHours, DataModel.StartMinutes, 0);
+            TimeSpan seedTime;
+            if (DataModel.TimeEditable)
+            {
+                seedTime = new TimeSpan(DataModel.StartHours, DataModel.StartMinutes, 0);
+            }
+            else
+            {
+                seedTime = new TimeSpan();
+            }
+            
             try
             {
                 NewTimerId = modelHelpers.Gallifrey.JiraTimerCollection.AddTimer(jiraIssue, DataModel.StartDate.Value, seedTime, DataModel.StartNow);
@@ -80,7 +91,15 @@ namespace Gallifrey.UI.Modern.Flyouts
 
                     if (result == MessageDialogResult.Affirmative)
                     {
-                        modelHelpers.Gallifrey.JiraTimerCollection.AdjustTime(ex.TimerId, seedTime.Hours, seedTime.Minutes, true);
+                        if (DataModel.TimeEditable)
+                        {
+                            modelHelpers.Gallifrey.JiraTimerCollection.AdjustTime(ex.TimerId, seedTime.Hours, seedTime.Minutes, true);
+                        }
+                        else
+                        {
+                            modelHelpers.Gallifrey.JiraTimerCollection.AddIdleTimer(ex.TimerId, DataModel.IdleTimers);
+                        }
+                            
                         doneSomething = true;
                     }
                     else

@@ -36,7 +36,7 @@ namespace Gallifrey.JiraTimers
         TimeSpan GetTotalTimeForDate(DateTime timerDate);
         bool AdjustTime(Guid uniqueId, int hours, int minutes, bool addTime);
         void AddJiraExportedTime(Guid uniqueId, int hours, int minutes);
-        void AddIdleTimer(Guid uniqueId, IdleTimer idleTimer);
+        void AddIdleTimer(Guid uniqueId, List<IdleTimer> idleTimer);
         void RefreshFromJira(Guid uniqueId, Issue jiraIssue, User currentUser);        
     }
 
@@ -294,15 +294,20 @@ namespace Gallifrey.JiraTimers
             SaveTimers();
         }
 
-        public void AddIdleTimer(Guid uniqueId, IdleTimer idleTimer)
+        public void AddIdleTimer(Guid uniqueId, List<IdleTimer> idleTimers)
         {
             trackUsage.TrackAppUsage(TrackingType.LockedTimerAdd);
             var timer = GetTimer(uniqueId);
-            timer.AddIdleTimer(idleTimer);
+            foreach (var idleTimer in idleTimers)
+            {
+                timer.AddIdleTimer(idleTimer);
+            }
             SaveTimers();
             if (exportSettings.ExportPrompt != null && exportSettings.ExportPrompt.OnAddIdle && !timer.FullyExported)
             {
-                exportPrompt.Invoke(this, new ExportPromptDetail(uniqueId, idleTimer.IdleTimeValue));
+                var idleTime = new TimeSpan();
+                idleTime = idleTimers.Aggregate(idleTime, (current, idleTimer) => current.Add(idleTimer.IdleTimeValue));
+                exportPrompt.Invoke(this, new ExportPromptDetail(uniqueId, idleTime));
             }
         }
 

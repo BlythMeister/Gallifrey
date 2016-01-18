@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using Gallifrey.Exceptions.JiraIntegration;
@@ -136,12 +137,12 @@ namespace Gallifrey.UI.Classic
                     timerToAddTimeTo = gallifrey.JiraTimerCollection.AddTimer(jiraIssue, idleTimer.DateStarted, new TimeSpan(), false);
                 }
 
-                gallifrey.JiraTimerCollection.AddIdleTimer(timerToAddTimeTo, idleTimer);
+                gallifrey.JiraTimerCollection.AddIdleTimer(timerToAddTimeTo, new List<IdleTimer> { idleTimer });
                 NewTimerId = timerToAddTimeTo;
             }
             else if (radRunning.Checked)
             {
-                gallifrey.JiraTimerCollection.AddIdleTimer(runningTimerId.Value, idleTimer);
+                gallifrey.JiraTimerCollection.AddIdleTimer(runningTimerId.Value, new List<IdleTimer> { idleTimer });
                 NewTimerId = runningTimerId;
             }
             else if (radNew.Checked)

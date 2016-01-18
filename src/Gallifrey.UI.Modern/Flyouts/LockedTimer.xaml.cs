@@ -19,7 +19,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             InitializeComponent();
 
             var idleTimers = modelHelpers.Gallifrey.IdleTimerCollection.GetUnusedLockTimers().ToList();
-            
+
             DataContext = new LockedTimerCollectionModel(idleTimers);
         }
 
@@ -61,12 +61,56 @@ namespace Gallifrey.UI.Modern.Flyouts
                 }
             }
 
-            modelHelpers.CloseFlyout(this);
-            var addFlyout = new AddTimer(modelHelpers, startDate: lockedTimerDate, enableDateChange: false, preloadTime: selectedTime, enableTimeChange: false);
-            await modelHelpers.OpenFlyout(addFlyout);
-            
-            if (addFlyout.AddedTimer)
+            var runningTimerId = modelHelpers.Gallifrey.JiraTimerCollection.GetRunningTimerId();
+            MessageDialogResult result;
+
+            if (runningTimerId.HasValue)
             {
+                var runningTimer = modelHelpers.Gallifrey.JiraTimerCollection.GetTimer(runningTimerId.Value);
+                result = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Add Time Where?", $"Where Would You Like To Add The Time Worth {selectedTime.FormatAsString()}?", MessageDialogStyle.AffirmativeAndNegativeAndSingleAuxiliary, new MetroDialogSettings { AffirmativeButtonText = "New Timer", NegativeButtonText = $"Running Timer ({runningTimer.JiraReference})", FirstAuxiliaryButtonText = "Cancel" });
+
+                if (result == MessageDialogResult.FirstAuxiliary)
+                {
+                    Focus();
+                    return;
+                }
+            }
+            else
+            {
+                //No running timer, so just show the add time flyout.
+                result = MessageDialogResult.Affirmative;
+            }
+            
+            var selectedTimers = selected.Select(x => modelHelpers.Gallifrey.IdleTimerCollection.GetTimer(x.UniqueId)).ToList();
+
+            if (result == MessageDialogResult.Affirmative)
+            {
+                modelHelpers.CloseFlyout(this);
+                var addFlyout = new AddTimer(modelHelpers, startDate: lockedTimerDate, enableDateChange: false, idleTimers: selectedTimers);
+                await modelHelpers.OpenFlyout(addFlyout);
+
+                if (addFlyout.AddedTimer)
+                {
+                    foreach (var lockedTimerModel in selected)
+                    {
+                        modelHelpers.Gallifrey.IdleTimerCollection.RemoveTimer(lockedTimerModel.UniqueId);
+                    }
+
+                    if (modelHelpers.Gallifrey.IdleTimerCollection.GetUnusedLockTimers().Any())
+                    {
+                        modelHelpers.OpenFlyout(this);
+                        DataModel.RefreshLockedTimers(modelHelpers.Gallifrey.IdleTimerCollection.GetUnusedLockTimers());
+                    }
+                }
+                else
+                {
+                    modelHelpers.OpenFlyout(this);
+                }
+            }
+            else
+            {
+                modelHelpers.Gallifrey.JiraTimerCollection.AddIdleTimer(runningTimerId.Value, selectedTimers);
+
                 foreach (var lockedTimerModel in selected)
                 {
                     modelHelpers.Gallifrey.IdleTimerCollection.RemoveTimer(lockedTimerModel.UniqueId);
@@ -74,16 +118,13 @@ namespace Gallifrey.UI.Modern.Flyouts
 
                 if (modelHelpers.Gallifrey.IdleTimerCollection.GetUnusedLockTimers().Any())
                 {
-                    modelHelpers.OpenFlyout(this);
                     DataModel.RefreshLockedTimers(modelHelpers.Gallifrey.IdleTimerCollection.GetUnusedLockTimers());
                 }
+                else
+                {
+                    modelHelpers.CloseFlyout(this);
+                }
             }
-            else
-            {
-                modelHelpers.OpenFlyout(this);
-            }
-
-            Focus();
         }
 
         private async void DeleteButton(object sender, RoutedEventArgs e)

@@ -1,5 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
+using Gallifrey.IdleTimers;
 
 namespace Gallifrey.UI.Modern.Models
 {
@@ -20,8 +23,9 @@ namespace Gallifrey.UI.Modern.Models
         public bool StartNowEditable { get; set; }
         public bool AssignToMe { get; set; }
         public bool InProgress { get; set; }
+        public List<IdleTimer> IdleTimers { get; set; }
 
-        public AddTimerModel(IBackend gallifrey, string jiraRef, DateTime? startDate, bool? enableDateChange, TimeSpan? preloadTime, bool? enableTimeChange, bool? startNow)
+        public AddTimerModel(IBackend gallifrey, string jiraRef, DateTime? startDate, bool? enableDateChange, List<IdleTimer> idleTimers, bool? startNow)
         {
             var dateToday = DateTime.Now;
 
@@ -53,12 +57,16 @@ namespace Gallifrey.UI.Modern.Models
             }
 
             DateEditable = !enableDateChange.HasValue || enableDateChange.Value;
-            TimeEditable = !enableTimeChange.HasValue || enableTimeChange.Value;
+            TimeEditable = true;
 
-            if (preloadTime.HasValue)
+            if (idleTimers != null && idleTimers.Any())
             {
-                StartHours = preloadTime.Value.Hours > 9 ? 9 : preloadTime.Value.Hours;
-                StartMinutes = preloadTime.Value.Minutes;
+                var preloadTime = new TimeSpan();
+                preloadTime = idleTimers.Aggregate(preloadTime, (current, idleTimer) => current.Add(idleTimer.IdleTimeValue));
+                StartHours = preloadTime.Hours > 9 ? 9 : preloadTime.Hours;
+                StartMinutes = preloadTime.Minutes;
+                IdleTimers = idleTimers;
+                TimeEditable = false;
             }
 
             StartNow = startNow.HasValue && startNow.Value;

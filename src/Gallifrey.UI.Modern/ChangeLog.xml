@@ -39,8 +39,12 @@
     <Others/>
   </Version>
   <Version Number="3.0.3" Name="Pre-Release">
-    <Features/>
-    <Bugs/>
+    <Features>
+      <Feature>When adding locked timers, prompts if you want to add to running timer</Feature>
+    </Features>
+    <Bugs>
+      <Bug>Fix issue for exported timers resetting to un-exported</Bug>
+    </Bugs>
     <Others/>
   </Version>
 </Versions>
