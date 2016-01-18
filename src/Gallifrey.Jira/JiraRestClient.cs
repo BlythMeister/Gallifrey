@@ -124,7 +124,7 @@ namespace Gallifrey.Jira
         private static WorkLogs FilterWorklogsToUser(string rawJson, string user)
         {
             var jsonObject = JObject.Parse(rawJson);
-            var filtered = jsonObject["worklogs"].Children().Where(x => ((string)x["author"]["key"]) == user);
+            var filtered = jsonObject["worklogs"].Children().Where(x => ((string)x["author"]["name"]).ToLower() == user.ToLower());
             jsonObject["worklogs"] = new JArray(filtered);
             return jsonObject.ToObject<WorkLogs>();
         }

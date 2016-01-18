@@ -230,7 +230,9 @@
   </Version>
   <Version Number="3.0.3" Name="Pre-Release">
     <Features/>
-    <Bugs/>
+    <Bugs>
+      <Bug>Fix issue for exported timers resetting to un-exported</Bug>
+    </Bugs> 
     <Others/>
   </Version>
 </Versions>
