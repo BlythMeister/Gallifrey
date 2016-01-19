@@ -13,6 +13,7 @@ namespace Gallifrey.UI.Modern.Models
         Twitter,
         Email,
         GitHub,
-        PayPal
+        PayPal,
+        Gitter
     }
 }

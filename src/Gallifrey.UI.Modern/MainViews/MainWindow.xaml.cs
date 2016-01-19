@@ -349,7 +349,21 @@ namespace Gallifrey.UI.Modern.MainViews
                     case Key.T: trigger = RemoteButtonTrigger.Twitter; break;
                     case Key.M: trigger = RemoteButtonTrigger.Email; break;
                     case Key.G: trigger = RemoteButtonTrigger.GitHub; break;
+                    case Key.H: trigger = RemoteButtonTrigger.Gitter; break;
                     case Key.C: trigger = RemoteButtonTrigger.PayPal; break;
+                    default: return;
+                }
+            }
+            else if (Keyboard.IsKeyDown(Key.LeftAlt) || Keyboard.IsKeyDown(Key.RightAlt))
+            {
+                switch (key)
+                {
+                    case Key.F1: trigger = RemoteButtonTrigger.Info; break;
+                    case Key.F2: trigger = RemoteButtonTrigger.Twitter; break;
+                    case Key.F3: trigger = RemoteButtonTrigger.Email; break;
+                    case Key.F4: trigger = RemoteButtonTrigger.GitHub; break;
+                    case Key.F5: trigger = RemoteButtonTrigger.Gitter; break;
+                    case Key.F6: trigger = RemoteButtonTrigger.PayPal; break;
                     default: return;
                 }
             }
@@ -364,11 +378,6 @@ namespace Gallifrey.UI.Modern.MainViews
                     case Key.F5: trigger = RemoteButtonTrigger.Export; break;
                     case Key.F6: trigger = RemoteButtonTrigger.LockTimer; break;
                     case Key.F7: trigger = RemoteButtonTrigger.Settings; break;
-                    case Key.F8: trigger = RemoteButtonTrigger.Info; break;
-                    case Key.F9: trigger = RemoteButtonTrigger.Twitter; break;
-                    case Key.F10: trigger = RemoteButtonTrigger.Email; break;
-                    case Key.F11: trigger = RemoteButtonTrigger.GitHub; break;
-                    case Key.F12: trigger = RemoteButtonTrigger.PayPal; break;
                     default: return;
                 }
             }
