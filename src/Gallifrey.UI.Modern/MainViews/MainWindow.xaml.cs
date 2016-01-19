@@ -361,8 +361,8 @@ namespace Gallifrey.UI.Modern.MainViews
                     case Key.F1: trigger = RemoteButtonTrigger.Info; break;
                     case Key.F2: trigger = RemoteButtonTrigger.Twitter; break;
                     case Key.F3: trigger = RemoteButtonTrigger.Email; break;
-                    case Key.F4: trigger = RemoteButtonTrigger.GitHub; break;
-                    case Key.F5: trigger = RemoteButtonTrigger.Gitter; break;
+                    case Key.F4: trigger = RemoteButtonTrigger.Gitter; break;
+                    case Key.F5: trigger = RemoteButtonTrigger.GitHub; break;
                     case Key.F6: trigger = RemoteButtonTrigger.PayPal; break;
                     default: return;
                 }

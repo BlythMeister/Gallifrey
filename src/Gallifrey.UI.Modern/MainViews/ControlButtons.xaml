@@ -129,7 +129,7 @@
             <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="GitterButton">
                 <Button.ToolTip>
                     <TextBlock>
-                        View The Code On GitHub<LineBreak/>ALT + F4 or CTRL + G
+                        Chat With Users Or Ask For Help On Gitter<LineBreak/>ALT + F4 or CTRL + H
                     </TextBlock>
                 </Button.ToolTip>
                 <Rectangle Width="24" Height="24" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
