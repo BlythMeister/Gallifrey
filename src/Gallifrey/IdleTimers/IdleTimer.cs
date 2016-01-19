@@ -20,7 +20,7 @@ namespace Gallifrey.IdleTimers
             IdleTimeValue = idleTimeValue;
             if (IdleTimeValue.TotalSeconds == 0)
             {
-                IdleTimeValue = DateFinished.Value.Subtract(DateStarted);
+                SetIdleTimeValueFromDates();
             }
             UniqueId = uniqueId;
         }
@@ -35,14 +35,29 @@ namespace Gallifrey.IdleTimers
 
         public void StopTimer()
         {
-            DateFinished = DateTime.Now;
+            SetIdleTimeValueFromDates();
+        }
+
+        private void SetIdleTimeValueFromDates()
+        {
+            if (!DateFinished.HasValue)
+            {
+                DateFinished = DateTime.Now;
+            }
+
             IdleTimeValue = DateFinished.Value.Subtract(DateStarted);
+            if (IdleTimeValue.Seconds > 30)
+            {
+                IdleTimeValue = IdleTimeValue.Add(new TimeSpan(0, 1, 0));
+            }
+
+            IdleTimeValue = new TimeSpan(IdleTimeValue.Hours, IdleTimeValue.Minutes, 0);
         }
 
         public override string ToString()
         {
             return DateFinished.HasValue ?
-                $"Date - {DateStarted.ToString("ddd, dd MMM")} - From [ {DateStarted.ToString("HH:mm:ss")} ] To [ {DateFinished.Value.ToString("HH:mm:ss")} ] - Time [ {IdleTimeValue.FormatAsString()} ]" :
+                $"Date - {DateStarted.ToString("ddd, dd MMM")} - From [ {DateStarted.ToString("HH:mm:ss")} ] To [ {DateFinished.Value.ToString("HH:mm:ss")} ] - Time [ {IdleTimeValue.FormatAsString(false)} ]" :
                 $"Date - {DateStarted.ToString("ddd, dd MMM")} - From [ {DateStarted.ToString("HH:mm:ss")} ] To [ IN PROGRESS ]";
         }
     }
