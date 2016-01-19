@@ -81,6 +81,10 @@ namespace Gallifrey.UI.Modern.Flyouts
             {
                 NewTimerId = modelHelpers.Gallifrey.JiraTimerCollection.AddTimer(jiraIssue, DataModel.StartDate.Value, seedTime, DataModel.StartNow);
                 AddedTimer = true;
+                if (!DataModel.TimeEditable)
+                {
+                    modelHelpers.Gallifrey.JiraTimerCollection.AddIdleTimer(NewTimerId, DataModel.IdleTimers);
+                }
             }
             catch (DuplicateTimerException ex)
             {

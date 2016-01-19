@@ -16,7 +16,6 @@ namespace Gallifrey.UI.Modern.Models
         public DateTime? StartDate { get; set; }
         public DateTime DisplayDate { get; set; }
         public bool DateEditable { get; set; }
-        public bool TimeEditable { get; set; }
         public int StartHours { get; set; }
         public int StartMinutes { get; set; }
         public bool StartNow { get; set; }
@@ -24,6 +23,8 @@ namespace Gallifrey.UI.Modern.Models
         public bool AssignToMe { get; set; }
         public bool InProgress { get; set; }
         public List<IdleTimer> IdleTimers { get; set; }
+
+        public bool TimeEditable => IdleTimers == null || IdleTimers.Count == 0;
 
         public AddTimerModel(IBackend gallifrey, string jiraRef, DateTime? startDate, bool? enableDateChange, List<IdleTimer> idleTimers, bool? startNow)
         {
@@ -57,7 +58,7 @@ namespace Gallifrey.UI.Modern.Models
             }
 
             DateEditable = !enableDateChange.HasValue || enableDateChange.Value;
-            TimeEditable = true;
+            StartNow = startNow.HasValue && startNow.Value;
 
             if (idleTimers != null && idleTimers.Any())
             {
@@ -66,10 +67,7 @@ namespace Gallifrey.UI.Modern.Models
                 StartHours = preloadTime.Hours > 9 ? 9 : preloadTime.Hours;
                 StartMinutes = preloadTime.Minutes;
                 IdleTimers = idleTimers;
-                TimeEditable = false;
             }
-
-            StartNow = startNow.HasValue && startNow.Value;
         }
 
         public void SetStartNowEnabled(bool enabled)
