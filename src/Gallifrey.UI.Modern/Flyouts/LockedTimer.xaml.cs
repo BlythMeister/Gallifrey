@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Windows;
 using Gallifrey.ExtensionMethods;
+using Gallifrey.JiraTimers;
 using Gallifrey.UI.Modern.Helpers;
 using Gallifrey.UI.Modern.Models;
 using MahApps.Metro.Controls.Dialogs;
@@ -44,14 +45,13 @@ namespace Gallifrey.UI.Modern.Flyouts
             }
 
             var selectedTime = new TimeSpan();
-            selectedTime = selected.Aggregate(selectedTime, (current, lockedTimerModel) => current.Add(lockedTimerModel.IdleTime));
-
             var lockedTimerDate = DateTime.MinValue;
             foreach (var lockedTimerModel in selected)
             {
                 if (lockedTimerDate == DateTime.MinValue || lockedTimerDate.Date == lockedTimerModel.DateForTimer)
                 {
                     lockedTimerDate = lockedTimerModel.DateForTimer;
+                    selectedTime = selectedTime.Add(lockedTimerModel.IdleTime);
                 }
                 else
                 {
@@ -61,12 +61,20 @@ namespace Gallifrey.UI.Modern.Flyouts
                 }
             }
 
+            JiraTimer runningTimer = null;
             var runningTimerId = modelHelpers.Gallifrey.JiraTimerCollection.GetRunningTimerId();
-            MessageDialogResult result;
-
             if (runningTimerId.HasValue)
             {
-                var runningTimer = modelHelpers.Gallifrey.JiraTimerCollection.GetTimer(runningTimerId.Value);
+                runningTimer = modelHelpers.Gallifrey.JiraTimerCollection.GetTimer(runningTimerId.Value);
+                if (runningTimer.DateStarted.Date != lockedTimerDate.Date)
+                {
+                    runningTimer = null;
+                }
+            }
+
+            MessageDialogResult result;
+            if(runningTimer != null)
+            { 
                 result = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Add Time Where?", $"Where Would You Like To Add The Time Worth {selectedTime.FormatAsString()}?", MessageDialogStyle.AffirmativeAndNegativeAndSingleAuxiliary, new MetroDialogSettings { AffirmativeButtonText = "New Timer", NegativeButtonText = $"Running Timer ({runningTimer.JiraReference})", FirstAuxiliaryButtonText = "Cancel" });
 
                 if (result == MessageDialogResult.FirstAuxiliary)
