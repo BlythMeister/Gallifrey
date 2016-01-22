@@ -46,6 +46,7 @@
     <Bugs>
       <Bug>Fix issue for exported timers resetting to un-exported</Bug>
       <Bug>Round locked timers to nearest minute as seconds are not logged anyway</Bug>
+      <Bug>Updated the order of default search results</Bug>
     </Bugs>
     <Others/>
   </Version>

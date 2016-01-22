@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using Gallifrey.Comparers;
 using Gallifrey.Jira.Model;
 using Gallifrey.JiraIntegration;
 
@@ -49,8 +50,9 @@ namespace Gallifrey.UI.Modern.Models
             var recentDisplay = recent.Select(x => new JiraIssueDisplayModel(x)).ToList();
             var issuesDisplay = issues.Select(x => new JiraIssueDisplayModel(x)).ToList();
             recentDisplay.AddRange(issuesDisplay);
+            recentDisplay = recentDisplay.Distinct().OrderBy(x => x.Reference, new JiraReferenceComparer()).ToList();
 
-            SearchResults = new ObservableCollection<JiraIssueDisplayModel>(recentDisplay.Distinct().ToList());
+            SearchResults = new ObservableCollection<JiraIssueDisplayModel>(recentDisplay);
         }
 
         public void UpdateSearchResults(IEnumerable<Issue> jiraIssues)

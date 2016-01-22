@@ -25,7 +25,7 @@ namespace Gallifrey.UI.Modern.Flyouts
 
             var filters = modelHelpers.Gallifrey.JiraConnection.GetJiraFilters();
             var issues = modelHelpers.Gallifrey.JiraConnection.GetJiraCurrentUserOpenIssues();
-            var recent = modelHelpers.Gallifrey.JiraTimerCollection.GetJiraReferencesForLastDays(100);
+            var recent = modelHelpers.Gallifrey.JiraTimerCollection.GetJiraReferencesForLastDays(50);
             DataContext = new SearchModel(filters, recent, issues);
         }
 
