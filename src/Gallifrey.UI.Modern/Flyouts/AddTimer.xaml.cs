@@ -89,7 +89,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             catch (DuplicateTimerException ex)
             {
                 var doneSomething = false;
-                if (seedTime.TotalMinutes > 0)
+                if (seedTime.TotalMinutes > 0 || !DataModel.TimeEditable)
                 {
                     var result = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Duplicate Timer", "The Timer Already Exists, Would You Like To Add The Time?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
 
