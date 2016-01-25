@@ -119,6 +119,7 @@
                                 </TextBlock>
                                 <Grid.ContextMenu>
                                     <ContextMenu>
+                                        <MenuItem Header="Copy JIRA Reference" Click="ContextMenu_Copy"/>
                                         <MenuItem Header="Delete Timer" Click="ContextMenu_Delete"/>
                                         <MenuItem Header="Edit Timer" Click="ContextMenu_Edit"/>
                                         <MenuItem Header="Export Timer" Click="ContextMenu_Export"/>

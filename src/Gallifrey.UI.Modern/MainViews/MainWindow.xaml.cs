@@ -27,7 +27,7 @@ namespace Gallifrey.UI.Modern.MainViews
         private readonly ModelHelpers modelHelpers;
         private MainViewModel ViewModel => (MainViewModel)DataContext;
         private bool machineLocked;
-        
+
         public MainWindow(InstanceType instance, AppType appType)
         {
             InitializeComponent();
@@ -334,25 +334,21 @@ namespace Gallifrey.UI.Modern.MainViews
         private void MainWindow_KeyUp(object sender, KeyEventArgs e)
         {
             var key = e.Key;
-            RemoteButtonTrigger trigger ;
+            RemoteButtonTrigger trigger;
 
             if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
             {
                 switch (key)
                 {
                     case Key.A: trigger = RemoteButtonTrigger.Add; break;
+                    case Key.C: trigger = RemoteButtonTrigger.Copy; break;
+                    case Key.V: trigger = RemoteButtonTrigger.Paste; break;
                     case Key.D: trigger = RemoteButtonTrigger.Delete; break;
                     case Key.F: trigger = RemoteButtonTrigger.Search; break;
                     case Key.E: trigger = RemoteButtonTrigger.Edit; break;
-                    case Key.S: trigger = RemoteButtonTrigger.Export; break;
+                    case Key.U: trigger = RemoteButtonTrigger.Export; break;
                     case Key.L: trigger = RemoteButtonTrigger.LockTimer; break;
-                    case Key.P: trigger = RemoteButtonTrigger.Settings; break;
-                    case Key.I: trigger = RemoteButtonTrigger.Info; break;
-                    case Key.T: trigger = RemoteButtonTrigger.Twitter; break;
-                    case Key.M: trigger = RemoteButtonTrigger.Email; break;
-                    case Key.G: trigger = RemoteButtonTrigger.GitHub; break;
-                    case Key.H: trigger = RemoteButtonTrigger.Gitter; break;
-                    case Key.C: trigger = RemoteButtonTrigger.PayPal; break;
+                    case Key.S: trigger = RemoteButtonTrigger.Settings; break;
                     default: return;
                 }
             }
@@ -383,7 +379,7 @@ namespace Gallifrey.UI.Modern.MainViews
                     default: return;
                 }
             }
-            
+
             modelHelpers.TriggerRemoteButtonPress(trigger);
         }
     }
