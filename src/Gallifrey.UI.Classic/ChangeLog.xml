@@ -233,6 +233,7 @@
     <Bugs>
       <Bug>Fix issue for exported timers resetting to un-exported</Bug>
       <Bug>Round locked timers to nearest minute as seconds are not logged anyway</Bug>
+      <Bug>Fixed issue with getting an idle timer after it's auto purged</Bug>
     </Bugs> 
     <Others/>
   </Version>

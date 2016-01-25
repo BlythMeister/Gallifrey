@@ -58,8 +58,12 @@ namespace Gallifrey.IdleTimers
 
         public void RemoveTimer(Guid uniqueId)
         {
-            lockTimerList.Remove(GetTimer(uniqueId));
-            SaveTimers();
+            var timerToRemove = GetTimer(uniqueId);
+            if (timerToRemove != null)
+            {
+                lockTimerList.Remove(timerToRemove);
+                SaveTimers();
+            }
         }
 
         public IEnumerable<IdleTimer> GetUnusedLockTimers()
@@ -75,7 +79,7 @@ namespace Gallifrey.IdleTimers
 
         public IdleTimer GetTimer(Guid uniqueId)
         {
-            return lockTimerList.First(timer => timer.UniqueId == uniqueId);
+            return lockTimerList.FirstOrDefault(timer => timer.UniqueId == uniqueId);
         }
     }
 }
