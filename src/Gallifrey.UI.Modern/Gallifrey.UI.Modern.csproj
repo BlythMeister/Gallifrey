@@ -66,6 +66,9 @@
     <Compile Include="Flyouts\AddTimer.xaml.cs">
       <DependentUpon>AddTimer.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Flyouts\BulkExport.xaml.cs">
+      <DependentUpon>BulkExport.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Flyouts\LockedTimer.xaml.cs">
       <DependentUpon>LockedTimer.xaml</DependentUpon>
     </Compile>
@@ -162,6 +165,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Flyouts\AddTimer.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Flyouts\BulkExport.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
