@@ -38,6 +38,18 @@ namespace Gallifrey.UI.Modern.MainViews
             ModelHelpers.OpenFlyout(new AddTimer(ModelHelpers, startDate: startDate));
         }
 
+        private void CopyButton(object sender, RoutedEventArgs e)
+        {
+            var selectedDate = ViewModel.TimerDates.FirstOrDefault(x => x.IsSelected);
+            var selectedTimer = selectedDate?.Timers.FirstOrDefault(y => y.IsSelected);
+            var jiraRef = selectedTimer?.Reference;
+
+            if (jiraRef != null)
+            {
+                Clipboard.SetText(jiraRef);
+            }
+        }
+
         private async void DeleteButton(object sender, RoutedEventArgs e)
         {
             var selectedTimerIds = ViewModel.GetSelectedTimerIds().ToList();
@@ -152,6 +164,7 @@ namespace Gallifrey.UI.Modern.MainViews
             switch (remoteButtonTrigger)
             {
                 case RemoteButtonTrigger.Add: AddButton(this, null); break;
+                case RemoteButtonTrigger.Copy: CopyButton(this, null); break;
                 case RemoteButtonTrigger.Delete: DeleteButton(this, null); break;
                 case RemoteButtonTrigger.Search: SearchButton(this, null); break;
                 case RemoteButtonTrigger.Edit: EditButton(this, null); break;

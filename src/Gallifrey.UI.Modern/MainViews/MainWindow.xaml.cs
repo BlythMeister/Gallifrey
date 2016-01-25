@@ -339,31 +339,13 @@ namespace Gallifrey.UI.Modern.MainViews
                 switch (key)
                 {
                     case Key.A: trigger = RemoteButtonTrigger.Add; break;
+                    case Key.C: trigger = RemoteButtonTrigger.Copy; break;
                     case Key.D: trigger = RemoteButtonTrigger.Delete; break;
                     case Key.F: trigger = RemoteButtonTrigger.Search; break;
                     case Key.E: trigger = RemoteButtonTrigger.Edit; break;
-                    case Key.S: trigger = RemoteButtonTrigger.Export; break;
+                    case Key.U: trigger = RemoteButtonTrigger.Export; break;
                     case Key.L: trigger = RemoteButtonTrigger.LockTimer; break;
-                    case Key.P: trigger = RemoteButtonTrigger.Settings; break;
-                    case Key.I: trigger = RemoteButtonTrigger.Info; break;
-                    case Key.T: trigger = RemoteButtonTrigger.Twitter; break;
-                    case Key.M: trigger = RemoteButtonTrigger.Email; break;
-                    case Key.G: trigger = RemoteButtonTrigger.GitHub; break;
-                    case Key.H: trigger = RemoteButtonTrigger.Gitter; break;
-                    case Key.C: trigger = RemoteButtonTrigger.PayPal; break;
-                    default: return;
-                }
-            }
-            else if (Keyboard.IsKeyDown(Key.LeftAlt) || Keyboard.IsKeyDown(Key.RightAlt))
-            {
-                switch (key)
-                {
-                    case Key.F1: trigger = RemoteButtonTrigger.Info; break;
-                    case Key.F2: trigger = RemoteButtonTrigger.Twitter; break;
-                    case Key.F3: trigger = RemoteButtonTrigger.Email; break;
-                    case Key.F4: trigger = RemoteButtonTrigger.Gitter; break;
-                    case Key.F5: trigger = RemoteButtonTrigger.GitHub; break;
-                    case Key.F6: trigger = RemoteButtonTrigger.PayPal; break;
+                    case Key.S: trigger = RemoteButtonTrigger.Settings; break;
                     default: return;
                 }
             }
