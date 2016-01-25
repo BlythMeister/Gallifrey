@@ -53,6 +53,28 @@ namespace Gallifrey.UI.Modern.MainViews
             }
         }
 
+        private void PasteButton(object sender, RoutedEventArgs e)
+        {
+            DateTime? startDate = null;
+
+            if (ViewModel.TimerDates.Any(x => x.TimerDate.Date == DateTime.Now.Date))
+            {
+                var selectedDate = ViewModel.TimerDates.FirstOrDefault(x => x.IsSelected);
+                startDate = selectedDate?.TimerDate;
+            }
+
+            var jiraRef = Clipboard.GetText();
+
+            if (ModelHelpers.Gallifrey.JiraConnection.DoesJiraExist(jiraRef))
+            {
+                ModelHelpers.OpenFlyout(new AddTimer(ModelHelpers, startDate: startDate, jiraRef: jiraRef));
+            }
+            else
+            {
+                DialogCoordinator.Instance.ShowMessageAsync(ModelHelpers.DialogContext, "Invalid Jira", $"Unable To Locate That Jira.\n\nJira Ref Pasted: '{jiraRef}'");
+            }
+        }
+
         private async void DeleteButton(object sender, RoutedEventArgs e)
         {
             var selectedTimerIds = ViewModel.GetSelectedTimerIds().ToList();
@@ -168,6 +190,7 @@ namespace Gallifrey.UI.Modern.MainViews
             {
                 case RemoteButtonTrigger.Add: AddButton(this, null); break;
                 case RemoteButtonTrigger.Copy: CopyButton(this, null); break;
+                case RemoteButtonTrigger.Paste: PasteButton(this, null); break;
                 case RemoteButtonTrigger.Delete: DeleteButton(this, null); break;
                 case RemoteButtonTrigger.Search: SearchButton(this, null); break;
                 case RemoteButtonTrigger.Edit: EditButton(this, null); break;

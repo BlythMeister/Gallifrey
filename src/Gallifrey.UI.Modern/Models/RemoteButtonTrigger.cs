@@ -4,6 +4,7 @@ namespace Gallifrey.UI.Modern.Models
     {
         Add,
         Copy,
+        Paste,
         Delete,
         Search,
         Edit,

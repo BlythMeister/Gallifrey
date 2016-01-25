@@ -340,6 +340,7 @@ namespace Gallifrey.UI.Modern.MainViews
                 {
                     case Key.A: trigger = RemoteButtonTrigger.Add; break;
                     case Key.C: trigger = RemoteButtonTrigger.Copy; break;
+                    case Key.V: trigger = RemoteButtonTrigger.Paste; break;
                     case Key.D: trigger = RemoteButtonTrigger.Delete; break;
                     case Key.F: trigger = RemoteButtonTrigger.Search; break;
                     case Key.E: trigger = RemoteButtonTrigger.Edit; break;
