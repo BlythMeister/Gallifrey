@@ -44,6 +44,15 @@ namespace Gallifrey.UI.Modern.Flyouts
                 return;
             }
 
+            var selectedTimers = selected.Select(x => modelHelpers.Gallifrey.IdleTimerCollection.GetTimer(x.UniqueId)).Where(x => x != null).ToList();
+            if (selected.Count != selectedTimers.Count)
+            {
+                await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Out Of Date", "The Timer Window Is Out Of Date And Needs To Be Refreshed");
+                DataModel.RefreshLockedTimers(modelHelpers.Gallifrey.IdleTimerCollection.GetUnusedLockTimers());
+                Focus();
+                return;
+            }
+
             var selectedTime = new TimeSpan();
             var lockedTimerDate = DateTime.MinValue;
             foreach (var lockedTimerModel in selected)
@@ -73,8 +82,8 @@ namespace Gallifrey.UI.Modern.Flyouts
             }
 
             MessageDialogResult result;
-            if(runningTimer != null)
-            { 
+            if (runningTimer != null)
+            {
                 result = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Add Time Where?", $"Where Would You Like To Add The Time Worth {selectedTime.FormatAsString()}?", MessageDialogStyle.AffirmativeAndNegativeAndSingleAuxiliary, new MetroDialogSettings { AffirmativeButtonText = "New Timer", NegativeButtonText = $"Running Timer ({runningTimer.JiraReference})", FirstAuxiliaryButtonText = "Cancel" });
 
                 if (result == MessageDialogResult.FirstAuxiliary)
@@ -88,8 +97,6 @@ namespace Gallifrey.UI.Modern.Flyouts
                 //No running timer, so just show the add time flyout.
                 result = MessageDialogResult.Affirmative;
             }
-            
-            var selectedTimers = selected.Select(x => modelHelpers.Gallifrey.IdleTimerCollection.GetTimer(x.UniqueId)).ToList();
 
             if (result == MessageDialogResult.Affirmative)
             {

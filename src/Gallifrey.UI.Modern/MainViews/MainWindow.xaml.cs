@@ -219,6 +219,8 @@ namespace Gallifrey.UI.Modern.MainViews
                     {
                         var idleTimerId = modelHelpers.Gallifrey.StopIdleTimer();
                         var idleTimer = modelHelpers.Gallifrey.IdleTimerCollection.GetTimer(idleTimerId);
+                        if (idleTimer == null) return;
+
                         if (idleTimer.IdleTimeValue.TotalSeconds < 60 || idleTimer.IdleTimeValue.TotalHours > 10)
                         {
                             modelHelpers.Gallifrey.IdleTimerCollection.RemoveTimer(idleTimerId);
