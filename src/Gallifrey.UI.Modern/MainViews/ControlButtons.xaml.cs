@@ -38,15 +38,18 @@ namespace Gallifrey.UI.Modern.MainViews
             ModelHelpers.OpenFlyout(new AddTimer(ModelHelpers, startDate: startDate));
         }
 
-        private void CopyButton(object sender, RoutedEventArgs e)
+        private async void CopyButton(object sender, RoutedEventArgs e)
         {
-            var selectedDate = ViewModel.TimerDates.FirstOrDefault(x => x.IsSelected);
-            var selectedTimer = selectedDate?.Timers.FirstOrDefault(y => y.IsSelected);
-            var jiraRef = selectedTimer?.Reference;
+            var selectedTimers = ViewModel.GetSelectedTimerIds();
 
-            if (jiraRef != null)
+            if (selectedTimers.Count() > 1)
             {
-                Clipboard.SetText(jiraRef);
+                await DialogCoordinator.Instance.ShowMessageAsync(ModelHelpers.DialogContext, "Too Many Timers Selected", "Please Select Only One Timer When Copying Reference");
+            }
+            else if (selectedTimers != null && selectedTimers.Count() == 1)
+            {
+                var selectedTimer = ModelHelpers.Gallifrey.JiraTimerCollection.GetTimer(selectedTimers.First());
+                Clipboard.SetText(selectedTimer.JiraReference);
             }
         }
 

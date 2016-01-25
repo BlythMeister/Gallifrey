@@ -27,7 +27,7 @@ namespace Gallifrey.UI.Modern.MainViews
         private readonly ModelHelpers modelHelpers;
         private MainViewModel ViewModel => (MainViewModel)DataContext;
         private bool machineLocked;
-        
+
         public MainWindow(InstanceType instance, AppType appType)
         {
             InitializeComponent();
@@ -332,7 +332,7 @@ namespace Gallifrey.UI.Modern.MainViews
         private void MainWindow_KeyUp(object sender, KeyEventArgs e)
         {
             var key = e.Key;
-            RemoteButtonTrigger trigger ;
+            RemoteButtonTrigger trigger;
 
             if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
             {
@@ -346,6 +346,19 @@ namespace Gallifrey.UI.Modern.MainViews
                     case Key.U: trigger = RemoteButtonTrigger.Export; break;
                     case Key.L: trigger = RemoteButtonTrigger.LockTimer; break;
                     case Key.S: trigger = RemoteButtonTrigger.Settings; break;
+                    default: return;
+                }
+            }
+            else if (Keyboard.IsKeyDown(Key.LeftAlt) || Keyboard.IsKeyDown(Key.RightAlt))
+            {
+                switch (key)
+                {
+                    case Key.F1: trigger = RemoteButtonTrigger.Info; break;
+                    case Key.F2: trigger = RemoteButtonTrigger.Twitter; break;
+                    case Key.F3: trigger = RemoteButtonTrigger.Email; break;
+                    case Key.F4: trigger = RemoteButtonTrigger.Gitter; break;
+                    case Key.F5: trigger = RemoteButtonTrigger.GitHub; break;
+                    case Key.F6: trigger = RemoteButtonTrigger.PayPal; break;
                     default: return;
                 }
             }
@@ -363,7 +376,7 @@ namespace Gallifrey.UI.Modern.MainViews
                     default: return;
                 }
             }
-            
+
             modelHelpers.TriggerRemoteButtonPress(trigger);
         }
     }
