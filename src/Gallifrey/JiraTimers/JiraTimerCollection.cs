@@ -190,7 +190,7 @@ namespace Gallifrey.JiraTimers
 
             timerList.RemoveAll(timer => timer.FullyExported &&
                 timer.DateStarted.Date != DateTime.Now.Date &&
-                timer.DateStarted <= DateTime.Now.AddDays(keepTimersForDays));
+                timer.DateStarted.Date <= DateTime.Now.AddDays(keepTimersForDays).Date);
 
             SaveTimers();
         }

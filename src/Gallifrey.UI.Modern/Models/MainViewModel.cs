@@ -117,9 +117,28 @@ namespace Gallifrey.UI.Modern.Models
 
         private void RefreshModel()
         {
-            var validTimerDates = ModelHelpers.Gallifrey.JiraTimerCollection.GetValidTimerDates().ToList();
+            var workingDays = ModelHelpers.Gallifrey.Settings.AppSettings.ExportDays.ToList();
+            var workingDate = DateTime.Now.AddDays((ModelHelpers.Gallifrey.Settings.AppSettings.KeepTimersForDays - 1) * -1).Date;
+            var validTimerDates = new List<DateTime>();
 
-            foreach (var timerDate in validTimerDates)
+            while (workingDate.Date <= DateTime.Now.Date)
+            {
+                if (workingDays.Contains(workingDate.DayOfWeek))
+                {
+                    validTimerDates.Add(workingDate.Date);
+                }
+                workingDate = workingDate.AddDays(1);
+            }
+
+            foreach (var timerDate in ModelHelpers.Gallifrey.JiraTimerCollection.GetValidTimerDates())
+            {
+                if (!validTimerDates.Contains(timerDate))
+                {
+                    validTimerDates.Add(timerDate.Date);
+                }
+            }
+
+            foreach (var timerDate in validTimerDates.OrderBy(x => x.Date))
             {
                 var dateModel = TimerDates.FirstOrDefault(x => x.TimerDate.Date == timerDate.Date);
 

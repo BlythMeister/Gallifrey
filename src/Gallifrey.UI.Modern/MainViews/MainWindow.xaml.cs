@@ -119,6 +119,7 @@ namespace Gallifrey.UI.Modern.MainViews
                     await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Connection Required", "You Must Have A Working Jira Connection To Use Gallifrey");
                     modelHelpers.CloseApp();
                 }
+                modelHelpers.RefreshModel();
             }
 
             if (modelHelpers.Gallifrey.VersionControl.IsAutomatedDeploy && modelHelpers.Gallifrey.VersionControl.IsFirstRun)

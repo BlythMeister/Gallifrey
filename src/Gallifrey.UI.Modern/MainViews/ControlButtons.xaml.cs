@@ -152,6 +152,7 @@ namespace Gallifrey.UI.Modern.MainViews
                 await DialogCoordinator.Instance.ShowMessageAsync(ModelHelpers.DialogContext, "Connection Required", "You Must Have A Working Jira Connection To Use Gallifrey");
                 ModelHelpers.CloseApp();
             }
+            ModelHelpers.RefreshModel();
         }
 
         private void EmailButton(object sender, RoutedEventArgs e)
