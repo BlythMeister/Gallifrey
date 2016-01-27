@@ -119,9 +119,15 @@ namespace Gallifrey.UI.Modern.MainViews
 
                 if (stoppedTimer)
                 {
-                    ModelHelpers.Gallifrey.JiraTimerCollection.StartTimer(editTimerFlyout.EditedTimerId);
+                    var timer = ModelHelpers.Gallifrey.JiraTimerCollection.GetTimer(editTimerFlyout.EditedTimerId);
+                    if (timer.DateStarted.Date == DateTime.Now.Date)
+                    {
+                        ModelHelpers.Gallifrey.JiraTimerCollection.StartTimer(editTimerFlyout.EditedTimerId);
+                    }
                 }
             }
+
+            ModelHelpers.RefreshModel();
         }
 
         private async void ExportButton(object sender, RoutedEventArgs e)

@@ -42,6 +42,7 @@ namespace Gallifrey.UI.Modern.Models
         public bool HasInactiveTime => !string.IsNullOrWhiteSpace(InactiveMinutes);
         public bool TimerRunning => !string.IsNullOrWhiteSpace(CurrentRunningTimerDescription);
         public bool HaveTimeToExport => !string.IsNullOrWhiteSpace(TimeToExportMessage);
+        public bool HaveTempTime => !string.IsNullOrWhiteSpace(TempTimeMessage);
 
         public string TimeToExportMessage
         {
@@ -49,20 +50,43 @@ namespace Gallifrey.UI.Modern.Models
             {
                 var unexportedTime = ModelHelpers.Gallifrey.JiraTimerCollection.GetTotalExportableTime();
                 var unexportedTimers = ModelHelpers.Gallifrey.JiraTimerCollection.GetStoppedUnexportedTimers();
-                var unexportedCount = unexportedTimers.Count();
+                var unexportedCount = unexportedTimers.Count(x=>!x.TempTimer);
 
                 var excludingRunning = string.Empty;
                 var runningTimerId = ModelHelpers.Gallifrey.JiraTimerCollection.GetRunningTimerId();
                 if (runningTimerId.HasValue)
                 {
                     var runningTimer = ModelHelpers.Gallifrey.JiraTimerCollection.GetTimer(runningTimerId.Value);
-                    if (!runningTimer.FullyExported)
+                    if (!runningTimer.FullyExported && !runningTimer.TempTimer)
                     {
                         excludingRunning = "(Excluding 1 Running Timer)";
                     }
                 }
 
                 return unexportedTime.TotalMinutes > 0 ? $"You Have {unexportedCount} Timer{(unexportedCount > 1 ? "s" : "")} Worth {unexportedTime.FormatAsString(false)} To Export {excludingRunning}" : string.Empty;
+            }
+        }
+
+        public string TempTimeMessage
+        {
+            get
+            {
+                var tempTime = ModelHelpers.Gallifrey.JiraTimerCollection.GetTotalTempTime();
+                var unexportedTimers = ModelHelpers.Gallifrey.JiraTimerCollection.GetStoppedUnexportedTimers();
+                var unexportedCount = unexportedTimers.Count(x => x.TempTimer);
+
+                var excludingRunning = string.Empty;
+                var runningTimerId = ModelHelpers.Gallifrey.JiraTimerCollection.GetRunningTimerId();
+                if (runningTimerId.HasValue)
+                {
+                    var runningTimer = ModelHelpers.Gallifrey.JiraTimerCollection.GetTimer(runningTimerId.Value);
+                    if (runningTimer.TempTimer)
+                    {
+                        excludingRunning = "(Excluding 1 Running Timer)";
+                    }
+                }
+
+                return tempTime.TotalMinutes > 0 ? $"You Have {unexportedCount} Temp Timer{(unexportedCount > 1 ? "s" : "")} Worth {tempTime.FormatAsString(false)} {excludingRunning}" : string.Empty;
             }
         }
 
@@ -113,6 +137,8 @@ namespace Gallifrey.UI.Modern.Models
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TimeToExportMessage"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HaveTimeToExport"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ExportedTotalMinutes"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HaveTempTime"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TempTimeMessage"));
         }
 
         private void RefreshModel()

@@ -8,8 +8,10 @@ namespace Gallifrey.UI.Modern.Models
 {
     public class AddTimerModel : INotifyPropertyChanged
     {
+        private bool tempTimer;
         public event PropertyChangedEventHandler PropertyChanged;
         public string JiraReference { get; set; }
+        public string TempTimerDescription { get; set; }
         public bool JiraReferenceEditable { get; set; }
         public DateTime MinDate { get; set; }
         public DateTime MaxDate { get; set; }
@@ -22,9 +24,20 @@ namespace Gallifrey.UI.Modern.Models
         public bool StartNowEditable { get; set; }
         public bool AssignToMe { get; set; }
         public bool InProgress { get; set; }
+
         public List<IdleTimer> IdleTimers { get; set; }
 
         public bool TimeEditable => IdleTimers == null || IdleTimers.Count == 0;
+
+        public bool TempTimer
+        {
+            get { return tempTimer; }
+            set
+            {
+                tempTimer = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TempTimer"));
+            }
+        }
 
         public AddTimerModel(IBackend gallifrey, string jiraRef, DateTime? startDate, bool? enableDateChange, List<IdleTimer> idleTimers, bool? startNow)
         {
