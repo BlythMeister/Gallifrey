@@ -127,9 +127,9 @@ namespace Gallifrey.JiraTimers
             }
             else
             {
-                if (exportSettings.ExportPrompt != null && exportSettings.ExportPrompt.OnCreatePreloaded && !newTimer.FullyExported)
+                if (exportSettings.ExportPrompt != null && exportSettings.ExportPrompt.OnCreatePreloaded && !newTimer.FullyExported && !newTimer.TempTimer)
                 {
-                    exportPrompt.Invoke(this, new ExportPromptDetail(newTimer.UniqueId, seedTime));
+                    exportPrompt?.Invoke(this, new ExportPromptDetail(newTimer.UniqueId, seedTime));
                 }
             }
             return newTimer.UniqueId;
@@ -206,9 +206,9 @@ namespace Gallifrey.JiraTimers
             var stopTime = timerForInteration.StopTimer();
 
             SaveTimers();
-            if (exportSettings.ExportPrompt != null && exportSettings.ExportPrompt.OnStop && !timerForInteration.FullyExported && !automatedStop)
+            if (exportSettings.ExportPrompt != null && exportSettings.ExportPrompt.OnStop && !timerForInteration.FullyExported && !automatedStop && !timerForInteration.TempTimer)
             {
-                exportPrompt.Invoke(this, new ExportPromptDetail(uniqueId, stopTime));
+                exportPrompt?.Invoke(this, new ExportPromptDetail(uniqueId, stopTime));
             }
         }
 
@@ -346,10 +346,10 @@ namespace Gallifrey.JiraTimers
             }
 
             SaveTimers();
-            if (exportSettings.ExportPrompt != null && exportSettings.ExportPrompt.OnManualAdjust && !timer.FullyExported)
+            if (exportSettings.ExportPrompt != null && exportSettings.ExportPrompt.OnManualAdjust && !timer.FullyExported && !timer.TempTimer)
             {
                 if (!addTime) adjustment = adjustment.Negate();
-                exportPrompt.Invoke(this, new ExportPromptDetail(uniqueId, adjustment));
+                exportPrompt?.Invoke(this, new ExportPromptDetail(uniqueId, adjustment));
             }
 
             return true;
@@ -371,11 +371,11 @@ namespace Gallifrey.JiraTimers
                 timer.AddIdleTimer(idleTimer);
             }
             SaveTimers();
-            if (exportSettings.ExportPrompt != null && exportSettings.ExportPrompt.OnAddIdle && !timer.FullyExported)
+            if (exportSettings.ExportPrompt != null && exportSettings.ExportPrompt.OnAddIdle && !timer.FullyExported && !timer.TempTimer)
             {
                 var idleTime = new TimeSpan();
                 idleTime = idleTimers.Aggregate(idleTime, (current, idleTimer) => current.Add(idleTimer.IdleTimeValue));
-                exportPrompt.Invoke(this, new ExportPromptDetail(uniqueId, idleTime));
+                exportPrompt?.Invoke(this, new ExportPromptDetail(uniqueId, idleTime));
             }
         }
 
