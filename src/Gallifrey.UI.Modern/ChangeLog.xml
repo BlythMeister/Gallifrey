@@ -53,6 +53,8 @@
       <Bug>Updated the order of default search results</Bug>
       <Bug>Fixed issue with getting an idle timer after it's auto purged</Bug>
       <Bug>Fixed issue with changing timer date when running recreating a copy of the original timer</Bug>
+      <Bug>Auto update check now doesn't run when a flyout is open</Bug>
+      <Bug>Keyboard shortcuts only active when flyout not open</Bug>
     </Bugs>
     <Others/>
   </Version>

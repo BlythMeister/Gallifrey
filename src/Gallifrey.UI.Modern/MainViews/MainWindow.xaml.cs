@@ -252,7 +252,7 @@ namespace Gallifrey.UI.Modern.MainViews
         {
             Application.Current.Dispatcher.Invoke(() =>
             {
-                if (!machineLocked)
+                if (!machineLocked && !modelHelpers.FlyoutOpen)
                 {
                     PerformUpdate(false, false);
                 }
@@ -334,6 +334,8 @@ namespace Gallifrey.UI.Modern.MainViews
 
         private void MainWindow_KeyUp(object sender, KeyEventArgs e)
         {
+            if (modelHelpers.FlyoutOpen) return;
+
             var key = e.Key;
             RemoteButtonTrigger trigger;
 
@@ -342,14 +344,14 @@ namespace Gallifrey.UI.Modern.MainViews
                 switch (key)
                 {
                     case Key.A: trigger = RemoteButtonTrigger.Add; break;
-                    case Key.C: trigger = RemoteButtonTrigger.Copy; break;
-                    case Key.V: trigger = RemoteButtonTrigger.Paste; break;
                     case Key.D: trigger = RemoteButtonTrigger.Delete; break;
                     case Key.F: trigger = RemoteButtonTrigger.Search; break;
                     case Key.E: trigger = RemoteButtonTrigger.Edit; break;
                     case Key.U: trigger = RemoteButtonTrigger.Export; break;
                     case Key.L: trigger = RemoteButtonTrigger.LockTimer; break;
                     case Key.S: trigger = RemoteButtonTrigger.Settings; break;
+                    case Key.C: trigger = RemoteButtonTrigger.Copy; break;
+                    case Key.V: trigger = RemoteButtonTrigger.Paste; break;
                     default: return;
                 }
             }
