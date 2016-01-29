@@ -29,12 +29,16 @@ namespace Gallifrey.UI.Modern.MainViews
         {
             DateTime? startDate = null;
 
-            if (ViewModel.TimerDates.Any(x => x.TimerDate.Date == DateTime.Now.Date))
+            var todaysTimers = ViewModel.TimerDates.FirstOrDefault(x => x.TimerDate.Date == DateTime.Now.Date);
+            if (todaysTimers != null)
             {
-                var selectedDate = ViewModel.TimerDates.FirstOrDefault(x => x.IsSelected);
-                startDate = selectedDate?.TimerDate;
+                if (todaysTimers.Timers.Any())
+                {
+                    var selectedDate = ViewModel.TimerDates.FirstOrDefault(x => x.IsSelected);
+                    startDate = selectedDate?.TimerDate;
+                }
             }
-
+            
             ModelHelpers.OpenFlyout(new AddTimer(ModelHelpers, startDate: startDate));
         }
 

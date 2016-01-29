@@ -332,7 +332,7 @@ namespace Gallifrey.UI.Modern.MainViews
             modelHelpers.Gallifrey.Close();
         }
 
-        private void MainWindow_KeyUp(object sender, KeyEventArgs e)
+        private void MainWindow_KeyDown(object sender, KeyEventArgs e)
         {
             if (modelHelpers.FlyoutOpen) return;
 

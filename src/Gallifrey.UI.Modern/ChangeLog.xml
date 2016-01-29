@@ -56,7 +56,7 @@
       <Bug>Auto update check now doesn't run when a flyout is open</Bug>
       <Bug>Keyboard shortcuts only active when flyout not open</Bug>
     </Bugs>
-    <Others/>
+    <Others />
   </Version>
 </Versions>
 
