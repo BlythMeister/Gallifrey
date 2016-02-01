@@ -29,16 +29,25 @@ namespace Gallifrey.UI.Modern.MainViews
         {
             DateTime? startDate = null;
 
-            var todaysTimers = ViewModel.TimerDates.FirstOrDefault(x => x.TimerDate.Date == DateTime.Now.Date);
-            if (todaysTimers != null)
+            var selected = ViewModel.TimerDates.FirstOrDefault(x => x.IsSelected);
+
+            if (selected != null)
             {
-                if (todaysTimers.Timers.Any())
+                startDate = selected.TimerDate;
+            }
+            else
+            {
+                var todaysTimers = ViewModel.TimerDates.FirstOrDefault(x => x.TimerDate.Date == DateTime.Now.Date);
+                if (todaysTimers != null)
                 {
-                    var selectedDate = ViewModel.TimerDates.FirstOrDefault(x => x.IsSelected);
-                    startDate = selectedDate?.TimerDate;
+                    if (todaysTimers.Timers.Any())
+                    {
+                        var selectedDate = ViewModel.TimerDates.FirstOrDefault(x => x.IsSelected);
+                        startDate = selectedDate?.TimerDate;
+                    }
                 }
             }
-            
+
             ModelHelpers.OpenFlyout(new AddTimer(ModelHelpers, startDate: startDate));
         }
 
@@ -194,7 +203,7 @@ namespace Gallifrey.UI.Modern.MainViews
             ModelHelpers.Gallifrey.TrackEvent(TrackingType.GitHubClick);
             Process.Start(new ProcessStartInfo("https://github.com/BlythMeister/Gallifrey"));
         }
-        
+
         private void ModelHelpersOnRemoteButtonTrigger(object sender, RemoteButtonTrigger remoteButtonTrigger)
         {
             switch (remoteButtonTrigger)
