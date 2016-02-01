@@ -28,7 +28,7 @@ namespace Gallifrey.UI.Modern.MainViews
         private void AddButton(object sender, RoutedEventArgs e)
         {
             var selected = ViewModel.TimerDates.FirstOrDefault(x => x.IsSelected);
-            var startDate = (selected != null) ? selected.TimerDate : DateTime.Today;
+            var startDate = selected?.TimerDate ?? DateTime.Today;
 
             ModelHelpers.OpenFlyout(new AddTimer(ModelHelpers, startDate: startDate));
         }
