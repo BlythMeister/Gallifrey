@@ -2,6 +2,7 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+             xmlns:dialogs="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
              IsModal="True" Theme="Adapt" Position="Right" Header="Locked Timer" CloseButtonIsCancel="True" Loaded="LockedTimer_OnLoaded">
     <Grid Width="300" Margin="5,5,5,5">
         <Grid.RowDefinitions>
@@ -70,4 +71,29 @@
             </Button>
         </StackPanel>
     </Grid>
+    <controls:Flyout.Resources>
+        <ResourceDictionary>
+            <dialogs:CustomDialog x:Key="TimerSelector"
+                                 Title="Existing Timer Selection"
+                                 x:Name="TimerSelector">
+                <Grid Margin="0 10 0 0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"
+                           MinHeight="20" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    
+                    <TextBlock Grid.Row="0" Margin="0 5 0 0" FontSize="{DynamicResource DialogMessageFontSize}" Text="Please Select Which Timer" TextWrapping="Wrap" />
+                    <ComboBox Grid.Row="1" Margin="0 5 0 0" FontSize="{DynamicResource DialogMessageFontSize}" controls:ControlsHelper.FocusBorderBrush="{DynamicResource AccentColorBrush}" x:Name="Items" />
+
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Height="85">
+                        <Button Height="35" MinWidth="80" Style="{DynamicResource AccentedDialogSquareButton}" Content="OK" Margin="0 0 5 0" Click="CloseTimerSelector" />
+                        <Button Height="35" MinWidth="80" Content="Cancel" Margin="5 0 5 0" Click="CancelTimerSelector"/>
+                    </StackPanel>
+                </Grid>
+            </dialogs:CustomDialog>
+        </ResourceDictionary>
+    </controls:Flyout.Resources>
 </controls:Flyout>
+

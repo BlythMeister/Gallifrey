@@ -130,6 +130,7 @@
     <Compile Include="Models\AddTimerModel.cs" />
     <Compile Include="Models\MainViewModel.cs" />
     <Compile Include="Models\TimerDateModel.cs" />
+    <Compile Include="Models\TimerDisplayModel.cs" />
     <Compile Include="Models\TimerModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
