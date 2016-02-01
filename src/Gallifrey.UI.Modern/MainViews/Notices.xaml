@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Center" Orientation="Vertical">
-        <TextBlock Background="{DynamicResource AccentColorBrush}" FontSize="17" Foreground="{DynamicResource IdealForegroundColorBrush}" TextAlignment="Center" Margin="0,0,0,2" Text="An Update Has Been Installed, Click Here To Apply" MouseDown="InstallUpdate" ToolTip="To Install The Update Click Here!" TextWrapping="Wrap">
+        <TextBlock Background="{DynamicResource AccentColorBrush}" FontSize="17" Foreground="{DynamicResource IdealForegroundColorBrush}" TextAlignment="Center" Padding="5,0" Margin="0,0,0,2" Text="An Update Has Been Installed, Click Here To Apply" MouseDown="InstallUpdate" ToolTip="To Install The Update Click Here!" TextWrapping="Wrap">
             <TextBlock.Style>
                 <Style TargetType="TextBlock">
                     <Setter Property="Visibility" Value="Visible" />
@@ -15,7 +15,7 @@
                 </Style>
             </TextBlock.Style>
         </TextBlock>
-        <TextBlock Background="{DynamicResource AccentColorBrush}" FontSize="17" Foreground="{DynamicResource IdealForegroundColorBrush}" TextAlignment="Center" Margin="0,0,0,2" Text="{Binding InactiveMinutes}" TextWrapping="Wrap">
+        <TextBlock Background="{DynamicResource AccentColorBrush}" FontSize="17" Foreground="{DynamicResource IdealForegroundColorBrush}" TextAlignment="Center" Padding="5,0" Margin="0,0,0,2" Text="{Binding InactiveMinutes}" TextWrapping="Wrap">
             <TextBlock.Style>
                 <Style TargetType="TextBlock">
                     <Setter Property="Visibility" Value="Visible" />
@@ -27,7 +27,7 @@
                 </Style>
             </TextBlock.Style>
         </TextBlock>
-        <TextBlock Background="{DynamicResource AccentColorBrush}" FontSize="17" Foreground="{DynamicResource IdealForegroundColorBrush}" TextAlignment="Center" Margin="0,0,0,2" Text="{Binding CurrentRunningTimerDescription}" MouseDown="GoToRunningTimer" ToolTip="Click To Navigate To Running Timer" TextWrapping="Wrap">
+        <TextBlock Background="{DynamicResource AccentColorBrush}" FontSize="17" Foreground="{DynamicResource IdealForegroundColorBrush}" TextAlignment="Center" Padding="5,0" Margin="0,0,0,2" Text="{Binding CurrentRunningTimerDescription}" MouseDown="GoToRunningTimer" ToolTip="Click To Navigate To Running Timer" TextWrapping="Wrap">
             <TextBlock.Style>
                 <Style TargetType="TextBlock">
                     <Setter Property="Visibility" Value="Visible" />
@@ -39,7 +39,7 @@
                 </Style>
             </TextBlock.Style>
         </TextBlock>
-        <TextBlock Background="{DynamicResource AccentColorBrush}" FontSize="17" Foreground="{DynamicResource IdealForegroundColorBrush}" TextAlignment="Center" Margin="0,0,0,2" Text="{Binding TimeToExportMessage}" MouseDown="UnExportedClick" ToolTip="Click To Export All Avaliable Timers" TextWrapping="Wrap">
+        <TextBlock Background="{DynamicResource AccentColorBrush}" FontSize="17" Foreground="{DynamicResource IdealForegroundColorBrush}" TextAlignment="Center" Padding="5,0" Margin="0,0,0,2" Text="{Binding TimeToExportMessage}" MouseDown="UnExportedClick" ToolTip="Click To Export All Avaliable Timers" TextWrapping="Wrap">
             <TextBlock.Style>
                 <Style TargetType="TextBlock">
                     <Setter Property="Visibility" Value="Visible" />
@@ -51,7 +51,7 @@
                 </Style>
             </TextBlock.Style>
         </TextBlock>
-        <TextBlock Background="{DynamicResource AccentColorBrush}" FontSize="17" Foreground="{DynamicResource IdealForegroundColorBrush}" TextAlignment="Center" Margin="0,0,0,2" Text="{Binding TempTimeMessage}" TextWrapping="Wrap">
+        <TextBlock Background="{DynamicResource AccentColorBrush}" FontSize="17" Foreground="{DynamicResource IdealForegroundColorBrush}" TextAlignment="Center" Padding="5,0" Margin="0,0,0,2" Text="{Binding TempTimeMessage}" TextWrapping="Wrap">
             <TextBlock.Style>
                 <Style TargetType="TextBlock">
                     <Setter Property="Visibility" Value="Visible" />

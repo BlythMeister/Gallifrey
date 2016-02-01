@@ -87,7 +87,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             MessageDialogResult result;
             if (runningTimer != null)
             {
-                result = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Add Time Where?", $"Where Would You Like To Add The Time Worth {selectedTime.FormatAsString()}?", MessageDialogStyle.AffirmativeAndNegativeAndDoubleAuxiliary, new MetroDialogSettings { AffirmativeButtonText = "New Timer", NegativeButtonText = $"Running Timer ({runningTimer.JiraReference})", FirstAuxiliaryButtonText = "Existing Timer", SecondAuxiliaryButtonText = "Cancel" });
+                result = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Add Time Where?", $"Where Would You Like To Add The Time Worth {selectedTime.FormatAsString()}?\n\nNote:- Running Timer Is\n{runningTimer.JiraReference} - {runningTimer.JiraName}", MessageDialogStyle.AffirmativeAndNegativeAndDoubleAuxiliary, new MetroDialogSettings { AffirmativeButtonText = "New Timer", NegativeButtonText = $"Running Timer", FirstAuxiliaryButtonText = "Existing Timer", SecondAuxiliaryButtonText = "Cancel" });
 
                 if (result == MessageDialogResult.SecondAuxiliary)
                 {
