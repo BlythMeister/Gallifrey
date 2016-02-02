@@ -25,6 +25,10 @@ namespace Gallifrey.UI.Modern.Models
             runningWatcher.Elapsed += runningWatcherElapsed;
             runningWatcher.Start();
 
+            var backgroundRefresh = new Timer(3600000);
+            backgroundRefresh.Elapsed += (sender, args) => RefreshModel();
+            backgroundRefresh.Start();
+
             modelHelpers.Gallifrey.VersionControl.PropertyChanged += VersionControlPropertyChanged;
             modelHelpers.RefreshModelEvent += (sender, args) => RefreshModel();
             modelHelpers.SelectRunningTimerEvent += (sender, args) => SelectRunningTimer();
