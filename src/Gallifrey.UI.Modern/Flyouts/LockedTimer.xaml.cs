@@ -130,6 +130,10 @@ namespace Gallifrey.UI.Modern.Flyouts
                         modelHelpers.OpenFlyout(this);
                         DataModel.RefreshLockedTimers(modelHelpers.Gallifrey.IdleTimerCollection.GetUnusedLockTimers());
                     }
+                    else
+                    {
+                        modelHelpers.SetSelectedTimer(addFlyout.NewTimerId);
+                    }
                 }
                 else
                 {

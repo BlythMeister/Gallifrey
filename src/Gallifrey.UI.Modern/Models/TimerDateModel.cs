@@ -16,7 +16,7 @@ namespace Gallifrey.UI.Modern.Models
         public ObservableCollection<TimerModel> Timers { get; set; }
 
         public string Header => $"{TimerDate.ToString("ddd, dd MMM")} [{jiraTimerCollection.GetTotalTimeForDate(TimerDate)}]";
-        public bool IsSelected { get; set; }
+        public bool DateIsSelected { get; set; }
 
         public TimerDateModel(DateTime timerDate, IJiraTimerCollection jiraTimerCollection)
         {
@@ -53,10 +53,10 @@ namespace Gallifrey.UI.Modern.Models
 
         public void SetSelected(bool isSelected)
         {
-            if (IsSelected != isSelected)
+            if (DateIsSelected != isSelected)
             {
-                IsSelected = isSelected;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("IsSelected"));
+                DateIsSelected = isSelected;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("DateIsSelected"));
             }
         }
     }

@@ -111,7 +111,12 @@ namespace Gallifrey.UI.Modern.MainViews
                     }
 
                     //show add form, we know it's a real jira & valid
-                    await ModelHelpers.OpenFlyout(new AddTimer(ModelHelpers, startDate: todaysDate, jiraRef: jiraRef, startNow: true));
+                    var addTimer = new AddTimer(ModelHelpers, startDate: todaysDate, jiraRef: jiraRef, startNow: true);
+                    await ModelHelpers.OpenFlyout(addTimer);
+                    if (addTimer.AddedTimer)
+                    {
+                        ModelHelpers.SetSelectedTimer(addTimer.NewTimerId);
+                    }
                 }
             }
         }

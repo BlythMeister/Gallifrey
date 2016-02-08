@@ -25,12 +25,17 @@ namespace Gallifrey.UI.Modern.MainViews
             ModelHelpers.RemoteButtonTrigger += ModelHelpersOnRemoteButtonTrigger;
         }
 
-        private void AddButton(object sender, RoutedEventArgs e)
+        private async void AddButton(object sender, RoutedEventArgs e)
         {
-            var selected = ViewModel.TimerDates.FirstOrDefault(x => x.IsSelected);
+            var selected = ViewModel.TimerDates.FirstOrDefault(x => x.DateIsSelected);
             var startDate = selected?.TimerDate ?? DateTime.Today;
 
-            ModelHelpers.OpenFlyout(new AddTimer(ModelHelpers, startDate: startDate));
+            var addTimer = new AddTimer(ModelHelpers, startDate: startDate);
+            await ModelHelpers.OpenFlyout(addTimer);
+            if (addTimer.AddedTimer)
+            {
+                ModelHelpers.SetSelectedTimer(addTimer.NewTimerId);
+            }
         }
 
         private async void CopyButton(object sender, RoutedEventArgs e)
@@ -48,13 +53,13 @@ namespace Gallifrey.UI.Modern.MainViews
             }
         }
 
-        private void PasteButton(object sender, RoutedEventArgs e)
+        private async void PasteButton(object sender, RoutedEventArgs e)
         {
             DateTime? startDate = null;
 
             if (ViewModel.TimerDates.Any(x => x.TimerDate.Date == DateTime.Now.Date))
             {
-                var selectedDate = ViewModel.TimerDates.FirstOrDefault(x => x.IsSelected);
+                var selectedDate = ViewModel.TimerDates.FirstOrDefault(x => x.DateIsSelected);
                 startDate = selectedDate?.TimerDate;
             }
 
@@ -62,11 +67,16 @@ namespace Gallifrey.UI.Modern.MainViews
 
             if (ModelHelpers.Gallifrey.JiraConnection.DoesJiraExist(jiraRef))
             {
-                ModelHelpers.OpenFlyout(new AddTimer(ModelHelpers, startDate: startDate, jiraRef: jiraRef));
+                var addTimer = new AddTimer(ModelHelpers, startDate: startDate, jiraRef: jiraRef);
+                await ModelHelpers.OpenFlyout(addTimer);
+                if (addTimer.AddedTimer)
+                {
+                    ModelHelpers.SetSelectedTimer(addTimer.NewTimerId);
+                }
             }
             else
             {
-                DialogCoordinator.Instance.ShowMessageAsync(ModelHelpers.DialogContext, "Invalid Jira", $"Unable To Locate That Jira.\n\nJira Ref Pasted: '{jiraRef}'");
+                await DialogCoordinator.Instance.ShowMessageAsync(ModelHelpers.DialogContext, "Invalid Jira", $"Unable To Locate That Jira.\n\nJira Ref Pasted: '{jiraRef}'");
             }
         }
 

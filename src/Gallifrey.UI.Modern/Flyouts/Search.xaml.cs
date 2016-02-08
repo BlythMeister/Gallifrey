@@ -93,7 +93,11 @@ namespace Gallifrey.UI.Modern.Flyouts
             {
                 var addFlyout = new AddTimer(modelHelpers, DataModel.SelectedSearchResult.Reference);
                 await modelHelpers.OpenFlyout(addFlyout);
-                if (!addFlyout.AddedTimer)
+                if (addFlyout.AddedTimer)
+                {
+                    modelHelpers.SetSelectedTimer(addFlyout.NewTimerId);
+                }
+                else
                 {
                     modelHelpers.OpenFlyout(this);
                 }

@@ -17,7 +17,7 @@
                     <Setter Property="BorderBrush" Value="{DynamicResource GrayBrush2}" />
                     <Setter Property="BorderThickness" Value="2" />
                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                    <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
+                    <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                     <Style.Resources>
                         <Style TargetType="Border">
                             <Setter Property="CornerRadius" Value="5"/>

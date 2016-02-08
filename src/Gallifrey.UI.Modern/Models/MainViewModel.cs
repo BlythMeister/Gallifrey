@@ -34,7 +34,7 @@ namespace Gallifrey.UI.Modern.Models
             modelHelpers.SelectRunningTimerEvent += (sender, args) => SelectRunningTimer();
             modelHelpers.SelectTimerEvent += (sender, timerId) => SetSelectedTimer(timerId);
         }
-
+        
         public string ExportedNumber => ModelHelpers.Gallifrey.JiraTimerCollection.GetNumberExported().Item1.ToString();
         public string TotalTimerCount => ModelHelpers.Gallifrey.JiraTimerCollection.GetNumberExported().Item2.ToString();
         public string UnexportedTime => ModelHelpers.Gallifrey.JiraTimerCollection.GetTotalUnexportedTime().FormatAsString(false);
@@ -249,7 +249,8 @@ namespace Gallifrey.UI.Modern.Models
             var runningTimer = ModelHelpers.Gallifrey.JiraTimerCollection.GetRunningTimerId();
             if (runningTimer.HasValue)
             {
-                SetSelectedTimer(runningTimer.Value);
+                //SetSelectedTimer(runningTimer.Value);
+                ModelHelpers.SetSelectedTimer(runningTimer.Value);
             }
             else
             {
@@ -290,9 +291,9 @@ namespace Gallifrey.UI.Modern.Models
 
         public IEnumerable<Guid> GetSelectedTimerIds()
         {
-            foreach (var timerDateModel in TimerDates.Where(x => x.IsSelected))
+            foreach (var timerDateModel in TimerDates.Where(x => x.DateIsSelected))
             {
-                foreach (var timerModel in timerDateModel.Timers.Where(timerModel => timerModel.IsSelected))
+                foreach (var timerModel in timerDateModel.Timers.Where(timerModel => timerModel.TimerIsSelected))
                 {
                     yield return timerModel.JiraTimer.UniqueId;
                 }

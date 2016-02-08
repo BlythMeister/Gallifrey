@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using Gallifrey.Exceptions.JiraIntegration;
@@ -167,10 +168,9 @@ namespace Gallifrey.UI.Modern.Flyouts
                 }
             }
 
-            modelHelpers.RefreshModel();
-            modelHelpers.SetSelectedTimer(NewTimerId);
             AddedTimer = true;
             modelHelpers.CloseFlyout(this);
+            modelHelpers.RefreshModel();
         }
 
         private async void SearchButton(object sender, RoutedEventArgs e)
