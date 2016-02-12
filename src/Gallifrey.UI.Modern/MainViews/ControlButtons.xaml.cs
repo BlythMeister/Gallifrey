@@ -49,7 +49,14 @@ namespace Gallifrey.UI.Modern.MainViews
             else if (selectedTimers != null && selectedTimers.Count() == 1)
             {
                 var selectedTimer = ModelHelpers.Gallifrey.JiraTimerCollection.GetTimer(selectedTimers.First());
-                Clipboard.SetText(selectedTimer.JiraReference);
+                if (selectedTimer.TempTimer)
+                {
+                    await DialogCoordinator.Instance.ShowMessageAsync(ModelHelpers.DialogContext, "Not Avaliable", "A Temp Timer Does Not Have A Copyable Reference");
+                }
+                else
+                {
+                    Clipboard.SetText(selectedTimer.JiraReference);
+                }
             }
         }
 
