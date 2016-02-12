@@ -5,151 +5,189 @@
              xmlns:helpers="clr-namespace:Gallifrey.UI.Modern.Helpers"
              xmlns:gallifreyJira="clr-namespace:Gallifrey.Jira.Enum;assembly=Gallifrey.Jira"
              IsModal="True" Theme="Adapt" Position="Right" Header="Export" CloseButtonIsCancel="True">
-    <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <Grid Width="400" Margin="5,5,5,5">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <Grid.Resources>
-                <helpers:EnumMatchToBooleanConverter x:Key="EnumConverter" />
-            </Grid.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <controls:MetroAnimatedSingleRowTabControl Grid.Row="0" TabStripPlacement="Left" ItemsSource="{Binding BulkExports}" Margin="5,0,0,0">
+            <TabControl.ItemContainerStyle>
+                <Style TargetType="TabItem">
+                    <Setter Property="Header" Value="{Binding Header}" />
+                    <Setter Property="controls:ControlsHelper.HeaderFontSize" Value="17" />
+                    <Setter Property="HorizontalAlignment" Value="Right" />
+                </Style>
+            </TabControl.ItemContainerStyle>
+            <TabControl.ContentTemplate>
+                <DataTemplate>
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <StackPanel Orientation="Vertical">
+                            <Grid Width="400" Margin="5,5,5,5">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Text="Jira Parent Reference" Margin="0,0,5,0">
-                <TextBlock.Style>
-                    <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding HasParent}" Value="False" >
-                                <Setter Property="Visibility" Value="Collapsed"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </TextBlock.Style>
-            </TextBlock>
-            <TextBox Grid.Row="0" Grid.Column="1" Margin="0,5" Text="{Binding JiraParentRef, Mode=OneWay}" IsEnabled="False">
-                <TextBox.Style>
-                    <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding HasParent}" Value="False" >
-                                <Setter Property="Visibility" Value="Collapsed"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </TextBox.Style>
-            </TextBox>
+                                <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Text="Jira Parent Reference" Margin="0,0,5,0">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding HasParent}" Value="False" >
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                                <TextBox Grid.Row="0" Grid.Column="1" Margin="0,5" Text="{Binding JiraParentRef, Mode=OneWay}" IsEnabled="False">
+                                    <TextBox.Style>
+                                        <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding HasParent}" Value="False" >
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBox.Style>
+                                </TextBox>
 
-            <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Text="Jira Parent Name">
-                <TextBlock.Style>
-                    <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding HasParent}" Value="False" >
-                                <Setter Property="Visibility" Value="Collapsed"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </TextBlock.Style>
-            </TextBlock>
-            <TextBox Grid.Row="1" Grid.Column="1" Margin="0,5" Text="{Binding JiraParentDesc, Mode=OneWay}" IsEnabled="False" TextWrapping="Wrap" MaxLines="2">
-                <TextBox.Style>
-                    <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding HasParent}" Value="False" >
-                                <Setter Property="Visibility" Value="Collapsed"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </TextBox.Style>
-            </TextBox>
+                                <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Text="Jira Parent Name">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding HasParent}" Value="False" >
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                                <TextBox Grid.Row="1" Grid.Column="1" Margin="0,5" Text="{Binding JiraParentDesc, Mode=OneWay}" IsEnabled="False" TextWrapping="Wrap" MaxLines="2">
+                                    <TextBox.Style>
+                                        <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding HasParent}" Value="False" >
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBox.Style>
+                                </TextBox>
 
-            <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center">Jira Reference</TextBlock>
-            <TextBox Grid.Row="2" Grid.Column="1" Margin="0,5" Text="{Binding JiraRef, Mode=OneWay}" IsEnabled="False"/>
+                                <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,5,0">Jira Reference</TextBlock>
+                                <TextBox Grid.Row="2" Grid.Column="1" Margin="0,5" Text="{Binding JiraRef, Mode=OneWay}" IsEnabled="False"/>
 
-            <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center">Jira Name</TextBlock>
-            <TextBox Grid.Row="3" Grid.Column="1" Margin="0,5" Text="{Binding JiraDesc, Mode=OneWay}" IsEnabled="False" TextWrapping="Wrap" MaxLines="2"/>
+                                <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center">Jira Name</TextBlock>
+                                <TextBox Grid.Row="3" Grid.Column="1" Margin="0,5" Text="{Binding JiraDesc, Mode=OneWay}" IsEnabled="False" TextWrapping="Wrap" MaxLines="2"/>
 
-            <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Padding="2">Already Exported</TextBlock>
-            <WrapPanel Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" Margin="0,5" Orientation="Horizontal">
-                <TextBox Text="{Binding ExportedHours, Mode=OneWay}" TextAlignment="Left" Width="80" IsEnabled="False" />
-                <TextBlock VerticalAlignment="Center" Margin="2,0">Hours</TextBlock>
-                <TextBox Text="{Binding ExportedMinutes, Mode=OneWay}" TextAlignment="Left" Width="80" IsEnabled="False" />
-                <TextBlock VerticalAlignment="Center" Margin="2,0">Minutes</TextBlock>
-            </WrapPanel>
+                                <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center">Export?</TextBlock>
+                                <CheckBox Grid.Row="4" Grid.Column="1" Margin="0,5" IsChecked="{Binding ShouldExport, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            </Grid>
+                            <Grid Width="400" Margin="5,5,5,5">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.Resources>
+                                    <helpers:EnumMatchToBooleanConverter x:Key="EnumConverter" />
+                                </Grid.Resources>
+                                <Grid.Style>
+                                    <Style TargetType="Grid">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding ShouldExport}" Value="False" >
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Grid.Style>
 
-            <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Padding="2">To Export</TextBlock>
-            <WrapPanel Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" Margin="0,5" Orientation="Horizontal">
-                <controls:NumericUpDown Value="{Binding ToExportHours, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Left" Minimum="0" Maximum="{Binding ToExportMaxHours}" Width="80" />
-                <TextBlock VerticalAlignment="Center" Margin="2,0">Hours</TextBlock>
-                <controls:NumericUpDown Value="{Binding ToExportMinutes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Left" Minimum="0" Maximum="59" Width="80" />
-                <TextBlock VerticalAlignment="Center" Margin="2,0">Minutes</TextBlock>
-            </WrapPanel>
+                                <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Padding="2">Already Exported</TextBlock>
+                                <WrapPanel Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Margin="0,5" Orientation="Horizontal">
+                                    <TextBox Text="{Binding ExportedHours, Mode=OneWay}" TextAlignment="Left" Width="80" IsEnabled="False" />
+                                    <TextBlock VerticalAlignment="Center" Margin="2,0">Hours</TextBlock>
+                                    <TextBox Text="{Binding ExportedMinutes, Mode=OneWay}" TextAlignment="Left" Width="80" IsEnabled="False" />
+                                    <TextBlock VerticalAlignment="Center" Margin="2,0">Minutes</TextBlock>
+                                </WrapPanel>
 
-            <TextBlock Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" Padding="2">Export Date</TextBlock>
-            <DatePicker Grid.Row="6" Grid.Column="1" Margin="0,5" IsTodayHighlighted="False" DisplayDate="" SelectedDate="{Binding ExportDate, Mode=OneWay}" IsEnabled="False"/>
+                                <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Padding="2">To Export</TextBlock>
+                                <WrapPanel Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Margin="0,5" Orientation="Horizontal">
+                                    <controls:NumericUpDown Value="{Binding ToExportHours, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Left" Minimum="0" Maximum="{Binding ToExportMaxHours}" Width="80" />
+                                    <TextBlock VerticalAlignment="Center" Margin="2,0">Hours</TextBlock>
+                                    <controls:NumericUpDown Value="{Binding ToExportMinutes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Left" Minimum="0" Maximum="59" Width="80" />
+                                    <TextBlock VerticalAlignment="Center" Margin="2,0">Minutes</TextBlock>
+                                </WrapPanel>
 
-            <TextBlock Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" Padding="2" TextWrapping="Wrap">Remaining Estimate<LineBreak/>Action</TextBlock>
-            <WrapPanel Grid.Row="7" Grid.Column="1" VerticalAlignment="Center" Margin="0,5" Orientation="Vertical">
-                <RadioButton GroupName="Export" Content="Adjust Automatically" IsChecked="{Binding Path=WorkLogStrategy, Mode=TwoWay, Converter={StaticResource EnumConverter}, ConverterParameter={x:Static gallifreyJira:WorkLogStrategy.Automatic}}" />
-                <RadioButton Margin="0,3,0,0" GroupName="Export" Content="Leave Remaining" IsChecked="{Binding Path=WorkLogStrategy, Mode=TwoWay, Converter={StaticResource EnumConverter}, ConverterParameter={x:Static gallifreyJira:WorkLogStrategy.LeaveRemaining}}" />
-                <RadioButton Margin="0,3,0,0" GroupName="Export" Content="Set Value" IsChecked="{Binding Path=WorkLogStrategy, Mode=TwoWay, Converter={StaticResource EnumConverter}, ConverterParameter={x:Static gallifreyJira:WorkLogStrategy.SetValue}}" />
-            </WrapPanel>
+                                <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Padding="2">Export Date</TextBlock>
+                                <DatePicker Grid.Row="2" Grid.Column="1" Margin="0,5" IsTodayHighlighted="False" DisplayDate="" SelectedDate="{Binding ExportDate, Mode=OneWay}" IsEnabled="False"/>
 
-            <TextBlock Grid.Row="8" Grid.Column="0" VerticalAlignment="Center" Padding="2" Text="Remaining Estimate" />
-            <WrapPanel Grid.Row="8" Grid.Column="1" VerticalAlignment="Center" Margin="0,5" Orientation="Horizontal">
-                <controls:NumericUpDown Value="{Binding RemainingHours}" TextAlignment="Left" Minimum="0" Maximum="99" Width="80" />
-                <TextBlock VerticalAlignment="Center" Margin="2,0">Hours</TextBlock>
-                <controls:NumericUpDown Value="{Binding RemainingMinutes}" TextAlignment="Left" Minimum="0" Maximum="59" Width="80" />
-                <TextBlock VerticalAlignment="Center" Margin="2,0">Minutes</TextBlock>
-                <WrapPanel.Style>
-                    <Style TargetType="WrapPanel">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding Path=ShowRemaining}" Value="False" >
-                                <Setter Property="Visibility" Value="Collapsed"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </WrapPanel.Style>
-            </WrapPanel>
-            <WrapPanel Grid.Row="8" Grid.Column="1" VerticalAlignment="Center" Margin="0,5" Orientation="Horizontal">
-                <TextBox Text="{Binding RemainingHours}" TextAlignment="Left" IsEnabled="False" Width="80" />
-                <TextBlock VerticalAlignment="Center" Margin="2,0">Hours</TextBlock>
-                <TextBox Text="{Binding RemainingMinutes}" TextAlignment="Left" IsEnabled="False" Width="80" />
-                <TextBlock VerticalAlignment="Center" Margin="2,0">Minutes</TextBlock>
-                <WrapPanel.Style>
-                    <Style TargetType="WrapPanel">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding Path=ShowRemaining}" Value="True" >
-                                <Setter Property="Visibility" Value="Collapsed"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </WrapPanel.Style>
-            </WrapPanel>
+                                <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Padding="2" TextWrapping="Wrap">Remaining Estimate<LineBreak/>Action</TextBlock>
+                                <WrapPanel Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Margin="0,5" Orientation="Vertical">
+                                    <RadioButton GroupName="Export" Content="Adjust Automatically" IsChecked="{Binding Path=WorkLogStrategy, Mode=TwoWay, Converter={StaticResource EnumConverter}, ConverterParameter={x:Static gallifreyJira:WorkLogStrategy.Automatic}}" />
+                                    <RadioButton Margin="0,3,0,0" GroupName="Export" Content="Leave Remaining" IsChecked="{Binding Path=WorkLogStrategy, Mode=TwoWay, Converter={StaticResource EnumConverter}, ConverterParameter={x:Static gallifreyJira:WorkLogStrategy.LeaveRemaining}}" />
+                                    <RadioButton Margin="0,3,0,0" GroupName="Export" Content="Set Value" IsChecked="{Binding Path=WorkLogStrategy, Mode=TwoWay, Converter={StaticResource EnumConverter}, ConverterParameter={x:Static gallifreyJira:WorkLogStrategy.SetValue}}" />
+                                </WrapPanel>
 
-            <TextBlock Grid.Row="9" Grid.Column="0" VerticalAlignment="Center">Comment</TextBlock>
-            <TextBox Grid.Row="9" Grid.Column="1" Margin="0,5" Text="{Binding Comment, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" AcceptsReturn="True" controls:TextBoxHelper.IsSpellCheckContextMenuEnabled="True" Height="70" VerticalScrollBarVisibility="Auto"/>
+                                <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Padding="2" Text="Remaining Estimate" />
+                                <WrapPanel Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" Margin="0,5" Orientation="Horizontal">
+                                    <controls:NumericUpDown Value="{Binding RemainingHours}" TextAlignment="Left" Minimum="0" Maximum="99" Width="80" />
+                                    <TextBlock VerticalAlignment="Center" Margin="2,0">Hours</TextBlock>
+                                    <controls:NumericUpDown Value="{Binding RemainingMinutes}" TextAlignment="Left" Minimum="0" Maximum="59" Width="80" />
+                                    <TextBlock VerticalAlignment="Center" Margin="2,0">Minutes</TextBlock>
+                                    <WrapPanel.Style>
+                                        <Style TargetType="WrapPanel">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Path=ShowRemaining}" Value="False" >
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </WrapPanel.Style>
+                                </WrapPanel>
+                                <WrapPanel Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" Margin="0,5" Orientation="Horizontal">
+                                    <TextBox Text="{Binding RemainingHours}" TextAlignment="Left" IsEnabled="False" Width="80" />
+                                    <TextBlock VerticalAlignment="Center" Margin="2,0">Hours</TextBlock>
+                                    <TextBox Text="{Binding RemainingMinutes}" TextAlignment="Left" IsEnabled="False" Width="80" />
+                                    <TextBlock VerticalAlignment="Center" Margin="2,0">Minutes</TextBlock>
+                                    <WrapPanel.Style>
+                                        <Style TargetType="WrapPanel">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Path=ShowRemaining}" Value="True" >
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </WrapPanel.Style>
+                                </WrapPanel>
 
-            <StackPanel Orientation="Horizontal" Grid.Row="10" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center">
-                <Button  Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="ExportButton" IsDefault="True">
-                    <Rectangle Width="23" Height="23" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}" ToolTip="Export Worklog To Jira">
-                        <Rectangle.OpacityMask>
-                            <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_disk_upload}" />
-                        </Rectangle.OpacityMask>
-                    </Rectangle>
-                </Button>
-            </StackPanel>
-        </Grid>
-    </ScrollViewer>
+                                <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center">Comment</TextBlock>
+                                <TextBox Grid.Row="5" Grid.Column="1" Margin="0,5" Text="{Binding Comment, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" AcceptsReturn="True" controls:TextBoxHelper.IsSpellCheckContextMenuEnabled="True" Height="45" VerticalScrollBarVisibility="Auto"/>
+                            </Grid>
+                        </StackPanel>
+                    </ScrollViewer>
+                </DataTemplate>
+            </TabControl.ContentTemplate>
+        </controls:MetroAnimatedSingleRowTabControl>
+        <Button Grid.Row="1" Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,5" Click="ExportButton" IsDefault="True">
+            <Rectangle Width="23" Height="23" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}" ToolTip="Export Worklog To Jira">
+                <Rectangle.OpacityMask>
+                    <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_disk_upload}" />
+                </Rectangle.OpacityMask>
+            </Rectangle>
+        </Button>
+    </Grid>
 </controls:Flyout>

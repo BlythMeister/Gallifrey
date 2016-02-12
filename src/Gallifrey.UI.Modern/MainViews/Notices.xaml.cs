@@ -28,18 +28,7 @@ namespace Gallifrey.UI.Modern.MainViews
 
             if (timers.Any())
             {
-                foreach (var jiraTimer in timers)
-                {
-                    await ModelHelpers.OpenFlyout(new Export(ModelHelpers, jiraTimer.UniqueId, null));
-
-                    var updatedTimer = ModelHelpers.Gallifrey.JiraTimerCollection.GetTimer(jiraTimer.UniqueId);
-                    if (!updatedTimer.FullyExported)
-                    {
-                        await DialogCoordinator.Instance.ShowMessageAsync(ModelHelpers.DialogContext, "Stopping Bulk Export", "Will Stop Bulk Export As Timer Was Not Fully Exported\n\nWill Select The Cancelled Timer");
-                        ModelHelpers.SetSelectedTimer(jiraTimer.UniqueId);
-                        break;
-                    }
-                }
+                await ModelHelpers.OpenFlyout(new BulkExport(ModelHelpers, timers));
             }
             else
             {

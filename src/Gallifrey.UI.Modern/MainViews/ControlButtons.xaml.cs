@@ -146,9 +146,14 @@ namespace Gallifrey.UI.Modern.MainViews
         {
             var selectedTimerIds = ViewModel.GetSelectedTimerIds().ToList();
 
-            foreach (var selectedTimerId in selectedTimerIds)
+            if (selectedTimerIds.Count == 1)
             {
-                await ModelHelpers.OpenFlyout(new Export(ModelHelpers, selectedTimerId, null));
+                await ModelHelpers.OpenFlyout(new Export(ModelHelpers, selectedTimerIds.First(), null));
+            }
+            else
+            {
+                var timers = selectedTimerIds.Select(x => ModelHelpers.Gallifrey.JiraTimerCollection.GetTimer(x)).ToList();
+                await ModelHelpers.OpenFlyout(new BulkExport(ModelHelpers, timers));
             }
         }
 

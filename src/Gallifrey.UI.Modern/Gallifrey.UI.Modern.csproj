@@ -69,6 +69,8 @@
     <Compile Include="Flyouts\BulkExport.xaml.cs">
       <DependentUpon>BulkExport.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\BulkExportContainerModel.cs" />
+    <Compile Include="Models\BulkExportModel.cs" />
     <Compile Include="Flyouts\LockedTimer.xaml.cs">
       <DependentUpon>LockedTimer.xaml</DependentUpon>
     </Compile>
