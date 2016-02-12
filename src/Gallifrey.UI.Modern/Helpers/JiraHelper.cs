@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.ExceptionServices;
 using System.Threading;
 using System.Threading.Tasks;
 using MahApps.Metro.Controls.Dialogs;
@@ -25,6 +26,10 @@ namespace Gallifrey.UI.Modern.Helpers
                 }
                 catch (Exception)
                 {
+                    if (throwErrors)
+                    {
+                        throw;
+                    }
                     return false;
                 }
             });
@@ -67,7 +72,19 @@ namespace Gallifrey.UI.Modern.Helpers
                 }
                 else
                 {
-                    result = jiraDownloadTask.Status == TaskStatus.RanToCompletion ? JiraHelperResult<T>.GetSuccess(jiraDownloadTask.Result) : JiraHelperResult<T>.GetErrored();
+                    if (jiraDownloadTask.Status == TaskStatus.RanToCompletion)
+                    {
+                        result = JiraHelperResult<T>.GetSuccess(jiraDownloadTask.Result);
+                    }
+                    else
+                    {
+                        result = JiraHelperResult<T>.GetErrored();
+
+                        if (throwErrors && jiraDownloadTask.Exception != null)
+                        {
+                            ExceptionDispatchInfo.Capture(jiraDownloadTask.Exception.InnerException).Throw();
+                        }
+                    }
                 }
 
                 return result;

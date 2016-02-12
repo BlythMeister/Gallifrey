@@ -74,7 +74,7 @@
                 </TextBox.Style>
             </TextBox>
 
-            <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center">Jira Reference</TextBlock>
+            <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,5,0">Jira Reference</TextBlock>
             <TextBox Grid.Row="2" Grid.Column="1" Margin="0,5" Text="{Binding JiraRef, Mode=OneWay}" IsEnabled="False"/>
 
             <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center">Jira Name</TextBlock>
@@ -139,17 +139,15 @@
             </WrapPanel>
 
             <TextBlock Grid.Row="9" Grid.Column="0" VerticalAlignment="Center">Comment</TextBlock>
-            <TextBox Grid.Row="9" Grid.Column="1" Margin="0,5" Text="{Binding Comment, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" AcceptsReturn="True" controls:TextBoxHelper.IsSpellCheckContextMenuEnabled="True" Height="70" VerticalScrollBarVisibility="Auto"/>
+            <TextBox Grid.Row="9" Grid.Column="1" Margin="0,5" Text="{Binding Comment, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" AcceptsReturn="True" controls:TextBoxHelper.IsSpellCheckContextMenuEnabled="True" Height="50" VerticalScrollBarVisibility="Auto"/>
 
-            <StackPanel Orientation="Horizontal" Grid.Row="10" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center">
-                <Button  Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="ExportButton" IsDefault="True">
-                    <Rectangle Width="23" Height="23" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}" ToolTip="Export Worklog To Jira">
-                        <Rectangle.OpacityMask>
-                            <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_disk_upload}" />
-                        </Rectangle.OpacityMask>
-                    </Rectangle>
-                </Button>
-            </StackPanel>
+            <Button Grid.Row="10" Grid.Column="0" Grid.ColumnSpan="2" Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="ExportButton" IsDefault="True">
+                <Rectangle Width="23" Height="23" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}" ToolTip="Export Worklog To Jira">
+                    <Rectangle.OpacityMask>
+                        <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_disk_upload}" />
+                    </Rectangle.OpacityMask>
+                </Rectangle>
+            </Button>
         </Grid>
     </ScrollViewer>
 </controls:Flyout>

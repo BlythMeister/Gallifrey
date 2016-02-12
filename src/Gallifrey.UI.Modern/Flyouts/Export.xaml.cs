@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using Gallifrey.Exceptions.JiraIntegration;
 using Gallifrey.Jira.Model;
+using Gallifrey.JiraTimers;
 using Gallifrey.UI.Modern.Helpers;
 using Gallifrey.UI.Modern.Models;
 using MahApps.Metro.Controls.Dialogs;
@@ -20,14 +21,13 @@ namespace Gallifrey.UI.Modern.Flyouts
             this.modelHelpers = modelHelpers;
             InitializeComponent();
             jiraHelper = new JiraHelper(modelHelpers.DialogContext);
-            SetupContext(timerId, exportTime);
+            SetupContext(modelHelpers.Gallifrey.JiraTimerCollection.GetTimer(timerId), exportTime);
         }
 
-        private async void SetupContext(Guid timerId, TimeSpan? exportTime)
+        private async void SetupContext(JiraTimer timerToShow, TimeSpan? exportTime)
         {
-            var timerToShow = modelHelpers.Gallifrey.JiraTimerCollection.GetTimer(timerId);
-            Issue jiraIssue = null;
-
+            await Task.Delay(50);
+            modelHelpers.HideFlyout(this);
             if (timerToShow.TempTimer)
             {
                 await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Temp Timer", "You Cannot Export A Temporary Timer!");
@@ -37,8 +37,8 @@ namespace Gallifrey.UI.Modern.Flyouts
 
             DataContext = new ExportModel(timerToShow, exportTime, modelHelpers.Gallifrey.Settings.ExportSettings.DefaultRemainingValue);
 
+            Issue jiraIssue = null;
             var requireRefresh = !timerToShow.LastJiraTimeCheck.HasValue || timerToShow.LastJiraTimeCheck < DateTime.UtcNow.AddMinutes(-15);
-
             var showError = false;
             try
             {
@@ -71,9 +71,8 @@ namespace Gallifrey.UI.Modern.Flyouts
 
             if (requireRefresh)
             {
-                modelHelpers.Gallifrey.JiraTimerCollection.RefreshFromJira(timerId, jiraIssue, modelHelpers.Gallifrey.JiraConnection.CurrentUser);
-
-                timerToShow = modelHelpers.Gallifrey.JiraTimerCollection.GetTimer(timerId);
+                modelHelpers.Gallifrey.JiraTimerCollection.RefreshFromJira(timerToShow.UniqueId, jiraIssue, modelHelpers.Gallifrey.JiraConnection.CurrentUser);
+                timerToShow = modelHelpers.Gallifrey.JiraTimerCollection.GetTimer(timerToShow.UniqueId);
             }
 
             if (timerToShow.FullyExported)
@@ -91,6 +90,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             }
 
             DataModel.UpdateTimer(timerToShow, jiraIssue);
+            modelHelpers.OpenFlyout(this);
         }
 
         private async void ExportButton(object sender, RoutedEventArgs e)
@@ -110,7 +110,16 @@ namespace Gallifrey.UI.Modern.Flyouts
                 var strategy = DataModel.WorkLogStrategy;
                 var comment = DataModel.Comment;
                 var remaining = DataModel.Remaining;
-                await jiraHelper.Do(() => modelHelpers.Gallifrey.JiraConnection.LogTime(jiraRef, date, toExport, strategy, comment, remaining), "Exporting Time To Jira", false, true);
+                var result = await jiraHelper.Do(() => modelHelpers.Gallifrey.JiraConnection.LogTime(jiraRef, date, toExport, strategy, comment, remaining), "Exporting Time To Jira", false, true);
+                if (result.Status == JiraHelperResult<bool>.JiraHelperStatus.Success)
+                {
+                    modelHelpers.Gallifrey.JiraTimerCollection.AddJiraExportedTime(DataModel.Timer.UniqueId, DataModel.ToExportHours, DataModel.ToExportMinutes);
+                    modelHelpers.CloseFlyout(this);
+                }
+                else
+                {
+                    throw new WorkLogException("Did not export");
+                }
             }
             catch (WorkLogException)
             {
@@ -125,11 +134,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             {
                 await dialog;
                 Focus();
-                return;
             }
-
-            modelHelpers.Gallifrey.JiraTimerCollection.AddJiraExportedTime(DataModel.Timer.UniqueId, DataModel.ToExportHours, DataModel.ToExportMinutes);
-            modelHelpers.CloseFlyout(this);
         }
     }
 }

@@ -47,6 +47,7 @@
       <Feature>Show all dates even if no timers for that date</Feature>
       <Feature>Added temporary timers for logging purpose when you don't have a Jira reference to hand</Feature>
       <Feature>Ability to add lock time to an existing timer</Feature>
+      <Feature>Added bulk export when clicking unexported time notice or multi selecting timers</Feature>
     </Features>
     <Bugs>
       <Bug>Fix issue for exported timers resetting to un-exported</Bug>
