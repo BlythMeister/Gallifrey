@@ -145,15 +145,17 @@ namespace Gallifrey.UI.Modern.MainViews
         private async void ExportButton(object sender, RoutedEventArgs e)
         {
             var selectedTimerIds = ViewModel.GetSelectedTimerIds().ToList();
-
-            if (selectedTimerIds.Count == 1)
+            if (selectedTimerIds.Any())
             {
-                await ModelHelpers.OpenFlyout(new Export(ModelHelpers, selectedTimerIds.First(), null));
-            }
-            else
-            {
-                var timers = selectedTimerIds.Select(x => ModelHelpers.Gallifrey.JiraTimerCollection.GetTimer(x)).ToList();
-                await ModelHelpers.OpenFlyout(new BulkExport(ModelHelpers, timers));
+                if (selectedTimerIds.Count == 1)
+                {
+                    await ModelHelpers.OpenFlyout(new Export(ModelHelpers, selectedTimerIds.First(), null));
+                }
+                else
+                {
+                    var timers = selectedTimerIds.Select(x => ModelHelpers.Gallifrey.JiraTimerCollection.GetTimer(x)).ToList();
+                    await ModelHelpers.OpenFlyout(new BulkExport(ModelHelpers, timers));
+                }
             }
         }
 

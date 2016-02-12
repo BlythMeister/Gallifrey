@@ -28,7 +28,14 @@ namespace Gallifrey.UI.Modern.MainViews
 
             if (timers.Any())
             {
-                await ModelHelpers.OpenFlyout(new BulkExport(ModelHelpers, timers));
+                if (timers.Count == 1)
+                {
+                    await ModelHelpers.OpenFlyout(new Export(ModelHelpers, timers.First().UniqueId, null));
+                }
+                else
+                {
+                    await ModelHelpers.OpenFlyout(new BulkExport(ModelHelpers, timers));
+                }
             }
             else
             {

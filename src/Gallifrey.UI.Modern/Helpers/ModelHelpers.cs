@@ -51,12 +51,19 @@ namespace Gallifrey.UI.Modern.Helpers
 
         public void CloseAllFlyouts()
         {
-            foreach (Flyout item in flyoutsControl.Items)
+            foreach (var item in openFlyouts)
             {
-                CloseFlyout(item);
+                CloseFlyout(item.Flyout);
             }
         }
 
+        public void HideAllFlyouts()
+        {
+            foreach (var item in openFlyouts)
+            {
+                HideFlyout(item.Flyout);
+            }
+        }
         public void CloseFlyout(Flyout flyout)
         {
             flyout.IsOpen = false;
@@ -71,6 +78,11 @@ namespace Gallifrey.UI.Modern.Helpers
 
             flyout.IsOpen = false;
         }
+
+        public List<Flyout> GetHiddenFlyouts()
+        {
+            return openFlyouts.Where(x => x.IsHidden).Select(x => x.Flyout).ToList();
+        } 
 
         public Task<Flyout> OpenFlyout(Flyout flyout)
         {

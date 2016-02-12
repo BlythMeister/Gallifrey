@@ -231,10 +231,19 @@ namespace Gallifrey.UI.Modern.MainViews
                             this.FlashWindow();
                             Activate();
                             Topmost = true;
-                            modelHelpers.CloseAllFlyouts();
+                            if (modelHelpers.FlyoutOpen)
+                            {
+                                modelHelpers.HideAllFlyouts();
+                            }
+                            
                             await modelHelpers.OpenFlyout(new LockedTimer(modelHelpers));
                             this.StopFlashingWindow();
                             Topmost = false;
+
+                            foreach (var hiddenFlyout in modelHelpers.GetHiddenFlyouts())
+                            {
+                                await modelHelpers.OpenFlyout(hiddenFlyout);
+                            }
                         }
                     }
                     catch (NoIdleTimerRunningException) { }
