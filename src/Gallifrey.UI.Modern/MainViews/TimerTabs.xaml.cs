@@ -111,7 +111,12 @@ namespace Gallifrey.UI.Modern.MainViews
                     }
 
                     //show add form, we know it's a real jira & valid
-                    await ModelHelpers.OpenFlyout(new AddTimer(ModelHelpers, startDate: todaysDate, jiraRef: jiraRef, startNow: true));
+                    var addTimer = new AddTimer(ModelHelpers, startDate: todaysDate, jiraRef: jiraRef, startNow: true);
+                    await ModelHelpers.OpenFlyout(addTimer);
+                    if (addTimer.AddedTimer)
+                    {
+                        ModelHelpers.SetSelectedTimer(addTimer.NewTimerId);
+                    }
                 }
             }
         }
@@ -132,6 +137,11 @@ namespace Gallifrey.UI.Modern.MainViews
         private void ContextMenu_Add(object sender, RoutedEventArgs e)
         {
             ModelHelpers.TriggerRemoteButtonPress(RemoteButtonTrigger.Add);
+        }
+
+        private void ContextMenu_Copy(object sender, RoutedEventArgs e)
+        {
+            ModelHelpers.TriggerRemoteButtonPress(RemoteButtonTrigger.Copy);
         }
 
         private void ContextMenu_Delete(object sender, RoutedEventArgs e)

@@ -5,7 +5,7 @@
              IsModal="True" Theme="Adapt" Position="Right" Header="Add Timer" CloseButtonIsCancel="True">
     <Grid Width="340" Margin="5,5,5,5" >
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -18,18 +18,66 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center">Jira Reference</TextBlock>
-        <TextBox Grid.Row="0" Grid.Column="1" Margin="0,5" Text="{Binding JiraReference, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" CharacterCasing="Upper">
-            <TextBox.Style>
-                <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+        <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center">
+            <TextBlock.Style>
+                <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding JiraReferenceEditable}" Value="False" >
-                            <Setter Property="IsEnabled" Value="False"/>
+                        <DataTrigger Binding="{Binding TempTimer}" Value="True" >
+                            <Setter Property="Text" Value="Description"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding TempTimer}" Value="False" >
+                            <Setter Property="Text" Value="Jira Reference"/>
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
-            </TextBox.Style>
-        </TextBox>
+            </TextBlock.Style>
+        </TextBlock>
+        
+        <Grid Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Margin="0,5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBox Grid.Column="0" Text="{Binding JiraReference, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" CharacterCasing="Upper">
+                <TextBox.Style>
+                    <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding JiraReferenceEditable}" Value="False" >
+                                <Setter Property="IsEnabled" Value="False"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding TempTimer}" Value="True" >
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBox.Style>
+            </TextBox>
+            <TextBox Grid.Column="0" Text="{Binding TempTimerDescription, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                <TextBox.Style>
+                    <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding TempTimer}" Value="False" >
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBox.Style>
+            </TextBox>
+            <CheckBox Grid.Column="1" Margin="5,0" IsChecked="{Binding TempTimer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                <CheckBox.Style>
+                    <Style TargetType="CheckBox" BasedOn="{StaticResource {x:Type CheckBox}}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding JiraReferenceEditable}" Value="False" >
+                                <Setter Property="IsEnabled" Value="False"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </CheckBox.Style>
+            </CheckBox>
+            <TextBlock Grid.Column="2" VerticalAlignment="Center">Temp Timer?</TextBlock>
+        </Grid>
+        
 
         <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Padding="2">Starting Date</TextBlock>
         <DatePicker Grid.Row="1" Grid.Column="1" Margin="0,5" IsTodayHighlighted="False" DisplayDate="{Binding DisplayDate}" DisplayDateStart="{Binding MinDate}" DisplayDateEnd="{Binding MaxDate}" SelectedDate="{Binding StartDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedDateChanged="StartDateChanged">
@@ -75,13 +123,32 @@
         </CheckBox>
 
         <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Padding="2">Assign To Me?</TextBlock>
-        <CheckBox Grid.Row="4" Grid.Column="1" Margin="0,5" IsChecked="{Binding AssignToMe, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+        <CheckBox Grid.Row="4" Grid.Column="1" Margin="0,5" IsChecked="{Binding AssignToMe, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            <CheckBox.Style>
+                <Style TargetType="CheckBox" BasedOn="{StaticResource {x:Type CheckBox}}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding TempTimer}" Value="True" >
+                            <Setter Property="IsEnabled" Value="False"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </CheckBox.Style>
+        </CheckBox>
 
         <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Padding="2">Set In Progress?</TextBlock>
-        <CheckBox Grid.Row="5" Grid.Column="1" Margin="0,5" IsChecked="{Binding InProgress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+        <CheckBox Grid.Row="5" Grid.Column="1" Margin="0,5" IsChecked="{Binding InProgress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            <CheckBox.Style>
+                <Style TargetType="CheckBox" BasedOn="{StaticResource {x:Type CheckBox}}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding TempTimer}" Value="True" >
+                            <Setter Property="IsEnabled" Value="False"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </CheckBox.Style>
+        </CheckBox>
 
-
-        <StackPanel Orientation="Horizontal" Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center">
+        <StackPanel Orientation="Horizontal" Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center">
             <Button  Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="AddButton" IsDefault="True">
                 <Rectangle Width="23" Height="23" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}" ToolTip="Add Timer">
                     <Rectangle.OpacityMask>

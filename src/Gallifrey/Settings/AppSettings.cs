@@ -33,14 +33,7 @@ namespace Gallifrey.Settings
         public AppSettings()
         {
             KeepTimersForDays = 7;
-            ExportDays = new List<DayOfWeek>
-                {
-                    DayOfWeek.Monday,
-                    DayOfWeek.Tuesday,
-                    DayOfWeek.Wednesday,
-                    DayOfWeek.Thursday,
-                    DayOfWeek.Friday
-                };
+            ExportDays = new List<DayOfWeek>();
             StartOfWeek = DayOfWeek.Monday;
             UsageTracking = true;
         }

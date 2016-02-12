@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using Gallifrey.ExtensionMethods;
 using Gallifrey.JiraTimers;
 using Gallifrey.UI.Modern.Helpers;
 using Gallifrey.UI.Modern.Models;
+using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 
 namespace Gallifrey.UI.Modern.Flyouts
@@ -12,6 +14,7 @@ namespace Gallifrey.UI.Modern.Flyouts
     public partial class LockedTimer
     {
         private readonly ModelHelpers modelHelpers;
+        private TimerDisplayModel selectedTimerSelectorModel;
         private LockedTimerCollectionModel DataModel => (LockedTimerCollectionModel)DataContext;
 
         public LockedTimer(ModelHelpers modelHelpers)
@@ -84,9 +87,9 @@ namespace Gallifrey.UI.Modern.Flyouts
             MessageDialogResult result;
             if (runningTimer != null)
             {
-                result = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Add Time Where?", $"Where Would You Like To Add The Time Worth {selectedTime.FormatAsString()}?", MessageDialogStyle.AffirmativeAndNegativeAndSingleAuxiliary, new MetroDialogSettings { AffirmativeButtonText = "New Timer", NegativeButtonText = $"Running Timer ({runningTimer.JiraReference})", FirstAuxiliaryButtonText = "Cancel" });
+                result = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Add Time Where?", $"Where Would You Like To Add The Time Worth {selectedTime.FormatAsString(false)}?\n\nNote:- Running Timer Is\n{runningTimer.JiraReference} - {runningTimer.JiraName}", MessageDialogStyle.AffirmativeAndNegativeAndDoubleAuxiliary, new MetroDialogSettings { AffirmativeButtonText = "New Timer", NegativeButtonText = $"Running Timer", FirstAuxiliaryButtonText = "Existing Timer", SecondAuxiliaryButtonText = "Cancel" });
 
-                if (result == MessageDialogResult.FirstAuxiliary)
+                if (result == MessageDialogResult.SecondAuxiliary)
                 {
                     Focus();
                     return;
@@ -94,8 +97,19 @@ namespace Gallifrey.UI.Modern.Flyouts
             }
             else
             {
-                //No running timer, so just show the add time flyout.
-                result = MessageDialogResult.Affirmative;
+                result = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Add Time Where?", $"Where Would You Like To Add The Time Worth {selectedTime.FormatAsString(false)}?", MessageDialogStyle.AffirmativeAndNegativeAndSingleAuxiliary, new MetroDialogSettings { AffirmativeButtonText = "New Timer", NegativeButtonText = "Existing Timer", FirstAuxiliaryButtonText = "Cancel" });
+
+                if (result == MessageDialogResult.FirstAuxiliary)
+                {
+                    Focus();
+                    return;
+                }
+
+                //All buttons moved allong one as no running timer.
+                if (result == MessageDialogResult.Negative)
+                {
+                    result = MessageDialogResult.FirstAuxiliary;
+                }
             }
 
             if (result == MessageDialogResult.Affirmative)
@@ -116,13 +130,17 @@ namespace Gallifrey.UI.Modern.Flyouts
                         modelHelpers.OpenFlyout(this);
                         DataModel.RefreshLockedTimers(modelHelpers.Gallifrey.IdleTimerCollection.GetUnusedLockTimers());
                     }
+                    else
+                    {
+                        modelHelpers.SetSelectedTimer(addFlyout.NewTimerId);
+                    }
                 }
                 else
                 {
                     modelHelpers.OpenFlyout(this);
                 }
             }
-            else
+            else if (result == MessageDialogResult.Negative)
             {
                 modelHelpers.Gallifrey.JiraTimerCollection.AddIdleTimer(runningTimerId.Value, selectedTimers);
 
@@ -140,6 +158,39 @@ namespace Gallifrey.UI.Modern.Flyouts
                     modelHelpers.CloseFlyout(this);
                 }
             }
+            else if (result == MessageDialogResult.FirstAuxiliary)
+            {
+                var items = modelHelpers.Gallifrey.JiraTimerCollection.GetTimersForADate(lockedTimerDate).Select(x => new TimerDisplayModel(x)).ToList();
+
+                var dialog = (BaseMetroDialog)this.Resources["TimerSelector"];
+
+                await DialogCoordinator.Instance.ShowMetroDialogAsync(modelHelpers.DialogContext, dialog);
+
+                var comboBox = dialog.FindChild<ComboBox>("Items");
+                comboBox.ItemsSource = items;
+
+                await dialog.WaitUntilUnloadedAsync();
+
+                if (selectedTimerSelectorModel != null)
+                {
+                    modelHelpers.Gallifrey.JiraTimerCollection.AddIdleTimer(selectedTimerSelectorModel.Timer.UniqueId, selectedTimers);
+
+                    foreach (var lockedTimerModel in selected)
+                    {
+                        modelHelpers.Gallifrey.IdleTimerCollection.RemoveTimer(lockedTimerModel.UniqueId);
+                    }
+                }
+
+                if (modelHelpers.Gallifrey.IdleTimerCollection.GetUnusedLockTimers().Any())
+                {
+                    DataModel.RefreshLockedTimers(modelHelpers.Gallifrey.IdleTimerCollection.GetUnusedLockTimers());
+                }
+                else
+                {
+                    modelHelpers.CloseFlyout(this);
+                }
+
+            }
         }
 
         private async void DeleteButton(object sender, RoutedEventArgs e)
@@ -156,7 +207,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             var selectedTime = new TimeSpan();
             selectedTime = selected.Aggregate(selectedTime, (current, lockedTimerModel) => current.Add(lockedTimerModel.IdleTime));
 
-            var result = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Are You Sure?", $"Are you Sure You Want To Delete Locked Timers Worth {selectedTime.FormatAsString()}?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
+            var result = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Are You Sure?", $"Are you Sure You Want To Delete Locked Timers Worth {selectedTime.FormatAsString(false)}?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
 
             if (result == MessageDialogResult.Affirmative)
             {
@@ -175,6 +226,25 @@ namespace Gallifrey.UI.Modern.Flyouts
             }
 
             Focus();
+        }
+
+        private async void CloseTimerSelector(object sender, RoutedEventArgs e)
+        {
+            var dialog = (BaseMetroDialog)this.Resources["TimerSelector"];
+            var comboBox = dialog.FindChild<ComboBox>("Items");
+
+            selectedTimerSelectorModel = (TimerDisplayModel)comboBox.SelectedItem;
+
+            await DialogCoordinator.Instance.HideMetroDialogAsync(modelHelpers.DialogContext, dialog);
+        }
+
+        private async void CancelTimerSelector(object sender, RoutedEventArgs e)
+        {
+            var dialog = (BaseMetroDialog)this.Resources["TimerSelector"];
+            
+            selectedTimerSelectorModel = null;
+
+            await DialogCoordinator.Instance.HideMetroDialogAsync(modelHelpers.DialogContext, dialog);
         }
     }
 }

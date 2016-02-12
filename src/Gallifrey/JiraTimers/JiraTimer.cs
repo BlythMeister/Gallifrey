@@ -24,6 +24,7 @@ namespace Gallifrey.JiraTimers
         public Guid UniqueId { get; private set; }
         public bool IsRunning { get; private set; }
         public DateTime? LastJiraTimeCheck { get; private set; }
+        public bool TempTimer { get; private set; }
         private readonly Stopwatch currentRunningTime;
         private readonly Timer runningWatcher;
 
@@ -32,7 +33,7 @@ namespace Gallifrey.JiraTimers
         public bool HasParent => !string.IsNullOrWhiteSpace(JiraParentReference);
 
         [JsonConstructor]
-        public JiraTimer(string jiraReference, string jiraProjectName, string jiraName, DateTime dateStarted, TimeSpan currentTime, TimeSpan exportedTime, Guid uniqueId, string jiraParentReference, string jiraParentName, DateTime? lastJiraTimeCheck)
+        public JiraTimer(string jiraReference, string jiraProjectName, string jiraName, DateTime dateStarted, TimeSpan currentTime, TimeSpan exportedTime, Guid uniqueId, string jiraParentReference, string jiraParentName, DateTime? lastJiraTimeCheck, bool tempTimer)
         {
             JiraReference = jiraReference;
             JiraProjectName = jiraProjectName;
@@ -48,6 +49,24 @@ namespace Gallifrey.JiraTimers
             runningWatcher = new Timer(100);
             runningWatcher.Elapsed += runningWatcherElapsed;
             LastJiraTimeCheck = lastJiraTimeCheck;
+            TempTimer = tempTimer;
+        }
+
+        public JiraTimer(int localTimerNumber, string tempTimerDescription, DateTime dateStarted, TimeSpan currentTime)
+        {
+            JiraReference = $"GALLIFREY-TEMP-{localTimerNumber}";
+            JiraProjectName = $"Temporary Timers";
+            JiraName = tempTimerDescription;
+            DateStarted = dateStarted;
+            CurrentTime = currentTime;
+            ExportedTime = new TimeSpan();
+            UniqueId = Guid.NewGuid();
+            IsRunning = false;
+            currentRunningTime = new Stopwatch();
+            runningWatcher = new Timer(100);
+            runningWatcher.Elapsed += runningWatcherElapsed;
+            LastJiraTimeCheck = null;
+            TempTimer = true;
         }
 
         public JiraTimer(Issue jiraIssue, DateTime dateStarted, TimeSpan currentTime)
@@ -69,6 +88,7 @@ namespace Gallifrey.JiraTimers
             runningWatcher = new Timer(100);
             runningWatcher.Elapsed += runningWatcherElapsed;
             LastJiraTimeCheck = null;
+            TempTimer = false;
         }
 
         public JiraTimer(JiraTimer previousTimer, DateTime dateStarted, bool resetTimes)
@@ -263,6 +283,13 @@ namespace Gallifrey.JiraTimers
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("JiraParentName"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasParent"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LastJiraTimeCheck"));
+        }
+
+        public void UpdateTempTimerDescription(string tempTimerDescription)
+        {
+            if(!TempTimer) return;
+            JiraName = tempTimerDescription;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("JiraName"));
         }
     }
 }

@@ -25,17 +25,66 @@ namespace Gallifrey.UI.Modern.MainViews
             ModelHelpers.RemoteButtonTrigger += ModelHelpersOnRemoteButtonTrigger;
         }
 
-        private void AddButton(object sender, RoutedEventArgs e)
+        private async void AddButton(object sender, RoutedEventArgs e)
+        {
+            var selected = ViewModel.TimerDates.FirstOrDefault(x => x.DateIsSelected);
+            var startDate = selected?.TimerDate ?? DateTime.Today;
+
+            var addTimer = new AddTimer(ModelHelpers, startDate: startDate);
+            await ModelHelpers.OpenFlyout(addTimer);
+            if (addTimer.AddedTimer)
+            {
+                ModelHelpers.SetSelectedTimer(addTimer.NewTimerId);
+            }
+        }
+
+        private async void CopyButton(object sender, RoutedEventArgs e)
+        {
+            var selectedTimers = ViewModel.GetSelectedTimerIds();
+
+            if (selectedTimers.Count() > 1)
+            {
+                await DialogCoordinator.Instance.ShowMessageAsync(ModelHelpers.DialogContext, "Too Many Timers Selected", "Please Select Only One Timer When Copying Reference");
+            }
+            else if (selectedTimers != null && selectedTimers.Count() == 1)
+            {
+                var selectedTimer = ModelHelpers.Gallifrey.JiraTimerCollection.GetTimer(selectedTimers.First());
+                if (selectedTimer.TempTimer)
+                {
+                    await DialogCoordinator.Instance.ShowMessageAsync(ModelHelpers.DialogContext, "Not Avaliable", "A Temp Timer Does Not Have A Copyable Reference");
+                }
+                else
+                {
+                    Clipboard.SetText(selectedTimer.JiraReference);
+                }
+            }
+        }
+
+        private async void PasteButton(object sender, RoutedEventArgs e)
         {
             DateTime? startDate = null;
 
             if (ViewModel.TimerDates.Any(x => x.TimerDate.Date == DateTime.Now.Date))
             {
-                var selectedDate = ViewModel.TimerDates.FirstOrDefault(x => x.IsSelected);
+                var selectedDate = ViewModel.TimerDates.FirstOrDefault(x => x.DateIsSelected);
                 startDate = selectedDate?.TimerDate;
             }
 
-            ModelHelpers.OpenFlyout(new AddTimer(ModelHelpers, startDate: startDate));
+            var jiraRef = Clipboard.GetText();
+
+            if (ModelHelpers.Gallifrey.JiraConnection.DoesJiraExist(jiraRef))
+            {
+                var addTimer = new AddTimer(ModelHelpers, startDate: startDate, jiraRef: jiraRef);
+                await ModelHelpers.OpenFlyout(addTimer);
+                if (addTimer.AddedTimer)
+                {
+                    ModelHelpers.SetSelectedTimer(addTimer.NewTimerId);
+                }
+            }
+            else
+            {
+                await DialogCoordinator.Instance.ShowMessageAsync(ModelHelpers.DialogContext, "Invalid Jira", $"Unable To Locate That Jira.\n\nJira Ref Pasted: '{jiraRef}'");
+            }
         }
 
         private async void DeleteButton(object sender, RoutedEventArgs e)
@@ -82,9 +131,15 @@ namespace Gallifrey.UI.Modern.MainViews
 
                 if (stoppedTimer)
                 {
-                    ModelHelpers.Gallifrey.JiraTimerCollection.StartTimer(editTimerFlyout.EditedTimerId);
+                    var timer = ModelHelpers.Gallifrey.JiraTimerCollection.GetTimer(editTimerFlyout.EditedTimerId);
+                    if (timer.DateStarted.Date == DateTime.Now.Date)
+                    {
+                        ModelHelpers.Gallifrey.JiraTimerCollection.StartTimer(editTimerFlyout.EditedTimerId);
+                    }
                 }
             }
+
+            ModelHelpers.RefreshModel();
         }
 
         private async void ExportButton(object sender, RoutedEventArgs e)
@@ -115,6 +170,7 @@ namespace Gallifrey.UI.Modern.MainViews
                 await DialogCoordinator.Instance.ShowMessageAsync(ModelHelpers.DialogContext, "Connection Required", "You Must Have A Working Jira Connection To Use Gallifrey");
                 ModelHelpers.CloseApp();
             }
+            ModelHelpers.RefreshModel();
         }
 
         private void EmailButton(object sender, RoutedEventArgs e)
@@ -146,12 +202,14 @@ namespace Gallifrey.UI.Modern.MainViews
             ModelHelpers.Gallifrey.TrackEvent(TrackingType.GitHubClick);
             Process.Start(new ProcessStartInfo("https://github.com/BlythMeister/Gallifrey"));
         }
-        
+
         private void ModelHelpersOnRemoteButtonTrigger(object sender, RemoteButtonTrigger remoteButtonTrigger)
         {
             switch (remoteButtonTrigger)
             {
                 case RemoteButtonTrigger.Add: AddButton(this, null); break;
+                case RemoteButtonTrigger.Copy: CopyButton(this, null); break;
+                case RemoteButtonTrigger.Paste: PasteButton(this, null); break;
                 case RemoteButtonTrigger.Delete: DeleteButton(this, null); break;
                 case RemoteButtonTrigger.Search: SearchButton(this, null); break;
                 case RemoteButtonTrigger.Edit: EditButton(this, null); break;

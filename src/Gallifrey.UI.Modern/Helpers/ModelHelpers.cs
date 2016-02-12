@@ -34,6 +34,8 @@ namespace Gallifrey.UI.Modern.Helpers
         private readonly List<OpenFlyoutDetails> openFlyouts;
         public IBackend Gallifrey { get; }
         public DialogContext DialogContext { get; }
+        public bool FlyoutOpen => flyoutsControl.Items.Count > 0;
+
         public event EventHandler<Guid> SelectTimerEvent;
         public event EventHandler SelectRunningTimerEvent;
         public event EventHandler RefreshModelEvent;

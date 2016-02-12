@@ -27,7 +27,7 @@ namespace Gallifrey.UI.Modern.MainViews
         private readonly ModelHelpers modelHelpers;
         private MainViewModel ViewModel => (MainViewModel)DataContext;
         private bool machineLocked;
-        
+
         public MainWindow(InstanceType instance, AppType appType)
         {
             InitializeComponent();
@@ -119,6 +119,7 @@ namespace Gallifrey.UI.Modern.MainViews
                     await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Connection Required", "You Must Have A Working Jira Connection To Use Gallifrey");
                     modelHelpers.CloseApp();
                 }
+                modelHelpers.RefreshModel();
             }
 
             if (modelHelpers.Gallifrey.VersionControl.IsAutomatedDeploy && modelHelpers.Gallifrey.VersionControl.IsFirstRun)
@@ -251,7 +252,7 @@ namespace Gallifrey.UI.Modern.MainViews
         {
             Application.Current.Dispatcher.Invoke(() =>
             {
-                if (!machineLocked)
+                if (!machineLocked && !modelHelpers.FlyoutOpen)
                 {
                     PerformUpdate(false, false);
                 }
@@ -331,10 +332,12 @@ namespace Gallifrey.UI.Modern.MainViews
             modelHelpers.Gallifrey.Close();
         }
 
-        private void MainWindow_KeyUp(object sender, KeyEventArgs e)
+        private void MainWindow_KeyDown(object sender, KeyEventArgs e)
         {
+            if (modelHelpers.FlyoutOpen) return;
+
             var key = e.Key;
-            RemoteButtonTrigger trigger ;
+            RemoteButtonTrigger trigger;
 
             if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
             {
@@ -344,15 +347,11 @@ namespace Gallifrey.UI.Modern.MainViews
                     case Key.D: trigger = RemoteButtonTrigger.Delete; break;
                     case Key.F: trigger = RemoteButtonTrigger.Search; break;
                     case Key.E: trigger = RemoteButtonTrigger.Edit; break;
-                    case Key.S: trigger = RemoteButtonTrigger.Export; break;
+                    case Key.U: trigger = RemoteButtonTrigger.Export; break;
                     case Key.L: trigger = RemoteButtonTrigger.LockTimer; break;
-                    case Key.P: trigger = RemoteButtonTrigger.Settings; break;
-                    case Key.I: trigger = RemoteButtonTrigger.Info; break;
-                    case Key.T: trigger = RemoteButtonTrigger.Twitter; break;
-                    case Key.M: trigger = RemoteButtonTrigger.Email; break;
-                    case Key.G: trigger = RemoteButtonTrigger.GitHub; break;
-                    case Key.H: trigger = RemoteButtonTrigger.Gitter; break;
-                    case Key.C: trigger = RemoteButtonTrigger.PayPal; break;
+                    case Key.S: trigger = RemoteButtonTrigger.Settings; break;
+                    case Key.C: trigger = RemoteButtonTrigger.Copy; break;
+                    case Key.V: trigger = RemoteButtonTrigger.Paste; break;
                     default: return;
                 }
             }
@@ -383,7 +382,7 @@ namespace Gallifrey.UI.Modern.MainViews
                     default: return;
                 }
             }
-            
+
             modelHelpers.TriggerRemoteButtonPress(trigger);
         }
     }

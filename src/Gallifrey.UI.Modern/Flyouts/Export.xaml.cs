@@ -28,6 +28,13 @@ namespace Gallifrey.UI.Modern.Flyouts
             var timerToShow = modelHelpers.Gallifrey.JiraTimerCollection.GetTimer(timerId);
             Issue jiraIssue = null;
 
+            if (timerToShow.TempTimer)
+            {
+                await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Temp Timer", "You Cannot Export A Temporary Timer!");
+                modelHelpers.CloseFlyout(this);
+                return;
+            }
+
             DataContext = new ExportModel(timerToShow, exportTime, modelHelpers.Gallifrey.Settings.ExportSettings.DefaultRemainingValue);
 
             var requireRefresh = !timerToShow.LastJiraTimeCheck.HasValue || timerToShow.LastJiraTimeCheck < DateTime.UtcNow.AddMinutes(-15);

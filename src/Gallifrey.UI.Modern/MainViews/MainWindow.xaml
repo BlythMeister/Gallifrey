@@ -4,7 +4,7 @@
         xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:mainViews="clr-namespace:Gallifrey.UI.Modern.MainViews"
         xmlns:dialogs="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
-        Height="600" Width="750" MinHeight="600" MinWidth="750" Icon="/Icons/clock_blue.ico" WindowTitleBrush="{DynamicResource AccentColorBrush}" NonActiveWindowTitleBrush="{DynamicResource AccentColorBrush}" BorderBrush="{DynamicResource AccentColorBrush}" BorderThickness="2" Loaded="OnLoaded" Closed="MainWindow_OnClosed" dialogs:DialogParticipation.Register="{Binding RelativeSource={RelativeSource Self}, Path=DataContext.ModelHelpers.DialogContext}" KeyUp="MainWindow_KeyUp">
+        Height="600" Width="750" MinHeight="600" MinWidth="750" Icon="/Icons/clock_blue.ico" WindowTitleBrush="{DynamicResource AccentColorBrush}" NonActiveWindowTitleBrush="{DynamicResource AccentColorBrush}" BorderBrush="{DynamicResource AccentColorBrush}" BorderThickness="2" Loaded="OnLoaded" Closed="MainWindow_OnClosed" dialogs:DialogParticipation.Register="{Binding RelativeSource={RelativeSource Self}, Path=DataContext.ModelHelpers.DialogContext}" KeyDown="MainWindow_KeyDown">
 
     <controls:MetroWindow.Flyouts>
         <controls:FlyoutsControl x:Name="FlyoutsControl" />

@@ -22,6 +22,13 @@ namespace Gallifrey.UI.Classic
             timerToShow = gallifrey.JiraTimerCollection.GetTimer(timerGuid);
             InitializeComponent();
 
+            if (timerToShow.TempTimer)
+            {
+                MessageBox.Show("You Cannot Export A Temporary Timer", "Temp Timer", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                DisplayForm = false;
+                return;
+            }
+
             var requireRefresh = !timerToShow.LastJiraTimeCheck.HasValue || timerToShow.LastJiraTimeCheck < DateTime.UtcNow.AddMinutes(-15);
 
             try
