@@ -16,81 +16,85 @@ namespace Gallifrey.UI.Modern.Flyouts
         private ExportModel DataModel => (ExportModel)DataContext;
         private readonly JiraHelper jiraHelper;
 
-        public Export(ModelHelpers modelHelpers, Guid timerId, TimeSpan? exportTime)
+        public Export(ModelHelpers modelHelpers, Guid timerId, TimeSpan? exportTime, bool skipJiraCheck = false)
         {
             this.modelHelpers = modelHelpers;
             InitializeComponent();
             jiraHelper = new JiraHelper(modelHelpers.DialogContext);
-            SetupContext(modelHelpers.Gallifrey.JiraTimerCollection.GetTimer(timerId), exportTime);
+            SetupContext(modelHelpers.Gallifrey.JiraTimerCollection.GetTimer(timerId), exportTime, skipJiraCheck);
         }
 
-        private async void SetupContext(JiraTimer timerToShow, TimeSpan? exportTime)
+        private async void SetupContext(JiraTimer timerToShow, TimeSpan? exportTime, bool skipJiraCheck)
         {
             await Task.Delay(50);
             modelHelpers.HideFlyout(this);
             if (timerToShow.TempTimer)
             {
                 await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Temp Timer", "You Cannot Export A Temporary Timer!");
-                modelHelpers.CloseFlyout(this);
+                modelHelpers.CloseHiddenFlyout(this);
                 return;
             }
 
             DataContext = new ExportModel(timerToShow, exportTime, modelHelpers.Gallifrey.Settings.ExportSettings.DefaultRemainingValue);
 
-            Issue jiraIssue = null;
-            var requireRefresh = !timerToShow.LastJiraTimeCheck.HasValue || timerToShow.LastJiraTimeCheck < DateTime.UtcNow.AddMinutes(-15);
-            var showError = false;
-            try
+            if (!skipJiraCheck)
             {
-                var jiraDownloadResult = await jiraHelper.Do(() => modelHelpers.Gallifrey.JiraConnection.GetJiraIssue(timerToShow.JiraReference, requireRefresh), "Downloading Jira Work Logs To Ensure Accurate Export", true, false);
-
-                switch (jiraDownloadResult.Status)
+                Issue jiraIssue = null;
+                var requireRefresh = !timerToShow.LastJiraTimeCheck.HasValue || timerToShow.LastJiraTimeCheck < DateTime.UtcNow.AddMinutes(-15);
+                var showError = false;
+                try
                 {
-                    case JiraHelperResult<Issue>.JiraHelperStatus.Cancelled:
-                        modelHelpers.CloseFlyout(this);
-                        return;
-                    case JiraHelperResult<Issue>.JiraHelperStatus.Errored:
-                        showError = true;
-                        break;
-                    case JiraHelperResult<Issue>.JiraHelperStatus.Success:
-                        jiraIssue = jiraDownloadResult.RetVal;
-                        break;
+                    var jiraDownloadResult = await jiraHelper.Do(() => modelHelpers.Gallifrey.JiraConnection.GetJiraIssue(timerToShow.JiraReference, requireRefresh), "Downloading Jira Work Logs To Ensure Accurate Export", true, false);
+
+                    switch (jiraDownloadResult.Status)
+                    {
+                        case JiraHelperResult<Issue>.JiraHelperStatus.Cancelled:
+                            modelHelpers.CloseHiddenFlyout(this);
+                            return;
+                        case JiraHelperResult<Issue>.JiraHelperStatus.Errored:
+                            showError = true;
+                            break;
+                        case JiraHelperResult<Issue>.JiraHelperStatus.Success:
+                            jiraIssue = jiraDownloadResult.RetVal;
+                            break;
+                    }
                 }
-            }
-            catch (Exception)
-            {
-                showError = true;
-            }
+                catch (Exception)
+                {
+                    showError = true;
+                }
 
-            if (showError)
-            {
-                await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Unable To Locate Jira", $"Unable To Locate Jira {timerToShow.JiraReference}!\nCannot Export Time\nPlease Verify/Correct Jira Reference");
-                modelHelpers.CloseFlyout(this);
-                return;
-            }
+                if (showError)
+                {
+                    await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Unable To Locate Jira", $"Unable To Locate Jira {timerToShow.JiraReference}!\nCannot Export Time\nPlease Verify/Correct Jira Reference");
+                    modelHelpers.CloseHiddenFlyout(this);
+                    return;
+                }
 
-            if (requireRefresh)
-            {
-                modelHelpers.Gallifrey.JiraTimerCollection.RefreshFromJira(timerToShow.UniqueId, jiraIssue, modelHelpers.Gallifrey.JiraConnection.CurrentUser);
-                timerToShow = modelHelpers.Gallifrey.JiraTimerCollection.GetTimer(timerToShow.UniqueId);
+                if (requireRefresh)
+                {
+                    modelHelpers.Gallifrey.JiraTimerCollection.RefreshFromJira(timerToShow.UniqueId, jiraIssue, modelHelpers.Gallifrey.JiraConnection.CurrentUser);
+                    timerToShow = modelHelpers.Gallifrey.JiraTimerCollection.GetTimer(timerToShow.UniqueId);
+                }
+
+                DataModel.UpdateTimer(timerToShow, jiraIssue);
             }
 
             if (timerToShow.FullyExported)
             {
                 await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Nothing To Export", "There Is No Time To Export");
-                modelHelpers.CloseFlyout(this);
+                modelHelpers.CloseHiddenFlyout(this);
                 return;
             }
 
             if (timerToShow.IsRunning)
             {
                 await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Timer Is Running", "You Cannot Export A Timer While It Is Running");
-                modelHelpers.CloseFlyout(this);
+                modelHelpers.CloseHiddenFlyout(this);
                 return;
             }
 
-            DataModel.UpdateTimer(timerToShow, jiraIssue);
-            modelHelpers.OpenFlyout(this);
+            await modelHelpers.OpenFlyout(this);
         }
 
         private async void ExportButton(object sender, RoutedEventArgs e)

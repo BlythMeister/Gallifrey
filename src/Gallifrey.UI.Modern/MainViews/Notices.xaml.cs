@@ -25,6 +25,7 @@ namespace Gallifrey.UI.Modern.MainViews
             unexportedMutex.WaitOne();
             ModelHelpers.Gallifrey.TrackEvent(TrackingType.ExportAll);
             var timers = ModelHelpers.Gallifrey.JiraTimerCollection.GetStoppedUnexportedTimers().ToList();
+            timers.RemoveAll(x => x.TempTimer || x.IsRunning);
 
             if (timers.Any())
             {
@@ -39,7 +40,7 @@ namespace Gallifrey.UI.Modern.MainViews
             }
             else
             {
-                await DialogCoordinator.Instance.ShowMessageAsync(ModelHelpers.DialogContext, "Nothing To Export", "No Un-Exported Timers To Bulk Export");
+                await DialogCoordinator.Instance.ShowMessageAsync(ModelHelpers.DialogContext, "Nothing To Export", "No Un-Exported Timers Avaliable To Export");
             }
 
             ModelHelpers.RefreshModel();

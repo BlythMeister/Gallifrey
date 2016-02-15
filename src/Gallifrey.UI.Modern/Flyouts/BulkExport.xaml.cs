@@ -41,7 +41,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                 switch (jiraDownloadResult.Status)
                 {
                     case JiraHelperResult<List<BulkExportModel>>.JiraHelperStatus.Cancelled:
-                        modelHelpers.CloseFlyout(this);
+                        modelHelpers.CloseHiddenFlyout(this);
                         return;
                     case JiraHelperResult<List<BulkExportModel>>.JiraHelperStatus.Errored:
                         await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Unable To Locate Jira", "There Was An Error Getting Work Logs");
@@ -60,19 +60,19 @@ namespace Gallifrey.UI.Modern.Flyouts
 
             if (showError)
             {
-                modelHelpers.CloseFlyout(this);
+                modelHelpers.CloseHiddenFlyout(this);
                 return;
             }
 
             if (!timersToShow.Any())
             {
                 await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Nothing To Export", "There Is No Time To Export");
-                modelHelpers.CloseFlyout(this);
+                modelHelpers.CloseHiddenFlyout(this);
             }
             else if (timersToShow.Count == 1)
             {
-                modelHelpers.CloseFlyout(this);
-                await modelHelpers.OpenFlyout(new Export(modelHelpers, timersToShow.First().Timer.UniqueId, null));
+                modelHelpers.CloseHiddenFlyout(this);
+                modelHelpers.OpenFlyout(new Export(modelHelpers, timersToShow.First().Timer.UniqueId, null, true));
             }
             else
             {
@@ -87,7 +87,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                     return cmp;
                 });
                 timersToShow.ForEach(x => DataModel.BulkExports.Add(x));
-                await modelHelpers.OpenFlyout(this);
+                modelHelpers.OpenFlyout(this);
             }
         }
 
@@ -114,7 +114,6 @@ namespace Gallifrey.UI.Modern.Flyouts
                 var timersToShow = DataModel.BulkExports.Where(bulkExportModel => !bulkExportModel.Timer.FullyExported).ToList();
                 DataModel.BulkExports.Clear();
                 timersToShow.ForEach(x => DataModel.BulkExports.Add(x));
-
                 Focus();
                 return;
             }
