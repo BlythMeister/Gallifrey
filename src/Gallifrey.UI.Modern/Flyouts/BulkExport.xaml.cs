@@ -9,6 +9,7 @@ using Gallifrey.JiraTimers;
 using Gallifrey.UI.Modern.Helpers;
 using Gallifrey.UI.Modern.Models;
 using MahApps.Metro.Controls.Dialogs;
+using Gallifrey.Comparers;
 
 namespace Gallifrey.UI.Modern.Flyouts
 {
@@ -75,6 +76,16 @@ namespace Gallifrey.UI.Modern.Flyouts
             }
             else
             {
+                var jiraComparer = new JiraReferenceComparer();
+                timersToShow.Sort((a, b) =>
+                {
+                    int cmp = b.ExportDate.Date.CompareTo(a.ExportDate.Date);
+                    if (cmp == 0)
+                    {
+                        cmp = jiraComparer.Compare(a.JiraRef, b.JiraRef);
+                    }
+                    return cmp;
+                });
                 timersToShow.ForEach(x => DataModel.BulkExports.Add(x));
                 await modelHelpers.OpenFlyout(this);
             }
