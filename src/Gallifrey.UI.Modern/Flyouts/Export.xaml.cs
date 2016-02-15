@@ -14,13 +14,13 @@ namespace Gallifrey.UI.Modern.Flyouts
     {
         private readonly ModelHelpers modelHelpers;
         private ExportModel DataModel => (ExportModel)DataContext;
-        private readonly JiraHelper jiraHelper;
+        private readonly ProgressDialogHelper progressDialogHelper;
 
         public Export(ModelHelpers modelHelpers, Guid timerId, TimeSpan? exportTime, bool skipJiraCheck = false)
         {
             this.modelHelpers = modelHelpers;
             InitializeComponent();
-            jiraHelper = new JiraHelper(modelHelpers.DialogContext);
+            progressDialogHelper = new ProgressDialogHelper(modelHelpers.DialogContext);
             SetupContext(modelHelpers.Gallifrey.JiraTimerCollection.GetTimer(timerId), exportTime, skipJiraCheck);
         }
 
@@ -44,17 +44,17 @@ namespace Gallifrey.UI.Modern.Flyouts
                 var showError = false;
                 try
                 {
-                    var jiraDownloadResult = await jiraHelper.Do(() => modelHelpers.Gallifrey.JiraConnection.GetJiraIssue(timerToShow.JiraReference, requireRefresh), "Downloading Jira Work Logs To Ensure Accurate Export", true, false);
+                    var jiraDownloadResult = await progressDialogHelper.Do(() => modelHelpers.Gallifrey.JiraConnection.GetJiraIssue(timerToShow.JiraReference, requireRefresh), "Downloading Jira Work Logs To Ensure Accurate Export", true, false);
 
                     switch (jiraDownloadResult.Status)
                     {
-                        case JiraHelperResult<Issue>.JiraHelperStatus.Cancelled:
+                        case ProgressResult.JiraHelperStatus.Cancelled:
                             modelHelpers.CloseHiddenFlyout(this);
                             return;
-                        case JiraHelperResult<Issue>.JiraHelperStatus.Errored:
+                        case ProgressResult.JiraHelperStatus.Errored:
                             showError = true;
                             break;
-                        case JiraHelperResult<Issue>.JiraHelperStatus.Success:
+                        case ProgressResult.JiraHelperStatus.Success:
                             jiraIssue = jiraDownloadResult.RetVal;
                             break;
                     }
@@ -114,8 +114,8 @@ namespace Gallifrey.UI.Modern.Flyouts
                 var strategy = DataModel.WorkLogStrategy;
                 var comment = DataModel.Comment;
                 var remaining = DataModel.Remaining;
-                var result = await jiraHelper.Do(() => modelHelpers.Gallifrey.JiraConnection.LogTime(jiraRef, date, toExport, strategy, comment, remaining), "Exporting Time To Jira", false, true);
-                if (result.Status == JiraHelperResult<bool>.JiraHelperStatus.Success)
+                var result = await progressDialogHelper.Do(() => modelHelpers.Gallifrey.JiraConnection.LogTime(jiraRef, date, toExport, strategy, comment, remaining), "Exporting Time To Jira", false, true);
+                if (result.Status == ProgressResult.JiraHelperStatus.Success)
                 {
                     modelHelpers.Gallifrey.JiraTimerCollection.AddJiraExportedTime(DataModel.Timer.UniqueId, DataModel.ToExportHours, DataModel.ToExportMinutes);
                     modelHelpers.CloseFlyout(this);

@@ -17,13 +17,13 @@ namespace Gallifrey.UI.Modern.Flyouts
     {
         private readonly ModelHelpers modelHelpers;
         private BulkExportContainerModel DataModel => (BulkExportContainerModel)DataContext;
-        private readonly JiraHelper jiraHelper;
+        private readonly ProgressDialogHelper progressDialogHelper;
 
         public BulkExport(ModelHelpers modelHelpers, List<JiraTimer> timers)
         {
             this.modelHelpers = modelHelpers;
             InitializeComponent();
-            jiraHelper = new JiraHelper(modelHelpers.DialogContext);
+            progressDialogHelper = new ProgressDialogHelper(modelHelpers.DialogContext);
             DataContext = new BulkExportContainerModel();
             SetupContext(timers);
         }
@@ -36,18 +36,18 @@ namespace Gallifrey.UI.Modern.Flyouts
             var showError = false;
             try
             {
-                var jiraDownloadResult = await jiraHelper.Do(() => GetTimers(timers), "Downloading Jira Work Logs To Ensure Accurate Export", true, true);
+                var jiraDownloadResult = await progressDialogHelper.Do(controller => GetTimers(controller, timers), "Downloading Jira Work Logs To Ensure Accurate Export", true, true);
 
                 switch (jiraDownloadResult.Status)
                 {
-                    case JiraHelperResult<List<BulkExportModel>>.JiraHelperStatus.Cancelled:
+                    case ProgressResult.JiraHelperStatus.Cancelled:
                         modelHelpers.CloseHiddenFlyout(this);
                         return;
-                    case JiraHelperResult<List<BulkExportModel>>.JiraHelperStatus.Errored:
+                    case ProgressResult.JiraHelperStatus.Errored:
                         await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Unable To Locate Jira", "There Was An Error Getting Work Logs");
                         showError = true;
                         break;
-                    case JiraHelperResult<List<BulkExportModel>>.JiraHelperStatus.Success:
+                    case ProgressResult.JiraHelperStatus.Success:
                         timersToShow = jiraDownloadResult.RetVal;
                         break;
                 }
@@ -105,7 +105,7 @@ namespace Gallifrey.UI.Modern.Flyouts
 
             try
             {
-                await jiraHelper.Do(() => DoExport(timersToExport), "Exporting Selected Timers", false, true);
+                await progressDialogHelper.Do(controller => DoExport(controller, timersToExport), "Exporting Selected Timers", false, true);
             }
             catch (BulkExportException ex)
             {
@@ -121,23 +121,40 @@ namespace Gallifrey.UI.Modern.Flyouts
             modelHelpers.CloseFlyout(this);
         }
 
-        private List<BulkExportModel> GetTimers(List<JiraTimer> timers)
+        private List<BulkExportModel> GetTimers(ProgressDialogController dialogController, List<JiraTimer> timers)
         {
             var timersToShow = new List<BulkExportModel>();
-            foreach (var timer in timers.Where(x => !x.TempTimer && !x.IsRunning))
+            var issuesRetrieved = new List<Issue>();
+            var timersToGet = timers.Where(x => !x.TempTimer && !x.IsRunning).ToList();
+            
+            for (var i = 0; i < timersToGet.Count; i++)
             {
-                var timerToShow = timer;
-                var model = new BulkExportModel(timerToShow, modelHelpers.Gallifrey.Settings.ExportSettings.DefaultRemainingValue);
-                Issue jiraIssue = null;
-                var requireRefresh = !timerToShow.LastJiraTimeCheck.HasValue || timerToShow.LastJiraTimeCheck < DateTime.UtcNow.AddMinutes(-15);
+                var timerToShow = timersToGet[i];
 
-                try
+                var requireRefresh = !timerToShow.LastJiraTimeCheck.HasValue || timerToShow.LastJiraTimeCheck < DateTime.UtcNow.AddMinutes(-15);
+                var model = new BulkExportModel(timerToShow, modelHelpers.Gallifrey.Settings.ExportSettings.DefaultRemainingValue);
+                var jiraIssue = issuesRetrieved.FirstOrDefault(x => x.key == timerToShow.JiraReference);
+
+                if (i == 0)
                 {
-                    jiraIssue = modelHelpers.Gallifrey.JiraConnection.GetJiraIssue(timerToShow.JiraReference, requireRefresh);
+                    dialogController.SetMessage($"Downloading Jira Work Logs For {timerToShow.JiraReference} To Ensure Accurate Export");
                 }
-                catch (Exception)
+                else
                 {
-                    throw new BulkExportException($"Unable To Locate Jira {timerToShow.JiraReference}!\nCannot Export Time\nPlease Verify/Correct Jira Reference");
+                    dialogController.SetMessage($"Downloading Jira Work Logs For {timerToShow.JiraReference} To Ensure Accurate Export\nDone {i} Of {timersToGet.Count}");
+                }
+
+                if (jiraIssue == null)
+                {
+                    try
+                    {
+                        jiraIssue = modelHelpers.Gallifrey.JiraConnection.GetJiraIssue(timerToShow.JiraReference, requireRefresh);
+                        issuesRetrieved.Add(jiraIssue);
+                    }
+                    catch (Exception)
+                    {
+                        throw new BulkExportException($"Unable To Locate Jira {timerToShow.JiraReference}!\nCannot Export Time\nPlease Verify/Correct Jira Reference");
+                    }
                 }
 
                 if (requireRefresh)
@@ -156,10 +173,21 @@ namespace Gallifrey.UI.Modern.Flyouts
             return timersToShow;
         }
 
-        private void DoExport(List<BulkExportModel> timersToExport)
+        private void DoExport(ProgressDialogController dialogController, List<BulkExportModel> timersToExport)
         {
-            foreach (var exportModel in timersToExport)
+            for (var i = 0; i < timersToExport.Count; i++)
             {
+                var exportModel = timersToExport[i];
+
+                if (i == 0)
+                {
+                    dialogController.SetMessage($"Exporting Timer {exportModel.JiraRef} For {exportModel.ExportDate.Date.ToString("ddd, dd MMM")}");
+                }
+                else
+                {
+                    dialogController.SetMessage($"Exporting Timer {exportModel.JiraRef} For {exportModel.ExportDate.Date.ToString("ddd, dd MMM")}\nDone {i} Of {timersToExport.Count}");
+                }
+
                 try
                 {
                     var jiraRef = exportModel.JiraRef;

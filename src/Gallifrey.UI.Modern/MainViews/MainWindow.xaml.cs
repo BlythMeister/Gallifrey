@@ -279,7 +279,7 @@ namespace Gallifrey.UI.Modern.MainViews
                 {
                     modelHelpers.Gallifrey.TrackEvent(TrackingType.ManualUpdateCheck);
                     var controller = await DialogCoordinator.Instance.ShowProgressAsync(modelHelpers.DialogContext, "Please Wait", "Checking For Updates");
-
+                    controller.SetIndeterminate();
                     updateResult = await modelHelpers.Gallifrey.VersionControl.CheckForUpdates(true);
                     await controller.CloseAsync();
                 }

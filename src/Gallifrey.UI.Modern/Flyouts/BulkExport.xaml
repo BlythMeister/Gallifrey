@@ -37,7 +37,7 @@
 
                                 <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Text="Jira Parent Reference" Margin="0,0,5,0">
                                     <TextBlock.Style>
-                                        <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+                                        <Style TargetType="TextBlock">
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding HasParent}" Value="False" >
                                                     <Setter Property="Visibility" Value="Collapsed"/>
@@ -60,7 +60,7 @@
 
                                 <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Text="Jira Parent Name">
                                     <TextBlock.Style>
-                                        <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+                                        <Style TargetType="TextBlock">
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding HasParent}" Value="False" >
                                                     <Setter Property="Visibility" Value="Collapsed"/>

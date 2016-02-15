@@ -14,14 +14,14 @@ namespace Gallifrey.UI.Modern.Flyouts
         private SearchModel DataModel => (SearchModel)DataContext;
         private readonly ModelHelpers modelHelpers;
         private readonly bool openFromAdd;
-        private readonly JiraHelper jiraHelper;
+        private readonly ProgressDialogHelper progressDialogHelper;
 
         public Search(ModelHelpers modelHelpers, bool openFromAdd)
         {
             this.modelHelpers = modelHelpers;
             this.openFromAdd = openFromAdd;
             InitializeComponent();
-            jiraHelper = new JiraHelper(modelHelpers.DialogContext);
+            progressDialogHelper = new ProgressDialogHelper(modelHelpers.DialogContext);
 
             var filters = modelHelpers.Gallifrey.JiraConnection.GetJiraFilters();
             var issues = modelHelpers.Gallifrey.JiraConnection.GetJiraCurrentUserOpenIssues();
@@ -53,16 +53,16 @@ namespace Gallifrey.UI.Modern.Flyouts
                     return;
                 }
 
-                var searchResult = await jiraHelper.Do(searchFunc, "Search In Progress", true, false);
+                var searchResult = await progressDialogHelper.Do(searchFunc, "Search In Progress", true, false);
 
                 switch (searchResult.Status)
                 {
-                    case JiraHelperResult<IEnumerable<Issue>>.JiraHelperStatus.Cancelled:
+                    case ProgressResult.JiraHelperStatus.Cancelled:
                         DataModel.ClearSearchResults();
                         return;
-                    case JiraHelperResult<IEnumerable<Issue>>.JiraHelperStatus.Errored:
+                    case ProgressResult.JiraHelperStatus.Errored:
                         throw new Exception();
-                    case JiraHelperResult<IEnumerable<Issue>>.JiraHelperStatus.Success:
+                    case ProgressResult.JiraHelperStatus.Success:
                         DataModel.UpdateSearchResults(searchResult.RetVal);
                         break;
                 }

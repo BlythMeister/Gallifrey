@@ -84,8 +84,8 @@
     <Compile Include="Models\LockedTimerCollectionModel.cs" />
     <Compile Include="Models\LockedTimerModel.cs" />
     <Compile Include="Models\ChangeLogModel.cs" />
-    <Compile Include="Helpers\JiraHelper.cs" />
-    <Compile Include="Helpers\JiraHelperResult.cs" />
+    <Compile Include="Helpers\ProgressDialogHelper.cs" />
+    <Compile Include="Helpers\ProgressResult.cs" />
     <Compile Include="Helpers\EnumMatchToBooleanConverter.cs" />
     <Compile Include="Helpers\ThemeHelper.cs" />
     <Compile Include="Models\InformationModel.cs" />
