@@ -26,7 +26,7 @@
             <Button Grid.Row="1" Grid.Column="1" Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="ChangeLogButton">
                 <Rectangle Width="27" Height="20" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}" ToolTip="View Full Change Log">
                     <Rectangle.OpacityMask>
-                        <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_book_open_information}" />
+                        <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_book_open_information}" />
                     </Rectangle.OpacityMask>
                 </Rectangle>
             </Button>

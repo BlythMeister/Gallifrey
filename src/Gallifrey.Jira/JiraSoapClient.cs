@@ -192,5 +192,12 @@ namespace Gallifrey.Jira
             issue.Assignee = userName;
             issue.SaveChanges();
         }
+
+        public void AddComment(string issueRef, string comment)
+        {
+            var issue = client.GetIssue(issueRef);
+            issue.AddComment(comment);
+            issue.SaveChanges();
+        }
     }
 }

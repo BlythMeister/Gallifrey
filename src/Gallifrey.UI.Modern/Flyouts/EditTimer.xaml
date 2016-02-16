@@ -124,21 +124,21 @@
             <Button  Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="AddTime">
                 <Rectangle Width="27" Height="24" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}" ToolTip="Add X Minutes">
                     <Rectangle.OpacityMask>
-                        <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_timer_rewind}" />
+                        <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_timer_rewind}" />
                     </Rectangle.OpacityMask>
                 </Rectangle>
             </Button>
             <Button  Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="SubtractTime">
                 <Rectangle Width="27" Height="24" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}" ToolTip="Subtract X Minutes">
                     <Rectangle.OpacityMask>
-                        <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_timer_forward}" />
+                        <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_timer_forward}" />
                     </Rectangle.OpacityMask>
                 </Rectangle>
             </Button>
             <Button  Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="SaveButton" IsDefault="{Binding IsDefaultOnButton, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                 <Rectangle Width="23" Height="23" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}" ToolTip="Save Timer Changes">
                     <Rectangle.OpacityMask>
-                        <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_save}" />
+                        <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_save}" />
                     </Rectangle.OpacityMask>
                 </Rectangle>
             </Button>

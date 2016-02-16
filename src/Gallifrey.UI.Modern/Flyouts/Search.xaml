@@ -55,7 +55,7 @@
         <Button Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Width="50" Height="50" Margin="2,0" Click="SearchButton" IsDefault="True">
             <Rectangle Width="23" Height="23" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}" ToolTip="Search Jira (Text/Filter)">
                 <Rectangle.OpacityMask>
-                    <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_magnify}" />
+                    <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_magnify}" />
                 </Rectangle.OpacityMask>
             </Rectangle>
             <Button.Style>
@@ -117,7 +117,7 @@
         <Button Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Width="50" Height="50" Margin="2,0" Click="AddTimer">
             <Rectangle Width="23" Height="23" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}" ToolTip="Create Jira From Selected Search Result">
                 <Rectangle.OpacityMask>
-                    <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_add}" />
+                    <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_add}" />
                 </Rectangle.OpacityMask>
             </Rectangle>
             <Button.Style>

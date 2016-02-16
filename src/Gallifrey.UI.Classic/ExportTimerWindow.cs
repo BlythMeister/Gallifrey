@@ -165,7 +165,7 @@ namespace Gallifrey.UI.Classic
 
             try
             {
-                gallifrey.JiraConnection.LogTime(jiraIssue.key, calExportDate.Value, exportTimespan, worklogStrategy, txtComment.Text, newEstimate);
+                gallifrey.JiraConnection.LogTime(jiraIssue.key, calExportDate.Value, exportTimespan, worklogStrategy, false, txtComment.Text, newEstimate);
             }
             catch (WorkLogException)
             {

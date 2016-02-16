@@ -11,7 +11,7 @@
                 </Button.ToolTip>
                 <Rectangle Width="23" Height="23" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
                     <Rectangle.OpacityMask>
-                        <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_add}" />
+                        <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_add}" />
                     </Rectangle.OpacityMask>
                 </Rectangle>
             </Button>
@@ -23,7 +23,7 @@
                 </Button.ToolTip>
                 <Rectangle Width="23" Height="23" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
                     <Rectangle.OpacityMask>
-                        <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_delete}" />
+                        <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_delete}" />
                     </Rectangle.OpacityMask>
                 </Rectangle>
             </Button>
@@ -35,7 +35,7 @@
                 </Button.ToolTip>
                 <Rectangle Width="23" Height="23" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
                     <Rectangle.OpacityMask>
-                        <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_magnify}" />
+                        <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_magnify}" />
                     </Rectangle.OpacityMask>
                 </Rectangle>
             </Button>
@@ -47,7 +47,7 @@
                 </Button.ToolTip>
                 <Rectangle Width="23" Height="23" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
                     <Rectangle.OpacityMask>
-                        <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_edit}" />
+                        <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_edit}" />
                     </Rectangle.OpacityMask>
                 </Rectangle>
             </Button>
@@ -59,7 +59,7 @@
                 </Button.ToolTip>
                 <Rectangle Width="30" Height="20" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
                     <Rectangle.OpacityMask>
-                        <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_cloud_upload}" />
+                        <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_cloud_upload}" />
                     </Rectangle.OpacityMask>
                 </Rectangle>
             </Button>
@@ -71,7 +71,7 @@
                 </Button.ToolTip>
                 <Rectangle Width="23" Height="23" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
                     <Rectangle.OpacityMask>
-                        <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_lock}" />
+                        <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_lock}" />
                     </Rectangle.OpacityMask>
                 </Rectangle>
             </Button>
@@ -83,7 +83,7 @@
                 </Button.ToolTip>
                 <Rectangle Width="23" Height="23" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
                     <Rectangle.OpacityMask>
-                        <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_settings}" />
+                        <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_settings}" />
                     </Rectangle.OpacityMask>
                 </Rectangle>
             </Button>
@@ -98,7 +98,7 @@
                 </Button.ToolTip>
                 <Rectangle Width="23" Height="23" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
                     <Rectangle.OpacityMask>
-                        <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_information_circle}" />
+                        <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_information_circle}" />
                     </Rectangle.OpacityMask>
                 </Rectangle>
             </Button>
@@ -110,7 +110,7 @@
                 </Button.ToolTip>
                 <Rectangle Width="25" Height="20" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
                     <Rectangle.OpacityMask>
-                        <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_twitter_bird}" />
+                        <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_twitter_bird}" />
                     </Rectangle.OpacityMask>
                 </Rectangle>
             </Button>
@@ -122,7 +122,7 @@
                 </Button.ToolTip>
                 <Rectangle Width="23" Height="18" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
                     <Rectangle.OpacityMask>
-                        <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_email}" />
+                        <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_email}" />
                     </Rectangle.OpacityMask>
                 </Rectangle>
             </Button>
@@ -134,7 +134,7 @@
                 </Button.ToolTip>
                 <Rectangle Width="24" Height="24" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
                     <Rectangle.OpacityMask>
-                        <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_chat}" />
+                        <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_chat}" />
                     </Rectangle.OpacityMask>
                 </Rectangle>
             </Button>
@@ -146,7 +146,7 @@
                 </Button.ToolTip>
                 <Rectangle Width="28" Height="24" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
                     <Rectangle.OpacityMask>
-                        <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_github}" />
+                        <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_github}" />
                     </Rectangle.OpacityMask>
                 </Rectangle>
             </Button>
@@ -158,7 +158,7 @@
                 </Button.ToolTip>
                 <Rectangle Width="23" Height="23" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
                     <Rectangle.OpacityMask>
-                        <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_paypal}" />
+                        <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_paypal}" />
                     </Rectangle.OpacityMask>
                 </Rectangle>
             </Button>

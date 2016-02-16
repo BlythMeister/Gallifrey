@@ -121,6 +121,14 @@ namespace Gallifrey.UI.Modern.Flyouts
             modelHelpers.CloseFlyout(this);
         }
 
+        private void ExportAllButton(object sender, RoutedEventArgs e)
+        {
+            foreach (var bulkExportModel in DataModel.BulkExports)
+            {
+                bulkExportModel.ShouldExport = true;
+            }
+        }
+
         private List<BulkExportModel> GetTimers(ProgressDialogController dialogController, List<JiraTimer> timers)
         {
             var timersToShow = new List<BulkExportModel>();
@@ -196,7 +204,8 @@ namespace Gallifrey.UI.Modern.Flyouts
                     var strategy = exportModel.WorkLogStrategy;
                     var comment = exportModel.Comment;
                     var remaining = exportModel.Remaining;
-                    modelHelpers.Gallifrey.JiraConnection.LogTime(jiraRef, date, toExport, strategy, comment, remaining);
+                    var standardComment = exportModel.StandardComment;
+                    modelHelpers.Gallifrey.JiraConnection.LogTime(jiraRef, date, toExport, strategy, standardComment, comment, remaining);
                     modelHelpers.Gallifrey.JiraTimerCollection.AddJiraExportedTime(exportModel.Timer.UniqueId, exportModel.ToExportHours, exportModel.ToExportMinutes);
                 }
                 catch (WorkLogException)

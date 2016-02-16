@@ -19,6 +19,7 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
@@ -141,10 +142,13 @@
             <TextBlock Grid.Row="9" Grid.Column="0" VerticalAlignment="Center">Comment</TextBlock>
             <TextBox Grid.Row="9" Grid.Column="1" Margin="0,5" Text="{Binding Comment, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" AcceptsReturn="True" controls:TextBoxHelper.IsSpellCheckContextMenuEnabled="True" Height="50" VerticalScrollBarVisibility="Auto" controls:TextBoxHelper.Watermark="{Binding DefaultComment}"/>
 
-            <Button Grid.Row="10" Grid.Column="0" Grid.ColumnSpan="2" Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="ExportButton" IsDefault="True">
+            <TextBlock Grid.Row="10" Grid.Column="0" VerticalAlignment="Center">Add As Standard<LineBreak />Comment</TextBlock>
+            <CheckBox Grid.Row="10" Grid.Column="1" Margin="0,5" IsChecked="{Binding StandardComment, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            
+            <Button Grid.Row="11" Grid.Column="0" Grid.ColumnSpan="2" Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="ExportButton" IsDefault="True">
                 <Rectangle Width="23" Height="23" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}" ToolTip="Export Worklog To Jira">
                     <Rectangle.OpacityMask>
-                        <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_disk_upload}" />
+                        <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_disk_upload}" />
                     </Rectangle.OpacityMask>
                 </Rectangle>
             </Button>

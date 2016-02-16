@@ -22,7 +22,7 @@
         <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="55" Height="55" Margin="2" Click="SendReport" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsDefault="True">
             <Rectangle Width="30" Height="18" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}" ToolTip="Submit Error Report">
                 <Rectangle.OpacityMask>
-                    <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_message_send}" />
+                    <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_message_send}" />
                 </Rectangle.OpacityMask>
             </Rectangle>
         </Button>

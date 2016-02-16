@@ -18,5 +18,6 @@ namespace Gallifrey.Jira
         void TransitionIssue(string issueRef, string transitionName);
         void AddWorkLog(string issueRef, WorkLogStrategy workLogStrategy, string comment, TimeSpan timeSpent, DateTime logDate, TimeSpan? remainingTime = null);
         void AssignIssue(string issueRef, string userName);
+        void AddComment(string issueRef, string comment);
     }
 }

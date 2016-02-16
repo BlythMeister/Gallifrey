@@ -114,7 +114,8 @@ namespace Gallifrey.UI.Modern.Flyouts
                 var strategy = DataModel.WorkLogStrategy;
                 var comment = DataModel.Comment;
                 var remaining = DataModel.Remaining;
-                var result = await progressDialogHelper.Do(() => modelHelpers.Gallifrey.JiraConnection.LogTime(jiraRef, date, toExport, strategy, comment, remaining), "Exporting Time To Jira", false, true);
+                var standardComment = DataModel.StandardComment;
+                var result = await progressDialogHelper.Do(() => modelHelpers.Gallifrey.JiraConnection.LogTime(jiraRef, date, toExport, strategy, standardComment, comment, remaining), "Exporting Time To Jira", false, true);
                 if (result.Status == ProgressResult.JiraHelperStatus.Success)
                 {
                     modelHelpers.Gallifrey.JiraTimerCollection.AddJiraExportedTime(DataModel.Timer.UniqueId, DataModel.ToExportHours, DataModel.ToExportMinutes);

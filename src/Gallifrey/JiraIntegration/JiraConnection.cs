@@ -20,7 +20,7 @@ namespace Gallifrey.JiraIntegration
         IEnumerable<Issue> GetJiraIssuesFromFilter(string filterName);
         IEnumerable<Issue> GetJiraIssuesFromSearchText(string searchText);
         IEnumerable<Issue> GetJiraIssuesFromJQL(string jqlText);
-        void LogTime(string jiraRef, DateTime exportTimeStamp, TimeSpan exportTime, WorkLogStrategy strategy, string comment = "", TimeSpan? remainingTime = null);
+        void LogTime(string jiraRef, DateTime exportTimeStamp, TimeSpan exportTime, WorkLogStrategy strategy, bool addStandardComment, string comment = "", TimeSpan? remainingTime = null);
         IEnumerable<Issue> GetJiraCurrentUserOpenIssues();
         IEnumerable<JiraProject> GetJiraProjects();
         IEnumerable<RecentJira> GetRecentJirasFound();
@@ -285,7 +285,7 @@ namespace Gallifrey.JiraIntegration
             TransitionIssue(jiraRef, inProgressStatuses);
         }
 
-        public void LogTime(string jiraRef, DateTime exportTimeStamp, TimeSpan exportTime, WorkLogStrategy strategy, string comment = "", TimeSpan? remainingTime = null)
+        public void LogTime(string jiraRef, DateTime exportTimeStamp, TimeSpan exportTime, WorkLogStrategy strategy, bool addStandardComment, string comment = "", TimeSpan? remainingTime = null)
         {
             trackUsage.TrackAppUsage(TrackingType.ExportOccured);
 
@@ -331,6 +331,18 @@ namespace Gallifrey.JiraIntegration
                     {
                         throw new StateChangedException("Time Logged, but state is now open", ex);
                     }
+                }
+            }
+
+            if (addStandardComment)
+            {
+                try
+                {
+                    jira.AddComment(jiraRef, comment);
+                }
+                catch (Exception ex)
+                {
+                    throw new CommentException("Comment was not added", ex);
                 }
             }
         }

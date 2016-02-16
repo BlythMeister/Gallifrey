@@ -23,6 +23,7 @@ namespace Gallifrey.UI.Modern.Models
         public string Comment { get; set; }
         public TimeSpan OriginalRemaining { get; set; }
         public string DefaultComment { get; set; }
+        public bool StandardComment { get; set; }
 
         public bool ShowRemaining => workLogStrategy == WorkLogStrategy.SetValue;
         public bool HasParent => Timer.HasParent;

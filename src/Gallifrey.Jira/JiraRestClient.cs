@@ -25,71 +25,6 @@ namespace Gallifrey.Jira
             client = new RestClient { BaseUrl = new Uri(baseUrl + (baseUrl.EndsWith("/") ? "" : "/") + "rest/api/2/") };
         }
 
-        private RestRequest CreateRequest(Method method, string path)
-        {
-            var request = new RestRequest { Method = method, Resource = path, RequestFormat = DataFormat.Json };
-            request.AddHeader("Authorization", "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes($"{username}:{password}")));
-            return request;
-        }
-
-        private void AssertStatus(IRestResponse response, HttpStatusCode status)
-        {
-            if (response.ErrorException != null)
-                throw new JiraClientException("Transport level error: " + response.ErrorMessage, response.ErrorException);
-            if (response.StatusCode != status)
-            {
-                try
-                {
-                    var errorMessages = JsonConvert.DeserializeObject<Error>(response.Content);
-
-                    if (errorMessages.errorMessages.Any())
-                    {
-                        throw new JiraClientException($"JIRA returned wrong status: {response.StatusDescription}. Message: {errorMessages.errorMessages[0]}");
-                    }
-                    else
-                    {
-                        throw new JiraClientException($"JIRA returned wrong status: {response.StatusDescription}");
-                    }
-                }
-                catch (JiraClientException)
-                {
-                    throw;
-                }
-                catch (System.Exception ex)
-                {
-                    throw new JiraClientException($"JIRA returned wrong status: {response.StatusDescription}", ex);
-                }
-            }
-        }
-
-        private IRestResponse ExecuteRequest(Method method, HttpStatusCode expectedStatus, string path, Dictionary<string, object> data = null)
-        {
-            var request = CreateRequest(method, path);
-            if (data != null)
-            {
-                request.AddHeader("ContentType", "application/json");
-                request.AddBody(data);
-            }
-
-            var response = client.Execute(request);
-
-            AssertStatus(response, expectedStatus);
-
-            return response;
-        }
-
-        private T ExecuteRequest<T>(HttpStatusCode expectedStatus, string path, Dictionary<string, object> data = null, Func<string, T> customDeserialize = null) where T : class
-        {
-            if (customDeserialize == null)
-            {
-                customDeserialize = JsonConvert.DeserializeObject<T>;
-            }
-
-            var response = ExecuteRequest(Method.GET, expectedStatus, path, data);
-
-            return customDeserialize(response.Content);
-        }
-
         public User GetCurrentUser()
         {
             return ExecuteRequest<User>(HttpStatusCode.OK, "myself");
@@ -120,15 +55,7 @@ namespace Gallifrey.Jira
 
             return issue;
         }
-
-        private static WorkLogs FilterWorklogsToUser(string rawJson, string user)
-        {
-            var jsonObject = JObject.Parse(rawJson);
-            var filtered = jsonObject["worklogs"].Children().Where(x => ((string)x["author"]["name"]).ToLower() == user.ToLower());
-            jsonObject["worklogs"] = new JArray(filtered);
-            return jsonObject.ToObject<WorkLogs>();
-        }
-
+        
         public IEnumerable<Issue> GetIssuesFromFilter(string filterName)
         {
             var filters = ExecuteRequest<List<Filter>>(HttpStatusCode.OK, "filter/favourite");
@@ -252,6 +179,89 @@ namespace Gallifrey.Jira
             };
 
             ExecuteRequest(Method.PUT, HttpStatusCode.NoContent, $"issue/{issueRef}/assignee", postData);
+        }
+
+        public void AddComment(string issueRef, string comment)
+        {
+            var postData = new Dictionary<string, object>
+            {
+                { "body", comment }
+            };
+
+            ExecuteRequest(Method.POST, HttpStatusCode.Created, $"issue/{issueRef}/comment", postData);
+        }
+
+        private RestRequest CreateRequest(Method method, string path)
+        {
+            var request = new RestRequest { Method = method, Resource = path, RequestFormat = DataFormat.Json };
+            request.AddHeader("Authorization", "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes($"{username}:{password}")));
+            return request;
+        }
+
+        private void AssertStatus(IRestResponse response, HttpStatusCode status)
+        {
+            if (response.ErrorException != null)
+                throw new JiraClientException("Transport level error: " + response.ErrorMessage, response.ErrorException);
+            if (response.StatusCode != status)
+            {
+                try
+                {
+                    var errorMessages = JsonConvert.DeserializeObject<Error>(response.Content);
+
+                    if (errorMessages.errorMessages.Any())
+                    {
+                        throw new JiraClientException($"JIRA returned wrong status: {response.StatusDescription}. Message: {errorMessages.errorMessages[0]}");
+                    }
+                    else
+                    {
+                        throw new JiraClientException($"JIRA returned wrong status: {response.StatusDescription}");
+                    }
+                }
+                catch (JiraClientException)
+                {
+                    throw;
+                }
+                catch (System.Exception ex)
+                {
+                    throw new JiraClientException($"JIRA returned wrong status: {response.StatusDescription}", ex);
+                }
+            }
+        }
+
+        private IRestResponse ExecuteRequest(Method method, HttpStatusCode expectedStatus, string path, Dictionary<string, object> data = null)
+        {
+            var request = CreateRequest(method, path);
+            if (data != null)
+            {
+                request.AddHeader("ContentType", "application/json");
+                request.AddBody(data);
+            }
+
+            var response = client.Execute(request);
+
+            AssertStatus(response, expectedStatus);
+
+            return response;
+        }
+
+        private T ExecuteRequest<T>(HttpStatusCode expectedStatus, string path, Dictionary<string, object> data = null, Func<string, T> customDeserialize = null) where T : class
+        {
+            if (customDeserialize == null)
+            {
+                customDeserialize = JsonConvert.DeserializeObject<T>;
+            }
+
+            var response = ExecuteRequest(Method.GET, expectedStatus, path, data);
+
+            return customDeserialize(response.Content);
+        }
+
+        private static WorkLogs FilterWorklogsToUser(string rawJson, string user)
+        {
+            var jsonObject = JObject.Parse(rawJson);
+            var filtered = jsonObject["worklogs"].Children().Where(x => ((string)x["author"]["name"]).ToLower() == user.ToLower());
+            jsonObject["worklogs"] = new JArray(filtered);
+            return jsonObject.ToObject<WorkLogs>();
         }
     }
 }

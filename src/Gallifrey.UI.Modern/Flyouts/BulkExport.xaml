@@ -98,6 +98,7 @@
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
                                 </Grid.RowDefinitions>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto"/>
@@ -176,18 +177,29 @@
 
                                 <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center">Comment</TextBlock>
                                 <TextBox Grid.Row="5" Grid.Column="1" Margin="0,5" Text="{Binding Comment, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" AcceptsReturn="True" controls:TextBoxHelper.IsSpellCheckContextMenuEnabled="True" Height="45" VerticalScrollBarVisibility="Auto" controls:TextBoxHelper.Watermark="{Binding DefaultComment}"/>
+
+                                <TextBlock Grid.Row="6" Grid.Column="0" VerticalAlignment="Center">Add As Standard<LineBreak />Comment</TextBlock>
+                                <CheckBox Grid.Row="6" Grid.Column="1" Margin="0,5" IsChecked="{Binding StandardComment, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                             </Grid>
                         </StackPanel>
                     </ScrollViewer>
                 </DataTemplate>
             </TabControl.ContentTemplate>
         </controls:MetroAnimatedSingleRowTabControl>
-        <Button Grid.Row="1" Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,5" Click="ExportButton" IsDefault="True">
-            <Rectangle Width="23" Height="23" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}" ToolTip="Export Worklog To Jira">
-                <Rectangle.OpacityMask>
-                    <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_disk_upload}" />
-                </Rectangle.OpacityMask>
-            </Rectangle>
-        </Button>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,5" Click="ExportAllButton">
+                <Rectangle Width="23" Height="23" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}" ToolTip="Check All For Export">
+                    <Rectangle.OpacityMask>
+                        <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_checkmark}" />
+                    </Rectangle.OpacityMask>
+                </Rectangle>
+            </Button><Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,5" Click="ExportButton" IsDefault="True">
+                <Rectangle Width="23" Height="23" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}" ToolTip="Export Worklog To Jira">
+                    <Rectangle.OpacityMask>
+                        <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_disk_upload}" />
+                    </Rectangle.OpacityMask>
+                </Rectangle>
+            </Button>
+        </StackPanel>
     </Grid>
 </controls:Flyout>

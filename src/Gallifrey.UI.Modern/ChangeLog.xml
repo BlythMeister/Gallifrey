@@ -48,6 +48,7 @@
       <Feature>Added temporary timers for logging purpose when you don't have a Jira reference to hand</Feature>
       <Feature>Ability to add lock time to an existing timer</Feature>
       <Feature>Added bulk export when clicking unexported time notice or multi selecting timers</Feature>
+      <Feature>Ability to add export comments as a standard comment as well as worklog comment</Feature>
     </Features>
     <Bugs>
       <Bug>Fix issue for exported timers resetting to un-exported</Bug>
