@@ -216,6 +216,10 @@ namespace Gallifrey.UI.Modern.Flyouts
                 {
                     throw new BulkExportException($"Unable To Re - Close A The Jira  {exportModel.JiraRef}, Manually Check!!");
                 }
+                catch (CommentException)
+                {
+                    throw new BulkExportException($"The Comment Was Not Added To Jira {exportModel.JiraRef}");
+                }
             }
         }
 

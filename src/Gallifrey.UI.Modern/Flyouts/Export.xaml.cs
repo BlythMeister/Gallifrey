@@ -134,6 +134,10 @@ namespace Gallifrey.UI.Modern.Flyouts
             {
                 dialog = DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Error Exporting", "Unable To Re-Close A The Jira, Manually Check!!");
             }
+            catch (CommentException)
+            {
+                dialog = DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Error Adding Comment", "The Comment Was Not Added");
+            }
 
             if (dialog != null)
             {
