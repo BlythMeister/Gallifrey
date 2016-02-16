@@ -35,7 +35,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                 return;
             }
 
-            DataContext = new ExportModel(timerToShow, exportTime, modelHelpers.Gallifrey.Settings.ExportSettings.DefaultRemainingValue);
+            DataContext = new ExportModel(timerToShow, exportTime, modelHelpers.Gallifrey.Settings.ExportSettings);
 
             if (!skipJiraCheck)
             {

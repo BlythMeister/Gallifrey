@@ -132,7 +132,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                 var timerToShow = timersToGet[i];
 
                 var requireRefresh = !timerToShow.LastJiraTimeCheck.HasValue || timerToShow.LastJiraTimeCheck < DateTime.UtcNow.AddMinutes(-15);
-                var model = new BulkExportModel(timerToShow, modelHelpers.Gallifrey.Settings.ExportSettings.DefaultRemainingValue);
+                var model = new BulkExportModel(timerToShow, modelHelpers.Gallifrey.Settings.ExportSettings);
                 var jiraIssue = issuesRetrieved.FirstOrDefault(x => x.key == timerToShow.JiraReference);
 
                 if (i == 0)

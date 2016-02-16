@@ -175,7 +175,7 @@
                                 </WrapPanel>
 
                                 <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center">Comment</TextBlock>
-                                <TextBox Grid.Row="5" Grid.Column="1" Margin="0,5" Text="{Binding Comment, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" AcceptsReturn="True" controls:TextBoxHelper.IsSpellCheckContextMenuEnabled="True" Height="45" VerticalScrollBarVisibility="Auto"/>
+                                <TextBox Grid.Row="5" Grid.Column="1" Margin="0,5" Text="{Binding Comment, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" AcceptsReturn="True" controls:TextBoxHelper.IsSpellCheckContextMenuEnabled="True" Height="45" VerticalScrollBarVisibility="Auto" controls:TextBoxHelper.Watermark="{Binding DefaultComment}"/>
                             </Grid>
                         </StackPanel>
                     </ScrollViewer>
