@@ -175,10 +175,10 @@
                                     </WrapPanel.Style>
                                 </WrapPanel>
 
-                                <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center">Comment</TextBlock>
+                                <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center">Worklog Comment</TextBlock>
                                 <TextBox Grid.Row="5" Grid.Column="1" Margin="0,5" Text="{Binding Comment, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" AcceptsReturn="True" controls:TextBoxHelper.IsSpellCheckContextMenuEnabled="True" Height="45" VerticalScrollBarVisibility="Auto" controls:TextBoxHelper.Watermark="{Binding DefaultComment}"/>
 
-                                <TextBlock Grid.Row="6" Grid.Column="0" VerticalAlignment="Center">Add As Standard<LineBreak />Comment</TextBlock>
+                                <TextBlock Grid.Row="6" Grid.Column="0" VerticalAlignment="Center">Add As Jira<LineBreak />Comment?</TextBlock>
                                 <CheckBox Grid.Row="6" Grid.Column="1" Margin="0,5" IsChecked="{Binding StandardComment, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                             </Grid>
                         </StackPanel>

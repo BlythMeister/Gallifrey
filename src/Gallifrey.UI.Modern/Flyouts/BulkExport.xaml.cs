@@ -93,7 +93,7 @@ namespace Gallifrey.UI.Modern.Flyouts
 
         private async void ExportButton(object sender, RoutedEventArgs e)
         {
-            var timersToExport = DataModel.BulkExports.Where(x => x.ShouldExport).ToList();
+            var timersToExport = DataModel.BulkExports.Where(x => x.ShouldExport).Reverse().ToList();
             foreach (var exportModel in timersToExport)
             {
                 if (exportModel.Timer.TimeToExport < exportModel.ToExport)
