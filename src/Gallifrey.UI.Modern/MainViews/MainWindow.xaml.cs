@@ -156,11 +156,11 @@ namespace Gallifrey.UI.Modern.MainViews
                 {
                     if (modelHelpers.Gallifrey.Settings.ExportSettings.ExportPromptAll)
                     {
-                        await modelHelpers.OpenFlyout(new Export(modelHelpers, e.TimerId, e.ExportTime));
+                        await modelHelpers.OpenFlyout(new Export(modelHelpers, e.TimerId, null)); 
                     }
                     else
                     {
-                        await modelHelpers.OpenFlyout(new Export(modelHelpers, e.TimerId, null));
+                        await modelHelpers.OpenFlyout(new Export(modelHelpers, e.TimerId, e.ExportTime));
                     }
                 }
             }
