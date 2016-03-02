@@ -16,7 +16,7 @@ namespace Gallifrey.UI.Modern.Flyouts
         private readonly bool openFromAdd;
         private readonly ProgressDialogHelper progressDialogHelper;
 
-        public Search(ModelHelpers modelHelpers, bool openFromAdd)
+        public Search(ModelHelpers modelHelpers, bool openFromAdd, DateTime selectedDateTab)
         {
             this.modelHelpers = modelHelpers;
             this.openFromAdd = openFromAdd;

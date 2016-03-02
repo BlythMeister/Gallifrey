@@ -27,8 +27,7 @@ namespace Gallifrey.UI.Modern.MainViews
 
         private async void AddButton(object sender, RoutedEventArgs e)
         {
-            var selected = ViewModel.TimerDates.FirstOrDefault(x => x.DateIsSelected);
-            var startDate = selected?.TimerDate ?? DateTime.Today;
+            var startDate = ViewModel.TimerDates.FirstOrDefault(x => x.DateIsSelected)?.TimerDate ?? DateTime.Today;
 
             var addTimer = new AddTimer(ModelHelpers, startDate: startDate);
             await ModelHelpers.OpenFlyout(addTimer);
@@ -62,18 +61,11 @@ namespace Gallifrey.UI.Modern.MainViews
 
         private async void PasteButton(object sender, RoutedEventArgs e)
         {
-            DateTime? startDate = null;
-
-            if (ViewModel.TimerDates.Any(x => x.TimerDate.Date == DateTime.Now.Date))
-            {
-                var selectedDate = ViewModel.TimerDates.FirstOrDefault(x => x.DateIsSelected);
-                startDate = selectedDate?.TimerDate;
-            }
-
             var jiraRef = Clipboard.GetText();
 
             if (ModelHelpers.Gallifrey.JiraConnection.DoesJiraExist(jiraRef))
             {
+                var startDate = ViewModel.TimerDates.FirstOrDefault(x => x.DateIsSelected)?.TimerDate ?? DateTime.Today;
                 var addTimer = new AddTimer(ModelHelpers, startDate: startDate, jiraRef: jiraRef);
                 await ModelHelpers.OpenFlyout(addTimer);
                 if (addTimer.AddedTimer)
@@ -108,7 +100,8 @@ namespace Gallifrey.UI.Modern.MainViews
 
         private void SearchButton(object sender, RoutedEventArgs e)
         {
-            ModelHelpers.OpenFlyout(new Search(ModelHelpers, false));
+            var startDate = ViewModel.TimerDates.FirstOrDefault(x => x.DateIsSelected)?.TimerDate ?? DateTime.Today;
+            ModelHelpers.OpenFlyout(new Search(ModelHelpers, false, startDate));
         }
 
         private async void EditButton(object sender, RoutedEventArgs e)

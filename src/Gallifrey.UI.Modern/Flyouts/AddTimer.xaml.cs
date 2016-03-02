@@ -16,13 +16,16 @@ namespace Gallifrey.UI.Modern.Flyouts
     public partial class AddTimer
     {
         private readonly ModelHelpers modelHelpers;
+        private readonly DateTime? startDate;
         private AddTimerModel DataModel => (AddTimerModel)DataContext;
         public bool AddedTimer { get; set; }
         public Guid NewTimerId { get; set; }
+        
 
         public AddTimer(ModelHelpers modelHelpers, string jiraRef = null, DateTime? startDate = null, bool? enableDateChange = null, List<IdleTimer> idleTimers = null, bool? startNow = null)
         {
             this.modelHelpers = modelHelpers;
+            this.startDate = startDate;
             InitializeComponent();
 
             DataContext = new AddTimerModel(modelHelpers.Gallifrey, jiraRef, startDate, enableDateChange, idleTimers, startNow);
@@ -176,7 +179,7 @@ namespace Gallifrey.UI.Modern.Flyouts
         private async void SearchButton(object sender, RoutedEventArgs e)
         {
             modelHelpers.HideFlyout(this);
-            var searchFlyout = new Search(modelHelpers, true);
+            var searchFlyout = new Search(modelHelpers, true, startDate ?? DateTime.Now.Date);
             await modelHelpers.OpenFlyout(searchFlyout);
             if (searchFlyout.SelectedJira != null)
             {
@@ -187,7 +190,7 @@ namespace Gallifrey.UI.Modern.Flyouts
 
         private void StartDateChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (DataModel.StartDate.HasValue && DataModel.StartDate.Value.Date != DateTime.Now.Date)
+            if (DataModel.StartDate.HasValue && DataModel.StartDate.Value.Date != DateTime.Now)
             {
                 DataModel.SetStartNowEnabled(false);
             }
