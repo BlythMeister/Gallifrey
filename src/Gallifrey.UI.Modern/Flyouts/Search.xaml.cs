@@ -14,12 +14,14 @@ namespace Gallifrey.UI.Modern.Flyouts
         private SearchModel DataModel => (SearchModel)DataContext;
         private readonly ModelHelpers modelHelpers;
         private readonly bool openFromAdd;
+        private readonly DateTime selectedDateTab;
         private readonly ProgressDialogHelper progressDialogHelper;
 
         public Search(ModelHelpers modelHelpers, bool openFromAdd, DateTime selectedDateTab)
         {
             this.modelHelpers = modelHelpers;
             this.openFromAdd = openFromAdd;
+            this.selectedDateTab = selectedDateTab;
             InitializeComponent();
             progressDialogHelper = new ProgressDialogHelper(modelHelpers.DialogContext);
 
@@ -91,7 +93,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             }
             else
             {
-                var addFlyout = new AddTimer(modelHelpers, DataModel.SelectedSearchResult.Reference);
+                var addFlyout = new AddTimer(modelHelpers, DataModel.SelectedSearchResult.Reference, selectedDateTab);
                 await modelHelpers.OpenFlyout(addFlyout);
                 if (addFlyout.AddedTimer)
                 {

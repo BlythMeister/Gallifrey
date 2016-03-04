@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using Gallifrey.Exceptions.JiraIntegration;
@@ -21,7 +20,6 @@ namespace Gallifrey.UI.Modern.Flyouts
         public bool AddedTimer { get; set; }
         public Guid NewTimerId { get; set; }
         
-
         public AddTimer(ModelHelpers modelHelpers, string jiraRef = null, DateTime? startDate = null, bool? enableDateChange = null, List<IdleTimer> idleTimers = null, bool? startNow = null)
         {
             this.modelHelpers = modelHelpers;
