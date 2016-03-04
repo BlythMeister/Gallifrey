@@ -188,7 +188,7 @@ namespace Gallifrey.UI.Modern.Flyouts
 
         private void StartDateChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (DataModel.StartDate.HasValue && DataModel.StartDate.Value.Date != DateTime.Now)
+            if (DataModel.StartDate.HasValue && DataModel.StartDate.Value.Date != DateTime.Now.Date)
             {
                 DataModel.SetStartNowEnabled(false);
             }
