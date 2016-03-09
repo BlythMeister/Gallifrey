@@ -98,23 +98,23 @@ namespace Gallifrey.UI.Classic
                 }
 
                 string message;
-                if (DateTime.Now.Subtract(new DateTime(2016, 7, 1)).TotalSeconds > 0)
+                var endOfLifeDate = new DateTime(2016, 7, 1).Date;
+                var nowDate = DateTime.Now.Date;
+                if (nowDate.Subtract(endOfLifeDate).TotalSeconds > 0)
                 {
                     message = "Support for this version of Gallifrey has ended.\n\nWould you like to download the new version?";
                 }
                 else
                 {
-                    var daysLeft = new DateTime(2016, 3, 10).Subtract(DateTime.Now.Date).TotalDays;
-                    message = $"This version of Gallifrey is end of life, support will end on 1st July 2016\nYou have {daysLeft} to upgrade!\n\nWould you like to download the new version?";
+                    var daysLeft = endOfLifeDate.Subtract(nowDate).TotalDays;
+                    message = $"This version of Gallifrey is end of life, support will end on 1st July 2016\nYou have {daysLeft} days to upgrade!\n\nWould you like to download the new version?";
                 }
 
-                if (MessageBox.Show(message, "End Of Life", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+                var messageResult = MessageBox.Show(message, "End Of Life", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                if (messageResult == DialogResult.Yes)
                 {
                     DoNewUiUpgrade();
                 }
-
-
-
             }
             catch (ManualReinstallRequiredException)
             {
