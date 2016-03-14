@@ -73,13 +73,40 @@
     </Grid>
     <controls:Flyout.Resources>
         <ResourceDictionary>
+            <dialogs:CustomDialog x:Key="TimeLocation"
+                                 Title="Add Time Where?"
+                                 x:Name="TimeLocation">
+                <Grid Margin="0 10 0 0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" MinHeight="20" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Margin="0 5 0 0" FontSize="{DynamicResource DialogMessageFontSize}" Text="" TextWrapping="Wrap" x:Name="Message"/>
+                    
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Height="85">
+                        <Button Height="45" MinWidth="70" Style="{DynamicResource AccentedDialogSquareButton}" Margin="0 0 5 0" Click="AddToNewTimer">
+                            <TextBlock>New<LineBreak/>Timer</TextBlock>
+                        </Button>
+                        <Button Height="45" MinWidth="70" Margin="5 0 5 0" Click="AddToRunningTimer" x:Name="RunningTimerButton">
+                            <TextBlock>Running<LineBreak/>Timer</TextBlock>
+                        </Button>
+                        <Button Height="45" MinWidth="70" Margin="5 0 5 0" Click="AddToExistingTimer">
+                            <TextBlock>Existing<LineBreak/>Timer</TextBlock>
+                        </Button>
+                        <Button Height="45" MinWidth="70" Margin="5 0 5 0" Click="AddToRecentTimer">
+                            <TextBlock>Recent<LineBreak/>Timer</TextBlock>
+                        </Button>
+                        <Button Height="45" MinWidth="70" Content="Cancel" Margin="5 0 5 0" Click="CancelAddTimer"/>
+                    </StackPanel>
+                </Grid>
+            </dialogs:CustomDialog>
             <dialogs:CustomDialog x:Key="TimerSelector"
                                  Title="Existing Timer Selection"
                                  x:Name="TimerSelector">
                 <Grid Margin="0 10 0 0">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"
-                           MinHeight="20" />
+                        <RowDefinition Height="Auto" MinHeight="20" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
@@ -88,7 +115,7 @@
                     <ComboBox Grid.Row="1" Margin="0 5 0 0" FontSize="{DynamicResource DialogMessageFontSize}" controls:ControlsHelper.FocusBorderBrush="{DynamicResource AccentColorBrush}" x:Name="Items" />
 
                     <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Height="85">
-                        <Button Height="35" MinWidth="80" Style="{DynamicResource AccentedDialogSquareButton}" Content="OK" Margin="0 0 5 0" Click="CloseTimerSelector" />
+                        <Button Height="35" MinWidth="80" Style="{DynamicResource AccentedDialogSquareButton}" Content="OK" Margin="0 0 5 0" Click="ConfirmTimerSelector" />
                         <Button Height="35" MinWidth="80" Content="Cancel" Margin="5 0 5 0" Click="CancelTimerSelector"/>
                     </StackPanel>
                 </Grid>

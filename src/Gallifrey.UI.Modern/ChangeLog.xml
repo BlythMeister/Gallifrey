@@ -46,7 +46,7 @@
       <Feature>Updated some keyboard shortcuts</Feature>
       <Feature>Show all dates even if no timers for that date</Feature>
       <Feature>Added temporary timers for logging purpose when you don't have a Jira reference to hand</Feature>
-      <Feature>Ability to add lock time to an existing timer</Feature>
+      <Feature>Ability to add lock time to an existing timer or recent reference</Feature>
       <Feature>Added bulk export when clicking unexported time notice or multi selecting timers</Feature>
       <Feature>Ability to add export comments as a standard comment as well as worklog comment</Feature>
     </Features>
