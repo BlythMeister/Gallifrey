@@ -42,11 +42,14 @@ namespace Gallifrey.UI.Modern.Models
         public string Exported => ModelHelpers.Gallifrey.JiraTimerCollection.GetTotalExportedTimeThisWeek(ModelHelpers.Gallifrey.Settings.AppSettings.StartOfWeek).FormatAsString(false);
         public string ExportedTargetTotalMinutes => ModelHelpers.Gallifrey.Settings.AppSettings.GetTargetThisWeek().TotalMinutes.ToString();
         public string VersionName => ModelHelpers.Gallifrey.VersionControl.UpdateInstalled ? "Click To Install New Version" : ModelHelpers.Gallifrey.VersionControl.VersionName;
+        public string LoggedInAs => $"Logged in as {ModelHelpers.Gallifrey.JiraConnection.CurrentUser.key} ({ModelHelpers.Gallifrey.JiraConnection.CurrentUser.emailAddress})";
+        public string LoggedInDisplayName => ModelHelpers.Gallifrey.JiraConnection.CurrentUser.displayName;
         public bool HasUpdate => ModelHelpers.Gallifrey.VersionControl.UpdateInstalled;
         public bool HasInactiveTime => !string.IsNullOrWhiteSpace(InactiveMinutes);
         public bool TimerRunning => !string.IsNullOrWhiteSpace(CurrentRunningTimerDescription);
         public bool HaveTimeToExport => !string.IsNullOrWhiteSpace(TimeToExportMessage);
         public bool HaveTempTime => !string.IsNullOrWhiteSpace(TempTimeMessage);
+        
 
         public string TimeToExportMessage
         {
@@ -143,6 +146,8 @@ namespace Gallifrey.UI.Modern.Models
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ExportedTotalMinutes"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HaveTempTime"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TempTimeMessage"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LoggedInAs"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LoggedInDisplayName"));
         }
 
         private void RefreshModel()

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Timers;
 using System.Windows;
@@ -255,6 +256,11 @@ namespace Gallifrey.UI.Modern.MainViews
         private void ManualUpdateCheck(object sender, RoutedEventArgs e)
         {
             PerformUpdate(true, true);
+        }
+
+        private void LoadJira(object sender, RoutedEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo(modelHelpers.Gallifrey.Settings.JiraConnectionSettings.JiraUrl));
         }
 
         private void AutoUpdateCheck(object sender, ElapsedEventArgs e)
