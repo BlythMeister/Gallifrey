@@ -8,5 +8,5 @@ NUGET
     Exceptionless.Wpf (3.3.1590)
       Exceptionless.Portable (3.3.1590)
     MahApps.Metro (1.2.4)
-    Newtonsoft.Json (8.0.2)
+    Newtonsoft.Json (8.0.3)
     RestSharp (105.2.3)

@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using Gallifrey.ExtensionMethods;
-using Gallifrey.IdleTimers;
 using Gallifrey.JiraTimers;
 using Gallifrey.UI.Modern.Helpers;
 using Gallifrey.UI.Modern.Models;
@@ -93,7 +89,7 @@ namespace Gallifrey.UI.Modern.Flyouts
 
             var message = dialog.FindChild<TextBlock>("Message");
             var runningTimerButton = dialog.FindChild<Button>("RunningTimerButton");
-            
+
             if (runningTimer != null)
             {
                 message.Text = $"Where Would You Like To Add The Time Worth {selectedTime.FormatAsString(false)}?\n\nNote:- Running Timer Is\n{runningTimer.JiraReference} - {runningTimer.JiraName}";
@@ -104,7 +100,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                 message.Text = $"Where Would You Like To Add The Time Worth {selectedTime.FormatAsString(false)}?";
                 runningTimerButton.Visibility = Visibility.Collapsed;
             }
-            
+
             await dialog.WaitUntilUnloadedAsync();
         }
 
@@ -201,6 +197,9 @@ namespace Gallifrey.UI.Modern.Flyouts
             var comboBox = timeSelectorDialog.FindChild<ComboBox>("Items");
             comboBox.ItemsSource = items;
 
+            var message = timeSelectorDialog.FindChild<TextBlock>("Message");
+            message.Text = "Please Select Which Timer";
+
             await timeSelectorDialog.WaitUntilUnloadedAsync();
 
             if (selectedTimerSelectorModel != null)
@@ -236,14 +235,44 @@ namespace Gallifrey.UI.Modern.Flyouts
             var comboBox = timeSelectorDialog.FindChild<ComboBox>("Items");
             comboBox.ItemsSource = items;
 
+            var message = timeSelectorDialog.FindChild<TextBlock>("Message");
+            message.Text = "Please Select Which Jira";
+
             await timeSelectorDialog.WaitUntilUnloadedAsync();
+
+            var selected = DataModel.LockedTimers.Where(x => x.IsSelected).ToList();
 
             if (selectedTimerSelectorModel != null)
             {
-                ShowAddTimer(selectedTimerSelectorModel.Reference);
+                var lockedTimerDate = selected.First().DateForTimer;
+                var timersAlreadyExisting = modelHelpers.Gallifrey.JiraTimerCollection.GetTimersForADate(lockedTimerDate).FirstOrDefault(x=>x.JiraReference == selectedTimerSelectorModel.Reference);
+
+                if (timersAlreadyExisting == null)
+                {
+                    ShowAddTimer(selectedTimerSelectorModel.Reference);
+                }
+                else
+                {
+                    var selectedTimers = selected.Select(x => modelHelpers.Gallifrey.IdleTimerCollection.GetTimer(x.UniqueId)).Where(x => x != null).ToList();
+                    modelHelpers.Gallifrey.JiraTimerCollection.AddIdleTimer(timersAlreadyExisting.UniqueId, selectedTimers);
+
+                    foreach (var lockedTimerModel in selected)
+                    {
+                        modelHelpers.Gallifrey.IdleTimerCollection.RemoveTimer(lockedTimerModel.UniqueId);
+                    }
+
+                    if (modelHelpers.Gallifrey.IdleTimerCollection.GetUnusedLockTimers().Any())
+                    {
+                        DataModel.RefreshLockedTimers(modelHelpers.Gallifrey.IdleTimerCollection.GetUnusedLockTimers());
+                    }
+                    else
+                    {
+                        modelHelpers.CloseFlyout(this);
+                    }
+                }
             }
         }
-        
+
         private async void ShowAddTimer(string preLoadJiraRef = null)
         {
             var selected = DataModel.LockedTimers.Where(x => x.IsSelected).ToList();

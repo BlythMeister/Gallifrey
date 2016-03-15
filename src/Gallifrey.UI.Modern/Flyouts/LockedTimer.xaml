@@ -110,8 +110,8 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
-                    
-                    <TextBlock Grid.Row="0" Margin="0 5 0 0" FontSize="{DynamicResource DialogMessageFontSize}" Text="Please Select Which Timer" TextWrapping="Wrap" />
+
+                    <TextBlock Grid.Row="0" Margin="0 5 0 0" FontSize="{DynamicResource DialogMessageFontSize}" TextWrapping="Wrap" x:Name="Message" />
                     <ComboBox Grid.Row="1" Margin="0 5 0 0" FontSize="{DynamicResource DialogMessageFontSize}" controls:ControlsHelper.FocusBorderBrush="{DynamicResource AccentColorBrush}" x:Name="Items" />
 
                     <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Height="85">
