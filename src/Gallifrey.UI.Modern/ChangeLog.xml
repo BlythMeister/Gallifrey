@@ -58,6 +58,7 @@
       <Bug>Fixed issue with changing timer date when running recreating a copy of the original timer</Bug>
       <Bug>Auto update check now doesn't run when a flyout is open</Bug>
       <Bug>Keyboard shortcuts only active when flyout not open</Bug>
+      <Bug>Hide version number and window controls when flyout open</Bug>
       <Bug>Attemping to fix memory leak when running Gallifrey for long periods</Bug>
     </Bugs>
     <Others />
