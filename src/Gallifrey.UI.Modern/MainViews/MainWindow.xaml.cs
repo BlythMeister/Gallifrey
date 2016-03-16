@@ -5,7 +5,6 @@ using System.Timers;
 using System.Windows;
 using System.Windows.Input;
 using System.Xml.Linq;
-using Exceptionless;
 using Gallifrey.AppTracking;
 using Gallifrey.Exceptions;
 using Gallifrey.Exceptions.IdleTimers;
@@ -26,6 +25,7 @@ namespace Gallifrey.UI.Modern.MainViews
     public partial class MainWindow
     {
         private readonly ModelHelpers modelHelpers;
+        private readonly ExceptionlessHelper exceptionlessHelper;
         private MainViewModel ViewModel => (MainViewModel)DataContext;
         private bool machineLocked;
 
@@ -34,17 +34,9 @@ namespace Gallifrey.UI.Modern.MainViews
             InitializeComponent();
 
             var gallifrey = new Backend(instance, appType);
-
-            if (gallifrey.VersionControl.IsAutomatedDeploy)
-            {
-                ExceptionlessClient.Default.Configuration.ApiKey = "e7ac6366507547639ce69fea261d6545";
-                ExceptionlessClient.Default.Configuration.DefaultTags.Add(gallifrey.VersionControl.VersionName.Replace("\n", " - "));
-                ExceptionlessClient.Default.Configuration.Enabled = true;
-                ExceptionlessClient.Default.SubmittingEvent += ExceptionlessSubmittingEvent;
-                ExceptionlessClient.Default.Register();
-            }
-
             modelHelpers = new ModelHelpers(gallifrey, FlyoutsControl);
+            exceptionlessHelper = new ExceptionlessHelper(modelHelpers);
+            exceptionlessHelper.RegisterExceptionless();
             var viewModel = new MainViewModel(modelHelpers);
             modelHelpers.RefreshModel();
             modelHelpers.SelectRunningTimer();
@@ -52,7 +44,6 @@ namespace Gallifrey.UI.Modern.MainViews
 
             gallifrey.NoActivityEvent += GallifreyOnNoActivityEvent;
             gallifrey.ExportPromptEvent += GallifreyOnExportPromptEvent;
-            gallifrey.DailyTrackingEvent += GallifreyOnDailyTrackingEvent;
             SystemEvents.SessionSwitch += SessionSwitchHandler;
 
             Height = gallifrey.Settings.UiSettings.Height;
@@ -66,21 +57,6 @@ namespace Gallifrey.UI.Modern.MainViews
                 var updateHeartbeat = new Timer(60000);
                 updateHeartbeat.Elapsed += AutoUpdateCheck;
                 updateHeartbeat.Enabled = true;
-            }
-        }
-
-        private async void ExceptionlessSubmittingEvent(object sender, EventSubmittingEventArgs e)
-        {
-            if (e.IsUnhandledError)
-            {
-                e.Cancel = true;
-
-                await Application.Current.Dispatcher.Invoke(async () =>
-                {
-                    modelHelpers.CloseAllFlyouts();
-                    await modelHelpers.OpenFlyout(new Error(modelHelpers, e.Event));
-                    modelHelpers.CloseApp(true);
-                });
             }
         }
 
@@ -132,6 +108,8 @@ namespace Gallifrey.UI.Modern.MainViews
                     await modelHelpers.OpenFlyout(new Flyouts.ChangeLog(changeLog));
                 }
             }
+
+            exceptionlessHelper.RegisterExceptionless();
         }
 
         private async void GallifreyOnExportPromptEvent(object sender, ExportPromptDetail e)
@@ -157,7 +135,7 @@ namespace Gallifrey.UI.Modern.MainViews
                 {
                     if (modelHelpers.Gallifrey.Settings.ExportSettings.ExportPromptAll)
                     {
-                        await modelHelpers.OpenFlyout(new Export(modelHelpers, e.TimerId, null)); 
+                        await modelHelpers.OpenFlyout(new Export(modelHelpers, e.TimerId, null));
                     }
                     else
                     {
@@ -167,20 +145,7 @@ namespace Gallifrey.UI.Modern.MainViews
             }
         }
 
-        private void GallifreyOnDailyTrackingEvent(object sender, EventArgs eventArgs)
-        {
-            try
-            {
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    ExceptionlessClient.Default.SubmitFeatureUsage(modelHelpers.Gallifrey.VersionControl.VersionName);
-                });
-            }
-            catch (Exception)
-            {
-                //suppress errors if tracking fails
-            }
-        }
+        
 
         private void GallifreyOnNoActivityEvent(object sender, int millisecondsSinceActivity)
         {
@@ -236,7 +201,7 @@ namespace Gallifrey.UI.Modern.MainViews
                             {
                                 modelHelpers.HideAllFlyouts();
                             }
-                            
+
                             await modelHelpers.OpenFlyout(new LockedTimer(modelHelpers));
                             this.StopFlashingWindow();
                             Topmost = false;

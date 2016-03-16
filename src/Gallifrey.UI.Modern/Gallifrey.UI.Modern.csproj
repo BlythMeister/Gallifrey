@@ -70,6 +70,7 @@
       <DependentUpon>BulkExport.xaml</DependentUpon>
     </Compile>
     <Compile Include="Helpers\CachedResourceDictionary.cs" />
+    <Compile Include="Helpers\ExceptionlessHelper.cs" />
     <Compile Include="Models\BulkExportContainerModel.cs" />
     <Compile Include="Models\BulkExportModel.cs" />
     <Compile Include="Flyouts\LockedTimer.xaml.cs">
