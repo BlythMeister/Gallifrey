@@ -22,13 +22,6 @@ We are aiming to maintain a Beta & Stable version of the app.
 
 **Installing on Windows 8 will alert with SmartScreen, you should be able to "Run Anyway" until I can afford a proper certificate, there is no way around this!  After a couple of runs, the warning should stop**
 
-#####Classic UI
-
-* [Stable Release - Click Here](http://blythmeister.github.io/Gallifrey.Releases/deploy/stable/setup.exe)
-* [Beta Release - Click Here](http://blythmeister.github.io/Gallifrey.Releases/deploy/beta/setup.exe)
-
-#####Modern UI
-
 * [Stable Release - Click Here](http://releases.gallifreyapp.co.uk/download/modern/stable/setup.exe)
 * [Beta Release - Click Here](http://releases.gallifreyapp.co.uk/download/modern/beta/setup.exe)
 
@@ -57,20 +50,23 @@ Feel free to contribute, but please read the wiki (https://github.com/BlythMeist
 Gallifrey makes use of the following libraries:
 
 * Exceptionless (http://exceptionless.com/)
-* Spell Check Winforms TextBox (http://spellchecktextbox.codeplex.com/)
 * Atlassian .Net SDK (https://bitbucket.org/farmas/atlassian.net-sdk/wiki/Home)
 * MahApps.Metro (http://mahapps.com/)
 * Newtonsoft Json (http://www.newtonsoft.com/json)
 * RestSharp (http://restsharp.org/)
 
-
 3rd Party Resources
 =========
 
-* Button icons provided by VisualPharm (http://www.visualpharm.com)
 * App icon provided by Jack Cai (http://www.doublejdesign.co.uk)
+* Modern UI Icons (http://modernuiicons.com/)
+
+End Of Life UI Libraries/Resources
+=========
+
+* Button icons provided by VisualPharm (http://www.visualpharm.com)
 * Digital-7 font by Style7 (http://www.styleseven.com/)
-* Modern UI Icons (http://modernuiicons.com/) - New Modern UI Only
+* Spell Check Winforms TextBox (http://spellchecktextbox.codeplex.com/)
 
 Licence
 =========
