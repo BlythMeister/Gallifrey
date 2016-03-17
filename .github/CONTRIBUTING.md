@@ -30,3 +30,7 @@ This is of my own creation, so please refer to the wiki re adding to change log.
 
 Any new item you feel should be displayed to the user please add detail to the change log.
 Bugs introduced and then fixed while in beta should not be presented in the change log.
+
+#Adding Credit
+
+Feel free to add yourself to the with thanks file to be added to the app thanks section!
