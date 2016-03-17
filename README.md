@@ -55,7 +55,6 @@ Gallifrey makes use of the following libraries:
 * Newtonsoft Json (http://www.newtonsoft.com/json)
 * RestSharp (http://restsharp.org/)
 
-
 3rd Party Resources
 =========
 
