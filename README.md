@@ -1,10 +1,10 @@
 Gallifrey
 =========
 
-[![Gitter](https://img.shields.io/badge/Gitter-Join%20Chat-green.svg?style=flat-square)](https://gitter.im/BlythMeister/Gallifrey)
-[![Release](https://img.shields.io/github/release/BlythMeister/Gallifrey.svg?style=flat-square)](https://github.com/BlythMeister/Gallifrey/releases/latest)
-[![Issues](https://img.shields.io/github/issues/BlythMeister/Gallifrey.svg?style=flat-square)](https://github.com/BlythMeister/Gallifrey/issues)
-[![Twitter Follow](https://img.shields.io/twitter/follow/GallifreyApp.svg?style=social?style=flat-square)](https://twitter.com/GallifreyApp)
+[![Gitter](https://img.shields.io/badge/Gitter-Join%20Chat-green.svg?style=flat)](https://gitter.im/BlythMeister/Gallifrey)
+[![Release](https://img.shields.io/github/release/BlythMeister/Gallifrey.svg?style=flat)](https://github.com/BlythMeister/Gallifrey/releases/latest)
+[![Issues](https://img.shields.io/github/issues/BlythMeister/Gallifrey.svg?style=flat)](https://github.com/BlythMeister/Gallifrey/issues)
+[![Twitter Follow](https://img.shields.io/twitter/follow/GallifreyApp.svg?style=social?style=flat)](https://twitter.com/GallifreyApp)
 
 Gallifrey will make anyone a Jira time lord!
 
