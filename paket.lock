@@ -1,7 +1,7 @@
 NUGET
   remote: https://www.nuget.org/api/v2
   specs:
-    Atlassian.SDK (2.5.0)
+    Atlassian.SDK (2.5)
     Exceptionless.Portable (3.3.1590)
     Exceptionless.Windows (3.3.1590)
       Exceptionless.Portable (3.3.1590)
