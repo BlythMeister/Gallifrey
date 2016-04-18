@@ -42,14 +42,13 @@ namespace Gallifrey.UI.Modern.Models
         public string Exported => ModelHelpers.Gallifrey.JiraTimerCollection.GetTotalExportedTimeThisWeek(ModelHelpers.Gallifrey.Settings.AppSettings.StartOfWeek).FormatAsString(false);
         public string ExportedTargetTotalMinutes => ModelHelpers.Gallifrey.Settings.AppSettings.GetTargetThisWeek().TotalMinutes.ToString();
         public string VersionName => ModelHelpers.Gallifrey.VersionControl.UpdateInstalled ? "Click To Install New Version" : ModelHelpers.Gallifrey.VersionControl.VersionName;
-        public string LoggedInAs => $"Logged in as {ModelHelpers.Gallifrey.JiraConnection.CurrentUser.key} ({ModelHelpers.Gallifrey.JiraConnection.CurrentUser.emailAddress})";
-        public string LoggedInDisplayName => ModelHelpers.Gallifrey.JiraConnection.CurrentUser.displayName;
+        public string LoggedInAs => ModelHelpers.Gallifrey.JiraConnection.CurrentUser != null ? $"Logged in as {ModelHelpers.Gallifrey.JiraConnection.CurrentUser.key} ({ModelHelpers.Gallifrey.JiraConnection.CurrentUser.emailAddress})" : "Please Connect To Jira";
+        public string LoggedInDisplayName => ModelHelpers.Gallifrey.JiraConnection.CurrentUser != null ? ModelHelpers.Gallifrey.JiraConnection.CurrentUser.displayName : "Not Logged In To Jira";
         public bool HasUpdate => ModelHelpers.Gallifrey.VersionControl.UpdateInstalled;
         public bool HasInactiveTime => !string.IsNullOrWhiteSpace(InactiveMinutes);
         public bool TimerRunning => !string.IsNullOrWhiteSpace(CurrentRunningTimerDescription);
         public bool HaveTimeToExport => !string.IsNullOrWhiteSpace(TimeToExportMessage);
         public bool HaveTempTime => !string.IsNullOrWhiteSpace(TempTimeMessage);
-        
 
         public string TimeToExportMessage
         {

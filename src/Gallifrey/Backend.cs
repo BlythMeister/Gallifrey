@@ -165,7 +165,7 @@ namespace Gallifrey
 
                     if (doMissingTimerCheck)
                     {
-                        var jirasExportedTo = JiraConnection.GetJiraIssuesFromJQL($"worklogAuthor = currentUser() and worklogDate = {workingDate.ToString("yyyy-MM-dd")}");
+                        var jirasExportedTo = JiraConnection.GetJiraIssuesFromJQL($"worklogAuthor = currentUser() and worklogDate = {workingDate.ToString("yyyy-MM-dd")}").ToList();
 
                         foreach (var issue in jirasExportedTo)
                         {
