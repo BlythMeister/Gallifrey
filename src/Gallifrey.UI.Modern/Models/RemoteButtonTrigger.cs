@@ -3,6 +3,8 @@ namespace Gallifrey.UI.Modern.Models
     public enum RemoteButtonTrigger
     {
         Add,
+        Copy,
+        Paste,
         Delete,
         Search,
         Edit,
@@ -13,6 +15,7 @@ namespace Gallifrey.UI.Modern.Models
         Twitter,
         Email,
         GitHub,
-        PayPal
+        PayPal,
+        Gitter
     }
 }

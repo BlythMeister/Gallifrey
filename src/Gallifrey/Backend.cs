@@ -148,7 +148,7 @@ namespace Gallifrey
             try
             {
                 var keepTimersForDays = settingsCollection.AppSettings.KeepTimersForDays;
-                if (keepTimersForDays > 0) keepTimersForDays = keepTimersForDays*-1;
+                if (keepTimersForDays > 0) keepTimersForDays = keepTimersForDays * -1;
                 var workingDate = DateTime.Now.AddDays(keepTimersForDays + 1);
 
                 var doMissingTimerCheck = false;
@@ -165,7 +165,7 @@ namespace Gallifrey
 
                     if (doMissingTimerCheck)
                     {
-                        var jirasExportedTo = JiraConnection.GetJiraIssuesFromJQL($"worklogAuthor = currentUser() and worklogDate = {workingDate.ToString("yyyy-MM-dd")}");
+                        var jirasExportedTo = JiraConnection.GetJiraIssuesFromJQL($"worklogAuthor = currentUser() and worklogDate = {workingDate.ToString("yyyy-MM-dd")}").ToList();
 
                         foreach (var issue in jirasExportedTo)
                         {
@@ -185,7 +185,7 @@ namespace Gallifrey
                         }
                     }
 
-                    foreach (var timer in timersOnDate)
+                    foreach (var timer in timersOnDate.Where(x => !x.TempTimer))
                     {
                         var issueWithWorklogs = issues.FirstOrDefault(x => x.key == timer.JiraReference);
 
@@ -222,7 +222,7 @@ namespace Gallifrey
                             }
                             else
                             {
-                                timersNotChecked.Add(timer.JiraReference, new List<Guid> {timer.UniqueId});
+                                timersNotChecked.Add(timer.JiraReference, new List<Guid> { timer.UniqueId });
                             }
                         }
                     }

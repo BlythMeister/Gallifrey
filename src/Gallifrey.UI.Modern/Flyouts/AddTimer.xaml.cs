@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using Gallifrey.Exceptions.JiraIntegration;
 using Gallifrey.Exceptions.JiraTimers;
+using Gallifrey.IdleTimers;
 using Gallifrey.Jira.Model;
 using Gallifrey.UI.Modern.Helpers;
 using Gallifrey.UI.Modern.Models;
@@ -13,16 +15,18 @@ namespace Gallifrey.UI.Modern.Flyouts
     public partial class AddTimer
     {
         private readonly ModelHelpers modelHelpers;
+        private readonly DateTime? startDate;
         private AddTimerModel DataModel => (AddTimerModel)DataContext;
         public bool AddedTimer { get; set; }
         public Guid NewTimerId { get; set; }
-
-        public AddTimer(ModelHelpers modelHelpers, string jiraRef = null, DateTime? startDate = null, bool? enableDateChange = null, TimeSpan? preloadTime = null, bool? enableTimeChange = null, bool? startNow = null)
+        
+        public AddTimer(ModelHelpers modelHelpers, string jiraRef = null, DateTime? startDate = null, bool? enableDateChange = null, List<IdleTimer> idleTimers = null, bool? startNow = null)
         {
             this.modelHelpers = modelHelpers;
+            this.startDate = startDate;
             InitializeComponent();
 
-            DataContext = new AddTimerModel(modelHelpers.Gallifrey, jiraRef, startDate, enableDateChange, preloadTime, enableTimeChange, startNow);
+            DataContext = new AddTimerModel(modelHelpers.Gallifrey, jiraRef, startDate, enableDateChange, idleTimers, startNow);
             AddedTimer = false;
         }
 
@@ -42,45 +46,77 @@ namespace Gallifrey.UI.Modern.Flyouts
                 return;
             }
 
-            Issue jiraIssue;
-            try
+            TimeSpan seedTime;
+            if (DataModel.TimeEditable)
             {
-                jiraIssue = modelHelpers.Gallifrey.JiraConnection.GetJiraIssue(DataModel.JiraReference);
+                seedTime = new TimeSpan(DataModel.StartHours, DataModel.StartMinutes, 0);
             }
-            catch (NoResultsFoundException)
+            else
             {
-                await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Invalid Jira", "Unable To Locate The Jira");
-                Focus();
-                return;
+                seedTime = new TimeSpan();
             }
 
-            if (DataModel.JiraReferenceEditable)
-            {
-                var result = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Correct Jira?", $"Jira found!\n\nRef: {jiraIssue.key}\nName: {jiraIssue.fields.summary}\n\nIs that correct?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
+            Issue jiraIssue = null;
 
-                if (result == MessageDialogResult.Negative)
+            if (!DataModel.TempTimer)
+            {
+                try
                 {
+                    jiraIssue = modelHelpers.Gallifrey.JiraConnection.GetJiraIssue(DataModel.JiraReference);
+                }
+                catch (NoResultsFoundException)
+                {
+                    await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Invalid Jira", "Unable To Locate The Jira");
                     Focus();
                     return;
                 }
+
+                if (DataModel.JiraReferenceEditable)
+                {
+                    var result = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Correct Jira?", $"Jira found!\n\nRef: {jiraIssue.key}\nName: {jiraIssue.fields.summary}\n\nIs that correct?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
+
+                    if (result == MessageDialogResult.Negative)
+                    {
+                        Focus();
+                        return;
+                    }
+                }
             }
 
-            var seedTime = new TimeSpan(DataModel.StartHours, DataModel.StartMinutes, 0);
             try
             {
-                NewTimerId = modelHelpers.Gallifrey.JiraTimerCollection.AddTimer(jiraIssue, DataModel.StartDate.Value, seedTime, DataModel.StartNow);
+                if (DataModel.TempTimer)
+                {
+                    NewTimerId = modelHelpers.Gallifrey.JiraTimerCollection.AddTempTimer(DataModel.TempTimerDescription, DataModel.StartDate.Value, seedTime, DataModel.StartNow);
+                }
+                else
+                {
+                    NewTimerId = modelHelpers.Gallifrey.JiraTimerCollection.AddTimer(jiraIssue, DataModel.StartDate.Value, seedTime, DataModel.StartNow);
+                }
                 AddedTimer = true;
+                if (!DataModel.TimeEditable)
+                {
+                    modelHelpers.Gallifrey.JiraTimerCollection.AddIdleTimer(NewTimerId, DataModel.IdleTimers);
+                }
             }
             catch (DuplicateTimerException ex)
             {
                 var doneSomething = false;
-                if (seedTime.TotalMinutes > 0)
+                if (seedTime.TotalMinutes > 0 || !DataModel.TimeEditable)
                 {
                     var result = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Duplicate Timer", "The Timer Already Exists, Would You Like To Add The Time?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
 
                     if (result == MessageDialogResult.Affirmative)
                     {
-                        modelHelpers.Gallifrey.JiraTimerCollection.AdjustTime(ex.TimerId, seedTime.Hours, seedTime.Minutes, true);
+                        if (DataModel.TimeEditable)
+                        {
+                            modelHelpers.Gallifrey.JiraTimerCollection.AdjustTime(ex.TimerId, seedTime.Hours, seedTime.Minutes, true);
+                        }
+                        else
+                        {
+                            modelHelpers.Gallifrey.JiraTimerCollection.AddIdleTimer(ex.TimerId, DataModel.IdleTimers);
+                        }
+
                         doneSomething = true;
                     }
                     else
@@ -106,40 +142,42 @@ namespace Gallifrey.UI.Modern.Flyouts
                 NewTimerId = ex.TimerId;
             }
 
-            if (DataModel.AssignToMe)
+            if (!DataModel.TempTimer)
             {
-                try
+                if (DataModel.AssignToMe)
                 {
-                    modelHelpers.Gallifrey.JiraConnection.AssignToCurrentUser(DataModel.JiraReference);
+                    try
+                    {
+                        modelHelpers.Gallifrey.JiraConnection.AssignToCurrentUser(DataModel.JiraReference);
+                    }
+                    catch (JiraConnectionException)
+                    {
+                        await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Assign Jira Error", "Unable To Locate Assign Jira To Current User");
+                    }
                 }
-                catch (JiraConnectionException)
+
+                if (DataModel.InProgress)
                 {
-                    await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Assign Jira Error", "Unable To Locate Assign Jira To Current User");
+                    try
+                    {
+                        modelHelpers.Gallifrey.JiraConnection.SetInProgress(DataModel.JiraReference);
+                    }
+                    catch (StateChangedException)
+                    {
+                        await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Error Changing Status", "Unable To Set Issue As In Progress");
+                    }
                 }
             }
 
-            if (DataModel.InProgress)
-            {
-                try
-                {
-                    modelHelpers.Gallifrey.JiraConnection.SetInProgress(DataModel.JiraReference);
-                }
-                catch (StateChangedException)
-                {
-                    await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Error Changing Status", "Unable To Set Issue As In Progress");
-                }
-            }
-
-            modelHelpers.RefreshModel();
-            modelHelpers.SetSelectedTimer(NewTimerId);
             AddedTimer = true;
             modelHelpers.CloseFlyout(this);
+            modelHelpers.RefreshModel();
         }
 
         private async void SearchButton(object sender, RoutedEventArgs e)
         {
             modelHelpers.HideFlyout(this);
-            var searchFlyout = new Search(modelHelpers, true);
+            var searchFlyout = new Search(modelHelpers, true, startDate ?? DateTime.Now.Date);
             await modelHelpers.OpenFlyout(searchFlyout);
             if (searchFlyout.SelectedJira != null)
             {

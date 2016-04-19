@@ -4,7 +4,10 @@
         xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:mainViews="clr-namespace:Gallifrey.UI.Modern.MainViews"
         xmlns:dialogs="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
-        Height="600" Width="700" MinWidth="700" MinHeight="600" Icon="/Icons/clock_blue.ico" WindowTitleBrush="{DynamicResource AccentColorBrush}" NonActiveWindowTitleBrush="{DynamicResource AccentColorBrush}" BorderBrush="{DynamicResource AccentColorBrush}" BorderThickness="2" Loaded="OnLoaded" Closed="MainWindow_OnClosed" dialogs:DialogParticipation.Register="{Binding RelativeSource={RelativeSource Self}, Path=DataContext.ModelHelpers.DialogContext}" KeyUp="MainWindow_KeyUp">
+        Height="650" Width="800" MinHeight="650" MinWidth="800" Icon="/Icons/clock_blue.ico" 
+        WindowTitleBrush="{DynamicResource AccentColorBrush}" NonActiveWindowTitleBrush="{DynamicResource AccentColorBrush}" BorderBrush="{DynamicResource AccentColorBrush}" BorderThickness="2"
+        LeftWindowCommandsOverlayBehavior="HiddenTitleBar" RightWindowCommandsOverlayBehavior="HiddenTitleBar" WindowButtonCommandsOverlayBehavior="HiddenTitleBar" IconOverlayBehavior="HiddenTitleBar" IsWindowDraggable="True"
+        Loaded="OnLoaded" Closed="MainWindow_OnClosed" KeyDown="MainWindow_KeyDown" dialogs:DialogParticipation.Register="{Binding RelativeSource={RelativeSource Self}, Path=DataContext.ModelHelpers.DialogContext}">
 
     <controls:MetroWindow.Flyouts>
         <controls:FlyoutsControl x:Name="FlyoutsControl" />
@@ -12,6 +15,18 @@
 
     <controls:MetroWindow.RightWindowCommands>
         <controls:WindowCommands>
+            <Button Click="LoadJira" ToolTip="{Binding LoggedInAs}">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Rectangle Width="22"
+                           Height="22"
+                           Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
+                        <Rectangle.OpacityMask>
+                            <VisualBrush Stretch="Uniform" Visual="{StaticResource appbar_user}" />
+                        </Rectangle.OpacityMask>
+                    </Rectangle>
+                    <TextBlock VerticalAlignment="Center" Text="{Binding LoggedInDisplayName}" Margin="5,0,0,0"/>
+                </StackPanel>
+            </Button>
             <Button Click="ManualUpdateCheck" Content="{Binding VersionName}" Name="UpdateCheckButton"/>
         </controls:WindowCommands>
     </controls:MetroWindow.RightWindowCommands>
@@ -28,7 +43,7 @@
         <mainViews:ControlButtons DataContext="{Binding}" Grid.Row="0" />
 
         <mainViews:Notices DataContext="{Binding}" Grid.Row="1" />
-        
+
         <mainViews:TimerTabs DataContext="{Binding}" Grid.Row="2" />
 
         <mainViews:TimerSummary DataContext="{Binding}" Grid.Row="3" />

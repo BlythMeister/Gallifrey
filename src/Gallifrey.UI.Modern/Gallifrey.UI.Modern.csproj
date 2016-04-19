@@ -66,6 +66,13 @@
     <Compile Include="Flyouts\AddTimer.xaml.cs">
       <DependentUpon>AddTimer.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Flyouts\BulkExport.xaml.cs">
+      <DependentUpon>BulkExport.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Helpers\CachedResourceDictionary.cs" />
+    <Compile Include="Helpers\ExceptionlessHelper.cs" />
+    <Compile Include="Models\BulkExportContainerModel.cs" />
+    <Compile Include="Models\BulkExportModel.cs" />
     <Compile Include="Flyouts\LockedTimer.xaml.cs">
       <DependentUpon>LockedTimer.xaml</DependentUpon>
     </Compile>
@@ -79,8 +86,8 @@
     <Compile Include="Models\LockedTimerCollectionModel.cs" />
     <Compile Include="Models\LockedTimerModel.cs" />
     <Compile Include="Models\ChangeLogModel.cs" />
-    <Compile Include="Helpers\JiraHelper.cs" />
-    <Compile Include="Helpers\JiraHelperResult.cs" />
+    <Compile Include="Helpers\ProgressDialogHelper.cs" />
+    <Compile Include="Helpers\ProgressResult.cs" />
     <Compile Include="Helpers\EnumMatchToBooleanConverter.cs" />
     <Compile Include="Helpers\ThemeHelper.cs" />
     <Compile Include="Models\InformationModel.cs" />
@@ -130,6 +137,7 @@
     <Compile Include="Models\AddTimerModel.cs" />
     <Compile Include="Models\MainViewModel.cs" />
     <Compile Include="Models\TimerDateModel.cs" />
+    <Compile Include="Models\TimerDisplayModel.cs" />
     <Compile Include="Models\TimerModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -162,6 +170,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Flyouts\AddTimer.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Flyouts\BulkExport.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

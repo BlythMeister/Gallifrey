@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 using System.Windows;
 using Gallifrey.Exceptions.JiraIntegration;
@@ -60,36 +59,43 @@ namespace Gallifrey.UI.Modern.Flyouts
             }
             else if (DataModel.HasModifiedJiraReference)
             {
-                Issue jiraIssue;
-                try
+                if (DataModel.TempTimer)
                 {
-                    jiraIssue = modelHelpers.Gallifrey.JiraConnection.GetJiraIssue(DataModel.JiraReference);
+                    modelHelpers.Gallifrey.JiraTimerCollection.ChangeTempTimerDescription(EditedTimerId, DataModel.TempTimerDescription);
                 }
-                catch (NoResultsFoundException)
+                else
                 {
-                    await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Invalid Jira", "Unable To Locate The Jira");
-                    Focus();
-                    return;
-                }
-
-                var result = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Correct Jira?", $"Jira found!\n\nRef: {jiraIssue.key}\nName: {jiraIssue.fields.summary}\n\nIs that correct?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
-
-                if (result == MessageDialogResult.Negative)
-                {
-                    return;
-                }
-
-                try
-                {
-                    EditedTimerId = modelHelpers.Gallifrey.JiraTimerCollection.RenameTimer(EditedTimerId, jiraIssue);
-                }
-                catch (DuplicateTimerException ex)
-                {
-                    var handlerd = await MergeTimers(ex);
-                    if (!handlerd)
+                    Issue jiraIssue;
+                    try
                     {
+                        jiraIssue = modelHelpers.Gallifrey.JiraConnection.GetJiraIssue(DataModel.JiraReference);
+                    }
+                    catch (NoResultsFoundException)
+                    {
+                        await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Invalid Jira", "Unable To Locate The Jira");
                         Focus();
                         return;
+                    }
+
+                    var result = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Correct Jira?", $"Jira found!\n\nRef: {jiraIssue.key}\nName: {jiraIssue.fields.summary}\n\nIs that correct?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
+
+                    if (result == MessageDialogResult.Negative)
+                    {
+                        return;
+                    }
+
+                    try
+                    {
+                        EditedTimerId = modelHelpers.Gallifrey.JiraTimerCollection.RenameTimer(EditedTimerId, jiraIssue);
+                    }
+                    catch (DuplicateTimerException ex)
+                    {
+                        var handlerd = await MergeTimers(ex);
+                        if (!handlerd)
+                        {
+                            Focus();
+                            return;
+                        }
                     }
                 }
             }

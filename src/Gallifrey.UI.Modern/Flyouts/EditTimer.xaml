@@ -11,20 +11,62 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,5,0">Jira Reference</TextBlock>
-        <TextBox Grid.Row="0" Grid.Column="1" Margin="0,5" Text="{Binding JiraReference, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" CharacterCasing="Upper">
+        <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Padding="2">Temp Timer?</TextBlock>
+        <CheckBox Grid.Row="0" Grid.Column="1" Margin="0,5" IsChecked="{Binding TempTimer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            <CheckBox.Style>
+                <Style TargetType="CheckBox" BasedOn="{StaticResource {x:Type CheckBox}}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding JiraReferenceEditable}" Value="False" >
+                            <Setter Property="IsEnabled" Value="False"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </CheckBox.Style>
+        </CheckBox>
+
+        <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center">
+            <TextBlock.Style>
+                <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding TempTimer}" Value="True" >
+                            <Setter Property="Text" Value="Description"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding TempTimer}" Value="False" >
+                            <Setter Property="Text" Value="Jira Reference"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
+        <TextBox Grid.Row="1" Grid.Column="1" Margin="0,5" Text="{Binding JiraReference, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" CharacterCasing="Upper">
             <TextBox.Style>
                 <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding JiraReferenceEditable}" Value="False">
+                        <DataTrigger Binding="{Binding JiraReferenceEditable}" Value="False" >
                             <Setter Property="IsEnabled" Value="False"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding HasModifiedRunDate}" Value="True">
+                            <Setter Property="IsEnabled" Value="False"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding TempTimer}" Value="True" >
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBox.Style>
+        </TextBox>
+        <TextBox Grid.Row="1" Grid.Column="1" Margin="0,5" Text="{Binding TempTimerDescription, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            <TextBox.Style>
+                <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding TempTimer}" Value="False" >
+                            <Setter Property="Visibility" Value="Collapsed"/>
                         </DataTrigger>
                         <DataTrigger Binding="{Binding HasModifiedRunDate}" Value="True">
                             <Setter Property="IsEnabled" Value="False"/>
@@ -33,16 +75,14 @@
                 </Style>
             </TextBox.Style>
         </TextBox>
-
-        <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Padding="2">Date</TextBlock>
-        <DatePicker Grid.Row="1" Grid.Column="1" Margin="0,5" IsTodayHighlighted="False" DisplayDate="{Binding DisplayDate}" DisplayDateStart="{Binding MinDate}" DisplayDateEnd="{Binding MaxDate}" SelectedDate="{Binding RunDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+        <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Padding="2">Date</TextBlock>
+        <DatePicker Grid.Row="2" Grid.Column="1" Margin="0,5" IsTodayHighlighted="False" DisplayDate="{Binding DisplayDate}" DisplayDateStart="{Binding MinDate}" DisplayDateEnd="{Binding MaxDate}" SelectedDate="{Binding RunDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
             <DatePicker.Style>
                 <Style TargetType="DatePicker" BasedOn="{StaticResource {x:Type DatePicker}}">
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding DateEditable}" Value="False" >
                             <Setter Property="IsEnabled" Value="False"/>
                         </DataTrigger>
-
                         <DataTrigger Binding="{Binding HasModifiedJiraReference}" Value="True">
                             <Setter Property="IsEnabled" Value="False"/>
                         </DataTrigger>
@@ -51,8 +91,8 @@
             </DatePicker.Style>
         </DatePicker>
 
-        <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Padding="2">Current Time</TextBlock>
-        <WrapPanel Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Margin="0,5" Orientation="Horizontal">
+        <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Padding="2" Margin="0,0,5,0">Current Time</TextBlock>
+        <WrapPanel Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Margin="0,5" Orientation="Horizontal">
             <controls:NumericUpDown Value="{Binding Hours, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Left" Minimum="0" Maximum="9" Width="80">
                 <controls:NumericUpDown.Style>
                     <Style TargetType="controls:NumericUpDown" BasedOn="{StaticResource {x:Type controls:NumericUpDown}}">
@@ -80,25 +120,25 @@
         </WrapPanel>
 
 
-        <StackPanel Orientation="Horizontal" Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center">
+        <StackPanel Orientation="Horizontal" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center">
             <Button  Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="AddTime">
                 <Rectangle Width="27" Height="24" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}" ToolTip="Add X Minutes">
                     <Rectangle.OpacityMask>
-                        <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_timer_rewind}" />
+                        <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_timer_rewind}" />
                     </Rectangle.OpacityMask>
                 </Rectangle>
             </Button>
             <Button  Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="SubtractTime">
                 <Rectangle Width="27" Height="24" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}" ToolTip="Subtract X Minutes">
                     <Rectangle.OpacityMask>
-                        <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_timer_forward}" />
+                        <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_timer_forward}" />
                     </Rectangle.OpacityMask>
                 </Rectangle>
             </Button>
             <Button  Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="SaveButton" IsDefault="{Binding IsDefaultOnButton, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                 <Rectangle Width="23" Height="23" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}" ToolTip="Save Timer Changes">
                     <Rectangle.OpacityMask>
-                        <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_save}" />
+                        <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_save}" />
                     </Rectangle.OpacityMask>
                 </Rectangle>
             </Button>

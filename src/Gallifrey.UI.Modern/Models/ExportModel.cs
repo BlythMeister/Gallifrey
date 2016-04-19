@@ -22,6 +22,8 @@ namespace Gallifrey.UI.Modern.Models
         public DateTime ExportDate { get; set; }
         public string Comment { get; set; }
         public TimeSpan OriginalRemaining { get; set; }
+        public string DefaultComment { get; set; }
+        public bool StandardComment { get; set; }
 
         public bool ShowRemaining => workLogStrategy == WorkLogStrategy.SetValue;
         public bool HasParent => Timer.HasParent;
@@ -45,13 +47,13 @@ namespace Gallifrey.UI.Modern.Models
             }
         }
 
-        public ExportModel(JiraTimer timer, TimeSpan? exportTime, DefaultRemaining defaultWorkLogStrategy)
+        public ExportModel(JiraTimer timer, TimeSpan? exportTime, IExportSettings exportSettings)
         {
             UpdateTimer(timer, exportTime);
 
             ExportDate = timer.DateStarted.Date != DateTime.Now.Date ? timer.DateStarted.Date.AddHours(12) : DateTime.Now;
 
-            switch (defaultWorkLogStrategy)
+            switch (exportSettings.DefaultRemainingValue)
             {
                 case DefaultRemaining.Auto:
                     WorkLogStrategy = WorkLogStrategy.Automatic;
@@ -63,6 +65,8 @@ namespace Gallifrey.UI.Modern.Models
                     WorkLogStrategy = WorkLogStrategy.SetValue;
                     break;
             }
+
+            DefaultComment = exportSettings.EmptyExportComment;
         }
 
         public void UpdateTimer(JiraTimer timer, Issue jiraIssue)

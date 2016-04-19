@@ -25,25 +25,22 @@ namespace Gallifrey.UI.Modern.MainViews
             unexportedMutex.WaitOne();
             ModelHelpers.Gallifrey.TrackEvent(TrackingType.ExportAll);
             var timers = ModelHelpers.Gallifrey.JiraTimerCollection.GetStoppedUnexportedTimers().ToList();
+            timers.RemoveAll(x => x.TempTimer || x.IsRunning);
 
             if (timers.Any())
             {
-                foreach (var jiraTimer in timers)
+                if (timers.Count == 1)
                 {
-                    await ModelHelpers.OpenFlyout(new Export(ModelHelpers, jiraTimer.UniqueId, null));
-
-                    var updatedTimer = ModelHelpers.Gallifrey.JiraTimerCollection.GetTimer(jiraTimer.UniqueId);
-                    if (!updatedTimer.FullyExported)
-                    {
-                        await DialogCoordinator.Instance.ShowMessageAsync(ModelHelpers.DialogContext, "Stopping Bulk Export", "Will Stop Bulk Export As Timer Was Not Fully Exported\n\nWill Select The Cancelled Timer");
-                        ModelHelpers.SetSelectedTimer(jiraTimer.UniqueId);
-                        break;
-                    }
+                    await ModelHelpers.OpenFlyout(new Export(ModelHelpers, timers.First().UniqueId, null));
+                }
+                else
+                {
+                    await ModelHelpers.OpenFlyout(new BulkExport(ModelHelpers, timers));
                 }
             }
             else
             {
-                await DialogCoordinator.Instance.ShowMessageAsync(ModelHelpers.DialogContext, "Nothing To Export", "No Un-Exported Timers To Bulk Export");
+                await DialogCoordinator.Instance.ShowMessageAsync(ModelHelpers.DialogContext, "Nothing To Export", "No Un-Exported Timers Avaliable To Export");
             }
 
             ModelHelpers.RefreshModel();

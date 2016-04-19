@@ -19,7 +19,7 @@ namespace Gallifrey.UI.Modern.Models
             DateAndTimeForTimer = idleTimer.DateStarted;
             Date = $"{idleTimer.DateStarted.ToString("ddd, dd MMM")} at {idleTimer.DateStarted.ToString("t")}";
             UniqueId = idleTimer.UniqueId;
-            IdleTimeValue = idleTimer.IdleTimeValue.FormatAsString();
+            IdleTimeValue = idleTimer.IdleTimeValue.FormatAsString(false);
             IdleTime = idleTimer.IdleTimeValue;
             IsSelected = false;
         }

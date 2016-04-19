@@ -113,7 +113,7 @@ namespace Gallifrey.UI.Modern.Models
             settings.AppSettings.AutoUpdate = AutoUpdate;
             settings.AppSettings.UsageTracking = AllowTracking;
             settings.AppSettings.TargetLogPerDay = new TimeSpan(TargetHoursPerDay, TargetMinutesPerDay, 0);
-            settings.AppSettings.ExportDays = WorkingDays.Where(x => x.IsChecked).Select(x => x.DayOfWeek);
+            settings.AppSettings.ExportDays = WorkingDays.Where(x => x.IsChecked).Select(x => x.DayOfWeek).ToList();
             settings.AppSettings.StartOfWeek = (DayOfWeek)Enum.Parse(typeof(DayOfWeek), StartOfWeek, true);
 
             //UI Settings
