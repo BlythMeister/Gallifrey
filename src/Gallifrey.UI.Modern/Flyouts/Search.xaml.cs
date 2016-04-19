@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using Gallifrey.Jira.Model;
 using Gallifrey.UI.Modern.Helpers;
@@ -25,9 +26,29 @@ namespace Gallifrey.UI.Modern.Flyouts
             InitializeComponent();
             progressDialogHelper = new ProgressDialogHelper(modelHelpers.DialogContext);
 
-            var filters = modelHelpers.Gallifrey.JiraConnection.GetJiraFilters();
-            var issues = modelHelpers.Gallifrey.JiraConnection.GetJiraCurrentUserOpenIssues();
             var recent = modelHelpers.Gallifrey.JiraTimerCollection.GetJiraReferencesForLastDays(50);
+
+            List<string> filters;
+            List<Issue> issues;
+
+            try
+            {
+                 filters = modelHelpers.Gallifrey.JiraConnection.GetJiraFilters().ToList();
+            }
+            catch (Exception)
+            {
+                filters = new List<string>();
+            }
+
+            try
+            {
+                issues = modelHelpers.Gallifrey.JiraConnection.GetJiraCurrentUserOpenIssues().ToList();
+            }
+            catch (Exception)
+            {
+                issues = new List<Issue>();
+            }
+            
             DataContext = new SearchModel(filters, recent, issues);
         }
 

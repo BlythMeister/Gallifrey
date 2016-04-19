@@ -38,7 +38,7 @@
     </Bugs>
     <Others/>
   </Version>
-  <Version Number="3.0.3" Name="Pre-Release">
+  <Version Number="3.0.3">
     <Features>
       <Feature>When adding locked timers, prompts if you want to add to running timer</Feature>
       <Feature>Added link to Gitter for chat help</Feature>
@@ -60,6 +60,7 @@
       <Bug>Keyboard shortcuts only active when flyout not open</Bug>
       <Bug>Hide version number and window controls when flyout open</Bug>
       <Bug>Attemping to fix memory leak when running Gallifrey for long periods</Bug>
+      <Bug>Fixed error when search loaded</Bug>
     </Bugs>
     <Others />
   </Version>
