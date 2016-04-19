@@ -38,7 +38,7 @@
     </Bugs>
     <Others/>
   </Version>
-  <Version Number="3.0.3">
+  <Version Number="3.1.0">
     <Features>
       <Feature>When adding locked timers, prompts if you want to add to running timer</Feature>
       <Feature>Added link to Gitter for chat help</Feature>
