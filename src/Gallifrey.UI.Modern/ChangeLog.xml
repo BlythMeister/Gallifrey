@@ -64,5 +64,12 @@
     </Bugs>
     <Others />
   </Version>
+  <Version Number="3.2.0" Name="Pre-Release">
+    <Features>
+      <Feature>Adding "Premium" switch for a Premium set of features</Feature>
+    </Features>
+    <Bugs/>
+    <Others/>
+  </Version>
 </Versions>
 

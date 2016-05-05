@@ -10,7 +10,7 @@ namespace Gallifrey.UI.Modern.Stable
     {
         protected override void OnStartup(StartupEventArgs e)
         {
-            Modern.App.Run(InstanceType.Stable, AppType.Modern);
+            Modern.App.Run(InstanceType.Stable);
         }
     }
 }

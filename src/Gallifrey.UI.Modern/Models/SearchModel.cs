@@ -21,7 +21,8 @@ namespace Gallifrey.UI.Modern.Models
             set
             {
                 searchTerm = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasSearchTerm"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("EnableSearchTerm"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("EnableFilter"));
             }
         }
 
@@ -31,13 +32,14 @@ namespace Gallifrey.UI.Modern.Models
             set
             {
                 selectedFilter = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasFilter"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("EnableSearchTerm"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("EnableFilter"));
             }
         }
 
-        public bool HasFilter => !string.IsNullOrWhiteSpace(SelectedFilter);
-        public bool HasSearchTerm => !string.IsNullOrWhiteSpace(SearchTerm);
-
+        public bool EnableSearchTerm => string.IsNullOrWhiteSpace(SelectedFilter) && !IsSearching;
+        public bool EnableFilter => string.IsNullOrWhiteSpace(SearchTerm) && !IsSearching;
+        
         public bool IsSearching { get; set; }
         public ObservableCollection<string> UserFilters { get; set; }
         public ObservableCollection<JiraIssueDisplayModel> SearchResults { get; set; }

@@ -52,34 +52,38 @@ namespace Gallifrey
         private readonly JiraConnection jiraConnection;
         private readonly VersionControl versionControl;
         private readonly WithThanksCreator withThanksCreator;
+        private readonly PremiumChecker premiumChecker;
+        private readonly Mutex exportedHeartbeatMutex;
 
         public event EventHandler<int> NoActivityEvent;
         public event EventHandler<ExportPromptDetail> ExportPromptEvent;
         public event EventHandler DailyTrackingEvent;
+
         internal ActivityChecker ActivityChecker;
+
         private Guid? runningTimerWhenIdle;
         private DateTime lastMissingTimerCheck = DateTime.MinValue;
-        private readonly Mutex exportedHeartbeatMutex;
-
-        public Backend(InstanceType instanceType, AppType appType)
+        
+        public Backend(InstanceType instanceType)
         {
             settingsCollection = SettingsCollectionSerializer.DeSerialize();
-            trackUsage = new TrackUsage(settingsCollection.AppSettings, settingsCollection.InternalSettings, instanceType, appType);
-            versionControl = new VersionControl(instanceType, appType, trackUsage);
+            trackUsage = new TrackUsage(settingsCollection.AppSettings, settingsCollection.InternalSettings, instanceType);
+            versionControl = new VersionControl(instanceType, trackUsage);
             jiraTimerCollection = new JiraTimerCollection(settingsCollection.ExportSettings, trackUsage);
             jiraTimerCollection.exportPrompt += OnExportPromptEvent;
             jiraConnection = new JiraConnection(trackUsage);
             idleTimerCollection = new IdleTimerCollection();
             ActivityChecker = new ActivityChecker(jiraTimerCollection, settingsCollection.AppSettings);
             withThanksCreator = new WithThanksCreator();
+            premiumChecker = new PremiumChecker();
 
             ActivityChecker.NoActivityEvent += OnNoActivityEvent;
-            var cleanUpAndTrackingHearbeat = new Timer(1800000); // 30 minutes
+            var cleanUpAndTrackingHearbeat = new Timer(TimeSpan.FromMinutes(30).TotalMilliseconds);
             cleanUpAndTrackingHearbeat.Elapsed += CleanUpAndTrackingHearbeatOnElapsed;
             cleanUpAndTrackingHearbeat.Start();
 
             exportedHeartbeatMutex = new Mutex(false);
-            var jiraExportHearbeat = new Timer(600000); //10 minutes
+            var jiraExportHearbeat = new Timer(TimeSpan.FromMinutes(10).TotalMilliseconds);
             jiraExportHearbeat.Elapsed += JiraExportHearbeatHearbeatOnElapsed;
             jiraExportHearbeat.Start();
 
@@ -132,7 +136,14 @@ namespace Gallifrey
                 {
                     DailyTrackingEvent?.Invoke(this, null);
                     trackUsage.TrackAppUsage(TrackingType.DailyHearbeat);
-                    settingsCollection.InternalSettings.LastHeartbeatTracked = DateTime.UtcNow;
+                    settingsCollection.InternalSettings.SetLastHeartbeatTracked(DateTime.UtcNow);
+                    settingsCollection.SaveSettings();
+                }
+
+                var isPremium = premiumChecker.CheckIfPremium(settingsCollection.InternalSettings.InstallationInstaceId);
+                if (isPremium != settingsCollection.InternalSettings.IsPremium)
+                {
+                    settingsCollection.InternalSettings.SetIsPremium(isPremium);
                     settingsCollection.SaveSettings();
                 }
             }

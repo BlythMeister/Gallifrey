@@ -11,7 +11,6 @@ namespace Gallifrey.Versions
     public interface IVersionControl
     {
         InstanceType InstanceType { get; }
-        AppType AppType { get; }
         bool IsAutomatedDeploy { get; }
         bool UpdateInstalled { get; }
         string VersionName { get; }
@@ -29,7 +28,6 @@ namespace Gallifrey.Versions
 
         private readonly ITrackUsage trackUsage;
         public InstanceType InstanceType { get; private set; }
-        public AppType AppType { get; private set; }
         public string VersionName { get; private set; }
         public string AppName { get; private set; }
         public bool UpdateInstalled { get; private set; }
@@ -40,19 +38,16 @@ namespace Gallifrey.Versions
         public Version DeployedVersion => UpdateInstalled ? ApplicationDeployment.CurrentDeployment.UpdatedVersion : ApplicationDeployment.CurrentDeployment.CurrentVersion;
         public bool IsFirstRun => ApplicationDeployment.CurrentDeployment.IsFirstRun;
 
-        public VersionControl(InstanceType instanceType, AppType appType, ITrackUsage trackUsage)
+        public VersionControl(InstanceType instanceType, ITrackUsage trackUsage)
         {
             this.trackUsage = trackUsage;
             InstanceType = instanceType;
-            AppType = appType;
             lastUpdateCheck = DateTime.MinValue;
 
             SetVersionName();
 
             var instance = InstanceType == InstanceType.Stable ? "" : $" ({InstanceType})";
-            var appName = AppType == AppType.Classic ? "Gallifrey Classic" : "Gallifrey";
-
-            AppName = $"{appName}{instance}";
+            AppName = $"Gallifrey {instance}";
         }
 
         private void SetVersionName()

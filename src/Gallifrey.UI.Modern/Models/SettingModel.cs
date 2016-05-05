@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Windows.Media;
@@ -10,8 +11,10 @@ using Microsoft.Win32;
 
 namespace Gallifrey.UI.Modern.Models
 {
-    public class SettingModel
+    public class SettingModel : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+
         readonly RegistryKey registryKey = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
 
         //AppSettings
@@ -201,6 +204,12 @@ namespace Gallifrey.UI.Modern.Models
             {
                 return DisplayName;
             }
+        }
+
+        public void EnableTracking()
+        {
+            AllowTracking = true;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("AllowTracking"));
         }
     }
 }

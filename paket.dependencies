@@ -4,6 +4,6 @@ nuget Atlassian.SDK @= 2.5.0
 nuget Exceptionless.Portable
 nuget Exceptionless.Windows
 nuget Exceptionless.Wpf
-nuget MahApps.Metro
+nuget MahApps.Metro prerelease
 nuget Newtonsoft.Json
 nuget RestSharp

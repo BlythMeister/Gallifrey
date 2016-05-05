@@ -2,6 +2,7 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+             xmlns:helpers="clr-namespace:Gallifrey.UI.Modern.Helpers"
              IsModal="True" Theme="Adapt" Position="Right" Header="Search Jira" CloseButtonIsCancel="True">
     <Grid Width="450" Margin="5,5,5,5" >
         <Grid.RowDefinitions>
@@ -17,80 +18,41 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
+        <Grid.Resources>
+            <helpers:BooleanVisibilityConverter x:Key="BoolToVisInverted" Collapse="True" Invert="True"/>
+            <helpers:BooleanVisibilityConverter x:Key="BoolToVis" Collapse="True" Invert="False"/>
+            <helpers:BooleanInvertConverter x:Key="BoolInvert"/>
+        </Grid.Resources>
+
         <TextBlock Grid.Row="0" Grid.Column="0" Text="Search Term" VerticalAlignment="Center" />
-        <TextBox Grid.Row="0" Grid.Column="1" Margin="5,5,0,5" Text="{Binding SearchTerm, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-            <TextBox.Style>
-                <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding HasFilter}" Value="True" >
-                            <Setter Property="IsEnabled" Value="False"/>
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding IsSearching}" Value="True" >
-                            <Setter Property="IsEnabled" Value="False"/>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </TextBox.Style>
-        </TextBox>
+        <TextBox Grid.Row="0" Grid.Column="1" Margin="5,5,0,5" Text="{Binding SearchTerm, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding EnableSearchTerm}" />
 
         <TextBlock Grid.Row="1" Grid.Column="0" Text="OR" TextAlignment="Center" />
 
         <TextBlock Grid.Row="2" Grid.Column="0" Text="Search Filter" VerticalAlignment="Center"/>
-        <ComboBox  Grid.Row="2" Grid.Column="1" Margin="5,5,0,5" ItemsSource="{Binding UserFilters}" SelectedItem="{Binding SelectedFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsSynchronizedWithCurrentItem="True" controls:TextBoxHelper.ClearTextButton="True">
-            <ComboBox.Style>
-                <Style TargetType="ComboBox" BasedOn="{StaticResource {x:Type ComboBox}}">
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding HasSearchTerm}" Value="True" >
-                            <Setter Property="IsEnabled" Value="False"/>
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding IsSearching}" Value="True" >
-                            <Setter Property="IsEnabled" Value="False"/>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </ComboBox.Style>
-        </ComboBox>
+        <ComboBox  Grid.Row="2" Grid.Column="1" Margin="5,5,0,5" ItemsSource="{Binding UserFilters}" SelectedItem="{Binding SelectedFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsSynchronizedWithCurrentItem="True" controls:TextBoxHelper.ClearTextButton="True"  IsEnabled="{Binding EnableFilter}" />
 
-
-        <Button Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Width="50" Height="50" Margin="2,0" Click="SearchButton" IsDefault="True">
+        <Button Style="{DynamicResource MetroCircleButtonStyle}" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Width="50" Height="50" Margin="2,0" Click="SearchButton" IsDefault="True" IsEnabled="{Binding IsSearching, Converter={StaticResource BoolInvert}}">
             <Rectangle Width="23" Height="23" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}" ToolTip="Search Jira (Text/Filter)">
                 <Rectangle.OpacityMask>
                     <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_magnify}" />
                 </Rectangle.OpacityMask>
             </Rectangle>
-            <Button.Style>
-                <Style TargetType="Button" BasedOn="{StaticResource MetroCircleButtonStyle}">
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding IsSearching}" Value="True" >
-                            <Setter Property="IsEnabled" Value="False"/>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </Button.Style>
         </Button>
 
         <ListView Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding SearchResults}" SelectedItem="{Binding SelectedSearchResult, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" BorderThickness="0" SelectionMode="Single">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <StackPanel>
-                        <TextBlock VerticalAlignment="Center" Margin="5">
+                        <TextBlock VerticalAlignment="Center" Margin="5" Visibility="{Binding HasParent, Converter={StaticResource BoolToVisInverted}}">
                             <TextBlock.Text>
                                 <MultiBinding StringFormat="{}{0} - {1}">
                                     <Binding Path="Reference" />
                                     <Binding Path="Description" />
                                 </MultiBinding>
                             </TextBlock.Text>
-                            <TextBlock.Style>
-                                <Style TargetType="TextBlock">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding HasParent}" Value="True" >
-                                            <Setter Property="Visibility" Value="Collapsed"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </TextBlock.Style>
                         </TextBlock>
-                        <TextBlock VerticalAlignment="Center" Margin="5">
+                        <TextBlock VerticalAlignment="Center" Margin="5" Visibility="{Binding HasParent, Converter={StaticResource BoolToVis}}">
                             <TextBlock.Text>
                                 <MultiBinding StringFormat="{}{0} - {1} (Parent: {2} - {3})">
                                     <Binding Path="Reference" />
@@ -99,36 +61,18 @@
                                     <Binding Path="ParentDescription" />
                                 </MultiBinding>
                             </TextBlock.Text>
-                            <TextBlock.Style>
-                                <Style TargetType="TextBlock">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding HasParent}" Value="False" >
-                                            <Setter Property="Visibility" Value="Collapsed"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </TextBlock.Style>
                         </TextBlock>
                     </StackPanel>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
 
-        <Button Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Width="50" Height="50" Margin="2,0" Click="AddTimer">
+        <Button Style="{DynamicResource MetroCircleButtonStyle}" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Width="50" Height="50" Margin="2,0" Click="AddTimer" IsEnabled="{Binding IsSearching, Converter={StaticResource BoolInvert}}">
             <Rectangle Width="23" Height="23" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}" ToolTip="Create Jira From Selected Search Result">
                 <Rectangle.OpacityMask>
                     <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_add}" />
                 </Rectangle.OpacityMask>
             </Rectangle>
-            <Button.Style>
-                <Style TargetType="Button" BasedOn="{StaticResource MetroCircleButtonStyle}">
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding IsSearching}" Value="True" >
-                            <Setter Property="IsEnabled" Value="False"/>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </Button.Style>
         </Button>
     </Grid>
 </controls:Flyout>

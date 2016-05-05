@@ -27,53 +27,16 @@
             </Grid.ColumnDefinitions>
             <Grid.Resources>
                 <helpers:EnumMatchToBooleanConverter x:Key="EnumConverter" />
+                <helpers:BooleanVisibilityConverter x:Key="BoolToVisInverted" Collapse="True" Invert="True"/>
+                <helpers:BooleanVisibilityConverter x:Key="BoolToVis" Collapse="True" Invert="False"/>
+                <helpers:BooleanInvertConverter x:Key="BoolInvert"/>
             </Grid.Resources>
 
-            <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Text="Jira Parent Reference" Margin="0,0,5,0">
-                <TextBlock.Style>
-                    <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding HasParent}" Value="False" >
-                                <Setter Property="Visibility" Value="Collapsed"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </TextBlock.Style>
-            </TextBlock>
-            <TextBox Grid.Row="0" Grid.Column="1" Margin="0,5" Text="{Binding JiraParentRef, Mode=OneWay}" IsEnabled="False">
-                <TextBox.Style>
-                    <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding HasParent}" Value="False" >
-                                <Setter Property="Visibility" Value="Collapsed"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </TextBox.Style>
-            </TextBox>
+            <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Text="Jira Parent Reference" Margin="0,0,5,0" Visibility="{Binding HasParent, Converter={StaticResource BoolToVisInverted}}" />
+            <TextBox Grid.Row="0" Grid.Column="1" Margin="0,5" Text="{Binding JiraParentRef, Mode=OneWay}" IsEnabled="False" Visibility="{Binding HasParent, Converter={StaticResource BoolToVisInverted}}" />
 
-            <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Text="Jira Parent Name">
-                <TextBlock.Style>
-                    <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding HasParent}" Value="False" >
-                                <Setter Property="Visibility" Value="Collapsed"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </TextBlock.Style>
-            </TextBlock>
-            <TextBox Grid.Row="1" Grid.Column="1" Margin="0,5" Text="{Binding JiraParentDesc, Mode=OneWay}" IsEnabled="False" TextWrapping="Wrap" MaxLines="2">
-                <TextBox.Style>
-                    <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding HasParent}" Value="False" >
-                                <Setter Property="Visibility" Value="Collapsed"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </TextBox.Style>
-            </TextBox>
+            <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Text="Jira Parent Name" Visibility="{Binding HasParent, Converter={StaticResource BoolToVisInverted}}" />
+            <TextBox Grid.Row="1" Grid.Column="1" Margin="0,5" Text="{Binding JiraParentDesc, Mode=OneWay}" IsEnabled="False" TextWrapping="Wrap" MaxLines="2" Visibility="{Binding HasParent, Converter={StaticResource BoolToVisInverted}}" />
 
             <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,5,0">Jira Reference</TextBlock>
             <TextBox Grid.Row="2" Grid.Column="1" Margin="0,5" Text="{Binding JiraRef, Mode=OneWay}" IsEnabled="False"/>
@@ -108,35 +71,17 @@
             </WrapPanel>
 
             <TextBlock Grid.Row="8" Grid.Column="0" VerticalAlignment="Center" Padding="2" Text="Remaining Estimate" />
-            <WrapPanel Grid.Row="8" Grid.Column="1" VerticalAlignment="Center" Margin="0,5" Orientation="Horizontal">
+            <WrapPanel Grid.Row="8" Grid.Column="1" VerticalAlignment="Center" Margin="0,5" Orientation="Horizontal" Visibility="{Binding ShowRemaining, Converter={StaticResource BoolToVisInverted}}">
                 <controls:NumericUpDown Value="{Binding RemainingHours}" TextAlignment="Left" Minimum="0" Maximum="99" Width="80" />
                 <TextBlock VerticalAlignment="Center" Margin="2,0">Hours</TextBlock>
                 <controls:NumericUpDown Value="{Binding RemainingMinutes}" TextAlignment="Left" Minimum="0" Maximum="59" Width="80" />
                 <TextBlock VerticalAlignment="Center" Margin="2,0">Minutes</TextBlock>
-                <WrapPanel.Style>
-                    <Style TargetType="WrapPanel">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding Path=ShowRemaining}" Value="False" >
-                                <Setter Property="Visibility" Value="Collapsed"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </WrapPanel.Style>
             </WrapPanel>
-            <WrapPanel Grid.Row="8" Grid.Column="1" VerticalAlignment="Center" Margin="0,5" Orientation="Horizontal">
+            <WrapPanel Grid.Row="8" Grid.Column="1" VerticalAlignment="Center" Margin="0,5" Orientation="Horizontal" Visibility="{Binding ShowRemaining, Converter={StaticResource BoolToVis}}">
                 <TextBox Text="{Binding RemainingHours}" TextAlignment="Left" IsEnabled="False" Width="80" />
                 <TextBlock VerticalAlignment="Center" Margin="2,0">Hours</TextBlock>
                 <TextBox Text="{Binding RemainingMinutes}" TextAlignment="Left" IsEnabled="False" Width="80" />
                 <TextBlock VerticalAlignment="Center" Margin="2,0">Minutes</TextBlock>
-                <WrapPanel.Style>
-                    <Style TargetType="WrapPanel">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding Path=ShowRemaining}" Value="True" >
-                                <Setter Property="Visibility" Value="Collapsed"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </WrapPanel.Style>
             </WrapPanel>
 
             <TextBlock Grid.Row="9" Grid.Column="0" VerticalAlignment="Center">Worklog Comment</TextBlock>

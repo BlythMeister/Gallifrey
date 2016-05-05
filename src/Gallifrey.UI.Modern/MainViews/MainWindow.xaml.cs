@@ -29,11 +29,11 @@ namespace Gallifrey.UI.Modern.MainViews
         private MainViewModel ViewModel => (MainViewModel)DataContext;
         private bool machineLocked;
 
-        public MainWindow(InstanceType instance, AppType appType)
+        public MainWindow(InstanceType instance)
         {
             InitializeComponent();
 
-            var gallifrey = new Backend(instance, appType);
+            var gallifrey = new Backend(instance);
             modelHelpers = new ModelHelpers(gallifrey, FlyoutsControl);
             exceptionlessHelper = new ExceptionlessHelper(modelHelpers);
             exceptionlessHelper.RegisterExceptionless();
@@ -48,7 +48,6 @@ namespace Gallifrey.UI.Modern.MainViews
 
             Height = gallifrey.Settings.UiSettings.Height;
             Width = gallifrey.Settings.UiSettings.Width;
-            Title = gallifrey.VersionControl.AppName;
             ThemeHelper.ChangeTheme(gallifrey.Settings.UiSettings.Theme, gallifrey.Settings.UiSettings.Accent);
 
             if (gallifrey.VersionControl.IsAutomatedDeploy)
@@ -221,6 +220,11 @@ namespace Gallifrey.UI.Modern.MainViews
         private void ManualUpdateCheck(object sender, RoutedEventArgs e)
         {
             PerformUpdate(true, true);
+        }
+
+        private void GetPremium(object sender, RoutedEventArgs e)
+        {
+            modelHelpers.ShowGetPremiumMessage();
         }
 
         private void LoadJira(object sender, RoutedEventArgs e)

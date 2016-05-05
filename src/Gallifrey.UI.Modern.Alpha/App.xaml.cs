@@ -10,7 +10,7 @@ namespace Gallifrey.UI.Modern.Alpha
     {
         protected override void OnStartup(StartupEventArgs e)
         {
-            Modern.App.Run(InstanceType.Alpha, AppType.Modern);
+            Modern.App.Run(InstanceType.Alpha);
         }
     }
 }

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using Gallifrey.UI.Modern.Models;
 using MahApps.Metro.Controls;
+using MahApps.Metro.Controls.Dialogs;
 
 namespace Gallifrey.UI.Modern.Helpers
 {
@@ -160,6 +161,32 @@ namespace Gallifrey.UI.Modern.Helpers
             }
 
             Application.Current.Shutdown();
+        }
+
+        public async void ShowGetPremiumMessage(string message = "")
+        {
+            string premiumMessage;
+
+            if (string.IsNullOrWhiteSpace(message))
+            {
+                premiumMessage = "To Get Access To Premium Features You Need To Either Contribute To Gallifrey Or Donate.\n\nPremium Features Include:\n=>Ability To Opt-Out Of Tracking";
+            }
+            else
+            {
+                premiumMessage = $"{message}\n\nTo Get Access To Premium Features You Need To Either Contribute To Gallifrey Or Donate.\n\nPremium Features Include:\n=>Ability To Opt-Out Of Tracking";
+            }
+
+            var messageResult = await DialogCoordinator.Instance.ShowMessageAsync(DialogContext, "Get Premium", premiumMessage, MessageDialogStyle.AffirmativeAndNegativeAndSingleAuxiliary, new MetroDialogSettings { AffirmativeButtonText = "Close", NegativeButtonText = "Contribute", FirstAuxiliaryButtonText = "Donate", DefaultButtonFocus = MessageDialogResult.Affirmative });
+
+            switch (messageResult)
+            {
+                case MessageDialogResult.Negative:
+                    TriggerRemoteButtonPress(Models.RemoteButtonTrigger.GitHub);
+                    break;
+                case MessageDialogResult.FirstAuxiliary:
+                    TriggerRemoteButtonPress(Models.RemoteButtonTrigger.PayPal);
+                    break;
+            }
         }
     }
 }

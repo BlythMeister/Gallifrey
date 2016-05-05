@@ -5,9 +5,12 @@ namespace Gallifrey.Settings
     public interface IInternalSettings
     {
         Version LastChangeLogVersion { get; }
-        DateTime LastHeartbeatTracked { get; set; }
+        DateTime LastHeartbeatTracked { get; }
         Guid InstallationInstaceId { get; }
+        bool IsPremium { get; }
         void SetLastChangeLogVersion(Version currentVersion);
+        void SetLastHeartbeatTracked(DateTime lastHeartbeat);
+        void SetIsPremium(bool isPremium);
         bool SetDefaults();
     }
 
@@ -19,7 +22,8 @@ namespace Gallifrey.Settings
         public int Revision { get; set; }
         public DateTime LastHeartbeatTracked { get; set; }
         public Guid InstallationInstaceId { get; set; }
-        
+        public bool IsPremium { get; set; }
+
         public Version LastChangeLogVersion { get { return new Version(Major, Minor, Build, Revision); } }
 
         public void SetLastChangeLogVersion(Version currentVersion)
@@ -28,6 +32,16 @@ namespace Gallifrey.Settings
             Minor = currentVersion.Minor < 0 ? 0 : currentVersion.Minor;
             Build = currentVersion.Build < 0 ? 0 : currentVersion.Build;
             Revision = currentVersion.Revision < 0 ? 0 : currentVersion.Revision;
+        }
+
+        public void SetLastHeartbeatTracked(DateTime lastHeartbeat)
+        {
+            LastHeartbeatTracked = lastHeartbeat;
+        }
+
+        public void SetIsPremium(bool isPremium)
+        {
+            IsPremium = isPremium;
         }
 
         public bool SetDefaults()

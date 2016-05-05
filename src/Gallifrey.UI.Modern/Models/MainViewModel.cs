@@ -7,6 +7,7 @@ using System.Timers;
 using Gallifrey.Comparers;
 using Gallifrey.ExtensionMethods;
 using Gallifrey.UI.Modern.Helpers;
+using Gallifrey.Versions;
 
 namespace Gallifrey.UI.Modern.Models
 {
@@ -34,7 +35,7 @@ namespace Gallifrey.UI.Modern.Models
             modelHelpers.SelectRunningTimerEvent += (sender, args) => SelectRunningTimer();
             modelHelpers.SelectTimerEvent += (sender, timerId) => SetSelectedTimer(timerId);
         }
-        
+
         public string ExportedNumber => ModelHelpers.Gallifrey.JiraTimerCollection.GetNumberExported().Item1.ToString();
         public string TotalTimerCount => ModelHelpers.Gallifrey.JiraTimerCollection.GetNumberExported().Item2.ToString();
         public string UnexportedTime => ModelHelpers.Gallifrey.JiraTimerCollection.GetTotalUnexportedTime().FormatAsString(false);
@@ -49,6 +50,17 @@ namespace Gallifrey.UI.Modern.Models
         public bool TimerRunning => !string.IsNullOrWhiteSpace(CurrentRunningTimerDescription);
         public bool HaveTimeToExport => !string.IsNullOrWhiteSpace(TimeToExportMessage);
         public bool HaveTempTime => !string.IsNullOrWhiteSpace(TempTimeMessage);
+        public bool IsPremium => ModelHelpers.Gallifrey.Settings.InternalSettings.IsPremium;
+
+        public string AppTitle
+        {
+            get
+            {
+                var instanceType = ModelHelpers.Gallifrey.VersionControl.InstanceType;
+                var appName = IsPremium ? "Gallifrey Premium" : "Gallifrey";
+                return instanceType == InstanceType.Stable ? $"{appName}" : $"{appName} ({instanceType})";
+            }
+        }
 
         public string TimeToExportMessage
         {
@@ -56,7 +68,7 @@ namespace Gallifrey.UI.Modern.Models
             {
                 var unexportedTime = ModelHelpers.Gallifrey.JiraTimerCollection.GetTotalExportableTime();
                 var unexportedTimers = ModelHelpers.Gallifrey.JiraTimerCollection.GetStoppedUnexportedTimers();
-                var unexportedCount = unexportedTimers.Count(x=>!x.TempTimer);
+                var unexportedCount = unexportedTimers.Count(x => !x.TempTimer);
 
                 var excludingRunning = string.Empty;
                 var runningTimerId = ModelHelpers.Gallifrey.JiraTimerCollection.GetRunningTimerId();
@@ -147,6 +159,8 @@ namespace Gallifrey.UI.Modern.Models
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TempTimeMessage"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LoggedInAs"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LoggedInDisplayName"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("AppTitle"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("IsPremium"));
         }
 
         private void RefreshModel()

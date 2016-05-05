@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.ComponentModel;
+using System.Windows;
 using Gallifrey.Exceptions.JiraIntegration;
 using Gallifrey.UI.Modern.Helpers;
 using Gallifrey.UI.Modern.Models;
@@ -54,6 +55,15 @@ namespace Gallifrey.UI.Modern.Flyouts
             {
                 await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext,"Invalid Jira Configuration", "You Cannot Save With Invalid Jira Configuration.\nTo Save You Have To Have A Valid Connection To Jira");
                 Focus();
+            }
+        }
+
+        private void AllowTrackingClick(object sender, RoutedEventArgs e)
+        {
+            if (!modelHelpers.Gallifrey.Settings.InternalSettings.IsPremium && !DataModel.AllowTracking)
+            {
+                modelHelpers.ShowGetPremiumMessage("To Opt-Out Of Tracking You Need To Have Gallifrey Premium");
+                DataModel.EnableTracking();
             }
         }
     }

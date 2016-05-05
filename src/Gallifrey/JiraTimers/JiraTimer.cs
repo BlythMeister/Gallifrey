@@ -204,7 +204,7 @@ namespace Gallifrey.JiraTimers
 
         public bool HasExportedTime()
         {
-            return ExportedTime.TotalSeconds == 0;
+            return ExportedTime.TotalSeconds > 0;
         }
 
         public bool ManualAdjustment(TimeSpan changeTimespan, bool addTime)

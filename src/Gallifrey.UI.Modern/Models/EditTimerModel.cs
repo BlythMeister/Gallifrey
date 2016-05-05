@@ -5,6 +5,8 @@ namespace Gallifrey.UI.Modern.Models
 {
     public class EditTimerModel : INotifyPropertyChanged
     {
+        private readonly bool hasExportedTime;
+
         private bool tempTimer;
         private string jiraReference;
         private string tempTimerDescription;
@@ -13,11 +15,9 @@ namespace Gallifrey.UI.Modern.Models
         private int minutes;
 
         public event PropertyChangedEventHandler PropertyChanged;
-        public bool JiraReferenceEditable { get; set; }
         public DateTime MinDate { get; set; }
         public DateTime MaxDate { get; set; }
         public DateTime DisplayDate { get; set; }
-        public bool DateEditable { get; set; }
         public bool TimeEditable { get; set; }
         public string OriginalJiraReference { get; set; }
         public string OriginalTempTimerDescription { get; set; }
@@ -26,8 +26,10 @@ namespace Gallifrey.UI.Modern.Models
         public int OriginalMinutes { get; set; }
         public bool IsDefaultOnButton { get; set; }
 
+        public bool DateEditable => !hasExportedTime && !HasModifiedJiraReference;
+        public bool JiraReferenceEditable => !hasExportedTime && !HasModifiedRunDate;
         public bool HasModifiedJiraReference => (OriginalJiraReference != JiraReference) || (OriginalTempTimerDescription != TempTimerDescription);
-        public bool HasModifiedRunDate => OriginalRunDate != RunDate;
+        public bool HasModifiedRunDate => OriginalRunDate.Value.Date != RunDate.Value.Date;
         public bool HasModifiedTime => OriginalHours != Hours || OriginalMinutes != Minutes;
 
         public EditTimerModel(IBackend gallifrey, Guid timerId)
@@ -55,8 +57,7 @@ namespace Gallifrey.UI.Modern.Models
             Hours = timer.ExactCurrentTime.Hours > 9 ? 9 : timer.ExactCurrentTime.Hours;
             Minutes = timer.ExactCurrentTime.Minutes;
 
-            DateEditable = timer.HasExportedTime();
-            JiraReferenceEditable = timer.HasExportedTime();
+            hasExportedTime = timer.HasExportedTime();
             TimeEditable = !timer.IsRunning;
 
             if (TempTimer)
@@ -79,6 +80,8 @@ namespace Gallifrey.UI.Modern.Models
             set
             {
                 jiraReference = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("DateEditable"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("JiraReferenceEditable"));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasModifiedJiraReference"));
             }
         }
@@ -89,6 +92,8 @@ namespace Gallifrey.UI.Modern.Models
             set
             {
                 tempTimerDescription = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("DateEditable"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("JiraReferenceEditable"));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasModifiedJiraReference"));
             }
         }
@@ -99,6 +104,8 @@ namespace Gallifrey.UI.Modern.Models
             set
             {
                 runDate = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("DateEditable"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("JiraReferenceEditable"));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasModifiedRunDate"));
             }
         }
