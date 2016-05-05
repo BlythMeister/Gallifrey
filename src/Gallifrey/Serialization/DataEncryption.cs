@@ -2,23 +2,18 @@
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
+using Gallifrey.Settings;
 
 namespace Gallifrey.Serialization
 {
     internal static class DataEncryption
     {
-        //TODO: Maybe these shouldn't be stored in plain code?
-        //TODO: Though, this is to make hacking the app settings a pain, rather than pure security.
-        private const string PassPhrase = "WOq2kKSbvHTcKp9e";
-        private const string InitVector = "pId6i1bN1aCVTaHN";
-        private const int Keysize = 256;
-
         internal static string Encrypt(string plainText)
         {
-            var initVectorBytes = Encoding.UTF8.GetBytes(InitVector);
+            var initVectorBytes = Encoding.UTF8.GetBytes(ConfigKeys.DataEncryptionInitVector);
             var plainTextBytes = Encoding.UTF8.GetBytes(plainText);
-            var password = new PasswordDeriveBytes(PassPhrase, null);
-            var keyBytes = password.GetBytes(Keysize / 8);
+            var password = new PasswordDeriveBytes(ConfigKeys.DataEncryptionPassPhrase, null);
+            var keyBytes = password.GetBytes(ConfigKeys.DataEncryptionKeysize / 8);
             var symmetricKey = new RijndaelManaged { Mode = CipherMode.CBC };
             var encryptor = symmetricKey.CreateEncryptor(keyBytes, initVectorBytes);
 
@@ -36,10 +31,10 @@ namespace Gallifrey.Serialization
 
         internal static string Decrypt(string cipherText)
         {
-            var initVectorBytes = Encoding.ASCII.GetBytes(InitVector);
+            var initVectorBytes = Encoding.ASCII.GetBytes(ConfigKeys.DataEncryptionInitVector);
             var cipherTextBytes = Convert.FromBase64String(cipherText);
-            var password = new PasswordDeriveBytes(PassPhrase, null);
-            var keyBytes = password.GetBytes(Keysize / 8);
+            var password = new PasswordDeriveBytes(ConfigKeys.DataEncryptionPassPhrase, null);
+            var keyBytes = password.GetBytes(ConfigKeys.DataEncryptionKeysize / 8);
             var symmetricKey = new RijndaelManaged { Mode = CipherMode.CBC };
             var decryptor = symmetricKey.CreateDecryptor(keyBytes, initVectorBytes);
 

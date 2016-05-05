@@ -31,7 +31,8 @@ namespace Gallifrey
 
         private string GetInstallationId(string fileLine)
         {
-            return fileLine.Contains("~") ? fileLine.Substring(0, fileLine.IndexOf("~")).Trim().ToLower() : fileLine.Trim().ToLower();
+            var trimedLine = fileLine.Trim().ToLower();
+            return trimedLine.Contains(" ") ? trimedLine.Substring(0, trimedLine.IndexOf(" ", StringComparison.Ordinal)).Trim() : trimedLine;
         }
     }
 }
