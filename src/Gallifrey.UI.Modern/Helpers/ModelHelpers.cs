@@ -165,15 +165,14 @@ namespace Gallifrey.UI.Modern.Helpers
 
         public async void ShowGetPremiumMessage(string message = "")
         {
-            string premiumMessage;
+            var premiumMessage = "To Get Premium Features Please Contribute Or Donate To Gallifrey.\nThink You Should Have Premium? - Please Contact Us By Email Or Twitter\n\nPremium Features Include:";
+            premiumMessage += "\n  • Ability To Opt-Out Of Tracking";
+            premiumMessage += "\n  • Bulk Export More Than 5 Timers";
+            premiumMessage += "\n  • Use More Than 2 Temp Timers";
 
-            if (string.IsNullOrWhiteSpace(message))
+            if (!string.IsNullOrWhiteSpace(message))
             {
-                premiumMessage = "To Get Access To Premium Features You Need To Either Contribute To Gallifrey Or Donate.\n\nPremium Features Include:\n=>Ability To Opt-Out Of Tracking";
-            }
-            else
-            {
-                premiumMessage = $"{message}\n\nTo Get Access To Premium Features You Need To Either Contribute To Gallifrey Or Donate.\n\nPremium Features Include:\n=>Ability To Opt-Out Of Tracking";
+                premiumMessage = $"{message}\n\n{premiumMessage}";
             }
 
             var messageResult = await DialogCoordinator.Instance.ShowMessageAsync(DialogContext, "Get Premium", premiumMessage, MessageDialogStyle.AffirmativeAndNegativeAndSingleAuxiliary, new MetroDialogSettings { AffirmativeButtonText = "Close", NegativeButtonText = "Contribute", FirstAuxiliaryButtonText = "Donate", DefaultButtonFocus = MessageDialogResult.Affirmative });

@@ -53,7 +53,7 @@
                                 <TextBox Grid.Row="3" Grid.Column="1" Margin="0,5" Text="{Binding JiraDesc, Mode=OneWay}" IsEnabled="False" TextWrapping="Wrap" MaxLines="2"/>
 
                                 <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center">Export?</TextBlock>
-                                <CheckBox Grid.Row="4" Grid.Column="1" Margin="0,5" IsChecked="{Binding ShouldExport, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                <CheckBox Grid.Row="4" Grid.Column="1" Margin="0,5" IsChecked="{Binding ShouldExport, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Click="ExportSingleClick" />
                             </Grid>
                             <Grid Width="400" Margin="5,5,5,5" Visibility="{Binding ShouldExport, Converter={StaticResource BoolToVis}}">
                                 <Grid.RowDefinitions>

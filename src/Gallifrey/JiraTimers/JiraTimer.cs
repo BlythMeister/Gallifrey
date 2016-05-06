@@ -257,6 +257,8 @@ namespace Gallifrey.JiraTimers
         {
             if (jiraIssue == null) return;
 
+            TempTimer = false;
+
             SetJiraExportedTime(jiraIssue.GetCurrentLoggedTimeForDate(DateStarted, currentUser));
             JiraReference = jiraIssue.key;
             JiraProjectName = jiraIssue.fields.project.key;

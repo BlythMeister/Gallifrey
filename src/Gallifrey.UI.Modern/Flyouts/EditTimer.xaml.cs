@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using Gallifrey.Exceptions.JiraIntegration;
@@ -61,7 +62,21 @@ namespace Gallifrey.UI.Modern.Flyouts
             {
                 if (DataModel.TempTimer)
                 {
-                    modelHelpers.Gallifrey.JiraTimerCollection.ChangeTempTimerDescription(EditedTimerId, DataModel.TempTimerDescription);
+                    var currentTimer = modelHelpers.Gallifrey.JiraTimerCollection.GetTimer(EditedTimerId);
+                    if (!currentTimer.TempTimer)
+                    {
+                        if (!modelHelpers.Gallifrey.Settings.InternalSettings.IsPremium)
+                        {
+                            var tempTimersCount = modelHelpers.Gallifrey.JiraTimerCollection.GetAllTempTimers().Count();
+                            if (tempTimersCount >= 2)
+                            {
+                                modelHelpers.ShowGetPremiumMessage("Without Gallifrey Premium You Are Limited To A Maximum Of 2 Temp Timers");
+                                Focus();
+                                return;
+                            }
+                        }
+                    }
+                    EditedTimerId = modelHelpers.Gallifrey.JiraTimerCollection.ChangeTempTimerDescription(EditedTimerId, DataModel.TempTimerDescription);
                 }
                 else
                 {

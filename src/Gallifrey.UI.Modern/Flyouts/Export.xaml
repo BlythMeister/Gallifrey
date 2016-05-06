@@ -29,14 +29,13 @@
                 <helpers:EnumMatchToBooleanConverter x:Key="EnumConverter" />
                 <helpers:BooleanVisibilityConverter x:Key="BoolToVisInverted" Collapse="True" Invert="True"/>
                 <helpers:BooleanVisibilityConverter x:Key="BoolToVis" Collapse="True" Invert="False"/>
-                <helpers:BooleanInvertConverter x:Key="BoolInvert"/>
             </Grid.Resources>
 
-            <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Text="Jira Parent Reference" Margin="0,0,5,0" Visibility="{Binding HasParent, Converter={StaticResource BoolToVisInverted}}" />
-            <TextBox Grid.Row="0" Grid.Column="1" Margin="0,5" Text="{Binding JiraParentRef, Mode=OneWay}" IsEnabled="False" Visibility="{Binding HasParent, Converter={StaticResource BoolToVisInverted}}" />
+            <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Text="Jira Parent Reference" Margin="0,0,5,0" Visibility="{Binding HasParent, Converter={StaticResource BoolToVis}}" />
+            <TextBox Grid.Row="0" Grid.Column="1" Margin="0,5" Text="{Binding JiraParentRef, Mode=OneWay}" IsEnabled="False" Visibility="{Binding HasParent, Converter={StaticResource BoolToVis}}" />
 
-            <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Text="Jira Parent Name" Visibility="{Binding HasParent, Converter={StaticResource BoolToVisInverted}}" />
-            <TextBox Grid.Row="1" Grid.Column="1" Margin="0,5" Text="{Binding JiraParentDesc, Mode=OneWay}" IsEnabled="False" TextWrapping="Wrap" MaxLines="2" Visibility="{Binding HasParent, Converter={StaticResource BoolToVisInverted}}" />
+            <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Text="Jira Parent Name" Visibility="{Binding HasParent, Converter={StaticResource BoolToVis}}" />
+            <TextBox Grid.Row="1" Grid.Column="1" Margin="0,5" Text="{Binding JiraParentDesc, Mode=OneWay}" IsEnabled="False" TextWrapping="Wrap" MaxLines="2" Visibility="{Binding HasParent, Converter={StaticResource BoolToVis}}" />
 
             <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,5,0">Jira Reference</TextBlock>
             <TextBox Grid.Row="2" Grid.Column="1" Margin="0,5" Text="{Binding JiraRef, Mode=OneWay}" IsEnabled="False"/>
