@@ -17,7 +17,8 @@
     <controls:MetroWindow.RightWindowCommands>
         <controls:WindowCommands>
             <controls:WindowCommands.Resources>
-                <helpers:BooleanVisibilityConverter x:Key="BoolToVis" Collapse="True" Invert="True"/>
+                <helpers:BooleanVisibilityConverter x:Key="BoolToVisInvert" Collapse="True" Invert="True"/>
+                <helpers:BooleanVisibilityConverter x:Key="BoolToVis" Collapse="True" Invert="False"/>
             </controls:WindowCommands.Resources>
             <Button Click="LoadJira" ToolTip="{Binding LoggedInAs}">
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
@@ -31,7 +32,8 @@
                     <TextBlock VerticalAlignment="Center" Text="{Binding LoggedInDisplayName}" Margin="5,0,0,0"/>
                 </StackPanel>
             </Button>
-            <Button Click="GetPremium" Content="Get Premium" Visibility="{Binding IsPremium, Converter={StaticResource BoolToVis}}" />
+            <Button Click="GetPremium" Content="Get Premium" Visibility="{Binding IsPremium, Converter={StaticResource BoolToVisInvert}}" />
+            <Button Click="GetBeta" Content="Become Beta Tester" Visibility="{Binding IsStable, Converter={StaticResource BoolToVis}}" />
             <Button Click="ManualUpdateCheck" Content="{Binding VersionName}" Name="UpdateCheckButton"/>
         </controls:WindowCommands>
     </controls:MetroWindow.RightWindowCommands>

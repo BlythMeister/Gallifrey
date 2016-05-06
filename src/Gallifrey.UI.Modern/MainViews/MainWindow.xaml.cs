@@ -369,5 +369,10 @@ namespace Gallifrey.UI.Modern.MainViews
 
             modelHelpers.TriggerRemoteButtonPress(trigger);
         }
+
+        private void GetBeta(object sender, RoutedEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo("http://releases.gallifreyapp.co.uk/download/modern/beta/setup.exe"));
+        }
     }
 }

@@ -51,6 +51,7 @@ namespace Gallifrey.UI.Modern.Models
         public bool HaveTimeToExport => !string.IsNullOrWhiteSpace(TimeToExportMessage);
         public bool HaveTempTime => !string.IsNullOrWhiteSpace(TempTimeMessage);
         public bool IsPremium => ModelHelpers.Gallifrey.Settings.InternalSettings.IsPremium;
+        public bool IsStable => ModelHelpers.Gallifrey.VersionControl.InstanceType == InstanceType.Stable;
 
         public string AppTitle
         {
