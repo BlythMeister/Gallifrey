@@ -68,7 +68,9 @@
     <Features>
       <Feature>Adding "Premium" switch for a Premium set of features</Feature>
     </Features>
-    <Bugs/>
+    <Bugs>
+      <Bug>Fix issue with locked timer when adding to new timer</Bug>
+    </Bugs>
     <Others/>
   </Version>
 </Versions>

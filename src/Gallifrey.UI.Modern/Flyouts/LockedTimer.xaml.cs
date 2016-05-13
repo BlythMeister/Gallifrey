@@ -278,7 +278,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             var selected = DataModel.LockedTimers.Where(x => x.IsSelected).ToList();
             var selectedTimers = selected.Select(x => modelHelpers.Gallifrey.IdleTimerCollection.GetTimer(x.UniqueId)).Where(x => x != null).ToList();
             var lockedTimerDate = selected.First().DateForTimer;
-            modelHelpers.CloseFlyout(this);
+            modelHelpers.HideFlyout(this);
             var addFlyout = new AddTimer(modelHelpers, startDate: lockedTimerDate, enableDateChange: false, idleTimers: selectedTimers, jiraRef: preLoadJiraRef);
             await modelHelpers.OpenFlyout(addFlyout);
 
@@ -296,6 +296,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                 }
                 else
                 {
+                    modelHelpers.CloseFlyout(this);
                     modelHelpers.SetSelectedTimer(addFlyout.NewTimerId);
                 }
             }
