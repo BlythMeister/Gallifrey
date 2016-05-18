@@ -2,11 +2,11 @@ NUGET
   remote: https://www.nuget.org/api/v2
   specs:
     Atlassian.SDK (2.5)
-    Exceptionless.Portable (3.4.1673)
-    Exceptionless.Windows (3.4.1673)
-      Exceptionless.Portable (3.4.1673)
-    Exceptionless.Wpf (3.4.1673)
-      Exceptionless.Portable (3.4.1673)
-    MahApps.Metro (1.3.0-ALPHA146)
+    Exceptionless.Portable (3.5.1738)
+    Exceptionless.Windows (3.5.1738)
+      Exceptionless.Portable (3.5.1738)
+    Exceptionless.Wpf (3.5.1738)
+      Exceptionless.Portable (3.5.1738)
+    MahApps.Metro (1.3.0-ALPHA152)
     Newtonsoft.Json (8.0.3)
     RestSharp (105.2.3)
