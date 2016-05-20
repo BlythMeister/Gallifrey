@@ -80,7 +80,6 @@
     <Compile Include="JiraTimers\JiraTimer.cs" />
     <Compile Include="JiraTimers\JiraTimerCollection.cs" />
     <Compile Include="ExtensionMethods\TimespanExtensionMethods.cs" />
-    <Compile Include="Exceptions\Versions\ManualReinstallRequiredException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Serialization\RecentJiraCollectionSerializer.cs" />
     <Compile Include="Serialization\SettingsCollectionSerializer.cs" />

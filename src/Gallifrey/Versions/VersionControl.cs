@@ -4,7 +4,6 @@ using System.Deployment.Application;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Gallifrey.AppTracking;
-using Gallifrey.Exceptions.Versions;
 
 namespace Gallifrey.Versions
 {
@@ -67,9 +66,9 @@ namespace Gallifrey.Versions
 
             VersionName = $"v{VersionName}{betaText}";
 
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("VersionName")); 
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("VersionName"));
         }
-        
+
         public Task<UpdateResult> CheckForUpdates(bool manualCheck = false)
         {
             if (!IsAutomatedDeploy)
@@ -77,49 +76,47 @@ namespace Gallifrey.Versions
                 return Task.Factory.StartNew(() => UpdateResult.NotDeployable);
             }
 
-            if (IsAutomatedDeploy && (manualCheck || lastUpdateCheck < DateTime.UtcNow.AddMinutes(-5)))
+            if (lastUpdateCheck >= DateTime.UtcNow.AddMinutes(-5) && !manualCheck)
             {
-                trackUsage.TrackAppUsage(TrackingType.UpdateCheck);
-                lastUpdateCheck = DateTime.UtcNow;
-
-                try
-                {
-                    var updateInfo = ApplicationDeployment.CurrentDeployment.CheckForDetailedUpdate(false);
-
-                    if (updateInfo.UpdateAvailable && updateInfo.AvailableVersion > ApplicationDeployment.CurrentDeployment.CurrentVersion)
-                    {
-                        return Task.Factory.StartNew(() => ApplicationDeployment.CurrentDeployment.Update()).ContinueWith(task =>
-                        {
-                            SetVersionName();
-                            UpdateInstalled = true;
-                            return UpdateResult.Updated;
-                        });
-                    }
-
-                    if (manualCheck)
-                    {
-                        return Task.Factory.StartNew(() =>
-                        {
-                            Task.Delay(1500);
-                            return UpdateResult.NoUpdate;
-                        });
-                    }
-                }
-                catch (TrustNotGrantedException)
-                {
-                    if (manualCheck)
-                    {
-                        throw new ManualReinstallRequiredException();
-                    }
-                }
-                catch (Exception)
-                {
-                }
+                return Task.Factory.StartNew(() => UpdateResult.TooSoon);
             }
 
-            return Task.Factory.StartNew(() => UpdateResult.TooSoon);
+            trackUsage.TrackAppUsage(TrackingType.UpdateCheck);
+            lastUpdateCheck = DateTime.UtcNow;
+
+            try
+            {
+                var updateInfo = ApplicationDeployment.CurrentDeployment.CheckForDetailedUpdate(false);
+
+                if (updateInfo.UpdateAvailable && updateInfo.AvailableVersion > ApplicationDeployment.CurrentDeployment.CurrentVersion)
+                {
+                    return Task.Factory.StartNew(() => ApplicationDeployment.CurrentDeployment.Update()).ContinueWith(task =>
+                    {
+                        SetVersionName();
+                        UpdateInstalled = true;
+                        return UpdateResult.Updated;
+                    });
+                }
+
+                return Task.Factory.StartNew(() =>
+                {
+                    if (manualCheck)
+                    {
+                        Task.Delay(1500);
+                    }
+                    return UpdateResult.NoUpdate;
+                });
+            }
+            catch (TrustNotGrantedException)
+            {
+                return Task.Factory.StartNew(() => UpdateResult.ReinstallNeeded);
+            }
+            catch (Exception)
+            {
+                return Task.Factory.StartNew(() => UpdateResult.Error);
+            }
         }
-        
+
         public void ManualReinstall()
         {
             var installUrl = ApplicationDeployment.CurrentDeployment.UpdateLocation.AbsoluteUri;

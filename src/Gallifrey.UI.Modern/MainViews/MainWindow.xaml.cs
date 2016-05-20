@@ -9,7 +9,6 @@ using Gallifrey.AppTracking;
 using Gallifrey.Exceptions;
 using Gallifrey.Exceptions.IdleTimers;
 using Gallifrey.Exceptions.JiraIntegration;
-using Gallifrey.Exceptions.Versions;
 using Gallifrey.ExtensionMethods;
 using Gallifrey.JiraTimers;
 using Gallifrey.UI.Modern.Extensions;
@@ -245,8 +244,6 @@ namespace Gallifrey.UI.Modern.MainViews
 
         private async void PerformUpdate(bool manualUpdateCheck, bool promptReinstall)
         {
-            var manualReinstall = false;
-
             try
             {
                 UpdateResult updateResult;
@@ -292,20 +289,23 @@ namespace Gallifrey.UI.Modern.MainViews
                 {
                     await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Unable To Update", "You Cannot Auto Update This Version Of Gallifrey");
                 }
-            }
-            catch (ManualReinstallRequiredException)
-            {
-                manualReinstall = true;
-            }
-
-            if (manualReinstall && promptReinstall)
-            {
-                var messageResult = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Update Error", "To Update An Uninstall/Reinstall Is Required.\nThis Can Happen Automatically\nNo Timers Will Be Lost\nDo You Want To Update Now?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
-
-                if (messageResult == MessageDialogResult.Affirmative)
+                else if (manualUpdateCheck && updateResult == UpdateResult.Error)
                 {
-                    modelHelpers.Gallifrey.VersionControl.ManualReinstall();
+                    throw new Exception();//Trigger error condition
                 }
+                else if (manualUpdateCheck && promptReinstall && updateResult == UpdateResult.ReinstallNeeded)
+                {
+                    var messageResult = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Update Error", "To Update An Uninstall/Reinstall Is Required.\nThis Can Happen Automatically\nNo Timers Will Be Lost\nDo You Want To Update Now?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
+
+                    if (messageResult == MessageDialogResult.Affirmative)
+                    {
+                        modelHelpers.Gallifrey.VersionControl.ManualReinstall();
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Update Error", "There Was An Error Trying To Update Gallifrey, If This Problem Persists Please Contact Support");
             }
         }
 

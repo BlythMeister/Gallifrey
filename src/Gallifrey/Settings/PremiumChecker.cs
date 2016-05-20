@@ -17,7 +17,7 @@ namespace Gallifrey
             {
                 string webContents;
                 using (var wc = new System.Net.WebClient())
-                    webContents = wc.DownloadString("http://www.gallifreyapp.co.uk/PremiumInstanceIds");
+                    webContents = wc.DownloadString("http://releases.gallifreyapp.co.uk/downloads/PremiumInstanceIds");
 
                 var descryptedContents = DataEncryption.Decrypt(webContents);
                 var lines = descryptedContents.Split('\n');
