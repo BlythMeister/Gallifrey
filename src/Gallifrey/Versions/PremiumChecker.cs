@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using Gallifrey.Serialization;
 
-namespace Gallifrey.Settings
+namespace Gallifrey.Versions
 {
     public interface IPremiumChecker
     {

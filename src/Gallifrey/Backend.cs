@@ -134,10 +134,13 @@ namespace Gallifrey
 
                 if (settingsCollection.InternalSettings.LastHeartbeatTracked.Date < DateTime.UtcNow.Date)
                 {
-                    DailyTrackingEvent?.Invoke(this, null);
-                    trackUsage.TrackAppUsage(TrackingType.DailyHearbeat);
-                    settingsCollection.InternalSettings.SetLastHeartbeatTracked(DateTime.UtcNow);
-                    settingsCollection.SaveSettings();
+                    if (versionControl.IsAutomatedDeploy)
+                    {
+                        DailyTrackingEvent?.Invoke(this, null);
+                        trackUsage.TrackAppUsage(TrackingType.DailyHearbeat);
+                        settingsCollection.InternalSettings.SetLastHeartbeatTracked(DateTime.UtcNow);
+                        settingsCollection.SaveSettings();
+                    }
                 }
 
                 var isPremium = premiumChecker.CheckIfPremium(settingsCollection.InternalSettings.InstallationInstaceId);

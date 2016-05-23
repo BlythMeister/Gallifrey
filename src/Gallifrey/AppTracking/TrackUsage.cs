@@ -54,7 +54,7 @@ namespace Gallifrey.AppTracking
 
         public async void TrackAppUsage(TrackingType trackingType)
         {
-            if (IsTrackingEnabled(trackingType))
+            if (IsTrackingEnabled(trackingType) && ApplicationDeployment.IsNetworkDeployed)
             {
                 if (webBrowser == null)
                 {
@@ -91,9 +91,7 @@ namespace Gallifrey.AppTracking
 
         private void SetTrackingQueryString(IInternalSettings internalSettings)
         {
-            var versionName = ApplicationDeployment.IsNetworkDeployed ? instanceType.ToString() : "Debug";
-
-            trackingQueryString = $"utm_source=GallifreyApp&utm_medium={versionName}&utm_campaign={internalSettings.LastChangeLogVersion}&uid={internalSettings.InstallationInstaceId}";
+            trackingQueryString = $"utm_source=GallifreyApp&utm_medium={instanceType}&utm_campaign={internalSettings.LastChangeLogVersion}&uid={internalSettings.InstallationInstaceId}";
         }
     }
 }

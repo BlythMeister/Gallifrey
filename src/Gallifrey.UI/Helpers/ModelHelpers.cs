@@ -175,14 +175,15 @@ namespace Gallifrey.UI.Helpers
                 premiumMessage = $"{message}\n\n{premiumMessage}";
             }
 
-            var messageResult = await DialogCoordinator.Instance.ShowMessageAsync(DialogContext, "Get Premium", premiumMessage, MessageDialogStyle.AffirmativeAndNegativeAndSingleAuxiliary, new MetroDialogSettings { AffirmativeButtonText = "Close", NegativeButtonText = "Contribute", FirstAuxiliaryButtonText = "Donate", DefaultButtonFocus = MessageDialogResult.Affirmative });
+            //Could be a custom dialog if can work out how.
+            var messageResult = await DialogCoordinator.Instance.ShowMessageAsync(DialogContext, "Get Premium", premiumMessage, MessageDialogStyle.AffirmativeAndNegativeAndSingleAuxiliary, new MetroDialogSettings { AffirmativeButtonText = "Close Message", NegativeButtonText = "I Want To Donate", FirstAuxiliaryButtonText = "I Want To Contribute", DefaultButtonFocus = MessageDialogResult.Affirmative});
 
             switch (messageResult)
             {
-                case MessageDialogResult.Negative:
+                case MessageDialogResult.FirstAuxiliary:
                     TriggerRemoteButtonPress(Models.RemoteButtonTrigger.GitHub);
                     break;
-                case MessageDialogResult.FirstAuxiliary:
+                case MessageDialogResult.Negative:
                     TriggerRemoteButtonPress(Models.RemoteButtonTrigger.PayPal);
                     break;
             }

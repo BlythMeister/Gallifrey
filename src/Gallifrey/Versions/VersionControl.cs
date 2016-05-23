@@ -81,7 +81,14 @@ namespace Gallifrey.Versions
                 return Task.Factory.StartNew(() => UpdateResult.TooSoon);
             }
 
-            trackUsage.TrackAppUsage(TrackingType.UpdateCheck);
+            if (manualCheck)
+            {
+                trackUsage.TrackAppUsage(TrackingType.UpdateCheckManual);
+            }
+            else
+            {
+                trackUsage.TrackAppUsage(TrackingType.UpdateCheck);
+            }
             lastUpdateCheck = DateTime.UtcNow;
 
             try

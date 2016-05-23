@@ -67,7 +67,7 @@
     <Compile Include="InactiveMonitor\ActivityChecker.cs" />
     <Compile Include="Exceptions\MultipleGallifreyRunningException.cs" />
     <Compile Include="Settings\ConfigKeys.cs" />
-    <Compile Include="Settings\PremiumChecker.cs" />
+    <Compile Include="Versions\PremiumChecker.cs" />
     <Compile Include="Serialization\ItemSerializer.cs" />
     <Compile Include="Versions\InstanceType.cs" />
     <Compile Include="JiraIntegration\JiraProject.cs" />
