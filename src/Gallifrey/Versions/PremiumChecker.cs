@@ -17,7 +17,7 @@ namespace Gallifrey.Versions
             {
                 string webContents;
                 using (var wc = new System.Net.WebClient())
-                    webContents = wc.DownloadString("http://releases.gallifreyapp.co.uk/downloads/PremiumInstanceIds");
+                    webContents = wc.DownloadString("http://releases.gallifreyapp.co.uk/download/PremiumInstanceIds");
 
                 var descryptedContents = DataEncryption.Decrypt(webContents);
                 var lines = descryptedContents.Split('\n');

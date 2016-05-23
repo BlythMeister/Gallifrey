@@ -1,0 +1,30 @@
+﻿<controls:Flyout x:Class="Gallifrey.UI.Modern.Flyouts.Error"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro" 
+             IsModal="True" Theme="Adapt" Position="Right" Header="Unexpected Error" CloseButtonIsCancel="True">
+    <StackPanel Width="350" Margin="5,5,5,5" >
+        <TextBlock Padding="5" TextWrapping="Wrap">
+            Unfortunately Gallifrey has encountered an unrecoverable error.<LineBreak />
+            <LineBreak />
+            We have created an error report which you can send to us to help diagnose the issue.<LineBreak />
+            Please feel free to enter your contact email and a description to help us!<LineBreak />
+            You email address will only be used if we have further questions to ask about the error.<LineBreak />
+            <LineBreak />
+            If you do not wish to send the error report, close this message rather than pressing the send button.<LineBreak />
+            <LineBreak />
+            The application will need to restart upon closing this message or submitting the report.
+        </TextBlock>
+        <TextBlock Padding="5">Email Address</TextBlock>
+        <TextBox Text="{Binding EmailAddress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" controls:TextBoxHelper.Watermark="Optional"/>
+        <TextBlock Padding="5">Description</TextBlock>
+        <TextBox Text="{Binding Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MaxLines="2" MinLines="2" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" TextWrapping="Wrap" controls:TextBoxHelper.Watermark="Optional"/>
+        <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="55" Height="55" Margin="2" Click="SendReport" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsDefault="True">
+            <Rectangle Width="30" Height="18" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}" ToolTip="Submit Error Report">
+                <Rectangle.OpacityMask>
+                    <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_message_send}" />
+                </Rectangle.OpacityMask>
+            </Rectangle>
+        </Button>
+    </StackPanel>
+</controls:Flyout>

@@ -12,13 +12,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gallifrey", "Gallifrey\Gall
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gallifrey.Jira", "Gallifrey.Jira\Gallifrey.Jira.csproj", "{FFCFED07-CD7C-46F9-98E5-B9D9116E40B1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gallifrey.UI.Alpha", "Gallifrey.UI.Alpha\Gallifrey.UI.Alpha.csproj", "{3756CC69-7152-486A-9D5E-8E9D36B22775}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gallifrey.UI.Modern.Alpha", "Gallifrey.UI.Modern.Alpha\Gallifrey.UI.Modern.Alpha.csproj", "{3756CC69-7152-486A-9D5E-8E9D36B22775}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gallifrey.UI", "Gallifrey.UI\Gallifrey.UI.csproj", "{E3D0AA93-144A-4D2D-A41B-8D29E01D4566}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gallifrey.UI.Modern", "Gallifrey.UI.Modern\Gallifrey.UI.Modern.csproj", "{E3D0AA93-144A-4D2D-A41B-8D29E01D4566}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gallifrey.UI.Beta", "Gallifrey.UI.Beta\Gallifrey.UI.Beta.csproj", "{F316D824-798F-4A03-9926-F1A4CCE66B61}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gallifrey.UI.Modern.Beta", "Gallifrey.UI.Modern.Beta\Gallifrey.UI.Modern.Beta.csproj", "{F316D824-798F-4A03-9926-F1A4CCE66B61}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gallifrey.UI.Stable", "Gallifrey.UI.Stable\Gallifrey.UI.Stable.csproj", "{6DF8CDD3-6864-4D32-845B-D17AB4D78F1C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gallifrey.UI.Modern.Stable", "Gallifrey.UI.Modern.Stable\Gallifrey.UI.Modern.Stable.csproj", "{6DF8CDD3-6864-4D32-845B-D17AB4D78F1C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
