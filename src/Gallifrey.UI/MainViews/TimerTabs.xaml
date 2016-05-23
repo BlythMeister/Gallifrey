@@ -1,0 +1,116 @@
+﻿<UserControl x:Class="Gallifrey.UI.MainViews.TimerTabs"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+             xmlns:helpers="clr-namespace:Gallifrey.UI.Helpers">
+
+    <controls:MetroAnimatedSingleRowTabControl TabStripPlacement="Left" ItemsSource="{Binding TimerDates}" DragOver="TabDragOver" Drop="TagDragDrop" AllowDrop="True" Margin="5,0,0,0" >
+        <TabControl.ItemContainerStyle>
+            <Style TargetType="TabItem">
+                <Setter Property="Header" Value="{Binding Header}" />
+                <Setter Property="controls:ControlsHelper.HeaderFontSize" Value="17" />
+                <Setter Property="HorizontalAlignment" Value="Right" />
+                <Setter Property="IsSelected" Value="{Binding DateIsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            </Style>
+        </TabControl.ItemContainerStyle>
+        <TabControl.ContentTemplate>
+            <DataTemplate>
+                <ListView ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemsSource="{Binding Timers}" MouseDoubleClick="TimerList_MouseDoubleClick" BorderThickness="0" SelectionMode="Extended">
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="{x:Type ListViewItem}">
+                            <Setter Property="Margin" Value="3" />
+                            <Setter Property="Padding" Value="4" />
+                            <Setter Property="BorderBrush" Value="{DynamicResource GrayBrush2}" />
+                            <Setter Property="BorderThickness" Value="2" />
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                            <Setter Property="IsSelected" Value="{Binding TimerIsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <Style.Resources>
+                                <Style TargetType="Border">
+                                    <Setter Property="CornerRadius" Value="5"/>
+                                </Style>
+                                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="{DynamicResource Gray8}"/>
+                                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="{DynamicResource BlackColor}" />
+                                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="{DynamicResource Gray8}" />
+                                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="{DynamicResource BlackColor}" />
+                            </Style.Resources>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsRunning}" Value="True" >
+                                    <Setter Property="BorderBrush" Value="{DynamicResource AccentColorBrush}"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding HasTimeToExportAndNotRunning}" Value="True" >
+                                    <Setter Property="BorderBrush" Value="{DynamicResource AccentColorBrush}"/>
+                                </DataTrigger>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="{DynamicResource AccentColorBrush4}" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Grid.Resources>
+                                    <helpers:BooleanVisibilityConverter x:Key="BoolToVisInverted" Collapse="True" Invert="True"/>
+                                    <helpers:BooleanVisibilityConverter x:Key="BoolToVis" Collapse="True" Invert="False"/>
+                                    <helpers:BooleanInvertConverter x:Key="BoolInvert"/>
+                                </Grid.Resources>
+
+                                <TextBlock Grid.Row="0" Grid.Column="0" FontSize="25" Margin="3,0,0,0" Text="{Binding Reference}" />
+                                <WrapPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Margin="3,0,0,0" Visibility="{Binding HasParent, Converter={StaticResource BoolToVis}}" >
+                                    <TextBlock  FontSize="13" TextWrapping="Wrap" Text="{Binding ParentDescription}" />
+                                    <TextBlock  FontSize="13" TextWrapping="Wrap" Text=" (" />
+                                    <TextBlock  FontSize="13" TextWrapping="Wrap" Text="{Binding ParentReference}" />
+                                    <TextBlock  FontSize="13" TextWrapping="Wrap" Text=")" />
+                                </WrapPanel>
+                                <TextBlock Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" FontSize="13" Margin="3,0,0,0" TextWrapping="Wrap" Text="{Binding Description}" />
+
+
+                                <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Margin="0,0,6,0" VerticalAlignment="Center" Visibility="{Binding HasTimeToExport, Converter={StaticResource BoolToVis}}">
+                                    <TextBlock FontSize="18" Margin="0,0,5,0" Text="{Binding ExportTime}" Foreground="{DynamicResource AccentColorBrush}" />
+                                    <TextBlock FontSize="18" Text="To Export" />
+                                </StackPanel>
+
+                                <TextBlock Grid.Row="0" Grid.Column="2" FontSize="26" Margin="3,0,0,0" Text="{Binding CurrentTime}">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsRunning}" Value="True" >
+                                                    <Setter Property="Foreground" Value="{DynamicResource AccentColorBrush}"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                                <Grid.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Header="Copy JIRA Reference" Click="ContextMenu_Copy"/>
+                                        <MenuItem Header="Delete Timer" Click="ContextMenu_Delete"/>
+                                        <MenuItem Header="Edit Timer" Click="ContextMenu_Edit"/>
+                                        <MenuItem Header="Export Timer" Click="ContextMenu_Export"/>
+                                        <MenuItem Header="Start/Stop Timer" Click="ContextMenu_StartStop"/>
+                                    </ContextMenu>
+                                </Grid.ContextMenu>
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                    <ListView.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Add New Timer" Click="ContextMenu_Add"/>
+                        </ContextMenu>
+                    </ListView.ContextMenu>
+                </ListView>
+            </DataTemplate>
+        </TabControl.ContentTemplate>
+    </controls:MetroAnimatedSingleRowTabControl>
+</UserControl>

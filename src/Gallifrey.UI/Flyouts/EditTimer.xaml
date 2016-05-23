@@ -1,0 +1,88 @@
+﻿<controls:Flyout x:Class="Gallifrey.UI.Flyouts.EditTimer"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+             xmlns:helpers="clr-namespace:Gallifrey.UI.Helpers"
+             IsModal="True" Theme="Adapt" Position="Right" Header="Edit Timer" CloseButtonIsCancel="True">
+    <Grid Width="340" Margin="5,5,5,5" >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.Resources>
+            <helpers:BooleanVisibilityConverter x:Key="BoolToVisInverted" Collapse="True" Invert="True"/>
+            <helpers:BooleanVisibilityConverter x:Key="BoolToVis" Collapse="True" Invert="False"/>
+            <helpers:BooleanInvertConverter x:Key="BoolInvert"/>
+        </Grid.Resources>
+
+        <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center">
+            <TextBlock.Style>
+                <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding TempTimer}" Value="True" >
+                            <Setter Property="Text" Value="Description"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding TempTimer}" Value="False" >
+                            <Setter Property="Text" Value="Jira Reference"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
+        
+        <Grid Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Margin="0,5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBox Grid.Column="0" Text="{Binding JiraReference, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" CharacterCasing="Upper" IsEnabled="{Binding JiraReferenceEditable}" Visibility="{Binding TempTimer, Converter={StaticResource BoolToVisInverted}}" />
+            <TextBox Grid.Column="0" Text="{Binding TempTimerDescription, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding TempTimer, Converter={StaticResource BoolToVis}}" />
+
+            <CheckBox Grid.Column="1" Margin="5,0" IsChecked="{Binding TempTimer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding JiraReferenceEditable}" />
+            <TextBlock Grid.Column="2" VerticalAlignment="Center">Temp Timer?</TextBlock>
+        </Grid>
+        
+        <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Padding="2">Date</TextBlock>
+        <DatePicker Grid.Row="1" Grid.Column="1" Margin="0,5" IsTodayHighlighted="False" DisplayDate="{Binding DisplayDate}" DisplayDateStart="{Binding MinDate}" DisplayDateEnd="{Binding MaxDate}" SelectedDate="{Binding RunDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding DateEditable}" />
+
+        <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Padding="2" Margin="0,0,5,0">Current Time</TextBlock>
+        <WrapPanel Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Margin="0,5" Orientation="Horizontal">
+            <controls:NumericUpDown Value="{Binding Hours, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Left" Minimum="0" Maximum="9" Width="80" IsEnabled="{Binding TimeEditable}" />
+            <TextBlock VerticalAlignment="Center" Margin="2,0" Text="Hours" />
+            <controls:NumericUpDown Value="{Binding Minutes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Left" Minimum="0" Maximum="59" Width="80" IsEnabled="{Binding TimeEditable}" />
+            <TextBlock VerticalAlignment="Center" Margin="2,0" Text="Minutes" />
+        </WrapPanel>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center">
+            <Button  Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="AddTime">
+                <Rectangle Width="27" Height="24" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}" ToolTip="Add X Minutes">
+                    <Rectangle.OpacityMask>
+                        <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_timer_rewind}" />
+                    </Rectangle.OpacityMask>
+                </Rectangle>
+            </Button>
+            <Button  Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="SubtractTime">
+                <Rectangle Width="27" Height="24" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}" ToolTip="Subtract X Minutes">
+                    <Rectangle.OpacityMask>
+                        <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_timer_forward}" />
+                    </Rectangle.OpacityMask>
+                </Rectangle>
+            </Button>
+            <Button  Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="SaveButton" IsDefault="{Binding IsDefaultOnButton, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                <Rectangle Width="23" Height="23" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}" ToolTip="Save Timer Changes">
+                    <Rectangle.OpacityMask>
+                        <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_save}" />
+                    </Rectangle.OpacityMask>
+                </Rectangle>
+            </Button>
+        </StackPanel>
+    </Grid>
+</controls:Flyout>
