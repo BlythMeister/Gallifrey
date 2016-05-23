@@ -31,7 +31,7 @@ namespace Gallifrey.UI.Modern.Flyouts
 
         private async void ChangeLogButton(object sender, RoutedEventArgs e)
         {
-            modelHelpers.CloseFlyout(this);
+            modelHelpers.HideFlyout(this);
             var changeLog = modelHelpers.Gallifrey.GetChangeLog(XDocument.Parse(Properties.Resources.ChangeLog)).ToList();
             if (changeLog.Any())
             {
