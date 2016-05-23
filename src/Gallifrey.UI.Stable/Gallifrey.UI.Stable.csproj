@@ -135,7 +135,7 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Gallifrey.UI.Modern\Gallifrey.UI.csproj">
+    <ProjectReference Include="..\Gallifrey.UI\Gallifrey.UI.csproj">
       <Project>{e3d0aa93-144a-4d2d-a41b-8d29e01d4566}</Project>
       <Name>Gallifrey.UI</Name>
     </ProjectReference>

@@ -50,7 +50,7 @@ namespace Gallifrey.UI.Flyouts
             TimeSpan seedTime;
             if (DataModel.TimeEditable)
             {
-                seedTime = new TimeSpan(DataModel.StartHours, DataModel.StartMinutes, 0);
+                seedTime = new TimeSpan(DataModel.StartHours ?? 0, DataModel.StartMinutes ?? 0, 0);
             }
             else
             {

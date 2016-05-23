@@ -118,7 +118,7 @@ namespace Gallifrey.UI.Flyouts
             if (DataModel.HasModifiedTime)
             {
                 var originalTime = new TimeSpan(DataModel.OriginalHours, DataModel.OriginalMinutes, 0);
-                var newTime = new TimeSpan(DataModel.Hours, DataModel.Minutes, 0);
+                var newTime = new TimeSpan(DataModel.Hours ?? 0, DataModel.Minutes ?? 0, 0);
                 var difference = newTime.Subtract(originalTime);
                 var addTime = difference.TotalSeconds > 0;
 

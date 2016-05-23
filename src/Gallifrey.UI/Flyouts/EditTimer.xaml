@@ -54,10 +54,10 @@
         <DatePicker Grid.Row="1" Grid.Column="1" Margin="0,5" IsTodayHighlighted="False" DisplayDate="{Binding DisplayDate}" DisplayDateStart="{Binding MinDate}" DisplayDateEnd="{Binding MaxDate}" SelectedDate="{Binding RunDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding DateEditable}" />
 
         <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Padding="2" Margin="0,0,5,0">Current Time</TextBlock>
-        <WrapPanel Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Margin="0,5" Orientation="Horizontal">
-            <controls:NumericUpDown Value="{Binding Hours, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Left" Minimum="0" Maximum="9" Width="80" IsEnabled="{Binding TimeEditable}" />
+        <WrapPanel Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Margin="0,5" Orientation="Horizontal" IsEnabled="{Binding TimeEditable}">
+            <controls:NumericUpDown Value="{Binding Hours, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Left" Minimum="0" Maximum="9" Width="80" controls:TextBoxHelper.SelectAllOnFocus="True" />
             <TextBlock VerticalAlignment="Center" Margin="2,0" Text="Hours" />
-            <controls:NumericUpDown Value="{Binding Minutes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Left" Minimum="0" Maximum="59" Width="80" IsEnabled="{Binding TimeEditable}" />
+            <controls:NumericUpDown Value="{Binding Minutes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Left" Width="80" Interval="5" controls:TextBoxHelper.SelectAllOnFocus="True" />
             <TextBlock VerticalAlignment="Center" Margin="2,0" Text="Minutes" />
         </WrapPanel>
 

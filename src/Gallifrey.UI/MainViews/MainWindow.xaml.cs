@@ -143,7 +143,7 @@ namespace Gallifrey.UI.MainViews
             }
         }
 
-        
+
 
         private void GallifreyOnNoActivityEvent(object sender, int millisecondsSinceActivity)
         {
@@ -186,7 +186,7 @@ namespace Gallifrey.UI.MainViews
                         var idleTimer = modelHelpers.Gallifrey.IdleTimerCollection.GetTimer(idleTimerId);
                         if (idleTimer == null) return;
 
-                        if (idleTimer.IdleTimeValue.TotalSeconds < 60 || idleTimer.IdleTimeValue.TotalHours > 10)
+                        if (idleTimer.IdleTimeValue.TotalSeconds < 0 || idleTimer.IdleTimeValue.TotalHours > 10)
                         {
                             modelHelpers.Gallifrey.IdleTimerCollection.RemoveTimer(idleTimerId);
                         }
@@ -194,7 +194,6 @@ namespace Gallifrey.UI.MainViews
                         {
                             this.FlashWindow();
                             Activate();
-                            Topmost = true;
                             if (modelHelpers.FlyoutOpen)
                             {
                                 modelHelpers.HideAllFlyouts();
@@ -202,7 +201,6 @@ namespace Gallifrey.UI.MainViews
 
                             await modelHelpers.OpenFlyout(new LockedTimer(modelHelpers));
                             this.StopFlashingWindow();
-                            Topmost = false;
 
                             foreach (var hiddenFlyout in modelHelpers.GetHiddenFlyouts())
                             {

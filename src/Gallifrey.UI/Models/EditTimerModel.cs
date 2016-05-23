@@ -68,8 +68,8 @@ namespace Gallifrey.UI.Models
             OriginalTempTimerDescription = TempTimerDescription;
             OriginalJiraReference = JiraReference;
             OriginalRunDate = RunDate;
-            OriginalHours = Hours;
-            OriginalMinutes = Minutes;
+            OriginalHours = Hours ?? 0;
+            OriginalMinutes = Minutes ?? 0;
 
             IsDefaultOnButton = true;
         }
@@ -110,22 +110,52 @@ namespace Gallifrey.UI.Models
             }
         }
 
-        public int Hours
+        public int? Hours
         {
             get { return hours; }
             set
             {
-                hours = value;
+                hours = value ?? 0;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasModifiedTime"));
             }
         }
 
-        public int Minutes
+        public int? Minutes
         {
             get { return minutes; }
             set
             {
-                minutes = value;
+                var newValue = value ?? 0;
+                if (newValue < 0)
+                {
+                    if (Hours == 0)
+                    {
+                        minutes = 0;
+                    }
+                    else
+                    {
+                        minutes = 60 + newValue;
+                        Hours--;
+                    }
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Hours"));
+                }
+                else if(value >= 60)
+                {
+                    if (Hours == 9)
+                    {
+                        minutes = 59;
+                    }
+                    else
+                    {
+                        Hours++;
+                        minutes = newValue - 60;
+                    }
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Hours"));
+                }
+                else
+                {
+                    minutes = newValue;
+                }
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasModifiedTime"));
             }
         }
@@ -152,7 +182,7 @@ namespace Gallifrey.UI.Models
         
         public void AdjustTime(TimeSpan timeAdjustmentAmount, bool addTime)
         {
-            var currentTime = new TimeSpan(Hours, Minutes, 0);
+            var currentTime = new TimeSpan(Hours ?? 0, Minutes ?? 0, 0);
 
             currentTime = addTime ? currentTime.Add(timeAdjustmentAmount) : currentTime.Subtract(timeAdjustmentAmount);
 
