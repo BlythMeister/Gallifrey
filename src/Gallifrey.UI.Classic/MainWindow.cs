@@ -1090,7 +1090,7 @@ namespace Gallifrey.UI.Classic
 
         private void DoNewUiUpgrade()
         {
-            if (!gallifrey.VersionControl.IsAutomatedDeploy)
+            if (!gallifrey.VersionControl.IsAutomatedDeploy || gallifrey.VersionControl.InstanceType == InstanceType.Alpha)
             {
                 MessageBox.Show("This is not a valid version so cannot be upgraded", "Invalid Upgrade", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
@@ -1098,14 +1098,11 @@ namespace Gallifrey.UI.Classic
 
             switch (gallifrey.VersionControl.InstanceType)
             {
-                case InstanceType.Alpha:
-                    Process.Start("http://releases.gallifreyapp.co.uk/download/modern/alpha/setup.exe");
-                    break;
                 case InstanceType.Beta:
-                    Process.Start("http://releases.gallifreyapp.co.uk/download/modern/beta/setup.exe");
+                    Process.Start("http://releases.gallifreyapp.co.uk/download/download-beta.html");
                     break;
                 default:
-                    Process.Start("http://releases.gallifreyapp.co.uk/download/modern/stable/setup.exe");
+                    Process.Start("http://releases.gallifreyapp.co.uk/download/download-stable.html");
                     break;
             }
         }
