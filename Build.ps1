@@ -18,48 +18,56 @@ else
 	{
 		$NewVersion = $OldVersion
 	}
-	New-Item src\CurrentVersion.info -type file -force -value $NewVersion
-	Get-ChildItem -Path "src" -Include AssemblyInfo.cs -Recurse | Foreach-Object {
-		$newFile = Get-Content $_ -encoding "UTF8" | Foreach-Object {
-			if ($_.StartsWith("[assembly: AssemblyVersion")) {
-				'[assembly: AssemblyVersion("' + $NewVersion + '")]'
-			} else {
-				if ($_.StartsWith("[assembly: AssemblyFileVersion")) {
-					'[assembly: AssemblyFileVersion("' + $NewVersion + '")]'
+	try
+	{
+		New-Item src\CurrentVersion.info -type file -force -value $NewVersion
+		Get-ChildItem -Path "src" -Include AssemblyInfo.cs -Recurse | Foreach-Object {
+			$newFile = Get-Content $_ -encoding "UTF8" | Foreach-Object {
+				if ($_.StartsWith("[assembly: AssemblyVersion")) {
+					'[assembly: AssemblyVersion("' + $NewVersion + '")]'
+				} else {
+					if ($_.StartsWith("[assembly: AssemblyFileVersion")) {
+						'[assembly: AssemblyFileVersion("' + $NewVersion + '")]'
+					} else {
+						$_
+					} 
+				}
+			}
+			
+			$newFile | set-Content $_ -encoding "UTF8"
+		}
+		
+		Get-ChildItem -Path "src" -Include "*.csproj" -Recurse | Foreach-Object {
+			$newFile = Get-Content $_ -encoding "UTF8" | Foreach-Object {
+				if ($_.StartsWith("    <MinimumRequiredVersion>")) {
+					"    <MinimumRequiredVersion>$NewVersion</MinimumRequiredVersion>"
+				} else {
+					if ($_.StartsWith("    <ApplicationVersion>")) {
+						"    <ApplicationVersion>$NewVersion</ApplicationVersion>"
+					} else {
+						$_
+					} 
+				}
+			}
+			
+			$newFile | set-Content $_ -encoding "UTF8"
+		}
+		
+		$newFile = Get-Content F:\GIT\Gallifrey\src\Gallifrey.UI.Modern\ChangeLog.xml -encoding "UTF8" | Foreach-Object {
+				if ($_.Contains(' Name="Pre-Release"')) {
+					'  <Version Number="' + $NewVersion + '" Name="Pre-Release">'
 				} else {
 					$_
-				} 
+				}
 			}
-		}
-		
-		$newFile | set-Content $_ -encoding "UTF8"
+			
+			$newFile | set-Content F:\GIT\Gallifrey\src\Gallifrey.UI.Modern\ChangeLog.xml -encoding "UTF8"
 	}
-	
-	Get-ChildItem -Path "src" -Include "*.csproj" -Recurse | Foreach-Object {
-		$newFile = Get-Content $_ -encoding "UTF8" | Foreach-Object {
-			if ($_.StartsWith("    <MinimumRequiredVersion>")) {
-				"    <MinimumRequiredVersion>$NewVersion</MinimumRequiredVersion>"
-			} else {
-				if ($_.StartsWith("    <ApplicationVersion>")) {
-					"    <ApplicationVersion>$NewVersion</ApplicationVersion>"
-				} else {
-					$_
-				} 
-			}
-		}
-		
-		$newFile | set-Content $_ -encoding "UTF8"
+	Catch
+	{
+		Write-Host "Error Updating Versions, Will Not Build"
+		Break
 	}
-	
-	$newFile = Get-Content F:\GIT\Gallifrey\src\Gallifrey.UI.Modern\ChangeLog.xml -encoding "UTF8" | Foreach-Object {
-			if ($_.Contains(' Name="Pre-Release"')) {
-				'  <Version Number="' + $NewVersion + '" Name="Pre-Release">'
-			} else {
-				$_
-			}
-		}
-		
-		$newFile | set-Content F:\GIT\Gallifrey\src\Gallifrey.UI.Modern\ChangeLog.xml -encoding "UTF8"
 }
 
 Write-Host "Restoring Packages"
@@ -93,3 +101,8 @@ Write-Host "Create App Zips"
 [IO.Compression.ZipFile]::CreateFromDirectory('Output\alpha', 'Output\alpha.zip')
 [IO.Compression.ZipFile]::CreateFromDirectory('Output\beta', 'Output\beta.zip')
 [IO.Compression.ZipFile]::CreateFromDirectory('Output\stable', 'Output\stable.zip')
+
+if($TeamCity.toLower() -eq "y")
+{
+	Write-Host "Publish Artifacts"
+}

@@ -52,11 +52,6 @@ namespace Gallifrey.Versions
         private void SetVersionName()
         {
             VersionName = IsAutomatedDeploy ? DeployedVersion.ToString() : Application.ProductVersion;
-            if (IsAutomatedDeploy && InstanceType == InstanceType.Stable)
-            {
-                VersionName = VersionName.Substring(0, VersionName.LastIndexOf("."));
-            }
-
             var betaText = InstanceType == InstanceType.Stable ? "" : $" ({InstanceType})";
 
             if (!IsAutomatedDeploy)
