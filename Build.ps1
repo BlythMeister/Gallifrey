@@ -3,16 +3,21 @@ Param(
 )
 
 Add-Type -A 'System.IO.Compression.FileSystem'
+$OldVersion = Get-Content src\CurrentVersion.info
 
-Write-Host "Current Version Number Is:"
-Get-Content src\CurrentVersion.info
-if($TeamCity.toLower() = "y")
+Write-Host "Current Version Number Is: $OldVersion"
+
+if($TeamCity.toLower() -eq "y")
 {
 	Write-Host "Will Not Update"
 }
 else
 {
 	$NewVersion = Read-Host "Enter New Version Number"
+	if($NewVersion -eq "")
+	{
+		$NewVersion = $OldVersion
+	}
 	New-Item src\CurrentVersion.info -type file -force -value $NewVersion
 	Get-ChildItem -Path "src" -Include AssemblyInfo.cs -Recurse | Foreach-Object {
 		$newFile = Get-Content $_ -encoding "UTF8" | Foreach-Object {
@@ -45,6 +50,16 @@ else
 		
 		$newFile | set-Content $_ -encoding "UTF8"
 	}
+	
+	$newFile = Get-Content F:\GIT\Gallifrey\src\Gallifrey.UI.Modern\ChangeLog.xml -encoding "UTF8" | Foreach-Object {
+			if ($_.Contains(' Name="Pre-Release"')) {
+				'  <Version Number="' + $NewVersion + '" Name="Pre-Release">'
+			} else {
+				$_
+			}
+		}
+		
+		$newFile | set-Content F:\GIT\Gallifrey\src\Gallifrey.UI.Modern\ChangeLog.xml -encoding "UTF8"
 }
 
 Write-Host "Restoring Packages"

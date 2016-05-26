@@ -23,21 +23,8 @@ namespace Gallifrey.ChangeLog
 
         private static ChangeLogVersion BuildChangeLogItem(XElement changeVersion, Version fromVersion)
         {
-            var fromCompareVersion = new Version(fromVersion.Major, fromVersion.Minor, fromVersion.Build);
             var version = new Version(changeVersion.Attribute("Number").Value);
-            var newVersion = false;
-            
-            var compareVersion = version;
-            if (version.Revision > 0)
-            {
-                compareVersion = new Version(version.Major, version.Minor, version.Build);
-            }
-
-            if (compareVersion > fromCompareVersion)
-            {
-                newVersion = true;
-            }
-
+            var newVersion = version > fromVersion;
             return BuildChangeLogItem(changeVersion, newVersion);
         }
 
