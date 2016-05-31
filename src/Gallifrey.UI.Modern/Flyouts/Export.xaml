@@ -27,7 +27,7 @@
             </Grid.ColumnDefinitions>
             <Grid.Resources>
                 <helpers:EnumMatchToBooleanConverter x:Key="EnumConverter" />
-                <helpers:BooleanVisibilityConverter x:Key="BoolToVisInverted" Collapse="True" Invert="True"/>
+                <helpers:BooleanVisibilityConverter x:Key="BoolToVisInvert" Collapse="True" Invert="True"/>
                 <helpers:BooleanVisibilityConverter x:Key="BoolToVis" Collapse="True" Invert="False"/>
             </Grid.Resources>
 
@@ -53,9 +53,9 @@
 
             <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Padding="2">To Export</TextBlock>
             <WrapPanel Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" Margin="0,5" Orientation="Horizontal">
-                <controls:NumericUpDown Value="{Binding ToExportHours, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Left" Minimum="0" Maximum="{Binding ToExportMaxHours}" Width="80" />
+                <controls:NumericUpDown Value="{Binding ToExportHours, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Left" Width="80" controls:TextBoxHelper.SelectAllOnFocus="True" />
                 <TextBlock VerticalAlignment="Center" Margin="2,0">Hours</TextBlock>
-                <controls:NumericUpDown Value="{Binding ToExportMinutes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Left" Minimum="0" Maximum="59" Width="80" />
+                <controls:NumericUpDown Value="{Binding ToExportMinutes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Left" Width="80" Interval="5" controls:TextBoxHelper.SelectAllOnFocus="True" />
                 <TextBlock VerticalAlignment="Center" Margin="2,0">Minutes</TextBlock>
             </WrapPanel>
 
@@ -70,13 +70,13 @@
             </WrapPanel>
 
             <TextBlock Grid.Row="8" Grid.Column="0" VerticalAlignment="Center" Padding="2" Text="Remaining Estimate" />
-            <WrapPanel Grid.Row="8" Grid.Column="1" VerticalAlignment="Center" Margin="0,5" Orientation="Horizontal" Visibility="{Binding ShowRemaining, Converter={StaticResource BoolToVisInverted}}">
-                <controls:NumericUpDown Value="{Binding RemainingHours}" TextAlignment="Left" Minimum="0" Maximum="99" Width="80" />
+            <WrapPanel Grid.Row="8" Grid.Column="1" VerticalAlignment="Center" Margin="0,5" Orientation="Horizontal" Visibility="{Binding ShowRemaining, Converter={StaticResource BoolToVis}}">
+                <controls:NumericUpDown Value="{Binding RemainingHours}" TextAlignment="Left" Width="80" controls:TextBoxHelper.SelectAllOnFocus="True" />
                 <TextBlock VerticalAlignment="Center" Margin="2,0">Hours</TextBlock>
-                <controls:NumericUpDown Value="{Binding RemainingMinutes}" TextAlignment="Left" Minimum="0" Maximum="59" Width="80" />
+                <controls:NumericUpDown Value="{Binding RemainingMinutes}" TextAlignment="Left" Width="80" Interval="5" controls:TextBoxHelper.SelectAllOnFocus="True" />
                 <TextBlock VerticalAlignment="Center" Margin="2,0">Minutes</TextBlock>
             </WrapPanel>
-            <WrapPanel Grid.Row="8" Grid.Column="1" VerticalAlignment="Center" Margin="0,5" Orientation="Horizontal" Visibility="{Binding ShowRemaining, Converter={StaticResource BoolToVis}}">
+            <WrapPanel Grid.Row="8" Grid.Column="1" VerticalAlignment="Center" Margin="0,5" Orientation="Horizontal" Visibility="{Binding ShowRemaining, Converter={StaticResource BoolToVisInvert}}">
                 <TextBox Text="{Binding RemainingHours}" TextAlignment="Left" IsEnabled="False" Width="80" />
                 <TextBlock VerticalAlignment="Center" Margin="2,0">Hours</TextBlock>
                 <TextBox Text="{Binding RemainingMinutes}" TextAlignment="Left" IsEnabled="False" Width="80" />

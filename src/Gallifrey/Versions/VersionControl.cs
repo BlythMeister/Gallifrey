@@ -1,5 +1,4 @@
 using System;
-using System.ComponentModel;
 using System.Deployment.Application;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -18,12 +17,12 @@ namespace Gallifrey.Versions
         string AppName { get; }
         Task<UpdateResult> CheckForUpdates(bool manualCheck = false);
         void ManualReinstall();
-        event PropertyChangedEventHandler PropertyChanged;
+        event EventHandler NewVersionInstalled;
     }
 
     public class VersionControl : IVersionControl
     {
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event EventHandler NewVersionInstalled;
 
         private readonly ITrackUsage trackUsage;
         public InstanceType InstanceType { get; private set; }
@@ -60,8 +59,6 @@ namespace Gallifrey.Versions
             }
 
             VersionName = $"v{VersionName}{betaText}";
-
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("VersionName"));
         }
 
         public Task<UpdateResult> CheckForUpdates(bool manualCheck = false)
@@ -96,6 +93,7 @@ namespace Gallifrey.Versions
                     {
                         SetVersionName();
                         UpdateInstalled = true;
+                        NewVersionInstalled?.Invoke(this, null);
                         return UpdateResult.Updated;
                     });
                 }

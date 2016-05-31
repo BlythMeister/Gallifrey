@@ -42,6 +42,7 @@ namespace Gallifrey.JiraTimers
         void AddJiraExportedTime(Guid uniqueId, int hours, int minutes);
         void AddIdleTimer(Guid uniqueId, List<IdleTimer> idleTimer);
         void RefreshFromJira(Guid uniqueId, Issue jiraIssue, User currentUser);
+        event EventHandler GeneralTimerModification;
     }
 
     public class JiraTimerCollection : IJiraTimerCollection
@@ -50,6 +51,7 @@ namespace Gallifrey.JiraTimers
         private readonly ITrackUsage trackUsage;
         private readonly List<JiraTimer> timerList;
         internal event EventHandler<ExportPromptDetail> exportPrompt;
+        public event EventHandler GeneralTimerModification;
 
         internal JiraTimerCollection(IExportSettings exportSettings, ITrackUsage trackUsage)
         {
@@ -66,6 +68,7 @@ namespace Gallifrey.JiraTimers
         internal void SaveTimers()
         {
             JiraTimerCollectionSerializer.Serialize(timerList);
+            GeneralTimerModification?.Invoke(this, null);
         }
 
         public IEnumerable<DateTime> GetValidTimerDates()

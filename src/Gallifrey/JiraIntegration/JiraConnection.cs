@@ -29,6 +29,7 @@ namespace Gallifrey.JiraIntegration
         User CurrentUser { get; }
         bool IsConnected { get; }
         void SetInProgress(string jiraRef);
+        event EventHandler LoggedIn;
     }
 
     public class JiraConnection : IJiraConnection
@@ -43,6 +44,7 @@ namespace Gallifrey.JiraIntegration
 
         public User CurrentUser { get; private set; }
         public bool IsConnected => jira != null;
+        public event EventHandler LoggedIn;
 
         public JiraConnection(ITrackUsage trackUsage)
         {
@@ -85,6 +87,7 @@ namespace Gallifrey.JiraIntegration
                     }
 
                     CurrentUser = jira.GetCurrentUser();
+                    LoggedIn?.Invoke(this, null);
 
                     TrackingType trackingType;
                     if (useRestApi)

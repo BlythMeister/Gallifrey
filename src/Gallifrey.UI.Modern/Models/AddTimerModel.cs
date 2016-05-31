@@ -92,6 +92,14 @@ namespace Gallifrey.UI.Modern.Models
             set
             {
                 startHours = value ?? 0;
+                if (startHours < 0)
+                {
+                    startHours = 0;
+                }
+                if (startHours > 9)
+                {
+                    startHours = 9;
+                }
             }
         }
 
@@ -104,26 +112,26 @@ namespace Gallifrey.UI.Modern.Models
 
                 if (newValue < 0)
                 {
-                    if (StartHours == 0)
+                    if (startHours == 0)
                     {
                         startMinutes = 0;
                     }
                     else
                     {
                         startMinutes = 60 + newValue;
-                        StartHours--;
+                        startHours--;
                     }
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("StartHours"));
                 }
                 else if (value >= 60)
                 {
-                    if (StartHours == 9)
+                    if (startHours == 9)
                     {
                         startMinutes = 59;
                     }
                     else
                     {
-                        StartHours++;
+                        startHours++;
                         startMinutes = newValue - 60;
                     }
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("StartHours"));

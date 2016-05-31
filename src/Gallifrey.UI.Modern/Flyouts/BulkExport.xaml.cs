@@ -228,7 +228,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                     var remaining = exportModel.Remaining;
                     var standardComment = exportModel.StandardComment;
                     modelHelpers.Gallifrey.JiraConnection.LogTime(jiraRef, date, toExport, strategy, standardComment, comment, remaining);
-                    modelHelpers.Gallifrey.JiraTimerCollection.AddJiraExportedTime(exportModel.Timer.UniqueId, exportModel.ToExportHours, exportModel.ToExportMinutes);
+                    modelHelpers.Gallifrey.JiraTimerCollection.AddJiraExportedTime(exportModel.Timer.UniqueId, exportModel.ToExportHours ?? 0, exportModel.ToExportMinutes ?? 0);
                 }
                 catch (WorkLogException)
                 {
