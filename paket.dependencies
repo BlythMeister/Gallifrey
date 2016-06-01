@@ -5,5 +5,6 @@ nuget Exceptionless.Portable
 nuget Exceptionless.Windows
 nuget Exceptionless.Wpf
 nuget MahApps.Metro prerelease
+nuget MvvmLightLibs
 nuget Newtonsoft.Json
 nuget RestSharp
