@@ -126,13 +126,9 @@ namespace Gallifrey.UI.Modern.Flyouts
                     throw new WorkLogException("Did not export");
                 }
             }
-            catch (WorkLogException)
+            catch (WorkLogException ex)
             {
-                dialog = DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Error Exporting", "Unable To Log Work!");
-            }
-            catch (StateChangedException)
-            {
-                dialog = DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Error Exporting", "Unable To Re-Close A The Jira, Manually Check!!");
+                dialog = DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Error Exporting", $"Unable To Log Work!\nError Message From Jira: {ex.InnerException.Message}");
             }
             catch (CommentException)
             {

@@ -230,13 +230,9 @@ namespace Gallifrey.UI.Modern.Flyouts
                     modelHelpers.Gallifrey.JiraConnection.LogTime(jiraRef, date, toExport, strategy, standardComment, comment, remaining);
                     modelHelpers.Gallifrey.JiraTimerCollection.AddJiraExportedTime(exportModel.Timer.UniqueId, exportModel.ToExportHours ?? 0, exportModel.ToExportMinutes ?? 0);
                 }
-                catch (WorkLogException)
+                catch (WorkLogException ex)
                 {
-                    throw new BulkExportException($"Error Logging Work To {exportModel.JiraRef}");
-                }
-                catch (StateChangedException)
-                {
-                    throw new BulkExportException($"Unable To Re - Close A The Jira  {exportModel.JiraRef}, Manually Check!!");
+                    throw new BulkExportException($"Error Logging Work To {exportModel.JiraRef}\nError Message From Jira: { ex.InnerException.Message }");
                 }
                 catch (CommentException)
                 {

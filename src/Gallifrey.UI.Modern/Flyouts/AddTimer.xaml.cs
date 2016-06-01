@@ -9,6 +9,7 @@ using Gallifrey.IdleTimers;
 using Gallifrey.Jira.Model;
 using Gallifrey.UI.Modern.Helpers;
 using Gallifrey.UI.Modern.Models;
+using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 
 namespace Gallifrey.UI.Modern.Flyouts
@@ -153,6 +154,9 @@ namespace Gallifrey.UI.Modern.Flyouts
                 NewTimerId = ex.TimerId;
             }
 
+            AddedTimer = true;
+            var stillDoingThings = false;
+
             if (!DataModel.TempTimer)
             {
                 if (DataModel.AssignToMe)
@@ -167,22 +171,32 @@ namespace Gallifrey.UI.Modern.Flyouts
                     }
                 }
 
-                if (DataModel.InProgress)
+                if (DataModel.ChangeStatus)
                 {
                     try
                     {
-                        modelHelpers.Gallifrey.JiraConnection.SetInProgress(DataModel.JiraReference);
+                        var transitionsAvaliable = modelHelpers.Gallifrey.JiraConnection.GetTransitions(DataModel.JiraReference);
+
+                        var timeSelectorDialog = (BaseMetroDialog)this.Resources["TransitionSelector"];
+                        await DialogCoordinator.Instance.ShowMetroDialogAsync(modelHelpers.DialogContext, timeSelectorDialog);
+
+                        var comboBox = timeSelectorDialog.FindChild<ComboBox>("Items");
+                        comboBox.ItemsSource = transitionsAvaliable.Select(x=>x.name).ToList();
+
+                        stillDoingThings = true;
                     }
-                    catch (StateChangedException)
+                    catch (Exception)
                     {
-                        await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Error Changing Status", "Unable To Set Issue As In Progress");
+                        await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Status Update Error", "Unable To Change The Status Of This Issue");
                     }
                 }
             }
 
-            AddedTimer = true;
-            modelHelpers.CloseFlyout(this);
-            modelHelpers.RefreshModel();
+            if (!stillDoingThings)
+            {
+                modelHelpers.CloseFlyout(this);
+                modelHelpers.RefreshModel();
+            }
         }
 
         private async void SearchButton(object sender, RoutedEventArgs e)
@@ -207,6 +221,46 @@ namespace Gallifrey.UI.Modern.Flyouts
             {
                 DataModel.SetStartNowEnabled(true);
             }
+        }
+
+        private async void TransitionSelected(object sender, RoutedEventArgs e)
+        {
+            var selectedTransition = string.Empty;
+
+            try
+            {
+                var dialog = (BaseMetroDialog)this.Resources["TransitionSelector"];
+                var comboBox = dialog.FindChild<ComboBox>("Items");
+                
+                selectedTransition = (string)comboBox.SelectedItem;
+
+                await DialogCoordinator.Instance.HideMetroDialogAsync(modelHelpers.DialogContext, dialog);
+
+                modelHelpers.Gallifrey.JiraConnection.TransitionIssue(DataModel.JiraReference, selectedTransition);
+            }
+            catch (StateChangedException)
+            {
+                if (string.IsNullOrWhiteSpace(selectedTransition))
+                {
+                    await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Status Update Error", "Unable To Change The Status Of This Issue");
+                }
+                else
+                {
+                    await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Status Update Error", $"Unable To Change The Status Of This Issue To {selectedTransition}");
+                }
+            }
+
+            modelHelpers.CloseFlyout(this);
+            modelHelpers.RefreshModel();
+        }
+
+        private async void CancelTransition(object sender, RoutedEventArgs e)
+        {
+            var dialog = (BaseMetroDialog)this.Resources["TransitionSelector"];
+            await DialogCoordinator.Instance.HideMetroDialogAsync(modelHelpers.DialogContext, dialog);
+
+            modelHelpers.CloseFlyout(this);
+            modelHelpers.RefreshModel();
         }
     }
 }

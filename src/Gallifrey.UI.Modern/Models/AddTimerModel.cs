@@ -24,7 +24,7 @@ namespace Gallifrey.UI.Modern.Models
         public bool StartNow { get; set; }
         public bool StartNowEditable { get; set; }
         public bool AssignToMe { get; set; }
-        public bool InProgress { get; set; }
+        public bool ChangeStatus { get; set; }
 
         public List<IdleTimer> IdleTimers { get; set; }
 

@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
              xmlns:helpers="clr-namespace:Gallifrey.UI.Modern.Helpers"
+             xmlns:dialogs="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
              IsModal="True" Theme="Adapt" Position="Right" Header="Add Timer" CloseButtonIsCancel="True">
     
     <Grid Width="340" Margin="5,5,5,5" >
@@ -71,8 +72,8 @@
         <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Padding="2">Assign To Me?</TextBlock>
         <CheckBox Grid.Row="4" Grid.Column="1" Margin="0,5" IsChecked="{Binding AssignToMe, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding TempTimer, Converter={StaticResource BoolInvert}}" />
 
-        <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Padding="2">Set In Progress?</TextBlock>
-        <CheckBox Grid.Row="5" Grid.Column="1" Margin="0,5" IsChecked="{Binding InProgress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding TempTimer, Converter={StaticResource BoolInvert}}" />
+        <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Padding="2">Change Status?</TextBlock>
+        <CheckBox Grid.Row="5" Grid.Column="1" Margin="0,5" IsChecked="{Binding ChangeStatus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding TempTimer, Converter={StaticResource BoolInvert}}" />
 
         <StackPanel Orientation="Horizontal" Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center">
             <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="AddButton" IsDefault="True">
@@ -91,4 +92,28 @@
             </Button>
         </StackPanel>
     </Grid>
+
+    <controls:Flyout.Resources>
+        <ResourceDictionary>
+            <dialogs:CustomDialog x:Key="TransitionSelector"
+                                 Title="Select Status Change To Do"
+                                 x:Name="TransitionSelector">
+                <Grid Margin="0 10 0 0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" MinHeight="20" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Margin="0 5 0 0" FontSize="{DynamicResource DialogMessageFontSize}" TextWrapping="Wrap" x:Name="Message" Text="Please Select The Status Update You Would Like To Perform" />
+                    <ComboBox Grid.Row="1" Margin="0 5 0 0" FontSize="{DynamicResource DialogMessageFontSize}" controls:ControlsHelper.FocusBorderBrush="{DynamicResource AccentColorBrush}" x:Name="Items" />
+
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Height="85">
+                        <Button Height="35" MinWidth="80" Style="{DynamicResource AccentedDialogSquareButton}" Content="OK" Margin="0 0 5 0" Click="TransitionSelected" />
+                        <Button Height="35" MinWidth="80" Content="Cancel" Margin="5 0 5 0" Click="CancelTransition"/>
+                    </StackPanel>
+                </Grid>
+            </dialogs:CustomDialog>
+        </ResourceDictionary>
+    </controls:Flyout.Resources>
 </controls:Flyout>

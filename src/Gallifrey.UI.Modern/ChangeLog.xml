@@ -68,6 +68,8 @@
     <Features>
       <Feature>Adding "Premium" switch for a Premium set of features</Feature>
       <Feature>Time adjustment now increments/decrements hours when minutes full/empty</Feature>
+      <Feature>Update the set in progress to update status so you can update the status at all stages</Feature>
+      <Feature>Removed auto re-open/close on export as this has strange behaviour</Feature>
     </Features>
     <Bugs>
       <Bug>Fix issue with locked timer when adding to new timer</Bug>
