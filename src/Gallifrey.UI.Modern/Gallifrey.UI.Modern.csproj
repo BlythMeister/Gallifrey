@@ -69,6 +69,7 @@
     <Compile Include="Flyouts\BulkExport.xaml.cs">
       <DependentUpon>BulkExport.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Flyouts\Flyouts.cs" />
     <Compile Include="Helpers\BooleanInvertConverter.cs" />
     <Compile Include="Helpers\CachedResourceDictionary.cs" />
     <Compile Include="Helpers\ExceptionlessHelper.cs" />
@@ -155,6 +156,8 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="ViewModels\AddTimerViewModel.cs" />
+    <Compile Include="ViewModels\BulkExportViewModel.cs" />
+    <Compile Include="ViewModels\EditTimerViewModel.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

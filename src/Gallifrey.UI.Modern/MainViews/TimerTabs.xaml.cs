@@ -7,6 +7,7 @@ using Gallifrey.Exceptions.JiraTimers;
 using Gallifrey.UI.Modern.Flyouts;
 using Gallifrey.UI.Modern.Helpers;
 using Gallifrey.UI.Modern.Models;
+using Gallifrey.UI.Modern.ViewModels;
 using MahApps.Metro.Controls.Dialogs;
 using DragDropEffects = System.Windows.DragDropEffects;
 using DragEventArgs = System.Windows.DragEventArgs;
@@ -113,9 +114,9 @@ namespace Gallifrey.UI.Modern.MainViews
                     //show add form, we know it's a real jira & valid
                     var addTimer = new AddTimer(ModelHelpers, startDate: todaysDate, jiraRef: jiraRef, startNow: true);
                     await ModelHelpers.OpenFlyout(addTimer);
-                    if (addTimer.AddedTimer)
+                    if (((AddTimerViewModel)addTimer.DataContext).AddedTimer)
                     {
-                        ModelHelpers.SetSelectedTimer(addTimer.NewTimerId);
+                        ModelHelpers.SetSelectedTimer(((AddTimerViewModel)addTimer.DataContext).NewTimerId);
                     }
                 }
             }

@@ -71,6 +71,11 @@ namespace Gallifrey.UI.Modern.Helpers
             flyout.IsOpen = false;
         }
 
+        public void HideFlyout(Flyouts.Flyouts flyout)
+        {
+            
+        }
+
         public List<Flyout> GetHiddenFlyouts()
         {
             return openFlyouts.Where(x => x.IsHidden).Select(x => x.Flyout).ToList();
@@ -116,6 +121,8 @@ namespace Gallifrey.UI.Modern.Helpers
             public Type FlyoutType { get; set; }
             public bool IsHidden { get; set; }
             public Guid OpenFlyoutDetailGuid { get; set; }
+
+            public Flyouts.Flyouts Enumtype { get; set; }
 
             public OpenFlyoutDetails(Flyout flyout)
             {

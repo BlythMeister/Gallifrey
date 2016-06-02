@@ -237,7 +237,7 @@ namespace Gallifrey.UI.Modern.ViewModels
 
         private async void AddTimer()
         {
-            if (StartDate.HasValue)
+            if (!StartDate.HasValue)
             {
                 await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Missing Date", "You Must Enter A Start Date");
                 return;
@@ -348,6 +348,37 @@ namespace Gallifrey.UI.Modern.ViewModels
 
                 NewTimerId = ex.TimerId;
             }
+
+            if (!TempTimer)
+            {
+                if (AssignToMe)
+                {
+                    try
+                    {
+                        modelHelpers.Gallifrey.JiraConnection.AssignToCurrentUser(JiraReference);
+                    }
+                    catch (JiraConnectionException)
+                    {
+                        await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Assign Jira Error", "Unable To Locate Assign Jira To Current User");
+                    }
+                }
+
+                if (InProgress)
+                {
+                    try
+                    {
+                        modelHelpers.Gallifrey.JiraConnection.SetInProgress(JiraReference);
+                    }
+                    catch (StateChangedException)
+                    {
+                        await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Error Changing Status", "Unable To Set Issue As In Progress");
+                    }
+                }
+            }
+
+            AddedTimer = true;
+            modelHelpers.HideAllFlyouts();
+            modelHelpers.RefreshModel();
         }
 
         public bool AddedTimer { get; set; }

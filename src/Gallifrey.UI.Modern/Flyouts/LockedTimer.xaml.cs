@@ -6,6 +6,7 @@ using Gallifrey.ExtensionMethods;
 using Gallifrey.JiraTimers;
 using Gallifrey.UI.Modern.Helpers;
 using Gallifrey.UI.Modern.Models;
+using Gallifrey.UI.Modern.ViewModels;
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 
@@ -282,7 +283,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             var addFlyout = new AddTimer(modelHelpers, startDate: lockedTimerDate, enableDateChange: false, idleTimers: selectedTimers, jiraRef: preLoadJiraRef);
             await modelHelpers.OpenFlyout(addFlyout);
 
-            if (addFlyout.AddedTimer)
+            if (((AddTimerViewModel)addFlyout.DataContext).AddedTimer)
             {
                 foreach (var lockedTimerModel in selected)
                 {
@@ -297,7 +298,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                 else
                 {
                     modelHelpers.CloseFlyout(this);
-                    modelHelpers.SetSelectedTimer(addFlyout.NewTimerId);
+                    modelHelpers.SetSelectedTimer(((AddTimerViewModel)addFlyout.DataContext).NewTimerId);
                 }
             }
             else

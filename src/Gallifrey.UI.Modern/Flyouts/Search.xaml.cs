@@ -5,6 +5,7 @@ using System.Windows;
 using Gallifrey.Jira.Model;
 using Gallifrey.UI.Modern.Helpers;
 using Gallifrey.UI.Modern.Models;
+using Gallifrey.UI.Modern.ViewModels;
 using MahApps.Metro.Controls.Dialogs;
 
 namespace Gallifrey.UI.Modern.Flyouts
@@ -126,9 +127,9 @@ namespace Gallifrey.UI.Modern.Flyouts
             {
                 var addFlyout = new AddTimer(modelHelpers, DataModel.SelectedSearchResult.Reference, selectedDateTab);
                 await modelHelpers.OpenFlyout(addFlyout);
-                if (addFlyout.AddedTimer)
+                if (((AddTimerViewModel)addFlyout.DataContext).AddedTimer)
                 {
-                    modelHelpers.SetSelectedTimer(addFlyout.NewTimerId);
+                    modelHelpers.SetSelectedTimer(((AddTimerViewModel)addFlyout.DataContext).NewTimerId);
                 }
                 else
                 {

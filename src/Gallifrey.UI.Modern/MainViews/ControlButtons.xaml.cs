@@ -6,6 +6,7 @@ using Gallifrey.AppTracking;
 using Gallifrey.UI.Modern.Flyouts;
 using Gallifrey.UI.Modern.Helpers;
 using Gallifrey.UI.Modern.Models;
+using Gallifrey.UI.Modern.ViewModels;
 using MahApps.Metro.Controls.Dialogs;
 
 namespace Gallifrey.UI.Modern.MainViews
@@ -31,9 +32,9 @@ namespace Gallifrey.UI.Modern.MainViews
 
             var addTimer = new AddTimer(ModelHelpers, startDate: startDate);
             await ModelHelpers.OpenFlyout(addTimer);
-            if (addTimer.AddedTimer)
+            if (((AddTimerViewModel)addTimer.DataContext).AddedTimer)
             {
-                ModelHelpers.SetSelectedTimer(addTimer.NewTimerId);
+                ModelHelpers.SetSelectedTimer(((AddTimerViewModel)addTimer.DataContext).NewTimerId);
             }
         }
 
@@ -68,9 +69,9 @@ namespace Gallifrey.UI.Modern.MainViews
                 var startDate = ViewModel.TimerDates.FirstOrDefault(x => x.DateIsSelected)?.TimerDate ?? DateTime.Today;
                 var addTimer = new AddTimer(ModelHelpers, startDate: startDate, jiraRef: jiraRef);
                 await ModelHelpers.OpenFlyout(addTimer);
-                if (addTimer.AddedTimer)
+                if (((AddTimerViewModel)addTimer.DataContext).AddedTimer)
                 {
-                    ModelHelpers.SetSelectedTimer(addTimer.NewTimerId);
+                    ModelHelpers.SetSelectedTimer(((AddTimerViewModel)addTimer.DataContext).NewTimerId);
                 }
             }
             else
