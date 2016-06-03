@@ -64,7 +64,7 @@
     </Bugs>
     <Others />
   </Version>
-  <Version Number="3.1.0.30" Name="Pre-Release">
+  <Version Number="3.1.0.31" Name="Pre-Release">
     <Features>
       <Feature>Adding "Premium" switch for a Premium set of features</Feature>
       <Feature>Time adjustment now increments/decrements hours when minutes full/empty</Feature>
