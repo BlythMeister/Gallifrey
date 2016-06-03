@@ -34,6 +34,7 @@ namespace Gallifrey.UI.Modern.Models
             modelHelpers.Gallifrey.SettingsChanged += (sender, args) => SettingsChanged();
             modelHelpers.Gallifrey.JiraConnection.LoggedIn += (sender, args) => UserLoggedIn();
             modelHelpers.Gallifrey.JiraTimerCollection.GeneralTimerModification += (sender, args) => GeneralTimerModification();
+            modelHelpers.Gallifrey.DailyTrackingEvent += (sender, args) => DailyEvent();
             modelHelpers.RefreshModelEvent += (sender, args) => RefreshModel();
             modelHelpers.SelectRunningTimerEvent += (sender, args) => SelectRunningTimer();
             modelHelpers.SelectTimerEvent += (sender, timerId) => SetSelectedTimer(timerId);
@@ -337,6 +338,9 @@ namespace Gallifrey.UI.Modern.Models
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ExportedTotalMinutes"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HaveTempTime"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TempTimeMessage"));
+
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ExportTarget"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ExportedTargetTotalMinutes"));
         }
 
         private void SettingsChanged()
@@ -353,6 +357,15 @@ namespace Gallifrey.UI.Modern.Models
 
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TimerRunning"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("CurrentRunningTimerDescription"));
+
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ExportTarget"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ExportedTargetTotalMinutes"));
+        }
+
+        private void DailyEvent()
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ExportTarget"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ExportedTargetTotalMinutes"));
         }
 
         #endregion
