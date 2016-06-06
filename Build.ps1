@@ -1,5 +1,8 @@
 Param(
-  [alias("tc")][string]$TeamCity
+  [Parameter(Position=0)]
+  [alias("nv")]
+  [ValidateSet('Y','N')]
+  [System.String]$NewVersion
 )
 
 Add-Type -A 'System.IO.Compression.FileSystem'
@@ -7,11 +10,7 @@ $OldVersion = Get-Content src\CurrentVersion.info
 
 Write-Host "Current Version Number Is: $OldVersion"
 
-if($TeamCity.toLower() -eq "y")
-{
-	Write-Host "Will Not Update"
-}
-else
+if($NewVersion.toLower() -eq "y")
 {
 	$NewVersion = Read-Host "Enter New Version Number"
 	if($NewVersion -eq "")

@@ -78,7 +78,7 @@
             </Grid.RowDefinitions>
             <TextBlock Grid.Row="0" FontSize="18" Margin="0,0,0,5" Text="Installation Identifier" TextDecorations="Underline" />
             <TextBlock Grid.Row="1" Text="Your installation has an identifier of:"></TextBlock>
-            <TextBlock Grid.Row="2" TextWrapping="Wrap" Margin="0,0,0,5" VerticalAlignment="Center" Text="{Binding InstallationId}" PreviewMouseDown="InstallationIdClick" />
+            <TextBlock x:Name="cur" Grid.Row="2" TextWrapping="Wrap" Margin="0,0,0,5" VerticalAlignment="Center" Text="{Binding InstallationId}" PreviewMouseDown="InstallationIdClick" TextDecorations="Underline" Cursor="Hand"/>
             <TextBlock Grid.Row="3" Text="Click the installation identifier to copy to the clipboard"></TextBlock>
         </Grid>
     </Grid>
