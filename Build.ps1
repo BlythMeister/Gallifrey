@@ -2,7 +2,7 @@ Param(
   [Parameter(Position=0)]
   [alias("nv")]
   [ValidateSet('Y','N')]
-  [System.String]$NewVersion
+  [System.String]$NewVersionUpdate
 )
 
 Add-Type -A 'System.IO.Compression.FileSystem'
@@ -10,7 +10,7 @@ $OldVersion = Get-Content src\CurrentVersion.info
 
 Write-Host "Current Version Number Is: $OldVersion"
 
-if($NewVersion.toLower() -eq "y")
+if($NewVersionUpdate.toLower() -eq "y")
 {
 	$NewVersion = Read-Host "Enter New Version Number"
 	if($NewVersion -eq "")
@@ -100,8 +100,3 @@ Write-Host "Create App Zips"
 [IO.Compression.ZipFile]::CreateFromDirectory('Output\alpha', 'Output\alpha.zip')
 [IO.Compression.ZipFile]::CreateFromDirectory('Output\beta', 'Output\beta.zip')
 [IO.Compression.ZipFile]::CreateFromDirectory('Output\stable', 'Output\stable.zip')
-
-if($TeamCity.toLower() -eq "y")
-{
-	Write-Host "Publish Artifacts"
-}
