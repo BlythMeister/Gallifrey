@@ -28,6 +28,11 @@ namespace Gallifrey.UI.Modern.Flyouts
             this.startDate = startDate;
             InitializeComponent();
 
+            if (!modelHelpers.Gallifrey.Settings.InternalSettings.IsPremium && startNow.HasValue && startNow.Value)
+            {
+                startNow = false;
+            }
+
             DataContext = new AddTimerModel(modelHelpers.Gallifrey, jiraRef, startDate, enableDateChange, idleTimers, startNow);
             AddedTimer = false;
         }
@@ -46,6 +51,44 @@ namespace Gallifrey.UI.Modern.Flyouts
                 await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Invalid Date", $"You Must Enter A Start Date Between {DataModel.MinDate.ToShortDateString()} And {DataModel.MaxDate.ToShortDateString()}");
                 Focus();
                 return;
+            }
+
+            //Validate Premium Features
+            if (!modelHelpers.Gallifrey.Settings.InternalSettings.IsPremium)
+            {
+                if (DataModel.TempTimer)
+                {
+                    if (modelHelpers.Gallifrey.JiraTimerCollection.GetAllTempTimers().Count() >= 2)
+                    {
+                        modelHelpers.ShowGetPremiumMessage("Without Gallifrey Premium You Are Limited To A Maximum Of 2 Temp Timers");
+                        Focus();
+                        return;
+                    }
+                }
+
+                if (DataModel.StartNow)
+                {
+                    modelHelpers.ShowGetPremiumMessage("Without Gallifrey Premium You Cannot Start Timer Now.");
+                    DataModel.StartNow = false;
+                    Focus();
+                    return;
+                }
+
+                if (DataModel.AssignToMe)
+                {
+                    modelHelpers.ShowGetPremiumMessage("Without Gallifrey Premium You Cannot Assign To Yourself.");
+                    DataModel.AssignToMe = false;
+                    Focus();
+                    return;
+                }
+
+                if (DataModel.ChangeStatus)
+                {
+                    modelHelpers.ShowGetPremiumMessage("Without Gallifrey Premium You Cannot Change Timer Status.");
+                    DataModel.ChangeStatus = false;
+                    Focus();
+                    return;
+                }
             }
 
             TimeSpan seedTime;
@@ -89,16 +132,6 @@ namespace Gallifrey.UI.Modern.Flyouts
             {
                 if (DataModel.TempTimer)
                 {
-                    if (!modelHelpers.Gallifrey.Settings.InternalSettings.IsPremium)
-                    {
-                        var tempTimersCount = modelHelpers.Gallifrey.JiraTimerCollection.GetAllTempTimers().Count();
-                        if (tempTimersCount >= 2)
-                        {
-                            modelHelpers.ShowGetPremiumMessage("Without Gallifrey Premium You Are Limited To A Maximum Of 2 Temp Timers");
-                            Focus();
-                            return;
-                        }
-                    }
                     NewTimerId = modelHelpers.Gallifrey.JiraTimerCollection.AddTempTimer(DataModel.TempTimerDescription, DataModel.StartDate.Value, seedTime, DataModel.StartNow);
                 }
                 else
