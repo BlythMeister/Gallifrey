@@ -5,6 +5,7 @@
         AppLoad,
         ExportOccured,
         UpdateCheck,
+        UpdateCheckManual,
         AppClose,
         DailyHearbeat,
         OptOut,

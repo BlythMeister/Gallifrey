@@ -34,6 +34,9 @@ namespace Gallifrey
         event EventHandler<int> NoActivityEvent;
         event EventHandler<ExportPromptDetail> ExportPromptEvent;
         event EventHandler DailyTrackingEvent;
+        event EventHandler BackendModifiedTimers;
+        event EventHandler IsPremiumChanged;
+        event EventHandler SettingsChanged;
         void Initialise();
         void Close();
         void TrackEvent(TrackingType trackingType);
@@ -52,34 +55,41 @@ namespace Gallifrey
         private readonly JiraConnection jiraConnection;
         private readonly VersionControl versionControl;
         private readonly WithThanksCreator withThanksCreator;
+        private readonly PremiumChecker premiumChecker;
+        private readonly Mutex exportedHeartbeatMutex;
 
         public event EventHandler<int> NoActivityEvent;
         public event EventHandler<ExportPromptDetail> ExportPromptEvent;
         public event EventHandler DailyTrackingEvent;
+        public event EventHandler BackendModifiedTimers;
+        public event EventHandler IsPremiumChanged;
+        public event EventHandler SettingsChanged;
+
         internal ActivityChecker ActivityChecker;
+
         private Guid? runningTimerWhenIdle;
         private DateTime lastMissingTimerCheck = DateTime.MinValue;
-        private readonly Mutex exportedHeartbeatMutex;
-
-        public Backend(InstanceType instanceType, AppType appType)
+        
+        public Backend(InstanceType instanceType)
         {
             settingsCollection = SettingsCollectionSerializer.DeSerialize();
-            trackUsage = new TrackUsage(settingsCollection.AppSettings, settingsCollection.InternalSettings, instanceType, appType);
-            versionControl = new VersionControl(instanceType, appType, trackUsage);
+            trackUsage = new TrackUsage(settingsCollection.AppSettings, settingsCollection.InternalSettings, instanceType);
+            versionControl = new VersionControl(instanceType, trackUsage);
             jiraTimerCollection = new JiraTimerCollection(settingsCollection.ExportSettings, trackUsage);
             jiraTimerCollection.exportPrompt += OnExportPromptEvent;
             jiraConnection = new JiraConnection(trackUsage);
             idleTimerCollection = new IdleTimerCollection();
             ActivityChecker = new ActivityChecker(jiraTimerCollection, settingsCollection.AppSettings);
             withThanksCreator = new WithThanksCreator();
+            premiumChecker = new PremiumChecker();
 
             ActivityChecker.NoActivityEvent += OnNoActivityEvent;
-            var cleanUpAndTrackingHearbeat = new Timer(1800000); // 30 minutes
+            var cleanUpAndTrackingHearbeat = new Timer(TimeSpan.FromMinutes(15).TotalMilliseconds);
             cleanUpAndTrackingHearbeat.Elapsed += CleanUpAndTrackingHearbeatOnElapsed;
             cleanUpAndTrackingHearbeat.Start();
 
             exportedHeartbeatMutex = new Mutex(false);
-            var jiraExportHearbeat = new Timer(600000); //10 minutes
+            var jiraExportHearbeat = new Timer(TimeSpan.FromMinutes(10).TotalMilliseconds);
             jiraExportHearbeat.Elapsed += JiraExportHearbeatHearbeatOnElapsed;
             jiraExportHearbeat.Start();
 
@@ -127,13 +137,25 @@ namespace Gallifrey
                         jiraTimerCollection.StartTimer(runningTimerId.Value);
                     }
                 }
+                BackendModifiedTimers?.Invoke(this, null);
 
                 if (settingsCollection.InternalSettings.LastHeartbeatTracked.Date < DateTime.UtcNow.Date)
                 {
-                    DailyTrackingEvent?.Invoke(this, null);
-                    trackUsage.TrackAppUsage(TrackingType.DailyHearbeat);
-                    settingsCollection.InternalSettings.LastHeartbeatTracked = DateTime.UtcNow;
+                    if (versionControl.IsAutomatedDeploy)
+                    {
+                        DailyTrackingEvent?.Invoke(this, null);
+                        trackUsage.TrackAppUsage(TrackingType.DailyHearbeat);
+                        settingsCollection.InternalSettings.SetLastHeartbeatTracked(DateTime.UtcNow);
+                        settingsCollection.SaveSettings();
+                    }
+                }
+
+                var isPremium = premiumChecker.CheckIfPremium(settingsCollection.InternalSettings.InstallationInstaceId);
+                if (isPremium != settingsCollection.InternalSettings.IsPremium)
+                {
+                    settingsCollection.InternalSettings.SetIsPremium(isPremium);
                     settingsCollection.SaveSettings();
+                    IsPremiumChanged?.Invoke(this, null);
                 }
             }
             catch { /*Surpress Errors, if this fails timers won't be removed*/}
@@ -148,7 +170,7 @@ namespace Gallifrey
             try
             {
                 var keepTimersForDays = settingsCollection.AppSettings.KeepTimersForDays;
-                if (keepTimersForDays > 0) keepTimersForDays = keepTimersForDays * -1;
+                if (keepTimersForDays > 0) keepTimersForDays = keepTimersForDays*-1;
                 var workingDate = DateTime.Now.AddDays(keepTimersForDays + 1);
 
                 var doMissingTimerCheck = false;
@@ -181,6 +203,7 @@ namespace Gallifrey
 
                                 var timerReference = jiraTimerCollection.AddTimer(issueWithWorklogs, workingDate.Date, new TimeSpan(), false);
                                 jiraTimerCollection.RefreshFromJira(timerReference, issueWithWorklogs, jiraConnection.CurrentUser);
+                                BackendModifiedTimers?.Invoke(this, null);
                             }
                         }
                     }
@@ -222,7 +245,7 @@ namespace Gallifrey
                             }
                             else
                             {
-                                timersNotChecked.Add(timer.JiraReference, new List<Guid> { timer.UniqueId });
+                                timersNotChecked.Add(timer.JiraReference, new List<Guid> {timer.UniqueId});
                             }
                         }
                     }
@@ -290,6 +313,7 @@ namespace Gallifrey
             ActivityChecker.UpdateAppSettings(settingsCollection.AppSettings);
             jiraTimerCollection.UpdateAppSettings(settingsCollection.ExportSettings);
             trackUsage.UpdateSettings(settingsCollection.AppSettings, settingsCollection.InternalSettings);
+            SettingsChanged?.Invoke(this, null);
         }
 
         public bool StartIdleTimer()

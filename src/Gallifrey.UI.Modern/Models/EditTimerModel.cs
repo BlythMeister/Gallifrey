@@ -5,6 +5,8 @@ namespace Gallifrey.UI.Modern.Models
 {
     public class EditTimerModel : INotifyPropertyChanged
     {
+        private readonly bool hasExportedTime;
+
         private bool tempTimer;
         private string jiraReference;
         private string tempTimerDescription;
@@ -13,11 +15,9 @@ namespace Gallifrey.UI.Modern.Models
         private int minutes;
 
         public event PropertyChangedEventHandler PropertyChanged;
-        public bool JiraReferenceEditable { get; set; }
         public DateTime MinDate { get; set; }
         public DateTime MaxDate { get; set; }
         public DateTime DisplayDate { get; set; }
-        public bool DateEditable { get; set; }
         public bool TimeEditable { get; set; }
         public string OriginalJiraReference { get; set; }
         public string OriginalTempTimerDescription { get; set; }
@@ -26,8 +26,10 @@ namespace Gallifrey.UI.Modern.Models
         public int OriginalMinutes { get; set; }
         public bool IsDefaultOnButton { get; set; }
 
+        public bool DateEditable => !hasExportedTime && !HasModifiedJiraReference;
+        public bool JiraReferenceEditable => !hasExportedTime && !HasModifiedRunDate;
         public bool HasModifiedJiraReference => (OriginalJiraReference != JiraReference) || (OriginalTempTimerDescription != TempTimerDescription);
-        public bool HasModifiedRunDate => OriginalRunDate != RunDate;
+        public bool HasModifiedRunDate => OriginalRunDate.Value.Date != RunDate.Value.Date;
         public bool HasModifiedTime => OriginalHours != Hours || OriginalMinutes != Minutes;
 
         public EditTimerModel(IBackend gallifrey, Guid timerId)
@@ -55,8 +57,7 @@ namespace Gallifrey.UI.Modern.Models
             Hours = timer.ExactCurrentTime.Hours > 9 ? 9 : timer.ExactCurrentTime.Hours;
             Minutes = timer.ExactCurrentTime.Minutes;
 
-            DateEditable = timer.HasExportedTime();
-            JiraReferenceEditable = timer.HasExportedTime();
+            hasExportedTime = timer.HasExportedTime();
             TimeEditable = !timer.IsRunning;
 
             if (TempTimer)
@@ -67,8 +68,8 @@ namespace Gallifrey.UI.Modern.Models
             OriginalTempTimerDescription = TempTimerDescription;
             OriginalJiraReference = JiraReference;
             OriginalRunDate = RunDate;
-            OriginalHours = Hours;
-            OriginalMinutes = Minutes;
+            OriginalHours = Hours ?? 0;
+            OriginalMinutes = Minutes ?? 0;
 
             IsDefaultOnButton = true;
         }
@@ -79,6 +80,8 @@ namespace Gallifrey.UI.Modern.Models
             set
             {
                 jiraReference = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("DateEditable"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("JiraReferenceEditable"));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasModifiedJiraReference"));
             }
         }
@@ -89,6 +92,8 @@ namespace Gallifrey.UI.Modern.Models
             set
             {
                 tempTimerDescription = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("DateEditable"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("JiraReferenceEditable"));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasModifiedJiraReference"));
             }
         }
@@ -99,26 +104,66 @@ namespace Gallifrey.UI.Modern.Models
             set
             {
                 runDate = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("DateEditable"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("JiraReferenceEditable"));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasModifiedRunDate"));
             }
         }
 
-        public int Hours
+        public int? Hours
         {
             get { return hours; }
             set
             {
-                hours = value;
+                hours = value ?? 0;
+                if (hours < 0)
+                {
+                    hours = 0;
+                }
+                if (hours > 9)
+                {
+                    hours = 9;
+                }
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasModifiedTime"));
             }
         }
 
-        public int Minutes
+        public int? Minutes
         {
             get { return minutes; }
             set
             {
-                minutes = value;
+                var newValue = value ?? 0;
+                if (newValue < 0)
+                {
+                    if (hours == 0)
+                    {
+                        minutes = 0;
+                    }
+                    else
+                    {
+                        minutes = 60 + newValue;
+                        hours--;
+                    }
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Hours"));
+                }
+                else if(value >= 60)
+                {
+                    if (hours == 9)
+                    {
+                        minutes = 59;
+                    }
+                    else
+                    {
+                        hours++;
+                        minutes = newValue - 60;
+                    }
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Hours"));
+                }
+                else
+                {
+                    minutes = newValue;
+                }
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasModifiedTime"));
             }
         }
@@ -145,7 +190,7 @@ namespace Gallifrey.UI.Modern.Models
         
         public void AdjustTime(TimeSpan timeAdjustmentAmount, bool addTime)
         {
-            var currentTime = new TimeSpan(Hours, Minutes, 0);
+            var currentTime = new TimeSpan(Hours ?? 0, Minutes ?? 0, 0);
 
             currentTime = addTime ? currentTime.Add(timeAdjustmentAmount) : currentTime.Subtract(timeAdjustmentAmount);
 

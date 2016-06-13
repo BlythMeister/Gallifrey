@@ -62,22 +62,13 @@ namespace Gallifrey.UI.Modern.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
-        ///&lt;Versions&gt;
-        ///  &lt;Version Number=&quot;3.0.0&quot; Name=&quot;Pre Release&quot;&gt;
+        ///&lt;Versions xmlns=&quot;http://releases.gallifreyapp.co.uk/ChangeLog&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xsi:noNamespaceSchemaLocation=&quot;http://releases.gallifreyapp.co.uk/schemas/ChangeLogSchema.xsd&quot;&gt;
+        ///  &lt;Version Number=&quot;3.0.0&quot;&gt;
         ///    &lt;Features&gt;
-        ///      &lt;Feature&gt;A Feature &lt;/Feature&gt;
-        ///    &lt;/Features&gt;
-        ///    &lt;Bugs&gt;
-        ///      &lt;Bug&gt;A Bug Fix&lt;/Bug&gt;
-        ///    &lt;/Bugs&gt;
-        ///    &lt;Others&gt;
-        ///      &lt;Other&gt;Brand new UI&lt;/Other&gt;
-        ///    &lt;/Others&gt;
-        ///  &lt;/Version&gt;
-        ///  &lt;Version Number=&quot;3.1.0&quot; Name=&quot;Pre Release 2&quot;&gt;
-        ///    &lt;Features&gt;
-        ///      &lt;Feature&gt;A Feature 2&lt;/Feature&gt;
-        ///      &lt;Feature&gt;A Feature 2a lfkdajdfk jdslkj g sflkj sd slksdlk sk dgkld kds  s;lsdk fkl  ;lsd;lj dgsl k glk [rest of string was truncated]&quot;;.
+        ///      &lt;Feature&gt;Add/Edit/Delete Timers&lt;/Feature&gt;
+        ///      &lt;Feature&gt;Manual Time Adjustment&lt;/Feature&gt;
+        ///      &lt;Feature&gt;Search For Jira Within Gallifrey&lt;/Feature&gt;
+        ///      &lt;Feature&gt;Export With Comments And Adjust Remaining [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string ChangeLog {
             get {

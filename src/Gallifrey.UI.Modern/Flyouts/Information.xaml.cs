@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Linq;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Navigation;
 using System.Xml.Linq;
 using Gallifrey.AppTracking;
@@ -30,7 +31,7 @@ namespace Gallifrey.UI.Modern.Flyouts
 
         private async void ChangeLogButton(object sender, RoutedEventArgs e)
         {
-            modelHelpers.CloseFlyout(this);
+            modelHelpers.HideFlyout(this);
             var changeLog = modelHelpers.Gallifrey.GetChangeLog(XDocument.Parse(Properties.Resources.ChangeLog)).ToList();
             if (changeLog.Any())
             {
@@ -41,6 +42,12 @@ namespace Gallifrey.UI.Modern.Flyouts
                 await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "No Change Log", "There Is No Change Log To Show");
             }
             modelHelpers.OpenFlyout(this);
+        }
+
+        private async void InstallationIdClick(object sender, MouseButtonEventArgs mouseButtonEventArgs)
+        {
+            Clipboard.SetText(modelHelpers.Gallifrey.Settings.InternalSettings.InstallationInstaceId.ToString());
+            await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Coppied Installation Id", $"You Installation Id Of {modelHelpers.Gallifrey.Settings.InternalSettings.InstallationInstaceId} Has Been Coppied To The Clipboard");
         }
     }
 }

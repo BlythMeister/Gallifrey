@@ -6,10 +6,4 @@
         Beta,
         Alpha
     }
-
-    public enum AppType
-    {
-        Classic,
-        Modern
-    }
 }

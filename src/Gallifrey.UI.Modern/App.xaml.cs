@@ -5,9 +5,9 @@ namespace Gallifrey.UI.Modern
 {
     public partial class App
     {
-        public static void Run(InstanceType instance, AppType appType)
+        public static void Run(InstanceType instance)
         {
-            var mainWindow = new MainWindow(instance, appType);
+            var mainWindow = new MainWindow(instance);
             mainWindow.Show();
         }
     }

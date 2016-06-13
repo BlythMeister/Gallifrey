@@ -15,17 +15,15 @@ namespace Gallifrey.AppTracking
 
     public class TrackUsage : ITrackUsage
     {
-        private readonly InstanceType instanceType;
-        private readonly AppType appType;
+        private readonly InstanceType instanceType;      
         private string trackingQueryString;
         private IAppSettings appSettings;
         private WebBrowser webBrowser;
 
-        public TrackUsage(IAppSettings appSettings, IInternalSettings internalSettings, InstanceType instanceType, AppType appType)
+        public TrackUsage(IAppSettings appSettings, IInternalSettings internalSettings, InstanceType instanceType)
         {
             this.appSettings = appSettings;
             this.instanceType = instanceType;
-            this.appType = appType;
             SetTrackingQueryString(internalSettings);
             SetupBrowser();
             TrackAppUsage(TrackingType.AppLoad);
@@ -56,7 +54,7 @@ namespace Gallifrey.AppTracking
 
         public async void TrackAppUsage(TrackingType trackingType)
         {
-            if (IsTrackingEnabled(trackingType))
+            if (IsTrackingEnabled(trackingType) && ApplicationDeployment.IsNetworkDeployed)
             {
                 if (webBrowser == null)
                 {
@@ -93,9 +91,7 @@ namespace Gallifrey.AppTracking
 
         private void SetTrackingQueryString(IInternalSettings internalSettings)
         {
-            var versionName = ApplicationDeployment.IsNetworkDeployed ? instanceType.ToString() : "Debug";
-
-            trackingQueryString = $"utm_source=GallifreyApp_{appType}&utm_medium={versionName}&utm_campaign={internalSettings.LastChangeLogVersion}&uid={internalSettings.InstallationInstaceId}";
+            trackingQueryString = $"utm_source=GallifreyApp&utm_medium={instanceType}&utm_campaign={internalSettings.LastChangeLogVersion}&uid={internalSettings.InstallationInstaceId}";
         }
     }
 }

@@ -31,26 +31,16 @@
                     <CheckBox Grid.Row="0" Grid.Column="1" Margin="5" VerticalAlignment="Center" IsChecked="{Binding AlertWhenIdle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
                     <TextBlock Grid.Row="1" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="How Frequently Alerts Should Be Shown">Idle Time Alert (Minutes)</TextBlock>
-                    <controls:NumericUpDown Grid.Row="1" Grid.Column="1" Margin="5" VerticalAlignment="Center" Minimum="0" Maximum="120" Value="{Binding AlertMinutes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                        <controls:NumericUpDown.Style>
-                            <Style TargetType="controls:NumericUpDown">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding AlertWhenIdle}" Value="False" >
-                                        <Setter Property="IsEnabled" Value="False"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </controls:NumericUpDown.Style>
-                    </controls:NumericUpDown>
-
+                    <controls:NumericUpDown Grid.Row="1" Grid.Column="1" Margin="5" VerticalAlignment="Center" Minimum="0" Maximum="120" Value="{Binding AlertMinutes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding AlertWhenIdle}" controls:TextBoxHelper.SelectAllOnFocus="True" />
+                       
                     <TextBlock Grid.Row="2" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="Number Of Days To Keep Timers For In The UI">Keep Timers For (Days)</TextBlock>
-                    <controls:NumericUpDown Grid.Row="2" Grid.Column="1" Margin="5" VerticalAlignment="Center" Minimum="2" Maximum="150" Value="{Binding KeepTimersForDays, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <controls:NumericUpDown Grid.Row="2" Grid.Column="1" Margin="5" VerticalAlignment="Center" Minimum="2" Maximum="150" Value="{Binding KeepTimersForDays, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" controls:TextBoxHelper.SelectAllOnFocus="True"/>
 
                     <TextBlock Grid.Row="3" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="Should Updated Be Automatically Applied">Auto Update?</TextBlock>
                     <CheckBox Grid.Row="3" Grid.Column="1" Margin="5" VerticalAlignment="Center" IsChecked="{Binding AutoUpdate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
                     <TextBlock Grid.Row="4" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="Allow Gallifrey To Track Your App Usage (Which Functions You Use - No Personal Data Is Captured)">Anonymous Usage Tracking</TextBlock>
-                    <CheckBox Grid.Row="4" Grid.Column="1" Margin="5" VerticalAlignment="Center" IsChecked="{Binding AllowTracking, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    <CheckBox Grid.Row="4" Grid.Column="1" Margin="5" VerticalAlignment="Center" IsChecked="{Binding AllowTracking, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Click="AllowTrackingClick"/>
 
                     <TextBlock Grid.Row="5" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="Start Gallifrey When Your Machine Starts">Start On Boot</TextBlock>
                     <CheckBox Grid.Row="5" Grid.Column="1" Margin="5" VerticalAlignment="Center" IsChecked="{Binding StartOnBoot, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
@@ -117,10 +107,10 @@
                     </Grid.RowDefinitions>
 
                     <TextBlock Grid.Row="0" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="How Many Hours/Minutes You Tartget To Export Per Day">Export Time Per Day Hours</TextBlock>
-                    <controls:NumericUpDown Grid.Row="0" Grid.Column="1" Margin="5" VerticalAlignment="Center" Minimum="0" Maximum="10" Value="{Binding TargetHoursPerDay, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <controls:NumericUpDown Grid.Row="0" Grid.Column="1" Margin="5" VerticalAlignment="Center" Value="{Binding TargetHoursPerDay, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" controls:TextBoxHelper.SelectAllOnFocus="True"/>
 
                     <TextBlock Grid.Row="1" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right"  ToolTip="How Many Hours/Minutes You Tartget To Export Per Day">Minutes</TextBlock>
-                    <controls:NumericUpDown Grid.Row="1" Grid.Column="1" Margin="5" VerticalAlignment="Center" Minimum="0" Maximum="60" Value="{Binding TargetMinutesPerDay, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <controls:NumericUpDown Grid.Row="1" Grid.Column="1" Margin="5" VerticalAlignment="Center" Value="{Binding TargetMinutesPerDay, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Interval="5" controls:TextBoxHelper.SelectAllOnFocus="True"/>
 
                     <TextBlock Grid.Row="2" Grid.Column="0" Margin="5" HorizontalAlignment="Right" ToolTip="Which Days You Work In A Week">Working Days</TextBlock>
                     <ListBox Grid.Row="2" Grid.Column="1" Margin="5" ItemsSource="{Binding WorkingDays, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">

@@ -71,8 +71,9 @@ namespace Gallifrey.UI.Modern.Flyouts
                 }
                 else
                 {
-                    await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "No Results", "Your Search Returned No Results");
+                    await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Missing Search", "Please Choose Enter Search Term Or Choose A Filter");
                     Focus();
+                    DataModel.ClearSearchResults();
                     return;
                 }
 
@@ -86,7 +87,16 @@ namespace Gallifrey.UI.Modern.Flyouts
                     case ProgressResult.JiraHelperStatus.Errored:
                         throw new Exception();
                     case ProgressResult.JiraHelperStatus.Success:
-                        DataModel.UpdateSearchResults(searchResult.RetVal);
+                        if (searchResult.RetVal.Any())
+                        {
+                            DataModel.UpdateSearchResults(searchResult.RetVal);
+                        }
+                        else
+                        {
+                            await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "No Results", "Your Search Returned No Results");
+                            Focus();
+                            DataModel.ClearSearchResults();
+                        }
                         break;
                 }
             }

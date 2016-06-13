@@ -1,17 +1,14 @@
 using System;
-using System.ComponentModel;
 using System.Deployment.Application;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Gallifrey.AppTracking;
-using Gallifrey.Exceptions.Versions;
 
 namespace Gallifrey.Versions
 {
     public interface IVersionControl
     {
         InstanceType InstanceType { get; }
-        AppType AppType { get; }
         bool IsAutomatedDeploy { get; }
         bool UpdateInstalled { get; }
         string VersionName { get; }
@@ -20,16 +17,15 @@ namespace Gallifrey.Versions
         string AppName { get; }
         Task<UpdateResult> CheckForUpdates(bool manualCheck = false);
         void ManualReinstall();
-        event PropertyChangedEventHandler PropertyChanged;
+        event EventHandler NewVersionInstalled;
     }
 
     public class VersionControl : IVersionControl
     {
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event EventHandler NewVersionInstalled;
 
         private readonly ITrackUsage trackUsage;
         public InstanceType InstanceType { get; private set; }
-        public AppType AppType { get; private set; }
         public string VersionName { get; private set; }
         public string AppName { get; private set; }
         public bool UpdateInstalled { get; private set; }
@@ -40,29 +36,21 @@ namespace Gallifrey.Versions
         public Version DeployedVersion => UpdateInstalled ? ApplicationDeployment.CurrentDeployment.UpdatedVersion : ApplicationDeployment.CurrentDeployment.CurrentVersion;
         public bool IsFirstRun => ApplicationDeployment.CurrentDeployment.IsFirstRun;
 
-        public VersionControl(InstanceType instanceType, AppType appType, ITrackUsage trackUsage)
+        public VersionControl(InstanceType instanceType, ITrackUsage trackUsage)
         {
             this.trackUsage = trackUsage;
             InstanceType = instanceType;
-            AppType = appType;
             lastUpdateCheck = DateTime.MinValue;
 
             SetVersionName();
 
             var instance = InstanceType == InstanceType.Stable ? "" : $" ({InstanceType})";
-            var appName = AppType == AppType.Classic ? "Gallifrey Classic" : "Gallifrey";
-
-            AppName = $"{appName}{instance}";
+            AppName = $"Gallifrey {instance}";
         }
 
         private void SetVersionName()
         {
             VersionName = IsAutomatedDeploy ? DeployedVersion.ToString() : Application.ProductVersion;
-            if (IsAutomatedDeploy && InstanceType == InstanceType.Stable)
-            {
-                VersionName = VersionName.Substring(0, VersionName.LastIndexOf("."));
-            }
-
             var betaText = InstanceType == InstanceType.Stable ? "" : $" ({InstanceType})";
 
             if (!IsAutomatedDeploy)
@@ -71,10 +59,8 @@ namespace Gallifrey.Versions
             }
 
             VersionName = $"v{VersionName}{betaText}";
-
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("VersionName")); 
         }
-        
+
         public Task<UpdateResult> CheckForUpdates(bool manualCheck = false)
         {
             if (!IsAutomatedDeploy)
@@ -82,49 +68,55 @@ namespace Gallifrey.Versions
                 return Task.Factory.StartNew(() => UpdateResult.NotDeployable);
             }
 
-            if (IsAutomatedDeploy && (manualCheck || lastUpdateCheck < DateTime.UtcNow.AddMinutes(-5)))
+            if (lastUpdateCheck >= DateTime.UtcNow.AddMinutes(-5) && !manualCheck)
             {
-                trackUsage.TrackAppUsage(TrackingType.UpdateCheck);
-                lastUpdateCheck = DateTime.UtcNow;
-
-                try
-                {
-                    var updateInfo = ApplicationDeployment.CurrentDeployment.CheckForDetailedUpdate(false);
-
-                    if (updateInfo.UpdateAvailable && updateInfo.AvailableVersion > ApplicationDeployment.CurrentDeployment.CurrentVersion)
-                    {
-                        return Task.Factory.StartNew(() => ApplicationDeployment.CurrentDeployment.Update()).ContinueWith(task =>
-                        {
-                            SetVersionName();
-                            UpdateInstalled = true;
-                            return UpdateResult.Updated;
-                        });
-                    }
-
-                    if (manualCheck)
-                    {
-                        return Task.Factory.StartNew(() =>
-                        {
-                            Task.Delay(1500);
-                            return UpdateResult.NoUpdate;
-                        });
-                    }
-                }
-                catch (TrustNotGrantedException)
-                {
-                    if (manualCheck)
-                    {
-                        throw new ManualReinstallRequiredException();
-                    }
-                }
-                catch (Exception)
-                {
-                }
+                return Task.Factory.StartNew(() => UpdateResult.TooSoon);
             }
 
-            return Task.Factory.StartNew(() => UpdateResult.TooSoon);
+            if (manualCheck)
+            {
+                trackUsage.TrackAppUsage(TrackingType.UpdateCheckManual);
+            }
+            else
+            {
+                trackUsage.TrackAppUsage(TrackingType.UpdateCheck);
+            }
+            lastUpdateCheck = DateTime.UtcNow;
+
+            try
+            {
+                var updateInfo = ApplicationDeployment.CurrentDeployment.CheckForDetailedUpdate(false);
+
+                if (updateInfo.UpdateAvailable && updateInfo.AvailableVersion > ApplicationDeployment.CurrentDeployment.CurrentVersion)
+                {
+                    return Task.Factory.StartNew(() => ApplicationDeployment.CurrentDeployment.Update()).ContinueWith(task =>
+                    {
+                        SetVersionName();
+                        UpdateInstalled = true;
+                        NewVersionInstalled?.Invoke(this, null);
+                        return UpdateResult.Updated;
+                    });
+                }
+
+                return Task.Factory.StartNew(() =>
+                {
+                    if (manualCheck)
+                    {
+                        Task.Delay(1500);
+                    }
+                    return UpdateResult.NoUpdate;
+                });
+            }
+            catch (TrustNotGrantedException)
+            {
+                return Task.Factory.StartNew(() => UpdateResult.ReinstallNeeded);
+            }
+            catch (Exception)
+            {
+                return Task.Factory.StartNew(() => UpdateResult.Error);
+            }
         }
-        
+
         public void ManualReinstall()
         {
             var installUrl = ApplicationDeployment.CurrentDeployment.UpdateLocation.AbsoluteUri;

@@ -9,7 +9,6 @@ using Gallifrey.AppTracking;
 using Gallifrey.Exceptions;
 using Gallifrey.Exceptions.IdleTimers;
 using Gallifrey.Exceptions.JiraIntegration;
-using Gallifrey.Exceptions.Versions;
 using Gallifrey.ExtensionMethods;
 using Gallifrey.JiraTimers;
 using Gallifrey.UI.Modern.Extensions;
@@ -29,11 +28,11 @@ namespace Gallifrey.UI.Modern.MainViews
         private MainViewModel ViewModel => (MainViewModel)DataContext;
         private bool machineLocked;
 
-        public MainWindow(InstanceType instance, AppType appType)
+        public MainWindow(InstanceType instance)
         {
             InitializeComponent();
 
-            var gallifrey = new Backend(instance, appType);
+            var gallifrey = new Backend(instance);
             modelHelpers = new ModelHelpers(gallifrey, FlyoutsControl);
             exceptionlessHelper = new ExceptionlessHelper(modelHelpers);
             exceptionlessHelper.RegisterExceptionless();
@@ -48,7 +47,6 @@ namespace Gallifrey.UI.Modern.MainViews
 
             Height = gallifrey.Settings.UiSettings.Height;
             Width = gallifrey.Settings.UiSettings.Width;
-            Title = gallifrey.VersionControl.AppName;
             ThemeHelper.ChangeTheme(gallifrey.Settings.UiSettings.Theme, gallifrey.Settings.UiSettings.Accent);
 
             if (gallifrey.VersionControl.IsAutomatedDeploy)
@@ -145,7 +143,7 @@ namespace Gallifrey.UI.Modern.MainViews
             }
         }
 
-        
+
 
         private void GallifreyOnNoActivityEvent(object sender, int millisecondsSinceActivity)
         {
@@ -196,7 +194,6 @@ namespace Gallifrey.UI.Modern.MainViews
                         {
                             this.FlashWindow();
                             Activate();
-                            Topmost = true;
                             if (modelHelpers.FlyoutOpen)
                             {
                                 modelHelpers.HideAllFlyouts();
@@ -204,7 +201,6 @@ namespace Gallifrey.UI.Modern.MainViews
 
                             await modelHelpers.OpenFlyout(new LockedTimer(modelHelpers));
                             this.StopFlashingWindow();
-                            Topmost = false;
 
                             foreach (var hiddenFlyout in modelHelpers.GetHiddenFlyouts())
                             {
@@ -221,6 +217,11 @@ namespace Gallifrey.UI.Modern.MainViews
         private void ManualUpdateCheck(object sender, RoutedEventArgs e)
         {
             PerformUpdate(true, true);
+        }
+
+        private void GetPremium(object sender, RoutedEventArgs e)
+        {
+            modelHelpers.ShowGetPremiumMessage();
         }
 
         private void LoadJira(object sender, RoutedEventArgs e)
@@ -241,8 +242,6 @@ namespace Gallifrey.UI.Modern.MainViews
 
         private async void PerformUpdate(bool manualUpdateCheck, bool promptReinstall)
         {
-            var manualReinstall = false;
-
             try
             {
                 UpdateResult updateResult;
@@ -288,20 +287,23 @@ namespace Gallifrey.UI.Modern.MainViews
                 {
                     await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Unable To Update", "You Cannot Auto Update This Version Of Gallifrey");
                 }
-            }
-            catch (ManualReinstallRequiredException)
-            {
-                manualReinstall = true;
-            }
-
-            if (manualReinstall && promptReinstall)
-            {
-                var messageResult = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Update Error", "To Update An Uninstall/Reinstall Is Required.\nThis Can Happen Automatically\nNo Timers Will Be Lost\nDo You Want To Update Now?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
-
-                if (messageResult == MessageDialogResult.Affirmative)
+                else if (manualUpdateCheck && updateResult == UpdateResult.Error)
                 {
-                    modelHelpers.Gallifrey.VersionControl.ManualReinstall();
+                    throw new Exception();//Trigger error condition
                 }
+                else if (manualUpdateCheck && promptReinstall && updateResult == UpdateResult.ReinstallNeeded)
+                {
+                    var messageResult = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Update Error", "To Update An Uninstall/Reinstall Is Required.\nThis Can Happen Automatically\nNo Timers Will Be Lost\nDo You Want To Update Now?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
+
+                    if (messageResult == MessageDialogResult.Affirmative)
+                    {
+                        modelHelpers.Gallifrey.VersionControl.ManualReinstall();
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Update Error", "There Was An Error Trying To Update Gallifrey, If This Problem Persists Please Contact Support");
             }
         }
 
@@ -364,6 +366,11 @@ namespace Gallifrey.UI.Modern.MainViews
             }
 
             modelHelpers.TriggerRemoteButtonPress(trigger);
+        }
+
+        private void GetBeta(object sender, RoutedEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo("http://releases.gallifreyapp.co.uk/download/modern/beta/setup.exe"));
         }
     }
 }

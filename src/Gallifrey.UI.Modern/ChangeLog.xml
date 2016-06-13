@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Versions xmlns="http://releases.gallifreyapp.co.uk/ChangeLog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://releases.gallifreyapp.co.uk/schemas/ChangeLogSchema.xsd">
-  <Version Number="3.0.0">
+  <Version Number="3.0.0.0">
     <Features>
       <Feature>Add/Edit/Delete Timers</Feature>
       <Feature>Manual Time Adjustment</Feature>
@@ -24,21 +24,21 @@
     <Bugs />
     <Others/>
   </Version>
-  <Version Number="3.0.1">
+  <Version Number="3.0.1.0">
     <Features />
     <Bugs>
       <Bug>Change the way the SOAP client is created to fix connection issue</Bug>
     </Bugs>
     <Others/>
   </Version>
-  <Version Number="3.0.2">
+  <Version Number="3.0.2.0">
     <Features/>
     <Bugs>
       <Bug>Fix bug with locked timers adding with search</Bug>
     </Bugs>
     <Others/>
   </Version>
-  <Version Number="3.1.0">
+  <Version Number="3.1.0.0">
     <Features>
       <Feature>When adding locked timers, prompts if you want to add to running timer</Feature>
       <Feature>Added link to Gitter for chat help</Feature>
@@ -63,6 +63,20 @@
       <Bug>Fixed error when search loaded</Bug>
     </Bugs>
     <Others />
+  </Version>
+  <Version Number="3.2.0.0" Name="">
+    <Features>
+      <Feature>Adding "Premium" switch for a Premium set of features</Feature>
+      <Feature>Time adjustment now increments/decrements hours when minutes full/empty</Feature>
+      <Feature>Update the set in progress to update status so you can update the status at all stages</Feature>
+      <Feature>Removed auto re-open/close on export as this has strange behaviour</Feature>
+    </Features>
+    <Bugs>
+      <Bug>Fix issue with locked timer when adding to new timer</Bug>
+      <Bug>Fix issue following an empty search locking the search flyout</Bug>
+      <Bug>Fix issue when time entry is blank showing error message</Bug>
+    </Bugs>
+    <Others/>
   </Version>
 </Versions>
 

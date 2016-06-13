@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using Exceptionless;
+using Gallifrey.Settings;
 using Gallifrey.UI.Modern.Flyouts;
 
 namespace Gallifrey.UI.Modern.Helpers
@@ -21,7 +22,7 @@ namespace Gallifrey.UI.Modern.Helpers
             if (modelHelpers.Gallifrey.VersionControl.IsAutomatedDeploy)
             {
                 ExceptionlessClient.Default.Unregister();
-                ExceptionlessClient.Default.Configuration.ApiKey = "e7ac6366507547639ce69fea261d6545";
+                ExceptionlessClient.Default.Configuration.ApiKey = ConfigKeys.ExceptionlessApiKey;
                 ExceptionlessClient.Default.Configuration.DefaultTags.Add(modelHelpers.Gallifrey.VersionControl.VersionName.Replace("\n", " - "));
                 ExceptionlessClient.Default.Configuration.SetUserIdentity(modelHelpers.Gallifrey.Settings.InternalSettings.InstallationInstaceId.ToString(), modelHelpers.Gallifrey.JiraConnection.IsConnected ? modelHelpers.Gallifrey.JiraConnection.CurrentUser.displayName : "Unknown");
                 ExceptionlessClient.Default.Configuration.SessionsEnabled = false;

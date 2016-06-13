@@ -19,6 +19,7 @@ namespace Gallifrey.JiraTimers
         IEnumerable<JiraTimer> GetUnexportedTimers(DateTime timerDate);
         IEnumerable<JiraTimer> GetStoppedUnexportedTimers();
         IEnumerable<JiraTimer> GetAllUnexportedTimers();
+        IEnumerable<JiraTimer> GetAllTempTimers();
         IEnumerable<RecentJira> GetJiraReferencesForLastDays(int days);
         Guid AddTimer(Issue jiraIssue, DateTime startDate, TimeSpan seedTime, bool startNow);
         Guid AddTempTimer(string tempTimerDescription, DateTime startDate, TimeSpan seedTime, bool startNow);
@@ -29,7 +30,7 @@ namespace Gallifrey.JiraTimers
         void RemoveTimersOlderThanDays(int keepTimersForDays);
         JiraTimer GetTimer(Guid timerGuid);
         Guid RenameTimer(Guid timerGuid, Issue newIssue);
-        void ChangeTempTimerDescription(Guid editedTimerId, string tempTimerDescription);
+        Guid ChangeTempTimerDescription(Guid editedTimerId, string tempTimerDescription);
         Guid ChangeTimerDate(Guid timerGuid, DateTime newStartDate);
         Tuple<int, int> GetNumberExported();
         TimeSpan GetTotalUnexportedTime();
@@ -41,6 +42,7 @@ namespace Gallifrey.JiraTimers
         void AddJiraExportedTime(Guid uniqueId, int hours, int minutes);
         void AddIdleTimer(Guid uniqueId, List<IdleTimer> idleTimer);
         void RefreshFromJira(Guid uniqueId, Issue jiraIssue, User currentUser);
+        event EventHandler GeneralTimerModification;
     }
 
     public class JiraTimerCollection : IJiraTimerCollection
@@ -49,6 +51,7 @@ namespace Gallifrey.JiraTimers
         private readonly ITrackUsage trackUsage;
         private readonly List<JiraTimer> timerList;
         internal event EventHandler<ExportPromptDetail> exportPrompt;
+        public event EventHandler GeneralTimerModification;
 
         internal JiraTimerCollection(IExportSettings exportSettings, ITrackUsage trackUsage)
         {
@@ -65,6 +68,7 @@ namespace Gallifrey.JiraTimers
         internal void SaveTimers()
         {
             JiraTimerCollectionSerializer.Serialize(timerList);
+            GeneralTimerModification?.Invoke(this, null);
         }
 
         public IEnumerable<DateTime> GetValidTimerDates()
@@ -90,6 +94,11 @@ namespace Gallifrey.JiraTimers
         public IEnumerable<JiraTimer> GetAllUnexportedTimers()
         {
             return timerList.Where(timer => !timer.FullyExported).OrderBy(timer => timer.DateStarted);
+        }
+
+        public IEnumerable<JiraTimer> GetAllTempTimers()
+        {
+            return timerList.Where(timer => timer.TempTimer).OrderBy(timer => timer.DateStarted);
         }
 
         public IEnumerable<RecentJira> GetJiraReferencesForLastDays(int days)
@@ -254,11 +263,19 @@ namespace Gallifrey.JiraTimers
             return newTimer.UniqueId;
         }
 
-        public void ChangeTempTimerDescription(Guid timerGuid, string tempTimerDescription)
+        public Guid ChangeTempTimerDescription(Guid timerGuid, string tempTimerDescription)
         {
             var currentTimer = GetTimer(timerGuid);
-            currentTimer.UpdateTempTimerDescription(tempTimerDescription);
-            SaveTimers();
+            if (currentTimer.TempTimer)
+            {
+                currentTimer.UpdateTempTimerDescription(tempTimerDescription);
+                SaveTimers();
+                return currentTimer.UniqueId;
+            }
+
+            var newGuid = AddTempTimer(tempTimerDescription, currentTimer.DateStarted, currentTimer.ExactCurrentTime, false);
+            RemoveTimer(timerGuid);
+            return newGuid;
         }
 
         public Guid ChangeTimerDate(Guid timerGuid, DateTime newStartDate)

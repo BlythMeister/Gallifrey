@@ -204,7 +204,7 @@ namespace Gallifrey.JiraTimers
 
         public bool HasExportedTime()
         {
-            return ExportedTime.TotalSeconds == 0;
+            return ExportedTime.TotalSeconds > 0;
         }
 
         public bool ManualAdjustment(TimeSpan changeTimespan, bool addTime)
@@ -256,6 +256,8 @@ namespace Gallifrey.JiraTimers
         public void RefreshFromJira(Issue jiraIssue, User currentUser)
         {
             if (jiraIssue == null) return;
+
+            TempTimer = false;
 
             SetJiraExportedTime(jiraIssue.GetCurrentLoggedTimeForDate(DateStarted, currentUser));
             JiraReference = jiraIssue.key;

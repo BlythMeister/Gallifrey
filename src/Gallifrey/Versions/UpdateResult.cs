@@ -5,6 +5,8 @@
         NotDeployable,
         Updated,
         NoUpdate,
-        TooSoon
+        TooSoon,
+        Error,
+        ReinstallNeeded
     }
 }

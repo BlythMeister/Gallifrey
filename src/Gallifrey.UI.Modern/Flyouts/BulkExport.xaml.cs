@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
+using Gallifrey.Comparers;
 using Gallifrey.Exceptions.JiraIntegration;
 using Gallifrey.Jira.Model;
 using Gallifrey.JiraTimers;
 using Gallifrey.UI.Modern.Helpers;
 using Gallifrey.UI.Modern.Models;
 using MahApps.Metro.Controls.Dialogs;
-using Gallifrey.Comparers;
 
 namespace Gallifrey.UI.Modern.Flyouts
 {
@@ -18,6 +19,7 @@ namespace Gallifrey.UI.Modern.Flyouts
         private readonly ModelHelpers modelHelpers;
         private BulkExportContainerModel DataModel => (BulkExportContainerModel)DataContext;
         private readonly ProgressDialogHelper progressDialogHelper;
+        private const int nonPremiumMaxExport = 5;
 
         public BulkExport(ModelHelpers modelHelpers, List<JiraTimer> timers)
         {
@@ -123,10 +125,30 @@ namespace Gallifrey.UI.Modern.Flyouts
 
         private void ExportAllButton(object sender, RoutedEventArgs e)
         {
-            foreach (var bulkExportModel in DataModel.BulkExports)
+            if (modelHelpers.Gallifrey.Settings.InternalSettings.IsPremium || DataModel.BulkExports.Count <= nonPremiumMaxExport)
             {
-                bulkExportModel.ShouldExport = true;
+                foreach (var bulkExportModel in DataModel.BulkExports)
+                {
+                    bulkExportModel.ShouldExport = true;
+                }
             }
+            else
+            {
+                modelHelpers.ShowGetPremiumMessage("Without Gallifrey Premium You Are Limited To A Maximum Of 5 Bulk Exports");
+                for (int i = 0; i < nonPremiumMaxExport; i++)
+                {
+                    DataModel.BulkExports[i].ShouldExport = true;
+                }
+            }
+        }
+
+        private void ExportSingleClick(object sender, RoutedEventArgs e)
+        {
+            if (modelHelpers.Gallifrey.Settings.InternalSettings.IsPremium || DataModel.BulkExports.Count(x => x.ShouldExport) <= nonPremiumMaxExport) return;
+
+            modelHelpers.ShowGetPremiumMessage("Without Gallifrey Premium You Are Limited To A Maximum Of 5 Bulk Exports");
+            var checkBox = (CheckBox)sender;
+            checkBox.IsChecked = false;
         }
 
         private List<BulkExportModel> GetTimers(ProgressDialogController dialogController, List<JiraTimer> timers)
@@ -134,7 +156,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             var timersToShow = new List<BulkExportModel>();
             var issuesRetrieved = new List<Issue>();
             var timersToGet = timers.Where(x => !x.TempTimer && !x.IsRunning).ToList();
-            
+
             for (var i = 0; i < timersToGet.Count; i++)
             {
                 var timerToShow = timersToGet[i];
@@ -206,15 +228,11 @@ namespace Gallifrey.UI.Modern.Flyouts
                     var remaining = exportModel.Remaining;
                     var standardComment = exportModel.StandardComment;
                     modelHelpers.Gallifrey.JiraConnection.LogTime(jiraRef, date, toExport, strategy, standardComment, comment, remaining);
-                    modelHelpers.Gallifrey.JiraTimerCollection.AddJiraExportedTime(exportModel.Timer.UniqueId, exportModel.ToExportHours, exportModel.ToExportMinutes);
+                    modelHelpers.Gallifrey.JiraTimerCollection.AddJiraExportedTime(exportModel.Timer.UniqueId, exportModel.ToExportHours ?? 0, exportModel.ToExportMinutes ?? 0);
                 }
-                catch (WorkLogException)
+                catch (WorkLogException ex)
                 {
-                    throw new BulkExportException($"Error Logging Work To {exportModel.JiraRef}");
-                }
-                catch (StateChangedException)
-                {
-                    throw new BulkExportException($"Unable To Re - Close A The Jira  {exportModel.JiraRef}, Manually Check!!");
+                    throw new BulkExportException($"Error Logging Work To {exportModel.JiraRef}\nError Message From Jira: { ex.InnerException.Message }");
                 }
                 catch (CommentException)
                 {

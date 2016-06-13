@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using Gallifrey.Exceptions.JiraIntegration;
@@ -8,6 +9,7 @@ using Gallifrey.IdleTimers;
 using Gallifrey.Jira.Model;
 using Gallifrey.UI.Modern.Helpers;
 using Gallifrey.UI.Modern.Models;
+using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 
 namespace Gallifrey.UI.Modern.Flyouts
@@ -25,6 +27,11 @@ namespace Gallifrey.UI.Modern.Flyouts
             this.modelHelpers = modelHelpers;
             this.startDate = startDate;
             InitializeComponent();
+
+            if (!modelHelpers.Gallifrey.Settings.InternalSettings.IsPremium && startNow.HasValue && startNow.Value)
+            {
+                startNow = false;
+            }
 
             DataContext = new AddTimerModel(modelHelpers.Gallifrey, jiraRef, startDate, enableDateChange, idleTimers, startNow);
             AddedTimer = false;
@@ -46,10 +53,48 @@ namespace Gallifrey.UI.Modern.Flyouts
                 return;
             }
 
+            //Validate Premium Features
+            if (!modelHelpers.Gallifrey.Settings.InternalSettings.IsPremium)
+            {
+                if (DataModel.TempTimer)
+                {
+                    if (modelHelpers.Gallifrey.JiraTimerCollection.GetAllTempTimers().Count() >= 2)
+                    {
+                        modelHelpers.ShowGetPremiumMessage("Without Gallifrey Premium You Are Limited To A Maximum Of 2 Temp Timers");
+                        Focus();
+                        return;
+                    }
+                }
+
+                if (DataModel.StartNow)
+                {
+                    modelHelpers.ShowGetPremiumMessage("Without Gallifrey Premium You Cannot Start Timer Now.");
+                    DataModel.StartNow = false;
+                    Focus();
+                    return;
+                }
+
+                if (DataModel.AssignToMe)
+                {
+                    modelHelpers.ShowGetPremiumMessage("Without Gallifrey Premium You Cannot Assign To Yourself.");
+                    DataModel.AssignToMe = false;
+                    Focus();
+                    return;
+                }
+
+                if (DataModel.ChangeStatus)
+                {
+                    modelHelpers.ShowGetPremiumMessage("Without Gallifrey Premium You Cannot Change Timer Status.");
+                    DataModel.ChangeStatus = false;
+                    Focus();
+                    return;
+                }
+            }
+
             TimeSpan seedTime;
             if (DataModel.TimeEditable)
             {
-                seedTime = new TimeSpan(DataModel.StartHours, DataModel.StartMinutes, 0);
+                seedTime = new TimeSpan(DataModel.StartHours ?? 0, DataModel.StartMinutes ?? 0, 0);
             }
             else
             {
@@ -142,6 +187,9 @@ namespace Gallifrey.UI.Modern.Flyouts
                 NewTimerId = ex.TimerId;
             }
 
+            AddedTimer = true;
+            var stillDoingThings = false;
+
             if (!DataModel.TempTimer)
             {
                 if (DataModel.AssignToMe)
@@ -156,22 +204,32 @@ namespace Gallifrey.UI.Modern.Flyouts
                     }
                 }
 
-                if (DataModel.InProgress)
+                if (DataModel.ChangeStatus)
                 {
                     try
                     {
-                        modelHelpers.Gallifrey.JiraConnection.SetInProgress(DataModel.JiraReference);
+                        var transitionsAvaliable = modelHelpers.Gallifrey.JiraConnection.GetTransitions(DataModel.JiraReference);
+
+                        var timeSelectorDialog = (BaseMetroDialog)this.Resources["TransitionSelector"];
+                        await DialogCoordinator.Instance.ShowMetroDialogAsync(modelHelpers.DialogContext, timeSelectorDialog);
+
+                        var comboBox = timeSelectorDialog.FindChild<ComboBox>("Items");
+                        comboBox.ItemsSource = transitionsAvaliable.Select(x=>x.name).ToList();
+
+                        stillDoingThings = true;
                     }
-                    catch (StateChangedException)
+                    catch (Exception)
                     {
-                        await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Error Changing Status", "Unable To Set Issue As In Progress");
+                        await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Status Update Error", "Unable To Change The Status Of This Issue");
                     }
                 }
             }
 
-            AddedTimer = true;
-            modelHelpers.CloseFlyout(this);
-            modelHelpers.RefreshModel();
+            if (!stillDoingThings)
+            {
+                modelHelpers.CloseFlyout(this);
+                modelHelpers.RefreshModel();
+            }
         }
 
         private async void SearchButton(object sender, RoutedEventArgs e)
@@ -196,6 +254,46 @@ namespace Gallifrey.UI.Modern.Flyouts
             {
                 DataModel.SetStartNowEnabled(true);
             }
+        }
+
+        private async void TransitionSelected(object sender, RoutedEventArgs e)
+        {
+            var selectedTransition = string.Empty;
+
+            try
+            {
+                var dialog = (BaseMetroDialog)this.Resources["TransitionSelector"];
+                var comboBox = dialog.FindChild<ComboBox>("Items");
+                
+                selectedTransition = (string)comboBox.SelectedItem;
+
+                await DialogCoordinator.Instance.HideMetroDialogAsync(modelHelpers.DialogContext, dialog);
+
+                modelHelpers.Gallifrey.JiraConnection.TransitionIssue(DataModel.JiraReference, selectedTransition);
+            }
+            catch (StateChangedException)
+            {
+                if (string.IsNullOrWhiteSpace(selectedTransition))
+                {
+                    await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Status Update Error", "Unable To Change The Status Of This Issue");
+                }
+                else
+                {
+                    await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Status Update Error", $"Unable To Change The Status Of This Issue To {selectedTransition}");
+                }
+            }
+
+            modelHelpers.CloseFlyout(this);
+            modelHelpers.RefreshModel();
+        }
+
+        private async void CancelTransition(object sender, RoutedEventArgs e)
+        {
+            var dialog = (BaseMetroDialog)this.Resources["TransitionSelector"];
+            await DialogCoordinator.Instance.HideMetroDialogAsync(modelHelpers.DialogContext, dialog);
+
+            modelHelpers.CloseFlyout(this);
+            modelHelpers.RefreshModel();
         }
     }
 }

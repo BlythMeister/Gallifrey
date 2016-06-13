@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Windows.Media;
@@ -10,18 +11,20 @@ using Microsoft.Win32;
 
 namespace Gallifrey.UI.Modern.Models
 {
-    public class SettingModel
+    public class SettingModel : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+
         readonly RegistryKey registryKey = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+        private int targetHoursPerDay;
+        private int? targetMinutesPerDay;
 
         //AppSettings
         public bool AlertWhenIdle { get; set; }
-        public int AlertMinutes { get; set; }
-        public int KeepTimersForDays { get; set; }
+        public int? AlertMinutes { get; set; }
+        public int? KeepTimersForDays { get; set; }
         public bool AutoUpdate { get; set; }
         public bool AllowTracking { get; set; }
-        public int TargetHoursPerDay { get; set; }
-        public int TargetMinutesPerDay { get; set; }
         public string StartOfWeek { get; set; }
         public List<WorkingDay> WorkingDays { get; set; }
 
@@ -49,6 +52,64 @@ namespace Gallifrey.UI.Modern.Models
 
         //Data Change Flags
         public bool JiraSettingsChanged { get; set; }
+
+        //Behaviour Properties
+        public int? TargetHoursPerDay
+        {
+            get { return targetHoursPerDay; }
+            set
+            {
+                targetHoursPerDay = value ?? 0;
+                if (targetHoursPerDay < 0)
+                {
+                    targetHoursPerDay = 0;
+                }
+                if (targetHoursPerDay > 9)
+                {
+                    targetHoursPerDay = 9;
+                }
+            }
+        }
+
+        public int? TargetMinutesPerDay
+        {
+            get { return targetMinutesPerDay; }
+            set
+            {
+                var newValue = value ?? 0;
+                if (newValue < 0)
+                {
+                    if (targetHoursPerDay == 0)
+                    {
+                        targetMinutesPerDay = 0;
+                    }
+                    else
+                    {
+                        targetMinutesPerDay = 60 + newValue;
+                        targetHoursPerDay--;
+                    }
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TargetHoursPerDay"));
+                }
+                else if (value >= 60)
+                {
+                    if (targetHoursPerDay == 9)
+                    {
+                        targetMinutesPerDay = 59;
+                    }
+                    else
+                    {
+                        targetHoursPerDay++;
+                        targetMinutesPerDay = newValue - 60;
+                    }
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TargetHoursPerDay"));
+                }
+                else
+                {
+                    targetMinutesPerDay = newValue;
+                }
+            }
+        }
+
 
         public SettingModel(ISettingsCollection settings, IVersionControl versionControl)
         {
@@ -108,11 +169,11 @@ namespace Gallifrey.UI.Modern.Models
         {
             //AppSettings
             settings.AppSettings.AlertWhenNotRunning = AlertWhenIdle;
-            settings.AppSettings.AlertTimeMilliseconds = AlertMinutes * 60 * 1000;
-            settings.AppSettings.KeepTimersForDays = KeepTimersForDays;
+            settings.AppSettings.AlertTimeMilliseconds = (AlertMinutes ?? 1) * 60 * 1000;
+            settings.AppSettings.KeepTimersForDays = KeepTimersForDays ?? 7;
             settings.AppSettings.AutoUpdate = AutoUpdate;
             settings.AppSettings.UsageTracking = AllowTracking;
-            settings.AppSettings.TargetLogPerDay = new TimeSpan(TargetHoursPerDay, TargetMinutesPerDay, 0);
+            settings.AppSettings.TargetLogPerDay = new TimeSpan(TargetHoursPerDay ?? 0, TargetMinutesPerDay ?? 0, 0);
             settings.AppSettings.ExportDays = WorkingDays.Where(x => x.IsChecked).Select(x => x.DayOfWeek).ToList();
             settings.AppSettings.StartOfWeek = (DayOfWeek)Enum.Parse(typeof(DayOfWeek), StartOfWeek, true);
 
@@ -201,6 +262,12 @@ namespace Gallifrey.UI.Modern.Models
             {
                 return DisplayName;
             }
+        }
+
+        public void EnableTracking()
+        {
+            AllowTracking = true;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("AllowTracking"));
         }
     }
 }

@@ -10,7 +10,7 @@ namespace Gallifrey.UI.Modern.Beta
     {
         protected override void OnStartup(StartupEventArgs e)
         {
-            Modern.App.Run(InstanceType.Beta, AppType.Modern);
+            Modern.App.Run(InstanceType.Beta);
         }
     }
 }

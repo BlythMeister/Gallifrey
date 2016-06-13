@@ -56,5 +56,14 @@ namespace Gallifrey.UI.Modern.Flyouts
                 Focus();
             }
         }
+
+        private void AllowTrackingClick(object sender, RoutedEventArgs e)
+        {
+            if (!modelHelpers.Gallifrey.Settings.InternalSettings.IsPremium && !DataModel.AllowTracking)
+            {
+                modelHelpers.ShowGetPremiumMessage("To Opt-Out Of Tracking You Need To Have Gallifrey Premium");
+                DataModel.EnableTracking();
+            }
+        }
     }
 }
