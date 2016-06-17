@@ -5,6 +5,11 @@ Param(
   [System.String]$NewVersionUpdate
 )
 
+if($NewVersionUpdate -eq "")
+{
+	Write-Host "-NewVersionUpdate is required"
+}
+
 Add-Type -A 'System.IO.Compression.FileSystem'
 $OldVersion = Get-Content src\CurrentVersion.info
 

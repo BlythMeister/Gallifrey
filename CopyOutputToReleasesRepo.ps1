@@ -7,7 +7,7 @@ Param(
 
 if($ReleaseType -eq "")
 {
-	Write-Host "No Release Type Entered"
+	Write-Host "-ReleaseType is required"
 }
 else
 {
