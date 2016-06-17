@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel;
+using Gallifrey.UI.Modern.Helpers;
 
 namespace Gallifrey.UI.Modern.Models
 {
@@ -115,15 +116,8 @@ namespace Gallifrey.UI.Modern.Models
             get { return hours; }
             set
             {
-                hours = value ?? 0;
-                if (hours < 0)
-                {
-                    hours = 0;
-                }
-                if (hours > 9)
-                {
-                    hours = 9;
-                }
+                var newValue = value ?? 0;
+                HourMinuteHelper.UpdateHours(ref hours, newValue, 9);
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasModifiedTime"));
             }
         }
@@ -134,36 +128,14 @@ namespace Gallifrey.UI.Modern.Models
             set
             {
                 var newValue = value ?? 0;
-                if (newValue < 0)
+                bool hoursChanged;
+                HourMinuteHelper.UpdateMinutes(ref hours, ref minutes, newValue, 9, out hoursChanged);
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Minutes"));
+                if (hoursChanged)
                 {
-                    if (hours == 0)
-                    {
-                        minutes = 0;
-                    }
-                    else
-                    {
-                        minutes = 60 + newValue;
-                        hours--;
-                    }
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Hours"));
                 }
-                else if(value >= 60)
-                {
-                    if (hours == 9)
-                    {
-                        minutes = 59;
-                    }
-                    else
-                    {
-                        hours++;
-                        minutes = newValue - 60;
-                    }
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Hours"));
-                }
-                else
-                {
-                    minutes = newValue;
-                }
+
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasModifiedTime"));
             }
         }

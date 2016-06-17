@@ -71,15 +71,15 @@
 
             <TextBlock Grid.Row="8" Grid.Column="0" VerticalAlignment="Center" Padding="2" Text="Remaining Estimate" />
             <WrapPanel Grid.Row="8" Grid.Column="1" VerticalAlignment="Center" Margin="0,5" Orientation="Horizontal" Visibility="{Binding ShowRemaining, Converter={StaticResource BoolToVis}}">
-                <controls:NumericUpDown Value="{Binding RemainingHours}" TextAlignment="Left" Width="80" controls:TextBoxHelper.SelectAllOnFocus="True" />
+                <controls:NumericUpDown Value="{Binding RemainingHours, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Left" Width="80" controls:TextBoxHelper.SelectAllOnFocus="True" />
                 <TextBlock VerticalAlignment="Center" Margin="2,0">Hours</TextBlock>
-                <controls:NumericUpDown Value="{Binding RemainingMinutes}" TextAlignment="Left" Width="80" Interval="5" controls:TextBoxHelper.SelectAllOnFocus="True" />
+                <controls:NumericUpDown Value="{Binding RemainingMinutes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Left" Width="80" Interval="5" controls:TextBoxHelper.SelectAllOnFocus="True" />
                 <TextBlock VerticalAlignment="Center" Margin="2,0">Minutes</TextBlock>
             </WrapPanel>
             <WrapPanel Grid.Row="8" Grid.Column="1" VerticalAlignment="Center" Margin="0,5" Orientation="Horizontal" Visibility="{Binding ShowRemaining, Converter={StaticResource BoolToVisInvert}}">
-                <TextBox Text="{Binding RemainingHours}" TextAlignment="Left" IsEnabled="False" Width="80" />
+                <TextBox Text="{Binding RemainingHours, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Left" IsEnabled="False" Width="80" />
                 <TextBlock VerticalAlignment="Center" Margin="2,0">Hours</TextBlock>
-                <TextBox Text="{Binding RemainingMinutes}" TextAlignment="Left" IsEnabled="False" Width="80" />
+                <TextBox Text="{Binding RemainingMinutes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Left" IsEnabled="False" Width="80" />
                 <TextBlock VerticalAlignment="Center" Margin="2,0">Minutes</TextBlock>
             </WrapPanel>
 

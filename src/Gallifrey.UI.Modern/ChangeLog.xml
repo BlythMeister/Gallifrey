@@ -78,5 +78,12 @@
     </Bugs>
     <Others/>
   </Version>
+  <Version Number="3.2.0.1" Name="Pre-Release">
+    <Features />
+    <Bugs>
+      <Bug>Fix issue when minutes over 99 entered by accident increments hours</Bug>
+    </Bugs>
+    <Others/>
+  </Version>
 </Versions>
 

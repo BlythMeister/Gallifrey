@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using Gallifrey.IdleTimers;
+using Gallifrey.UI.Modern.Helpers;
 
 namespace Gallifrey.UI.Modern.Models
 {
@@ -91,15 +92,8 @@ namespace Gallifrey.UI.Modern.Models
             get { return startHours; }
             set
             {
-                startHours = value ?? 0;
-                if (startHours < 0)
-                {
-                    startHours = 0;
-                }
-                if (startHours > 9)
-                {
-                    startHours = 9;
-                }
+                var newValue = value ?? 0;
+                HourMinuteHelper.UpdateHours(ref startHours, newValue, 9);
             }
         }
 
@@ -109,36 +103,12 @@ namespace Gallifrey.UI.Modern.Models
             set
             {
                 var newValue = value ?? 0;
-
-                if (newValue < 0)
+                bool hoursChanged;
+                HourMinuteHelper.UpdateMinutes(ref startHours, ref startMinutes, newValue, 9, out hoursChanged);
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("StartMinutes"));
+                if (hoursChanged)
                 {
-                    if (startHours == 0)
-                    {
-                        startMinutes = 0;
-                    }
-                    else
-                    {
-                        startMinutes = 60 + newValue;
-                        startHours--;
-                    }
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("StartHours"));
-                }
-                else if (value >= 60)
-                {
-                    if (startHours == 9)
-                    {
-                        startMinutes = 59;
-                    }
-                    else
-                    {
-                        startHours++;
-                        startMinutes = newValue - 60;
-                    }
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("StartHours"));
-                }
-                else
-                {
-                    startMinutes = newValue;
                 }
             }
         }
