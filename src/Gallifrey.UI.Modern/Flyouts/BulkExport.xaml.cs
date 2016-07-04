@@ -105,22 +105,38 @@ namespace Gallifrey.UI.Modern.Flyouts
                 }
             }
 
-            try
+            var exportSuccess = await RetryableExport(timersToExport);
+            if (exportSuccess)
             {
-                await progressDialogHelper.Do(controller => DoExport(controller, timersToExport), "Exporting Selected Timers", false, true);
+                modelHelpers.CloseFlyout(this);
             }
-            catch (BulkExportException ex)
+            else
             {
-                await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Error Exporting", ex.Message);
-
                 var timersToShow = DataModel.BulkExports.Where(bulkExportModel => !bulkExportModel.Timer.FullyExported).ToList();
                 DataModel.BulkExports.Clear();
                 timersToShow.ForEach(x => DataModel.BulkExports.Add(x));
                 Focus();
-                return;
             }
+        }
 
-            modelHelpers.CloseFlyout(this);
+        private async Task<bool> RetryableExport(List<BulkExportModel> timersToExport)
+        {
+            try
+            {
+                await progressDialogHelper.Do(controller => DoExport(controller, timersToExport), "Exporting Selected Timers", false, true);
+                return true;
+            }
+            catch (BulkExportException ex)
+            {
+                var choice = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Error Exporting", $"{ex.Message}\n\nPlease Correct Error & Press Retry, Or Cancel To Halt Export", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Retry", NegativeButtonText = "Cancel" });
+
+                if (choice == MessageDialogResult.Affirmative)
+                {
+                    return await RetryableExport(timersToExport.Where(x=>!x.Timer.FullyExported).ToList());
+                }
+
+                return false;
+            }
         }
 
         private void ExportAllButton(object sender, RoutedEventArgs e)
@@ -232,7 +248,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                 }
                 catch (WorkLogException ex)
                 {
-                    throw new BulkExportException($"Error Logging Work To {exportModel.JiraRef}\nError Message From Jira: { ex.InnerException.Message }");
+                    throw new BulkExportException($"Error Logging Work To {exportModel.JiraRef}\n\nError Message From Jira: { ex.InnerException.Message }");
                 }
                 catch (CommentException)
                 {
