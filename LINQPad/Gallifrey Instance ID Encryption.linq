@@ -10,7 +10,7 @@ void Main()
 	var running = true;
 	while(running)
 	{
-		Console.WriteLine("Enter Command (Show/Add/Remove/Done)");
+		Console.WriteLine("Enter Command (Show/Add/Remove/Replace/Done)");
 		var command = Console.ReadLine();
 		Util.ClearResults();
 		switch (command.ToLower())
@@ -23,6 +23,9 @@ void Main()
 				break;
 			case "remove":
 				DoRemove();
+				break;
+			case "replace":
+				DoReplace();
 				break;
 			case "done":
 				running = false;
@@ -88,6 +91,42 @@ private void DoRemove()
 	{
 		Console.WriteLine("Unable to locate: {0}", instanceId);
 	}	
+}
+
+private void DoReplace()
+{
+	Console.WriteLine("Enter OLD InstanceId To Remove");
+	var oldInstanceId = Console.ReadLine();
+	Console.WriteLine("Enter NEW InstanceId To Add");
+	var newInstanceId = Console.ReadLine();
+	DecryptFile();
+	var lines = new List<string>();
+	var swapped = false;
+	foreach (string line in File.ReadAllLines(path))
+	{
+		if(!line.StartsWith(oldInstanceId))
+		{
+			lines.Add(line);
+		}
+		else
+		{
+			swapped = true;
+			lines.Add(line.Replace(oldInstanceId, newInstanceId));
+		}
+	}
+		
+	File.WriteAllLines(path, lines);
+	EncryptFile();
+		
+	if(swapped)
+	{
+		Console.WriteLine("Replaced: {0} With: {1}", oldInstanceId, newInstanceId);
+	}
+	else
+	{
+		Console.WriteLine("Unable to locate old id: {0}", oldInstanceId);
+	}
+	
 }
 
 private void DecryptFile()
