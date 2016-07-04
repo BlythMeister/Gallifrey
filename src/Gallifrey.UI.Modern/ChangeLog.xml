@@ -78,7 +78,7 @@
     </Bugs>
     <Others/>
   </Version>
-  <Version Number="3.2.0.1" Name="Pre-Release">
+  <Version Number="3.2.0.2" Name="Pre-Release">
     <Features>
       <Feature>If bulk export fails, you are now given chance to retry or cancel</Feature>
     </Features>

@@ -8,10 +8,9 @@ Param(
 if($ReleaseType -eq "")
 {
 	Write-Host "-ReleaseType is required"
+	return
 }
-else
-{
-	Write-Host "Publishing $ReleaseType To Releases Repo"
-	Copy-Item Output\$ReleaseType\ ..\Gallifrey.Releases\download\modern\ -recurse -force
-	Write-Host "Published $ReleaseType"
-}
+
+Write-Host "Publishing $ReleaseType To Releases Repo"
+Copy-Item Output\$ReleaseType\ ..\Gallifrey.Releases\download\modern\ -recurse -force
+Write-Host "Published $ReleaseType"

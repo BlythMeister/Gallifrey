@@ -8,6 +8,7 @@ Param(
 if($NewVersionUpdate -eq "")
 {
 	Write-Host "-NewVersionUpdate is required"
+	return
 }
 
 Add-Type -A 'System.IO.Compression.FileSystem'
