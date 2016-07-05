@@ -83,6 +83,7 @@
     </Compile>
     <Compile Include="Helpers\ModelHelpers.cs" />
     <Compile Include="Helpers\DialogContext.cs" />
+    <Compile Include="Helpers\HourMinuteHelper.cs" />
     <Compile Include="Models\RemoteButtonTrigger.cs" />
     <Compile Include="Models\AccentThemeModel.cs" />
     <Compile Include="Models\LockedTimerCollectionModel.cs" />

@@ -30,7 +30,10 @@ namespace Gallifrey.Serialization
 
         private static SettingsCollection SetMissingDefaults(SettingsCollection settings)
         {
-            if (settings.UiSettings.SetDefaults() || settings.InternalSettings.SetDefaults())
+            var uiSettingsDefaultsSet = settings.UiSettings.SetDefaults();
+            var internalSettingsDefaultsSet = settings.InternalSettings.SetDefaults();
+            
+            if (uiSettingsDefaultsSet || internalSettingsDefaultsSet)
             {
                 Serialize(settings);
             }

@@ -4,6 +4,7 @@ using Gallifrey.Jira.Enum;
 using Gallifrey.Jira.Model;
 using Gallifrey.JiraTimers;
 using Gallifrey.Settings;
+using Gallifrey.UI.Modern.Helpers;
 
 namespace Gallifrey.UI.Modern.Models
 {
@@ -68,11 +69,9 @@ namespace Gallifrey.UI.Modern.Models
             }
             set
             {
-                toExportHours = value ?? 0;
-                if (toExportHours < 0)
-                {
-                    toExportHours = 0;
-                }
+                var newValue = value ?? 0;
+                HourMinuteHelper.UpdateHours(ref toExportHours, newValue, int.MaxValue);
+
                 if (ToExport > toExportMaxTime)
                 {
                     toExportHours = toExportMaxTime.Hours;
@@ -92,28 +91,12 @@ namespace Gallifrey.UI.Modern.Models
             set
             {
                 var newValue = value ?? 0;
-                if (newValue < 0)
+                bool hoursChanged;
+                HourMinuteHelper.UpdateMinutes(ref toExportHours, ref toExportMinutes, newValue, int.MaxValue, out hoursChanged);
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ToExportMinutes"));
+                if (hoursChanged)
                 {
-                    if (toExportHours == 0)
-                    {
-                        toExportMinutes = 0;
-                    }
-                    else
-                    {
-                        toExportMinutes = 60 + newValue;
-                        toExportHours--;
-                    }
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ToExportHours"));
-                }
-                else if (value >= 60)
-                {
-                    toExportHours++;
-                    toExportMinutes = newValue - 60;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ToExportHours"));
-                }
-                else
-                {
-                    toExportMinutes = newValue;
                 }
 
                 if (ToExport > toExportMaxTime)
@@ -134,15 +117,8 @@ namespace Gallifrey.UI.Modern.Models
             }
             set
             {
-                remainingHours = value ?? 0;
-                if (remainingHours < 0)
-                {
-                    remainingHours = 0;
-                }
-                if (remainingHours > 99)
-                {
-                    remainingHours = 99;
-                }
+                var newValue = value ?? 0;
+                HourMinuteHelper.UpdateHours(ref remainingHours, newValue, 99);
             }
         }
 
@@ -155,35 +131,12 @@ namespace Gallifrey.UI.Modern.Models
             set
             {
                 var newValue = value ?? 0;
-                if (newValue < 0)
+                bool hoursChanged;
+                HourMinuteHelper.UpdateMinutes(ref remainingHours, ref remainingMinutes, newValue, 99, out hoursChanged);
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("RemainingMinutes"));
+                if (hoursChanged)
                 {
-                    if (remainingHours == 0)
-                    {
-                        remainingMinutes = 0;
-                    }
-                    else
-                    {
-                        remainingMinutes = 60 + newValue;
-                        remainingHours--;
-                    }
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("RemainingHours"));
-                }
-                else if (value >= 60)
-                {
-                    if (remainingHours == 99)
-                    {
-                        remainingMinutes = 59;
-                    }
-                    else
-                    {
-                        remainingHours++;
-                        remainingMinutes = newValue - 60;
-                    }
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("RemainingHours"));
-                }
-                else
-                {
-                    remainingMinutes = newValue;
                 }
             }
         }

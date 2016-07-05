@@ -47,7 +47,7 @@ namespace Gallifrey.UI.Modern.Flyouts
         private async void InstallationIdClick(object sender, MouseButtonEventArgs mouseButtonEventArgs)
         {
             Clipboard.SetText(modelHelpers.Gallifrey.Settings.InternalSettings.InstallationInstaceId.ToString());
-            await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Coppied Installation Id", $"You Installation Id Of {modelHelpers.Gallifrey.Settings.InternalSettings.InstallationInstaceId} Has Been Coppied To The Clipboard");
+            await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Copied Installation Id", $"You Installation Id Of {modelHelpers.Gallifrey.Settings.InternalSettings.InstallationInstaceId} Has Been Copied To The Clipboard");
         }
     }
 }

@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Media;
 using Gallifrey.Settings;
+using Gallifrey.UI.Modern.Helpers;
 using Gallifrey.Versions;
 using MahApps.Metro;
 using Microsoft.Win32;
@@ -17,7 +18,7 @@ namespace Gallifrey.UI.Modern.Models
 
         readonly RegistryKey registryKey = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
         private int targetHoursPerDay;
-        private int? targetMinutesPerDay;
+        private int targetMinutesPerDay;
 
         //AppSettings
         public bool AlertWhenIdle { get; set; }
@@ -59,15 +60,8 @@ namespace Gallifrey.UI.Modern.Models
             get { return targetHoursPerDay; }
             set
             {
-                targetHoursPerDay = value ?? 0;
-                if (targetHoursPerDay < 0)
-                {
-                    targetHoursPerDay = 0;
-                }
-                if (targetHoursPerDay > 9)
-                {
-                    targetHoursPerDay = 9;
-                }
+                var newValue = value ?? 0;
+                HourMinuteHelper.UpdateHours(ref targetHoursPerDay, newValue, 9);
             }
         }
 
@@ -77,39 +71,15 @@ namespace Gallifrey.UI.Modern.Models
             set
             {
                 var newValue = value ?? 0;
-                if (newValue < 0)
+                bool hoursChanged;
+                HourMinuteHelper.UpdateMinutes(ref targetHoursPerDay, ref targetMinutesPerDay, newValue, 9, out hoursChanged);
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TargetMinutesPerDay"));
+                if (hoursChanged)
                 {
-                    if (targetHoursPerDay == 0)
-                    {
-                        targetMinutesPerDay = 0;
-                    }
-                    else
-                    {
-                        targetMinutesPerDay = 60 + newValue;
-                        targetHoursPerDay--;
-                    }
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TargetHoursPerDay"));
-                }
-                else if (value >= 60)
-                {
-                    if (targetHoursPerDay == 9)
-                    {
-                        targetMinutesPerDay = 59;
-                    }
-                    else
-                    {
-                        targetHoursPerDay++;
-                        targetMinutesPerDay = newValue - 60;
-                    }
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TargetHoursPerDay"));
-                }
-                else
-                {
-                    targetMinutesPerDay = newValue;
                 }
             }
         }
-
 
         public SettingModel(ISettingsCollection settings, IVersionControl versionControl)
         {
