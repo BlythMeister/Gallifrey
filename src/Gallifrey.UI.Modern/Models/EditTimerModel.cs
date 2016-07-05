@@ -38,9 +38,6 @@ namespace Gallifrey.UI.Modern.Models
             var dateToday = DateTime.Now;
             var timer = gallifrey.JiraTimerCollection.GetTimer(timerId);
 
-            TempTimer = timer.TempTimer;
-            JiraReference = timer.JiraReference;
-            
             if (gallifrey.Settings.AppSettings.KeepTimersForDays > 0)
             {
                 MinDate = dateToday.AddDays(gallifrey.Settings.AppSettings.KeepTimersForDays * -1);
@@ -61,9 +58,17 @@ namespace Gallifrey.UI.Modern.Models
             hasExportedTime = timer.HasExportedTime();
             TimeEditable = !timer.IsRunning;
 
+            TempTimer = timer.TempTimer;
+
             if (TempTimer)
             {
-                TempTimerDescription = timer.JiraName;               
+                TempTimerDescription = timer.JiraName;
+                JiraReference = string.Empty;
+            }
+            else
+            {
+                JiraReference = timer.JiraReference;
+                TempTimerDescription = string.Empty;
             }
 
             OriginalTempTimerDescription = TempTimerDescription;
@@ -146,11 +151,7 @@ namespace Gallifrey.UI.Modern.Models
             set
             {
                 tempTimer = value;
-                TempTimerDescription = OriginalTempTimerDescription;
-                JiraReference = OriginalJiraReference;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TempTimer"));
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TempTimerDescription"));
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("JiraReference"));
             }
         }
 

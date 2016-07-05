@@ -89,5 +89,12 @@
     </Bugs>
     <Others/>
   </Version>
+  <Version Number="3.2.1.1" Name="Pre-Release">
+    <Features/>   
+    <Bugs>
+      <Bug>Fix issue with GALLIFREY-TEMP showing when converting a temp timer to a normal Jira timer</Bug>
+    </Bugs>
+    <Others/>
+  </Version>
 </Versions>
 
