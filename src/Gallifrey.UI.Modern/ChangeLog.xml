@@ -78,13 +78,14 @@
     </Bugs>
     <Others/>
   </Version>
-  <Version Number="3.2.0.3" Name="Pre-Release">
+  <Version Number="3.2.1.0" Name="">
     <Features>
       <Feature>If bulk export fails, you are now given chance to retry or cancel</Feature>
     </Features>
     <Bugs>
       <Bug>Fix issue when minutes over 99 entered by accident increments hours</Bug>
       <Bug>Fix spelling errors</Bug>
+      <Bug>Fix the installationID not being generated on new installs</Bug>
     </Bugs>
     <Others/>
   </Version>
