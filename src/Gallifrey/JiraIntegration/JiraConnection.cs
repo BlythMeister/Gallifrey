@@ -264,8 +264,6 @@ namespace Gallifrey.JiraIntegration
         {
             trackUsage.TrackAppUsage(TrackingType.ExportOccured);
 
-            var jiraIssue = jira.GetIssue(jiraRef);
-
             if (string.IsNullOrWhiteSpace(comment)) comment = exportSettings.EmptyExportComment;
             if (!string.IsNullOrWhiteSpace(exportSettings.ExportCommentPrefix))
             {
