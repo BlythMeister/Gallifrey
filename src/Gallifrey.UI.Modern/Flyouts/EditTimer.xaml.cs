@@ -76,7 +76,17 @@ namespace Gallifrey.UI.Modern.Flyouts
                             }
                         }
                     }
-                    EditedTimerId = modelHelpers.Gallifrey.JiraTimerCollection.ChangeTempTimerDescription(EditedTimerId, DataModel.TempTimerDescription);
+
+                    try
+                    {
+                        EditedTimerId = modelHelpers.Gallifrey.JiraTimerCollection.ChangeTempTimerDescription(EditedTimerId, DataModel.TempTimerDescription);
+                    }
+                    catch (DuplicateTimerException)
+                    {
+                        await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Something Went Wrong", "An Error Occured Trying To Edit That Timer, Please Try Again");
+                        Focus();
+                        return;
+                    }
                 }
                 else
                 {
