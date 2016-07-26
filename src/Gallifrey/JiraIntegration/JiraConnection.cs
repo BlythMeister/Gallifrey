@@ -158,8 +158,15 @@ namespace Gallifrey.JiraIntegration
             {
                 CheckAndConnectJira();
                 trackUsage.TrackAppUsage(TrackingType.SearchFilter);
-                var issues = jira.GetIssuesFromFilter(filterName);
+                var filterJql = jira.GetJqlForFilter(filterName);
+                var issues = jira.GetIssuesFromFilter(filterName).ToList();
                 recentJiraCollection.AddRecentJiras(issues);
+
+                if (filterJql.ToLower().Contains("order by"))
+                {
+                    return issues;
+                }
+
                 return issues.OrderBy(x => x.key, new JiraReferenceComparer());
             }
             catch (Exception ex)

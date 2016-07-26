@@ -24,7 +24,7 @@ namespace Gallifrey.Jira
             this.password = password;
             client = new RestClient { BaseUrl = new Uri(baseUrl + (baseUrl.EndsWith("/") ? "" : "/") + "rest/api/2/") };
         }
-
+        
         public User GetCurrentUser()
         {
             return ExecuteRequest<User>(HttpStatusCode.OK, "myself");
@@ -55,8 +55,8 @@ namespace Gallifrey.Jira
 
             return issue;
         }
-        
-        public IEnumerable<Issue> GetIssuesFromFilter(string filterName)
+
+        public string GetJqlForFilter(string filterName)
         {
             var filters = ExecuteRequest<List<Filter>>(HttpStatusCode.OK, "filter/favourite");
 
@@ -64,12 +64,26 @@ namespace Gallifrey.Jira
 
             if (selectedFilter != null)
             {
-                return GetIssuesFromJql(selectedFilter.jql);
+                return selectedFilter.jql;
             }
-            else
+
+            return string.Empty;
+        }
+
+        public IEnumerable<Issue> GetIssuesFromFilter(string filterName)
+        {
+            var jql = GetJqlForFilter(filterName);
+
+            if (string.IsNullOrWhiteSpace(jql))
             {
                 return new List<Issue>();
             }
+            else
+            {
+                return GetIssuesFromJql(jql);
+            }
+
+            
         }
 
         public IEnumerable<Issue> GetIssuesFromJql(string jql)

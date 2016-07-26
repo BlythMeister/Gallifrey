@@ -90,10 +90,11 @@
     <Others/>
   </Version>
   <Version Number="3.2.1.3" Name="Pre-Release">
-    <Features/>   
+    <Features/>
     <Bugs>
       <Bug>Fix issue with GALLIFREY-TEMP showing when converting a temp timer to a normal Jira timer</Bug>
       <Bug>Fix issue with error editing temp timers</Bug>
+      <Bug>Fix issue whereby filter JQL order by is ignored in return</Bug>
     </Bugs>
     <Others/>
   </Version>
