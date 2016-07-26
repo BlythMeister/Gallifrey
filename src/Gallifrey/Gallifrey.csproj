@@ -51,6 +51,7 @@
     <Compile Include="Contributors\WithThanksDefinition.cs" />
     <Compile Include="DeploymentUtils\Uninstaller.cs" />
     <Compile Include="DeploymentUtils\W322Utils.cs" />
+    <Compile Include="Exceptions\DebuggerException.cs" />
     <Compile Include="Exceptions\IdleTimers\NoIdleTimerRunningException.cs" />
     <Compile Include="Exceptions\JiraIntegration\CommentException.cs" />
     <Compile Include="Exceptions\JiraTimers\IdleTimerRunningException.cs" />

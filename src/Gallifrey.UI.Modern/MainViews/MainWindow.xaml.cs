@@ -60,6 +60,7 @@ namespace Gallifrey.UI.Modern.MainViews
 
         private async void OnLoaded(object sender, RoutedEventArgs e)
         {
+            var debuggerMissing = false;
             var multipleInstances = false;
             var showSettings = false;
             try
@@ -78,8 +79,17 @@ namespace Gallifrey.UI.Modern.MainViews
             {
                 multipleInstances = true;
             }
+            catch (DebuggerException)
+            {
+                debuggerMissing = true;
+            }
 
-            if (multipleInstances)
+            if (debuggerMissing)
+            {
+                await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Debugger Not Running", "It Looks Like Your Running Without Auto-Update\nPlease Use The Installed Shortcut To Start Gallifrey Or Download Again From GallifreyApp.co.uk");
+                modelHelpers.CloseApp();
+            }
+            else if (multipleInstances)
             {
                 modelHelpers.Gallifrey.TrackEvent(TrackingType.MultipleInstancesRunning);
                 await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Multiple Instances", "You Can Only Have One Instance Of Gallifrey Running At A Time\nPlease Close The Other Instance");

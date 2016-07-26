@@ -260,10 +260,20 @@ namespace Gallifrey
 
         public void Initialise()
         {
-            var processes = Process.GetProcesses();
-            if (processes.Count(process => process.ProcessName.Contains("Gallifrey") && !process.ProcessName.Contains("vshost")) > 1)
+            if (versionControl.IsAutomatedDeploy)
             {
-                throw new MultipleGallifreyRunningException();
+                var processes = Process.GetProcesses();
+                if (processes.Count(process => process.ProcessName.Contains("Gallifrey") && !process.ProcessName.Contains("vshost")) > 1)
+                {
+                    throw new MultipleGallifreyRunningException();
+                }
+            }
+            else
+            {
+                if (!Debugger.IsAttached)
+                {
+                    throw new DebuggerException();
+                }
             }
 
             jiraConnection.ReConnect(settingsCollection.JiraConnectionSettings, settingsCollection.ExportSettings);
