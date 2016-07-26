@@ -77,7 +77,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                     return;
                 }
 
-                var searchResult = await progressDialogHelper.Do(searchFunc, "Search In Progress", true, false);
+                var searchResult = await progressDialogHelper.Do(searchFunc, "Search In Progress", true, false, TimeSpan.Zero);
 
                 switch (searchResult.Status)
                 {

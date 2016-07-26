@@ -18,6 +18,7 @@ namespace Gallifrey.UI.Modern.Flyouts
     {
         private readonly ModelHelpers modelHelpers;
         private readonly DateTime? startDate;
+        private readonly ProgressDialogHelper progressDialogHelper;
         private AddTimerModel DataModel => (AddTimerModel)DataContext;
         public bool AddedTimer { get; set; }
         public Guid NewTimerId { get; set; }
@@ -26,6 +27,7 @@ namespace Gallifrey.UI.Modern.Flyouts
         {
             this.modelHelpers = modelHelpers;
             this.startDate = startDate;
+            progressDialogHelper = new ProgressDialogHelper(modelHelpers.DialogContext);
             InitializeComponent();
 
             if (!modelHelpers.Gallifrey.Settings.InternalSettings.IsPremium && startNow.HasValue && startNow.Value)
@@ -107,7 +109,17 @@ namespace Gallifrey.UI.Modern.Flyouts
             {
                 try
                 {
-                    jiraIssue = modelHelpers.Gallifrey.JiraConnection.GetJiraIssue(DataModel.JiraReference);
+                    var jiraSearchRef = DataModel.JiraReference;
+                    var result = await progressDialogHelper.Do(() => modelHelpers.Gallifrey.JiraConnection.GetJiraIssue(jiraSearchRef), "Jira Check In Progress", true, true, TimeSpan.Zero);
+                    if (result.Status == ProgressResult.JiraHelperStatus.Success)
+                    {
+                        jiraIssue = result.RetVal;
+                    }
+                    else
+                    {
+                        Focus();
+                        return;
+                    }
                 }
                 catch (NoResultsFoundException)
                 {
@@ -118,9 +130,9 @@ namespace Gallifrey.UI.Modern.Flyouts
 
                 if (DataModel.JiraReferenceEditable)
                 {
-                    var result = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Correct Jira?", $"Jira found!\n\nRef: {jiraIssue.key}\nName: {jiraIssue.fields.summary}\n\nIs that correct?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
+                    var correctJiraResult = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Correct Jira?", $"Jira found!\n\nRef: {jiraIssue.key}\nName: {jiraIssue.fields.summary}\n\nIs that correct?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
 
-                    if (result == MessageDialogResult.Negative)
+                    if (correctJiraResult == MessageDialogResult.Negative)
                     {
                         Focus();
                         return;

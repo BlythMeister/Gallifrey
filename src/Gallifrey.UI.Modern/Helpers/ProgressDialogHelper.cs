@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Runtime.ExceptionServices;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Timers;
 using MahApps.Metro.Controls.Dialogs;
 
 namespace Gallifrey.UI.Modern.Helpers
@@ -15,30 +17,30 @@ namespace Gallifrey.UI.Modern.Helpers
             this.dialogContext = dialogContext;
         }
 
-        public Task<ProgressResult<bool>> Do(Action action, string message, bool canCancel, bool throwErrors)
+        public Task<ProgressResult<bool>> Do(Action action, string message, bool canCancel, bool throwErrors, TimeSpan timeoutTime)
         {
             return Do(controller =>
             {
                 action();
                 return true;
-            }, message, canCancel, throwErrors);
+            }, message, canCancel, throwErrors, timeoutTime);
         }
 
-        public Task<ProgressResult<bool>> Do(Action<ProgressDialogController> action, string message, bool canCancel, bool throwErrors)
+        public Task<ProgressResult<bool>> Do(Action<ProgressDialogController> action, string message, bool canCancel, bool throwErrors, TimeSpan timeoutTime)
         {
             return Do(controller =>
             {
                 action(controller);
                 return true;
-            }, message, canCancel, throwErrors);
+            }, message, canCancel, throwErrors, timeoutTime);
         }
 
-        public async Task<ProgressResult<T>> Do<T>(Func<T> function, string message, bool canCancel, bool throwErrors)
+        public async Task<ProgressResult<T>> Do<T>(Func<T> function, string message, bool canCancel, bool throwErrors, TimeSpan timeoutTime)
         {
-            return await Do(controller => function(), message, canCancel, throwErrors);
+            return await Do(controller => function(), message, canCancel, throwErrors, timeoutTime);
         }
 
-        public async Task<ProgressResult<T>> Do<T>(Func<ProgressDialogController, T> function, string message, bool canCancel, bool throwErrors)
+        public async Task<ProgressResult<T>> Do<T>(Func<ProgressDialogController, T> function, string message, bool canCancel, bool throwErrors, TimeSpan timeoutTime)
         {
             var cancellationTokenSource = new CancellationTokenSource();
             var controller = await DialogCoordinator.Instance.ShowProgressAsync(dialogContext, "Please Wait", message, canCancel);
@@ -46,6 +48,8 @@ namespace Gallifrey.UI.Modern.Helpers
 
             var controllerCancel = Task.Factory.StartNew(delegate
             {
+                var cancelTimer = new Stopwatch();
+                cancelTimer.Start();
                 while (true)
                 {
                     if (!controller.IsOpen)
@@ -57,12 +61,23 @@ namespace Gallifrey.UI.Modern.Helpers
                     {
                         break;
                     }
+
+                    if (!canCancel && timeoutTime > TimeSpan.Zero)
+                    {
+                        if (cancelTimer.Elapsed > timeoutTime)
+                        {
+                            controller.CloseAsync();
+                            DialogCoordinator.Instance.ShowMessageAsync(dialogContext, "Timeout", "The Opperation Took Longer Than Expected So Was Forcably Cancelled");
+                            break;
+                        }
+                    }
                     Thread.Sleep(100);
                 }
             }, cancellationTokenSource.Token);
 
             try
             {
+
                 var functionTask = Task.Factory.StartNew(() => function.Invoke(controller), cancellationTokenSource.Token);
 
                 ProgressResult<T> result;

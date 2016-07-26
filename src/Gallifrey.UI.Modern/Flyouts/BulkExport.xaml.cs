@@ -38,7 +38,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             var showError = false;
             try
             {
-                var jiraDownloadResult = await progressDialogHelper.Do(controller => GetTimers(controller, timers), "Downloading Jira Work Logs To Ensure Accurate Export", true, true);
+                var jiraDownloadResult = await progressDialogHelper.Do(controller => GetTimers(controller, timers), "Downloading Jira Work Logs To Ensure Accurate Export", true, true, TimeSpan.Zero);
 
                 switch (jiraDownloadResult.Status)
                 {
@@ -123,7 +123,7 @@ namespace Gallifrey.UI.Modern.Flyouts
         {
             try
             {
-                await progressDialogHelper.Do(controller => DoExport(controller, timersToExport), "Exporting Selected Timers", false, true);
+                await progressDialogHelper.Do(controller => DoExport(controller, timersToExport), "Exporting Selected Timers", false, true, TimeSpan.FromMinutes(timersToExport.Count * 2));
                 return true;
             }
             catch (BulkExportException ex)
