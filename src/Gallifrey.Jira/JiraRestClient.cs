@@ -22,7 +22,7 @@ namespace Gallifrey.Jira
         {
             this.username = username;
             this.password = password;
-            client = new RestClient { BaseUrl = new Uri(baseUrl + (baseUrl.EndsWith("/") ? "" : "/") + "rest/api/2/") };
+            client = new RestClient { BaseUrl = new Uri(baseUrl + (baseUrl.EndsWith("/") ? "" : "/") + "rest/api/2/"), Timeout = (int)TimeSpan.FromMinutes(2).TotalMilliseconds };
         }
         
         public User GetCurrentUser()
@@ -78,12 +78,8 @@ namespace Gallifrey.Jira
             {
                 return new List<Issue>();
             }
-            else
-            {
-                return GetIssuesFromJql(jql);
-            }
 
-            
+            return GetIssuesFromJql(jql);
         }
 
         public IEnumerable<Issue> GetIssuesFromJql(string jql)
