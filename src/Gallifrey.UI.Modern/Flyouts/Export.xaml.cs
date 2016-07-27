@@ -44,7 +44,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                 var showError = false;
                 try
                 {
-                    var jiraDownloadResult = await progressDialogHelper.Do(() => modelHelpers.Gallifrey.JiraConnection.GetJiraIssue(timerToShow.JiraReference, requireRefresh), "Downloading Jira Work Logs To Ensure Accurate Export", true, false, TimeSpan.Zero);
+                    var jiraDownloadResult = await progressDialogHelper.Do(() => modelHelpers.Gallifrey.JiraConnection.GetJiraIssue(timerToShow.JiraReference, requireRefresh), "Downloading Jira Work Logs To Ensure Accurate Export", true, false);
 
                     switch (jiraDownloadResult.Status)
                     {
@@ -115,7 +115,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                 var comment = DataModel.Comment;
                 var remaining = DataModel.Remaining;
                 var standardComment = DataModel.StandardComment;
-                var result = await progressDialogHelper.Do(() => modelHelpers.Gallifrey.JiraConnection.LogTime(jiraRef, date, toExport, strategy, standardComment, comment, remaining), "Exporting Time To Jira", false, true, TimeSpan.FromMinutes(2));
+                var result = await progressDialogHelper.Do(() => modelHelpers.Gallifrey.JiraConnection.LogTime(jiraRef, date, toExport, strategy, standardComment, comment, remaining), "Exporting Time To Jira", false, true);
                 if (result.Status == ProgressResult.JiraHelperStatus.Success)
                 {
                     modelHelpers.Gallifrey.JiraTimerCollection.AddJiraExportedTime(DataModel.Timer.UniqueId, DataModel.ToExportHours ?? 0, DataModel.ToExportMinutes ?? 0);
