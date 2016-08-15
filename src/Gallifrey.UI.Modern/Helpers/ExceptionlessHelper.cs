@@ -53,7 +53,13 @@ namespace Gallifrey.UI.Modern.Helpers
             {
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    ExceptionlessClient.Default.SubmitFeatureUsage(modelHelpers.Gallifrey.VersionControl.VersionName);
+                    var featureName = modelHelpers.Gallifrey.VersionControl.VersionName;
+                    if (modelHelpers.Gallifrey.Settings.InternalSettings.IsPremium)
+                    {
+                        featureName += "_Premium";
+                    }
+
+                    ExceptionlessClient.Default.SubmitFeatureUsage(featureName);
                 });
             }
             catch (Exception)

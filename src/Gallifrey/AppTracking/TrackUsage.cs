@@ -91,7 +91,13 @@ namespace Gallifrey.AppTracking
 
         private void SetTrackingQueryString(IInternalSettings internalSettings)
         {
-            trackingQueryString = $"utm_source=GallifreyApp&utm_medium={instanceType}&utm_campaign={internalSettings.LastChangeLogVersion}&uid={internalSettings.InstallationInstaceId}";
+            var prem = "Gallifrey";
+            if (internalSettings.IsPremium)
+            {
+                prem = "Gallifrey_Premium";
+            }
+
+            trackingQueryString = $"utm_source={prem}&utm_medium={instanceType}&utm_campaign={internalSettings.LastChangeLogVersion}&uid={internalSettings.InstallationInstaceId}";
         }
     }
 }
