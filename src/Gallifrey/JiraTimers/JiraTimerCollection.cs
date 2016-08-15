@@ -401,7 +401,8 @@ namespace Gallifrey.JiraTimers
             var timer = GetTimer(uniqueId);
             if (timer != null)
             {
-                timer.RefreshFromJira(jiraIssue, currentUser);
+                timer.RefreshFromJira(jiraIssue);
+                timer.UpdateExportTimeFromJira(jiraIssue, currentUser);
                 SaveTimers();
             }
         }
