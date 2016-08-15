@@ -235,7 +235,7 @@ namespace Gallifrey.UI.Modern.Flyouts
         private async void SearchButton(object sender, RoutedEventArgs e)
         {
             modelHelpers.HideFlyout(this);
-            var searchFlyout = new Search(modelHelpers, true, startDate ?? DateTime.Now.Date);
+            var searchFlyout = new Search(modelHelpers, openFromAdd: true);
             await modelHelpers.OpenFlyout(searchFlyout);
             if (searchFlyout.SelectedJira != null)
             {

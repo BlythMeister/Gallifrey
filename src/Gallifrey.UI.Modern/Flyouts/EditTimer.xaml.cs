@@ -208,5 +208,17 @@ namespace Gallifrey.UI.Modern.Flyouts
             EditedTimerId = ex.TimerId;
             return true;
         }
+
+        private async void SearchButton(object sender, RoutedEventArgs e)
+        {
+            modelHelpers.HideFlyout(this);
+            var searchFlyout = new Search(modelHelpers, openFromEdit:true);
+            await modelHelpers.OpenFlyout(searchFlyout);
+            if (searchFlyout.SelectedJira != null)
+            {
+                DataModel.SetJiraReference(searchFlyout.SelectedJira.Reference);
+            }
+            modelHelpers.OpenFlyout(this);
+        }
     }
 }

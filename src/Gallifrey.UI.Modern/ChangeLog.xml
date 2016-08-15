@@ -94,6 +94,7 @@
       <Feature>Added ability to cancel issue search when adding timer</Feature>
       <Feature>Added a timeout on all non-cancellable progress dialogs</Feature>
       <Feature>Prevent a non auto updateable version of Gallifrey from starting</Feature>
+      <Feature>Added search button to the edit timer to replicate functionality of add timer</Feature>
     </Features>
     <Bugs>
       <Bug>Fix issue with GALLIFREY-TEMP showing when converting a temp timer to a normal Jira timer</Bug>

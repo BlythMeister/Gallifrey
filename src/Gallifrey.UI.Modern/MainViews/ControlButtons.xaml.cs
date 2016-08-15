@@ -101,7 +101,7 @@ namespace Gallifrey.UI.Modern.MainViews
         private void SearchButton(object sender, RoutedEventArgs e)
         {
             var startDate = ViewModel.TimerDates.FirstOrDefault(x => x.DateIsSelected)?.TimerDate ?? DateTime.Today;
-            ModelHelpers.OpenFlyout(new Search(ModelHelpers, false, startDate));
+            ModelHelpers.OpenFlyout(new Search(ModelHelpers, selectedDateTab: startDate));
         }
 
         private async void EditButton(object sender, RoutedEventArgs e)

@@ -44,9 +44,11 @@ namespace Gallifrey.UI.Modern.Models
         public ObservableCollection<string> UserFilters { get; set; }
         public ObservableCollection<JiraIssueDisplayModel> SearchResults { get; set; }
         public JiraIssueDisplayModel SelectedSearchResult { get; set; }
+        public bool OpenFromEdit { get; set; }
 
-        public SearchModel(IEnumerable<string> filters, IEnumerable<RecentJira> recent, IEnumerable<Issue> issues)
+        public SearchModel(IEnumerable<string> filters, IEnumerable<RecentJira> recent, IEnumerable<Issue> issues, bool openFromEdit)
         {
+            OpenFromEdit = openFromEdit;
             UserFilters = new ObservableCollection<string>(filters);
 
             var recentDisplay = recent.Select(x => new JiraIssueDisplayModel(x)).ToList();

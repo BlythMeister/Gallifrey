@@ -9,6 +9,7 @@ namespace Gallifrey.UI.Modern.Models
         private readonly bool hasExportedTime;
 
         private bool tempTimer;
+        private bool jiraRefFromSearch;
         private string jiraReference;
         private string tempTimerDescription;
         private DateTime? runDate;
@@ -28,10 +29,11 @@ namespace Gallifrey.UI.Modern.Models
         public bool IsDefaultOnButton { get; set; }
 
         public bool DateEditable => !hasExportedTime && !HasModifiedJiraReference;
-        public bool JiraReferenceEditable => !hasExportedTime && !HasModifiedRunDate;
+        public bool JiraReferenceEditable => !hasExportedTime && !HasModifiedRunDate && !jiraRefFromSearch;
         public bool HasModifiedJiraReference => (OriginalJiraReference != JiraReference) || (OriginalTempTimerDescription != TempTimerDescription);
         public bool HasModifiedRunDate => OriginalRunDate.Value.Date != RunDate.Value.Date;
         public bool HasModifiedTime => OriginalHours != Hours || OriginalMinutes != Minutes;
+        
 
         public EditTimerModel(IBackend gallifrey, Guid timerId)
         {
@@ -172,6 +174,15 @@ namespace Gallifrey.UI.Modern.Models
 
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Hours"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Minutes"));
+        }
+
+        public void SetJiraReference(string jiraRef)
+        {
+            JiraReference = jiraRef;
+            jiraRefFromSearch = true;
+
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("JiraReference"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("JiraReferenceEditable"));
         }
     }
 }

@@ -67,10 +67,17 @@
             </ListView.ItemTemplate>
         </ListView>
 
-        <Button Style="{DynamicResource MetroCircleButtonStyle}" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Width="50" Height="50" Margin="2,0" Click="AddTimer" IsEnabled="{Binding IsSearching, Converter={StaticResource BoolInvert}}">
+        <Button Style="{DynamicResource MetroCircleButtonStyle}" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Width="50" Height="50" Margin="2,0" Click="AddTimer" IsEnabled="{Binding IsSearching, Converter={StaticResource BoolInvert}}" Visibility="{Binding OpenFromEdit, Converter={StaticResource BoolToVisInverted}}">
             <Rectangle Width="23" Height="23" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}" ToolTip="Create Jira From Selected Search Result">
                 <Rectangle.OpacityMask>
                     <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_add}" />
+                </Rectangle.OpacityMask>
+            </Rectangle>
+        </Button>
+        <Button Style="{DynamicResource MetroCircleButtonStyle}" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Width="50" Height="50" Margin="2,0" Click="AddTimer" IsEnabled="{Binding IsSearching, Converter={StaticResource BoolInvert}}" Visibility="{Binding OpenFromEdit, Converter={StaticResource BoolToVis}}">
+            <Rectangle Width="23" Height="23" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}" ToolTip="Use Jira From Selected Search Result In Edit">
+                <Rectangle.OpacityMask>
+                    <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_save}" />
                 </Rectangle.OpacityMask>
             </Rectangle>
         </Button>
