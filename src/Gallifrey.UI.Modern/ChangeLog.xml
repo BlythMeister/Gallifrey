@@ -89,12 +89,13 @@
     </Bugs>
     <Others/>
   </Version>
-  <Version Number="3.2.1.7" Name="Pre-Release">
+  <Version Number="3.2.1.8" Name="Pre-Release">
     <Features>
       <Feature>Added ability to cancel issue search when adding timer</Feature>
       <Feature>Added a timeout on all non-cancellable progress dialogs</Feature>
       <Feature>Prevent a non auto updateable version of Gallifrey from starting</Feature>
       <Feature>Added search button to the edit timer to replicate functionality of add timer</Feature>
+      <Feature>Ability to add timers for a period as well as single day</Feature>
     </Features>
     <Bugs>
       <Bug>Fix issue with GALLIFREY-TEMP showing when converting a temp timer to a normal Jira timer</Bug>

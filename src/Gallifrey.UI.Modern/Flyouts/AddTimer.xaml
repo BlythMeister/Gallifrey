@@ -15,6 +15,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
@@ -54,26 +55,41 @@
             <CheckBox Grid.Column="1" Margin="5,0" IsChecked="{Binding TempTimer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding JiraReferenceEditable}" />
             <TextBlock Grid.Column="2" VerticalAlignment="Center">Temp Timer?</TextBlock>
         </Grid>
-      
-        <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Padding="2">Starting Date</TextBlock>
-        <DatePicker Grid.Row="1" Grid.Column="1" Margin="0,5" IsTodayHighlighted="False" DisplayDate="{Binding DisplayDate}" DisplayDateStart="{Binding MinDate}" DisplayDateEnd="{Binding MaxDate}" SelectedDate="{Binding StartDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedDateChanged="StartDateChanged" IsEnabled="{Binding DateEditable}" />
 
-        <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Padding="2">Pre Loaded Time</TextBlock>
-        <WrapPanel Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Margin="0,5" Orientation="Horizontal" IsEnabled="{Binding TimeEditable}">
+        <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Padding="2" Visibility="{Binding DatePeriod, Converter={StaticResource BoolToVisInverted}}">Date</TextBlock>
+        <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Padding="2" Visibility="{Binding DatePeriod, Converter={StaticResource BoolToVis}}">Start Date</TextBlock>
+        <Grid Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Margin="0,5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            
+            <DatePicker Grid.Column="0" Margin="0,5" IsTodayHighlighted="False" DisplayDate="{Binding DisplayDate}" DisplayDateStart="{Binding MinDate}" DisplayDateEnd="{Binding MaxDate}" SelectedDate="{Binding StartDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding DateEditable}" />
+            
+            <CheckBox Grid.Column="1" Margin="5,0" IsChecked="{Binding DatePeriod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding DateEditable}" />
+            <TextBlock Grid.Column="2" VerticalAlignment="Center">Period?</TextBlock>
+        </Grid>
+
+        <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Padding="2" Visibility="{Binding DatePeriod, Converter={StaticResource BoolToVis}}">End Date</TextBlock>
+        <DatePicker Grid.Row="2" Grid.Column="1" Margin="0,5" IsTodayHighlighted="False" DisplayDate="{Binding StartDate}" DisplayDateStart="{Binding StartDate}" DisplayDateEnd="{Binding MaxDate}" SelectedDate="{Binding EndDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding DateEditable}" Visibility="{Binding DatePeriod, Converter={StaticResource BoolToVis}}"/>
+        
+        <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Padding="2">Pre Loaded Time</TextBlock>
+        <WrapPanel Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Margin="0,5" Orientation="Horizontal" IsEnabled="{Binding TimeEditable}">
             <controls:NumericUpDown Value="{Binding StartHours, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Left" Width="80" controls:TextBoxHelper.SelectAllOnFocus="True" />
             <TextBlock VerticalAlignment="Center" Margin="2,0" Text="Hours" />
             <controls:NumericUpDown Value="{Binding StartMinutes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Left" Width="80" Interval="5" controls:TextBoxHelper.SelectAllOnFocus="True" />
             <TextBlock VerticalAlignment="Center" Margin="2,0" Text="Minutes" />
         </WrapPanel>
 
-        <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Padding="2">Start Now?</TextBlock>
-        <CheckBox Grid.Row="3" Grid.Column="1" Margin="0,5" IsChecked="{Binding StartNow, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding StartNowEditable}" />
+        <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Padding="2">Start Now?</TextBlock>
+        <CheckBox Grid.Row="4" Grid.Column="1" Margin="0,5" IsChecked="{Binding StartNow, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding StartNowEditable}" />
 
-        <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Padding="2">Assign To Me?</TextBlock>
-        <CheckBox Grid.Row="4" Grid.Column="1" Margin="0,5" IsChecked="{Binding AssignToMe, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding TempTimer, Converter={StaticResource BoolInvert}}" />
+        <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Padding="2">Assign To Me?</TextBlock>
+        <CheckBox Grid.Row="5" Grid.Column="1" Margin="0,5" IsChecked="{Binding AssignToMe, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding TempTimer, Converter={StaticResource BoolInvert}}" />
 
-        <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Padding="2">Change Status?</TextBlock>
-        <CheckBox Grid.Row="5" Grid.Column="1" Margin="0,5" IsChecked="{Binding ChangeStatus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding TempTimer, Converter={StaticResource BoolInvert}}" />
+        <TextBlock Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" Padding="2">Change Status?</TextBlock>
+        <CheckBox Grid.Row="6" Grid.Column="1" Margin="0,5" IsChecked="{Binding ChangeStatus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding TempTimer, Converter={StaticResource BoolInvert}}" />
 
         <StackPanel Orientation="Horizontal" Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center">
             <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="SearchButton">

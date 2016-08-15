@@ -4,10 +4,10 @@
 
     <DockPanel HorizontalAlignment="Stretch" Background="{DynamicResource AccentColorBrush}">
         <TextBlock Foreground="White" Margin="5,0,0,0" VerticalAlignment="Center">
-                Contact Us By <Hyperlink NavigateUri="https://twitter.com/GallifreyApp" Foreground="Black" RequestNavigate="Hyperlink_RequestNavigate">Twitter</Hyperlink>, <Hyperlink NavigateUri="https://gitter.im/BlythMeister/Gallifrey" Foreground="Black" RequestNavigate="Hyperlink_RequestNavigate">Gitter</Hyperlink> Or <Hyperlink NavigateUri="mailto:contact@gallifreyapp.co.uk?subject=Gallifrey App Contact" Foreground="Black" RequestNavigate="Hyperlink_RequestNavigate">E-Mail</Hyperlink>. Raise Or Fix A Bug On <Hyperlink NavigateUri="https://github.com/BlythMeister/Gallifrey" Foreground="Black" RequestNavigate="Hyperlink_RequestNavigate">GitHub</Hyperlink>.
+                Contact Us By <Hyperlink NavigateUri="https://twitter.com/GallifreyApp" Foreground="White" RequestNavigate="Hyperlink_RequestNavigate">Twitter</Hyperlink>, <Hyperlink NavigateUri="https://gitter.im/BlythMeister/Gallifrey" Foreground="White" RequestNavigate="Hyperlink_RequestNavigate">Gitter</Hyperlink> Or <Hyperlink NavigateUri="mailto:contact@gallifreyapp.co.uk?subject=Gallifrey App Contact" Foreground="White" RequestNavigate="Hyperlink_RequestNavigate">E-Mail</Hyperlink>. Raise Or Fix A Bug On <Hyperlink NavigateUri="https://github.com/BlythMeister/Gallifrey" Foreground="White" RequestNavigate="Hyperlink_RequestNavigate">GitHub</Hyperlink>.
         </TextBlock>
         <TextBlock HorizontalAlignment="Right" Margin="0,0,5,0" Foreground="White" VerticalAlignment="Center">
-            Please Help Support Gallifrey <Hyperlink NavigateUri="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=G3MWL8E6UG4RS" Foreground="Black" RequestNavigate="Hyperlink_RequestNavigate">Click To Donate</Hyperlink>
+            Please Help Support Gallifrey <Hyperlink NavigateUri="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=G3MWL8E6UG4RS" Foreground="White" RequestNavigate="Hyperlink_RequestNavigate">Click To Donate</Hyperlink>
         </TextBlock>
 
     </DockPanel>
