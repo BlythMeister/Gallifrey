@@ -99,6 +99,7 @@
       <Bug>Fix issue with GALLIFREY-TEMP showing when converting a temp timer to a normal Jira timer</Bug>
       <Bug>Fix issue with error editing temp timers</Bug>
       <Bug>Fix issue whereby filter JQL order by is ignored in return</Bug>
+      <Bug>Update wording in settings for "Idle" becoming "Locked"</Bug>
     </Bugs>
     <Others/>
   </Version>

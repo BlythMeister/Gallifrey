@@ -118,7 +118,7 @@ namespace Gallifrey.UI.Modern.Models
             ExportAll = settings.ExportSettings.ExportPromptAll;
             ExportPrompts = new List<ExportPrompt>
             {
-                new ExportPrompt("Idle", settings.ExportSettings.ExportPrompt.OnAddIdle, "Add Idle Time"),
+                new ExportPrompt("Locked", settings.ExportSettings.ExportPrompt.OnAddIdle, "Add Locked Time"),
                 new ExportPrompt("Manual", settings.ExportSettings.ExportPrompt.OnManualAdjust, "Manual Timer Adjustment"),
                 new ExportPrompt("Stop", settings.ExportSettings.ExportPrompt.OnStop, "Stop Timer"),
                 new ExportPrompt("Pre", settings.ExportSettings.ExportPrompt.OnCreatePreloaded, "Add Pre-Loaded Timer"),
@@ -180,7 +180,7 @@ namespace Gallifrey.UI.Modern.Models
             settings.JiraConnectionSettings.JiraPassword = JiraPassword;
 
             //Export Settings
-            settings.ExportSettings.ExportPrompt.OnAddIdle = ExportPrompts.First(x => x.Key == "Idle").IsChecked;
+            settings.ExportSettings.ExportPrompt.OnAddIdle = ExportPrompts.First(x => x.Key == "Locked").IsChecked;
             settings.ExportSettings.ExportPrompt.OnManualAdjust = ExportPrompts.First(x => x.Key == "Manual").IsChecked;
             settings.ExportSettings.ExportPrompt.OnStop = ExportPrompts.First(x => x.Key == "Stop").IsChecked;
             settings.ExportSettings.ExportPrompt.OnCreatePreloaded = ExportPrompts.First(x => x.Key == "Pre").IsChecked;
