@@ -181,7 +181,7 @@ namespace Gallifrey.UI.Modern.MainViews
                 case SessionSwitchReason.RemoteDisconnect:
                 case SessionSwitchReason.ConsoleDisconnect:
 
-                    modelHelpers.Gallifrey.StartIdleTimer();
+                    modelHelpers.Gallifrey.StartLockTimer();
                     machineLocked = true;
                     break;
 
@@ -192,7 +192,7 @@ namespace Gallifrey.UI.Modern.MainViews
 
                     try
                     {
-                        var idleTimerId = modelHelpers.Gallifrey.StopIdleTimer();
+                        var idleTimerId = modelHelpers.Gallifrey.StopLockTimer();
                         var idleTimer = modelHelpers.Gallifrey.IdleTimerCollection.GetTimer(idleTimerId);
                         if (idleTimer == null) return;
 
@@ -232,11 +232,6 @@ namespace Gallifrey.UI.Modern.MainViews
         private void GetPremium(object sender, RoutedEventArgs e)
         {
             modelHelpers.ShowGetPremiumMessage();
-        }
-
-        private void LoadJira(object sender, RoutedEventArgs e)
-        {
-            Process.Start(new ProcessStartInfo(modelHelpers.Gallifrey.Settings.JiraConnectionSettings.JiraUrl));
         }
 
         private void AutoUpdateCheck(object sender, ElapsedEventArgs e)

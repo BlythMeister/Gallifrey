@@ -41,9 +41,10 @@ namespace Gallifrey
         void Close();
         void TrackEvent(TrackingType trackingType);
         void SaveSettings(bool jiraSettingsChanged);
-        bool StartIdleTimer();
-        Guid StopIdleTimer();
+        bool StartLockTimer();
+        Guid StopLockTimer();
         IEnumerable<ChangeLogVersion> GetChangeLog(XDocument changeLogContent);
+        void ResetInactiveAlert();
     }
 
     public class Backend : IBackend
@@ -326,9 +327,9 @@ namespace Gallifrey
             SettingsChanged?.Invoke(this, null);
         }
 
-        public bool StartIdleTimer()
+        public bool StartLockTimer()
         {
-            ActivityChecker.StopActivityCheck();
+            ActivityChecker.StopActivityCheckForLockTimer();
 
             runningTimerWhenIdle = JiraTimerCollection.GetRunningTimerId();
             if (runningTimerWhenIdle.HasValue)
@@ -338,9 +339,9 @@ namespace Gallifrey
             return idleTimerCollection.NewLockTimer();
         }
 
-        public Guid StopIdleTimer()
+        public Guid StopLockTimer()
         {
-            ActivityChecker.StartActivityCheck();
+            ActivityChecker.RestartActivityCheckAfterLockTimer();
 
             if (runningTimerWhenIdle.HasValue)
             {
@@ -366,6 +367,11 @@ namespace Gallifrey
             }
 
             return changeLogItems;
+        }
+
+        public void ResetInactiveAlert()
+        {
+            ActivityChecker.Reset();
         }
 
         public IJiraTimerCollection JiraTimerCollection => jiraTimerCollection;

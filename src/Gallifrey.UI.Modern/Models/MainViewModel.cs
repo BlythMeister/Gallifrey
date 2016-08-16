@@ -18,6 +18,7 @@ namespace Gallifrey.UI.Modern.Models
         public event PropertyChangedEventHandler PropertyChanged;
         public ObservableCollection<TimerDateModel> TimerDates { get; private set; }
         public string InactiveMinutes { get; private set; }
+        public TimeSpan TimeTimeActivity { get; private set; }
 
         public MainViewModel(ModelHelpers modelHelpers)
         {
@@ -50,10 +51,7 @@ namespace Gallifrey.UI.Modern.Models
 
         public string VersionName => ModelHelpers.Gallifrey.VersionControl.UpdateInstalled ? "Click To Install New Version" : ModelHelpers.Gallifrey.VersionControl.VersionName;
         public bool HasUpdate => ModelHelpers.Gallifrey.VersionControl.UpdateInstalled;
-
-        public string LoggedInAs => ModelHelpers.Gallifrey.JiraConnection.CurrentUser != null ? $"Logged in as {ModelHelpers.Gallifrey.JiraConnection.CurrentUser.key} ({ModelHelpers.Gallifrey.JiraConnection.CurrentUser.emailAddress})" : "Please Connect To Jira";
-        public string LoggedInDisplayName => ModelHelpers.Gallifrey.JiraConnection.CurrentUser != null ? ModelHelpers.Gallifrey.JiraConnection.CurrentUser.displayName : "Not Logged In To Jira";
-        
+       
         public bool HasInactiveTime => !string.IsNullOrWhiteSpace(InactiveMinutes);
         public bool TimerRunning => !string.IsNullOrWhiteSpace(CurrentRunningTimerDescription);
         public bool HaveTimeToExport => !string.IsNullOrWhiteSpace(TimeToExportMessage);
@@ -147,20 +145,18 @@ namespace Gallifrey.UI.Modern.Models
 
         public void SetNoActivityMilliseconds(int millisecondsSinceActivity)
         {
-            if (millisecondsSinceActivity == 0)
+            TimeTimeActivity = TimeSpan.FromMilliseconds(millisecondsSinceActivity);
+            TimeTimeActivity = TimeTimeActivity.Subtract(TimeSpan.FromMilliseconds(TimeTimeActivity.Milliseconds));
+            TimeTimeActivity = TimeTimeActivity.Subtract(TimeSpan.FromSeconds(TimeTimeActivity.Seconds));
+
+            if (TimeTimeActivity.TotalMinutes > 0)
             {
-                InactiveMinutes = string.Empty;
+                var minutesPlural = TimeTimeActivity.TotalMinutes > 1 ? "s" : "";
+                InactiveMinutes = $"No Timer Running For {TimeTimeActivity.TotalMinutes} Minute{minutesPlural}"; 
             }
             else
             {
-                var minutesSinceActivity = (millisecondsSinceActivity / 1000) / 60;
-                var minutesPlural = string.Empty;
-                if (minutesSinceActivity > 1)
-                {
-                    minutesPlural = "s";
-                }
-
-                InactiveMinutes = $"No Timer Running For {minutesSinceActivity} Minute{minutesPlural}";
+                InactiveMinutes = string.Empty;
             }
 
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("InactiveMinutes"));

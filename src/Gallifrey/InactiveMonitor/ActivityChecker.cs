@@ -13,15 +13,14 @@ namespace Gallifrey.InactiveMonitor
         private readonly Timer hearbeat;
         private readonly Stopwatch noTimerRunning;
         private readonly object lockObject;
-        private IAppSettings appSettings;
-        private int eventsSent;
-        private bool TemporaryStopActivityCheck;
+        private bool temporaryStopActivityCheck;
+        private TimeSpan alertLimit;
 
         internal ActivityChecker(IJiraTimerCollection timerCollection, IAppSettings appSettings)
         {
             this.timerCollection = timerCollection;
             noTimerRunning = new Stopwatch();
-            TemporaryStopActivityCheck = false;
+            temporaryStopActivityCheck = false;
             lockObject = new object();
 
             hearbeat = new Timer(500);
@@ -30,9 +29,10 @@ namespace Gallifrey.InactiveMonitor
             UpdateAppSettings(appSettings);
         }
 
-        internal void UpdateAppSettings(IAppSettings newAppSettings)
+        internal void UpdateAppSettings(IAppSettings appSettings)
         {
-            appSettings = newAppSettings;
+            alertLimit = TimeSpan.FromMilliseconds(appSettings.AlertTimeMilliseconds);
+
             if (appSettings.AlertWhenNotRunning)
             {
                 hearbeat.Start();
@@ -40,7 +40,6 @@ namespace Gallifrey.InactiveMonitor
             else
             {
                 hearbeat.Stop();
-                noTimerRunning.Stop();
                 noTimerRunning.Reset();
             }
         }
@@ -49,46 +48,48 @@ namespace Gallifrey.InactiveMonitor
         {
             lock (lockObject)
             {
-                if (timerCollection.GetRunningTimerId().HasValue || TemporaryStopActivityCheck)
+                if (temporaryStopActivityCheck)
+                {
+                    return;
+                }
+
+                if (timerCollection.GetRunningTimerId().HasValue)
                 {
                     if (noTimerRunning.IsRunning)
                     {
-                        noTimerRunning.Stop();
-                        NoActivityEvent?.Invoke(this, 0);
+                        Reset();
                     }
-
-                    noTimerRunning.Reset();
-                    eventsSent = 0;
                 }
                 else
                 {
-                    if (!noTimerRunning.IsRunning) noTimerRunning.Start();
-                    if (noTimerRunning.ElapsedMilliseconds >= appSettings.AlertTimeMilliseconds)
+                    if (!noTimerRunning.IsRunning)
                     {
-                        eventsSent++;
-                        noTimerRunning.Reset();
-                        NoActivityEvent?.Invoke(this, eventsSent * appSettings.AlertTimeMilliseconds);
+                        noTimerRunning.Start();
+                    }
+
+                    if (noTimerRunning.Elapsed >= alertLimit)
+                    {
+                        NoActivityEvent?.Invoke(this, (int)noTimerRunning.ElapsedMilliseconds);
                     }
                 }
             }
         }
 
-        public void StopActivityCheck()
+        public void StopActivityCheckForLockTimer()
         {
-            TemporaryStopActivityCheck = true;
+            temporaryStopActivityCheck = true;
             noTimerRunning.Stop();
-            noTimerRunning.Reset();
-            eventsSent = 0;
-            NoActivityEvent?.Invoke(this, 0);
         }
 
-        public void StartActivityCheck()
+        public void RestartActivityCheckAfterLockTimer()
         {
-            TemporaryStopActivityCheck = false;
-            noTimerRunning.Stop();
-            noTimerRunning.Reset();
-            eventsSent = 0;
+            temporaryStopActivityCheck = false;
+        }
+
+        public void Reset()
+        {
             NoActivityEvent?.Invoke(this, 0);
+            noTimerRunning.Reset();
         }
     }
 }

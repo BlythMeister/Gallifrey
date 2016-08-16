@@ -139,6 +139,11 @@ namespace Gallifrey.UI.Modern.MainViews
             ModelHelpers.TriggerRemoteButtonPress(RemoteButtonTrigger.Add);
         }
 
+        private void ContextMenu_AddToFill(object sender, RoutedEventArgs e)
+        {
+            ModelHelpers.TriggerRemoteButtonPress(RemoteButtonTrigger.AddToFill);
+        }
+
         private void ContextMenu_Copy(object sender, RoutedEventArgs e)
         {
             ModelHelpers.TriggerRemoteButtonPress(RemoteButtonTrigger.Copy);

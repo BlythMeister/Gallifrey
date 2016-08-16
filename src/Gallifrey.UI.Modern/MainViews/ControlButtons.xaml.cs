@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using Gallifrey.AppTracking;
+using Gallifrey.IdleTimers;
 using Gallifrey.UI.Modern.Flyouts;
 using Gallifrey.UI.Modern.Helpers;
 using Gallifrey.UI.Modern.Models;
@@ -35,6 +37,30 @@ namespace Gallifrey.UI.Modern.MainViews
             {
                 ModelHelpers.SetSelectedTimer(addTimer.NewTimerId);
             }
+        }
+
+        private async void AddToFillDay()
+        {
+            var startDate = ViewModel.TimerDates.FirstOrDefault(x => x.DateIsSelected)?.TimerDate ?? DateTime.Today;
+            var recordedToDate = ModelHelpers.Gallifrey.JiraTimerCollection.GetTotalTimeForDateNoSeconds(startDate);
+            var target = ModelHelpers.Gallifrey.Settings.AppSettings.TargetLogPerDay;
+
+            if (recordedToDate < target)
+            {
+                var dummyIdleTimer = new IdleTimer(DateTime.Now, DateTime.Now, target.Subtract(recordedToDate), Guid.NewGuid());
+                var addTimer = new AddTimer(ModelHelpers, startDate: startDate, idleTimers: new List<IdleTimer> { dummyIdleTimer }, enableDateChange: false);
+                await ModelHelpers.OpenFlyout(addTimer);
+                if (addTimer.AddedTimer)
+                {
+                    ModelHelpers.SetSelectedTimer(addTimer.NewTimerId);
+                }
+            }
+            else
+            {
+                await DialogCoordinator.Instance.ShowMessageAsync(ModelHelpers.DialogContext, "No Extra Time", "You Have Already Hit The Target For This Date!");
+            }
+
+
         }
 
         private async void CopyButton(object sender, RoutedEventArgs e)
@@ -223,6 +249,7 @@ namespace Gallifrey.UI.Modern.MainViews
             switch (remoteButtonTrigger)
             {
                 case RemoteButtonTrigger.Add: AddButton(this, null); break;
+                case RemoteButtonTrigger.AddToFill: AddToFillDay(); break;
                 case RemoteButtonTrigger.Copy: CopyButton(this, null); break;
                 case RemoteButtonTrigger.Paste: PasteButton(this, null); break;
                 case RemoteButtonTrigger.Delete: DeleteButton(this, null); break;

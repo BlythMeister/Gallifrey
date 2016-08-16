@@ -38,6 +38,7 @@ namespace Gallifrey.JiraTimers
         TimeSpan GetTotalExportableTime();
         TimeSpan GetTotalExportedTimeThisWeek(DayOfWeek startOfWeek);
         TimeSpan GetTotalTimeForDate(DateTime timerDate);
+        TimeSpan GetTotalTimeForDateNoSeconds(DateTime timerDate);
         bool AdjustTime(Guid uniqueId, int hours, int minutes, bool addTime);
         void AddJiraExportedTime(Guid uniqueId, int hours, int minutes);
         void AddIdleTimer(Guid uniqueId, List<IdleTimer> idleTimer);
@@ -350,6 +351,12 @@ namespace Gallifrey.JiraTimers
         {
             var time = new TimeSpan();
             return timerList.Where(jiraTimer => jiraTimer.DateStarted.Date == timerDate.Date).Aggregate(time, (current, jiraTimer) => current.Add(new TimeSpan(jiraTimer.ExactCurrentTime.Hours, jiraTimer.ExactCurrentTime.Minutes, jiraTimer.ExactCurrentTime.Seconds)));
+        }
+
+        public TimeSpan GetTotalTimeForDateNoSeconds(DateTime timerDate)
+        {
+            var unexportedTime = new TimeSpan();
+            return timerList.Where(timer => timer.DateStarted.Date == timerDate.Date).Aggregate(unexportedTime, (current, jiraTimer) => current.Add(new TimeSpan(jiraTimer.ExactCurrentTime.Hours, jiraTimer.ExactCurrentTime.Minutes, 0)));
         }
 
         public bool AdjustTime(Guid uniqueId, int hours, int minutes, bool addTime)

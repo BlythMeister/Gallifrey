@@ -128,8 +128,6 @@ namespace Gallifrey.UI.Modern.Models
             }
         }
 
-
-
         public int? StartHours
         {
             get { return startHours; }
