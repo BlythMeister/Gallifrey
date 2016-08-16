@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using Gallifrey.Exceptions.JiraIntegration;
 using Gallifrey.Exceptions.JiraTimers;
@@ -58,6 +59,18 @@ namespace Gallifrey.UI.Modern.MainViews
                     ModelHelpers.SelectRunningTimer();
                 }
             }
+        }
+        
+        private void TimerRightClick(object sender, MouseButtonEventArgs e)
+        {
+            ((ListViewItem)sender).IsSelected = true;
+            e.Handled = true;
+        }
+
+        private void TabHeaderRightClick(object sender, RoutedEventArgs e)
+        {
+            ((TabItem)sender).IsSelected = true;
+            e.Handled = true;
         }
 
         private void TabDragOver(object sender, DragEventArgs e)

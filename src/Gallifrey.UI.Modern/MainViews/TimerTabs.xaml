@@ -11,6 +11,7 @@
                 <Setter Property="controls:ControlsHelper.HeaderFontSize" Value="17" />
                 <Setter Property="HorizontalAlignment" Value="Right" />
                 <Setter Property="IsSelected" Value="{Binding DateIsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <EventSetter Event="MouseDown" Handler="TabHeaderRightClick" />
             </Style>
         </TabControl.ItemContainerStyle>
         <TabControl.ContentTemplate>
@@ -24,6 +25,7 @@
                             <Setter Property="BorderThickness" Value="2" />
                             <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                             <Setter Property="IsSelected" Value="{Binding TimerIsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <EventSetter Event="MouseDown" Handler="TimerRightClick"/>
                             <Style.Resources>
                                 <Style TargetType="Border">
                                     <Setter Property="CornerRadius" Value="5"/>
@@ -112,14 +114,14 @@
                             </Grid>
                         </DataTemplate>
                     </ListView.ItemTemplate>
-                    <ListView.ContextMenu>
-                        <ContextMenu>
-                            <MenuItem Header="Add New Timer" Click="ContextMenu_Add"/>
-                            <MenuItem Header="Add Timer To Fill Export Target" Click="ContextMenu_AddToFill"/>
-                        </ContextMenu>
-                    </ListView.ContextMenu>
                 </ListView>
             </DataTemplate>
         </TabControl.ContentTemplate>
+        <TabControl.ContextMenu>
+            <ContextMenu>
+                <MenuItem Header="Add New Timer" Click="ContextMenu_Add"/>
+                <MenuItem Header="Add Timer To Fill Export Target" Click="ContextMenu_AddToFill"/>
+            </ContextMenu>
+        </TabControl.ContextMenu>
     </controls:MetroAnimatedSingleRowTabControl>
 </UserControl>
