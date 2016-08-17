@@ -13,14 +13,12 @@ A simple, light-weight Jira time logging companion to help you travel the Jira u
 Downloads
 =========
 
-Gallifrey is currently under development.
-We are aiming to maintain a Beta & Stable version of the app.
+Gallifrey has a beta and stable version of the app.
+**Please note**, the Beta is the current work in progress & I cannot guarantee that it is 100% stable! 
 
 ###Download Links
 
-**Please note**, the Beta is the current work in progress & I cannot guarantee that it is 100% stable! 
-
-**Installing on Windows 8 will alert with SmartScreen, you should be able to "Run Anyway" until I can afford a proper certificate, there is no way around this!  After a couple of runs, the warning should stop**
+**Installing on Windows 8+ will alert with SmartScreen, you should be able to "Run Anyway" until I can afford a proper certificate, there is no way around this!  After a couple of runs, the warning should stop**
 
 * [Stable Release - Click Here](http://releases.gallifreyapp.co.uk/download/modern/stable/setup.exe)
 * [Beta Release - Click Here](http://releases.gallifreyapp.co.uk/download/modern/beta/setup.exe)
@@ -60,13 +58,6 @@ Gallifrey makes use of the following libraries:
 
 * App icon provided by Jack Cai (http://www.doublejdesign.co.uk)
 * Modern UI Icons (http://modernuiicons.com/)
-
-End Of Life UI Libraries/Resources
-=========
-
-* Button icons provided by VisualPharm (http://www.visualpharm.com)
-* Digital-7 font by Style7 (http://www.styleseven.com/)
-* Spell Check Winforms TextBox (http://spellchecktextbox.codeplex.com/)
 
 Licence
 =========
