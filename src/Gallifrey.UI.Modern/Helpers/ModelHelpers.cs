@@ -56,7 +56,12 @@ namespace Gallifrey.UI.Modern.Helpers
         {
             var actualType = flyout.GetType();
             var openFlyoutDetail = openFlyouts.FirstOrDefault(x => x.FlyoutType == actualType);
-            if (openFlyoutDetail != null) openFlyoutDetail.IsHidden = false;
+            if (openFlyoutDetail != null)
+            {
+                openFlyoutDetail.IsHidden = false;
+            }
+                
+
             flyout.IsOpen = false;
             FlyoutClosedHandler(flyout, null);
         }
@@ -90,8 +95,8 @@ namespace Gallifrey.UI.Modern.Helpers
             }
 
             openFlyoutDetail.IsHidden = false;
-            flyout.IsOpen = true;
-
+            openFlyoutDetail.Flyout.IsOpen = true;
+            
             return openFlyoutDetail.TaskCompletionSource.Task;
         }
 
