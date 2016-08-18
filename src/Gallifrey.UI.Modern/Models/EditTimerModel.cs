@@ -8,10 +8,10 @@ namespace Gallifrey.UI.Modern.Models
     {
         private readonly bool hasExportedTime;
 
-        private bool tempTimer;
+        private bool localTimer;
         private bool jiraRefFromSearch;
         private string jiraReference;
-        private string tempTimerDescription;
+        private string localTimerDescription;
         private DateTime? runDate;
         private int hours;
         private int minutes;
@@ -22,7 +22,7 @@ namespace Gallifrey.UI.Modern.Models
         public DateTime DisplayDate { get; set; }
         public bool TimeEditable { get; set; }
         public string OriginalJiraReference { get; set; }
-        public string OriginalTempTimerDescription { get; set; }
+        public string OriginalLocalTimerDescription { get; set; }
         public DateTime? OriginalRunDate { get; set; }
         public int OriginalHours { get; set; }
         public int OriginalMinutes { get; set; }
@@ -30,7 +30,7 @@ namespace Gallifrey.UI.Modern.Models
 
         public bool DateEditable => !hasExportedTime && !HasModifiedJiraReference;
         public bool JiraReferenceEditable => !hasExportedTime && !HasModifiedRunDate && !jiraRefFromSearch;
-        public bool HasModifiedJiraReference => (OriginalJiraReference != JiraReference) || (OriginalTempTimerDescription != TempTimerDescription);
+        public bool HasModifiedJiraReference => (OriginalJiraReference != JiraReference) || (OriginalLocalTimerDescription != LocalTimerDescription);
         public bool HasModifiedRunDate => OriginalRunDate.Value.Date != RunDate.Value.Date;
         public bool HasModifiedTime => OriginalHours != Hours || OriginalMinutes != Minutes;
         
@@ -60,20 +60,20 @@ namespace Gallifrey.UI.Modern.Models
             hasExportedTime = timer.HasExportedTime();
             TimeEditable = !timer.IsRunning;
 
-            TempTimer = timer.TempTimer;
+            LocalTimer = timer.LocalTimer;
 
-            if (TempTimer)
+            if (LocalTimer)
             {
-                TempTimerDescription = timer.JiraName;
+                LocalTimerDescription = timer.JiraName;
                 JiraReference = string.Empty;
             }
             else
             {
                 JiraReference = timer.JiraReference;
-                TempTimerDescription = string.Empty;
+                LocalTimerDescription = string.Empty;
             }
 
-            OriginalTempTimerDescription = TempTimerDescription;
+            OriginalLocalTimerDescription = LocalTimerDescription;
             OriginalJiraReference = JiraReference;
             OriginalRunDate = RunDate;
             OriginalHours = Hours ?? 0;
@@ -94,12 +94,12 @@ namespace Gallifrey.UI.Modern.Models
             }
         }
 
-        public string TempTimerDescription
+        public string LocalTimerDescription
         {
-            get { return tempTimerDescription; }
+            get { return localTimerDescription; }
             set
             {
-                tempTimerDescription = value;
+                localTimerDescription = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("DateEditable"));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("JiraReferenceEditable"));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasModifiedJiraReference"));
@@ -147,13 +147,13 @@ namespace Gallifrey.UI.Modern.Models
             }
         }
 
-        public bool TempTimer
+        public bool LocalTimer
         {
-            get { return tempTimer; }
+            get { return localTimer; }
             set
             {
-                tempTimer = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TempTimer"));
+                localTimer = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LocalTimer"));
             }
         }
 

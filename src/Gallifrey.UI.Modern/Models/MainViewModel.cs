@@ -55,7 +55,7 @@ namespace Gallifrey.UI.Modern.Models
         public bool HasInactiveTime => !string.IsNullOrWhiteSpace(InactiveMinutes);
         public bool TimerRunning => !string.IsNullOrWhiteSpace(CurrentRunningTimerDescription);
         public bool HaveTimeToExport => !string.IsNullOrWhiteSpace(TimeToExportMessage);
-        public bool HaveTempTime => !string.IsNullOrWhiteSpace(TempTimeMessage);
+        public bool HaveLocalTime => !string.IsNullOrWhiteSpace(LocalTimeMessage);
         public bool IsPremium => ModelHelpers.Gallifrey.Settings.InternalSettings.IsPremium;
         public bool IsStable => ModelHelpers.Gallifrey.VersionControl.InstanceType == InstanceType.Stable;
 
@@ -75,14 +75,14 @@ namespace Gallifrey.UI.Modern.Models
             {
                 var unexportedTime = ModelHelpers.Gallifrey.JiraTimerCollection.GetTotalExportableTime();
                 var unexportedTimers = ModelHelpers.Gallifrey.JiraTimerCollection.GetStoppedUnexportedTimers();
-                var unexportedCount = unexportedTimers.Count(x => !x.TempTimer);
+                var unexportedCount = unexportedTimers.Count(x => !x.LocalTimer);
 
                 var excludingRunning = string.Empty;
                 var runningTimerId = ModelHelpers.Gallifrey.JiraTimerCollection.GetRunningTimerId();
                 if (runningTimerId.HasValue)
                 {
                     var runningTimer = ModelHelpers.Gallifrey.JiraTimerCollection.GetTimer(runningTimerId.Value);
-                    if (!runningTimer.FullyExported && !runningTimer.TempTimer)
+                    if (!runningTimer.FullyExported && !runningTimer.LocalTimer)
                     {
                         excludingRunning = "(Excluding 1 Running Timer)";
                     }
@@ -92,26 +92,26 @@ namespace Gallifrey.UI.Modern.Models
             }
         }
 
-        public string TempTimeMessage
+        public string LocalTimeMessage
         {
             get
             {
-                var tempTime = ModelHelpers.Gallifrey.JiraTimerCollection.GetTotalTempTime();
+                var localTime = ModelHelpers.Gallifrey.JiraTimerCollection.GetTotalLocalTime();
                 var unexportedTimers = ModelHelpers.Gallifrey.JiraTimerCollection.GetStoppedUnexportedTimers();
-                var unexportedCount = unexportedTimers.Count(x => x.TempTimer);
+                var unexportedCount = unexportedTimers.Count(x => x.LocalTimer);
 
                 var excludingRunning = string.Empty;
                 var runningTimerId = ModelHelpers.Gallifrey.JiraTimerCollection.GetRunningTimerId();
                 if (runningTimerId.HasValue)
                 {
                     var runningTimer = ModelHelpers.Gallifrey.JiraTimerCollection.GetTimer(runningTimerId.Value);
-                    if (runningTimer.TempTimer)
+                    if (runningTimer.LocalTimer)
                     {
                         excludingRunning = "(Excluding 1 Running Timer)";
                     }
                 }
 
-                return tempTime.TotalMinutes > 0 ? $"You Have {unexportedCount} Temp Timer{(unexportedCount > 1 ? "s" : "")} Worth {tempTime.FormatAsString(false)} {excludingRunning}" : string.Empty;
+                return localTime.TotalMinutes > 0 ? $"You Have {unexportedCount} Local Timer{(unexportedCount > 1 ? "s" : "")} Worth {localTime.FormatAsString(false)} {excludingRunning}" : string.Empty;
             }
         }
 
@@ -332,8 +332,8 @@ namespace Gallifrey.UI.Modern.Models
             
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("CurrentRunningTimerDescription"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ExportedTotalMinutes"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HaveTempTime"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TempTimeMessage"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HaveLocalTime"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LocalTimeMessage"));
 
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ExportTarget"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ExportedTargetTotalMinutes"));

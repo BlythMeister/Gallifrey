@@ -80,7 +80,7 @@
                                     <TextBlock.Style>
                                         <Style TargetType="TextBlock">
                                             <Style.Triggers>
-                                                <DataTrigger Binding="{Binding IsTempTimer}" Value="True" >
+                                                <DataTrigger Binding="{Binding IsLocalTimer}" Value="True" >
                                                     <Setter Property="Foreground" Value="{DynamicResource AccentColorBrush}"/>
                                                 </DataTrigger>
                                             </Style.Triggers>

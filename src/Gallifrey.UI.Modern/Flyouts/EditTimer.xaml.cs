@@ -60,17 +60,17 @@ namespace Gallifrey.UI.Modern.Flyouts
             }
             else if (DataModel.HasModifiedJiraReference)
             {
-                if (DataModel.TempTimer)
+                if (DataModel.LocalTimer)
                 {
                     var currentTimer = modelHelpers.Gallifrey.JiraTimerCollection.GetTimer(EditedTimerId);
-                    if (!currentTimer.TempTimer)
+                    if (!currentTimer.LocalTimer)
                     {
                         if (!modelHelpers.Gallifrey.Settings.InternalSettings.IsPremium)
                         {
-                            var tempTimersCount = modelHelpers.Gallifrey.JiraTimerCollection.GetAllTempTimers().Count();
-                            if (tempTimersCount >= 2)
+                            var localTimersCount = modelHelpers.Gallifrey.JiraTimerCollection.GetAllLocalTimers().Count();
+                            if (localTimersCount >= 2)
                             {
-                                modelHelpers.ShowGetPremiumMessage("Without Gallifrey Premium You Are Limited To A Maximum Of 2 Temp Timers");
+                                modelHelpers.ShowGetPremiumMessage("Without Gallifrey Premium You Are Limited To A Maximum Of 2 Local Timers");
                                 Focus();
                                 return;
                             }
@@ -79,7 +79,7 @@ namespace Gallifrey.UI.Modern.Flyouts
 
                     try
                     {
-                        EditedTimerId = modelHelpers.Gallifrey.JiraTimerCollection.ChangeTempTimerDescription(EditedTimerId, DataModel.TempTimerDescription);
+                        EditedTimerId = modelHelpers.Gallifrey.JiraTimerCollection.ChangeLocalTimerDescription(EditedTimerId, DataModel.LocalTimerDescription);
                     }
                     catch (DuplicateTimerException)
                     {

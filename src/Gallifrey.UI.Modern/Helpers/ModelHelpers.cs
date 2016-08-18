@@ -173,7 +173,7 @@ namespace Gallifrey.UI.Modern.Helpers
             var premiumMessage = "To Get Premium Please Contribute Or Donate To Gallifrey.\n\nPremium Features Include:";
             premiumMessage += "\n  • Ability To Opt-Out Of Tracking";
             premiumMessage += "\n  • Bulk Export More Than 5 Timers";
-            premiumMessage += "\n  • Use More Than 2 Temp Timers";
+            premiumMessage += "\n  • Use More Than 2 Local Timers";
             premiumMessage += "\n  • Start Now/Assign To Me/Change Status On Add";
             premiumMessage += "\n\nThink You Should Have Premium?\nPlease Contact Us By Email Or Twitter";
 

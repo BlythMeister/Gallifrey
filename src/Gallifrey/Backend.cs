@@ -209,7 +209,7 @@ namespace Gallifrey
                         }
                     }
 
-                    foreach (var timer in timersOnDate.Where(x => !x.TempTimer))
+                    foreach (var timer in timersOnDate.Where(x => !x.LocalTimer))
                     {
                         var issueWithWorklogs = issues.FirstOrDefault(x => x.key == timer.JiraReference);
 

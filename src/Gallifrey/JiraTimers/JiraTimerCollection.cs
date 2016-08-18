@@ -19,10 +19,10 @@ namespace Gallifrey.JiraTimers
         IEnumerable<JiraTimer> GetUnexportedTimers(DateTime timerDate);
         IEnumerable<JiraTimer> GetStoppedUnexportedTimers();
         IEnumerable<JiraTimer> GetAllUnexportedTimers();
-        IEnumerable<JiraTimer> GetAllTempTimers();
+        IEnumerable<JiraTimer> GetAllLocalTimers();
         IEnumerable<RecentJira> GetJiraReferencesForLastDays(int days);
         Guid AddTimer(Issue jiraIssue, DateTime startDate, TimeSpan seedTime, bool startNow);
-        Guid AddTempTimer(string tempTimerDescription, DateTime startDate, TimeSpan seedTime, bool startNow);
+        Guid AddLocalTimer(string localTimerDescription, DateTime startDate, TimeSpan seedTime, bool startNow);
         void RemoveTimer(Guid uniqueId);
         void StartTimer(Guid uniqueId);
         void StopTimer(Guid uniqueId, bool automatedStop);
@@ -30,11 +30,11 @@ namespace Gallifrey.JiraTimers
         void RemoveTimersOlderThanDays(int keepTimersForDays);
         JiraTimer GetTimer(Guid timerGuid);
         Guid RenameTimer(Guid timerGuid, Issue newIssue);
-        Guid ChangeTempTimerDescription(Guid editedTimerId, string tempTimerDescription);
+        Guid ChangeLocalTimerDescription(Guid editedTimerId, string localTimerDescription);
         Guid ChangeTimerDate(Guid timerGuid, DateTime newStartDate);
         Tuple<int, int> GetNumberExported();
         TimeSpan GetTotalUnexportedTime();
-        TimeSpan GetTotalTempTime();
+        TimeSpan GetTotalLocalTime();
         TimeSpan GetTotalExportableTime();
         TimeSpan GetTotalExportedTimeThisWeek(DayOfWeek startOfWeek);
         TimeSpan GetTotalTimeForDate(DateTime timerDate);
@@ -97,9 +97,9 @@ namespace Gallifrey.JiraTimers
             return timerList.Where(timer => !timer.FullyExported).OrderBy(timer => timer.DateStarted);
         }
 
-        public IEnumerable<JiraTimer> GetAllTempTimers()
+        public IEnumerable<JiraTimer> GetAllLocalTimers()
         {
-            return timerList.Where(timer => timer.TempTimer).OrderBy(timer => timer.DateStarted);
+            return timerList.Where(timer => timer.LocalTimer).OrderBy(timer => timer.DateStarted);
         }
 
         public IEnumerable<RecentJira> GetJiraReferencesForLastDays(int days)
@@ -137,7 +137,7 @@ namespace Gallifrey.JiraTimers
             }
             else
             {
-                if (exportSettings.ExportPrompt != null && exportSettings.ExportPrompt.OnCreatePreloaded && !newTimer.FullyExported && !newTimer.TempTimer)
+                if (exportSettings.ExportPrompt != null && exportSettings.ExportPrompt.OnCreatePreloaded && !newTimer.FullyExported && !newTimer.LocalTimer)
                 {
                     exportPrompt?.Invoke(this, new ExportPromptDetail(newTimer.UniqueId, seedTime));
                 }
@@ -145,21 +145,21 @@ namespace Gallifrey.JiraTimers
             return newTimer.UniqueId;
         }
 
-        public Guid AddTempTimer(string tempTimerDescription, DateTime startDate, TimeSpan seedTime, bool startNow)
+        public Guid AddLocalTimer(string localTimerDescription, DateTime startDate, TimeSpan seedTime, bool startNow)
         {
             var foundValid = false;
-            var nextTempTimerNumber = 0;
-            var currentLocalTimers = GetTimersForADate(startDate.Date).Where(x => x.TempTimer).ToList();
+            var nextLocalTimerNumber = 0;
+            var currentLocalTimers = GetTimersForADate(startDate.Date).Where(x => x.LocalTimer).ToList();
             while (!foundValid)
             {
-                nextTempTimerNumber++;
-                if (!currentLocalTimers.Any(x => x.JiraReference.EndsWith($"-{nextTempTimerNumber}")))
+                nextLocalTimerNumber++;
+                if (!currentLocalTimers.Any(x => x.JiraReference.EndsWith($"-{nextLocalTimerNumber}")))
                 {
                     foundValid = true;
                 }
             }
 
-            var newTimer = new JiraTimer(nextTempTimerNumber, tempTimerDescription, startDate, seedTime);
+            var newTimer = new JiraTimer(nextLocalTimerNumber, localTimerDescription, startDate, seedTime);
 
             AddTimer(newTimer);
             if (startNow)
@@ -186,9 +186,9 @@ namespace Gallifrey.JiraTimers
             var timerForInteration = GetTimer(uniqueId);
             if (timerForInteration.DateStarted.Date != DateTime.Now.Date)
             {
-                if (timerForInteration.TempTimer)
+                if (timerForInteration.LocalTimer)
                 {
-                    uniqueId = AddTempTimer(timerForInteration.JiraName, DateTime.Now, new TimeSpan(), false);
+                    uniqueId = AddLocalTimer(timerForInteration.JiraName, DateTime.Now, new TimeSpan(), false);
                     timerForInteration = GetTimer(uniqueId);
                 }
                 else
@@ -216,7 +216,7 @@ namespace Gallifrey.JiraTimers
             var stopTime = timerForInteration.StopTimer();
 
             SaveTimers();
-            if (exportSettings.ExportPrompt != null && exportSettings.ExportPrompt.OnStop && !timerForInteration.FullyExported && !automatedStop && !timerForInteration.TempTimer)
+            if (exportSettings.ExportPrompt != null && exportSettings.ExportPrompt.OnStop && !timerForInteration.FullyExported && !automatedStop && !timerForInteration.LocalTimer)
             {
                 exportPrompt?.Invoke(this, new ExportPromptDetail(uniqueId, stopTime));
             }
@@ -264,17 +264,17 @@ namespace Gallifrey.JiraTimers
             return newTimer.UniqueId;
         }
 
-        public Guid ChangeTempTimerDescription(Guid timerGuid, string tempTimerDescription)
+        public Guid ChangeLocalTimerDescription(Guid timerGuid, string localTimerDescription)
         {
             var currentTimer = GetTimer(timerGuid);
-            if (currentTimer.TempTimer)
+            if (currentTimer.LocalTimer)
             {
-                currentTimer.UpdateTempTimerDescription(tempTimerDescription);
+                currentTimer.UpdateLocalTimerDescription(localTimerDescription);
                 SaveTimers();
                 return currentTimer.UniqueId;
             }
 
-            var newGuid = AddTempTimer(tempTimerDescription, currentTimer.DateStarted, currentTimer.ExactCurrentTime, false);
+            var newGuid = AddLocalTimer(localTimerDescription, currentTimer.DateStarted, currentTimer.ExactCurrentTime, false);
             RemoveTimer(timerGuid);
             return newGuid;
         }
@@ -285,20 +285,20 @@ namespace Gallifrey.JiraTimers
             if (currentTimer.IsRunning) currentTimer.StopTimer();
 
             JiraTimer newTimer;
-            if (currentTimer.TempTimer)
+            if (currentTimer.LocalTimer)
             {
                 var foundValid = false;
-                var nextTempTimerNumber = 0;
-                var currentLocalTimers = GetTimersForADate(newStartDate.Date).Where(x => x.TempTimer).ToList();
+                var nextLocalTimerNumber = 0;
+                var currentLocalTimers = GetTimersForADate(newStartDate.Date).Where(x => x.LocalTimer).ToList();
                 while (!foundValid)
                 {
-                    nextTempTimerNumber++;
-                    if (!currentLocalTimers.Any(x => x.JiraReference.EndsWith($"-{nextTempTimerNumber}")))
+                    nextLocalTimerNumber++;
+                    if (!currentLocalTimers.Any(x => x.JiraReference.EndsWith($"-{nextLocalTimerNumber}")))
                     {
                         foundValid = true;
                     }
                 }
-                newTimer = new JiraTimer(nextTempTimerNumber, currentTimer.JiraName, newStartDate.Date, currentTimer.ExactCurrentTime);
+                newTimer = new JiraTimer(nextLocalTimerNumber, currentTimer.JiraName, newStartDate.Date, currentTimer.ExactCurrentTime);
             }
             else
             {
@@ -329,16 +329,16 @@ namespace Gallifrey.JiraTimers
             return timerList.Where(timer => !timer.FullyExported).Aggregate(unexportedTime, (current, jiraTimer) => current.Add(new TimeSpan(jiraTimer.TimeToExport.Hours, jiraTimer.TimeToExport.Minutes, 0)));
         }
 
-        public TimeSpan GetTotalTempTime()
+        public TimeSpan GetTotalLocalTime()
         {
             var unexportedTime = new TimeSpan();
-            return timerList.Where(timer => timer.TempTimer && !timer.IsRunning && !timer.FullyExported).Aggregate(unexportedTime, (current, jiraTimer) => current.Add(new TimeSpan(jiraTimer.TimeToExport.Hours, jiraTimer.TimeToExport.Minutes, 0)));
+            return timerList.Where(timer => timer.LocalTimer && !timer.IsRunning && !timer.FullyExported).Aggregate(unexportedTime, (current, jiraTimer) => current.Add(new TimeSpan(jiraTimer.TimeToExport.Hours, jiraTimer.TimeToExport.Minutes, 0)));
         }
 
         public TimeSpan GetTotalExportableTime()
         {
             var unexportedTime = new TimeSpan();
-            return timerList.Where(timer => !timer.TempTimer && !timer.IsRunning && !timer.FullyExported).Aggregate(unexportedTime, (current, jiraTimer) => current.Add(new TimeSpan(jiraTimer.TimeToExport.Hours, jiraTimer.TimeToExport.Minutes, 0)));
+            return timerList.Where(timer => !timer.LocalTimer && !timer.IsRunning && !timer.FullyExported).Aggregate(unexportedTime, (current, jiraTimer) => current.Add(new TimeSpan(jiraTimer.TimeToExport.Hours, jiraTimer.TimeToExport.Minutes, 0)));
         }
 
         public TimeSpan GetTotalExportedTimeThisWeek(DayOfWeek startOfWeek)
@@ -370,7 +370,7 @@ namespace Gallifrey.JiraTimers
             }
 
             SaveTimers();
-            if (exportSettings.ExportPrompt != null && exportSettings.ExportPrompt.OnManualAdjust && !timer.FullyExported && !timer.TempTimer)
+            if (exportSettings.ExportPrompt != null && exportSettings.ExportPrompt.OnManualAdjust && !timer.FullyExported && !timer.LocalTimer)
             {
                 if (!addTime) adjustment = adjustment.Negate();
                 exportPrompt?.Invoke(this, new ExportPromptDetail(uniqueId, adjustment));
@@ -395,7 +395,7 @@ namespace Gallifrey.JiraTimers
                 timer.AddIdleTimer(idleTimer);
             }
             SaveTimers();
-            if (exportSettings.ExportPrompt != null && exportSettings.ExportPrompt.OnAddIdle && !timer.FullyExported && !timer.TempTimer)
+            if (exportSettings.ExportPrompt != null && exportSettings.ExportPrompt.OnAddIdle && !timer.FullyExported && !timer.LocalTimer)
             {
                 var idleTime = new TimeSpan();
                 idleTime = idleTimers.Aggregate(idleTime, (current, idleTimer) => current.Add(idleTimer.IdleTimeValue));

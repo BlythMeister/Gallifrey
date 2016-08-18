@@ -105,8 +105,11 @@
       <Bug>Fix issue whereby filter JQL order by is ignored in return</Bug>
       <Bug>Update wording in settings for "Idle" becoming "Locked"</Bug>
       <Bug>Activity check now updates every minute rather than every alert time (e.g. 5) minutes</Bug>
+      <Bug>Fixing context menu being displayed when right clicking a timer</Bug>
     </Bugs>
-    <Others/>
+    <Others>
+      <Other>Temp timers are now "Local" timers in preparation for exporting to a destination other than Jira</Other>
+    </Others>
   </Version>
 </Versions>
 

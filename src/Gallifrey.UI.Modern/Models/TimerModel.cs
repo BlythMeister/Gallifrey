@@ -30,7 +30,7 @@ namespace Gallifrey.UI.Modern.Models
         public bool HasTimeToExport => !JiraTimer.FullyExported;
         public bool HasTimeToExportAndNotRunning => !JiraTimer.FullyExported && !JiraTimer.IsRunning;
         public bool IsRunning => JiraTimer.IsRunning;
-        public bool IsTempTimer => JiraTimer.TempTimer;
+        public bool IsLocalTimer => JiraTimer.LocalTimer;
 
         public TimerModel(JiraTimer timer)
         {

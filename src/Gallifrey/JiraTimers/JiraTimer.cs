@@ -24,7 +24,7 @@ namespace Gallifrey.JiraTimers
         public Guid UniqueId { get; private set; }
         public bool IsRunning { get; private set; }
         public DateTime? LastJiraTimeCheck { get; private set; }
-        public bool TempTimer { get; private set; }
+        public bool LocalTimer { get; private set; }
         private readonly Stopwatch currentRunningTime;
         private readonly Timer runningWatcher;
 
@@ -33,7 +33,7 @@ namespace Gallifrey.JiraTimers
         public bool HasParent => !string.IsNullOrWhiteSpace(JiraParentReference);
 
         [JsonConstructor]
-        public JiraTimer(string jiraReference, string jiraProjectName, string jiraName, DateTime dateStarted, TimeSpan currentTime, TimeSpan exportedTime, Guid uniqueId, string jiraParentReference, string jiraParentName, DateTime? lastJiraTimeCheck, bool tempTimer)
+        public JiraTimer(string jiraReference, string jiraProjectName, string jiraName, DateTime dateStarted, TimeSpan currentTime, TimeSpan exportedTime, Guid uniqueId, string jiraParentReference, string jiraParentName, DateTime? lastJiraTimeCheck, bool localTimer)
         {
             JiraReference = jiraReference;
             JiraProjectName = jiraProjectName;
@@ -49,11 +49,11 @@ namespace Gallifrey.JiraTimers
             runningWatcher = new Timer(100);
             runningWatcher.Elapsed += runningWatcherElapsed;
             LastJiraTimeCheck = lastJiraTimeCheck;
-            TempTimer = tempTimer;
+            LocalTimer = localTimer;
         }
 
-        public JiraTimer(int localTimerNumber, string tempTimerDescription, DateTime dateStarted, TimeSpan currentTime) :
-            this($"GALLIFREY-TEMP-{localTimerNumber}", "Temporary Timers", tempTimerDescription, dateStarted, currentTime, new TimeSpan(), Guid.NewGuid(), string.Empty, string.Empty, null, true)
+        public JiraTimer(int localTimerNumber, string localTimerDescription, DateTime dateStarted, TimeSpan currentTime) :
+            this($"GALLIFREY-{localTimerNumber}", "Local Timers", localTimerDescription, dateStarted, currentTime, new TimeSpan(), Guid.NewGuid(), string.Empty, string.Empty, null, true)
         {
         }
 
@@ -64,7 +64,7 @@ namespace Gallifrey.JiraTimers
         }
 
         public JiraTimer(JiraTimer previousTimer, DateTime dateStarted, bool resetTimes) :
-            this(previousTimer.JiraReference, previousTimer.JiraProjectName, previousTimer.JiraName, dateStarted, resetTimes ? new TimeSpan() : previousTimer.CurrentTime, resetTimes ? new TimeSpan() : previousTimer.ExportedTime, Guid.NewGuid(), previousTimer.JiraParentReference, previousTimer.JiraParentName, null, previousTimer.TempTimer)
+            this(previousTimer.JiraReference, previousTimer.JiraProjectName, previousTimer.JiraName, dateStarted, resetTimes ? new TimeSpan() : previousTimer.CurrentTime, resetTimes ? new TimeSpan() : previousTimer.ExportedTime, Guid.NewGuid(), previousTimer.JiraParentReference, previousTimer.JiraParentName, null, previousTimer.LocalTimer)
         {
 
         }
@@ -217,7 +217,7 @@ namespace Gallifrey.JiraTimers
         {
             if (jiraIssue == null) return;
 
-            TempTimer = false;
+            LocalTimer = false;
 
             JiraReference = jiraIssue.key;
             JiraProjectName = jiraIssue.fields.project.key;
@@ -248,7 +248,7 @@ namespace Gallifrey.JiraTimers
         {
             if (jiraIssue == null) return;
 
-            TempTimer = false;
+            LocalTimer = false;
 
             SetJiraExportedTime(jiraIssue.GetCurrentLoggedTimeForDate(DateStarted, currentUser));
 
@@ -260,10 +260,10 @@ namespace Gallifrey.JiraTimers
         }
 
 
-        public void UpdateTempTimerDescription(string tempTimerDescription)
+        public void UpdateLocalTimerDescription(string localTimerDescription)
         {
-            if (!TempTimer) return;
-            JiraName = tempTimerDescription;
+            if (!LocalTimer) return;
+            JiraName = localTimerDescription;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("JiraName"));
         }
     }

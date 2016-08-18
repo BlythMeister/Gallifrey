@@ -9,7 +9,7 @@ namespace Gallifrey.UI.Modern.Models
 {
     public class AddTimerModel : INotifyPropertyChanged
     {
-        private bool tempTimer;
+        private bool localTimer;
         private bool datePeriod;
         private int startMinutes;
         private int startHours;
@@ -18,7 +18,7 @@ namespace Gallifrey.UI.Modern.Models
 
         public event PropertyChangedEventHandler PropertyChanged;
         public string JiraReference { get; set; }
-        public string TempTimerDescription { get; set; }
+        public string LocalTimerDescription { get; set; }
         public bool JiraReferenceEditable { get; set; }
         public DateTime MinDate { get; set; }
         public DateTime MaxDate { get; set; }
@@ -33,13 +33,13 @@ namespace Gallifrey.UI.Modern.Models
 
         public bool TimeEditable => IdleTimers == null || IdleTimers.Count == 0;
 
-        public bool TempTimer
+        public bool LocalTimer
         {
-            get { return tempTimer; }
+            get { return localTimer; }
             set
             {
-                tempTimer = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TempTimer"));
+                localTimer = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LocalTimer"));
             }
         }
 

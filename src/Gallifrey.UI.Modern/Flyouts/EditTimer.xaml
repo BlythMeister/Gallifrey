@@ -26,10 +26,10 @@
             <TextBlock.Style>
                 <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding TempTimer}" Value="True" >
+                        <DataTrigger Binding="{Binding LocalTimer}" Value="True" >
                             <Setter Property="Text" Value="Description"/>
                         </DataTrigger>
-                        <DataTrigger Binding="{Binding TempTimer}" Value="False" >
+                        <DataTrigger Binding="{Binding LocalTimer}" Value="False" >
                             <Setter Property="Text" Value="Jira Reference"/>
                         </DataTrigger>
                     </Style.Triggers>
@@ -43,11 +43,11 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <TextBox Grid.Column="0" Text="{Binding JiraReference, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" CharacterCasing="Upper" IsEnabled="{Binding JiraReferenceEditable}" Visibility="{Binding TempTimer, Converter={StaticResource BoolToVisInverted}}" />
-            <TextBox Grid.Column="0" Text="{Binding TempTimerDescription, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding TempTimer, Converter={StaticResource BoolToVis}}" />
+            <TextBox Grid.Column="0" Text="{Binding JiraReference, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" CharacterCasing="Upper" IsEnabled="{Binding JiraReferenceEditable}" Visibility="{Binding LocalTimer, Converter={StaticResource BoolToVisInverted}}" />
+            <TextBox Grid.Column="0" Text="{Binding LocalTimerDescription, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding LocalTimer, Converter={StaticResource BoolToVis}}" />
 
-            <CheckBox Grid.Column="1" Margin="5,0" IsChecked="{Binding TempTimer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding JiraReferenceEditable}" />
-            <TextBlock Grid.Column="2" VerticalAlignment="Center">Temp Timer?</TextBlock>
+            <CheckBox Grid.Column="1" Margin="5,0" IsChecked="{Binding LocalTimer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding JiraReferenceEditable}" />
+            <TextBlock Grid.Column="2" VerticalAlignment="Center">Local Timer?</TextBlock>
         </Grid>
         
         <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Padding="2">Date</TextBlock>

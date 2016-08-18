@@ -29,7 +29,7 @@ namespace Gallifrey.UI.Modern.MainViews
             unexportedMutex.WaitOne();
             ModelHelpers.Gallifrey.TrackEvent(TrackingType.ExportAll);
             var timers = ModelHelpers.Gallifrey.JiraTimerCollection.GetStoppedUnexportedTimers().ToList();
-            timers.RemoveAll(x => x.TempTimer || x.IsRunning);
+            timers.RemoveAll(x => x.LocalTimer || x.IsRunning);
 
             if (timers.Any())
             {

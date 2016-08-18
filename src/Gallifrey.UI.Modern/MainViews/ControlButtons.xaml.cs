@@ -74,9 +74,9 @@ namespace Gallifrey.UI.Modern.MainViews
             else if (selectedTimers != null && selectedTimers.Count() == 1)
             {
                 var selectedTimer = ModelHelpers.Gallifrey.JiraTimerCollection.GetTimer(selectedTimers.First());
-                if (selectedTimer.TempTimer)
+                if (selectedTimer.LocalTimer)
                 {
-                    await DialogCoordinator.Instance.ShowMessageAsync(ModelHelpers.DialogContext, "Not Avaliable", "A Temp Timer Does Not Have A Copyable Reference");
+                    await DialogCoordinator.Instance.ShowMessageAsync(ModelHelpers.DialogContext, "Not Avaliable", "A Local Timer Does Not Have A Copyable Reference");
                 }
                 else
                 {
@@ -174,7 +174,7 @@ namespace Gallifrey.UI.Modern.MainViews
                         {
                             selectedTimerIds.Remove(selectedTimer.UniqueId);
                         }
-                        else if (selectedTimer.TempTimer)
+                        else if (selectedTimer.LocalTimer)
                         {
                             selectedTimerIds.Remove(selectedTimer.UniqueId);
                         }

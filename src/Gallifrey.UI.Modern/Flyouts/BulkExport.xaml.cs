@@ -171,7 +171,7 @@ namespace Gallifrey.UI.Modern.Flyouts
         {
             var timersToShow = new List<BulkExportModel>();
             var issuesRetrieved = new List<Issue>();
-            var timersToGet = timers.Where(x => !x.TempTimer && !x.IsRunning).ToList();
+            var timersToGet = timers.Where(x => !x.LocalTimer && !x.IsRunning).ToList();
 
             for (var i = 0; i < timersToGet.Count; i++)
             {

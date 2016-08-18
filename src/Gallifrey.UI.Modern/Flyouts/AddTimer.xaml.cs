@@ -55,11 +55,11 @@ namespace Gallifrey.UI.Modern.Flyouts
             //Validate Premium Features
             if (!modelHelpers.Gallifrey.Settings.InternalSettings.IsPremium)
             {
-                if (DataModel.TempTimer)
+                if (DataModel.LocalTimer)
                 {
-                    if (modelHelpers.Gallifrey.JiraTimerCollection.GetAllTempTimers().Count() >= 2)
+                    if (modelHelpers.Gallifrey.JiraTimerCollection.GetAllLocalTimers().Count() >= 2)
                     {
-                        modelHelpers.ShowGetPremiumMessage("Without Gallifrey Premium You Are Limited To A Maximum Of 2 Temp Timers");
+                        modelHelpers.ShowGetPremiumMessage("Without Gallifrey Premium You Are Limited To A Maximum Of 2 Local Timers");
                         Focus();
                         return;
                     }
@@ -102,7 +102,7 @@ namespace Gallifrey.UI.Modern.Flyouts
 
             Issue jiraIssue = null;
 
-            if (!DataModel.TempTimer)
+            if (!DataModel.LocalTimer)
             {
                 try
                 {
@@ -144,7 +144,7 @@ namespace Gallifrey.UI.Modern.Flyouts
 
             var stillDoingThings = false;
 
-            if (!DataModel.TempTimer)
+            if (!DataModel.LocalTimer)
             {
                 if (DataModel.AssignToMe)
                 {
@@ -212,9 +212,9 @@ namespace Gallifrey.UI.Modern.Flyouts
         {
             try
             {
-                if (DataModel.TempTimer)
+                if (DataModel.LocalTimer)
                 {
-                    NewTimerId = modelHelpers.Gallifrey.JiraTimerCollection.AddTempTimer(DataModel.TempTimerDescription, startDate, seedTime, DataModel.StartNow);
+                    NewTimerId = modelHelpers.Gallifrey.JiraTimerCollection.AddLocalTimer(DataModel.LocalTimerDescription, startDate, seedTime, DataModel.StartNow);
                 }
                 else
                 {
