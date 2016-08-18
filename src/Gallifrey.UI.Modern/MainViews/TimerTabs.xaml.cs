@@ -60,12 +60,6 @@ namespace Gallifrey.UI.Modern.MainViews
                 }
             }
         }
-        
-        private void TimerRightClick(object sender, MouseButtonEventArgs e)
-        {
-            ((ListViewItem)sender).IsSelected = true;
-            e.Handled = true;
-        }
 
         private void TabHeaderRightClick(object sender, RoutedEventArgs e)
         {
