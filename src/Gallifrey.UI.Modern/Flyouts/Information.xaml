@@ -51,7 +51,7 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <TextBlock Grid.Row="0" FontSize="18" Margin="0,0,0,5" Text="Support" TextDecorations="Underline" />
-            <TextBlock Grid.Row="1" TextWrapping="Wrap" Margin="0,0,0,5" VerticalAlignment="Center">Contact Us By Email Or Social Networks!<LineBreak />Email: <Hyperlink NavigateUri="mailto:contact@gallifreyapp.co.uk?subject=Gallifrey App Contact" Foreground="{DynamicResource IdealForegroundColorBrush}" RequestNavigate="Hyperlink_RequestNavigate">GallifreyApp@gmail.com</Hyperlink><LineBreak />Twitter: <Hyperlink NavigateUri="https://twitter.com/GallifreyApp" Foreground="{DynamicResource IdealForegroundColorBrush}" RequestNavigate="Hyperlink_RequestNavigate">@GallifreyApp</Hyperlink></TextBlock>
+            <TextBlock Grid.Row="1" TextWrapping="Wrap" Margin="0,0,0,5" VerticalAlignment="Center">Contact Us By Email Or Social Networks!<LineBreak />Email: <Hyperlink NavigateUri="mailto:contact@gallifreyapp.co.uk?subject=Gallifrey App Contact" Foreground="{DynamicResource TextBrush}" RequestNavigate="Hyperlink_RequestNavigate">GallifreyApp@gmail.com</Hyperlink><LineBreak />Twitter: <Hyperlink NavigateUri="https://twitter.com/GallifreyApp" Foreground="{DynamicResource TextBrush}" RequestNavigate="Hyperlink_RequestNavigate">@GallifreyApp</Hyperlink></TextBlock>
         </Grid>
         <Grid Grid.Row="3">
             <Grid.RowDefinitions>
@@ -59,7 +59,7 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <TextBlock Grid.Row="0" FontSize="18" Margin="0,0,0,5" Text="Donate" TextDecorations="Underline" />
-            <TextBlock Grid.Row="1" TextWrapping="Wrap" Margin="0,0,0,5" VerticalAlignment="Center">Help us keep the project alive by donating via <Hyperlink NavigateUri="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=G3MWL8E6UG4RS" Foreground="{DynamicResource IdealForegroundColorBrush}" RequestNavigate="Hyperlink_RequestNavigate">PayPal</Hyperlink>.</TextBlock>
+            <TextBlock Grid.Row="1" TextWrapping="Wrap" Margin="0,0,0,5" VerticalAlignment="Center">Help us keep the project alive by donating via <Hyperlink NavigateUri="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=G3MWL8E6UG4RS" Foreground="{DynamicResource TextBrush}" RequestNavigate="Hyperlink_RequestNavigate">PayPal</Hyperlink>.</TextBlock>
         </Grid>
         <Grid Grid.Row="4">
             <Grid.RowDefinitions>
@@ -67,7 +67,7 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <TextBlock Grid.Row="0" FontSize="18" Margin="0,0,0,5" Text="Source Code" TextDecorations="Underline" />
-            <TextBlock Grid.Row="1" TextWrapping="Wrap" Margin="0,0,0,5" VerticalAlignment="Center">All our code and websites are hosted on <Hyperlink NavigateUri="https://github.com/BlythMeister/Gallifrey" Foreground="{DynamicResource IdealForegroundColorBrush}" RequestNavigate="Hyperlink_RequestNavigate">GitHub</Hyperlink><LineBreak/>You can download and fork to join the community</TextBlock>
+            <TextBlock Grid.Row="1" TextWrapping="Wrap" Margin="0,0,0,5" VerticalAlignment="Center">All our code and websites are hosted on <Hyperlink NavigateUri="https://github.com/BlythMeister/Gallifrey" Foreground="{DynamicResource TextBrush}" RequestNavigate="Hyperlink_RequestNavigate">GitHub</Hyperlink><LineBreak/>You can download and fork to join the community</TextBlock>
         </Grid>
         <Grid Grid.Row="5">
             <Grid.RowDefinitions>

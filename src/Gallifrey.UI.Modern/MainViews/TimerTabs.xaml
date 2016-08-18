@@ -17,6 +17,15 @@
         <TabControl.ContentTemplate>
             <DataTemplate>
                 <ListView ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemsSource="{Binding Timers}" MouseDoubleClick="TimerList_MouseDoubleClick" BorderThickness="0" SelectionMode="Extended">
+                    <ListView.Resources>
+                        <ContextMenu x:Key="ItemContextMenu">
+                            <MenuItem Header="Copy JIRA Reference" Click="ContextMenu_Copy"/>
+                            <MenuItem Header="Delete Timer" Click="ContextMenu_Delete"/>
+                            <MenuItem Header="Edit Timer" Click="ContextMenu_Edit"/>
+                            <MenuItem Header="Export Timer" Click="ContextMenu_Export"/>
+                            <MenuItem Header="Start/Stop Timer" Click="ContextMenu_StartStop"/>
+                        </ContextMenu>
+                    </ListView.Resources>
                     <ListView.ItemContainerStyle>
                         <Style TargetType="{x:Type ListViewItem}">
                             <Setter Property="Margin" Value="3" />
@@ -25,6 +34,7 @@
                             <Setter Property="BorderThickness" Value="2" />
                             <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                             <Setter Property="IsSelected" Value="{Binding TimerIsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <Setter Property="ContextMenu" Value="{StaticResource ItemContextMenu}" />
                             <EventSetter Event="MouseDown" Handler="TimerRightClick"/>
                             <Style.Resources>
                                 <Style TargetType="Border">
@@ -66,7 +76,7 @@
                                     <helpers:BooleanVisibilityConverter x:Key="BoolToVis" Collapse="True" Invert="False"/>
                                 </Grid.Resources>
 
-                                <TextBlock Grid.Row="0" Grid.Column="0" FontSize="25" Margin="3,0,0,0" Text="{Binding Reference}">
+                                <TextBlock Grid.Row="0" Grid.Column="0" FontSize="25" Margin="3,0,0,0" Text="{Binding Reference}" FontWeight="Medium">
                                     <TextBlock.Style>
                                         <Style TargetType="TextBlock">
                                             <Style.Triggers>
@@ -87,11 +97,11 @@
 
 
                                 <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Margin="0,0,6,0" VerticalAlignment="Center" Visibility="{Binding HasTimeToExport, Converter={StaticResource BoolToVis}}">
-                                    <TextBlock FontSize="18" Margin="0,0,5,0" Text="{Binding ExportTime}" Foreground="{DynamicResource AccentColorBrush}" />
-                                    <TextBlock FontSize="18" Text="To Export" />
+                                    <TextBlock FontSize="18" Margin="0,0,5,0" Text="{Binding ExportTime}" Foreground="{DynamicResource AccentColorBrush}" FontWeight="Medium"/>
+                                    <TextBlock FontSize="18" Text="To Export" Foreground="{DynamicResource AccentColorBrush}" FontWeight="Medium" />
                                 </StackPanel>
 
-                                <TextBlock Grid.Row="0" Grid.Column="2" FontSize="26" Margin="3,0,0,0" Text="{Binding CurrentTime}">
+                                <TextBlock Grid.Row="0" Grid.Column="2" FontSize="26" Margin="3,0,0,0" Text="{Binding CurrentTime}" FontWeight="Medium">
                                     <TextBlock.Style>
                                         <Style TargetType="TextBlock">
                                             <Style.Triggers>
@@ -102,15 +112,11 @@
                                         </Style>
                                     </TextBlock.Style>
                                 </TextBlock>
-                                <Grid.ContextMenu>
+                            <!--    <Grid.ContextMenu>
                                     <ContextMenu>
-                                        <MenuItem Header="Copy JIRA Reference" Click="ContextMenu_Copy"/>
-                                        <MenuItem Header="Delete Timer" Click="ContextMenu_Delete"/>
-                                        <MenuItem Header="Edit Timer" Click="ContextMenu_Edit"/>
-                                        <MenuItem Header="Export Timer" Click="ContextMenu_Export"/>
-                                        <MenuItem Header="Start/Stop Timer" Click="ContextMenu_StartStop"/>
+
                                     </ContextMenu>
-                                </Grid.ContextMenu>
+                                </Grid.ContextMenu>-->
                             </Grid>
                         </DataTemplate>
                     </ListView.ItemTemplate>
