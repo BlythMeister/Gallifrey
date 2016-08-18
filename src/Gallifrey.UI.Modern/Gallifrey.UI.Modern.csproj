@@ -269,6 +269,17 @@
   <Choose>
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.6'">
       <ItemGroup>
+        <Reference Include="Exceptionless">
+          <HintPath>..\..\packages\Exceptionless\lib\net45\Exceptionless.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
+  <Choose>
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.6'">
+      <ItemGroup>
         <Reference Include="Exceptionless.Portable">
           <HintPath>..\..\packages\Exceptionless.Portable\lib\net45\Exceptionless.Portable.dll</HintPath>
           <Private>True</Private>
