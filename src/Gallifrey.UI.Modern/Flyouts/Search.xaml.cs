@@ -61,7 +61,19 @@ namespace Gallifrey.UI.Modern.Flyouts
                 DataModel.SetIsSearching();
 
                 Func<IEnumerable<Issue>> searchFunc;
-                if (!string.IsNullOrWhiteSpace(DataModel.SearchTerm))
+
+                if (!string.IsNullOrWhiteSpace(DataModel.SearchTerm) && !string.IsNullOrWhiteSpace(DataModel.SelectedFilter))
+                {
+                    var searchTerm = DataModel.SearchTerm;
+                    var searchFilter = DataModel.SelectedFilter;
+                    searchFunc = () =>
+                    {
+                        var searchTermResults = modelHelpers.Gallifrey.JiraConnection.GetJiraIssuesFromSearchText(searchTerm);
+                        var searchFilterResults = modelHelpers.Gallifrey.JiraConnection.GetJiraIssuesFromFilter(searchFilter);
+                        return searchTermResults.Where(x => searchFilterResults.Any(y => y.key == x.key));
+                    };
+                }
+                else if (!string.IsNullOrWhiteSpace(DataModel.SearchTerm))
                 {
                     var searchTerm = DataModel.SearchTerm;
                     searchFunc = () => modelHelpers.Gallifrey.JiraConnection.GetJiraIssuesFromSearchText(searchTerm);

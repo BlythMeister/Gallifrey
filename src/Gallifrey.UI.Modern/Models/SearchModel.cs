@@ -10,36 +10,10 @@ namespace Gallifrey.UI.Modern.Models
 {
     public class SearchModel : INotifyPropertyChanged
     {
-        private string searchTerm;
-        private string selectedFilter;
-
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public string SearchTerm
-        {
-            get { return searchTerm; }
-            set
-            {
-                searchTerm = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("EnableSearchTerm"));
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("EnableFilter"));
-            }
-        }
-
-        public string SelectedFilter
-        {
-            get { return selectedFilter; }
-            set
-            {
-                selectedFilter = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("EnableSearchTerm"));
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("EnableFilter"));
-            }
-        }
-
-        public bool EnableSearchTerm => string.IsNullOrWhiteSpace(SelectedFilter) && !IsSearching;
-        public bool EnableFilter => string.IsNullOrWhiteSpace(SearchTerm) && !IsSearching;
-        
+        public string SearchTerm { get; set; }
+        public string SelectedFilter { get; set; }
         public bool IsSearching { get; set; }
         public ObservableCollection<string> UserFilters { get; set; }
         public ObservableCollection<JiraIssueDisplayModel> SearchResults { get; set; }

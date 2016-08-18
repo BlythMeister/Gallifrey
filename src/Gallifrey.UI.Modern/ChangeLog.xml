@@ -98,6 +98,7 @@
       <Feature>Ability to add timers for a period as well as single day</Feature>
       <Feature>Clicking on the no timer running notice now creates a timer for that number of minutes</Feature>
       <Feature>Right click context on timer area now has Add timer to fill export target feature</Feature>
+      <Feature>Allow search on term and filter whereby issues need to be in BOTH to show</Feature>
     </Features>
     <Bugs>
       <Bug>Fix issue with GALLIFREY-TEMP showing when converting a temp timer to a normal Jira timer</Bug>
@@ -106,6 +107,7 @@
       <Bug>Update wording in settings for "Idle" becoming "Locked"</Bug>
       <Bug>Activity check now updates every minute rather than every alert time (e.g. 5) minutes</Bug>
       <Bug>Fixing context menu being displayed when right clicking a timer</Bug>
+      <Bug>Fixing search to be more specific on text searches</Bug>
     </Bugs>
     <Others>
       <Other>Temp timers are now "Local" timers in preparation for exporting to a destination other than Jira</Other>
