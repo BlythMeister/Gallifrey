@@ -30,9 +30,9 @@
     <ErrorReportUrl>https://github.com/BlythMeister/Gallifrey</ErrorReportUrl>
     <ProductName>Gallifrey %28Alpha%29</ProductName>
     <PublisherName>Gallifrey</PublisherName>
-    <MinimumRequiredVersion>3.2.1.12</MinimumRequiredVersion>
+    <MinimumRequiredVersion>3.2.1.13</MinimumRequiredVersion>
     <ApplicationRevision>26</ApplicationRevision>
-    <ApplicationVersion>3.2.1.12</ApplicationVersion>
+    <ApplicationVersion>3.2.1.13</ApplicationVersion>
     <UseApplicationTrust>true</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -214,17 +214,6 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.6'">
-      <ItemGroup>
-        <Reference Include="Exceptionless">
-          <HintPath>..\..\packages\Exceptionless\lib\net45\Exceptionless.dll</HintPath>
-          <Private>True</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
   <Choose>
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.6'">
       <ItemGroup>
