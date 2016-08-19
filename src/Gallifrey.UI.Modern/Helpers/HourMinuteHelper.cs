@@ -1,5 +1,3 @@
-using System;
-
 namespace Gallifrey.UI.Modern.Helpers
 {
     public static class HourMinuteHelper

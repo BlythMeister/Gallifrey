@@ -377,5 +377,10 @@ namespace Gallifrey.UI.Modern.MainViews
         {
             Process.Start(new ProcessStartInfo("http://releases.gallifreyapp.co.uk/download/modern/beta/setup.exe"));
         }
+
+        private void MetroWindow_Activated(object sender, EventArgs e)
+        {
+            this.StopFlashingWindow();
+        }
     }
 }

@@ -405,6 +405,8 @@ namespace Gallifrey.JiraTimers
 
         public void RefreshFromJira(Guid uniqueId, Issue jiraIssue, User currentUser)
         {
+            //TODO this function needs to take into account harvest.
+            //Or the callers need to!
             var timer = GetTimer(uniqueId);
             if (timer != null)
             {

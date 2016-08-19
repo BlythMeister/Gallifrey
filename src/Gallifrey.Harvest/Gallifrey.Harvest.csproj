@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{FFCFED07-CD7C-46F9-98E5-B9D9116E40B1}</ProjectGuid>
+    <ProjectGuid>{ED0846C2-11A7-46C3-AE8F-DE9BEA599D1D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Gallifrey.Jira</RootNamespace>
-    <AssemblyName>Gallifrey.Jira</AssemblyName>
+    <RootNamespace>Gallifrey.Harvest</RootNamespace>
+    <AssemblyName>Gallifrey.Harvest</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -37,27 +37,17 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Enum\WorkLogStrategy.cs" />
-    <Compile Include="IJiraClient.cs" />
-    <Compile Include="JiraClientFactory.cs" />
-    <Compile Include="JiraRestClient.cs" />
-    <Compile Include="JiraSoapClient.cs" />
-    <Compile Include="Model\Error.cs" />
-    <Compile Include="Model\Fields.cs" />
-    <Compile Include="Model\Filter.cs" />
-    <Compile Include="Model\Issue.cs" />
+    <Compile Include="IHarvestClient.cs" />
+    <Compile Include="Model\DailyRecord.cs" />
+    <Compile Include="Model\DayEntry.cs" />
+    <Compile Include="HarvestRestClient.cs" />
     <Compile Include="Model\Project.cs" />
-    <Compile Include="Model\TimeTracking.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Model\SearchResult.cs" />
-    <Compile Include="Model\Status.cs" />
-    <Compile Include="Model\Transitions.cs" />
-    <Compile Include="Model\User.cs" />
-    <Compile Include="Model\WorkLog.cs" />
-    <Compile Include="Model\WorkLogs.cs" />
+    <Compile Include="Model\Task.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="paket.references" />
@@ -76,23 +66,11 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  <Import Project="..\..\.paket\paket.targets" />
   <Choose>
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.6'">
       <ItemGroup>
-        <Reference Include="Atlassian.Jira">
-          <HintPath>..\..\packages\Atlassian.SDK\lib\Atlassian.Jira.dll</HintPath>
-          <Private>True</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
-  <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.6'">
-      <ItemGroup>
-        <Reference Include="Newtonsoft.Json">
-          <HintPath>..\..\packages\Newtonsoft.Json\lib\net45\Newtonsoft.Json.dll</HintPath>
+        <Reference Include="RestSharp">
+          <HintPath>..\..\packages\RestSharp\lib\net46\RestSharp.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
