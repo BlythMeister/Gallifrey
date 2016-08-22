@@ -68,6 +68,7 @@
     <Compile Include="InactiveMonitor\ActivityChecker.cs" />
     <Compile Include="Exceptions\MultipleGallifreyRunningException.cs" />
     <Compile Include="Settings\ConfigKeys.cs" />
+    <Compile Include="Settings\HarvestConnectionSettings.cs" />
     <Compile Include="Versions\PremiumChecker.cs" />
     <Compile Include="Serialization\ItemSerializer.cs" />
     <Compile Include="Versions\InstanceType.cs" />
@@ -99,6 +100,10 @@
     <Compile Include="Versions\VersionControl.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Gallifrey.Harvest\Gallifrey.Harvest.csproj">
+      <Project>{ED0846C2-11A7-46C3-AE8F-DE9BEA599D1D}</Project>
+      <Name>Gallifrey.Harvest</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Gallifrey.Jira\Gallifrey.Jira.csproj">
       <Project>{ffcfed07-cd7c-46f9-98e5-b9d9116e40b1}</Project>
       <Name>Gallifrey.Jira</Name>

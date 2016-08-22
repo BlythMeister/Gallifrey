@@ -41,18 +41,6 @@ namespace Gallifrey.JiraIntegration
             DateSeen = dateSeen;
         }
 
-        public override string ToString()
-        {
-            if (string.IsNullOrWhiteSpace(JiraParentReference))
-            {
-                return $"{JiraReference} ({JiraName})";    
-            }
-            else
-            {
-                return $"{JiraReference} ({JiraName}) - Parent [ {JiraParentReference} - {JiraParentName} ]";
-            }
-        }
-
         public override bool Equals(object obj)
         {
             // Try to cast the object to compare to to be a Person

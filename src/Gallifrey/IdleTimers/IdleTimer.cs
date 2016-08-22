@@ -53,12 +53,5 @@ namespace Gallifrey.IdleTimers
 
             IdleTimeValue = new TimeSpan(IdleTimeValue.Hours, IdleTimeValue.Minutes, 0);
         }
-
-        public override string ToString()
-        {
-            return DateFinished.HasValue ?
-                $"Date - {DateStarted.ToString("ddd, dd MMM")} - From [ {DateStarted.ToString("HH:mm:ss")} ] To [ {DateFinished.Value.ToString("HH:mm:ss")} ] - Time [ {IdleTimeValue.FormatAsString(false)} ]" :
-                $"Date - {DateStarted.ToString("ddd, dd MMM")} - From [ {DateStarted.ToString("HH:mm:ss")} ] To [ IN PROGRESS ]";
-        }
     }
 }

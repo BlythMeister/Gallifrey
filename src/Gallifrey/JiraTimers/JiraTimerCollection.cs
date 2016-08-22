@@ -4,6 +4,7 @@ using System.Linq;
 using Gallifrey.AppTracking;
 using Gallifrey.Comparers;
 using Gallifrey.Exceptions.JiraTimers;
+using Gallifrey.Harvest.Model;
 using Gallifrey.IdleTimers;
 using Gallifrey.Jira.Model;
 using Gallifrey.JiraIntegration;
@@ -16,7 +17,6 @@ namespace Gallifrey.JiraTimers
     {
         IEnumerable<DateTime> GetValidTimerDates();
         IEnumerable<JiraTimer> GetTimersForADate(DateTime timerDate);
-        IEnumerable<JiraTimer> GetUnexportedTimers(DateTime timerDate);
         IEnumerable<JiraTimer> GetStoppedUnexportedTimers();
         IEnumerable<JiraTimer> GetAllUnexportedTimers();
         IEnumerable<JiraTimer> GetAllLocalTimers();
@@ -40,9 +40,10 @@ namespace Gallifrey.JiraTimers
         TimeSpan GetTotalTimeForDate(DateTime timerDate);
         TimeSpan GetTotalTimeForDateNoSeconds(DateTime timerDate);
         bool AdjustTime(Guid uniqueId, int hours, int minutes, bool addTime);
-        void AddJiraExportedTime(Guid uniqueId, int hours, int minutes);
+        void AddExportedTime(Guid uniqueId, int hours, int minutes);
         void AddIdleTimer(Guid uniqueId, List<IdleTimer> idleTimer);
         void RefreshFromJira(Guid uniqueId, Issue jiraIssue, User currentUser);
+        void RefreshFromHarvest(Guid uniqueId, List<DayEntry> dayEntries);
         event EventHandler GeneralTimerModification;
     }
 
@@ -80,11 +81,6 @@ namespace Gallifrey.JiraTimers
         public IEnumerable<JiraTimer> GetTimersForADate(DateTime timerDate)
         {
             return timerList.Where(timer => timer.DateStarted.Date == timerDate.Date).OrderBy(timer => timer.JiraReference, new JiraReferenceComparer());
-        }
-
-        public IEnumerable<JiraTimer> GetUnexportedTimers(DateTime timerDate)
-        {
-            return timerList.Where(timer => timer.DateStarted.Date == timerDate.Date && !timer.FullyExported).OrderBy(timer => timer.JiraReference, new JiraReferenceComparer());
         }
 
         public IEnumerable<JiraTimer> GetStoppedUnexportedTimers()
@@ -379,13 +375,13 @@ namespace Gallifrey.JiraTimers
             return true;
         }
 
-        public void AddJiraExportedTime(Guid uniqueId, int hours, int minutes)
+        public void AddExportedTime(Guid uniqueId, int hours, int minutes)
         {
             var timer = GetTimer(uniqueId);
-            timer.AddJiraExportedTime(new TimeSpan(hours, minutes, 0));
+            timer.AddExportedTime(new TimeSpan(hours, minutes, 0));
             SaveTimers();
         }
-
+        
         public void AddIdleTimer(Guid uniqueId, List<IdleTimer> idleTimers)
         {
             trackUsage.TrackAppUsage(TrackingType.LockedTimerAdd);
@@ -405,13 +401,27 @@ namespace Gallifrey.JiraTimers
 
         public void RefreshFromJira(Guid uniqueId, Issue jiraIssue, User currentUser)
         {
-            //TODO this function needs to take into account harvest.
-            //Or the callers need to!
             var timer = GetTimer(uniqueId);
             if (timer != null)
             {
                 timer.RefreshFromJira(jiraIssue);
-                timer.UpdateExportTimeFromJira(jiraIssue, currentUser);
+                if (!exportSettings.ExportToHarvest)
+                {
+                    timer.UpdateExportTimeFromJira(jiraIssue, currentUser);
+                }
+                SaveTimers();
+            }
+        }
+
+        public void RefreshFromHarvest(Guid uniqueId, List<DayEntry> dayEntries)
+        {
+            var timer = GetTimer(uniqueId);
+            if (timer != null)
+            {
+                if (!exportSettings.ExportToHarvest)
+                {
+                    timer.UpdateExportTimeFromHarvest(dayEntries);
+                }
                 SaveTimers();
             }
         }

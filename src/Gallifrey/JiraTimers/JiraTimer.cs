@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Timers;
 using Gallifrey.Exceptions.JiraTimers;
 using Gallifrey.ExtensionMethods;
+using Gallifrey.Harvest.Model;
 using Gallifrey.IdleTimers;
 using Gallifrey.Jira.Model;
 using Newtonsoft.Json;
@@ -60,7 +63,7 @@ namespace Gallifrey.JiraTimers
         public JiraTimer(Issue jiraIssue, DateTime dateStarted, TimeSpan currentTime) :
             this(jiraIssue.key, jiraIssue.fields.project.key, jiraIssue.fields.summary, dateStarted, currentTime, new TimeSpan(), Guid.NewGuid(), jiraIssue.fields.parent == null ? string.Empty : jiraIssue.fields.parent.key, jiraIssue.fields.parent == null ? string.Empty : jiraIssue.fields.parent.fields.summary, null, false)
         {
-            
+
         }
 
         public JiraTimer(JiraTimer previousTimer, DateTime dateStarted, bool resetTimes) :
@@ -132,36 +135,6 @@ namespace Gallifrey.JiraTimers
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ExactCurrentTime"));
         }
 
-        public override string ToString()
-        {
-            string description;
-
-            if (TimeToExport.TotalMinutes >= 1)
-            {
-                if (HasParent)
-                {
-                    description = string.Format("{0} - [ {1} ] - Export [ {2} ] - [ {4} {5} / {0} {3} ]", JiraReference, ExactCurrentTime.FormatAsString(), TimeToExport.FormatAsString(), JiraName, JiraParentReference, JiraParentName);
-                }
-                else
-                {
-                    description = string.Format("{0} - [ {1} ] - Export [ {2} ] - [ {0} - {3} ]", JiraReference, ExactCurrentTime.FormatAsString(), TimeToExport.FormatAsString(), JiraName);
-                }
-            }
-            else
-            {
-                if (HasParent)
-                {
-                    description = string.Format("{0} - [ {1} ] - [ {3} {4} / {0} {2} ]", JiraReference, ExactCurrentTime.FormatAsString(), JiraName, JiraParentReference, JiraParentName);
-                }
-                else
-                {
-                    description = string.Format("{0} - [ {1} ] - [ {0} {2} ]", JiraReference, ExactCurrentTime.FormatAsString(), JiraName);
-                }
-            }
-
-            return description;
-        }
-
         public bool HasExportedTime()
         {
             return ExportedTime.TotalSeconds > 0;
@@ -194,19 +167,7 @@ namespace Gallifrey.JiraTimers
             return returnValue;
         }
 
-        public void SetJiraExportedTime(TimeSpan loggedTime)
-        {
-            ExportedTime = loggedTime;
-            var exportedvsActual = ExportedTime.Subtract(ExactCurrentTime);
-            if (exportedvsActual.TotalMinutes >= 1)
-            {
-                ManualAdjustment(exportedvsActual, true);
-            }
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ExactCurrentTime"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TimeToExport"));
-        }
-
-        public void AddJiraExportedTime(TimeSpan loggedTime)
+        public void AddExportedTime(TimeSpan loggedTime)
         {
             ExportedTime = ExportedTime.Add(loggedTime);
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ExactCurrentTime"));
@@ -234,7 +195,7 @@ namespace Gallifrey.JiraTimers
             }
 
             LastJiraTimeCheck = DateTime.UtcNow;
-            
+
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("JiraReference"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("JiraProjectName"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("JiraName"));
@@ -244,27 +205,42 @@ namespace Gallifrey.JiraTimers
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LastJiraTimeCheck"));
         }
 
+        public void UpdateLocalTimerDescription(string localTimerDescription)
+        {
+            if (!LocalTimer) return;
+            JiraName = localTimerDescription;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("JiraName"));
+        }
+
         public void UpdateExportTimeFromJira(Issue jiraIssue, User currentUser)
         {
             if (jiraIssue == null) return;
 
-            LocalTimer = false;
+            UpdateExportedTime(jiraIssue.GetCurrentLoggedTimeForDate(DateStarted, currentUser));
+        }
+        
+        public void UpdateExportTimeFromHarvest(List<DayEntry> dayEntries)
+        {
+            var exportedTime = new TimeSpan();
+            dayEntries.ForEach(x => exportedTime = exportedTime.Add(TimeSpan.FromHours(x.hours)));
+            UpdateExportedTime(exportedTime);
+        }
 
-            SetJiraExportedTime(jiraIssue.GetCurrentLoggedTimeForDate(DateStarted, currentUser));
+        private void UpdateExportedTime(TimeSpan newExportedTime)
+        {
+            ExportedTime = newExportedTime;
+            LocalTimer = false;
+            var exportedvsActual = ExportedTime.Subtract(ExactCurrentTime);
+            if (exportedvsActual.TotalMinutes >= 1)
+            {
+                ManualAdjustment(exportedvsActual, true);
+            }
 
             LastJiraTimeCheck = DateTime.UtcNow;
 
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ExactCurrentTime"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TimeToExport"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LastJiraTimeCheck"));
-        }
-
-
-        public void UpdateLocalTimerDescription(string localTimerDescription)
-        {
-            if (!LocalTimer) return;
-            JiraName = localTimerDescription;
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("JiraName"));
         }
     }
 }
