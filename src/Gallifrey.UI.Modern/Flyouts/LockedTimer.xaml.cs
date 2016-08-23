@@ -331,5 +331,10 @@ namespace Gallifrey.UI.Modern.Flyouts
 
             await DialogCoordinator.Instance.HideMetroDialogAsync(modelHelpers.DialogContext, dialog);
         }
+
+        private void LockedTimer_OpenChange(object sender, RoutedEventArgs e)
+        {
+            DataModel.RefreshLockedTimers(modelHelpers.Gallifrey.IdleTimerCollection.GetUnusedLockTimers());
+        }
     }
 }
