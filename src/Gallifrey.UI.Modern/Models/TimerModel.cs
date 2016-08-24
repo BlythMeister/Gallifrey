@@ -9,16 +9,8 @@ namespace Gallifrey.UI.Modern.Models
         public event PropertyChangedEventHandler PropertyChanged;
 
         public JiraTimer JiraTimer { get; set; }
-        private bool timerIsSelected;
 
-        public bool TimerIsSelected
-        {
-            get { return timerIsSelected; }
-            set
-            {
-                timerIsSelected = value;
-            }
-        }
+        public bool TimerIsSelected { get; set; }
 
         public string ExportTime => JiraTimer.TimeToExport.FormatAsString(false);
         public string CurrentTime => JiraTimer.ExactCurrentTime.FormatAsString();

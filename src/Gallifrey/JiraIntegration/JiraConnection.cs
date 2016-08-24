@@ -359,15 +359,40 @@ namespace Gallifrey.JiraIntegration
                 //ignored
             }
 
-            var jql = $"Summary ~ \"{nonProjectText}\" OR Description ~ \"{nonProjectText}\"";
+            var jql = string.Empty;
+            if (!string.IsNullOrWhiteSpace(nonProjectText))
+            {
+                if (string.IsNullOrWhiteSpace(jql))
+                {
+                    jql = $"(Summary ~ \"{nonProjectText}\" OR Description ~ \"{nonProjectText}\")";
+                }
+                else
+                {
+                    jql = $"({jql}) AND (Summary ~ \"{nonProjectText}\" OR Description ~ \"{nonProjectText}\")";
+                }
+            }
             if (!string.IsNullOrWhiteSpace(projectQuery))
             {
-                jql = $"({jql}) AND ({projectQuery})";
+                if (string.IsNullOrWhiteSpace(jql))
+                {
+                    jql = $"({projectQuery})";
+                }
+                else
+                {
+                    jql = $"({jql}) AND ({projectQuery})";
+                }
             }
 
             if (!string.IsNullOrWhiteSpace(keyQuery))
             {
-                jql = $"({jql}) OR ({keyQuery})";
+                if (string.IsNullOrWhiteSpace(jql))
+                {
+                    jql = $"({keyQuery})";
+                }
+                else
+                {
+                    jql = $"({jql}) OR ({keyQuery})";
+                }
             }
 
             return jql;
