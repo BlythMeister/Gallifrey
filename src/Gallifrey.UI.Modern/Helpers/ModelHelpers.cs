@@ -153,6 +153,11 @@ namespace Gallifrey.UI.Modern.Helpers
 
         public void TriggerRemoteButtonPress(RemoteButtonTrigger buttonTrigger)
         {
+            if (buttonTrigger == Models.RemoteButtonTrigger.Export && Gallifrey.Settings.ExportSettings.TrackingOnly)
+            {
+                return;
+            }
+
             RemoteButtonTrigger?.Invoke(null, buttonTrigger);
         }
 

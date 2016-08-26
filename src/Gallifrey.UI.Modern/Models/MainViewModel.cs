@@ -58,6 +58,7 @@ namespace Gallifrey.UI.Modern.Models
         public bool HaveLocalTime => !string.IsNullOrWhiteSpace(LocalTimeMessage);
         public bool IsPremium => ModelHelpers.Gallifrey.Settings.InternalSettings.IsPremium;
         public bool IsStable => ModelHelpers.Gallifrey.VersionControl.InstanceType == InstanceType.Stable;
+        public bool TrackingOnly => ModelHelpers.Gallifrey.Settings.ExportSettings.TrackingOnly;
 
         public string AppTitle
         {
@@ -73,6 +74,11 @@ namespace Gallifrey.UI.Modern.Models
         {
             get
             {
+                if (TrackingOnly)
+                {
+                    return string.Empty;
+                }
+
                 var unexportedTime = ModelHelpers.Gallifrey.JiraTimerCollection.GetTotalExportableTime();
                 var unexportedTimers = ModelHelpers.Gallifrey.JiraTimerCollection.GetStoppedUnexportedTimers();
                 var unexportedCount = unexportedTimers.Count(x => !x.LocalTimer);
@@ -96,6 +102,11 @@ namespace Gallifrey.UI.Modern.Models
         {
             get
             {
+                if (TrackingOnly)
+                {
+                    return string.Empty;
+                }
+
                 var localTime = ModelHelpers.Gallifrey.JiraTimerCollection.GetTotalLocalTime();
                 var unexportedTimers = ModelHelpers.Gallifrey.JiraTimerCollection.GetStoppedUnexportedTimers();
                 var unexportedCount = unexportedTimers.Count(x => x.LocalTimer);
@@ -248,8 +259,9 @@ namespace Gallifrey.UI.Modern.Models
                     }
                 }
             }
-
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TimerDates"));
+
+            SetTrackingOnlyInModel();
         }
 
         private void SetSelectedTimer(Guid value)
@@ -295,6 +307,20 @@ namespace Gallifrey.UI.Modern.Models
                     }
                 }
             }
+        }
+
+        private void SetTrackingOnlyInModel()
+        {
+            foreach (var timerDateModel in TimerDates)
+            {
+                timerDateModel.SetTrackingOnly(TrackingOnly);
+
+                foreach (var timerModel in timerDateModel.Timers)
+                {
+                    timerModel.SetTrackingOnly(TrackingOnly);
+                }
+            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TimerDates"));
         }
 
         #endregion
@@ -343,6 +369,13 @@ namespace Gallifrey.UI.Modern.Models
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ExportTarget"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ExportedTargetTotalMinutes"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TrackingOnly"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HaveTimeToExport"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TimeToExportMessage"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HaveLocalTime"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TimeToExportMessage"));
+
+            SetTrackingOnlyInModel();
         }
 
         private void TimerChanged()

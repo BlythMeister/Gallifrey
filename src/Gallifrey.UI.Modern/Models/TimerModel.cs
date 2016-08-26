@@ -11,6 +11,7 @@ namespace Gallifrey.UI.Modern.Models
         public JiraTimer JiraTimer { get; set; }
 
         public bool TimerIsSelected { get; set; }
+        public bool TrackingOnly { get; private set; }
 
         public string ExportTime => JiraTimer.TimeToExport.FormatAsString(false);
         public string CurrentTime => JiraTimer.ExactCurrentTime.FormatAsString();
@@ -19,10 +20,10 @@ namespace Gallifrey.UI.Modern.Models
         public string Reference => JiraTimer.JiraReference;
         public string ParentReference => JiraTimer.JiraParentReference;
         public bool HasParent => JiraTimer.HasParent;
-        public bool HasTimeToExport => !JiraTimer.FullyExported;
+        public bool HasTimeToExport => !JiraTimer.FullyExported && !TrackingOnly;
         public bool HasTimeToExportAndNotRunning => !JiraTimer.FullyExported && !JiraTimer.IsRunning;
         public bool IsRunning => JiraTimer.IsRunning;
-        public bool IsLocalTimer => JiraTimer.LocalTimer;
+        public bool HighlightTitle => JiraTimer.LocalTimer && !TrackingOnly;
 
         public TimerModel(JiraTimer timer)
         {
@@ -68,6 +69,17 @@ namespace Gallifrey.UI.Modern.Models
             {
                 TimerIsSelected = isSelected;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TimerIsSelected"));
+            }
+        }
+
+        public void SetTrackingOnly(bool trackingOnly)
+        {
+            if (TrackingOnly != trackingOnly)
+            {
+                TrackingOnly = trackingOnly;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TrackingOnly"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasTimeToExport"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HighlightTitle"));
             }
         }
     }

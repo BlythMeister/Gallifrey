@@ -17,6 +17,11 @@
         <TabControl.ContentTemplate>
             <DataTemplate>
                 <ListView ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemsSource="{Binding Timers}" MouseDoubleClick="TimerList_MouseDoubleClick" BorderThickness="0" SelectionMode="Extended">
+                    <ListView.Resources>
+                        <helpers:BooleanVisibilityConverter x:Key="BoolToVis" Collapse="True" Invert="False"/>
+                        <helpers:BooleanVisibilityConverter x:Key="BoolToVisInvert" Collapse="True" Invert="True"/>
+                    </ListView.Resources>
+                    
                     <ListView.ItemContainerStyle>
                         <Style TargetType="{x:Type ListViewItem}">
                             <Setter Property="Margin" Value="3" />
@@ -61,15 +66,11 @@
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
 
-                                <Grid.Resources>
-                                    <helpers:BooleanVisibilityConverter x:Key="BoolToVis" Collapse="True" Invert="False"/>
-                                </Grid.Resources>
-
                                 <TextBlock Grid.Row="0" Grid.Column="0" FontSize="25" Margin="3,0,0,0" Text="{Binding Reference}" FontWeight="Medium">
                                     <TextBlock.Style>
                                         <Style TargetType="TextBlock">
                                             <Style.Triggers>
-                                                <DataTrigger Binding="{Binding IsLocalTimer}" Value="True" >
+                                                <DataTrigger Binding="{Binding HighlightTitle}" Value="True" >
                                                     <Setter Property="Foreground" Value="{DynamicResource AccentColorBrush}"/>
                                                 </DataTrigger>
                                             </Style.Triggers>
@@ -101,11 +102,6 @@
                                         </Style>
                                     </TextBlock.Style>
                                 </TextBlock>
-                                <!--    <Grid.ContextMenu>
-                                    <ContextMenu>
-
-                                    </ContextMenu>
-                                </Grid.ContextMenu>-->
                             </Grid>
                         </DataTemplate>
                     </ListView.ItemTemplate>
@@ -114,7 +110,7 @@
                             <MenuItem Header="Copy JIRA Reference" Click="ContextMenu_Copy"/>
                             <MenuItem Header="Delete Timer" Click="ContextMenu_Delete"/>
                             <MenuItem Header="Edit Timer" Click="ContextMenu_Edit"/>
-                            <MenuItem Header="Export Timer" Click="ContextMenu_Export"/>
+                            <MenuItem Header="Export Timer" Click="ContextMenu_Export" Visibility="{Binding TrackingOnly, Converter={StaticResource BoolToVisInvert}}"/>
                             <MenuItem Header="Start/Stop Timer" Click="ContextMenu_StartStop"/>
                         </ContextMenu>
                     </ListView.ContextMenu>

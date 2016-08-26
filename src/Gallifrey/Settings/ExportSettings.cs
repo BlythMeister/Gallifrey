@@ -7,6 +7,7 @@
         string EmptyExportComment { get; set; }
         ExportPrompt ExportPrompt { get; set; }
         bool ExportPromptAll { get; set; }
+        bool TrackingOnly { get; set; }
     }
 
     public class ExportSettings : IExportSettings
@@ -16,6 +17,7 @@
         public string EmptyExportComment { get; set; }
         public ExportPrompt ExportPrompt { get; set; }
         public bool ExportPromptAll { get; set; }
+        public bool TrackingOnly { get; set; }
 
         public ExportSettings()
         {
@@ -23,6 +25,7 @@
             ExportCommentPrefix = "Gallifrey";
             EmptyExportComment = "No Comment Entered";
             ExportPrompt = new ExportPrompt();
+            TrackingOnly = false;
         }
     }
 }

@@ -89,7 +89,7 @@
     </Bugs>
     <Others/>
   </Version>
-  <Version Number="3.2.1.16" Name="Pre-Release">
+  <Version Number="3.2.1.17" Name="Pre-Release">
     <Features>
       <Feature>Added ability to cancel issue search when adding timer</Feature>
       <Feature>Added a timeout on all non-cancellable progress dialogs</Feature>
@@ -99,6 +99,7 @@
       <Feature>Clicking on the no timer running notice now creates a timer for that number of minutes</Feature>
       <Feature>Right click context on timer area now has Add timer to fill export target feature</Feature>
       <Feature>Allow search on term and filter whereby issues need to be in BOTH to show</Feature>
+      <Feature>Added "Tracking Only" mode to hide all export functionality - Use if you need to manually export to another timesheet tool</Feature>
     </Features>
     <Bugs>
       <Bug>Fix issue with GALLIFREY-TEMP showing when converting a temp timer to a normal Jira timer</Bug>

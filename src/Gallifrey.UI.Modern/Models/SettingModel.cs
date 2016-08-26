@@ -19,6 +19,7 @@ namespace Gallifrey.UI.Modern.Models
         readonly RegistryKey registryKey = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
         private int targetHoursPerDay;
         private int targetMinutesPerDay;
+        private bool trackingOnly;
 
         //AppSettings
         public bool AlertWhenIdle { get; set; }
@@ -46,6 +47,15 @@ namespace Gallifrey.UI.Modern.Models
         public RemainingAdjustmentValue SelectedRemainingAdjustmentValue { get; set; }
         public string CommentPrefix { get; set; }
         public string DefaultComment { get; set; }
+        public bool TrackingOnly
+        {
+            get { return trackingOnly; }
+            set
+            {
+                trackingOnly = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TrackingOnly"));
+            }
+        }
 
         //Static Data
         public List<AccentThemeModel> AvaliableThemes { get; set; }
@@ -115,6 +125,7 @@ namespace Gallifrey.UI.Modern.Models
             JiraPassword = settings.JiraConnectionSettings.JiraPassword;
 
             //Export Settings
+            TrackingOnly = settings.ExportSettings.TrackingOnly;
             ExportAll = settings.ExportSettings.ExportPromptAll;
             ExportPrompts = new List<ExportPrompt>
             {
@@ -188,6 +199,7 @@ namespace Gallifrey.UI.Modern.Models
             settings.ExportSettings.DefaultRemainingValue = SelectedRemainingAdjustmentValue.Remaining;
             settings.ExportSettings.ExportCommentPrefix = CommentPrefix;
             settings.ExportSettings.EmptyExportComment = DefaultComment;
+            settings.ExportSettings.TrackingOnly = TrackingOnly;
         }
 
         public class WorkingDay

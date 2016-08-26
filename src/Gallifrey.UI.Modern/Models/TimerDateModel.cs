@@ -17,6 +17,7 @@ namespace Gallifrey.UI.Modern.Models
 
         public string Header => $"{TimerDate.ToString("ddd, dd MMM")} [{jiraTimerCollection.GetTotalTimeForDate(TimerDate)}]";
         public bool DateIsSelected { get; set; }
+        public bool TrackingOnly { get; private set; }
 
         public TimerDateModel(DateTime timerDate, IJiraTimerCollection jiraTimerCollection)
         {
@@ -57,6 +58,15 @@ namespace Gallifrey.UI.Modern.Models
             {
                 DateIsSelected = isSelected;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("DateIsSelected"));
+            }
+        }
+
+        public void SetTrackingOnly(bool trackingOnly)
+        {
+            if (TrackingOnly != trackingOnly)
+            {
+                TrackingOnly = trackingOnly;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TrackingOnly"));
             }
         }
     }

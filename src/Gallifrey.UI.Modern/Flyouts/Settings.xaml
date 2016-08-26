@@ -32,7 +32,7 @@
 
                     <TextBlock Grid.Row="1" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="How Frequently Alerts Should Be Shown">Idle Time Alert (Minutes)</TextBlock>
                     <controls:NumericUpDown Grid.Row="1" Grid.Column="1" Margin="5" VerticalAlignment="Center" Minimum="0" Maximum="120" Value="{Binding AlertMinutes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding AlertWhenIdle}" controls:TextBoxHelper.SelectAllOnFocus="True" />
-                       
+
                     <TextBlock Grid.Row="2" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="Number Of Days To Keep Timers For In The UI">Keep Timers For (Days)</TextBlock>
                     <controls:NumericUpDown Grid.Row="2" Grid.Column="1" Margin="5" VerticalAlignment="Center" Minimum="2" Maximum="150" Value="{Binding KeepTimersForDays, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" controls:TextBoxHelper.SelectAllOnFocus="True"/>
 
@@ -145,10 +145,18 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
-                    <TextBlock Grid.Row="0" Grid.Column="0" Margin="5" HorizontalAlignment="Right" ToolTip="Events Which You Want To Have An Export Prompt For">Events</TextBlock>
-                    <ListBox Grid.Row="0" Grid.Column="1" Margin="5" ItemsSource="{Binding ExportPrompts, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                    <Grid.Resources>
+                        <helpers:BooleanVisibilityConverter x:Key="BoolToVisInvert" Collapse="False" Invert="True"/>
+                    </Grid.Resources>
+
+                    <TextBlock Grid.Row="0" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="Tracking Only, Check To Disable Export Functionality">Tracking Only</TextBlock>
+                    <CheckBox Grid.Row="0" Grid.Column="1" Margin="5" VerticalAlignment="Center" IsChecked="{Binding TrackingOnly, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+                    <TextBlock Grid.Row="1" Grid.Column="0" Margin="5" HorizontalAlignment="Right" ToolTip="Events Which You Want To Have An Export Prompt For" Visibility="{Binding TrackingOnly, Converter={StaticResource BoolToVisInvert}}">Events</TextBlock>
+                    <ListBox Grid.Row="1" Grid.Column="1" Margin="5" ItemsSource="{Binding ExportPrompts, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding TrackingOnly, Converter={StaticResource BoolToVisInvert}}">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <CheckBox IsChecked="{Binding IsChecked}" Content="{Binding DisplayName}" />
@@ -156,17 +164,17 @@
                         </ListBox.ItemTemplate>
                     </ListBox>
 
-                    <TextBlock Grid.Row="1" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="Should Export Prompt Offer You ALL Time To Export, Or Just Changed">Export All</TextBlock>
-                    <CheckBox Grid.Row="1" Grid.Column="1" Margin="5" VerticalAlignment="Center" IsChecked="{Binding ExportAll, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBlock Grid.Row="2" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="Should Export Prompt Offer You ALL Time To Export, Or Just Changed" Visibility="{Binding TrackingOnly, Converter={StaticResource BoolToVisInvert}}">Export All</TextBlock>
+                    <CheckBox Grid.Row="2" Grid.Column="1" Margin="5" VerticalAlignment="Center" IsChecked="{Binding ExportAll, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding TrackingOnly, Converter={StaticResource BoolToVisInvert}}"/>
 
-                    <TextBlock Grid.Row="2" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="The Default Option On The Export Window For Remaining Time">Default Remaining Action</TextBlock>
-                    <ComboBox Grid.Row="2" Grid.Column="1" Margin="5" ItemsSource="{Binding RemainingAdjustmentValues}" SelectedItem="{Binding SelectedRemainingAdjustmentValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    <TextBlock Grid.Row="3" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="The Default Option On The Export Window For Remaining Time" Visibility="{Binding TrackingOnly, Converter={StaticResource BoolToVisInvert}}">Default Remaining Action</TextBlock>
+                    <ComboBox Grid.Row="3" Grid.Column="1" Margin="5" ItemsSource="{Binding RemainingAdjustmentValues}" SelectedItem="{Binding SelectedRemainingAdjustmentValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding TrackingOnly, Converter={StaticResource BoolToVisInvert}}"/>
 
-                    <TextBlock Grid.Row="3" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="A Custom Prefix For All Jira Exports">Comment Prefix</TextBlock>
-                    <TextBox Grid.Row="3" Grid.Column="1" Margin="5" VerticalAlignment="Center" Text="{Binding CommentPrefix, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBlock Grid.Row="4" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="A Custom Prefix For All Jira Exports" Visibility="{Binding TrackingOnly, Converter={StaticResource BoolToVisInvert}}">Comment Prefix</TextBlock>
+                    <TextBox Grid.Row="4" Grid.Column="1" Margin="5" VerticalAlignment="Center" Text="{Binding CommentPrefix, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding TrackingOnly, Converter={StaticResource BoolToVisInvert}}"/>
 
-                    <TextBlock Grid.Row="4" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="The Default Comment If You Do Not Enter A Comment">Default Comment</TextBlock>
-                    <TextBox Grid.Row="4" Grid.Column="1" Margin="5" VerticalAlignment="Center" Text="{Binding DefaultComment, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBlock Grid.Row="5" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="The Default Comment If You Do Not Enter A Comment" Visibility="{Binding TrackingOnly, Converter={StaticResource BoolToVisInvert}}">Default Comment</TextBlock>
+                    <TextBox Grid.Row="5" Grid.Column="1" Margin="5" VerticalAlignment="Center" Text="{Binding DefaultComment, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding TrackingOnly, Converter={StaticResource BoolToVisInvert}}"/>
                 </Grid>
             </TabItem>
         </controls:MetroAnimatedSingleRowTabControl>
