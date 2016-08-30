@@ -28,7 +28,7 @@ Donate
 
 Please help us keep this project up and running by donating.
 We hope to get a domain up and running with a nice GitHub Pages website, but this all costs money.
-[Click Here to donate](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=G3MWL8E6UG4RS)
+[Click Here to donate](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=R4877TJL3D6BQ)
 
 Support
 =========

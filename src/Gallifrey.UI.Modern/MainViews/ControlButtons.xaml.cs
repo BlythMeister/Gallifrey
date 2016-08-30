@@ -203,7 +203,7 @@ namespace Gallifrey.UI.Modern.MainViews
         private void PayPalButton(object sender, RoutedEventArgs e)
         {
             ModelHelpers.Gallifrey.TrackEvent(TrackingType.PayPalClick);
-            Process.Start(new ProcessStartInfo("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=G3MWL8E6UG4RS"));
+            Process.Start(new ProcessStartInfo("http://www.gallifreyapp.co.uk/donations.html"));
         }
 
         private void GitterButton(object sender, RoutedEventArgs e)
