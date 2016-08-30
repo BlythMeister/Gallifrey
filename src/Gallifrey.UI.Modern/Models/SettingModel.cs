@@ -191,10 +191,10 @@ namespace Gallifrey.UI.Modern.Models
             settings.JiraConnectionSettings.JiraPassword = JiraPassword;
 
             //Export Settings
-            settings.ExportSettings.ExportPrompt.OnAddIdle = ExportPrompts.First(x => x.Key == "Locked").IsChecked;
-            settings.ExportSettings.ExportPrompt.OnManualAdjust = ExportPrompts.First(x => x.Key == "Manual").IsChecked;
-            settings.ExportSettings.ExportPrompt.OnStop = ExportPrompts.First(x => x.Key == "Stop").IsChecked;
-            settings.ExportSettings.ExportPrompt.OnCreatePreloaded = ExportPrompts.First(x => x.Key == "Pre").IsChecked;
+            settings.ExportSettings.ExportPrompt.OnAddIdle = ExportPrompts.First(x => x.Key == "Locked").IsChecked && !TrackingOnly;
+            settings.ExportSettings.ExportPrompt.OnManualAdjust = ExportPrompts.First(x => x.Key == "Manual").IsChecked && !TrackingOnly;
+            settings.ExportSettings.ExportPrompt.OnStop = ExportPrompts.First(x => x.Key == "Stop").IsChecked && !TrackingOnly;
+            settings.ExportSettings.ExportPrompt.OnCreatePreloaded = ExportPrompts.First(x => x.Key == "Pre").IsChecked && !TrackingOnly;
             settings.ExportSettings.ExportPromptAll = ExportAll;
             settings.ExportSettings.DefaultRemainingValue = SelectedRemainingAdjustmentValue.Remaining;
             settings.ExportSettings.ExportCommentPrefix = CommentPrefix;
