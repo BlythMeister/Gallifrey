@@ -60,6 +60,7 @@ namespace Gallifrey.JiraIntegration
         {
             exportSettings = newExportSettings;
             jiraConnectionSettings = newJiraConnectionSettings;
+            jira = null;
             CheckAndConnectJira();
             UpdateJiraProjectCache();
         }
