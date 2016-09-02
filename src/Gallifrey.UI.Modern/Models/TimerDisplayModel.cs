@@ -31,5 +31,10 @@ namespace Gallifrey.UI.Modern.Models
             ParentDescription = recentJira.JiraParentName;
             HasParent = !string.IsNullOrWhiteSpace(recentJira.JiraParentReference);
         }
+
+        public override string ToString()
+        {
+            return $"{Reference} - {Description}";
+        }
     }
 }
