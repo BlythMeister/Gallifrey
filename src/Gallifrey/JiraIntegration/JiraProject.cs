@@ -10,10 +10,5 @@
             JiraProjectCode = jiraProjectCode;
             JiraProjectName = jiraProjectName;
         }
-
-        public override string ToString()
-        {
-            return $"{JiraProjectCode} ({JiraProjectName})";
-        }
     }
 }

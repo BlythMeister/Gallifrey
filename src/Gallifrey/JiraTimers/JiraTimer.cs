@@ -60,7 +60,7 @@ namespace Gallifrey.JiraTimers
         public JiraTimer(Issue jiraIssue, DateTime dateStarted, TimeSpan currentTime) :
             this(jiraIssue.key, jiraIssue.fields.project.key, jiraIssue.fields.summary, dateStarted, currentTime, new TimeSpan(), Guid.NewGuid(), jiraIssue.fields.parent == null ? string.Empty : jiraIssue.fields.parent.key, jiraIssue.fields.parent == null ? string.Empty : jiraIssue.fields.parent.fields.summary, null, false)
         {
-            
+
         }
 
         public JiraTimer(JiraTimer previousTimer, DateTime dateStarted, bool resetTimes) :
@@ -130,36 +130,6 @@ namespace Gallifrey.JiraTimers
 
             CurrentTime = CurrentTime.Add(idleTimer.IdleTimeValue);
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ExactCurrentTime"));
-        }
-
-        public override string ToString()
-        {
-            string description;
-
-            if (TimeToExport.TotalMinutes >= 1)
-            {
-                if (HasParent)
-                {
-                    description = string.Format("{0} - [ {1} ] - Export [ {2} ] - [ {4} {5} / {0} {3} ]", JiraReference, ExactCurrentTime.FormatAsString(), TimeToExport.FormatAsString(), JiraName, JiraParentReference, JiraParentName);
-                }
-                else
-                {
-                    description = string.Format("{0} - [ {1} ] - Export [ {2} ] - [ {0} - {3} ]", JiraReference, ExactCurrentTime.FormatAsString(), TimeToExport.FormatAsString(), JiraName);
-                }
-            }
-            else
-            {
-                if (HasParent)
-                {
-                    description = string.Format("{0} - [ {1} ] - [ {3} {4} / {0} {2} ]", JiraReference, ExactCurrentTime.FormatAsString(), JiraName, JiraParentReference, JiraParentName);
-                }
-                else
-                {
-                    description = string.Format("{0} - [ {1} ] - [ {0} {2} ]", JiraReference, ExactCurrentTime.FormatAsString(), JiraName);
-                }
-            }
-
-            return description;
         }
 
         public bool HasExportedTime()

@@ -16,7 +16,6 @@ namespace Gallifrey.JiraTimers
     {
         IEnumerable<DateTime> GetValidTimerDates();
         IEnumerable<JiraTimer> GetTimersForADate(DateTime timerDate);
-        IEnumerable<JiraTimer> GetUnexportedTimers(DateTime timerDate);
         IEnumerable<JiraTimer> GetStoppedUnexportedTimers();
         IEnumerable<JiraTimer> GetAllUnexportedTimers();
         IEnumerable<JiraTimer> GetAllLocalTimers();
@@ -80,11 +79,6 @@ namespace Gallifrey.JiraTimers
         public IEnumerable<JiraTimer> GetTimersForADate(DateTime timerDate)
         {
             return timerList.Where(timer => timer.DateStarted.Date == timerDate.Date).OrderBy(timer => timer.JiraReference, new JiraReferenceComparer());
-        }
-
-        public IEnumerable<JiraTimer> GetUnexportedTimers(DateTime timerDate)
-        {
-            return timerList.Where(timer => timer.DateStarted.Date == timerDate.Date && !timer.FullyExported).OrderBy(timer => timer.JiraReference, new JiraReferenceComparer());
         }
 
         public IEnumerable<JiraTimer> GetStoppedUnexportedTimers()
