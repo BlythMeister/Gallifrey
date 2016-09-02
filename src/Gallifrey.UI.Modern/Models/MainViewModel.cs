@@ -51,7 +51,7 @@ namespace Gallifrey.UI.Modern.Models
 
         public string VersionName => ModelHelpers.Gallifrey.VersionControl.UpdateInstalled ? "Click To Install New Version" : ModelHelpers.Gallifrey.VersionControl.VersionName;
         public bool HasUpdate => ModelHelpers.Gallifrey.VersionControl.UpdateInstalled;
-       
+
         public bool HasInactiveTime => !string.IsNullOrWhiteSpace(InactiveMinutes);
         public bool TimerRunning => !string.IsNullOrWhiteSpace(CurrentRunningTimerDescription);
         public bool HaveTimeToExport => !string.IsNullOrWhiteSpace(TimeToExportMessage);
@@ -163,7 +163,7 @@ namespace Gallifrey.UI.Modern.Models
             if (TimeTimeActivity.TotalMinutes > 0)
             {
                 var minutesPlural = TimeTimeActivity.TotalMinutes > 1 ? "s" : "";
-                InactiveMinutes = $"No Timer Running For {TimeTimeActivity.TotalMinutes} Minute{minutesPlural}"; 
+                InactiveMinutes = $"No Timer Running For {TimeTimeActivity.TotalMinutes} Minute{minutesPlural}";
             }
             else
             {
@@ -186,7 +186,7 @@ namespace Gallifrey.UI.Modern.Models
         }
 
         #region Private Helpers
-        
+
         private void RefreshModel()
         {
             var workingDays = ModelHelpers.Gallifrey.Settings.AppSettings.ExportDays.ToList();
@@ -354,8 +354,13 @@ namespace Gallifrey.UI.Modern.Models
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ExportedNumber"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TotalTimerCount"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("UnexportedTime"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Exported"));
-            
+
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TimeToExportMessage"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HaveTimeToExport"));
+
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TimerRunning"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("CurrentRunningTimerDescription"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ExportedTotalMinutes"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HaveLocalTime"));
