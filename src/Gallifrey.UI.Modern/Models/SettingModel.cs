@@ -20,10 +20,30 @@ namespace Gallifrey.UI.Modern.Models
         private int targetHoursPerDay;
         private int targetMinutesPerDay;
         private bool trackingOnly;
+        private bool alertWhenIdle;
+        private bool trackIdle;
 
         //AppSettings
-        public bool AlertWhenIdle { get; set; }
+        public bool AlertWhenIdle
+        {
+            get { return alertWhenIdle; }
+            set
+            {
+                alertWhenIdle = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("AlertWhenIdle"));
+            }
+        }
+        public bool TrackIdle
+        {
+            get { return trackIdle; }
+            set
+            {
+                trackIdle = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TrackIdle"));
+            }
+        }
         public int? AlertMinutes { get; set; }
+        public int? TrackIdleThresholdMinutes { get; set; }
         public int? KeepTimersForDays { get; set; }
         public bool AutoUpdate { get; set; }
         public bool AllowTracking { get; set; }
@@ -99,7 +119,9 @@ namespace Gallifrey.UI.Modern.Models
 
             //AppSettings
             AlertWhenIdle = settings.AppSettings.AlertWhenNotRunning;
-            AlertMinutes = (settings.AppSettings.AlertTimeMilliseconds / 1000 / 60);
+            AlertMinutes = (int) TimeSpan.FromMilliseconds(settings.AppSettings.AlertTimeMilliseconds).TotalMinutes;
+            TrackIdle = settings.AppSettings.TrackIdleTime;
+            TrackIdleThresholdMinutes = (int)TimeSpan.FromMilliseconds(settings.AppSettings.IdleTimeThresholdMilliseconds).TotalMinutes;
             KeepTimersForDays = settings.AppSettings.KeepTimersForDays;
             AutoUpdate = settings.AppSettings.AutoUpdate;
             AllowTracking = settings.AppSettings.UsageTracking;
@@ -150,7 +172,9 @@ namespace Gallifrey.UI.Modern.Models
         {
             //AppSettings
             settings.AppSettings.AlertWhenNotRunning = AlertWhenIdle;
-            settings.AppSettings.AlertTimeMilliseconds = (AlertMinutes ?? 1) * 60 * 1000;
+            settings.AppSettings.AlertTimeMilliseconds = (int)TimeSpan.FromMinutes((AlertMinutes ?? 1)).TotalMilliseconds;
+            settings.AppSettings.TrackIdleTime = TrackIdle;
+            settings.AppSettings.IdleTimeThresholdMilliseconds = (int)TimeSpan.FromMinutes((TrackIdleThresholdMinutes ?? 1)).TotalMilliseconds;
             settings.AppSettings.KeepTimersForDays = KeepTimersForDays ?? 7;
             settings.AppSettings.AutoUpdate = AutoUpdate;
             settings.AppSettings.UsageTracking = AllowTracking;

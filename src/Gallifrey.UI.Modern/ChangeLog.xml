@@ -116,7 +116,10 @@
     </Others>
   </Version>
   <Version Number="3.3.0.1" Name="Pre-Release">
-    <Features/>
+    <Features>
+      <Feature>Added config to turn lock/idle timers on/off</Feature>
+      <Feature>Added configurable threshold fo lock/idle time</Feature>
+    </Features>
     <Bugs>
       <Bug>Update to context menu to only show timer menu when right click on a timer</Bug>
     </Bugs>

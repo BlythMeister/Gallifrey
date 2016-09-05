@@ -174,6 +174,11 @@ namespace Gallifrey.UI.Modern.MainViews
 
         private async void SessionSwitchHandler(object sender, SessionSwitchEventArgs e)
         {
+            if (!modelHelpers.Gallifrey.Settings.AppSettings.TrackIdleTime)
+            {
+                return;
+            }
+
             switch (e.Reason)
             {
                 case SessionSwitchReason.SessionLock:
@@ -195,8 +200,8 @@ namespace Gallifrey.UI.Modern.MainViews
                         var idleTimerId = modelHelpers.Gallifrey.StopLockTimer();
                         var idleTimer = modelHelpers.Gallifrey.IdleTimerCollection.GetTimer(idleTimerId);
                         if (idleTimer == null) return;
-
-                        if (idleTimer.IdleTimeValue.TotalSeconds < 60 || idleTimer.IdleTimeValue.TotalHours > 10)
+                        
+                        if (idleTimer.IdleTimeValue.TotalMilliseconds < modelHelpers.Gallifrey.Settings.AppSettings.IdleTimeThresholdMilliseconds || idleTimer.IdleTimeValue.TotalHours > 10)
                         {
                             modelHelpers.Gallifrey.IdleTimerCollection.RemoveTimer(idleTimerId);
                         }

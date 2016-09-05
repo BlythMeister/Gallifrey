@@ -32,7 +32,7 @@ namespace Gallifrey.Serialization
         {
             var uiSettingsDefaultsSet = settings.UiSettings.SetDefaults();
             var internalSettingsDefaultsSet = settings.InternalSettings.SetDefaults();
-            
+
             if (uiSettingsDefaultsSet || internalSettingsDefaultsSet)
             {
                 Serialize(settings);
