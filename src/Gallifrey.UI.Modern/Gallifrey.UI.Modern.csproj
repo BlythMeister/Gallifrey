@@ -73,6 +73,7 @@
     <Compile Include="Helpers\CachedResourceDictionary.cs" />
     <Compile Include="Helpers\ExceptionlessHelper.cs" />
     <Compile Include="Helpers\BooleanVisibilityConverter.cs" />
+    <Compile Include="Helpers\IdleTimeDetector.cs" />
     <Compile Include="Models\BulkExportContainerModel.cs" />
     <Compile Include="Models\BulkExportModel.cs" />
     <Compile Include="Flyouts\LockedTimer.xaml.cs">

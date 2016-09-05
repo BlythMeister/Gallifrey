@@ -41,7 +41,7 @@ namespace Gallifrey
         void Close();
         void TrackEvent(TrackingType trackingType);
         void SaveSettings(bool jiraSettingsChanged);
-        bool StartLockTimer();
+        bool StartLockTimer(TimeSpan? idleTime = null);
         Guid StopLockTimer();
         IEnumerable<ChangeLogVersion> GetChangeLog(XDocument changeLogContent);
         void ResetInactiveAlert();
@@ -327,7 +327,7 @@ namespace Gallifrey
             SettingsChanged?.Invoke(this, null);
         }
 
-        public bool StartLockTimer()
+        public bool StartLockTimer(TimeSpan? initalTimeSpan = null)
         {
             ActivityChecker.StopActivityCheckForLockTimer();
 
@@ -335,8 +335,12 @@ namespace Gallifrey
             if (runningTimerWhenIdle.HasValue)
             {
                 jiraTimerCollection.StopTimer(runningTimerWhenIdle.Value, true);
+                if (initalTimeSpan.HasValue)
+                {
+                    jiraTimerCollection.AdjustTime(runningTimerWhenIdle.Value, initalTimeSpan.Value.Hours, initalTimeSpan.Value.Minutes, false);
+                }
             }
-            return idleTimerCollection.NewLockTimer();
+            return idleTimerCollection.NewLockTimer(initalTimeSpan.GetValueOrDefault(new TimeSpan()));
         }
 
         public Guid StopLockTimer()

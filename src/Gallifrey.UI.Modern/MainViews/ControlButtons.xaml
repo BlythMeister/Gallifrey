@@ -72,7 +72,7 @@
             <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="LockTimerButton">
                 <Button.ToolTip>
                     <TextBlock>
-                        Show Locked Timers<LineBreak/>F6 or CTRL + L
+                        Show Locked/Idle Timers<LineBreak/>F6 or CTRL + L
                     </TextBlock>
                 </Button.ToolTip>
                 <Rectangle Width="23" Height="23" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">

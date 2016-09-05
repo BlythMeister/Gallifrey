@@ -42,8 +42,18 @@ namespace Gallifrey.UI.Modern.Models
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TrackIdle"));
             }
         }
+        public bool TrackLock
+        {
+            get { return trackIdle; }
+            set
+            {
+                trackIdle = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TrackLock"));
+            }
+        }
         public int? AlertMinutes { get; set; }
         public int? TrackIdleThresholdMinutes { get; set; }
+        public int? TrackLockThresholdMinutes { get; set; }
         public int? KeepTimersForDays { get; set; }
         public bool AutoUpdate { get; set; }
         public bool AllowTracking { get; set; }
@@ -122,6 +132,8 @@ namespace Gallifrey.UI.Modern.Models
             AlertMinutes = (int) TimeSpan.FromMilliseconds(settings.AppSettings.AlertTimeMilliseconds).TotalMinutes;
             TrackIdle = settings.AppSettings.TrackIdleTime;
             TrackIdleThresholdMinutes = (int)TimeSpan.FromMilliseconds(settings.AppSettings.IdleTimeThresholdMilliseconds).TotalMinutes;
+            TrackLock = settings.AppSettings.TrackLockTime;
+            TrackLockThresholdMinutes = (int)TimeSpan.FromMilliseconds(settings.AppSettings.LockTimeThresholdMilliseconds).TotalMinutes;
             KeepTimersForDays = settings.AppSettings.KeepTimersForDays;
             AutoUpdate = settings.AppSettings.AutoUpdate;
             AllowTracking = settings.AppSettings.UsageTracking;
@@ -175,6 +187,8 @@ namespace Gallifrey.UI.Modern.Models
             settings.AppSettings.AlertTimeMilliseconds = (int)TimeSpan.FromMinutes((AlertMinutes ?? 1)).TotalMilliseconds;
             settings.AppSettings.TrackIdleTime = TrackIdle;
             settings.AppSettings.IdleTimeThresholdMilliseconds = (int)TimeSpan.FromMinutes((TrackIdleThresholdMinutes ?? 1)).TotalMilliseconds;
+            settings.AppSettings.TrackLockTime = TrackLock;
+            settings.AppSettings.LockTimeThresholdMilliseconds = (int)TimeSpan.FromMinutes((TrackLockThresholdMinutes ?? 1)).TotalMilliseconds;
             settings.AppSettings.KeepTimersForDays = KeepTimersForDays ?? 7;
             settings.AppSettings.AutoUpdate = AutoUpdate;
             settings.AppSettings.UsageTracking = AllowTracking;

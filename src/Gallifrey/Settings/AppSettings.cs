@@ -16,6 +16,8 @@ namespace Gallifrey.Settings
         TimeSpan GetTargetThisWeek();
         bool AutoUpdate { get; set; }
         bool UsageTracking { get; set; }
+        bool TrackLockTime { get; set; }
+        int LockTimeThresholdMilliseconds { get; set; }
         bool TrackIdleTime { get; set; }
         int IdleTimeThresholdMilliseconds { get; set; }
     }
@@ -31,9 +33,11 @@ namespace Gallifrey.Settings
         public Guid? TimerRunningOnShutdown { get; set; }
         public bool AutoUpdate { get; set; }
         public bool UsageTracking { get; set; }
+        public bool TrackLockTime { get; set; }
+        public int LockTimeThresholdMilliseconds { get; set; }
         public bool TrackIdleTime { get; set; }
         public int IdleTimeThresholdMilliseconds { get; set; }
-
+        
         public AppSettings()
         {
             KeepTimersForDays = 7;

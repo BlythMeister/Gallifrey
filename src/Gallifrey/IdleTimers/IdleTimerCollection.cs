@@ -28,12 +28,12 @@ namespace Gallifrey.IdleTimers
             IdleTimerCollectionSerializer.Serialize(lockTimerList);
         }
 
-        internal bool NewLockTimer()
+        internal bool NewLockTimer(TimeSpan initalTimeSpan)
         {
             var addedTimer = false;
             if (!lockTimerList.Any(x => x.IsRunning))
             {
-                lockTimerList.Add(new IdleTimer());
+                lockTimerList.Add(new IdleTimer(initalTimeSpan));
                 addedTimer = true;
             }
             
