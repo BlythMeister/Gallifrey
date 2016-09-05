@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 
 namespace Gallifrey.Settings
@@ -33,9 +35,21 @@ namespace Gallifrey.Settings
         public Guid? TimerRunningOnShutdown { get; set; }
         public bool AutoUpdate { get; set; }
         public bool UsageTracking { get; set; }
+
+        [DefaultValue(true)]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
         public bool TrackLockTime { get; set; }
+
+        [DefaultValue(60000)]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
         public int LockTimeThresholdMilliseconds { get; set; }
+
+        [DefaultValue(false)]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
         public bool TrackIdleTime { get; set; }
+
+        [DefaultValue(300000)]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
         public int IdleTimeThresholdMilliseconds { get; set; }
         
         public AppSettings()
@@ -44,6 +58,9 @@ namespace Gallifrey.Settings
             ExportDays = new List<DayOfWeek>();
             StartOfWeek = DayOfWeek.Monday;
             UsageTracking = true;
+            TrackLockTime = true;
+            LockTimeThresholdMilliseconds = 60000;
+            IdleTimeThresholdMilliseconds = 300000;
         }
 
         public TimeSpan GetTargetThisWeek()
