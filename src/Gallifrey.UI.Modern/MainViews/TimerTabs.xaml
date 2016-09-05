@@ -20,6 +20,13 @@
                     <ListView.Resources>
                         <helpers:BooleanVisibilityConverter x:Key="BoolToVis" Collapse="True" Invert="False"/>
                         <helpers:BooleanVisibilityConverter x:Key="BoolToVisInvert" Collapse="True" Invert="True"/>
+                        <ContextMenu x:Key="ItemContextMenu">
+                            <MenuItem Header="Copy JIRA Reference" Click="ContextMenu_Copy"/>
+                            <MenuItem Header="Delete Timer" Click="ContextMenu_Delete"/>
+                            <MenuItem Header="Edit Timer" Click="ContextMenu_Edit"/>
+                            <MenuItem Header="Export Timer" Click="ContextMenu_Export" Visibility="{Binding TrackingOnly, Converter={StaticResource BoolToVisInvert}}"/>
+                            <MenuItem Header="Start/Stop Timer" Click="ContextMenu_StartStop"/>
+                        </ContextMenu>
                     </ListView.Resources>
                     
                     <ListView.ItemContainerStyle>
@@ -30,6 +37,7 @@
                             <Setter Property="BorderThickness" Value="2" />
                             <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                             <Setter Property="IsSelected" Value="{Binding TimerIsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <Setter Property="ContextMenu" Value="{StaticResource ItemContextMenu}" />
                             <Style.Resources>
                                 <Style TargetType="Border">
                                     <Setter Property="CornerRadius" Value="5"/>
@@ -105,15 +113,6 @@
                             </Grid>
                         </DataTemplate>
                     </ListView.ItemTemplate>
-                    <ListView.ContextMenu>
-                        <ContextMenu>
-                            <MenuItem Header="Copy JIRA Reference" Click="ContextMenu_Copy"/>
-                            <MenuItem Header="Delete Timer" Click="ContextMenu_Delete"/>
-                            <MenuItem Header="Edit Timer" Click="ContextMenu_Edit"/>
-                            <MenuItem Header="Export Timer" Click="ContextMenu_Export" Visibility="{Binding TrackingOnly, Converter={StaticResource BoolToVisInvert}}"/>
-                            <MenuItem Header="Start/Stop Timer" Click="ContextMenu_StartStop"/>
-                        </ContextMenu>
-                    </ListView.ContextMenu>
                 </ListView>
             </DataTemplate>
         </TabControl.ContentTemplate>

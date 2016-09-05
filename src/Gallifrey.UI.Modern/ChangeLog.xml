@@ -117,7 +117,9 @@
   </Version>
   <Version Number="3.3.0.1" Name="Pre-Release">
     <Features/>
-    <Bugs/>
+    <Bugs>
+      <Bug>Update to context menu to only show timer menu when right click on a timer</Bug>
+    </Bugs>
     <Others/>
   </Version>
 </Versions>
