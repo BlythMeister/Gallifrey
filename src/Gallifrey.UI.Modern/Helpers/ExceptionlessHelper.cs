@@ -54,10 +54,10 @@ namespace Gallifrey.UI.Modern.Helpers
             {
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    var featureName = $"Gallifrey v{modelHelpers.Gallifrey.VersionControl.VersionName}";
+                    var featureName = $"Gallifrey v{modelHelpers.Gallifrey.Settings.InternalSettings.LastChangeLogVersion}";
                     if (modelHelpers.Gallifrey.Settings.InternalSettings.IsPremium)
                     {
-                        featureName = $"Gallifrey Premium v{modelHelpers.Gallifrey.VersionControl.VersionName}";
+                        featureName = $"Gallifrey Premium v{modelHelpers.Gallifrey.Settings.InternalSettings.LastChangeLogVersion}";
                     }
 
                     if (modelHelpers.Gallifrey.VersionControl.IsAutomatedDeploy)
