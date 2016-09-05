@@ -124,6 +124,7 @@
     <Bugs>
       <Bug>Update to context menu to only show timer menu when right click on a timer</Bug>
       <Bug>Fix slow startup from refreshing project cache</Bug>
+      <Bug>Fix timer adjustment buttons ignoring maximum time value on edit</Bug>
     </Bugs>
     <Others/>
   </Version>
