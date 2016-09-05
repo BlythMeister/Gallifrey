@@ -21,6 +21,7 @@ namespace Gallifrey.UI.Modern.Models
         private int targetMinutesPerDay;
         private bool trackingOnly;
         private bool alertWhenIdle;
+        private bool trackLock;
         private bool trackIdle;
 
         //AppSettings
@@ -44,10 +45,10 @@ namespace Gallifrey.UI.Modern.Models
         }
         public bool TrackLock
         {
-            get { return trackIdle; }
+            get { return trackLock; }
             set
             {
-                trackIdle = value;
+                trackLock = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TrackLock"));
             }
         }
