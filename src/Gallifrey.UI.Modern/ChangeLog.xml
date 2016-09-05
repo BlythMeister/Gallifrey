@@ -122,6 +122,7 @@
     </Features>
     <Bugs>
       <Bug>Update to context menu to only show timer menu when right click on a timer</Bug>
+      <Bug>Fix slow startup from refreshing project cache</Bug>
     </Bugs>
     <Others/>
   </Version>
