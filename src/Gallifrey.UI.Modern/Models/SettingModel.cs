@@ -19,6 +19,7 @@ namespace Gallifrey.UI.Modern.Models
         readonly RegistryKey registryKey = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
         private int targetHoursPerDay;
         private int targetMinutesPerDay;
+        private bool trackingOnly;
 
         //AppSettings
         public bool AlertWhenIdle { get; set; }
@@ -46,6 +47,15 @@ namespace Gallifrey.UI.Modern.Models
         public RemainingAdjustmentValue SelectedRemainingAdjustmentValue { get; set; }
         public string CommentPrefix { get; set; }
         public string DefaultComment { get; set; }
+        public bool TrackingOnly
+        {
+            get { return trackingOnly; }
+            set
+            {
+                trackingOnly = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TrackingOnly"));
+            }
+        }
 
         //Static Data
         public List<AccentThemeModel> AvaliableThemes { get; set; }
@@ -115,10 +125,11 @@ namespace Gallifrey.UI.Modern.Models
             JiraPassword = settings.JiraConnectionSettings.JiraPassword;
 
             //Export Settings
+            TrackingOnly = settings.ExportSettings.TrackingOnly;
             ExportAll = settings.ExportSettings.ExportPromptAll;
             ExportPrompts = new List<ExportPrompt>
             {
-                new ExportPrompt("Idle", settings.ExportSettings.ExportPrompt.OnAddIdle, "Add Idle Time"),
+                new ExportPrompt("Locked", settings.ExportSettings.ExportPrompt.OnAddIdle, "Add Locked Time"),
                 new ExportPrompt("Manual", settings.ExportSettings.ExportPrompt.OnManualAdjust, "Manual Timer Adjustment"),
                 new ExportPrompt("Stop", settings.ExportSettings.ExportPrompt.OnStop, "Stop Timer"),
                 new ExportPrompt("Pre", settings.ExportSettings.ExportPrompt.OnCreatePreloaded, "Add Pre-Loaded Timer"),
@@ -180,14 +191,15 @@ namespace Gallifrey.UI.Modern.Models
             settings.JiraConnectionSettings.JiraPassword = JiraPassword;
 
             //Export Settings
-            settings.ExportSettings.ExportPrompt.OnAddIdle = ExportPrompts.First(x => x.Key == "Idle").IsChecked;
-            settings.ExportSettings.ExportPrompt.OnManualAdjust = ExportPrompts.First(x => x.Key == "Manual").IsChecked;
-            settings.ExportSettings.ExportPrompt.OnStop = ExportPrompts.First(x => x.Key == "Stop").IsChecked;
-            settings.ExportSettings.ExportPrompt.OnCreatePreloaded = ExportPrompts.First(x => x.Key == "Pre").IsChecked;
+            settings.ExportSettings.ExportPrompt.OnAddIdle = ExportPrompts.First(x => x.Key == "Locked").IsChecked && !TrackingOnly;
+            settings.ExportSettings.ExportPrompt.OnManualAdjust = ExportPrompts.First(x => x.Key == "Manual").IsChecked && !TrackingOnly;
+            settings.ExportSettings.ExportPrompt.OnStop = ExportPrompts.First(x => x.Key == "Stop").IsChecked && !TrackingOnly;
+            settings.ExportSettings.ExportPrompt.OnCreatePreloaded = ExportPrompts.First(x => x.Key == "Pre").IsChecked && !TrackingOnly;
             settings.ExportSettings.ExportPromptAll = ExportAll;
             settings.ExportSettings.DefaultRemainingValue = SelectedRemainingAdjustmentValue.Remaining;
             settings.ExportSettings.ExportCommentPrefix = CommentPrefix;
             settings.ExportSettings.EmptyExportComment = DefaultComment;
+            settings.ExportSettings.TrackingOnly = TrackingOnly;
         }
 
         public class WorkingDay

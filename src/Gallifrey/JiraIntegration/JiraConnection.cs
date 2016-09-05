@@ -60,6 +60,7 @@ namespace Gallifrey.JiraIntegration
         {
             exportSettings = newExportSettings;
             jiraConnectionSettings = newJiraConnectionSettings;
+            jira = null;
             CheckAndConnectJira();
             UpdateJiraProjectCache();
         }
@@ -158,8 +159,15 @@ namespace Gallifrey.JiraIntegration
             {
                 CheckAndConnectJira();
                 trackUsage.TrackAppUsage(TrackingType.SearchFilter);
-                var issues = jira.GetIssuesFromFilter(filterName);
+                var filterJql = jira.GetJqlForFilter(filterName);
+                var issues = jira.GetIssuesFromFilter(filterName).ToList();
                 recentJiraCollection.AddRecentJiras(issues);
+
+                if (filterJql.ToLower().Contains("order by"))
+                {
+                    return issues;
+                }
+
                 return issues.OrderBy(x => x.key, new JiraReferenceComparer());
             }
             catch (Exception ex)
@@ -264,8 +272,6 @@ namespace Gallifrey.JiraIntegration
         {
             trackUsage.TrackAppUsage(TrackingType.ExportOccured);
 
-            var jiraIssue = jira.GetIssue(jiraRef);
-
             if (string.IsNullOrWhiteSpace(comment)) comment = exportSettings.EmptyExportComment;
             if (!string.IsNullOrWhiteSpace(exportSettings.ExportCommentPrefix))
             {
@@ -320,43 +326,74 @@ namespace Gallifrey.JiraIntegration
 
         private string GetJql(string searchText)
         {
-            var jql = string.Empty;
-            var searchTerm = string.Empty;
-            var projects = jira.GetProjects();
+            var projects = jira.GetProjects().ToList();
+            var projectQuery = string.Empty;
+            var nonProjectText = string.Empty;
             foreach (var keyword in searchText.Split(' '))
             {
-                var foundProject = false;
-                if (projects.Any(project => project.key == keyword))
+                var firstProjectMatch = projects.FirstOrDefault(x => x.key == keyword);
+                if (firstProjectMatch != null)
                 {
-                    jql = $"project = \"{keyword}\"";
-                    foundProject = true;
+                    if (!string.IsNullOrWhiteSpace(projectQuery))
+                    {
+                        projectQuery += " OR ";
+                    }
+                    projectQuery += $"project = \"{firstProjectMatch.name}\"";
                 }
-
-                if (!foundProject)
+                else
                 {
-                    searchTerm += " " + keyword;
+                    nonProjectText += $" {keyword}";
                 }
             }
+            nonProjectText = nonProjectText.Trim();
 
-            if (!string.IsNullOrWhiteSpace(searchTerm))
-            {
-                if (!string.IsNullOrWhiteSpace(jql))
-                {
-                    jql += " AND ";
-                }
-                jql += $" text ~ \"{searchTerm}\"";
-            }
-
+            var keyQuery = string.Empty;
             try
             {
                 if ((jira.GetIssue(searchText) != null))
                 {
-                    jql = $"key = \"{searchText}\" OR ({jql})";
+                    keyQuery = $"(key = \"{searchText}\")";
                 }
-
             }
             catch
             {
+                //ignored
+            }
+
+            var jql = string.Empty;
+            if (!string.IsNullOrWhiteSpace(nonProjectText))
+            {
+                if (string.IsNullOrWhiteSpace(jql))
+                {
+                    jql = $"(Summary ~ \"{nonProjectText}\" OR Description ~ \"{nonProjectText}\")";
+                }
+                else
+                {
+                    jql = $"({jql}) AND (Summary ~ \"{nonProjectText}\" OR Description ~ \"{nonProjectText}\")";
+                }
+            }
+            if (!string.IsNullOrWhiteSpace(projectQuery))
+            {
+                if (string.IsNullOrWhiteSpace(jql))
+                {
+                    jql = $"({projectQuery})";
+                }
+                else
+                {
+                    jql = $"({jql}) AND ({projectQuery})";
+                }
+            }
+
+            if (!string.IsNullOrWhiteSpace(keyQuery))
+            {
+                if (string.IsNullOrWhiteSpace(jql))
+                {
+                    jql = $"({keyQuery})";
+                }
+                else
+                {
+                    jql = $"({jql}) OR ({keyQuery})";
+                }
             }
 
             return jql;

@@ -25,12 +25,12 @@
         </Grid.Resources>
 
         <TextBlock Grid.Row="0" Grid.Column="0" Text="Search Term" VerticalAlignment="Center" />
-        <TextBox Grid.Row="0" Grid.Column="1" Margin="5,5,0,5" Text="{Binding SearchTerm, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding EnableSearchTerm}" />
+        <TextBox Grid.Row="0" Grid.Column="1" Margin="5,5,0,5" Text="{Binding SearchTerm, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsSearching, Converter={StaticResource BoolInvert}}" />
 
         <TextBlock Grid.Row="1" Grid.Column="0" Text="OR" TextAlignment="Center" />
 
         <TextBlock Grid.Row="2" Grid.Column="0" Text="Search Filter" VerticalAlignment="Center"/>
-        <ComboBox  Grid.Row="2" Grid.Column="1" Margin="5,5,0,5" ItemsSource="{Binding UserFilters}" SelectedItem="{Binding SelectedFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsSynchronizedWithCurrentItem="True" controls:TextBoxHelper.ClearTextButton="True"  IsEnabled="{Binding EnableFilter}" />
+        <ComboBox  Grid.Row="2" Grid.Column="1" Margin="5,5,0,5" ItemsSource="{Binding UserFilters}" SelectedItem="{Binding SelectedFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsSynchronizedWithCurrentItem="True" controls:TextBoxHelper.ClearTextButton="True"  IsEnabled="{Binding IsSearching, Converter={StaticResource BoolInvert}}" />
 
         <Button Style="{DynamicResource MetroCircleButtonStyle}" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Width="50" Height="50" Margin="2,0" Click="SearchButton" IsDefault="True" IsEnabled="{Binding IsSearching, Converter={StaticResource BoolInvert}}">
             <Rectangle Width="23" Height="23" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}" ToolTip="Search Jira (Text/Filter)">
@@ -67,10 +67,17 @@
             </ListView.ItemTemplate>
         </ListView>
 
-        <Button Style="{DynamicResource MetroCircleButtonStyle}" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Width="50" Height="50" Margin="2,0" Click="AddTimer" IsEnabled="{Binding IsSearching, Converter={StaticResource BoolInvert}}">
+        <Button Style="{DynamicResource MetroCircleButtonStyle}" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Width="50" Height="50" Margin="2,0" Click="AddTimer" IsEnabled="{Binding IsSearching, Converter={StaticResource BoolInvert}}" Visibility="{Binding OpenFromEdit, Converter={StaticResource BoolToVisInverted}}">
             <Rectangle Width="23" Height="23" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}" ToolTip="Create Jira From Selected Search Result">
                 <Rectangle.OpacityMask>
                     <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_add}" />
+                </Rectangle.OpacityMask>
+            </Rectangle>
+        </Button>
+        <Button Style="{DynamicResource MetroCircleButtonStyle}" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Width="50" Height="50" Margin="2,0" Click="AddTimer" IsEnabled="{Binding IsSearching, Converter={StaticResource BoolInvert}}" Visibility="{Binding OpenFromEdit, Converter={StaticResource BoolToVis}}">
+            <Rectangle Width="23" Height="23" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}" ToolTip="Use Jira From Selected Search Result In Edit">
+                <Rectangle.OpacityMask>
+                    <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_save}" />
                 </Rectangle.OpacityMask>
             </Rectangle>
         </Button>

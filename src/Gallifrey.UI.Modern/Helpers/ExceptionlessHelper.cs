@@ -3,6 +3,7 @@ using System.Windows;
 using Exceptionless;
 using Gallifrey.Settings;
 using Gallifrey.UI.Modern.Flyouts;
+using Gallifrey.Versions;
 
 namespace Gallifrey.UI.Modern.Helpers
 {
@@ -53,7 +54,25 @@ namespace Gallifrey.UI.Modern.Helpers
             {
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    ExceptionlessClient.Default.SubmitFeatureUsage(modelHelpers.Gallifrey.VersionControl.VersionName);
+                    var featureName = $"Gallifrey v{modelHelpers.Gallifrey.VersionControl.VersionName}";
+                    if (modelHelpers.Gallifrey.Settings.InternalSettings.IsPremium)
+                    {
+                        featureName = $"Gallifrey Premium v{modelHelpers.Gallifrey.VersionControl.VersionName}";
+                    }
+
+                    if (modelHelpers.Gallifrey.VersionControl.IsAutomatedDeploy)
+                    {
+                        if (modelHelpers.Gallifrey.VersionControl.InstanceType != InstanceType.Stable)
+                        {
+                            featureName += $" ({modelHelpers.Gallifrey.VersionControl.InstanceType})";
+                        }
+                    }
+                    else
+                    {
+                        featureName += " (Debug)";
+                    }
+
+                    ExceptionlessClient.Default.SubmitFeatureUsage(featureName);
                 });
             }
             catch (Exception)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using Gallifrey.Exceptions.JiraIntegration;
 using Gallifrey.Exceptions.JiraTimers;
@@ -58,6 +59,12 @@ namespace Gallifrey.UI.Modern.MainViews
                     ModelHelpers.SelectRunningTimer();
                 }
             }
+        }
+
+        private void TabHeaderRightClick(object sender, RoutedEventArgs e)
+        {
+            ((TabItem)sender).IsSelected = true;
+            e.Handled = true;
         }
 
         private void TabDragOver(object sender, DragEventArgs e)
@@ -137,6 +144,11 @@ namespace Gallifrey.UI.Modern.MainViews
         private void ContextMenu_Add(object sender, RoutedEventArgs e)
         {
             ModelHelpers.TriggerRemoteButtonPress(RemoteButtonTrigger.Add);
+        }
+
+        private void ContextMenu_AddToFill(object sender, RoutedEventArgs e)
+        {
+            ModelHelpers.TriggerRemoteButtonPress(RemoteButtonTrigger.AddToFill);
         }
 
         private void ContextMenu_Copy(object sender, RoutedEventArgs e)

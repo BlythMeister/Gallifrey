@@ -19,7 +19,7 @@ namespace Gallifrey.Jira
             this.username = username;
             client = new Atlassian.Jira.Jira(baseUrl, username, password) { MaxIssuesPerRequest = 999 };
         }
-
+        
         public User GetCurrentUser()
         {
             client.GetAccessToken();
@@ -82,6 +82,12 @@ namespace Gallifrey.Jira
                     summary = issue.Summary,
                 }
             };
+        }
+
+        public string GetJqlForFilter(string filterName)
+        {
+            //NOT SUPPORTED IN SOAP API
+            return string.Empty;
         }
 
         public IEnumerable<Issue> GetIssuesFromFilter(string filterName)

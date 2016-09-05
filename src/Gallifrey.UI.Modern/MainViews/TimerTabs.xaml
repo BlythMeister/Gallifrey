@@ -11,11 +11,17 @@
                 <Setter Property="controls:ControlsHelper.HeaderFontSize" Value="17" />
                 <Setter Property="HorizontalAlignment" Value="Right" />
                 <Setter Property="IsSelected" Value="{Binding DateIsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <EventSetter Event="MouseDown" Handler="TabHeaderRightClick" />
             </Style>
         </TabControl.ItemContainerStyle>
         <TabControl.ContentTemplate>
             <DataTemplate>
                 <ListView ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemsSource="{Binding Timers}" MouseDoubleClick="TimerList_MouseDoubleClick" BorderThickness="0" SelectionMode="Extended">
+                    <ListView.Resources>
+                        <helpers:BooleanVisibilityConverter x:Key="BoolToVis" Collapse="True" Invert="False"/>
+                        <helpers:BooleanVisibilityConverter x:Key="BoolToVisInvert" Collapse="True" Invert="True"/>
+                    </ListView.Resources>
+                    
                     <ListView.ItemContainerStyle>
                         <Style TargetType="{x:Type ListViewItem}">
                             <Setter Property="Margin" Value="3" />
@@ -60,13 +66,17 @@
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
 
-                                <Grid.Resources>
-                                    <helpers:BooleanVisibilityConverter x:Key="BoolToVisInverted" Collapse="True" Invert="True"/>
-                                    <helpers:BooleanVisibilityConverter x:Key="BoolToVis" Collapse="True" Invert="False"/>
-                                    <helpers:BooleanInvertConverter x:Key="BoolInvert"/>
-                                </Grid.Resources>
-
-                                <TextBlock Grid.Row="0" Grid.Column="0" FontSize="25" Margin="3,0,0,0" Text="{Binding Reference}" />
+                                <TextBlock Grid.Row="0" Grid.Column="0" FontSize="25" Margin="3,0,0,0" Text="{Binding Reference}" FontWeight="Medium">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding HighlightTitle}" Value="True" >
+                                                    <Setter Property="Foreground" Value="{DynamicResource AccentColorBrush}"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
                                 <WrapPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Margin="3,0,0,0" Visibility="{Binding HasParent, Converter={StaticResource BoolToVis}}" >
                                     <TextBlock  FontSize="13" TextWrapping="Wrap" Text="{Binding ParentDescription}" />
                                     <TextBlock  FontSize="13" TextWrapping="Wrap" Text=" (" />
@@ -77,11 +87,11 @@
 
 
                                 <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Margin="0,0,6,0" VerticalAlignment="Center" Visibility="{Binding HasTimeToExport, Converter={StaticResource BoolToVis}}">
-                                    <TextBlock FontSize="18" Margin="0,0,5,0" Text="{Binding ExportTime}" Foreground="{DynamicResource AccentColorBrush}" />
-                                    <TextBlock FontSize="18" Text="To Export" />
+                                    <TextBlock FontSize="18" Margin="0,0,5,0" Text="{Binding ExportTime}" Foreground="{DynamicResource AccentColorBrush}" FontWeight="Medium"/>
+                                    <TextBlock FontSize="18" Text="To Export" Foreground="{DynamicResource AccentColorBrush}" FontWeight="Medium" />
                                 </StackPanel>
 
-                                <TextBlock Grid.Row="0" Grid.Column="2" FontSize="26" Margin="3,0,0,0" Text="{Binding CurrentTime}">
+                                <TextBlock Grid.Row="0" Grid.Column="2" FontSize="26" Margin="3,0,0,0" Text="{Binding CurrentTime}" FontWeight="Medium">
                                     <TextBlock.Style>
                                         <Style TargetType="TextBlock">
                                             <Style.Triggers>
@@ -92,25 +102,26 @@
                                         </Style>
                                     </TextBlock.Style>
                                 </TextBlock>
-                                <Grid.ContextMenu>
-                                    <ContextMenu>
-                                        <MenuItem Header="Copy JIRA Reference" Click="ContextMenu_Copy"/>
-                                        <MenuItem Header="Delete Timer" Click="ContextMenu_Delete"/>
-                                        <MenuItem Header="Edit Timer" Click="ContextMenu_Edit"/>
-                                        <MenuItem Header="Export Timer" Click="ContextMenu_Export"/>
-                                        <MenuItem Header="Start/Stop Timer" Click="ContextMenu_StartStop"/>
-                                    </ContextMenu>
-                                </Grid.ContextMenu>
                             </Grid>
                         </DataTemplate>
                     </ListView.ItemTemplate>
                     <ListView.ContextMenu>
                         <ContextMenu>
-                            <MenuItem Header="Add New Timer" Click="ContextMenu_Add"/>
+                            <MenuItem Header="Copy JIRA Reference" Click="ContextMenu_Copy"/>
+                            <MenuItem Header="Delete Timer" Click="ContextMenu_Delete"/>
+                            <MenuItem Header="Edit Timer" Click="ContextMenu_Edit"/>
+                            <MenuItem Header="Export Timer" Click="ContextMenu_Export" Visibility="{Binding TrackingOnly, Converter={StaticResource BoolToVisInvert}}"/>
+                            <MenuItem Header="Start/Stop Timer" Click="ContextMenu_StartStop"/>
                         </ContextMenu>
                     </ListView.ContextMenu>
                 </ListView>
             </DataTemplate>
         </TabControl.ContentTemplate>
+        <TabControl.ContextMenu>
+            <ContextMenu>
+                <MenuItem Header="Add New Timer" Click="ContextMenu_Add"/>
+                <MenuItem Header="Add Timer To Fill Export Target" Click="ContextMenu_AddToFill"/>
+            </ContextMenu>
+        </TabControl.ContextMenu>
     </controls:MetroAnimatedSingleRowTabControl>
 </UserControl>

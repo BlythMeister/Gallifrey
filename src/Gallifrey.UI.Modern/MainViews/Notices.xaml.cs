@@ -1,7 +1,10 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Windows.Input;
 using Gallifrey.AppTracking;
+using Gallifrey.IdleTimers;
 using Gallifrey.UI.Modern.Flyouts;
 using Gallifrey.UI.Modern.Helpers;
 using Gallifrey.UI.Modern.Models;
@@ -11,7 +14,8 @@ namespace Gallifrey.UI.Modern.MainViews
 {
     public partial class Notices
     {
-        private ModelHelpers ModelHelpers => ((MainViewModel)DataContext).ModelHelpers;
+        private MainViewModel Model => (MainViewModel)DataContext;
+        private ModelHelpers ModelHelpers => Model.ModelHelpers;
         private readonly Mutex unexportedMutex;
 
         public Notices()
@@ -25,7 +29,7 @@ namespace Gallifrey.UI.Modern.MainViews
             unexportedMutex.WaitOne();
             ModelHelpers.Gallifrey.TrackEvent(TrackingType.ExportAll);
             var timers = ModelHelpers.Gallifrey.JiraTimerCollection.GetStoppedUnexportedTimers().ToList();
-            timers.RemoveAll(x => x.TempTimer || x.IsRunning);
+            timers.RemoveAll(x => x.LocalTimer || x.IsRunning);
 
             if (timers.Any())
             {
@@ -60,6 +64,18 @@ namespace Gallifrey.UI.Modern.MainViews
         {
             ModelHelpers.Gallifrey.TrackEvent(TrackingType.ShowRunningTimer);
             ModelHelpers.SelectRunningTimer();
+        }
+
+        private async void CreateTimerFromInactive(object sender, MouseButtonEventArgs e)
+        {
+            var dummyIdleTimer = new IdleTimer(DateTime.Now, DateTime.Now, Model.TimeTimeActivity, Guid.NewGuid());
+            var addFlyout = new AddTimer(ModelHelpers, idleTimers: new List<IdleTimer> { dummyIdleTimer }, enableDateChange: false);
+            await ModelHelpers.OpenFlyout(addFlyout);
+            if (addFlyout.AddedTimer)
+            {
+                ModelHelpers.SetSelectedTimer(addFlyout.NewTimerId);
+                ModelHelpers.Gallifrey.ResetInactiveAlert();
+            }
         }
     }
 }

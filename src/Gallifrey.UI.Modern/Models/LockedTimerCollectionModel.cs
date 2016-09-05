@@ -19,6 +19,11 @@ namespace Gallifrey.UI.Modern.Models
         public void RefreshLockedTimers(IEnumerable<IdleTimer> unexportedTimers)
         {
             LockedTimers = new ObservableCollection<LockedTimerModel>(unexportedTimers.ToList().Select(x => new LockedTimerModel(x)).OrderByDescending(x => x.DateAndTimeForTimer));
+            var firstTimer = LockedTimers.FirstOrDefault();
+            if (firstTimer != null)
+            {
+                firstTimer.IsSelected = true;
+            }
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LockedTimers"));
         }
     }

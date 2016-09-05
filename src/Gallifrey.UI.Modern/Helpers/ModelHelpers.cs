@@ -56,7 +56,12 @@ namespace Gallifrey.UI.Modern.Helpers
         {
             var actualType = flyout.GetType();
             var openFlyoutDetail = openFlyouts.FirstOrDefault(x => x.FlyoutType == actualType);
-            if (openFlyoutDetail != null) openFlyoutDetail.IsHidden = false;
+            if (openFlyoutDetail != null)
+            {
+                openFlyoutDetail.IsHidden = false;
+            }
+                
+
             flyout.IsOpen = false;
             FlyoutClosedHandler(flyout, null);
         }
@@ -90,8 +95,8 @@ namespace Gallifrey.UI.Modern.Helpers
             }
 
             openFlyoutDetail.IsHidden = false;
-            flyout.IsOpen = true;
-
+            openFlyoutDetail.Flyout.IsOpen = true;
+            
             return openFlyoutDetail.TaskCompletionSource.Task;
         }
 
@@ -148,6 +153,11 @@ namespace Gallifrey.UI.Modern.Helpers
 
         public void TriggerRemoteButtonPress(RemoteButtonTrigger buttonTrigger)
         {
+            if (buttonTrigger == Models.RemoteButtonTrigger.Export && Gallifrey.Settings.ExportSettings.TrackingOnly)
+            {
+                return;
+            }
+
             RemoteButtonTrigger?.Invoke(null, buttonTrigger);
         }
 
@@ -168,7 +178,7 @@ namespace Gallifrey.UI.Modern.Helpers
             var premiumMessage = "To Get Premium Please Contribute Or Donate To Gallifrey.\n\nPremium Features Include:";
             premiumMessage += "\n  • Ability To Opt-Out Of Tracking";
             premiumMessage += "\n  • Bulk Export More Than 5 Timers";
-            premiumMessage += "\n  • Use More Than 2 Temp Timers";
+            premiumMessage += "\n  • Use More Than 2 Local Timers";
             premiumMessage += "\n  • Start Now/Assign To Me/Change Status On Add";
             premiumMessage += "\n\nThink You Should Have Premium?\nPlease Contact Us By Email Or Twitter";
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using Gallifrey.Exceptions.JiraIntegration;
@@ -17,7 +18,6 @@ namespace Gallifrey.UI.Modern.Flyouts
     public partial class AddTimer
     {
         private readonly ModelHelpers modelHelpers;
-        private readonly DateTime? startDate;
         private AddTimerModel DataModel => (AddTimerModel)DataContext;
         public bool AddedTimer { get; set; }
         public Guid NewTimerId { get; set; }
@@ -25,7 +25,6 @@ namespace Gallifrey.UI.Modern.Flyouts
         public AddTimer(ModelHelpers modelHelpers, string jiraRef = null, DateTime? startDate = null, bool? enableDateChange = null, List<IdleTimer> idleTimers = null, bool? startNow = null)
         {
             this.modelHelpers = modelHelpers;
-            this.startDate = startDate;
             InitializeComponent();
 
             if (!modelHelpers.Gallifrey.Settings.InternalSettings.IsPremium && startNow.HasValue && startNow.Value)
@@ -56,11 +55,11 @@ namespace Gallifrey.UI.Modern.Flyouts
             //Validate Premium Features
             if (!modelHelpers.Gallifrey.Settings.InternalSettings.IsPremium)
             {
-                if (DataModel.TempTimer)
+                if (DataModel.LocalTimer)
                 {
-                    if (modelHelpers.Gallifrey.JiraTimerCollection.GetAllTempTimers().Count() >= 2)
+                    if (modelHelpers.Gallifrey.JiraTimerCollection.GetAllLocalTimers().Count() >= 2)
                     {
-                        modelHelpers.ShowGetPremiumMessage("Without Gallifrey Premium You Are Limited To A Maximum Of 2 Temp Timers");
+                        modelHelpers.ShowGetPremiumMessage("Without Gallifrey Premium You Are Limited To A Maximum Of 2 Local Timers");
                         Focus();
                         return;
                     }
@@ -103,7 +102,7 @@ namespace Gallifrey.UI.Modern.Flyouts
 
             Issue jiraIssue = null;
 
-            if (!DataModel.TempTimer)
+            if (!DataModel.LocalTimer)
             {
                 try
                 {
@@ -128,69 +127,24 @@ namespace Gallifrey.UI.Modern.Flyouts
                 }
             }
 
-            try
+            if (DataModel.DatePeriod)
             {
-                if (DataModel.TempTimer)
-                {
-                    NewTimerId = modelHelpers.Gallifrey.JiraTimerCollection.AddTempTimer(DataModel.TempTimerDescription, DataModel.StartDate.Value, seedTime, DataModel.StartNow);
-                }
-                else
-                {
-                    NewTimerId = modelHelpers.Gallifrey.JiraTimerCollection.AddTimer(jiraIssue, DataModel.StartDate.Value, seedTime, DataModel.StartNow);
-                }
-                AddedTimer = true;
-                if (!DataModel.TimeEditable)
-                {
-                    modelHelpers.Gallifrey.JiraTimerCollection.AddIdleTimer(NewTimerId, DataModel.IdleTimers);
-                }
+                AddedTimer = await AddPeriodTimer(jiraIssue, seedTime);
             }
-            catch (DuplicateTimerException ex)
+            else
             {
-                var doneSomething = false;
-                if (seedTime.TotalMinutes > 0 || !DataModel.TimeEditable)
-                {
-                    var result = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Duplicate Timer", "The Timer Already Exists, Would You Like To Add The Time?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
-
-                    if (result == MessageDialogResult.Affirmative)
-                    {
-                        if (DataModel.TimeEditable)
-                        {
-                            modelHelpers.Gallifrey.JiraTimerCollection.AdjustTime(ex.TimerId, seedTime.Hours, seedTime.Minutes, true);
-                        }
-                        else
-                        {
-                            modelHelpers.Gallifrey.JiraTimerCollection.AddIdleTimer(ex.TimerId, DataModel.IdleTimers);
-                        }
-
-                        doneSomething = true;
-                    }
-                    else
-                    {
-                        Focus();
-                        return;
-                    }
-                }
-
-                if (DataModel.StartNow)
-                {
-                    modelHelpers.Gallifrey.JiraTimerCollection.StartTimer(ex.TimerId);
-                    doneSomething = true;
-                }
-
-                if (!doneSomething)
-                {
-                    await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Duplicate Timer", "This Timer Already Exists!");
-                    Focus();
-                    return;
-                }
-
-                NewTimerId = ex.TimerId;
+                AddedTimer = await AddSingleTimer(jiraIssue, seedTime, DataModel.StartDate.Value);
             }
 
-            AddedTimer = true;
+            if (!AddedTimer)
+            {
+                Focus();
+                return;
+            }
+
             var stillDoingThings = false;
 
-            if (!DataModel.TempTimer)
+            if (!DataModel.LocalTimer)
             {
                 if (DataModel.AssignToMe)
                 {
@@ -232,28 +186,100 @@ namespace Gallifrey.UI.Modern.Flyouts
             }
         }
 
+        private async Task<bool> AddPeriodTimer(Issue jiraIssue, TimeSpan seedTime)
+        {
+            var workingDate = DataModel.StartDate.Value;
+
+            while (workingDate <= DataModel.EndDate.Value)
+            {
+                var added = await AddSingleTimer(jiraIssue, seedTime, workingDate);
+                if (!added && workingDate < DataModel.EndDate.Value)
+                {
+                    var result = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Continue Adding?", $"The Timer For {workingDate.ToString("ddd, dd MMM")} Was Not Added.\nWould You Like To Carry On Adding For The Remaining Dates?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
+
+                    if (result == MessageDialogResult.Negative)
+                    {
+                        return false;
+                    }
+                }
+                workingDate = workingDate.AddDays(1);
+            }
+
+            return true;
+        }
+
+        private async Task<bool> AddSingleTimer(Issue jiraIssue, TimeSpan seedTime, DateTime startDate)
+        {
+            try
+            {
+                if (DataModel.LocalTimer)
+                {
+                    NewTimerId = modelHelpers.Gallifrey.JiraTimerCollection.AddLocalTimer(DataModel.LocalTimerDescription, startDate, seedTime, DataModel.StartNow);
+                }
+                else
+                {
+                    NewTimerId = modelHelpers.Gallifrey.JiraTimerCollection.AddTimer(jiraIssue, startDate, seedTime, DataModel.StartNow);
+                }
+                AddedTimer = true;
+                if (!DataModel.TimeEditable)
+                {
+                    modelHelpers.Gallifrey.JiraTimerCollection.AddIdleTimer(NewTimerId, DataModel.IdleTimers);
+                }
+            }
+            catch (DuplicateTimerException ex)
+            {
+                var doneSomething = false;
+                if (seedTime.TotalMinutes > 0 || !DataModel.TimeEditable)
+                {
+                    var result = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Duplicate Timer", $"The Timer Already Exists On {DataModel.StartDate.Value.ToString("ddd, dd MMM")}, Would You Like To Add The Time?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
+
+                    if (result == MessageDialogResult.Affirmative)
+                    {
+                        if (DataModel.TimeEditable)
+                        {
+                            modelHelpers.Gallifrey.JiraTimerCollection.AdjustTime(ex.TimerId, seedTime.Hours, seedTime.Minutes, true);
+                        }
+                        else
+                        {
+                            modelHelpers.Gallifrey.JiraTimerCollection.AddIdleTimer(ex.TimerId, DataModel.IdleTimers);
+                        }
+
+                        doneSomething = true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+
+                if (DataModel.StartNow)
+                {
+                    modelHelpers.Gallifrey.JiraTimerCollection.StartTimer(ex.TimerId);
+                    doneSomething = true;
+                }
+
+                if (!doneSomething)
+                {
+                    await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Duplicate Timer", "This Timer Already Exists!");
+                    return false;
+                }
+
+                NewTimerId = ex.TimerId;
+            }
+
+            return true;
+        }
+
         private async void SearchButton(object sender, RoutedEventArgs e)
         {
             modelHelpers.HideFlyout(this);
-            var searchFlyout = new Search(modelHelpers, true, startDate ?? DateTime.Now.Date);
+            var searchFlyout = new Search(modelHelpers, openFromAdd: true);
             await modelHelpers.OpenFlyout(searchFlyout);
             if (searchFlyout.SelectedJira != null)
             {
                 DataModel.SetJiraReference(searchFlyout.SelectedJira.Reference);
             }
             modelHelpers.OpenFlyout(this);
-        }
-
-        private void StartDateChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (DataModel.StartDate.HasValue && DataModel.StartDate.Value.Date != DateTime.Now.Date)
-            {
-                DataModel.SetStartNowEnabled(false);
-            }
-            else
-            {
-                DataModel.SetStartNowEnabled(true);
-            }
         }
 
         private async void TransitionSelected(object sender, RoutedEventArgs e)

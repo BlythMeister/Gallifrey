@@ -60,6 +60,7 @@ namespace Gallifrey.UI.Modern.MainViews
 
         private async void OnLoaded(object sender, RoutedEventArgs e)
         {
+            var debuggerMissing = false;
             var multipleInstances = false;
             var showSettings = false;
             try
@@ -78,8 +79,17 @@ namespace Gallifrey.UI.Modern.MainViews
             {
                 multipleInstances = true;
             }
+            catch (DebuggerException)
+            {
+                debuggerMissing = true;
+            }
 
-            if (multipleInstances)
+            if (debuggerMissing)
+            {
+                await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Debugger Not Running", "It Looks Like Your Running Without Auto-Update\nPlease Use The Installed Shortcut To Start Gallifrey Or Download Again From GallifreyApp.co.uk");
+                modelHelpers.CloseApp();
+            }
+            else if (multipleInstances)
             {
                 modelHelpers.Gallifrey.TrackEvent(TrackingType.MultipleInstancesRunning);
                 await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Multiple Instances", "You Can Only Have One Instance Of Gallifrey Running At A Time\nPlease Close The Other Instance");
@@ -171,7 +181,7 @@ namespace Gallifrey.UI.Modern.MainViews
                 case SessionSwitchReason.RemoteDisconnect:
                 case SessionSwitchReason.ConsoleDisconnect:
 
-                    modelHelpers.Gallifrey.StartIdleTimer();
+                    modelHelpers.Gallifrey.StartLockTimer();
                     machineLocked = true;
                     break;
 
@@ -182,7 +192,7 @@ namespace Gallifrey.UI.Modern.MainViews
 
                     try
                     {
-                        var idleTimerId = modelHelpers.Gallifrey.StopIdleTimer();
+                        var idleTimerId = modelHelpers.Gallifrey.StopLockTimer();
                         var idleTimer = modelHelpers.Gallifrey.IdleTimerCollection.GetTimer(idleTimerId);
                         if (idleTimer == null) return;
 
@@ -222,11 +232,6 @@ namespace Gallifrey.UI.Modern.MainViews
         private void GetPremium(object sender, RoutedEventArgs e)
         {
             modelHelpers.ShowGetPremiumMessage();
-        }
-
-        private void LoadJira(object sender, RoutedEventArgs e)
-        {
-            Process.Start(new ProcessStartInfo(modelHelpers.Gallifrey.Settings.JiraConnectionSettings.JiraUrl));
         }
 
         private void AutoUpdateCheck(object sender, ElapsedEventArgs e)
@@ -371,6 +376,11 @@ namespace Gallifrey.UI.Modern.MainViews
         private void GetBeta(object sender, RoutedEventArgs e)
         {
             Process.Start(new ProcessStartInfo("http://releases.gallifreyapp.co.uk/download/modern/beta/setup.exe"));
+        }
+
+        private void MetroWindow_Activated(object sender, EventArgs e)
+        {
+            this.StopFlashingWindow();
         }
     }
 }

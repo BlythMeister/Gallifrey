@@ -41,9 +41,10 @@ namespace Gallifrey
         void Close();
         void TrackEvent(TrackingType trackingType);
         void SaveSettings(bool jiraSettingsChanged);
-        bool StartIdleTimer();
-        Guid StopIdleTimer();
+        bool StartLockTimer();
+        Guid StopLockTimer();
         IEnumerable<ChangeLogVersion> GetChangeLog(XDocument changeLogContent);
+        void ResetInactiveAlert();
     }
 
     public class Backend : IBackend
@@ -208,7 +209,7 @@ namespace Gallifrey
                         }
                     }
 
-                    foreach (var timer in timersOnDate.Where(x => !x.TempTimer))
+                    foreach (var timer in timersOnDate.Where(x => !x.LocalTimer))
                     {
                         var issueWithWorklogs = issues.FirstOrDefault(x => x.key == timer.JiraReference);
 
@@ -260,10 +261,20 @@ namespace Gallifrey
 
         public void Initialise()
         {
-            var processes = Process.GetProcesses();
-            if (processes.Count(process => process.ProcessName.Contains("Gallifrey") && !process.ProcessName.Contains("vshost")) > 1)
+            if (versionControl.IsAutomatedDeploy)
             {
-                throw new MultipleGallifreyRunningException();
+                var processes = Process.GetProcesses();
+                if (processes.Count(process => process.ProcessName.Contains("Gallifrey") && !process.ProcessName.Contains("vshost")) > 1)
+                {
+                    throw new MultipleGallifreyRunningException();
+                }
+            }
+            else
+            {
+                if (!Debugger.IsAttached)
+                {
+                    throw new DebuggerException();
+                }
             }
 
             jiraConnection.ReConnect(settingsCollection.JiraConnectionSettings, settingsCollection.ExportSettings);
@@ -316,9 +327,9 @@ namespace Gallifrey
             SettingsChanged?.Invoke(this, null);
         }
 
-        public bool StartIdleTimer()
+        public bool StartLockTimer()
         {
-            ActivityChecker.StopActivityCheck();
+            ActivityChecker.StopActivityCheckForLockTimer();
 
             runningTimerWhenIdle = JiraTimerCollection.GetRunningTimerId();
             if (runningTimerWhenIdle.HasValue)
@@ -328,9 +339,9 @@ namespace Gallifrey
             return idleTimerCollection.NewLockTimer();
         }
 
-        public Guid StopIdleTimer()
+        public Guid StopLockTimer()
         {
-            ActivityChecker.StartActivityCheck();
+            ActivityChecker.RestartActivityCheckAfterLockTimer();
 
             if (runningTimerWhenIdle.HasValue)
             {
@@ -356,6 +367,11 @@ namespace Gallifrey
             }
 
             return changeLogItems;
+        }
+
+        public void ResetInactiveAlert()
+        {
+            ActivityChecker.Reset();
         }
 
         public IJiraTimerCollection JiraTimerCollection => jiraTimerCollection;

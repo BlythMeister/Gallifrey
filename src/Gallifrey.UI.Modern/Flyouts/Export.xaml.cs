@@ -28,9 +28,9 @@ namespace Gallifrey.UI.Modern.Flyouts
         {
             await Task.Delay(50);
             modelHelpers.HideFlyout(this);
-            if (timerToShow.TempTimer)
+            if (timerToShow.LocalTimer)
             {
-                await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Temp Timer", "You Cannot Export A Temporary Timer!");
+                await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Local Timer", "You Cannot Export A Local Timer!");
                 modelHelpers.CloseHiddenFlyout(this);
                 return;
             }

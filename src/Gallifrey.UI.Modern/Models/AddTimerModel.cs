@@ -9,17 +9,19 @@ namespace Gallifrey.UI.Modern.Models
 {
     public class AddTimerModel : INotifyPropertyChanged
     {
-        private bool tempTimer;
+        private bool localTimer;
+        private bool datePeriod;
         private int startMinutes;
         private int startHours;
+        private DateTime? startDate;
+        private DateTime? endDate;
 
         public event PropertyChangedEventHandler PropertyChanged;
         public string JiraReference { get; set; }
-        public string TempTimerDescription { get; set; }
+        public string LocalTimerDescription { get; set; }
         public bool JiraReferenceEditable { get; set; }
         public DateTime MinDate { get; set; }
         public DateTime MaxDate { get; set; }
-        public DateTime? StartDate { get; set; }
         public DateTime DisplayDate { get; set; }
         public bool DateEditable { get; set; }
         public bool StartNow { get; set; }
@@ -31,13 +33,52 @@ namespace Gallifrey.UI.Modern.Models
 
         public bool TimeEditable => IdleTimers == null || IdleTimers.Count == 0;
 
-        public bool TempTimer
+        public bool LocalTimer
         {
-            get { return tempTimer; }
+            get { return localTimer; }
             set
             {
-                tempTimer = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TempTimer"));
+                localTimer = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LocalTimer"));
+            }
+        }
+
+        public bool DatePeriod
+        {
+            get { return datePeriod; }
+            set
+            {
+                datePeriod = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("DatePeriod"));
+                SetStartNowEnabled();
+            }
+        }
+
+        public DateTime? StartDate
+        {
+            get { return startDate; }
+            set
+            {
+                startDate = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("StartDate"));
+                if (EndDate < startDate)
+                {
+                    EndDate = startDate;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("EndDate"));
+                }
+
+                SetStartNowEnabled();
+            }
+        }
+
+        public DateTime? EndDate
+        {
+            get { return endDate; }
+            set
+            {
+                endDate = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("EndDate"));
+                SetStartNowEnabled();
             }
         }
 
@@ -65,11 +106,13 @@ namespace Gallifrey.UI.Modern.Models
             {
                 DisplayDate = dateToday;
                 StartDate = dateToday;
+                EndDate = dateToday;
             }
             else
             {
                 DisplayDate = startDate.Value;
                 StartDate = startDate.Value;
+                EndDate = startDate.Value;
             }
 
             DateEditable = !enableDateChange.HasValue || enableDateChange.Value;
@@ -84,8 +127,6 @@ namespace Gallifrey.UI.Modern.Models
                 IdleTimers = idleTimers;
             }
         }
-
-
 
         public int? StartHours
         {
@@ -113,8 +154,19 @@ namespace Gallifrey.UI.Modern.Models
             }
         }
 
-        public void SetStartNowEnabled(bool enabled)
+        public void SetStartNowEnabled()
         {
+            var enabled = true;
+
+            if (DatePeriod && StartDate.HasValue && EndDate.HasValue && StartDate.Value.Date != EndDate.Value.Date)
+            {
+                enabled = false;
+            }
+            else if (StartDate.HasValue && StartDate.Value.Date != DateTime.Now.Date)
+            {
+                enabled = false;
+            }
+
             if (enabled)
             {
                 StartNowEditable = true;

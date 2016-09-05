@@ -70,7 +70,7 @@ if($NewVersionUpdate.toLower() -eq "y")
 	}
 	Catch
 	{
-		Write-Host "Error Updating Versions, Will Not Build"
+		Write-Host "Error Updating Versions, Will Not Build, Error Message: $_"
 		Break
 	}
 }

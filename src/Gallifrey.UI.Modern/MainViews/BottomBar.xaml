@@ -3,11 +3,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <DockPanel HorizontalAlignment="Stretch" Background="{DynamicResource AccentColorBrush}">
-        <TextBlock Foreground="White" Margin="5,0,0,0" VerticalAlignment="Center">
-                Contact Us By <Hyperlink NavigateUri="https://twitter.com/GallifreyApp" Foreground="Black" RequestNavigate="Hyperlink_RequestNavigate">Twitter</Hyperlink>, <Hyperlink NavigateUri="https://gitter.im/BlythMeister/Gallifrey" Foreground="Black" RequestNavigate="Hyperlink_RequestNavigate">Gitter</Hyperlink> Or <Hyperlink NavigateUri="mailto:contact@gallifreyapp.co.uk?subject=Gallifrey App Contact" Foreground="Black" RequestNavigate="Hyperlink_RequestNavigate">E-Mail</Hyperlink>. Raise Or Fix A Bug On <Hyperlink NavigateUri="https://github.com/BlythMeister/Gallifrey" Foreground="Black" RequestNavigate="Hyperlink_RequestNavigate">GitHub</Hyperlink>.
+        <TextBlock Foreground="{DynamicResource IdealForegroundColorBrush}" Margin="5,0,0,0" VerticalAlignment="Center">
+                Contact Us By <Hyperlink NavigateUri="https://twitter.com/GallifreyApp" Foreground="{DynamicResource IdealForegroundColorBrush}" RequestNavigate="Hyperlink_RequestNavigate">Twitter</Hyperlink>, <Hyperlink NavigateUri="https://gitter.im/BlythMeister/Gallifrey" Foreground="{DynamicResource IdealForegroundColorBrush}" RequestNavigate="Hyperlink_RequestNavigate">Gitter</Hyperlink> Or <Hyperlink NavigateUri="mailto:contact@gallifreyapp.co.uk?subject=Gallifrey App Contact" Foreground="{DynamicResource IdealForegroundColorBrush}" RequestNavigate="Hyperlink_RequestNavigate">E-Mail</Hyperlink>. Raise Or Fix A Bug On <Hyperlink NavigateUri="https://github.com/BlythMeister/Gallifrey" Foreground="{DynamicResource IdealForegroundColorBrush}" RequestNavigate="Hyperlink_RequestNavigate">GitHub</Hyperlink>.
         </TextBlock>
-        <TextBlock HorizontalAlignment="Right" Margin="0,0,5,0" Foreground="White" VerticalAlignment="Center">
-            Please Help Support Gallifrey <Hyperlink NavigateUri="http://www.gallifreyapp.co.uk/donations.html" Foreground="Black" RequestNavigate="Hyperlink_RequestNavigate">Click To Donate</Hyperlink>
+        <TextBlock HorizontalAlignment="Right" Margin="0,0,5,0" Foreground="{DynamicResource IdealForegroundColorBrush}" VerticalAlignment="Center">
+            Please Help Support Gallifrey <Hyperlink NavigateUri="http://www.gallifreyapp.co.uk/donations.html" Foreground="{DynamicResource IdealForegroundColorBrush}" RequestNavigate="Hyperlink_RequestNavigate">Click To Donate</Hyperlink>
         </TextBlock>
 
     </DockPanel>

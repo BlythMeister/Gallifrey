@@ -10,13 +10,13 @@
 
         <TextBlock Background="{DynamicResource AccentColorBrush}" FontSize="17" Foreground="{DynamicResource IdealForegroundColorBrush}" TextAlignment="Center" Padding="5,0" Margin="0,0,0,2" Text="An Update Has Been Installed, Click Here To Apply" MouseDown="InstallUpdate" ToolTip="To Install The Update Click Here!" TextWrapping="Wrap" Visibility="{Binding HasUpdate, Converter={StaticResource BoolToVis}}" />
 
-        <TextBlock Background="{DynamicResource AccentColorBrush}" FontSize="17" Foreground="{DynamicResource IdealForegroundColorBrush}" TextAlignment="Center" Padding="5,0" Margin="0,0,0,2" Text="{Binding InactiveMinutes}" TextWrapping="Wrap" Visibility="{Binding HasInactiveTime, Converter={StaticResource BoolToVis}}" />
+        <TextBlock Background="{DynamicResource AccentColorBrush}" FontSize="17" Foreground="{DynamicResource IdealForegroundColorBrush}" TextAlignment="Center" Padding="5,0" Margin="0,0,0,2" Text="{Binding InactiveMinutes}" MouseDown="CreateTimerFromInactive" ToolTip="Click To Create Timer With This Time" TextWrapping="Wrap" Visibility="{Binding HasInactiveTime, Converter={StaticResource BoolToVis}}" />
 
         <TextBlock Background="{DynamicResource AccentColorBrush}" FontSize="17" Foreground="{DynamicResource IdealForegroundColorBrush}" TextAlignment="Center" Padding="5,0" Margin="0,0,0,2" Text="{Binding CurrentRunningTimerDescription}" MouseDown="GoToRunningTimer" ToolTip="Click To Navigate To Running Timer" TextWrapping="Wrap" Visibility="{Binding TimerRunning, Converter={StaticResource BoolToVis}}" />
 
         <TextBlock Background="{DynamicResource AccentColorBrush}" FontSize="17" Foreground="{DynamicResource IdealForegroundColorBrush}" TextAlignment="Center" Padding="5,0" Margin="0,0,0,2" Text="{Binding TimeToExportMessage}" MouseDown="UnExportedClick" ToolTip="Click To Export All Avaliable Timers" TextWrapping="Wrap" Visibility="{Binding HaveTimeToExport, Converter={StaticResource BoolToVis}}" />
 
-        <TextBlock Background="{DynamicResource AccentColorBrush}" FontSize="17" Foreground="{DynamicResource IdealForegroundColorBrush}" TextAlignment="Center" Padding="5,0" Margin="0,0,0,2" Text="{Binding TempTimeMessage}" TextWrapping="Wrap" Visibility="{Binding HaveTempTime, Converter={StaticResource BoolToVis}}" />
+        <TextBlock Background="{DynamicResource AccentColorBrush}" FontSize="17" Foreground="{DynamicResource IdealForegroundColorBrush}" TextAlignment="Center" Padding="5,0" Margin="0,0,0,2" Text="{Binding LocalTimeMessage}" TextWrapping="Wrap" Visibility="{Binding HaveLocalTime, Converter={StaticResource BoolToVis}}" />
         
     </StackPanel>
 </UserControl>

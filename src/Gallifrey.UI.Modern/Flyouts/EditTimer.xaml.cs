@@ -60,23 +60,33 @@ namespace Gallifrey.UI.Modern.Flyouts
             }
             else if (DataModel.HasModifiedJiraReference)
             {
-                if (DataModel.TempTimer)
+                if (DataModel.LocalTimer)
                 {
                     var currentTimer = modelHelpers.Gallifrey.JiraTimerCollection.GetTimer(EditedTimerId);
-                    if (!currentTimer.TempTimer)
+                    if (!currentTimer.LocalTimer)
                     {
                         if (!modelHelpers.Gallifrey.Settings.InternalSettings.IsPremium)
                         {
-                            var tempTimersCount = modelHelpers.Gallifrey.JiraTimerCollection.GetAllTempTimers().Count();
-                            if (tempTimersCount >= 2)
+                            var localTimersCount = modelHelpers.Gallifrey.JiraTimerCollection.GetAllLocalTimers().Count();
+                            if (localTimersCount >= 2)
                             {
-                                modelHelpers.ShowGetPremiumMessage("Without Gallifrey Premium You Are Limited To A Maximum Of 2 Temp Timers");
+                                modelHelpers.ShowGetPremiumMessage("Without Gallifrey Premium You Are Limited To A Maximum Of 2 Local Timers");
                                 Focus();
                                 return;
                             }
                         }
                     }
-                    EditedTimerId = modelHelpers.Gallifrey.JiraTimerCollection.ChangeTempTimerDescription(EditedTimerId, DataModel.TempTimerDescription);
+
+                    try
+                    {
+                        EditedTimerId = modelHelpers.Gallifrey.JiraTimerCollection.ChangeLocalTimerDescription(EditedTimerId, DataModel.LocalTimerDescription);
+                    }
+                    catch (DuplicateTimerException)
+                    {
+                        await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Something Went Wrong", "An Error Occured Trying To Edit That Timer, Please Try Again");
+                        Focus();
+                        return;
+                    }
                 }
                 else
                 {
@@ -197,6 +207,18 @@ namespace Gallifrey.UI.Modern.Flyouts
             modelHelpers.Gallifrey.JiraTimerCollection.RemoveTimer(EditedTimerId);
             EditedTimerId = ex.TimerId;
             return true;
+        }
+
+        private async void SearchButton(object sender, RoutedEventArgs e)
+        {
+            modelHelpers.HideFlyout(this);
+            var searchFlyout = new Search(modelHelpers, openFromEdit:true);
+            await modelHelpers.OpenFlyout(searchFlyout);
+            if (searchFlyout.SelectedJira != null)
+            {
+                DataModel.SetJiraReference(searchFlyout.SelectedJira.Reference);
+            }
+            modelHelpers.OpenFlyout(this);
         }
     }
 }

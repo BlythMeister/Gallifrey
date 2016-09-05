@@ -10,6 +10,7 @@ namespace Gallifrey.Jira
         User GetCurrentUser();
         Issue GetIssue(string issueRef);
         Issue GetIssueWithWorklogs(string issueRef, string user);
+        string GetJqlForFilter(string filterName);
         IEnumerable<Issue> GetIssuesFromFilter(string filterName);
         IEnumerable<Issue> GetIssuesFromJql(string jql);
         IEnumerable<Project> GetProjects();

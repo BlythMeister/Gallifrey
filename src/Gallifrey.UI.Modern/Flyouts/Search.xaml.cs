@@ -15,14 +15,16 @@ namespace Gallifrey.UI.Modern.Flyouts
         private SearchModel DataModel => (SearchModel)DataContext;
         private readonly ModelHelpers modelHelpers;
         private readonly bool openFromAdd;
+        private readonly bool openFromEdit;
         private readonly DateTime selectedDateTab;
         private readonly ProgressDialogHelper progressDialogHelper;
 
-        public Search(ModelHelpers modelHelpers, bool openFromAdd, DateTime selectedDateTab)
+        public Search(ModelHelpers modelHelpers, bool openFromAdd = false, bool openFromEdit = false, DateTime? selectedDateTab = null)
         {
             this.modelHelpers = modelHelpers;
             this.openFromAdd = openFromAdd;
-            this.selectedDateTab = selectedDateTab;
+            this.openFromEdit = openFromEdit;
+            this.selectedDateTab = selectedDateTab ?? DateTime.Now.Date;
             InitializeComponent();
             progressDialogHelper = new ProgressDialogHelper(modelHelpers.DialogContext);
 
@@ -33,7 +35,7 @@ namespace Gallifrey.UI.Modern.Flyouts
 
             try
             {
-                 filters = modelHelpers.Gallifrey.JiraConnection.GetJiraFilters().ToList();
+                filters = modelHelpers.Gallifrey.JiraConnection.GetJiraFilters().ToList();
             }
             catch (Exception)
             {
@@ -48,8 +50,8 @@ namespace Gallifrey.UI.Modern.Flyouts
             {
                 issues = new List<Issue>();
             }
-            
-            DataContext = new SearchModel(filters, recent, issues);
+
+            DataContext = new SearchModel(filters, recent, issues, openFromEdit);
         }
 
         private async void SearchButton(object sender, RoutedEventArgs e)
@@ -59,7 +61,19 @@ namespace Gallifrey.UI.Modern.Flyouts
                 DataModel.SetIsSearching();
 
                 Func<IEnumerable<Issue>> searchFunc;
-                if (!string.IsNullOrWhiteSpace(DataModel.SearchTerm))
+
+                if (!string.IsNullOrWhiteSpace(DataModel.SearchTerm) && !string.IsNullOrWhiteSpace(DataModel.SelectedFilter))
+                {
+                    var searchTerm = DataModel.SearchTerm;
+                    var searchFilter = DataModel.SelectedFilter;
+                    searchFunc = () =>
+                    {
+                        var searchTermResults = modelHelpers.Gallifrey.JiraConnection.GetJiraIssuesFromSearchText(searchTerm);
+                        var searchFilterResults = modelHelpers.Gallifrey.JiraConnection.GetJiraIssuesFromFilter(searchFilter);
+                        return searchTermResults.Where(x => searchFilterResults.Any(y => y.key == x.key));
+                    };
+                }
+                else if (!string.IsNullOrWhiteSpace(DataModel.SearchTerm))
                 {
                     var searchTerm = DataModel.SearchTerm;
                     searchFunc = () => modelHelpers.Gallifrey.JiraConnection.GetJiraIssuesFromSearchText(searchTerm);
@@ -118,7 +132,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             }
 
             modelHelpers.CloseFlyout(this);
-            if (openFromAdd)
+            if (openFromAdd || openFromEdit)
             {
                 SelectedJira = DataModel.SelectedSearchResult;
             }
