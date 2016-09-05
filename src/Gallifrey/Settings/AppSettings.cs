@@ -26,14 +26,38 @@ namespace Gallifrey.Settings
 
     public class AppSettings : IAppSettings
     {
+        [DefaultValue(true)]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
         public bool AlertWhenNotRunning { get; set; }
+
+        [DefaultValue(300000)]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
         public int AlertTimeMilliseconds { get; set; }
+
+        [DefaultValue(7)]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
         public int KeepTimersForDays { get; set; }
+
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
         public TimeSpan TargetLogPerDay { get; set; }
+
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
         public IEnumerable<DayOfWeek> ExportDays { get; set; }
+        
+        [DefaultValue(DayOfWeek.Monday)]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
         public DayOfWeek StartOfWeek { get; set; }
+
+        [DefaultValue(null)]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
         public Guid? TimerRunningOnShutdown { get; set; }
+
+        [DefaultValue(false)]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
         public bool AutoUpdate { get; set; }
+
+        [DefaultValue(true)]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
         public bool UsageTracking { get; set; }
 
         [DefaultValue(true)]
@@ -54,13 +78,19 @@ namespace Gallifrey.Settings
         
         public AppSettings()
         {
+            AlertWhenNotRunning = true;
+            AlertTimeMilliseconds = (int)TimeSpan.FromMinutes(5).TotalMilliseconds;
             KeepTimersForDays = 7;
+            TargetLogPerDay = TimeSpan.Zero;
             ExportDays = new List<DayOfWeek>();
             StartOfWeek = DayOfWeek.Monday;
+            TimerRunningOnShutdown = null;
+            AutoUpdate = false;
             UsageTracking = true;
             TrackLockTime = true;
-            LockTimeThresholdMilliseconds = 60000;
-            IdleTimeThresholdMilliseconds = 300000;
+            LockTimeThresholdMilliseconds = (int)TimeSpan.FromMinutes(1).TotalMilliseconds;
+            TrackIdleTime = false;
+            IdleTimeThresholdMilliseconds = (int)TimeSpan.FromMinutes(5).TotalMilliseconds;
         }
 
         public TimeSpan GetTargetThisWeek()

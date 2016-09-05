@@ -1,4 +1,7 @@
-﻿namespace Gallifrey.Settings
+﻿using System.ComponentModel;
+using Newtonsoft.Json;
+
+namespace Gallifrey.Settings
 {
     public interface IExportSettings
     {
@@ -12,19 +15,36 @@
 
     public class ExportSettings : IExportSettings
     {
+        [DefaultValue(DefaultRemaining.Leave)]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
         public DefaultRemaining DefaultRemainingValue { get; set; }
+
+        [DefaultValue("Gallifrey")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
         public string ExportCommentPrefix { get; set; }
+
+        [DefaultValue("No Comment Entered")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
         public string EmptyExportComment { get; set; }
+
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
         public ExportPrompt ExportPrompt { get; set; }
+
+        [DefaultValue(false)]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
         public bool ExportPromptAll { get; set; }
+
+        [DefaultValue(false)]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
         public bool TrackingOnly { get; set; }
 
         public ExportSettings()
         {
-            DefaultRemainingValue = DefaultRemaining.Set;
+            DefaultRemainingValue = DefaultRemaining.Leave;
             ExportCommentPrefix = "Gallifrey";
             EmptyExportComment = "No Comment Entered";
             ExportPrompt = new ExportPrompt();
+            ExportPromptAll = false;
             TrackingOnly = false;
         }
     }

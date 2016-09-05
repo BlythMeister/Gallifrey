@@ -130,7 +130,7 @@ namespace Gallifrey.UI.Modern.Models
 
             //AppSettings
             AlertWhenIdle = settings.AppSettings.AlertWhenNotRunning;
-            AlertMinutes = (int) TimeSpan.FromMilliseconds(settings.AppSettings.AlertTimeMilliseconds).TotalMinutes;
+            AlertMinutes = (int)TimeSpan.FromMilliseconds(settings.AppSettings.AlertTimeMilliseconds).TotalMinutes;
             TrackIdle = settings.AppSettings.TrackIdleTime;
             TrackIdleThresholdMinutes = (int)TimeSpan.FromMilliseconds(settings.AppSettings.IdleTimeThresholdMilliseconds).TotalMinutes;
             TrackLock = settings.AppSettings.TrackLockTime;
@@ -185,11 +185,11 @@ namespace Gallifrey.UI.Modern.Models
         {
             //AppSettings
             settings.AppSettings.AlertWhenNotRunning = AlertWhenIdle;
-            settings.AppSettings.AlertTimeMilliseconds = (int)TimeSpan.FromMinutes((AlertMinutes ?? 1)).TotalMilliseconds;
+            settings.AppSettings.AlertTimeMilliseconds = AlertWhenIdle ? (int)TimeSpan.FromMinutes((AlertMinutes ?? 1)).TotalMilliseconds : 0;
             settings.AppSettings.TrackIdleTime = TrackIdle;
-            settings.AppSettings.IdleTimeThresholdMilliseconds = (int)TimeSpan.FromMinutes((TrackIdleThresholdMinutes ?? 1)).TotalMilliseconds;
+            settings.AppSettings.IdleTimeThresholdMilliseconds = TrackIdle ? (int)TimeSpan.FromMinutes((TrackIdleThresholdMinutes ?? 1)).TotalMilliseconds : 0;
             settings.AppSettings.TrackLockTime = TrackLock;
-            settings.AppSettings.LockTimeThresholdMilliseconds = (int)TimeSpan.FromMinutes((TrackLockThresholdMinutes ?? 1)).TotalMilliseconds;
+            settings.AppSettings.LockTimeThresholdMilliseconds = TrackLock ? (int)TimeSpan.FromMinutes((TrackLockThresholdMinutes ?? 1)).TotalMilliseconds : 0;
             settings.AppSettings.KeepTimersForDays = KeepTimersForDays ?? 7;
             settings.AppSettings.AutoUpdate = AutoUpdate;
             settings.AppSettings.UsageTracking = AllowTracking;
