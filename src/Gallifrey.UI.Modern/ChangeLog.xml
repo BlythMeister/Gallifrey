@@ -89,7 +89,7 @@
     </Bugs>
     <Others/>
   </Version>
-  <Version Number="3.3.0.0" Name="Pre-Release">
+  <Version Number="3.3.0.0" Name="">
     <Features>
       <Feature>Added ability to cancel issue search when adding timer</Feature>
       <Feature>Added a timeout on all non-cancellable progress dialogs</Feature>
