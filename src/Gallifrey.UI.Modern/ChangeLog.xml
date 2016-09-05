@@ -119,6 +119,7 @@
     <Features>
       <Feature>Added config to turn lock/idle timers on/off</Feature>
       <Feature>Added configurable threshold fo lock/idle time</Feature>
+      <Feature>Warn when adding for period on a non-working day and offer to skip</Feature>
     </Features>
     <Bugs>
       <Bug>Update to context menu to only show timer menu when right click on a timer</Bug>

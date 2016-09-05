@@ -189,19 +189,35 @@ namespace Gallifrey.UI.Modern.Flyouts
         private async Task<bool> AddPeriodTimer(Issue jiraIssue, TimeSpan seedTime)
         {
             var workingDate = DataModel.StartDate.Value;
+            
 
             while (workingDate <= DataModel.EndDate.Value)
             {
-                var added = await AddSingleTimer(jiraIssue, seedTime, workingDate);
-                if (!added && workingDate < DataModel.EndDate.Value)
+                var addTimer = true;
+                if (!modelHelpers.Gallifrey.Settings.AppSettings.ExportDays.Contains(workingDate.DayOfWeek))
                 {
-                    var result = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Continue Adding?", $"The Timer For {workingDate.ToString("ddd, dd MMM")} Was Not Added.\nWould You Like To Carry On Adding For The Remaining Dates?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
+                    var result = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Add For Non-Working Day?", $"The Date {workingDate.ToString("ddd, dd MMM")} Is Not A Working Day.\nWould You Still Like To Add A Timer For This Date?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
 
                     if (result == MessageDialogResult.Negative)
                     {
-                        return false;
+                        addTimer = false;
                     }
                 }
+
+                if (addTimer)
+                {
+                    var added = await AddSingleTimer(jiraIssue, seedTime, workingDate);
+                    if (!added && workingDate < DataModel.EndDate.Value)
+                    {
+                        var result = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Continue Adding?", $"The Timer For {workingDate.ToString("ddd, dd MMM")} Was Not Added.\nWould You Like To Carry On Adding For The Remaining Dates?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
+
+                        if (result == MessageDialogResult.Negative)
+                        {
+                            return false;
+                        }
+                    }
+                }
+                
                 workingDate = workingDate.AddDays(1);
             }
 
