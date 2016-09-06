@@ -21,7 +21,6 @@
                         <helpers:BooleanVisibilityConverter x:Key="BoolToVis" Collapse="True" Invert="False"/>
                         <helpers:BooleanVisibilityConverter x:Key="BoolToVisInvert" Collapse="True" Invert="True"/>
                     </ListView.Resources>
-                    
                     <ListView.ItemContainerStyle>
                         <Style TargetType="{x:Type ListViewItem}">
                             <Setter Property="Margin" Value="3" />
@@ -85,7 +84,6 @@
                                 </WrapPanel>
                                 <TextBlock Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" FontSize="13" Margin="3,0,0,0" TextWrapping="Wrap" Text="{Binding Description}" />
 
-
                                 <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Margin="0,0,6,0" VerticalAlignment="Center" Visibility="{Binding HasTimeToExport, Converter={StaticResource BoolToVis}}">
                                     <TextBlock FontSize="18" Margin="0,0,5,0" Text="{Binding ExportTime}" Foreground="{DynamicResource AccentColorBrush}" FontWeight="Medium"/>
                                     <TextBlock FontSize="18" Text="To Export" Foreground="{DynamicResource AccentColorBrush}" FontWeight="Medium" />
@@ -102,6 +100,15 @@
                                         </Style>
                                     </TextBlock.Style>
                                 </TextBlock>
+                                <Grid.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Header="Copy JIRA Reference" Click="ContextMenu_Copy"/>
+                                        <MenuItem Header="Delete Timer" Click="ContextMenu_Delete"/>
+                                        <MenuItem Header="Edit Timer" Click="ContextMenu_Edit"/>
+                                        <MenuItem Header="Export Timer" Click="ContextMenu_Export" Visibility="{Binding TrackingOnly, Converter={StaticResource BoolToVisInvert}}"/>
+                                        <MenuItem Header="Start/Stop Timer" Click="ContextMenu_StartStop"/>
+                                    </ContextMenu>
+                                </Grid.ContextMenu>
                             </Grid>
                         </DataTemplate>
                     </ListView.ItemTemplate>
