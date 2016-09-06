@@ -108,6 +108,10 @@ namespace Gallifrey.UI.Modern.Models
             set
             {
                 endDate = value;
+                if (EndDate < startDate)
+                {
+                    endDate = startDate;
+                }
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("EndDate"));
                 SetStartNowEnabled();
             }

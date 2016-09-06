@@ -72,7 +72,7 @@
         </Grid>
 
         <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Padding="2" Visibility="{Binding DatePeriod, Converter={StaticResource BoolToVis}}">End Date</TextBlock>
-        <DatePicker Grid.Row="2" Grid.Column="1" Margin="0,5" IsTodayHighlighted="False" DisplayDate="{Binding StartDate}" DisplayDateStart="{Binding StartDate}" DisplayDateEnd="{Binding MaxDate}" SelectedDate="{Binding EndDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding DateEditable}" Visibility="{Binding DatePeriod, Converter={StaticResource BoolToVis}}"/>
+        <DatePicker Grid.Row="2" Grid.Column="1" Margin="0,5" IsTodayHighlighted="False" DisplayDate="{Binding EndDate}" DisplayDateStart="{Binding EndDate}" DisplayDateEnd="{Binding MaxDate}" SelectedDate="{Binding EndDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding DateEditable}" Visibility="{Binding DatePeriod, Converter={StaticResource BoolToVis}}"/>
         
         <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Padding="2">Pre Loaded Time</TextBlock>
         <WrapPanel Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Margin="0,5" Orientation="Horizontal" IsEnabled="{Binding TimeEditable}">
