@@ -57,7 +57,7 @@ namespace Gallifrey.UI.Modern.MainViews
                 updateHeartbeat.Enabled = true;
             }
 
-            var idleDetectionHeartbeat = new Timer(500);
+            var idleDetectionHeartbeat = new Timer(TimeSpan.FromSeconds(30).TotalMilliseconds);
             idleDetectionHeartbeat.Elapsed += IdleDetectionCheck;
             idleDetectionHeartbeat.Enabled = true;
         }
