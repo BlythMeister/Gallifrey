@@ -215,9 +215,18 @@ namespace Gallifrey.UI.Modern.MainViews
                 var idleTimer = modelHelpers.Gallifrey.IdleTimerCollection.GetTimer(idleTimerId);
                 if (idleTimer == null) return;
 
-                if (idleTimer.IdleTimeValue.TotalMilliseconds < threshold || idleTimer.IdleTimeValue.TotalHours > 10)
+                if (idleTimer.IdleTimeValue.TotalHours > 10)
                 {
                     modelHelpers.Gallifrey.IdleTimerCollection.RemoveTimer(idleTimerId);
+                }
+                else if (idleTimer.IdleTimeValue.TotalMilliseconds < threshold)
+                {
+                    modelHelpers.Gallifrey.IdleTimerCollection.RemoveTimer(idleTimerId);
+                    var runningId = modelHelpers.Gallifrey.JiraTimerCollection.GetRunningTimerId();
+                    if (runningId.HasValue)
+                    {
+                        modelHelpers.Gallifrey.JiraTimerCollection.GetTimer(runningId.Value).AddIdleTimer(idleTimer);
+                    }
                 }
                 else
                 {
