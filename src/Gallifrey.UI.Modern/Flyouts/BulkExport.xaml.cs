@@ -10,6 +10,7 @@ using Gallifrey.Jira.Model;
 using Gallifrey.JiraTimers;
 using Gallifrey.UI.Modern.Helpers;
 using Gallifrey.UI.Modern.Models;
+using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 
 namespace Gallifrey.UI.Modern.Flyouts
@@ -20,6 +21,8 @@ namespace Gallifrey.UI.Modern.Flyouts
         private BulkExportContainerModel DataModel => (BulkExportContainerModel)DataContext;
         private readonly ProgressDialogHelper progressDialogHelper;
         private const int nonPremiumMaxExport = 5;
+        private bool lastChangeStatusSent = false;
+        private string currentChangeStatusJiraRef = string.Empty;
 
         public BulkExport(ModelHelpers modelHelpers, List<JiraTimer> timers)
         {
@@ -108,7 +111,41 @@ namespace Gallifrey.UI.Modern.Flyouts
             var exportSuccess = await RetryableExport(timersToExport);
             if (exportSuccess)
             {
-                modelHelpers.CloseFlyout(this);
+                var changeStatusExports = timersToExport.Where(x => x.ChangeStatus);
+                if (changeStatusExports.Any())
+                {
+                    foreach (var timer in changeStatusExports)
+                    {
+                        while (!string.IsNullOrWhiteSpace(currentChangeStatusJiraRef))
+                        {
+                            await Task.Delay(TimeSpan.FromSeconds(1));
+                        }
+
+                        currentChangeStatusJiraRef = timer.JiraRef;
+                        try
+                        {
+                            var transitionsAvaliable = modelHelpers.Gallifrey.JiraConnection.GetTransitions(timer.JiraRef);
+
+                            var timeSelectorDialog = (BaseMetroDialog)this.Resources["TransitionSelector"];
+                            await DialogCoordinator.Instance.ShowMetroDialogAsync(modelHelpers.DialogContext, timeSelectorDialog);
+
+                            var comboBox = timeSelectorDialog.FindChild<ComboBox>("Items");
+                            comboBox.ItemsSource = transitionsAvaliable.Select(x => x.name).ToList();
+
+                            var messageBox = timeSelectorDialog.FindChild<TextBlock>("Message");
+                            messageBox.Text = $"Please Select The Status Update You Would Like To Perform To {timer.JiraRef}";
+                        }
+                        catch (Exception)
+                        {
+                            await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Status Update Error", "Unable To Change The Status Of This Issue");
+                        }
+                    }
+                    lastChangeStatusSent = true;
+                }
+                else
+                {
+                    modelHelpers.CloseFlyout(this);
+                }
             }
             else
             {
@@ -132,7 +169,7 @@ namespace Gallifrey.UI.Modern.Flyouts
 
                 if (choice == MessageDialogResult.Affirmative)
                 {
-                    return await RetryableExport(timersToExport.Where(x=>!x.Timer.FullyExported).ToList());
+                    return await RetryableExport(timersToExport.Where(x => !x.Timer.FullyExported).ToList());
                 }
 
                 return false;
@@ -261,6 +298,72 @@ namespace Gallifrey.UI.Modern.Flyouts
         {
             public BulkExportException(string message) : base(message)
             {
+            }
+        }
+
+
+
+        private async void TransitionSelected(object sender, RoutedEventArgs e)
+        {
+            var selectedTransition = string.Empty;
+
+            try
+            {
+                var dialog = (BaseMetroDialog)this.Resources["TransitionSelector"];
+                var comboBox = dialog.FindChild<ComboBox>("Items");
+
+                selectedTransition = (string)comboBox.SelectedItem;
+
+                await DialogCoordinator.Instance.HideMetroDialogAsync(modelHelpers.DialogContext, dialog);
+
+                modelHelpers.Gallifrey.JiraConnection.TransitionIssue(currentChangeStatusJiraRef, selectedTransition);
+            }
+            catch (StateChangedException)
+            {
+                if (string.IsNullOrWhiteSpace(selectedTransition))
+                {
+                    await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Status Update Error", "Unable To Change The Status Of This Issue");
+                }
+                else
+                {
+                    await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Status Update Error", $"Unable To Change The Status Of This Issue To {selectedTransition}");
+                }
+            }
+
+            currentChangeStatusJiraRef = string.Empty;
+            if (lastChangeStatusSent)
+            {
+                modelHelpers.CloseFlyout(this);
+            }
+        }
+
+        private async void CancelTransition(object sender, RoutedEventArgs e)
+        {
+            var dialog = (BaseMetroDialog)this.Resources["TransitionSelector"];
+            await DialogCoordinator.Instance.HideMetroDialogAsync(modelHelpers.DialogContext, dialog);
+
+            currentChangeStatusJiraRef = string.Empty;
+            if (lastChangeStatusSent)
+            {
+                modelHelpers.CloseFlyout(this);
+            }
+        }
+
+        private void ChangeStatusClick(object sender, RoutedEventArgs e)
+        {
+            if (!modelHelpers.Gallifrey.Settings.InternalSettings.IsPremium)
+            {
+                var changeStatusTicked = DataModel.BulkExports.Where(x => x.ChangeStatus).ToList();
+                
+                if (changeStatusTicked.Any())
+                {
+                    modelHelpers.ShowGetPremiumMessage("Without Gallifrey Premium You Cannot Change Jira Status.");
+                    foreach (var bulkExportModel in changeStatusTicked)
+                    {
+                        bulkExportModel.ChangeStatus = false;
+                    }
+                    Focus();
+                }
             }
         }
     }

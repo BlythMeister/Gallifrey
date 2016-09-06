@@ -16,6 +16,7 @@ namespace Gallifrey.UI.Modern.Models
         private int remainingHours;
         private int remainingMinutes;
         private TimeSpan toExportMaxTime;
+        private bool changeStatus;
         public event PropertyChangedEventHandler PropertyChanged;
 
         public JiraTimer Timer { get; set; }
@@ -45,6 +46,16 @@ namespace Gallifrey.UI.Modern.Models
                 workLogStrategy = value;
                 SetRemaining();
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ShowRemaining"));
+            }
+        }
+
+        public bool ChangeStatus
+        {
+            get { return changeStatus; }
+            set
+            {
+                changeStatus = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ChangeStatus"));
             }
         }
 
