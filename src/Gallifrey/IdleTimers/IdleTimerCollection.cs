@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Gallifrey.Exceptions.IdleTimers;
 using Gallifrey.Serialization;
 
 namespace Gallifrey.IdleTimers
@@ -28,32 +27,28 @@ namespace Gallifrey.IdleTimers
             IdleTimerCollectionSerializer.Serialize(lockTimerList);
         }
 
-        internal bool NewLockTimer(TimeSpan initalTimeSpan)
+        internal void NewLockTimer(TimeSpan initalTimeSpan)
         {
-            var addedTimer = false;
             if (!lockTimerList.Any(x => x.IsRunning))
             {
                 lockTimerList.Add(new IdleTimer(initalTimeSpan));
-                addedTimer = true;
             }
             
             SaveTimers();
-            return addedTimer;
         }
 
-        internal Guid StopLockedTimers()
+        internal Guid? StopLockedTimers()
         {
-            if (!lockTimerList.Any(x => x.IsRunning))
+            IdleTimer lastStoppedTimer = null;
+            foreach (var lockedTimer in lockTimerList.Where(x=>x.IsRunning))
             {
-                throw new NoIdleTimerRunningException("Cannot find any idle timers running!");
+                lockedTimer.StopTimer();
+                lastStoppedTimer = lockedTimer;
             }
-
-            var lockedTimer = lockTimerList.First(timer => timer.IsRunning);
-            lockedTimer.StopTimer();
             
             SaveTimers();
 
-            return lockedTimer.UniqueId;
+            return lastStoppedTimer?.UniqueId;
         }
 
         public void RemoveTimer(Guid uniqueId)
