@@ -115,9 +115,11 @@
       <Other>Temp timers are now "Local" timers in preparation for exporting to a destination other than Jira</Other>
     </Others>
   </Version>
-  <Version Number="3.3.0.1" Name="Pre-Release">
+  <Version Number="3.3.1.0" Name="">
     <Features/>
-    <Bugs/>
+    <Bugs>
+      <Bug>Fix the context menu</Bug>
+    </Bugs>
     <Others/>
   </Version>
 </Versions>
