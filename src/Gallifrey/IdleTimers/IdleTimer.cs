@@ -27,7 +27,7 @@ namespace Gallifrey.IdleTimers
 
         public IdleTimer(TimeSpan initalTimeSpan)
         {
-            DateStarted = DateTime.UtcNow.Subtract(initalTimeSpan);
+            DateStarted = DateTime.Now.Subtract(initalTimeSpan);
             DateFinished = null;
             IdleTimeValue = initalTimeSpan;
             UniqueId = Guid.NewGuid();
@@ -42,7 +42,7 @@ namespace Gallifrey.IdleTimers
         {
             if (!DateFinished.HasValue)
             {
-                DateFinished = DateTime.UtcNow;
+                DateFinished = DateTime.Now;
             }
 
             IdleTimeValue = DateFinished.Value.Subtract(DateStarted);
