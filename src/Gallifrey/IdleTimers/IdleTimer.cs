@@ -25,8 +25,12 @@ namespace Gallifrey.IdleTimers
             UniqueId = uniqueId;
         }
 
-        public IdleTimer(TimeSpan initalTimeSpan) : this(DateTime.UtcNow.Subtract(initalTimeSpan), null, initalTimeSpan, Guid.NewGuid())
+        public IdleTimer(TimeSpan initalTimeSpan)
         {
+            DateStarted = DateTime.UtcNow.Subtract(initalTimeSpan);
+            DateFinished = null;
+            IdleTimeValue = initalTimeSpan;
+            UniqueId = Guid.NewGuid();
         }
 
         public void StopTimer()

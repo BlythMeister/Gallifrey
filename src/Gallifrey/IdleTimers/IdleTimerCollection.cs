@@ -29,26 +29,27 @@ namespace Gallifrey.IdleTimers
 
         internal void NewLockTimer(TimeSpan initalTimeSpan)
         {
+            //Only allow 1 running timer at a time
             if (!lockTimerList.Any(x => x.IsRunning))
             {
                 lockTimerList.Add(new IdleTimer(initalTimeSpan));
             }
-            
+
             SaveTimers();
         }
 
         internal Guid? StopLockedTimers()
         {
-            IdleTimer lastStoppedTimer = null;
-            foreach (var lockedTimer in lockTimerList.Where(x=>x.IsRunning))
-            {
-                lockedTimer.StopTimer();
-                lastStoppedTimer = lockedTimer;
-            }
-            
-            SaveTimers();
+            var lockedTimer = lockTimerList.FirstOrDefault(x => x.IsRunning);
 
-            return lastStoppedTimer?.UniqueId;
+            if (lockedTimer == null)
+            {
+                return null;
+            }
+
+            lockedTimer.StopTimer();
+            SaveTimers();
+            return lockedTimer.UniqueId;
         }
 
         public void RemoveTimer(Guid uniqueId)
@@ -63,7 +64,7 @@ namespace Gallifrey.IdleTimers
 
         public IEnumerable<IdleTimer> GetUnusedLockTimers()
         {
-            return lockTimerList.Where(timer => timer.IsRunning == false).OrderByDescending(timer=>timer.DateFinished);
+            return lockTimerList.Where(timer => timer.IsRunning == false).OrderByDescending(timer => timer.DateFinished);
         }
 
         public void RemoveOldTimers()
