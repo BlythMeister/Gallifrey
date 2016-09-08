@@ -324,7 +324,7 @@ namespace Gallifrey
 
         public void StartLockTimer(TimeSpan? initalTimeSpan = null)
         {
-            ActivityChecker.StopActivityCheckForLockTimer();
+            ActivityChecker.PauseForLockTimer(initalTimeSpan);
 
             if (!runningTimerWhenIdle.HasValue)
             {
@@ -344,7 +344,7 @@ namespace Gallifrey
 
         public Guid? StopLockTimer()
         {
-            ActivityChecker.RestartActivityCheckAfterLockTimer();
+            ActivityChecker.ResumeAfterLockTimer();
 
             if (runningTimerWhenIdle.HasValue)
             {

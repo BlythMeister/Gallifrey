@@ -11,16 +11,14 @@ namespace Gallifrey.InactiveMonitor
         internal event EventHandler<int> NoActivityEvent;
         private readonly IJiraTimerCollection timerCollection;
         private readonly Timer hearbeat;
-        private readonly Stopwatch noTimerRunning;
+        private readonly ActivityStopwatch activityStopwatch;
         private readonly object lockObject;
-        private bool temporaryStopActivityCheck;
         private TimeSpan alertLimit;
 
         internal ActivityChecker(IJiraTimerCollection timerCollection, IAppSettings appSettings)
         {
+            activityStopwatch = new ActivityStopwatch();
             this.timerCollection = timerCollection;
-            noTimerRunning = new Stopwatch();
-            temporaryStopActivityCheck = false;
             lockObject = new object();
 
             hearbeat = new Timer(500);
@@ -40,7 +38,7 @@ namespace Gallifrey.InactiveMonitor
             else
             {
                 hearbeat.Stop();
-                noTimerRunning.Reset();
+                activityStopwatch.Reset();
             }
         }
 
@@ -48,48 +46,91 @@ namespace Gallifrey.InactiveMonitor
         {
             lock (lockObject)
             {
-                if (temporaryStopActivityCheck)
+                if (activityStopwatch.IsPaused)
                 {
                     return;
                 }
 
                 if (timerCollection.GetRunningTimerId().HasValue)
                 {
-                    if (noTimerRunning.IsRunning)
+                    if (activityStopwatch.IsRunning)
                     {
                         Reset();
                     }
                 }
                 else
                 {
-                    if (!noTimerRunning.IsRunning)
+                    if (!activityStopwatch.IsRunning)
                     {
-                        noTimerRunning.Start();
+                        activityStopwatch.Start();
                     }
 
-                    if (noTimerRunning.Elapsed >= alertLimit)
+                    if (activityStopwatch.Elapsed >= alertLimit)
                     {
-                        NoActivityEvent?.Invoke(this, (int)noTimerRunning.ElapsedMilliseconds);
+                        NoActivityEvent?.Invoke(this, (int)activityStopwatch.Elapsed.TotalMilliseconds);
                     }
                 }
             }
         }
 
-        public void StopActivityCheckForLockTimer()
+        public void PauseForLockTimer(TimeSpan? manualAdjustTimeSpan)
         {
-            temporaryStopActivityCheck = true;
-            noTimerRunning.Stop();
+            activityStopwatch.Pause(manualAdjustTimeSpan);
         }
 
-        public void RestartActivityCheckAfterLockTimer()
+        public void ResumeAfterLockTimer()
         {
-            temporaryStopActivityCheck = false;
+            activityStopwatch.Resume();
         }
 
         public void Reset()
         {
             NoActivityEvent?.Invoke(this, 0);
-            noTimerRunning.Reset();
+            activityStopwatch.Reset();
+        }
+
+        private class ActivityStopwatch
+        {
+            private readonly Stopwatch timer;
+            private TimeSpan manualAdjustmentValue;
+
+            public TimeSpan Elapsed => timer.Elapsed.Subtract(manualAdjustmentValue);
+            public bool IsRunning => timer.IsRunning;
+            public bool IsPaused { get; private set; }
+
+            public ActivityStopwatch()
+            {
+                timer = new Stopwatch();
+                manualAdjustmentValue = TimeSpan.Zero;
+            }
+
+            public void Reset()
+            {
+                timer.Reset();
+                manualAdjustmentValue = TimeSpan.Zero;
+            }
+
+            public void Pause(TimeSpan? manualAdjustTimeSpan)
+            {
+                IsPaused = true;
+                timer.Stop();
+                if (manualAdjustTimeSpan.HasValue)
+                {
+                    manualAdjustmentValue = manualAdjustmentValue.Add(manualAdjustTimeSpan.Value);
+                }
+            }
+
+            public void Resume()
+            {
+                IsPaused = false;
+                timer.Start();
+            }
+
+            public void Start()
+            {
+                Reset();
+                timer.Start();
+            }
         }
     }
 }
