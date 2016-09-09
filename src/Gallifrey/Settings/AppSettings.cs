@@ -22,6 +22,7 @@ namespace Gallifrey.Settings
         int LockTimeThresholdMilliseconds { get; set; }
         bool TrackIdleTime { get; set; }
         int IdleTimeThresholdMilliseconds { get; set; }
+        List<string> DefaultTimers { get; set; }
     }
 
     public class AppSettings : IAppSettings
@@ -75,7 +76,10 @@ namespace Gallifrey.Settings
         [DefaultValue(300000)]
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
         public int IdleTimeThresholdMilliseconds { get; set; }
-        
+
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
+        public List<string> DefaultTimers { get; set; }
+
         public AppSettings()
         {
             AlertWhenNotRunning = true;
@@ -91,6 +95,7 @@ namespace Gallifrey.Settings
             LockTimeThresholdMilliseconds = (int)TimeSpan.FromMinutes(1).TotalMilliseconds;
             TrackIdleTime = false;
             IdleTimeThresholdMilliseconds = (int)TimeSpan.FromMinutes(5).TotalMilliseconds;
+            DefaultTimers = new List<string>();
         }
 
         public TimeSpan GetTargetThisWeek()

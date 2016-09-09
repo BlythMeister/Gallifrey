@@ -60,6 +60,7 @@ namespace Gallifrey.UI.Modern.Models
         public bool AllowTracking { get; set; }
         public string StartOfWeek { get; set; }
         public List<WorkingDay> WorkingDays { get; set; }
+        public string DefaultTimers { get; set; }
 
         //UI Settings
         public AccentThemeModel Theme { get; set; }
@@ -141,6 +142,7 @@ namespace Gallifrey.UI.Modern.Models
             TargetHoursPerDay = settings.AppSettings.TargetLogPerDay.Hours;
             TargetMinutesPerDay = settings.AppSettings.TargetLogPerDay.Minutes;
             StartOfWeek = settings.AppSettings.StartOfWeek.ToString();
+            DefaultTimers = string.Join(",", settings.AppSettings.DefaultTimers ?? new List<string>());
 
             WorkingDays = new List<WorkingDay>();
             foreach (DayOfWeek dayOfWeek in Enum.GetValues(typeof(DayOfWeek)))
@@ -196,6 +198,7 @@ namespace Gallifrey.UI.Modern.Models
             settings.AppSettings.TargetLogPerDay = new TimeSpan(TargetHoursPerDay ?? 0, TargetMinutesPerDay ?? 0, 0);
             settings.AppSettings.ExportDays = WorkingDays.Where(x => x.IsChecked).Select(x => x.DayOfWeek).ToList();
             settings.AppSettings.StartOfWeek = (DayOfWeek)Enum.Parse(typeof(DayOfWeek), StartOfWeek, true);
+            settings.AppSettings.DefaultTimers = DefaultTimers.Split(',').SelectMany(x => x.Split(' ')).Where(x=>!string.IsNullOrWhiteSpace(x)).ToList();
 
             //UI Settings
             settings.UiSettings.Theme = Theme.Name;

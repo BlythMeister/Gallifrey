@@ -128,6 +128,7 @@
       <Feature>Added configurable threshold fo lock/idle time</Feature>
       <Feature>Warn when adding for period on a non-working day and offer to skip</Feature>
       <Feature>Add Ability to change status on export</Feature>
+      <Feature>Added default timers to be created on empty working days</Feature>
     </Features>
     <Bugs>
       <Bug>Update to context menu to only show timer menu when right click on a timer</Bug>
