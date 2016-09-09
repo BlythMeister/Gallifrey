@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
              xmlns:dialogs="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
              IsModal="True" Theme="Adapt" Position="Right" Header="Locked/Idle Timers" CloseButtonIsCancel="True" Loaded="LockedTimer_OnLoaded" IsOpenChanged="LockedTimer_OpenChange">
     <Grid Width="300" Margin="5,5,5,5">
         <Grid.RowDefinitions>
@@ -55,19 +56,11 @@
             </ListView.ItemTemplate>
         </ListView>
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom">
-            <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="AddButton">
-                <Rectangle Width="23" Height="23" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}" ToolTip="Add Selected Lock Timers">
-                    <Rectangle.OpacityMask>
-                        <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_add}" />
-                    </Rectangle.OpacityMask>
-                </Rectangle>
+            <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="AddButton" ToolTip="Add Selected Lock/Idle Timers">
+                <iconPacks:PackIconModern Kind="Add" Height="23" Width="23" />
             </Button>
-            <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="DeleteButton">
-                <Rectangle Width="23" Height="23" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}" ToolTip="Delete Selected Lock Timers">
-                    <Rectangle.OpacityMask>
-                        <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_delete}" />
-                    </Rectangle.OpacityMask>
-                </Rectangle>
+            <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="DeleteButton" ToolTip="Delete Selected Lock/Idle Timers">
+                <iconPacks:PackIconModern Kind="Delete" Height="23" Width="23" />
             </Button>
         </StackPanel>
     </Grid>

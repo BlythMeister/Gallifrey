@@ -5,6 +5,7 @@
                  xmlns:gallifreyJira="clr-namespace:Gallifrey.Jira.Enum;assembly=Gallifrey.Jira"
                  xmlns:helpers="clr-namespace:Gallifrey.UI.Modern.Helpers"
                  xmlns:dialogs="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
+                 xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
                  IsModal="True" Theme="Adapt" Position="Right" Header="Export" CloseButtonIsCancel="True">
     <Grid>
         <Grid.RowDefinitions>
@@ -127,18 +128,11 @@
             </TabControl.ContentTemplate>
         </controls:MetroAnimatedSingleRowTabControl>
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,5" Click="ExportAllButton">
-                <Rectangle Width="23" Height="23" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}" ToolTip="Check All For Export">
-                    <Rectangle.OpacityMask>
-                        <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_checkmark}" />
-                    </Rectangle.OpacityMask>
-                </Rectangle>
-            </Button><Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,5" Click="ExportButton" IsDefault="True">
-                <Rectangle Width="23" Height="23" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}" ToolTip="Export Worklog To Jira">
-                    <Rectangle.OpacityMask>
-                        <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_disk_upload}" />
-                    </Rectangle.OpacityMask>
-                </Rectangle>
+            <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,5" Click="ExportAllButton" ToolTip="Check All For Export">
+                <iconPacks:PackIconModern Kind="Checkmark" Height="23" Width="23" />
+            </Button>
+            <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,5" Click="ExportButton" IsDefault="True" ToolTip="Export Checked Worklogs To Jira">
+                <iconPacks:PackIconModern Kind="DiskUpload" Height="23" Width="23" />
             </Button>
         </StackPanel>
     </Grid>

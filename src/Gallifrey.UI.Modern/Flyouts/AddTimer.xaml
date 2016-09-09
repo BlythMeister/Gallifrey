@@ -4,6 +4,7 @@
              xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
              xmlns:helpers="clr-namespace:Gallifrey.UI.Modern.Helpers"
              xmlns:dialogs="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
              IsModal="True" Theme="Adapt" Position="Right" Header="Add Timer" CloseButtonIsCancel="True">
     
     <Grid Width="340" Margin="5,5,5,5" >
@@ -92,19 +93,11 @@
         <CheckBox Grid.Row="6" Grid.Column="1" Margin="0,5" IsChecked="{Binding ChangeStatus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding LocalTimer, Converter={StaticResource BoolInvert}}" Click="ChangeStatusClick"/>
 
         <StackPanel Orientation="Horizontal" Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center">
-            <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="SearchButton">
-                <Rectangle Width="23" Height="23" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}" ToolTip="Search Jira">
-                    <Rectangle.OpacityMask>
-                        <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_magnify}" />
-                    </Rectangle.OpacityMask>
-                </Rectangle>
+            <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="SearchButton" ToolTip="Search Jira">
+                <iconPacks:PackIconModern Kind="Magnify" Height="23" Width="23" />
             </Button>
-            <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="AddButton" IsDefault="True">
-                <Rectangle Width="23" Height="23" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}" ToolTip="Add Timer">
-                    <Rectangle.OpacityMask>
-                        <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_add}" />
-                    </Rectangle.OpacityMask>
-                </Rectangle>
+            <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="AddButton" IsDefault="True" ToolTip="Add Timer">
+                <iconPacks:PackIconModern Kind="Add" Height="23" Width="23" />
             </Button>
         </StackPanel>
     </Grid>

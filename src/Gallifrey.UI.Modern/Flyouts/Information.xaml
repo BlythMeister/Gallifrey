@@ -1,7 +1,8 @@
 ﻿<controls:Flyout x:Class="Gallifrey.UI.Modern.Flyouts.Information"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro" 
+             xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
              IsModal="True" Theme="Adapt" Position="Right" Header="App Information" CloseButtonIsCancel="True">
     <Grid Width="350" Margin="5,5,5,5" >
         <Grid.RowDefinitions>
@@ -23,12 +24,8 @@
             </Grid.ColumnDefinitions>
             <TextBlock Grid.Row="0" Grid.ColumnSpan="2" FontSize="18" Margin="0,0,0,5" Text="About" TextDecorations="Underline" />
             <TextBlock Grid.Row="1" Grid.Column="0" TextWrapping="Wrap" Margin="0,0,0,5" VerticalAlignment="Center">Gallifrey is a time logging companion designed to work with Jira time logs.<LineBreak />Gallifrey is open sourced on GitHub and free to download and contribute!</TextBlock>
-            <Button Grid.Row="1" Grid.Column="1" Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="ChangeLogButton">
-                <Rectangle Width="27" Height="20" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}" ToolTip="View Full Change Log">
-                    <Rectangle.OpacityMask>
-                        <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_book_open_information}" />
-                    </Rectangle.OpacityMask>
-                </Rectangle>
+            <Button Grid.Row="1" Grid.Column="1" Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="ChangeLogButton"  ToolTip="View Full Change Log">
+                <iconPacks:PackIconModern Kind="BookOpenInformation" Height="20" Width="27" />
             </Button>
         </Grid>
         <Grid Grid.Row="1">
@@ -59,7 +56,7 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <TextBlock Grid.Row="0" FontSize="18" Margin="0,0,0,5" Text="Donate" TextDecorations="Underline" />
-            <TextBlock Grid.Row="1" TextWrapping="Wrap" Margin="0,0,0,5" VerticalAlignment="Center">Help us keep the project alive by donating via <Hyperlink NavigateUri="http://www.gallifreyapp.co.uk/donations.html" Foreground="{DynamicResource TextBrush}" RequestNavigate="Hyperlink_RequestNavigate">PayPal</Hyperlink>.</TextBlock>
+            <TextBlock Grid.Row="1" TextWrapping="Wrap" Margin="0,0,0,5" VerticalAlignment="Center">Help us keep the project alive by <Hyperlink NavigateUri="http://www.gallifreyapp.co.uk/donations.html" Foreground="{DynamicResource TextBrush}" RequestNavigate="Hyperlink_RequestNavigate">donating</Hyperlink>.</TextBlock>
         </Grid>
         <Grid Grid.Row="4">
             <Grid.RowDefinitions>

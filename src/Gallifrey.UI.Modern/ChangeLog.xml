@@ -134,7 +134,9 @@
       <Bug>Fix slow startup from refreshing project cache</Bug>
       <Bug>Fix timer adjustment buttons ignoring maximum time value on edit</Bug>
     </Bugs>
-    <Others/>
+    <Others>
+      <Other>Move to MahApps Icon pack</Other>
+    </Others>
   </Version>
 </Versions>
 

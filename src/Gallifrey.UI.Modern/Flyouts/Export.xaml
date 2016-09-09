@@ -5,6 +5,7 @@
                  xmlns:gallifreyJira="clr-namespace:Gallifrey.Jira.Enum;assembly=Gallifrey.Jira"
                  xmlns:helpers="clr-namespace:Gallifrey.UI.Modern.Helpers"
                  xmlns:dialogs="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
+                 xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
                  IsModal="True" Theme="Adapt" Position="Right" Header="Export" CloseButtonIsCancel="True">
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <Grid Width="400" Margin="5,5,5,5">
@@ -94,12 +95,8 @@
             <TextBlock Grid.Row="11" Grid.Column="0" VerticalAlignment="Center">Change Status?</TextBlock>
             <CheckBox Grid.Row="11" Grid.Column="1" Margin="0,5" IsChecked="{Binding ChangeStatus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Click="ChangeStatusClick"/>
 
-            <Button Grid.Row="12" Grid.Column="0" Grid.ColumnSpan="2" Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="ExportButton" IsDefault="True">
-                <Rectangle Width="23" Height="23" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}" ToolTip="Export Worklog To Jira">
-                    <Rectangle.OpacityMask>
-                        <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_disk_upload}" />
-                    </Rectangle.OpacityMask>
-                </Rectangle>
+            <Button Grid.Row="12" Grid.Column="0" Grid.ColumnSpan="2" Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="ExportButton" IsDefault="True" ToolTip="Export Worklog To Jira">
+                <iconPacks:PackIconModern Kind="DiskUpload" Height="23" Width="23" />
             </Button>
         </Grid>
     </ScrollViewer>
