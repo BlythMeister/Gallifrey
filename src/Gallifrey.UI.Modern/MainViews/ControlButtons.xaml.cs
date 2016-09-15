@@ -14,8 +14,8 @@ namespace Gallifrey.UI.Modern.MainViews
 {
     public partial class ControlButtons
     {
-        private MainViewModel ViewModel => (MainViewModel)DataContext;
-        private ModelHelpers ModelHelpers => ((MainViewModel)DataContext).ModelHelpers;
+        private MainViewModel ViewModel => (MainViewModel) DataContext;
+        private ModelHelpers ModelHelpers => ((MainViewModel) DataContext).ModelHelpers;
 
         public ControlButtons()
         {
@@ -48,7 +48,7 @@ namespace Gallifrey.UI.Modern.MainViews
             if (recordedToDate < target)
             {
                 var dummyIdleTimer = new IdleTimer(DateTime.Now, DateTime.Now, target.Subtract(recordedToDate), Guid.NewGuid());
-                var addTimer = new AddTimer(ModelHelpers, startDate: startDate, idleTimers: new List<IdleTimer> { dummyIdleTimer }, enableDateChange: false);
+                var addTimer = new AddTimer(ModelHelpers, startDate: startDate, idleTimers: new List<IdleTimer> {dummyIdleTimer}, enableDateChange: false);
                 await ModelHelpers.OpenFlyout(addTimer);
                 if (addTimer.AddedTimer)
                 {
@@ -87,8 +87,28 @@ namespace Gallifrey.UI.Modern.MainViews
 
         private async void PasteButton(object sender, RoutedEventArgs e)
         {
-            var jiraRef = Clipboard.GetText();
+            var pastedData = Clipboard.GetText();
+            string jiraRef = null;
+            try
+            {
+                var pastedUri = new Uri(pastedData);
+                var jiraUri = new Uri(ModelHelpers.Gallifrey.Settings.JiraConnectionSettings.JiraUrl);
+                if (pastedUri.Host == jiraUri.Host)
+                {
+                    var uriDrag = pastedUri.AbsolutePath;
+                    jiraRef = uriDrag.Substring(uriDrag.LastIndexOf("/") + 1);
+                }
+            }
+            catch (Exception)
+            {
+                //ignored
+            }
 
+            if (string.IsNullOrWhiteSpace(jiraRef))
+            {
+                jiraRef = pastedData;
+            }
+        
             if (ModelHelpers.Gallifrey.JiraConnection.DoesJiraExist(jiraRef))
             {
                 var startDate = ViewModel.TimerDates.FirstOrDefault(x => x.DateIsSelected)?.TimerDate ?? DateTime.Today;
