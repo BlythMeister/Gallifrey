@@ -248,7 +248,7 @@ namespace Gallifrey.UI.Modern.MainViews
             var idleTimer = modelHelpers.Gallifrey.IdleTimerCollection.GetTimer(idleTimerId.Value);
             if (idleTimer == null) return;
 
-            if (idleTimer.IdleTimeValue.TotalHours > 10)
+            if (idleTimer.IdleTimeValue > modelHelpers.Gallifrey.Settings.AppSettings.TargetLogPerDay)
             {
                 modelHelpers.Gallifrey.IdleTimerCollection.RemoveTimer(idleTimerId.Value);
             }
