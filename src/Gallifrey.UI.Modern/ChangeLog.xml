@@ -122,7 +122,7 @@
     </Bugs>
     <Others/>
   </Version>
-  <Version Number="3.3.1.13" Name="Pre-Release">
+  <Version Number="3.3.1.14" Name="Pre-Release">
     <Features>
       <Feature>Added config to turn lock/idle timers on/off</Feature>
       <Feature>Added configurable threshold fo lock/idle time</Feature>
