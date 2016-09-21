@@ -20,6 +20,7 @@ namespace Gallifrey.IdleTimers
         internal IdleTimerCollection()
         {
             lockTimerList = IdleTimerCollectionSerializer.DeSerialize();
+            lockTimerList.RemoveAll(x => x.IsRunning);
         }
 
         internal void SaveTimers()
