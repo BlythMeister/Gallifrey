@@ -40,6 +40,9 @@ namespace Gallifrey.UI.Modern.MainViews
             var viewModel = new MainViewModel(modelHelpers);
             modelHelpers.RefreshModel();
             modelHelpers.SelectRunningTimer();
+
+            modelHelpers.MakeTopMost += MakeTopMost;
+
             DataContext = viewModel;
 
             gallifrey.NoActivityEvent += GallifreyOnNoActivityEvent;
@@ -123,6 +126,25 @@ namespace Gallifrey.UI.Modern.MainViews
             }
 
             exceptionlessHelper.RegisterExceptionless();
+        }
+
+        private void MakeTopMost(object sender, bool topMost)
+        {
+            if (Topmost != topMost)
+            {
+                if (topMost)
+                {
+                    this.FlashWindow();
+                    Activate();
+                }
+                else
+                {
+                    this.StopFlashingWindow();
+                }
+            }
+
+            Topmost = topMost;
+
         }
 
         private async void GallifreyOnExportPromptEvent(object sender, ExportPromptDetail e)
@@ -263,15 +285,12 @@ namespace Gallifrey.UI.Modern.MainViews
             }
             else
             {
-                this.FlashWindow();
-                Activate();
                 if (modelHelpers.FlyoutOpen)
                 {
                     modelHelpers.HideAllFlyouts();
                 }
 
                 await modelHelpers.OpenFlyout(new LockedTimer(modelHelpers));
-                this.StopFlashingWindow();
 
                 foreach (var hiddenFlyout in modelHelpers.GetHiddenFlyouts())
                 {

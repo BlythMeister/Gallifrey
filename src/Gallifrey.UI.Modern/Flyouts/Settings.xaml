@@ -39,8 +39,11 @@
                     <TextBlock Grid.Row="4" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="Start Gallifrey When Your Machine Starts">Start On Boot</TextBlock>
                     <CheckBox Grid.Row="4" Grid.Column="1" Margin="5" VerticalAlignment="Center" IsChecked="{Binding StartOnBoot, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
-                    <TextBlock Grid.Row="5" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="UI Theme To Use">Theme</TextBlock>
-                    <ComboBox Grid.Row="5" Grid.Column="1" Margin="5" SelectedItem="{Binding Theme}" ItemsSource="{Binding AvaliableThemes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                    <TextBlock Grid.Row="5" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="When Flyout Open Make UI TopMost Window">Top Most For Flyouts</TextBlock>
+                    <CheckBox Grid.Row="5" Grid.Column="1" Margin="5" VerticalAlignment="Center" IsChecked="{Binding TopMostOnFlyoutOpen, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                    <TextBlock Grid.Row="6" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="UI Theme To Use">Theme</TextBlock>
+                    <ComboBox Grid.Row="6" Grid.Column="1" Margin="5" SelectedItem="{Binding Theme}" ItemsSource="{Binding AvaliableThemes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
@@ -51,8 +54,8 @@
                         </ComboBox.ItemTemplate>
                     </ComboBox>
 
-                    <TextBlock Grid.Row="6" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="UI Colour Scheme">Main Colour</TextBlock>
-                    <ComboBox Grid.Row="6" Grid.Column="1" Margin="5" SelectedItem="{Binding Accent}" ItemsSource="{Binding AvaliableAccents, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                    <TextBlock Grid.Row="7" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="UI Colour Scheme">Main Colour</TextBlock>
+                    <ComboBox Grid.Row="7" Grid.Column="1" Margin="5" SelectedItem="{Binding Accent}" ItemsSource="{Binding AvaliableAccents, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">

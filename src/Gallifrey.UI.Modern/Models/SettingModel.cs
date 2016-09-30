@@ -66,6 +66,7 @@ namespace Gallifrey.UI.Modern.Models
         public AccentThemeModel Theme { get; set; }
         public AccentThemeModel Accent { get; set; }
         public bool StartOnBoot { get; set; }
+        public bool TopMostOnFlyoutOpen { get; set; }
 
         //Jira Settings
         public string JiraUrl { get; set; }
@@ -155,6 +156,7 @@ namespace Gallifrey.UI.Modern.Models
             Theme = AvaliableThemes.FirstOrDefault(x => x.Name == settings.UiSettings.Theme) ?? AvaliableThemes.First();
             Accent = AvaliableAccents.FirstOrDefault(x => x.Name == settings.UiSettings.Accent) ?? AvaliableAccents.First();
             StartOnBoot = versionControl.IsAutomatedDeploy && registryKey.GetValue(versionControl.AppName) != null;
+            TopMostOnFlyoutOpen = settings.UiSettings.TopMostOnFlyoutOpen;
 
             //Jira Settings
             JiraUrl = settings.JiraConnectionSettings.JiraUrl;
@@ -215,6 +217,7 @@ namespace Gallifrey.UI.Modern.Models
                     registryKey.DeleteValue(versionControl.AppName, false);
                 }
             }
+            settings.UiSettings.TopMostOnFlyoutOpen = TopMostOnFlyoutOpen;
 
             //Jira Settings
             if (settings.JiraConnectionSettings.JiraUrl != JiraUrl ||
