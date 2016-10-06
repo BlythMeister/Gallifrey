@@ -130,8 +130,10 @@ namespace Gallifrey.UI.Modern.MainViews
 
         private void MakeTopMost(object sender, bool topMost)
         {
-            if (Topmost != topMost)
+            Dispatcher.Invoke(() =>
             {
+                if (Topmost == topMost) return;
+
                 if (topMost)
                 {
                     this.FlashWindow();
@@ -141,10 +143,9 @@ namespace Gallifrey.UI.Modern.MainViews
                 {
                     this.StopFlashingWindow();
                 }
-            }
 
-            Topmost = topMost;
-
+                Topmost = topMost;
+            });
         }
 
         private async void GallifreyOnExportPromptEvent(object sender, ExportPromptDetail e)
