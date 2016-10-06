@@ -182,7 +182,6 @@ namespace Gallifrey.UI.Modern.MainViews
         }
 
 
-
         private void GallifreyOnNoActivityEvent(object sender, int millisecondsSinceActivity)
         {
             Dispatcher.Invoke(() =>
@@ -271,7 +270,11 @@ namespace Gallifrey.UI.Modern.MainViews
             var idleTimer = modelHelpers.Gallifrey.IdleTimerCollection.GetTimer(idleTimerId.Value);
             if (idleTimer == null) return;
 
-            if (idleTimer.IdleTimeValue > modelHelpers.Gallifrey.Settings.AppSettings.TargetLogPerDay)
+            if (modelHelpers.Gallifrey.Settings.AppSettings.TargetLogPerDay == TimeSpan.Zero && idleTimer.IdleTimeValue > TimeSpan.FromHours(10))
+            {
+                modelHelpers.Gallifrey.IdleTimerCollection.RemoveTimer(idleTimerId.Value);
+            }
+            else if (idleTimer.IdleTimeValue > modelHelpers.Gallifrey.Settings.AppSettings.TargetLogPerDay)
             {
                 modelHelpers.Gallifrey.IdleTimerCollection.RemoveTimer(idleTimerId.Value);
             }
