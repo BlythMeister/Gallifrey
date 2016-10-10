@@ -171,6 +171,8 @@ namespace Gallifrey.UI.Modern.Flyouts
             if (dialog != null)
             {
                 await dialog;
+                DataModel.Timer.ClearLastJiraCheck();
+                SetupContext(DataModel.Timer, DataModel.ToExportMaxTime, false);
                 Focus();
             }
         }

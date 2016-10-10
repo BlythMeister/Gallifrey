@@ -20,8 +20,8 @@ namespace Gallifrey.UI.Modern.Flyouts
         private readonly ModelHelpers modelHelpers;
         private BulkExportContainerModel DataModel => (BulkExportContainerModel)DataContext;
         private readonly ProgressDialogHelper progressDialogHelper;
-        private const int nonPremiumMaxExport = 5;
-        private bool lastChangeStatusSent = false;
+        private const int NonPremiumMaxExport = 5;
+        private bool lastChangeStatusSent;
         private string currentChangeStatusJiraRef = string.Empty;
 
         public BulkExport(ModelHelpers modelHelpers, List<JiraTimer> timers)
@@ -33,7 +33,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             SetupContext(timers);
         }
 
-        private async void SetupContext(List<JiraTimer> timers)
+        private async void SetupContext(List<JiraTimer> timers, List<BulkExportModel> oldModels = null)
         {
             await Task.Delay(50);
             modelHelpers.HideFlyout(this);
@@ -92,6 +92,28 @@ namespace Gallifrey.UI.Modern.Flyouts
                     return cmp;
                 });
                 timersToShow.ForEach(x => DataModel.BulkExports.Add(x));
+                if (oldModels != null)
+                {
+                    foreach (var oldModel in oldModels)
+                    {
+                        foreach (var newModel in DataModel.BulkExports)
+                        {
+                            if (oldModel.JiraRef == newModel.JiraRef && oldModel.ExportDate.Date == newModel.ExportDate.Date)
+                            {
+                                newModel.ShouldExport = oldModel.ShouldExport;
+                                newModel.ToExportHours = oldModel.ToExportHours;
+                                newModel.ToExportMinutes = oldModel.ToExportMinutes;
+                                newModel.WorkLogStrategy = oldModel.WorkLogStrategy;
+                                newModel.RemainingHours = oldModel.RemainingHours;
+                                newModel.RemainingMinutes = oldModel.RemainingMinutes;
+                                newModel.Comment = oldModel.Comment;
+                                newModel.StandardComment = oldModel.StandardComment;
+                                newModel.ChangeStatus = oldModel.ChangeStatus;
+                            }
+                        }
+                    }
+                }
+                
                 modelHelpers.OpenFlyout(this);
             }
         }
@@ -108,7 +130,21 @@ namespace Gallifrey.UI.Modern.Flyouts
                 }
             }
 
-            var exportSuccess = await RetryableExport(timersToExport);
+            var exportSuccess = false;
+            try
+            {
+                await progressDialogHelper.Do(controller => DoExport(controller, timersToExport), "Exporting Selected Timers", false, true);
+                exportSuccess = true;
+            }
+            catch (BulkExportException ex)
+            {
+                await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Error Exporting", $"{ex.Message}");
+                foreach (var timer in timersToExport.Where(x => !x.Timer.FullyExported))
+                {
+                    timer.Timer.ClearLastJiraCheck();
+                }
+            }
+
             if (exportSuccess)
             {
                 var changeStatusExports = timersToExport.Where(x => x.ChangeStatus);
@@ -151,34 +187,14 @@ namespace Gallifrey.UI.Modern.Flyouts
             {
                 var timersToShow = DataModel.BulkExports.Where(bulkExportModel => !bulkExportModel.Timer.FullyExported).ToList();
                 DataModel.BulkExports.Clear();
-                timersToShow.ForEach(x => DataModel.BulkExports.Add(x));
+                SetupContext(timersToShow.Select(x => x.Timer).ToList(), timersToShow);
                 Focus();
             }
         }
-
-        private async Task<bool> RetryableExport(List<BulkExportModel> timersToExport)
-        {
-            try
-            {
-                await progressDialogHelper.Do(controller => DoExport(controller, timersToExport), "Exporting Selected Timers", false, true);
-                return true;
-            }
-            catch (BulkExportException ex)
-            {
-                var choice = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Error Exporting", $"{ex.Message}\n\nPlease Correct Error & Press Retry, Or Cancel To Halt Export", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Retry", NegativeButtonText = "Cancel" });
-
-                if (choice == MessageDialogResult.Affirmative)
-                {
-                    return await RetryableExport(timersToExport.Where(x => !x.Timer.FullyExported).ToList());
-                }
-
-                return false;
-            }
-        }
-
+        
         private void ExportAllButton(object sender, RoutedEventArgs e)
         {
-            if (modelHelpers.Gallifrey.Settings.InternalSettings.IsPremium || DataModel.BulkExports.Count <= nonPremiumMaxExport)
+            if (modelHelpers.Gallifrey.Settings.InternalSettings.IsPremium || DataModel.BulkExports.Count <= NonPremiumMaxExport)
             {
                 foreach (var bulkExportModel in DataModel.BulkExports)
                 {
@@ -188,7 +204,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             else
             {
                 modelHelpers.ShowGetPremiumMessage("Without Gallifrey Premium You Are Limited To A Maximum Of 5 Bulk Exports");
-                for (int i = 0; i < nonPremiumMaxExport; i++)
+                for (int i = 0; i < NonPremiumMaxExport; i++)
                 {
                     DataModel.BulkExports[i].ShouldExport = true;
                 }
@@ -197,7 +213,7 @@ namespace Gallifrey.UI.Modern.Flyouts
 
         private void ExportSingleClick(object sender, RoutedEventArgs e)
         {
-            if (modelHelpers.Gallifrey.Settings.InternalSettings.IsPremium || DataModel.BulkExports.Count(x => x.ShouldExport) <= nonPremiumMaxExport) return;
+            if (modelHelpers.Gallifrey.Settings.InternalSettings.IsPremium || DataModel.BulkExports.Count(x => x.ShouldExport) <= NonPremiumMaxExport) return;
 
             modelHelpers.ShowGetPremiumMessage("Without Gallifrey Premium You Are Limited To A Maximum Of 5 Bulk Exports");
             var checkBox = (CheckBox)sender;
