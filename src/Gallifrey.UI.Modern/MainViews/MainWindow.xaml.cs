@@ -73,7 +73,13 @@ namespace Gallifrey.UI.Modern.MainViews
             var showSettings = false;
             try
             {
-                modelHelpers.Gallifrey.Initialise();
+                var progressDialogHelper = new ProgressDialogHelper(modelHelpers.DialogContext);
+                var result = await progressDialogHelper.Do(modelHelpers.Gallifrey.Initialise, "Initialising Gallifrey", true, true);
+                if (result.Status == ProgressResult.JiraHelperStatus.Cancelled)
+                {
+                    await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Gallifrey Not Initialised", "Gallifrey Initialisation Was Cancelled, The App Will Now Close");
+                    modelHelpers.CloseApp();
+                }
             }
             catch (MissingJiraConfigException)
             {

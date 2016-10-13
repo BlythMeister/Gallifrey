@@ -49,7 +49,7 @@ namespace Gallifrey.Serialization
                 if (File.Exists(savePath))
                 {
                     File.Copy(savePath, TempWritePath, true);
-                    if (!File.Exists(BackupPath) || (new FileInfo(BackupPath).LastAccessTime.Date == DateTime.Now.Date))
+                    if (!File.Exists(BackupPath) || (new FileInfo(BackupPath).LastAccessTime.Date != DateTime.Now.Date))
                     {
                         File.Copy(savePath, BackupPath, true);
                     }
