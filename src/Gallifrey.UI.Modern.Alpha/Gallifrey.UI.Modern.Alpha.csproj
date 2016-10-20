@@ -30,9 +30,9 @@
     <ErrorReportUrl>https://github.com/BlythMeister/Gallifrey</ErrorReportUrl>
     <ProductName>Gallifrey %28Alpha%29</ProductName>
     <PublisherName>Gallifrey</PublisherName>
-    <MinimumRequiredVersion>3.3.1.20</MinimumRequiredVersion>
+    <MinimumRequiredVersion>3.3.1.21</MinimumRequiredVersion>
     <ApplicationRevision>26</ApplicationRevision>
-    <ApplicationVersion>3.3.1.20</ApplicationVersion>
+    <ApplicationVersion>3.3.1.21</ApplicationVersion>
     <UseApplicationTrust>true</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>

@@ -66,7 +66,7 @@ namespace Gallifrey.UI.Modern.MainViews
             idleDetectionHeartbeat.Enabled = true;
         }
 
-        private async void OnLoaded(object sender, RoutedEventArgs e)
+        private async void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
             var debuggerMissing = false;
             var multipleInstances = false;
@@ -143,6 +143,7 @@ namespace Gallifrey.UI.Modern.MainViews
                 if (topMost)
                 {
                     this.FlashWindow();
+                    WindowState = WindowState.Normal;
                     Activate();
                 }
                 else
@@ -396,6 +397,11 @@ namespace Gallifrey.UI.Modern.MainViews
                 await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Update Error", "There Was An Error Trying To Update Gallifrey, If This Problem Persists Please Contact Support");
             }
         }
+        
+        private void GetBeta(object sender, RoutedEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo("http://releases.gallifreyapp.co.uk/download/modern/beta/setup.exe"));
+        }
 
         private void MainWindow_OnClosed(object sender, EventArgs e)
         {
@@ -458,12 +464,7 @@ namespace Gallifrey.UI.Modern.MainViews
             modelHelpers.TriggerRemoteButtonPress(trigger);
         }
 
-        private void GetBeta(object sender, RoutedEventArgs e)
-        {
-            Process.Start(new ProcessStartInfo("http://releases.gallifreyapp.co.uk/download/modern/beta/setup.exe"));
-        }
-
-        private void MetroWindow_Activated(object sender, EventArgs e)
+        private void MainWindow_Activated(object sender, EventArgs e)
         {
             this.StopFlashingWindow();
         }
