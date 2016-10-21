@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,14 +19,16 @@ namespace Gallifrey.UI.Modern.Flyouts
     public partial class AddTimer
     {
         private readonly ModelHelpers modelHelpers;
+        private readonly ProgressDialogHelper progressDialogHelper;
         private AddTimerModel DataModel => (AddTimerModel)DataContext;
         public bool AddedTimer { get; set; }
         public Guid NewTimerId { get; set; }
-        
+
         public AddTimer(ModelHelpers modelHelpers, string jiraRef = null, DateTime? startDate = null, bool? enableDateChange = null, List<IdleTimer> idleTimers = null, bool? startNow = null)
         {
             this.modelHelpers = modelHelpers;
             InitializeComponent();
+            progressDialogHelper = new ProgressDialogHelper(modelHelpers.DialogContext);
 
             if (!modelHelpers.Gallifrey.Settings.InternalSettings.IsPremium && startNow.HasValue && startNow.Value)
             {
@@ -76,16 +79,28 @@ namespace Gallifrey.UI.Modern.Flyouts
             }
 
             Issue jiraIssue = null;
-
+            var jiraRef = string.Empty;
+            
             if (!DataModel.LocalTimer)
             {
                 try
                 {
-                    jiraIssue = modelHelpers.Gallifrey.JiraConnection.GetJiraIssue(DataModel.JiraReference);
+                    jiraRef = DataModel.JiraReference;
+                    var jiraDownloadResult = await progressDialogHelper.Do(() => modelHelpers.Gallifrey.JiraConnection.GetJiraIssue(jiraRef), "Searching For Jira Issue", true, true);
+
+                    if (jiraDownloadResult.Status == ProgressResult.JiraHelperStatus.Success)
+                    {
+                        jiraIssue = jiraDownloadResult.RetVal;
+                    }
+                    else
+                    {
+                        Focus();
+                        return;
+                    }
                 }
                 catch (NoResultsFoundException)
                 {
-                    await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Invalid Jira", "Unable To Locate The Jira");
+                    await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Invalid Jira", $"Unable To Locate The Jira '{jiraRef}'");
                     Focus();
                     return;
                 }
@@ -125,7 +140,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                 {
                     try
                     {
-                        modelHelpers.Gallifrey.JiraConnection.AssignToCurrentUser(DataModel.JiraReference);
+                        await progressDialogHelper.Do(() => modelHelpers.Gallifrey.JiraConnection.AssignToCurrentUser(jiraRef), "Assigning Issue", false, true);
                     }
                     catch (JiraConnectionException)
                     {
@@ -137,18 +152,23 @@ namespace Gallifrey.UI.Modern.Flyouts
                 {
                     try
                     {
-                        var transitionsAvaliable = modelHelpers.Gallifrey.JiraConnection.GetTransitions(DataModel.JiraReference);
+                        var transitionResult = await progressDialogHelper.Do(() => modelHelpers.Gallifrey.JiraConnection.GetTransitions(jiraRef), "Getting Transitions To Change Status", false, true);
 
-                        var timeSelectorDialog = (BaseMetroDialog)this.Resources["TransitionSelector"];
-                        await DialogCoordinator.Instance.ShowMetroDialogAsync(modelHelpers.DialogContext, timeSelectorDialog);
+                        if (transitionResult.Status == ProgressResult.JiraHelperStatus.Success)
+                        {
+                            var transitionsAvaliable = transitionResult.RetVal;
+                            
+                            var timeSelectorDialog = (BaseMetroDialog)this.Resources["TransitionSelector"];
+                            await DialogCoordinator.Instance.ShowMetroDialogAsync(modelHelpers.DialogContext, timeSelectorDialog);
 
-                        var comboBox = timeSelectorDialog.FindChild<ComboBox>("Items");
-                        comboBox.ItemsSource = transitionsAvaliable.Select(x=>x.name).ToList();
+                            var comboBox = timeSelectorDialog.FindChild<ComboBox>("Items");
+                            comboBox.ItemsSource = transitionsAvaliable.Select(x => x.name).ToList();
 
-                        var messageBox = timeSelectorDialog.FindChild<TextBlock>("Message");
-                        messageBox.Text = $"Please Select The Status Update You Would Like To Perform To {DataModel.JiraReference}";
+                            var messageBox = timeSelectorDialog.FindChild<TextBlock>("Message");
+                            messageBox.Text = $"Please Select The Status Update You Would Like To Perform To {DataModel.JiraReference}";
 
-                        stillDoingThings = true;
+                            stillDoingThings = true;
+                        }
                     }
                     catch (Exception)
                     {
@@ -167,7 +187,7 @@ namespace Gallifrey.UI.Modern.Flyouts
         private async Task<bool> AddPeriodTimer(Issue jiraIssue, TimeSpan seedTime)
         {
             var workingDate = DataModel.StartDate.Value;
-            
+
 
             while (workingDate <= DataModel.EndDate.Value)
             {
@@ -195,7 +215,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                         }
                     }
                 }
-                
+
                 workingDate = workingDate.AddDays(1);
             }
 
@@ -284,12 +304,13 @@ namespace Gallifrey.UI.Modern.Flyouts
             {
                 var dialog = (BaseMetroDialog)this.Resources["TransitionSelector"];
                 var comboBox = dialog.FindChild<ComboBox>("Items");
-                
+
                 selectedTransition = (string)comboBox.SelectedItem;
+                var jiraRef = DataModel.JiraReference;
 
                 await DialogCoordinator.Instance.HideMetroDialogAsync(modelHelpers.DialogContext, dialog);
 
-                modelHelpers.Gallifrey.JiraConnection.TransitionIssue(DataModel.JiraReference, selectedTransition);
+                await progressDialogHelper.Do(() => modelHelpers.Gallifrey.JiraConnection.TransitionIssue(jiraRef, selectedTransition), "Changing Status", false, true);
             }
             catch (StateChangedException)
             {

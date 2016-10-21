@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using Gallifrey.Jira.Model;
+using Gallifrey.JiraIntegration;
 using Gallifrey.UI.Modern.Helpers;
 using Gallifrey.UI.Modern.Models;
 using MahApps.Metro.Controls.Dialogs;
@@ -12,7 +13,7 @@ namespace Gallifrey.UI.Modern.Flyouts
     public partial class Search
     {
         public JiraIssueDisplayModel SelectedJira { get; private set; }
-        private SearchModel DataModel => (SearchModel)DataContext;
+        private SearchModel DataModel => (SearchModel) DataContext;
         private readonly ModelHelpers modelHelpers;
         private readonly bool openFromAdd;
         private readonly bool openFromEdit;
@@ -28,30 +29,62 @@ namespace Gallifrey.UI.Modern.Flyouts
             InitializeComponent();
             progressDialogHelper = new ProgressDialogHelper(modelHelpers.DialogContext);
 
-            var recent = modelHelpers.Gallifrey.JiraTimerCollection.GetJiraReferencesForLastDays(50);
+            LoadSearch();
+        }
 
-            List<string> filters;
-            List<Issue> issues;
+        private async void LoadSearch()
+        {
+            Func<SearchModel> getSearchModel = () =>
+            {
+                var recent = new List<RecentJira>();
+                var filters = new List<string>();
+                var issues = new List<Issue>();
 
-            try
-            {
-                filters = modelHelpers.Gallifrey.JiraConnection.GetJiraFilters().ToList();
-            }
-            catch (Exception)
-            {
-                filters = new List<string>();
-            }
+                try
+                {
+                    recent = modelHelpers.Gallifrey.JiraTimerCollection.GetJiraReferencesForLastDays(50).ToList();
+                }
+                catch (Exception)
+                {
+                    //Ignore
+                }
 
-            try
-            {
-                issues = modelHelpers.Gallifrey.JiraConnection.GetJiraCurrentUserOpenIssues().ToList();
-            }
-            catch (Exception)
-            {
-                issues = new List<Issue>();
-            }
+                try
+                {
+                    filters = modelHelpers.Gallifrey.JiraConnection.GetJiraFilters().ToList();
+                }
+                catch (Exception)
+                {
+                    //Ignore
+                }
 
-            DataContext = new SearchModel(filters, recent, issues, openFromEdit);
+                try
+                {
+                    issues = modelHelpers.Gallifrey.JiraConnection.GetJiraCurrentUserOpenIssues().ToList();
+                }
+                catch (Exception)
+                {
+                    //Ignore
+                }
+
+                return new SearchModel(filters, recent, issues, openFromEdit);
+            };
+
+            var result = await progressDialogHelper.Do(getSearchModel, "Loading Search Information", true, false);
+
+            switch (result.Status)
+            {
+                case ProgressResult.JiraHelperStatus.Cancelled:
+                    modelHelpers.CloseFlyout(this);
+                    break;
+                case ProgressResult.JiraHelperStatus.Errored:
+                    await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Error", "There Was An Error Loading Default Search Results");
+                    modelHelpers.CloseFlyout(this);
+                    break;
+                case ProgressResult.JiraHelperStatus.Success:
+                    DataContext = result.RetVal;
+                    break;
+            }
         }
 
         private async void SearchButton(object sender, RoutedEventArgs e)

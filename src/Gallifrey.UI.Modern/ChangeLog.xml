@@ -130,6 +130,7 @@
       <Feature>Add Ability to change status on export</Feature>
       <Feature>Added default timers to be created on empty working days</Feature>
       <Feature>Added config to force top-most window when a flyout opens</Feature>
+      <Feature>Added progress dialogs for all Jira interaction to deal with a slow instance</Feature>
     </Features>
     <Bugs>
       <Bug>Update to context menu to only show timer menu when right click on a timer</Bug>

@@ -14,6 +14,7 @@ namespace Gallifrey.UI.Modern.Flyouts
     public partial class EditTimer
     {
         private readonly ModelHelpers modelHelpers;
+        private readonly ProgressDialogHelper progressDialogHelper;
         private EditTimerModel DataModel => (EditTimerModel)DataContext;
         public Guid EditedTimerId { get; set; }
 
@@ -21,6 +22,8 @@ namespace Gallifrey.UI.Modern.Flyouts
         {
             this.modelHelpers = modelHelpers;
             InitializeComponent();
+
+            progressDialogHelper = new ProgressDialogHelper(modelHelpers.DialogContext);
 
             EditedTimerId = selected;
             DataContext = new EditTimerModel(modelHelpers.Gallifrey, EditedTimerId);
@@ -91,13 +94,25 @@ namespace Gallifrey.UI.Modern.Flyouts
                 else
                 {
                     Issue jiraIssue;
+                    var jiraRef = string.Empty;
                     try
                     {
-                        jiraIssue = modelHelpers.Gallifrey.JiraConnection.GetJiraIssue(DataModel.JiraReference);
+                        jiraRef = DataModel.JiraReference;
+                        var jiraDownloadResult = await progressDialogHelper.Do(() => modelHelpers.Gallifrey.JiraConnection.GetJiraIssue(jiraRef), "Searching For Jira Issue", true, true);
+
+                        if (jiraDownloadResult.Status == ProgressResult.JiraHelperStatus.Success)
+                        {
+                            jiraIssue = jiraDownloadResult.RetVal;
+                        }
+                        else
+                        {
+                            Focus();
+                            return;
+                        }
                     }
                     catch (NoResultsFoundException)
                     {
-                        await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Invalid Jira", "Unable To Locate The Jira");
+                        await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Invalid Jira", $"Unable To Locate The Jira '{jiraRef}'");
                         Focus();
                         return;
                     }
@@ -212,7 +227,7 @@ namespace Gallifrey.UI.Modern.Flyouts
         private async void SearchButton(object sender, RoutedEventArgs e)
         {
             modelHelpers.HideFlyout(this);
-            var searchFlyout = new Search(modelHelpers, openFromEdit:true);
+            var searchFlyout = new Search(modelHelpers, openFromEdit: true);
             await modelHelpers.OpenFlyout(searchFlyout);
             if (searchFlyout.SelectedJira != null)
             {
