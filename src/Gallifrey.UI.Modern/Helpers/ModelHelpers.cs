@@ -116,11 +116,11 @@ namespace Gallifrey.UI.Modern.Helpers
                 flyoutsControl.Items.Remove(openFlyoutDetail.Flyout);
                 openFlyoutDetail.TaskCompletionSource.SetResult(openFlyoutDetail.Flyout);
                 openFlyouts.Remove(openFlyoutDetail);
+            }
 
-                if (!openFlyouts.Any())
-                {
-                    MakeTopMost?.Invoke(this, false);
-                }
+            if (!openFlyouts.Any() || openFlyouts.All(x=>x.IsHidden))
+            {
+                MakeTopMost?.Invoke(this, false);
             }
         }
 

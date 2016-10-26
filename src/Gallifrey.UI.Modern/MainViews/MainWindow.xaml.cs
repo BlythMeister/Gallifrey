@@ -468,5 +468,13 @@ namespace Gallifrey.UI.Modern.MainViews
         {
             this.StopFlashingWindow();
         }
+
+        private void MainWindow_StateChange(object sender, EventArgs e)
+        {
+            if (Topmost && WindowState == WindowState.Minimized)
+            {
+                WindowState = WindowState.Normal;
+            }
+        }
     }
 }

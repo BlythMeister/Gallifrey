@@ -9,7 +9,7 @@
         Icon="/Icons/clock_blue.ico" Title="{Binding AppTitle}"
         WindowTitleBrush="{DynamicResource AccentColorBrush}" NonActiveWindowTitleBrush="{DynamicResource AccentColorBrush}" BorderBrush="{DynamicResource AccentColorBrush}" BorderThickness="2"
         LeftWindowCommandsOverlayBehavior="HiddenTitleBar" RightWindowCommandsOverlayBehavior="HiddenTitleBar" WindowButtonCommandsOverlayBehavior="HiddenTitleBar" IconOverlayBehavior="HiddenTitleBar" IsWindowDraggable="True"
-        Loaded="MainWindow_OnLoaded" Closed="MainWindow_OnClosed" KeyDown="MainWindow_KeyDown"  Activated="MainWindow_Activated"
+        Loaded="MainWindow_OnLoaded" Closed="MainWindow_OnClosed" KeyDown="MainWindow_KeyDown" Activated="MainWindow_Activated" StateChanged="MainWindow_StateChange"
         dialogs:DialogParticipation.Register="{Binding RelativeSource={RelativeSource Self}, Path=DataContext.ModelHelpers.DialogContext}">
 
     <controls:MetroWindow.Flyouts>
