@@ -80,8 +80,7 @@ if(Test-Path "Output")
 {
 	Remove-Item "Output\*" -recurse
 }
-.paket\paket.bootstrapper.exe
-.paket\paket.exe restore
+.paket\paket.bootstrapper.exe --run restore
 if(-Not ($ENV:PATH -like "*MSBuild*"))
 {
 	if(Test-Path "${Env:ProgramFiles(x86)}\MSBuild\14.0\bin")
