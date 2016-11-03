@@ -136,6 +136,7 @@
       <Bug>Update to context menu to only show timer menu when right click on a timer</Bug>
       <Bug>Fix slow startup from refreshing project cache</Bug>
       <Bug>Fix timer adjustment buttons ignoring maximum time value on edit</Bug>
+      <Bug>Seperate local time from Jira timers in unexported time summary</Bug>
     </Bugs>
     <Others>
       <Other>Move to MahApps Icon pack</Other>

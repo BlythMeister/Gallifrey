@@ -32,7 +32,6 @@ namespace Gallifrey.JiraTimers
         Guid ChangeLocalTimerDescription(Guid editedTimerId, string localTimerDescription);
         Guid ChangeTimerDate(Guid timerGuid, DateTime newStartDate);
         Tuple<int, int> GetNumberExported();
-        TimeSpan GetTotalUnexportedTime();
         TimeSpan GetTotalLocalTime();
         TimeSpan GetTotalExportableTime();
         TimeSpan GetTotalExportedTimeThisWeek(DayOfWeek startOfWeek);
@@ -315,12 +314,6 @@ namespace Gallifrey.JiraTimers
         public Tuple<int, int> GetNumberExported()
         {
             return new Tuple<int, int>(timerList.Count(jiraTimer => jiraTimer.FullyExported), timerList.Count);
-        }
-
-        public TimeSpan GetTotalUnexportedTime()
-        {
-            var unexportedTime = new TimeSpan();
-            return timerList.Where(timer => !timer.FullyExported).Aggregate(unexportedTime, (current, jiraTimer) => current.Add(new TimeSpan(jiraTimer.TimeToExport.Hours, jiraTimer.TimeToExport.Minutes, 0)));
         }
 
         public TimeSpan GetTotalLocalTime()

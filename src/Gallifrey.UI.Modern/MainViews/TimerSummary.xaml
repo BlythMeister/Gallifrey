@@ -23,7 +23,11 @@
                 </WrapPanel>
                 <WrapPanel HorizontalAlignment="Left" VerticalAlignment="Center" DockPanel.Dock="Left" Margin="10,0,0,0"  Visibility="{Binding TrackingOnly, Converter={StaticResource BoolToVisInvert}}">
                     <TextBlock Text="Unexported Time: "/>
-                    <TextBlock Text="{Binding UnexportedTime}" />
+                    <TextBlock Text="{Binding ExportableTime}" />
+                </WrapPanel>
+                <WrapPanel HorizontalAlignment="Left" VerticalAlignment="Center" DockPanel.Dock="Left" Margin="10,0,0,0"  Visibility="{Binding TrackingOnly, Converter={StaticResource BoolToVisInvert}}">
+                    <TextBlock Text="Local Time: "/>
+                    <TextBlock Text="{Binding LocalTime}" />
                 </WrapPanel>
 
                 <WrapPanel HorizontalAlignment="Right" VerticalAlignment="Center" DockPanel.Dock="Right" Margin="10,0,5,0" Visibility="{Binding TrackingOnly, Converter={StaticResource BoolToVisInvert}}">

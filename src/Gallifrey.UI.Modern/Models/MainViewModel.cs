@@ -43,7 +43,8 @@ namespace Gallifrey.UI.Modern.Models
 
         public string ExportedNumber => ModelHelpers.Gallifrey.JiraTimerCollection.GetNumberExported().Item1.ToString();
         public string TotalTimerCount => ModelHelpers.Gallifrey.JiraTimerCollection.GetNumberExported().Item2.ToString();
-        public string UnexportedTime => ModelHelpers.Gallifrey.JiraTimerCollection.GetTotalUnexportedTime().FormatAsString(false);
+        public string LocalTime => ModelHelpers.Gallifrey.JiraTimerCollection.GetTotalLocalTime().FormatAsString(false);
+        public string ExportableTime => ModelHelpers.Gallifrey.JiraTimerCollection.GetTotalExportableTime().FormatAsString(false);
         public string Exported => ModelHelpers.Gallifrey.JiraTimerCollection.GetTotalExportedTimeThisWeek(ModelHelpers.Gallifrey.Settings.AppSettings.StartOfWeek).FormatAsString(false);
 
         public string ExportTarget => ModelHelpers.Gallifrey.Settings.AppSettings.GetTargetThisWeek().FormatAsString(false);
