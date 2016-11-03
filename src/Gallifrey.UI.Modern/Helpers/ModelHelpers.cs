@@ -15,14 +15,13 @@ namespace Gallifrey.UI.Modern.Helpers
         private readonly List<OpenFlyoutDetails> openFlyouts;
         public IBackend Gallifrey { get; }
         public DialogContext DialogContext { get; }
-        public bool FlyoutOpen => flyoutsControl.Items.Count > 0;
+        public bool FlyoutOpen => openFlyouts.Count(x=>!x.IsHidden) > 0;
 
         public event EventHandler<Guid> SelectTimerEvent;
         public event EventHandler SelectRunningTimerEvent;
         public event EventHandler RefreshModelEvent;
         public event EventHandler<RemoteButtonTrigger> RemoteButtonTrigger;
-        public event EventHandler<bool> MakeTopMost;
-
+        
         public ModelHelpers(IBackend gallifrey, FlyoutsControl flyoutsControl)
         {
             this.flyoutsControl = flyoutsControl;
@@ -97,11 +96,6 @@ namespace Gallifrey.UI.Modern.Helpers
             openFlyoutDetail.IsHidden = false;
             openFlyoutDetail.Flyout.IsOpen = true;
 
-            if (Gallifrey.Settings.UiSettings.TopMostOnFlyoutOpen)
-            {
-                MakeTopMost?.Invoke(this, true);
-            }
-            
             return openFlyoutDetail.TaskCompletionSource.Task;
         }
 
@@ -116,11 +110,6 @@ namespace Gallifrey.UI.Modern.Helpers
                 flyoutsControl.Items.Remove(openFlyoutDetail.Flyout);
                 openFlyoutDetail.TaskCompletionSource.SetResult(openFlyoutDetail.Flyout);
                 openFlyouts.Remove(openFlyoutDetail);
-            }
-
-            if (!openFlyouts.Any() || openFlyouts.All(x=>x.IsHidden))
-            {
-                MakeTopMost?.Invoke(this, false);
             }
         }
 

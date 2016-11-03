@@ -41,8 +41,6 @@ namespace Gallifrey.UI.Modern.MainViews
             modelHelpers.RefreshModel();
             modelHelpers.SelectRunningTimer();
 
-            modelHelpers.MakeTopMost += MakeTopMost;
-
             DataContext = viewModel;
 
             gallifrey.NoActivityEvent += GallifreyOnNoActivityEvent;
@@ -64,6 +62,10 @@ namespace Gallifrey.UI.Modern.MainViews
             var idleDetectionHeartbeat = new Timer(TimeSpan.FromSeconds(30).TotalMilliseconds);
             idleDetectionHeartbeat.Elapsed += IdleDetectionCheck;
             idleDetectionHeartbeat.Enabled = true;
+
+            var flyoutOpenCheck = new Timer(100);
+            flyoutOpenCheck.Elapsed += FlyoutOpenCheck;
+            flyoutOpenCheck.Enabled = true;
         }
 
         private async void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
@@ -132,27 +134,6 @@ namespace Gallifrey.UI.Modern.MainViews
             }
 
             exceptionlessHelper.RegisterExceptionless();
-        }
-
-        private void MakeTopMost(object sender, bool topMost)
-        {
-            Dispatcher.Invoke(() =>
-            {
-                if (Topmost == topMost) return;
-
-                if (topMost)
-                {
-                    this.FlashWindow();
-                    WindowState = WindowState.Normal;
-                    Activate();
-                }
-                else
-                {
-                    this.StopFlashingWindow();
-                }
-
-                Topmost = topMost;
-            });
         }
 
         private async void GallifreyOnExportPromptEvent(object sender, ExportPromptDetail e)
@@ -267,6 +248,28 @@ namespace Gallifrey.UI.Modern.MainViews
                 machineIdle = false;
                 Dispatcher.Invoke(() => StopLockTimer(modelHelpers.Gallifrey.Settings.AppSettings.IdleTimeThresholdMilliseconds));
             }
+        }
+
+        private void FlyoutOpenCheck(object sender, ElapsedEventArgs e)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                if (modelHelpers.Gallifrey.Settings.UiSettings.TopMostOnFlyoutOpen)
+                {
+                    if (modelHelpers.FlyoutOpen)
+                    {
+                        this.FlashWindow();
+                        WindowState = WindowState.Normal;
+                        Activate();
+                    }
+                    else
+                    {
+                        this.StopFlashingWindow();
+                    }
+
+                    Topmost = modelHelpers.FlyoutOpen;
+                }
+            });
         }
 
         private async void StopLockTimer(int threshold)
