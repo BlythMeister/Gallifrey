@@ -143,5 +143,12 @@
       <Other>Attempt to fix slow memory leak</Other>
     </Others>
   </Version>
+  <Version Number="3.4.0.1" Name="Pre-Release">
+    <Features/>
+    <Bugs/>
+    <Others>
+      <Other>Update dependencies to latest versions</Other>
+    </Others>
+  </Version>
 </Versions>
 
