@@ -11,7 +11,7 @@ namespace Gallifrey.Settings
         void SetLastChangeLogVersion(Version currentVersion);
         void SetLastHeartbeatTracked(DateTime lastHeartbeat);
         void SetIsPremium(bool isPremium);
-        bool SetDefaults();
+        bool ValidateInstallationId();
     }
 
     public class InternalSettings : IInternalSettings
@@ -44,17 +44,17 @@ namespace Gallifrey.Settings
             IsPremium = isPremium;
         }
 
-        public bool SetDefaults()
+        public bool ValidateInstallationId()
         {
-            var setANewDefault = false;
+            var setInstallationId = false;
 
             if (InstallationInstaceId == Guid.Empty)
             {
-                setANewDefault = true;
+                setInstallationId = true;
                 InstallationInstaceId = Guid.NewGuid();
             }
 
-            return setANewDefault;
+            return setInstallationId;
         }
     }
 }

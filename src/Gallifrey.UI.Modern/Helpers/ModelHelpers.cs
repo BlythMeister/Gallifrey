@@ -15,13 +15,13 @@ namespace Gallifrey.UI.Modern.Helpers
         private readonly List<OpenFlyoutDetails> openFlyouts;
         public IBackend Gallifrey { get; }
         public DialogContext DialogContext { get; }
-        public bool FlyoutOpen => flyoutsControl.Items.Count > 0;
+        public bool FlyoutOpen => openFlyouts.Count(x=>!x.IsHidden) > 0;
 
         public event EventHandler<Guid> SelectTimerEvent;
         public event EventHandler SelectRunningTimerEvent;
         public event EventHandler RefreshModelEvent;
         public event EventHandler<RemoteButtonTrigger> RemoteButtonTrigger;
-
+        
         public ModelHelpers(IBackend gallifrey, FlyoutsControl flyoutsControl)
         {
             this.flyoutsControl = flyoutsControl;
@@ -61,7 +61,6 @@ namespace Gallifrey.UI.Modern.Helpers
                 openFlyoutDetail.IsHidden = false;
             }
                 
-
             flyout.IsOpen = false;
             FlyoutClosedHandler(flyout, null);
         }
@@ -96,7 +95,7 @@ namespace Gallifrey.UI.Modern.Helpers
 
             openFlyoutDetail.IsHidden = false;
             openFlyoutDetail.Flyout.IsOpen = true;
-            
+
             return openFlyoutDetail.TaskCompletionSource.Task;
         }
 

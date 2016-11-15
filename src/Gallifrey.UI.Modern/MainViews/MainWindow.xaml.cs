@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
 using System.Windows.Input;
 using System.Xml.Linq;
 using Gallifrey.AppTracking;
 using Gallifrey.Exceptions;
-using Gallifrey.Exceptions.IdleTimers;
 using Gallifrey.Exceptions.JiraIntegration;
 using Gallifrey.ExtensionMethods;
 using Gallifrey.JiraTimers;
@@ -27,6 +27,7 @@ namespace Gallifrey.UI.Modern.MainViews
         private readonly ExceptionlessHelper exceptionlessHelper;
         private MainViewModel ViewModel => (MainViewModel)DataContext;
         private bool machineLocked;
+        private bool machineIdle;
 
         public MainWindow(InstanceType instance)
         {
@@ -39,6 +40,7 @@ namespace Gallifrey.UI.Modern.MainViews
             var viewModel = new MainViewModel(modelHelpers);
             modelHelpers.RefreshModel();
             modelHelpers.SelectRunningTimer();
+
             DataContext = viewModel;
 
             gallifrey.NoActivityEvent += GallifreyOnNoActivityEvent;
@@ -52,20 +54,34 @@ namespace Gallifrey.UI.Modern.MainViews
             if (gallifrey.VersionControl.IsAutomatedDeploy)
             {
                 PerformUpdate(false, true);
-                var updateHeartbeat = new Timer(60000);
+                var updateHeartbeat = new Timer(TimeSpan.FromMinutes(1).TotalMilliseconds);
                 updateHeartbeat.Elapsed += AutoUpdateCheck;
                 updateHeartbeat.Enabled = true;
             }
+
+            var idleDetectionHeartbeat = new Timer(TimeSpan.FromSeconds(30).TotalMilliseconds);
+            idleDetectionHeartbeat.Elapsed += IdleDetectionCheck;
+            idleDetectionHeartbeat.Enabled = true;
+
+            var flyoutOpenCheck = new Timer(100);
+            flyoutOpenCheck.Elapsed += FlyoutOpenCheck;
+            flyoutOpenCheck.Enabled = true;
         }
 
-        private async void OnLoaded(object sender, RoutedEventArgs e)
+        private async void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
             var debuggerMissing = false;
             var multipleInstances = false;
             var showSettings = false;
             try
             {
-                modelHelpers.Gallifrey.Initialise();
+                var progressDialogHelper = new ProgressDialogHelper(modelHelpers.DialogContext);
+                var result = await progressDialogHelper.Do(modelHelpers.Gallifrey.Initialise, "Initialising Gallifrey", true, true);
+                if (result.Status == ProgressResult.JiraHelperStatus.Cancelled)
+                {
+                    await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Gallifrey Not Initialised", "Gallifrey Initialisation Was Cancelled, The App Will Now Close");
+                    modelHelpers.CloseApp();
+                }
             }
             catch (MissingJiraConfigException)
             {
@@ -127,7 +143,7 @@ namespace Gallifrey.UI.Modern.MainViews
             {
                 var exportTime = e.ExportTime;
                 var message = $"Do You Want To Export '{timer.JiraReference}'?\n";
-                if (modelHelpers.Gallifrey.Settings.ExportSettings.ExportPromptAll || (new TimeSpan(exportTime.Ticks - (exportTime.Ticks % 600000000)) == new TimeSpan(timer.TimeToExport.Ticks - (timer.TimeToExport.Ticks % 600000000))))
+                if (modelHelpers.Gallifrey.Settings.ExportSettings.ExportPromptAll || (new TimeSpan(exportTime.Ticks - exportTime.Ticks % 600000000) == new TimeSpan(timer.TimeToExport.Ticks - (timer.TimeToExport.Ticks % 600000000))))
                 {
                     exportTime = timer.TimeToExport;
                     message += $"You Have '{exportTime.FormatAsString(false)}' To Export";
@@ -154,10 +170,9 @@ namespace Gallifrey.UI.Modern.MainViews
         }
 
 
-
         private void GallifreyOnNoActivityEvent(object sender, int millisecondsSinceActivity)
         {
-            Application.Current.Dispatcher.Invoke(() =>
+            Dispatcher.Invoke(() =>
             {
                 ViewModel.SetNoActivityMilliseconds(millisecondsSinceActivity);
 
@@ -172,8 +187,13 @@ namespace Gallifrey.UI.Modern.MainViews
             });
         }
 
-        private async void SessionSwitchHandler(object sender, SessionSwitchEventArgs e)
+        private void SessionSwitchHandler(object sender, SessionSwitchEventArgs e)
         {
+            if (!modelHelpers.Gallifrey.Settings.AppSettings.TrackLockTime)
+            {
+                return;
+            }
+
             switch (e.Reason)
             {
                 case SessionSwitchReason.SessionLock:
@@ -181,8 +201,15 @@ namespace Gallifrey.UI.Modern.MainViews
                 case SessionSwitchReason.RemoteDisconnect:
                 case SessionSwitchReason.ConsoleDisconnect:
 
-                    modelHelpers.Gallifrey.StartLockTimer();
                     machineLocked = true;
+                    if (machineIdle)
+                    {
+                        machineIdle = false;
+                    }
+                    else
+                    {
+                        modelHelpers.Gallifrey.StartLockTimer();
+                    }
                     break;
 
                 case SessionSwitchReason.SessionUnlock:
@@ -190,37 +217,99 @@ namespace Gallifrey.UI.Modern.MainViews
                 case SessionSwitchReason.RemoteConnect:
                 case SessionSwitchReason.ConsoleConnect:
 
-                    try
-                    {
-                        var idleTimerId = modelHelpers.Gallifrey.StopLockTimer();
-                        var idleTimer = modelHelpers.Gallifrey.IdleTimerCollection.GetTimer(idleTimerId);
-                        if (idleTimer == null) return;
-
-                        if (idleTimer.IdleTimeValue.TotalSeconds < 60 || idleTimer.IdleTimeValue.TotalHours > 10)
-                        {
-                            modelHelpers.Gallifrey.IdleTimerCollection.RemoveTimer(idleTimerId);
-                        }
-                        else
-                        {
-                            this.FlashWindow();
-                            Activate();
-                            if (modelHelpers.FlyoutOpen)
-                            {
-                                modelHelpers.HideAllFlyouts();
-                            }
-
-                            await modelHelpers.OpenFlyout(new LockedTimer(modelHelpers));
-                            this.StopFlashingWindow();
-
-                            foreach (var hiddenFlyout in modelHelpers.GetHiddenFlyouts())
-                            {
-                                await modelHelpers.OpenFlyout(hiddenFlyout);
-                            }
-                        }
-                    }
-                    catch (NoIdleTimerRunningException) { }
                     machineLocked = false;
+                    machineIdle = false;
+                    StopLockTimer(modelHelpers.Gallifrey.Settings.AppSettings.LockTimeThresholdMilliseconds);
                     break;
+            }
+        }
+
+        private void IdleDetectionCheck(object sender, ElapsedEventArgs e)
+        {
+            if (!modelHelpers.Gallifrey.Settings.AppSettings.TrackIdleTime)
+            {
+                return;
+            }
+
+            if (machineLocked)
+            {
+                machineIdle = false;
+                return;
+            }
+
+            var idleTimeInfo = IdleTimeDetector.GetIdleTimeInfo();
+            if (idleTimeInfo.IdleTime.TotalMilliseconds > modelHelpers.Gallifrey.Settings.AppSettings.IdleTimeThresholdMilliseconds && !machineIdle)
+            {
+                machineIdle = true;
+                modelHelpers.Gallifrey.StartLockTimer(idleTimeInfo.IdleTime);
+            }
+            else if (idleTimeInfo.IdleTime.TotalMilliseconds < modelHelpers.Gallifrey.Settings.AppSettings.IdleTimeThresholdMilliseconds && machineIdle)
+            {
+                machineIdle = false;
+                Dispatcher.Invoke(() => StopLockTimer(modelHelpers.Gallifrey.Settings.AppSettings.IdleTimeThresholdMilliseconds));
+            }
+        }
+
+        private void FlyoutOpenCheck(object sender, ElapsedEventArgs e)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                if (modelHelpers.Gallifrey.Settings.UiSettings.TopMostOnFlyoutOpen)
+                {
+                    if (modelHelpers.FlyoutOpen)
+                    {
+                        this.FlashWindow();
+                        WindowState = WindowState.Normal;
+                        Activate();
+                    }
+                    else
+                    {
+                        this.StopFlashingWindow();
+                    }
+
+                    Topmost = modelHelpers.FlyoutOpen;
+                }
+            });
+        }
+
+        private async void StopLockTimer(int threshold)
+        {
+            var idleTimerId = modelHelpers.Gallifrey.StopLockTimer();
+            if (!idleTimerId.HasValue) return;
+
+            var idleTimer = modelHelpers.Gallifrey.IdleTimerCollection.GetTimer(idleTimerId.Value);
+            if (idleTimer == null) return;
+
+            if (modelHelpers.Gallifrey.Settings.AppSettings.TargetLogPerDay == TimeSpan.Zero && idleTimer.IdleTimeValue > TimeSpan.FromHours(10))
+            {
+                modelHelpers.Gallifrey.IdleTimerCollection.RemoveTimer(idleTimerId.Value);
+            }
+            else if (idleTimer.IdleTimeValue > modelHelpers.Gallifrey.Settings.AppSettings.TargetLogPerDay)
+            {
+                modelHelpers.Gallifrey.IdleTimerCollection.RemoveTimer(idleTimerId.Value);
+            }
+            else if (idleTimer.IdleTimeValue.TotalMilliseconds < threshold)
+            {
+                modelHelpers.Gallifrey.IdleTimerCollection.RemoveTimer(idleTimerId.Value);
+                var runningId = modelHelpers.Gallifrey.JiraTimerCollection.GetRunningTimerId();
+                if (runningId.HasValue)
+                {
+                    modelHelpers.Gallifrey.JiraTimerCollection.GetTimer(runningId.Value).AddIdleTimer(idleTimer);
+                }
+            }
+            else
+            {
+                if (modelHelpers.FlyoutOpen)
+                {
+                    modelHelpers.HideAllFlyouts();
+                }
+
+                await modelHelpers.OpenFlyout(new LockedTimer(modelHelpers));
+
+                foreach (var hiddenFlyout in modelHelpers.GetHiddenFlyouts())
+                {
+                    await modelHelpers.OpenFlyout(hiddenFlyout);
+                }
             }
         }
 
@@ -236,7 +325,7 @@ namespace Gallifrey.UI.Modern.MainViews
 
         private void AutoUpdateCheck(object sender, ElapsedEventArgs e)
         {
-            Application.Current.Dispatcher.Invoke(() =>
+            Dispatcher.Invoke(() =>
             {
                 if (!machineLocked && !modelHelpers.FlyoutOpen)
                 {
@@ -311,6 +400,11 @@ namespace Gallifrey.UI.Modern.MainViews
                 await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Update Error", "There Was An Error Trying To Update Gallifrey, If This Problem Persists Please Contact Support");
             }
         }
+        
+        private void GetBeta(object sender, RoutedEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo("http://releases.gallifreyapp.co.uk/download/modern/beta/setup.exe"));
+        }
 
         private void MainWindow_OnClosed(object sender, EventArgs e)
         {
@@ -373,14 +467,17 @@ namespace Gallifrey.UI.Modern.MainViews
             modelHelpers.TriggerRemoteButtonPress(trigger);
         }
 
-        private void GetBeta(object sender, RoutedEventArgs e)
-        {
-            Process.Start(new ProcessStartInfo("http://releases.gallifreyapp.co.uk/download/modern/beta/setup.exe"));
-        }
-
-        private void MetroWindow_Activated(object sender, EventArgs e)
+        private void MainWindow_Activated(object sender, EventArgs e)
         {
             this.StopFlashingWindow();
+        }
+
+        private void MainWindow_StateChange(object sender, EventArgs e)
+        {
+            if (Topmost && WindowState == WindowState.Minimized)
+            {
+                WindowState = WindowState.Normal;
+            }
         }
     }
 }

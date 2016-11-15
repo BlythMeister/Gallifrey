@@ -31,7 +31,7 @@ namespace Gallifrey.UI.Modern.Helpers
             {
                 if (hourValue == 0)
                 {
-                    hourValue = 0;
+                    minuteValue = 0;
                 }
                 else
                 {

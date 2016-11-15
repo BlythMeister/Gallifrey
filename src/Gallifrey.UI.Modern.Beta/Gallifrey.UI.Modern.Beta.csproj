@@ -30,9 +30,9 @@
     <ErrorReportUrl>https://github.com/BlythMeister/Gallifrey</ErrorReportUrl>
     <ProductName>Gallifrey %28Beta%29</ProductName>
     <PublisherName>Gallifrey</PublisherName>
-    <MinimumRequiredVersion>3.3.1.0</MinimumRequiredVersion>
+    <MinimumRequiredVersion>3.4.0.0</MinimumRequiredVersion>
     <ApplicationRevision>25</ApplicationRevision>
-    <ApplicationVersion>3.3.1.0</ApplicationVersion>
+    <ApplicationVersion>3.4.0.0</ApplicationVersion>
     <UseApplicationTrust>true</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -257,6 +257,17 @@
         </Reference>
         <Reference Include="System.Windows.Interactivity">
           <HintPath>..\..\packages\MahApps.Metro\lib\net45\System.Windows.Interactivity.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
+  <Choose>
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.6'">
+      <ItemGroup>
+        <Reference Include="MahApps.Metro.IconPacks.Modern">
+          <HintPath>..\..\packages\MahApps.Metro.IconPacks.Modern\lib\net46\MahApps.Metro.IconPacks.Modern.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>

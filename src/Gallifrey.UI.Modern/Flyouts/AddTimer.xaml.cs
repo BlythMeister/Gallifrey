@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,14 +19,16 @@ namespace Gallifrey.UI.Modern.Flyouts
     public partial class AddTimer
     {
         private readonly ModelHelpers modelHelpers;
+        private readonly ProgressDialogHelper progressDialogHelper;
         private AddTimerModel DataModel => (AddTimerModel)DataContext;
         public bool AddedTimer { get; set; }
         public Guid NewTimerId { get; set; }
-        
+
         public AddTimer(ModelHelpers modelHelpers, string jiraRef = null, DateTime? startDate = null, bool? enableDateChange = null, List<IdleTimer> idleTimers = null, bool? startNow = null)
         {
             this.modelHelpers = modelHelpers;
             InitializeComponent();
+            progressDialogHelper = new ProgressDialogHelper(modelHelpers.DialogContext);
 
             if (!modelHelpers.Gallifrey.Settings.InternalSettings.IsPremium && startNow.HasValue && startNow.Value)
             {
@@ -38,6 +41,19 @@ namespace Gallifrey.UI.Modern.Flyouts
 
         private async void AddButton(object sender, RoutedEventArgs e)
         {
+            if (!modelHelpers.Gallifrey.Settings.InternalSettings.IsPremium)
+            {
+                if (DataModel.LocalTimer)
+                {
+                    if (modelHelpers.Gallifrey.JiraTimerCollection.GetAllLocalTimers().Count() >= 2)
+                    {
+                        modelHelpers.ShowGetPremiumMessage("Without Gallifrey Premium You Are Limited To A Maximum Of 2 Local Timers");
+                        Focus();
+                        return;
+                    }
+                }
+            }
+
             if (!DataModel.StartDate.HasValue)
             {
                 await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Missing Date", "You Must Enter A Start Date");
@@ -52,44 +68,6 @@ namespace Gallifrey.UI.Modern.Flyouts
                 return;
             }
 
-            //Validate Premium Features
-            if (!modelHelpers.Gallifrey.Settings.InternalSettings.IsPremium)
-            {
-                if (DataModel.LocalTimer)
-                {
-                    if (modelHelpers.Gallifrey.JiraTimerCollection.GetAllLocalTimers().Count() >= 2)
-                    {
-                        modelHelpers.ShowGetPremiumMessage("Without Gallifrey Premium You Are Limited To A Maximum Of 2 Local Timers");
-                        Focus();
-                        return;
-                    }
-                }
-
-                if (DataModel.StartNow)
-                {
-                    modelHelpers.ShowGetPremiumMessage("Without Gallifrey Premium You Cannot Start Timer Now.");
-                    DataModel.StartNow = false;
-                    Focus();
-                    return;
-                }
-
-                if (DataModel.AssignToMe)
-                {
-                    modelHelpers.ShowGetPremiumMessage("Without Gallifrey Premium You Cannot Assign To Yourself.");
-                    DataModel.AssignToMe = false;
-                    Focus();
-                    return;
-                }
-
-                if (DataModel.ChangeStatus)
-                {
-                    modelHelpers.ShowGetPremiumMessage("Without Gallifrey Premium You Cannot Change Timer Status.");
-                    DataModel.ChangeStatus = false;
-                    Focus();
-                    return;
-                }
-            }
-
             TimeSpan seedTime;
             if (DataModel.TimeEditable)
             {
@@ -101,16 +79,28 @@ namespace Gallifrey.UI.Modern.Flyouts
             }
 
             Issue jiraIssue = null;
-
+            var jiraRef = string.Empty;
+            
             if (!DataModel.LocalTimer)
             {
                 try
                 {
-                    jiraIssue = modelHelpers.Gallifrey.JiraConnection.GetJiraIssue(DataModel.JiraReference);
+                    jiraRef = DataModel.JiraReference;
+                    var jiraDownloadResult = await progressDialogHelper.Do(() => modelHelpers.Gallifrey.JiraConnection.GetJiraIssue(jiraRef), "Searching For Jira Issue", true, true);
+
+                    if (jiraDownloadResult.Status == ProgressResult.JiraHelperStatus.Success)
+                    {
+                        jiraIssue = jiraDownloadResult.RetVal;
+                    }
+                    else
+                    {
+                        Focus();
+                        return;
+                    }
                 }
                 catch (NoResultsFoundException)
                 {
-                    await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Invalid Jira", "Unable To Locate The Jira");
+                    await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Invalid Jira", $"Unable To Locate The Jira '{jiraRef}'");
                     Focus();
                     return;
                 }
@@ -150,7 +140,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                 {
                     try
                     {
-                        modelHelpers.Gallifrey.JiraConnection.AssignToCurrentUser(DataModel.JiraReference);
+                        await progressDialogHelper.Do(() => modelHelpers.Gallifrey.JiraConnection.AssignToCurrentUser(jiraRef), "Assigning Issue", false, true);
                     }
                     catch (JiraConnectionException)
                     {
@@ -162,15 +152,23 @@ namespace Gallifrey.UI.Modern.Flyouts
                 {
                     try
                     {
-                        var transitionsAvaliable = modelHelpers.Gallifrey.JiraConnection.GetTransitions(DataModel.JiraReference);
+                        var transitionResult = await progressDialogHelper.Do(() => modelHelpers.Gallifrey.JiraConnection.GetTransitions(jiraRef), "Getting Transitions To Change Status", false, true);
 
-                        var timeSelectorDialog = (BaseMetroDialog)this.Resources["TransitionSelector"];
-                        await DialogCoordinator.Instance.ShowMetroDialogAsync(modelHelpers.DialogContext, timeSelectorDialog);
+                        if (transitionResult.Status == ProgressResult.JiraHelperStatus.Success)
+                        {
+                            var transitionsAvaliable = transitionResult.RetVal;
+                            
+                            var timeSelectorDialog = (BaseMetroDialog)this.Resources["TransitionSelector"];
+                            await DialogCoordinator.Instance.ShowMetroDialogAsync(modelHelpers.DialogContext, timeSelectorDialog);
 
-                        var comboBox = timeSelectorDialog.FindChild<ComboBox>("Items");
-                        comboBox.ItemsSource = transitionsAvaliable.Select(x=>x.name).ToList();
+                            var comboBox = timeSelectorDialog.FindChild<ComboBox>("Items");
+                            comboBox.ItemsSource = transitionsAvaliable.Select(x => x.name).ToList();
 
-                        stillDoingThings = true;
+                            var messageBox = timeSelectorDialog.FindChild<TextBlock>("Message");
+                            messageBox.Text = $"Please Select The Status Update You Would Like To Perform To {DataModel.JiraReference}";
+
+                            stillDoingThings = true;
+                        }
                     }
                     catch (Exception)
                     {
@@ -190,18 +188,34 @@ namespace Gallifrey.UI.Modern.Flyouts
         {
             var workingDate = DataModel.StartDate.Value;
 
+
             while (workingDate <= DataModel.EndDate.Value)
             {
-                var added = await AddSingleTimer(jiraIssue, seedTime, workingDate);
-                if (!added && workingDate < DataModel.EndDate.Value)
+                var addTimer = true;
+                if (!modelHelpers.Gallifrey.Settings.AppSettings.ExportDays.Contains(workingDate.DayOfWeek))
                 {
-                    var result = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Continue Adding?", $"The Timer For {workingDate.ToString("ddd, dd MMM")} Was Not Added.\nWould You Like To Carry On Adding For The Remaining Dates?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
+                    var result = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Add For Non-Working Day?", $"The Date {workingDate.ToString("ddd, dd MMM")} Is Not A Working Day.\nWould You Still Like To Add A Timer For This Date?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
 
                     if (result == MessageDialogResult.Negative)
                     {
-                        return false;
+                        addTimer = false;
                     }
                 }
+
+                if (addTimer)
+                {
+                    var added = await AddSingleTimer(jiraIssue, seedTime, workingDate);
+                    if (!added && workingDate < DataModel.EndDate.Value)
+                    {
+                        var result = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Continue Adding?", $"The Timer For {workingDate.ToString("ddd, dd MMM")} Was Not Added.\nWould You Like To Carry On Adding For The Remaining Dates?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
+
+                        if (result == MessageDialogResult.Negative)
+                        {
+                            return false;
+                        }
+                    }
+                }
+
                 workingDate = workingDate.AddDays(1);
             }
 
@@ -290,12 +304,13 @@ namespace Gallifrey.UI.Modern.Flyouts
             {
                 var dialog = (BaseMetroDialog)this.Resources["TransitionSelector"];
                 var comboBox = dialog.FindChild<ComboBox>("Items");
-                
+
                 selectedTransition = (string)comboBox.SelectedItem;
+                var jiraRef = DataModel.JiraReference;
 
                 await DialogCoordinator.Instance.HideMetroDialogAsync(modelHelpers.DialogContext, dialog);
 
-                modelHelpers.Gallifrey.JiraConnection.TransitionIssue(DataModel.JiraReference, selectedTransition);
+                await progressDialogHelper.Do(() => modelHelpers.Gallifrey.JiraConnection.TransitionIssue(jiraRef, selectedTransition), "Changing Status", false, true);
             }
             catch (StateChangedException)
             {
@@ -320,6 +335,45 @@ namespace Gallifrey.UI.Modern.Flyouts
 
             modelHelpers.CloseFlyout(this);
             modelHelpers.RefreshModel();
+        }
+
+        private void StartNowClick(object sender, RoutedEventArgs e)
+        {
+            if (!modelHelpers.Gallifrey.Settings.InternalSettings.IsPremium)
+            {
+                if (DataModel.StartNow)
+                {
+                    modelHelpers.ShowGetPremiumMessage("Without Gallifrey Premium You Cannot Start Timer Now.");
+                    DataModel.StartNow = false;
+                    Focus();
+                }
+            }
+        }
+
+        private void AssignToMeClick(object sender, RoutedEventArgs e)
+        {
+            if (!modelHelpers.Gallifrey.Settings.InternalSettings.IsPremium)
+            {
+                if (DataModel.AssignToMe)
+                {
+                    modelHelpers.ShowGetPremiumMessage("Without Gallifrey Premium You Cannot Assign To Yourself.");
+                    DataModel.AssignToMe = false;
+                    Focus();
+                }
+            }
+        }
+
+        private void ChangeStatusClick(object sender, RoutedEventArgs e)
+        {
+            if (!modelHelpers.Gallifrey.Settings.InternalSettings.IsPremium)
+            {
+                if (DataModel.ChangeStatus)
+                {
+                    modelHelpers.ShowGetPremiumMessage("Without Gallifrey Premium You Cannot Change Jira Status.");
+                    DataModel.ChangeStatus = false;
+                    Focus();
+                }
+            }
         }
     }
 }

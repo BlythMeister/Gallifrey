@@ -1,45 +1,44 @@
-﻿namespace Gallifrey.Settings
+﻿using System.ComponentModel;
+using Newtonsoft.Json;
+
+namespace Gallifrey.Settings
 {
     public interface IUiSettings
     {
         int Height { get; set; }
         int Width { get; set; }
-        bool AlwaysOnTop { get; set; }
         string Theme { get; set; }
         string Accent { get; set; }
-        bool SetDefaults();
+        bool TopMostOnFlyoutOpen { get; set; }
     }
 
     public class UiSettings : IUiSettings
     {
+        [DefaultValue(0)]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
         public int Height { get; set; }
+
+        [DefaultValue(0)]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
         public int Width { get; set; }
-        public bool AlwaysOnTop { get; set; }
+
+        [DefaultValue("Light")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
         public string Theme { get; set; }
+
+        [DefaultValue("Blue")]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
         public string Accent { get; set; }
-        
+
+        [DefaultValue(false)]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
+        public bool TopMostOnFlyoutOpen { get; set; }
+
         public UiSettings()
         {
-            AlwaysOnTop = true;
-        }
-
-        public bool SetDefaults()
-        {
-            var setANewDefault = false;
-
-            if (string.IsNullOrWhiteSpace(Theme))
-            {
-                setANewDefault = true;
-                Theme = "Dark";
-            }
-
-            if (string.IsNullOrWhiteSpace(Accent))
-            {
-                setANewDefault = true;
-                Accent = "Blue";
-            }
-
-            return setANewDefault;
+            Theme = "Light";
+            Accent = "Blue";
+            TopMostOnFlyoutOpen = false;
         }
     }
 }

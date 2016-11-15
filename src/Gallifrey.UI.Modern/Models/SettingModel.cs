@@ -20,20 +20,53 @@ namespace Gallifrey.UI.Modern.Models
         private int targetHoursPerDay;
         private int targetMinutesPerDay;
         private bool trackingOnly;
+        private bool alertWhenIdle;
+        private bool trackLock;
+        private bool trackIdle;
 
         //AppSettings
-        public bool AlertWhenIdle { get; set; }
+        public bool AlertWhenIdle
+        {
+            get { return alertWhenIdle; }
+            set
+            {
+                alertWhenIdle = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("AlertWhenIdle"));
+            }
+        }
+        public bool TrackIdle
+        {
+            get { return trackIdle; }
+            set
+            {
+                trackIdle = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TrackIdle"));
+            }
+        }
+        public bool TrackLock
+        {
+            get { return trackLock; }
+            set
+            {
+                trackLock = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TrackLock"));
+            }
+        }
         public int? AlertMinutes { get; set; }
+        public int? TrackIdleThresholdMinutes { get; set; }
+        public int? TrackLockThresholdMinutes { get; set; }
         public int? KeepTimersForDays { get; set; }
         public bool AutoUpdate { get; set; }
         public bool AllowTracking { get; set; }
         public string StartOfWeek { get; set; }
         public List<WorkingDay> WorkingDays { get; set; }
+        public string DefaultTimers { get; set; }
 
         //UI Settings
         public AccentThemeModel Theme { get; set; }
         public AccentThemeModel Accent { get; set; }
         public bool StartOnBoot { get; set; }
+        public bool TopMostOnFlyoutOpen { get; set; }
 
         //Jira Settings
         public string JiraUrl { get; set; }
@@ -99,13 +132,18 @@ namespace Gallifrey.UI.Modern.Models
 
             //AppSettings
             AlertWhenIdle = settings.AppSettings.AlertWhenNotRunning;
-            AlertMinutes = (settings.AppSettings.AlertTimeMilliseconds / 1000 / 60);
+            AlertMinutes = (int)TimeSpan.FromMilliseconds(settings.AppSettings.AlertTimeMilliseconds).TotalMinutes;
+            TrackIdle = settings.AppSettings.TrackIdleTime;
+            TrackIdleThresholdMinutes = (int)TimeSpan.FromMilliseconds(settings.AppSettings.IdleTimeThresholdMilliseconds).TotalMinutes;
+            TrackLock = settings.AppSettings.TrackLockTime;
+            TrackLockThresholdMinutes = (int)TimeSpan.FromMilliseconds(settings.AppSettings.LockTimeThresholdMilliseconds).TotalMinutes;
             KeepTimersForDays = settings.AppSettings.KeepTimersForDays;
             AutoUpdate = settings.AppSettings.AutoUpdate;
             AllowTracking = settings.AppSettings.UsageTracking;
             TargetHoursPerDay = settings.AppSettings.TargetLogPerDay.Hours;
             TargetMinutesPerDay = settings.AppSettings.TargetLogPerDay.Minutes;
             StartOfWeek = settings.AppSettings.StartOfWeek.ToString();
+            DefaultTimers = string.Join(",", settings.AppSettings.DefaultTimers ?? new List<string>());
 
             WorkingDays = new List<WorkingDay>();
             foreach (DayOfWeek dayOfWeek in Enum.GetValues(typeof(DayOfWeek)))
@@ -118,6 +156,7 @@ namespace Gallifrey.UI.Modern.Models
             Theme = AvaliableThemes.FirstOrDefault(x => x.Name == settings.UiSettings.Theme) ?? AvaliableThemes.First();
             Accent = AvaliableAccents.FirstOrDefault(x => x.Name == settings.UiSettings.Accent) ?? AvaliableAccents.First();
             StartOnBoot = versionControl.IsAutomatedDeploy && registryKey.GetValue(versionControl.AppName) != null;
+            TopMostOnFlyoutOpen = settings.UiSettings.TopMostOnFlyoutOpen;
 
             //Jira Settings
             JiraUrl = settings.JiraConnectionSettings.JiraUrl;
@@ -150,13 +189,18 @@ namespace Gallifrey.UI.Modern.Models
         {
             //AppSettings
             settings.AppSettings.AlertWhenNotRunning = AlertWhenIdle;
-            settings.AppSettings.AlertTimeMilliseconds = (AlertMinutes ?? 1) * 60 * 1000;
+            settings.AppSettings.AlertTimeMilliseconds = AlertWhenIdle ? (int)TimeSpan.FromMinutes((AlertMinutes ?? 1)).TotalMilliseconds : 0;
+            settings.AppSettings.TrackIdleTime = TrackIdle;
+            settings.AppSettings.IdleTimeThresholdMilliseconds = TrackIdle ? (int)TimeSpan.FromMinutes((TrackIdleThresholdMinutes ?? 1)).TotalMilliseconds : 0;
+            settings.AppSettings.TrackLockTime = TrackLock;
+            settings.AppSettings.LockTimeThresholdMilliseconds = TrackLock ? (int)TimeSpan.FromMinutes((TrackLockThresholdMinutes ?? 1)).TotalMilliseconds : 0;
             settings.AppSettings.KeepTimersForDays = KeepTimersForDays ?? 7;
             settings.AppSettings.AutoUpdate = AutoUpdate;
             settings.AppSettings.UsageTracking = AllowTracking;
             settings.AppSettings.TargetLogPerDay = new TimeSpan(TargetHoursPerDay ?? 0, TargetMinutesPerDay ?? 0, 0);
             settings.AppSettings.ExportDays = WorkingDays.Where(x => x.IsChecked).Select(x => x.DayOfWeek).ToList();
             settings.AppSettings.StartOfWeek = (DayOfWeek)Enum.Parse(typeof(DayOfWeek), StartOfWeek, true);
+            settings.AppSettings.DefaultTimers = DefaultTimers.Split(',').SelectMany(x => x.Split(' ')).Where(x=>!string.IsNullOrWhiteSpace(x)).ToList();
 
             //UI Settings
             settings.UiSettings.Theme = Theme.Name;
@@ -173,6 +217,7 @@ namespace Gallifrey.UI.Modern.Models
                     registryKey.DeleteValue(versionControl.AppName, false);
                 }
             }
+            settings.UiSettings.TopMostOnFlyoutOpen = TopMostOnFlyoutOpen;
 
             //Jira Settings
             if (settings.JiraConnectionSettings.JiraUrl != JiraUrl ||

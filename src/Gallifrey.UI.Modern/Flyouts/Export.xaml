@@ -4,11 +4,14 @@
              xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
                  xmlns:gallifreyJira="clr-namespace:Gallifrey.Jira.Enum;assembly=Gallifrey.Jira"
                  xmlns:helpers="clr-namespace:Gallifrey.UI.Modern.Helpers"
+                 xmlns:dialogs="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
+                 xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
                  IsModal="True" Theme="Adapt" Position="Right" Header="Export" CloseButtonIsCancel="True">
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <Grid Width="400" Margin="5,5,5,5">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
@@ -88,14 +91,37 @@
 
             <TextBlock Grid.Row="10" Grid.Column="0" VerticalAlignment="Center">Add As Jira<LineBreak />Comment?</TextBlock>
             <CheckBox Grid.Row="10" Grid.Column="1" Margin="0,5" IsChecked="{Binding StandardComment, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-            
-            <Button Grid.Row="11" Grid.Column="0" Grid.ColumnSpan="2" Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="ExportButton" IsDefault="True">
-                <Rectangle Width="23" Height="23" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}" ToolTip="Export Worklog To Jira">
-                    <Rectangle.OpacityMask>
-                        <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_disk_upload}" />
-                    </Rectangle.OpacityMask>
-                </Rectangle>
+
+            <TextBlock Grid.Row="11" Grid.Column="0" VerticalAlignment="Center">Change Status?</TextBlock>
+            <CheckBox Grid.Row="11" Grid.Column="1" Margin="0,5" IsChecked="{Binding ChangeStatus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Click="ChangeStatusClick"/>
+
+            <Button Grid.Row="12" Grid.Column="0" Grid.ColumnSpan="2" Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="ExportButton" IsDefault="True" ToolTip="Export Worklog To Jira">
+                <iconPacks:PackIconModern Kind="DiskUpload" Height="23" Width="23" />
             </Button>
         </Grid>
     </ScrollViewer>
+
+    <controls:Flyout.Resources>
+        <ResourceDictionary>
+            <dialogs:CustomDialog x:Key="TransitionSelector"
+                                 Title="Select Status Change To Do"
+                                 x:Name="TransitionSelector">
+                <Grid Margin="0 10 0 0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" MinHeight="20" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Margin="0 5 0 0" FontSize="{DynamicResource DialogMessageFontSize}" TextWrapping="Wrap" x:Name="Message" Text="Please Select The Status Update You Would Like To Perform" />
+                    <ComboBox Grid.Row="1" Margin="0 5 0 0" FontSize="{DynamicResource DialogMessageFontSize}" controls:ControlsHelper.FocusBorderBrush="{DynamicResource AccentColorBrush}" x:Name="Items" />
+
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Height="85">
+                        <Button Height="35" MinWidth="80" Style="{DynamicResource AccentedDialogSquareButton}" Content="OK" Margin="0 0 5 0" Click="TransitionSelected" />
+                        <Button Height="35" MinWidth="80" Content="Cancel" Margin="5 0 5 0" Click="CancelTransition"/>
+                    </StackPanel>
+                </Grid>
+            </dialogs:CustomDialog>
+        </ResourceDictionary>
+    </controls:Flyout.Resources>
 </controls:Flyout>

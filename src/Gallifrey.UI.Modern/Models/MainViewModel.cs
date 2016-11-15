@@ -43,7 +43,8 @@ namespace Gallifrey.UI.Modern.Models
 
         public string ExportedNumber => ModelHelpers.Gallifrey.JiraTimerCollection.GetNumberExported().Item1.ToString();
         public string TotalTimerCount => ModelHelpers.Gallifrey.JiraTimerCollection.GetNumberExported().Item2.ToString();
-        public string UnexportedTime => ModelHelpers.Gallifrey.JiraTimerCollection.GetTotalUnexportedTime().FormatAsString(false);
+        public string LocalTime => ModelHelpers.Gallifrey.JiraTimerCollection.GetTotalLocalTime().FormatAsString(false);
+        public string ExportableTime => ModelHelpers.Gallifrey.JiraTimerCollection.GetTotalExportableTime().FormatAsString(false);
         public string Exported => ModelHelpers.Gallifrey.JiraTimerCollection.GetTotalExportedTimeThisWeek(ModelHelpers.Gallifrey.Settings.AppSettings.StartOfWeek).FormatAsString(false);
 
         public string ExportTarget => ModelHelpers.Gallifrey.Settings.AppSettings.GetTargetThisWeek().FormatAsString(false);
@@ -231,11 +232,34 @@ namespace Gallifrey.UI.Modern.Models
                     }
                 }
 
-                var removeTimers = dateModel.Timers.Where(timerModel => !dateTimers.Any(x => x.UniqueId == timerModel.JiraTimer.UniqueId)).ToList();
-
-                foreach (var removeTimer in removeTimers)
+                foreach (var removeTimer in dateModel.Timers.Where(timerModel => !dateTimers.Any(x => x.UniqueId == timerModel.JiraTimer.UniqueId)).ToList())
                 {
                     dateModel.RemoveTimerModel(removeTimer);
+                }
+
+                if (!dateModel.Timers.Any())
+                {
+                    foreach (var defaultJira in ModelHelpers.Gallifrey.Settings.AppSettings.DefaultTimers ?? new List<string>())
+                    {
+                        if (!dateModel.Timers.Any(x => x.JiraTimer.JiraReference == defaultJira))
+                        {
+                            try
+                            {
+                                var jira = ModelHelpers.Gallifrey.JiraConnection.GetJiraIssue(defaultJira);
+                                if (jira != null)
+                                {
+                                    var timerId = ModelHelpers.Gallifrey.JiraTimerCollection.AddTimer(jira, timerDate.Date, TimeSpan.Zero, false);
+                                    var timer = ModelHelpers.Gallifrey.JiraTimerCollection.GetTimer(timerId);
+                                    timer.PropertyChanged += (sender, args) => TimerChanged();
+                                    dateModel.AddTimerModel(new TimerModel(timer));
+                                }
+                            }
+                            catch (Exception)
+                            {
+                                // ignored
+                            }
+                        }
+                    }
                 }
             }
 
@@ -291,7 +315,6 @@ namespace Gallifrey.UI.Modern.Models
             var runningTimer = ModelHelpers.Gallifrey.JiraTimerCollection.GetRunningTimerId();
             if (runningTimer.HasValue)
             {
-                //SetSelectedTimer(runningTimer.Value);
                 ModelHelpers.SetSelectedTimer(runningTimer.Value);
             }
             else
@@ -381,6 +404,7 @@ namespace Gallifrey.UI.Modern.Models
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TimeToExportMessage"));
 
             SetTrackingOnlyInModel();
+            RefreshModel();
         }
 
         private void TimerChanged()

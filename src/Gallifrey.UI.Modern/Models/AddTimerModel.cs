@@ -15,6 +15,9 @@ namespace Gallifrey.UI.Modern.Models
         private int startHours;
         private DateTime? startDate;
         private DateTime? endDate;
+        private bool startNow;
+        private bool assignToMe;
+        private bool changeStatus;
 
         public event PropertyChangedEventHandler PropertyChanged;
         public string JiraReference { get; set; }
@@ -24,12 +27,40 @@ namespace Gallifrey.UI.Modern.Models
         public DateTime MaxDate { get; set; }
         public DateTime DisplayDate { get; set; }
         public bool DateEditable { get; set; }
-        public bool StartNow { get; set; }
         public bool StartNowEditable { get; set; }
-        public bool AssignToMe { get; set; }
-        public bool ChangeStatus { get; set; }
-
         public List<IdleTimer> IdleTimers { get; set; }
+
+        public bool StartNow
+        {
+            get { return startNow; }
+            set
+            {
+                startNow = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("StartNow"));
+            }
+        }
+
+        public bool AssignToMe
+        {
+            get { return assignToMe; }
+            set
+            {
+                assignToMe = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("AssignToMe"));
+            }
+        }
+
+        public bool ChangeStatus
+        {
+            get { return changeStatus; }
+            set
+            {
+                changeStatus = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ChangeStatus"));
+            }
+        }
+
+        
 
         public bool TimeEditable => IdleTimers == null || IdleTimers.Count == 0;
 
@@ -77,6 +108,10 @@ namespace Gallifrey.UI.Modern.Models
             set
             {
                 endDate = value;
+                if (EndDate < startDate)
+                {
+                    endDate = startDate;
+                }
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("EndDate"));
                 SetStartNowEnabled();
             }

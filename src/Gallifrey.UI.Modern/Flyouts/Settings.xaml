@@ -3,13 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
              xmlns:helpers="clr-namespace:Gallifrey.UI.Modern.Helpers"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
              IsModal="True" Theme="Adapt" Position="Right" Header="Settings" CloseButtonIsCancel="True">
-    <Grid Width="340" Height="400" Margin="5,5,5,5" VerticalAlignment="Top">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
-        <controls:MetroAnimatedSingleRowTabControl TabStripPlacement="Top" controls:TabControlHelper.IsUnderlined="True" Grid.Row="0">
+    <DockPanel Height="Auto" VerticalAlignment="Stretch" Width="393" Margin="5,5,5,5">
+        <controls:MetroAnimatedSingleRowTabControl TabStripPlacement="Top" controls:TabControlHelper.IsUnderlined="True" DockPanel.Dock="Top" VerticalAlignment="Stretch" Height="Auto">
             <TabItem Header="General">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -27,23 +24,23 @@
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
-                    <TextBlock Grid.Row="0" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="Should Remind You If You Do Not Have Any Timers Running">Alert When Idle?</TextBlock>
-                    <CheckBox Grid.Row="0" Grid.Column="1" Margin="5" VerticalAlignment="Center" IsChecked="{Binding AlertWhenIdle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBlock Grid.Row="0" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="The Default Timers To Be Created On Empty Days (Comma/Space Seperated)">Default Timers</TextBlock>
+                    <TextBox Grid.Row="0" Grid.Column="1" Margin="5" VerticalAlignment="Center" Text="{Binding DefaultTimers, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    
+                    <TextBlock Grid.Row="1" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="Number Of Days To Keep Timers For In The UI">Keep Timers For (Days)</TextBlock>
+                    <controls:NumericUpDown Grid.Row="1" Grid.Column="1" Margin="5" VerticalAlignment="Center" Minimum="2" Maximum="150" Value="{Binding KeepTimersForDays, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" controls:TextBoxHelper.SelectAllOnFocus="True"/>
 
-                    <TextBlock Grid.Row="1" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="How Frequently Alerts Should Be Shown">Idle Time Alert (Minutes)</TextBlock>
-                    <controls:NumericUpDown Grid.Row="1" Grid.Column="1" Margin="5" VerticalAlignment="Center" Minimum="0" Maximum="120" Value="{Binding AlertMinutes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding AlertWhenIdle}" controls:TextBoxHelper.SelectAllOnFocus="True" />
+                    <TextBlock Grid.Row="2" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="Should Updated Be Automatically Applied">Auto Update?</TextBlock>
+                    <CheckBox Grid.Row="2" Grid.Column="1" Margin="5" VerticalAlignment="Center" IsChecked="{Binding AutoUpdate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
-                    <TextBlock Grid.Row="2" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="Number Of Days To Keep Timers For In The UI">Keep Timers For (Days)</TextBlock>
-                    <controls:NumericUpDown Grid.Row="2" Grid.Column="1" Margin="5" VerticalAlignment="Center" Minimum="2" Maximum="150" Value="{Binding KeepTimersForDays, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" controls:TextBoxHelper.SelectAllOnFocus="True"/>
+                    <TextBlock Grid.Row="3" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="Allow Gallifrey To Track Your App Usage (Which Functions You Use - No Personal Data Is Captured)">Anonymous Usage Tracking</TextBlock>
+                    <CheckBox Grid.Row="3" Grid.Column="1" Margin="5" VerticalAlignment="Center" IsChecked="{Binding AllowTracking, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Click="AllowTrackingClick"/>
 
-                    <TextBlock Grid.Row="3" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="Should Updated Be Automatically Applied">Auto Update?</TextBlock>
-                    <CheckBox Grid.Row="3" Grid.Column="1" Margin="5" VerticalAlignment="Center" IsChecked="{Binding AutoUpdate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBlock Grid.Row="4" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="Start Gallifrey When Your Machine Starts">Start On Boot</TextBlock>
+                    <CheckBox Grid.Row="4" Grid.Column="1" Margin="5" VerticalAlignment="Center" IsChecked="{Binding StartOnBoot, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
-                    <TextBlock Grid.Row="4" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="Allow Gallifrey To Track Your App Usage (Which Functions You Use - No Personal Data Is Captured)">Anonymous Usage Tracking</TextBlock>
-                    <CheckBox Grid.Row="4" Grid.Column="1" Margin="5" VerticalAlignment="Center" IsChecked="{Binding AllowTracking, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Click="AllowTrackingClick"/>
-
-                    <TextBlock Grid.Row="5" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="Start Gallifrey When Your Machine Starts">Start On Boot</TextBlock>
-                    <CheckBox Grid.Row="5" Grid.Column="1" Margin="5" VerticalAlignment="Center" IsChecked="{Binding StartOnBoot, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    <TextBlock Grid.Row="5" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="When Flyout Open Make UI TopMost Window">Top Most For Flyouts</TextBlock>
+                    <CheckBox Grid.Row="5" Grid.Column="1" Margin="5" VerticalAlignment="Center" IsChecked="{Binding TopMostOnFlyoutOpen, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                     <TextBlock Grid.Row="6" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="UI Theme To Use">Theme</TextBlock>
                     <ComboBox Grid.Row="6" Grid.Column="1" Margin="5" SelectedItem="{Binding Theme}" ItemsSource="{Binding AvaliableThemes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
@@ -70,7 +67,7 @@
                     </ComboBox>
                 </Grid>
             </TabItem>
-            <TabItem Header="Jira">
+            <TabItem Header="Idle">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
@@ -81,16 +78,27 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
-                    <TextBlock Grid.Row="0" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="The URL To Connect To Jira">URL</TextBlock>
-                    <TextBox Grid.Row="0" Grid.Column="1" Margin="5" VerticalAlignment="Center" Text="{Binding JiraUrl, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBlock Grid.Row="0" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="Should Remind You If You Do Not Have Any Timers Running">Not Running Alert?</TextBlock>
+                    <CheckBox Grid.Row="0" Grid.Column="1" Margin="5" VerticalAlignment="Center" IsChecked="{Binding AlertWhenIdle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
-                    <TextBlock Grid.Row="1" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="Your Jira Username">Username</TextBlock>
-                    <TextBox Grid.Row="1" Grid.Column="1" Margin="5" VerticalAlignment="Center" Text="{Binding JiraUsername, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBlock Grid.Row="1" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="How Frequently Alerts Should Be Shown">Not Running Alert Time (Minutes)</TextBlock>
+                    <controls:NumericUpDown Grid.Row="1" Grid.Column="1" Margin="5" VerticalAlignment="Center" Minimum="0" Maximum="120" Value="{Binding AlertMinutes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding AlertWhenIdle}" controls:TextBoxHelper.SelectAllOnFocus="True" />
 
-                    <TextBlock Grid.Row="2" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="Your Jira Password">Password</TextBlock>
-                    <PasswordBox Grid.Row="2" Grid.Column="1" Margin="5" VerticalAlignment="Center" helpers:PasswordBoxHelper.BindPassword="true" helpers:PasswordBoxHelper.BoundPassword="{Binding JiraPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    <TextBlock Grid.Row="2" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="Should Track Time When Your Away From Your Machine">Track Machine Locked Time?</TextBlock>
+                    <CheckBox Grid.Row="2" Grid.Column="1" Margin="5" VerticalAlignment="Center" IsChecked="{Binding TrackLock, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+                    <TextBlock Grid.Row="3" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="Threshold For Minimum Time Tracked When Your Away From Your Machine">Lock Time Threshold (Minutes)</TextBlock>
+                    <controls:NumericUpDown Grid.Row="3" Grid.Column="1" Margin="5" VerticalAlignment="Center" Minimum="1" Maximum="120" Value="{Binding TrackLockThresholdMinutes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding TrackLock}" controls:TextBoxHelper.SelectAllOnFocus="True" />
+
+                    <TextBlock Grid.Row="4" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="Should Track Time When Your Idle">Track Idle Time?</TextBlock>
+                    <CheckBox Grid.Row="4" Grid.Column="1" Margin="5" VerticalAlignment="Center" IsChecked="{Binding TrackIdle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+                    <TextBlock Grid.Row="5" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="Threshold For Minimum Time Tracked When Idle">Idle Time Threshold (Minutes)</TextBlock>
+                    <controls:NumericUpDown Grid.Row="5" Grid.Column="1" Margin="5" VerticalAlignment="Center" Minimum="1" Maximum="120" Value="{Binding TrackIdleThresholdMinutes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding TrackIdle}" controls:TextBoxHelper.SelectAllOnFocus="True" />
                 </Grid>
             </TabItem>
             <TabItem Header="Targets">
@@ -177,16 +185,35 @@
                     <TextBox Grid.Row="5" Grid.Column="1" Margin="5" VerticalAlignment="Center" Text="{Binding DefaultComment, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding TrackingOnly, Converter={StaticResource BoolToVisInvert}}"/>
                 </Grid>
             </TabItem>
+            <TabItem Header="Jira">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="The URL To Connect To Jira">URL</TextBlock>
+                    <TextBox Grid.Row="0" Grid.Column="1" Margin="5" VerticalAlignment="Center" Text="{Binding JiraUrl, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+                    <TextBlock Grid.Row="1" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="Your Jira Username">Username</TextBlock>
+                    <TextBox Grid.Row="1" Grid.Column="1" Margin="5" VerticalAlignment="Center" Text="{Binding JiraUsername, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+                    <TextBlock Grid.Row="2" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="Your Jira Password">Password</TextBlock>
+                    <PasswordBox Grid.Row="2" Grid.Column="1" Margin="5" VerticalAlignment="Center" helpers:PasswordBoxHelper.BindPassword="true" helpers:PasswordBoxHelper.BoundPassword="{Binding JiraPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                </Grid>
+            </TabItem>
         </controls:MetroAnimatedSingleRowTabControl>
 
-        <WrapPanel HorizontalAlignment="Center" Grid.Row="1">
-            <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="SaveSettings" IsDefault="True">
-                <Rectangle Width="23" Height="23" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}" ToolTip="Save Settings">
-                    <Rectangle.OpacityMask>
-                        <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_save}" />
-                    </Rectangle.OpacityMask>
-                </Rectangle>
+        <WrapPanel HorizontalAlignment="Center" DockPanel.Dock="Bottom" VerticalAlignment="Bottom" Height="Auto">
+            <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="SaveSettings" IsDefault="True" ToolTip="Save Settings">
+                <iconPacks:PackIconModern Kind="Save" Height="23" Width="23" />
             </Button>
         </WrapPanel>
-    </Grid>
+    </DockPanel>
 </controls:Flyout>

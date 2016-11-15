@@ -15,8 +15,10 @@ namespace Gallifrey.UI.Modern.Models
         private int toExportMinutes;
         private int remainingHours;
         private int remainingMinutes;
-        private TimeSpan toExportMaxTime;
+        private bool changeStatus;
         public event PropertyChangedEventHandler PropertyChanged;
+
+        public TimeSpan ToExportMaxTime { get; private set; }
 
         public JiraTimer Timer { get; set; }
 
@@ -48,6 +50,16 @@ namespace Gallifrey.UI.Modern.Models
             }
         }
 
+        public bool ChangeStatus
+        {
+            get { return changeStatus; }
+            set
+            {
+                changeStatus = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ChangeStatus"));
+            }
+        }
+
         public int? ToExportHours
         {
             get
@@ -59,10 +71,10 @@ namespace Gallifrey.UI.Modern.Models
                 var newValue = value ?? 0;
                 HourMinuteHelper.UpdateHours(ref toExportHours, newValue, int.MaxValue);
 
-                if (ToExport > toExportMaxTime)
+                if (ToExport > ToExportMaxTime)
                 {
-                    toExportHours = toExportMaxTime.Hours;
-                    toExportMinutes = toExportMaxTime.Minutes;
+                    toExportHours = ToExportMaxTime.Hours;
+                    toExportMinutes = ToExportMaxTime.Minutes;
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ToExportHours"));
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ToExportMinutes"));
                 }
@@ -86,10 +98,10 @@ namespace Gallifrey.UI.Modern.Models
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ToExportHours"));
                 }
 
-                if (ToExport > toExportMaxTime)
+                if (ToExport > ToExportMaxTime)
                 {
-                    toExportHours = toExportMaxTime.Hours;
-                    toExportMinutes = toExportMaxTime.Minutes;
+                    toExportHours = ToExportMaxTime.Hours;
+                    toExportMinutes = ToExportMaxTime.Minutes;
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ToExportHours"));
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ToExportMinutes"));
                 }
@@ -152,7 +164,7 @@ namespace Gallifrey.UI.Modern.Models
 
         public void UpdateTimer(JiraTimer timer, Issue jiraIssue)
         {
-            UpdateTimer(timer, toExportMaxTime);
+            UpdateTimer(timer, ToExportMaxTime);
 
             OriginalRemaining = jiraIssue.fields.timetracking != null ? TimeSpan.FromSeconds(jiraIssue.fields.timetracking.remainingEstimateSeconds) : new TimeSpan();
 
@@ -165,15 +177,15 @@ namespace Gallifrey.UI.Modern.Models
 
             if (exportTime.HasValue && exportTime.Value < timer.TimeToExport)
             {
-                toExportMaxTime = exportTime.Value;
+                ToExportMaxTime = exportTime.Value;
             }
             else
             {
-                toExportMaxTime = new TimeSpan(timer.TimeToExport.Hours, timer.TimeToExport.Minutes, 0);
+                ToExportMaxTime = new TimeSpan(timer.TimeToExport.Hours, timer.TimeToExport.Minutes, 0);
             }
 
-            ToExportHours = toExportMaxTime.Hours;
-            ToExportMinutes = toExportMaxTime.Minutes;
+            ToExportHours = ToExportMaxTime.Hours;
+            ToExportMinutes = ToExportMaxTime.Minutes;
 
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasParent"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("JiraParentRef"));

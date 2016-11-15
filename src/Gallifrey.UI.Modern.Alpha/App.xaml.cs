@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Collections;
+using System.Windows;
 using Gallifrey.Versions;
 
 namespace Gallifrey.UI.Modern.Alpha
@@ -10,7 +11,7 @@ namespace Gallifrey.UI.Modern.Alpha
     {
         protected override void OnStartup(StartupEventArgs e)
         {
-            Modern.App.Run(InstanceType.Alpha);
+            Modern.App.Run(InstanceType.Alpha, Resources);
         }
     }
 }

@@ -25,15 +25,7 @@ namespace Gallifrey.Serialization
 
             var settings = serializer.DeSerialize();
 
-            return SetMissingDefaults(settings);
-        }
-
-        private static SettingsCollection SetMissingDefaults(SettingsCollection settings)
-        {
-            var uiSettingsDefaultsSet = settings.UiSettings.SetDefaults();
-            var internalSettingsDefaultsSet = settings.InternalSettings.SetDefaults();
-            
-            if (uiSettingsDefaultsSet || internalSettingsDefaultsSet)
+            if (settings.InternalSettings.ValidateInstallationId())
             {
                 Serialize(settings);
             }

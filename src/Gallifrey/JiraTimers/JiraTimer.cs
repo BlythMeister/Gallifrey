@@ -236,5 +236,10 @@ namespace Gallifrey.JiraTimers
             JiraName = localTimerDescription;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("JiraName"));
         }
+
+        public void ClearLastJiraCheck()
+        {
+            LastJiraTimeCheck = null;
+        }
     }
 }

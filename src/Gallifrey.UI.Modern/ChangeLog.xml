@@ -122,5 +122,26 @@
     </Bugs>
     <Others/>
   </Version>
+  <Version Number="3.4.0.0" Name="">
+    <Features>
+      <Feature>Added config to turn lock/idle timers on/off</Feature>
+      <Feature>Added configurable threshold fo lock/idle time</Feature>
+      <Feature>Warn when adding for period on a non-working day and offer to skip</Feature>
+      <Feature>Add Ability to change status on export</Feature>
+      <Feature>Added default timers to be created on empty working days</Feature>
+      <Feature>Added config to force top-most window when a flyout opens</Feature>
+      <Feature>Added progress dialogs for all Jira interaction to deal with a slow instance</Feature>
+    </Features>
+    <Bugs>
+      <Bug>Update to context menu to only show timer menu when right click on a timer</Bug>
+      <Bug>Fix slow startup from refreshing project cache</Bug>
+      <Bug>Fix timer adjustment buttons ignoring maximum time value on edit</Bug>
+      <Bug>Seperate local time from Jira timers in unexported time summary</Bug>
+    </Bugs>
+    <Others>
+      <Other>Move to MahApps Icon pack</Other>
+      <Other>Attempt to fix slow memory leak</Other>
+    </Others>
+  </Version>
 </Versions>
 

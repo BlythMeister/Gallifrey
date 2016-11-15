@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using Gallifrey.Exceptions.Serialization;
 using Newtonsoft.Json;
@@ -9,10 +10,16 @@ namespace Gallifrey.Serialization
     public class ItemSerializer<T> where T : new()
     {
         private readonly string savePath;
+        private string TempWritePath => savePath + ".temp";
+        private string BackupPath => savePath + ".bak";
 
-        public ItemSerializer() { }
+        public ItemSerializer()
+        {
+        }
 
-        public ItemSerializer(string fileName) : this(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Gallifrey"), fileName) { }
+        public ItemSerializer(string fileName) : this(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Gallifrey"), fileName)
+        {
+        }
 
         public ItemSerializer(string directory, string fileName)
         {
@@ -39,6 +46,14 @@ namespace Gallifrey.Serialization
 
             try
             {
+                if (File.Exists(savePath))
+                {
+                    File.Copy(savePath, TempWritePath, true);
+                    if (!File.Exists(BackupPath) || (new FileInfo(BackupPath).LastAccessTime.Date != DateTime.Now.Date))
+                    {
+                        File.Copy(savePath, BackupPath, true);
+                    }
+                }
                 File.WriteAllText(savePath, DataEncryption.Encrypt(JsonConvert.SerializeObject(obj)));
             }
             catch (Exception ex)
@@ -49,6 +64,20 @@ namespace Gallifrey.Serialization
                 }
                 Thread.Sleep(100);
                 Serialize(obj, retryCount + 1);
+            }
+            finally
+            {
+                try
+                {
+                    if (File.Exists(TempWritePath))
+                    {
+                        File.Delete(TempWritePath);
+                    }
+                }
+                catch (Exception)
+                {
+                    //ignored
+                }
             }
         }
 

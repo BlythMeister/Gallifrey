@@ -169,11 +169,25 @@ namespace Gallifrey.UI.Modern.Models
 
             currentTime = addTime ? currentTime.Add(timeAdjustmentAmount) : currentTime.Subtract(timeAdjustmentAmount);
 
-            Hours = currentTime.Hours > 9 ? 9 : currentTime.Hours;
-            Minutes = currentTime.Minutes;
+            if (currentTime.TotalMinutes > 599)
+            {
+                Hours = 9;
+                Minutes = 59;
+            }
+            else if (currentTime.TotalMinutes < 0)
+            {
+                Hours = 0;
+                Minutes = 0;
+            }
+            else
+            {
+                Hours = currentTime.Hours;
+                Minutes = currentTime.Minutes;
+            }
 
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Hours"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Minutes"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasModifiedTime"));
         }
 
         public void SetJiraReference(string jiraRef)

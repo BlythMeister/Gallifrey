@@ -1,11 +1,14 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using Gallifrey.Exceptions.JiraIntegration;
 using Gallifrey.Jira.Model;
 using Gallifrey.JiraTimers;
 using Gallifrey.UI.Modern.Helpers;
 using Gallifrey.UI.Modern.Models;
+using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 
 namespace Gallifrey.UI.Modern.Flyouts
@@ -119,7 +122,30 @@ namespace Gallifrey.UI.Modern.Flyouts
                 if (result.Status == ProgressResult.JiraHelperStatus.Success)
                 {
                     modelHelpers.Gallifrey.JiraTimerCollection.AddJiraExportedTime(DataModel.Timer.UniqueId, DataModel.ToExportHours ?? 0, DataModel.ToExportMinutes ?? 0);
-                    modelHelpers.CloseFlyout(this);
+                    if (DataModel.ChangeStatus)
+                    {
+                        try
+                        {
+                            var transitionsAvaliable = modelHelpers.Gallifrey.JiraConnection.GetTransitions(DataModel.JiraRef);
+
+                            var timeSelectorDialog = (BaseMetroDialog)this.Resources["TransitionSelector"];
+                            await DialogCoordinator.Instance.ShowMetroDialogAsync(modelHelpers.DialogContext, timeSelectorDialog);
+
+                            var comboBox = timeSelectorDialog.FindChild<ComboBox>("Items");
+                            comboBox.ItemsSource = transitionsAvaliable.Select(x => x.name).ToList();
+
+                            var messageBox = timeSelectorDialog.FindChild<TextBlock>("Message");
+                            messageBox.Text = $"Please Select The Status Update You Would Like To Perform To {jiraRef}";
+                        }
+                        catch (Exception)
+                        {
+                            await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Status Update Error", "Unable To Change The Status Of This Issue");
+                        }
+                    }
+                    else
+                    {
+                        modelHelpers.CloseFlyout(this);
+                    }
                 }
                 else
                 {
@@ -145,7 +171,60 @@ namespace Gallifrey.UI.Modern.Flyouts
             if (dialog != null)
             {
                 await dialog;
+                DataModel.Timer.ClearLastJiraCheck();
+                SetupContext(DataModel.Timer, DataModel.ToExportMaxTime, false);
                 Focus();
+            }
+        }
+
+        private async void TransitionSelected(object sender, RoutedEventArgs e)
+        {
+            var selectedTransition = string.Empty;
+
+            try
+            {
+                var dialog = (BaseMetroDialog)this.Resources["TransitionSelector"];
+                var comboBox = dialog.FindChild<ComboBox>("Items");
+
+                selectedTransition = (string)comboBox.SelectedItem;
+
+                await DialogCoordinator.Instance.HideMetroDialogAsync(modelHelpers.DialogContext, dialog);
+
+                modelHelpers.Gallifrey.JiraConnection.TransitionIssue(DataModel.JiraRef, selectedTransition);
+            }
+            catch (StateChangedException)
+            {
+                if (string.IsNullOrWhiteSpace(selectedTransition))
+                {
+                    await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Status Update Error", "Unable To Change The Status Of This Issue");
+                }
+                else
+                {
+                    await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Status Update Error", $"Unable To Change The Status Of This Issue To {selectedTransition}");
+                }
+            }
+
+            modelHelpers.CloseFlyout(this);
+        }
+
+        private async void CancelTransition(object sender, RoutedEventArgs e)
+        {
+            var dialog = (BaseMetroDialog)this.Resources["TransitionSelector"];
+            await DialogCoordinator.Instance.HideMetroDialogAsync(modelHelpers.DialogContext, dialog);
+
+            modelHelpers.CloseFlyout(this);
+        }
+
+        private void ChangeStatusClick(object sender, RoutedEventArgs e)
+        {
+            if (!modelHelpers.Gallifrey.Settings.InternalSettings.IsPremium)
+            {
+                if (DataModel.ChangeStatus)
+                {
+                    modelHelpers.ShowGetPremiumMessage("Without Gallifrey Premium You Cannot Change Jira Status.");
+                    DataModel.ChangeStatus = false;
+                    Focus();
+                }
             }
         }
     }

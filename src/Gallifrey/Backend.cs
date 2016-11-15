@@ -10,7 +10,6 @@ using Gallifrey.AppTracking;
 using Gallifrey.ChangeLog;
 using Gallifrey.Contributors;
 using Gallifrey.Exceptions;
-using Gallifrey.Exceptions.IdleTimers;
 using Gallifrey.IdleTimers;
 using Gallifrey.InactiveMonitor;
 using Gallifrey.Jira.Model;
@@ -41,8 +40,8 @@ namespace Gallifrey
         void Close();
         void TrackEvent(TrackingType trackingType);
         void SaveSettings(bool jiraSettingsChanged);
-        bool StartLockTimer();
-        Guid StopLockTimer();
+        void StartLockTimer(TimeSpan? idleTime = null);
+        Guid? StopLockTimer();
         IEnumerable<ChangeLogVersion> GetChangeLog(XDocument changeLogContent);
         void ResetInactiveAlert();
     }
@@ -70,7 +69,7 @@ namespace Gallifrey
 
         private Guid? runningTimerWhenIdle;
         private DateTime lastMissingTimerCheck = DateTime.MinValue;
-        
+
         public Backend(InstanceType instanceType)
         {
             settingsCollection = SettingsCollectionSerializer.DeSerialize();
@@ -171,7 +170,7 @@ namespace Gallifrey
             try
             {
                 var keepTimersForDays = settingsCollection.AppSettings.KeepTimersForDays;
-                if (keepTimersForDays > 0) keepTimersForDays = keepTimersForDays*-1;
+                if (keepTimersForDays > 0) keepTimersForDays = keepTimersForDays * -1;
                 var workingDate = DateTime.Now.AddDays(keepTimersForDays + 1);
 
                 var doMissingTimerCheck = false;
@@ -246,7 +245,7 @@ namespace Gallifrey
                             }
                             else
                             {
-                                timersNotChecked.Add(timer.JiraReference, new List<Guid> {timer.UniqueId});
+                                timersNotChecked.Add(timer.JiraReference, new List<Guid> { timer.UniqueId });
                             }
                         }
                     }
@@ -296,11 +295,7 @@ namespace Gallifrey
             }
             settingsCollection.AppSettings.TimerRunningOnShutdown = runningTimer;
 
-            try
-            {
-                idleTimerCollection.StopLockedTimers();
-            }
-            catch (NoIdleTimerRunningException) { /*This being caught is good, there was nothing to stop*/}
+            idleTimerCollection.StopLockedTimers();
 
             jiraTimerCollection.SaveTimers();
             idleTimerCollection.SaveTimers();
@@ -327,21 +322,29 @@ namespace Gallifrey
             SettingsChanged?.Invoke(this, null);
         }
 
-        public bool StartLockTimer()
+        public void StartLockTimer(TimeSpan? initalTimeSpan = null)
         {
-            ActivityChecker.StopActivityCheckForLockTimer();
+            ActivityChecker.PauseForLockTimer(initalTimeSpan);
 
-            runningTimerWhenIdle = JiraTimerCollection.GetRunningTimerId();
-            if (runningTimerWhenIdle.HasValue)
+            if (!runningTimerWhenIdle.HasValue)
             {
-                jiraTimerCollection.StopTimer(runningTimerWhenIdle.Value, true);
+                runningTimerWhenIdle = JiraTimerCollection.GetRunningTimerId();
+                if (runningTimerWhenIdle.HasValue)
+                {
+                    jiraTimerCollection.StopTimer(runningTimerWhenIdle.Value, true);
+                    if (initalTimeSpan.HasValue)
+                    {
+                        jiraTimerCollection.AdjustTime(runningTimerWhenIdle.Value, initalTimeSpan.Value.Hours, initalTimeSpan.Value.Minutes, false);
+                    }
+                }
             }
-            return idleTimerCollection.NewLockTimer();
+
+            idleTimerCollection.NewLockTimer(initalTimeSpan.GetValueOrDefault(new TimeSpan()));
         }
 
-        public Guid StopLockTimer()
+        public Guid? StopLockTimer()
         {
-            ActivityChecker.RestartActivityCheckAfterLockTimer();
+            ActivityChecker.ResumeAfterLockTimer();
 
             if (runningTimerWhenIdle.HasValue)
             {

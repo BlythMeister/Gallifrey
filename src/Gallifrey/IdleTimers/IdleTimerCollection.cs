@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Gallifrey.Exceptions.IdleTimers;
 using Gallifrey.Serialization;
 
 namespace Gallifrey.IdleTimers
@@ -21,6 +20,7 @@ namespace Gallifrey.IdleTimers
         internal IdleTimerCollection()
         {
             lockTimerList = IdleTimerCollectionSerializer.DeSerialize();
+            lockTimerList.RemoveAll(x => x.IsRunning);
         }
 
         internal void SaveTimers()
@@ -28,31 +28,28 @@ namespace Gallifrey.IdleTimers
             IdleTimerCollectionSerializer.Serialize(lockTimerList);
         }
 
-        internal bool NewLockTimer()
+        internal void NewLockTimer(TimeSpan initalTimeSpan)
         {
-            var addedTimer = false;
+            //Only allow 1 running timer at a time
             if (!lockTimerList.Any(x => x.IsRunning))
             {
-                lockTimerList.Add(new IdleTimer());
-                addedTimer = true;
+                lockTimerList.Add(new IdleTimer(initalTimeSpan));
             }
-            
+
             SaveTimers();
-            return addedTimer;
         }
 
-        internal Guid StopLockedTimers()
+        internal Guid? StopLockedTimers()
         {
-            if (!lockTimerList.Any(x => x.IsRunning))
+            var lockedTimer = lockTimerList.FirstOrDefault(x => x.IsRunning);
+
+            if (lockedTimer == null)
             {
-                throw new NoIdleTimerRunningException("Cannot find any idle timers running!");
+                return null;
             }
 
-            var lockedTimer = lockTimerList.First(timer => timer.IsRunning);
             lockedTimer.StopTimer();
-            
             SaveTimers();
-
             return lockedTimer.UniqueId;
         }
 
@@ -68,7 +65,7 @@ namespace Gallifrey.IdleTimers
 
         public IEnumerable<IdleTimer> GetUnusedLockTimers()
         {
-            return lockTimerList.Where(timer => timer.IsRunning == false).OrderByDescending(timer=>timer.DateFinished);
+            return lockTimerList.Where(timer => timer.IsRunning == false).OrderByDescending(timer => timer.DateFinished);
         }
 
         public void RemoveOldTimers()

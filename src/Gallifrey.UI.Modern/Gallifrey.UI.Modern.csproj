@@ -73,6 +73,7 @@
     <Compile Include="Helpers\CachedResourceDictionary.cs" />
     <Compile Include="Helpers\ExceptionlessHelper.cs" />
     <Compile Include="Helpers\BooleanVisibilityConverter.cs" />
+    <Compile Include="Helpers\IdleTimeDetector.cs" />
     <Compile Include="Models\BulkExportContainerModel.cs" />
     <Compile Include="Models\BulkExportModel.cs" />
     <Compile Include="Flyouts\LockedTimer.xaml.cs">
@@ -212,10 +213,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Icons\Icons.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="MainViews\BottomBar.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -309,6 +306,17 @@
         </Reference>
         <Reference Include="System.Windows.Interactivity">
           <HintPath>..\..\packages\MahApps.Metro\lib\net45\System.Windows.Interactivity.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
+  <Choose>
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.6'">
+      <ItemGroup>
+        <Reference Include="MahApps.Metro.IconPacks.Modern">
+          <HintPath>..\..\packages\MahApps.Metro.IconPacks.Modern\lib\net46\MahApps.Metro.IconPacks.Modern.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>

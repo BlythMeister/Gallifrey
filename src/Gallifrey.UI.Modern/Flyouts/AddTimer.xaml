@@ -4,6 +4,7 @@
              xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
              xmlns:helpers="clr-namespace:Gallifrey.UI.Modern.Helpers"
              xmlns:dialogs="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
              IsModal="True" Theme="Adapt" Position="Right" Header="Add Timer" CloseButtonIsCancel="True">
     
     <Grid Width="340" Margin="5,5,5,5" >
@@ -72,7 +73,7 @@
         </Grid>
 
         <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Padding="2" Visibility="{Binding DatePeriod, Converter={StaticResource BoolToVis}}">End Date</TextBlock>
-        <DatePicker Grid.Row="2" Grid.Column="1" Margin="0,5" IsTodayHighlighted="False" DisplayDate="{Binding StartDate}" DisplayDateStart="{Binding StartDate}" DisplayDateEnd="{Binding MaxDate}" SelectedDate="{Binding EndDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding DateEditable}" Visibility="{Binding DatePeriod, Converter={StaticResource BoolToVis}}"/>
+        <DatePicker Grid.Row="2" Grid.Column="1" Margin="0,5" IsTodayHighlighted="False" DisplayDate="{Binding EndDate}" DisplayDateStart="{Binding EndDate}" DisplayDateEnd="{Binding MaxDate}" SelectedDate="{Binding EndDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding DateEditable}" Visibility="{Binding DatePeriod, Converter={StaticResource BoolToVis}}"/>
         
         <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Padding="2">Pre Loaded Time</TextBlock>
         <WrapPanel Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Margin="0,5" Orientation="Horizontal" IsEnabled="{Binding TimeEditable}">
@@ -83,28 +84,20 @@
         </WrapPanel>
 
         <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Padding="2">Start Now?</TextBlock>
-        <CheckBox Grid.Row="4" Grid.Column="1" Margin="0,5" IsChecked="{Binding StartNow, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding StartNowEditable}" />
+        <CheckBox Grid.Row="4" Grid.Column="1" Margin="0,5" IsChecked="{Binding StartNow, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding StartNowEditable}" Click="StartNowClick"/>
 
         <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Padding="2">Assign To Me?</TextBlock>
-        <CheckBox Grid.Row="5" Grid.Column="1" Margin="0,5" IsChecked="{Binding AssignToMe, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding LocalTimer, Converter={StaticResource BoolInvert}}" />
+        <CheckBox Grid.Row="5" Grid.Column="1" Margin="0,5" IsChecked="{Binding AssignToMe, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding LocalTimer, Converter={StaticResource BoolInvert}}" Click="AssignToMeClick"/>
 
         <TextBlock Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" Padding="2">Change Status?</TextBlock>
-        <CheckBox Grid.Row="6" Grid.Column="1" Margin="0,5" IsChecked="{Binding ChangeStatus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding LocalTimer, Converter={StaticResource BoolInvert}}" />
+        <CheckBox Grid.Row="6" Grid.Column="1" Margin="0,5" IsChecked="{Binding ChangeStatus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding LocalTimer, Converter={StaticResource BoolInvert}}" Click="ChangeStatusClick"/>
 
         <StackPanel Orientation="Horizontal" Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center">
-            <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="SearchButton">
-                <Rectangle Width="23" Height="23" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}" ToolTip="Search Jira">
-                    <Rectangle.OpacityMask>
-                        <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_magnify}" />
-                    </Rectangle.OpacityMask>
-                </Rectangle>
+            <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="SearchButton" ToolTip="Search Jira">
+                <iconPacks:PackIconModern Kind="Magnify" Height="23" Width="23" />
             </Button>
-            <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="AddButton" IsDefault="True">
-                <Rectangle Width="23" Height="23" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}" ToolTip="Add Timer">
-                    <Rectangle.OpacityMask>
-                        <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_add}" />
-                    </Rectangle.OpacityMask>
-                </Rectangle>
+            <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="AddButton" IsDefault="True" ToolTip="Add Timer">
+                <iconPacks:PackIconModern Kind="Add" Height="23" Width="23" />
             </Button>
         </StackPanel>
     </Grid>

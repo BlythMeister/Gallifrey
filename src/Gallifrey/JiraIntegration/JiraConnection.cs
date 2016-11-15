@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Authentication;
+using System.Threading.Tasks;
 using Gallifrey.AppTracking;
 using Gallifrey.Comparers;
 using Gallifrey.Exceptions.JiraIntegration;
@@ -62,7 +63,7 @@ namespace Gallifrey.JiraIntegration
             jiraConnectionSettings = newJiraConnectionSettings;
             jira = null;
             CheckAndConnectJira();
-            UpdateJiraProjectCache();
+            Task.Factory.StartNew(UpdateJiraProjectCache);
         }
 
         private void CheckAndConnectJira()
@@ -228,13 +229,14 @@ namespace Gallifrey.JiraIntegration
             {
                 try
                 {
+                    lastCacheUpdate = DateTime.UtcNow;
                     CheckAndConnectJira();
                     var projects = jira.GetProjects();
                     jiraProjectCache.Clear();
                     jiraProjectCache.AddRange(projects.Select(project => new JiraProject(project.key, project.name)));
-                    lastCacheUpdate = DateTime.UtcNow;
+
                 }
-                catch (Exception) { }
+                catch (Exception) { lastCacheUpdate = DateTime.MinValue; }
             }
         }
 
