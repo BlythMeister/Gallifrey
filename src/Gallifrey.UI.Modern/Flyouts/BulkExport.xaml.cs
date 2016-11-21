@@ -46,7 +46,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                 switch (jiraDownloadResult.Status)
                 {
                     case ProgressResult.JiraHelperStatus.Cancelled:
-                        modelHelpers.CloseHiddenFlyout(this);
+                        modelHelpers.CloseFlyout(this);
                         return;
                     case ProgressResult.JiraHelperStatus.Errored:
                         await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Unable To Locate Jira", "There Was An Error Getting Work Logs");
@@ -65,18 +65,18 @@ namespace Gallifrey.UI.Modern.Flyouts
 
             if (showError)
             {
-                modelHelpers.CloseHiddenFlyout(this);
+                modelHelpers.CloseFlyout(this);
                 return;
             }
 
             if (!timersToShow.Any())
             {
                 await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Nothing To Export", "There Is No Time To Export");
-                modelHelpers.CloseHiddenFlyout(this);
+                modelHelpers.CloseFlyout(this);
             }
             else if (timersToShow.Count == 1)
             {
-                modelHelpers.CloseHiddenFlyout(this);
+                modelHelpers.CloseFlyout(this);
                 modelHelpers.OpenFlyout(new Export(modelHelpers, timersToShow.First().Timer.UniqueId, null, true));
             }
             else
