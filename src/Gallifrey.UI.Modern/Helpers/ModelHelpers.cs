@@ -49,18 +49,13 @@ namespace Gallifrey.UI.Modern.Helpers
         }
         public void CloseFlyout(Flyout flyout)
         {
-            flyout.IsOpen = false;
-        }
-
-        public void CloseHiddenFlyout(Flyout flyout)
-        {
             var actualType = flyout.GetType();
             var openFlyoutDetail = openFlyouts.FirstOrDefault(x => x.FlyoutType == actualType);
             if (openFlyoutDetail != null)
             {
                 openFlyoutDetail.IsHidden = false;
             }
-                
+
             flyout.IsOpen = false;
             FlyoutClosedHandler(flyout, null);
         }

@@ -1,6 +1,5 @@
 echo off
 cls
 cd .paket
-paket.bootstrapper.exe
-paket.exe restore
+paket.bootstrapper.exe --run restore
 pause

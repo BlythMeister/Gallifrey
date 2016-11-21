@@ -143,9 +143,11 @@
       <Other>Attempt to fix slow memory leak</Other>
     </Others>
   </Version>
-  <Version Number="3.4.0.1" Name="Pre-Release">
+  <Version Number="3.4.1.0" Name="">
     <Features/>
-    <Bugs/>
+    <Bugs>
+      <Bug>Fix for re-showing old bulk export due to hidden flyout not closing properly</Bug>
+    </Bugs>
     <Others>
       <Other>Update dependencies to latest versions</Other>
     </Others>

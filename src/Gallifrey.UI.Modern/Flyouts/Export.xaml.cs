@@ -34,7 +34,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             if (timerToShow.LocalTimer)
             {
                 await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Local Timer", "You Cannot Export A Local Timer!");
-                modelHelpers.CloseHiddenFlyout(this);
+                modelHelpers.CloseFlyout(this);
                 return;
             }
 
@@ -52,7 +52,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                     switch (jiraDownloadResult.Status)
                     {
                         case ProgressResult.JiraHelperStatus.Cancelled:
-                            modelHelpers.CloseHiddenFlyout(this);
+                            modelHelpers.CloseFlyout(this);
                             return;
                         case ProgressResult.JiraHelperStatus.Errored:
                             showError = true;
@@ -70,7 +70,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                 if (showError)
                 {
                     await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Unable To Locate Jira", $"Unable To Locate Jira {timerToShow.JiraReference}!\nCannot Export Time\nPlease Verify/Correct Jira Reference");
-                    modelHelpers.CloseHiddenFlyout(this);
+                    modelHelpers.CloseFlyout(this);
                     return;
                 }
 
@@ -86,14 +86,14 @@ namespace Gallifrey.UI.Modern.Flyouts
             if (timerToShow.FullyExported)
             {
                 await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Nothing To Export", "There Is No Time To Export");
-                modelHelpers.CloseHiddenFlyout(this);
+                modelHelpers.CloseFlyout(this);
                 return;
             }
 
             if (timerToShow.IsRunning)
             {
                 await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Timer Is Running", "You Cannot Export A Timer While It Is Running");
-                modelHelpers.CloseHiddenFlyout(this);
+                modelHelpers.CloseFlyout(this);
                 return;
             }
 
