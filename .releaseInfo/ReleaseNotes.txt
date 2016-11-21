@@ -1,0 +1,15 @@
+Tag: X.X.X
+Title: Version X.X.X
+Body (Remove Empty Sections):
+
+# Features
+
+* A Feature Here
+
+# Bugs
+
+* A Bug Fix Here
+
+# Others
+
+* Other Items Here
