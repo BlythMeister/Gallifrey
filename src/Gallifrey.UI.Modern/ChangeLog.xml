@@ -152,5 +152,10 @@
       <Other>Update dependencies to latest versions</Other>
     </Others>
   </Version>
+  <Version Number="3.4.1.0" Name="Pre-Release">
+    <Features/>
+    <Bugs />   
+    <Others />   
+  </Version>
 </Versions>
 
