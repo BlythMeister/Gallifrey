@@ -20,15 +20,14 @@ Gallifrey has a beta and stable version of the app.
 
 **Installing on Windows 8+ will alert with SmartScreen, you should be able to "Run Anyway" until I can afford a proper certificate, there is no way around this!  After a couple of runs, the warning should stop**
 
-* [Stable Release - Click Here](http://releases.gallifreyapp.co.uk/download/modern/stable/setup.exe)
-* [Beta Release - Click Here](http://releases.gallifreyapp.co.uk/download/modern/beta/setup.exe)
+* [Stable Release](http://releases.gallifreyapp.co.uk/download/modern/stable/setup.exe)
+* [Beta Release](http://releases.gallifreyapp.co.uk/download/modern/beta/setup.exe)
 
 Donate
 =========
 
 Please help us keep this project up and running by donating.
-We hope to get a domain up and running with a nice GitHub Pages website, but this all costs money.
-[Click Here to donate](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=R4877TJL3D6BQ)
+[Click Here to donate](http://www.gallifreyapp.co.uk/donations.html) 
 
 Support
 =========
