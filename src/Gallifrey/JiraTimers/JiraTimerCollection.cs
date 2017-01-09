@@ -226,7 +226,7 @@ namespace Gallifrey.JiraTimers
         {
             if (keepTimersForDays > 0) keepTimersForDays = keepTimersForDays * -1;
 
-            timerList.RemoveAll(timer => timer.FullyExported &&
+            timerList.RemoveAll(timer => (timer.FullyExported || timer.LocalTimer) &&
                 timer.DateStarted.Date != DateTime.Now.Date &&
                 timer.DateStarted.Date <= DateTime.Now.AddDays(keepTimersForDays).Date);
 
