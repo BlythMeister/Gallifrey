@@ -194,6 +194,7 @@ namespace Gallifrey.UI.Modern.Models
         {
             JiraReference = jiraRef;
             jiraRefFromSearch = true;
+            LocalTimer = false;
 
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("JiraReference"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("JiraReferenceEditable"));

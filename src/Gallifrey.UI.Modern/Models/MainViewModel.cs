@@ -388,6 +388,7 @@ namespace Gallifrey.UI.Modern.Models
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ExportedTotalMinutes"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HaveLocalTime"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LocalTimeMessage"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ExportableTime"));
 
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ExportTarget"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ExportedTargetTotalMinutes"));
@@ -412,6 +413,7 @@ namespace Gallifrey.UI.Modern.Models
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TimeToExportMessage"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HaveTimeToExport"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("UnexportedTime"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ExportableTime"));
 
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TimerRunning"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("CurrentRunningTimerDescription"));
