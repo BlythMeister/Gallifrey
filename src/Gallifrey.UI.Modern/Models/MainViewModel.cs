@@ -388,6 +388,7 @@ namespace Gallifrey.UI.Modern.Models
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ExportedTotalMinutes"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HaveLocalTime"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LocalTimeMessage"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LocalTime"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ExportableTime"));
 
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ExportTarget"));
@@ -400,9 +401,11 @@ namespace Gallifrey.UI.Modern.Models
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ExportedTargetTotalMinutes"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TrackingOnly"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HaveTimeToExport"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ExportableTime"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TimeToExportMessage"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HaveLocalTime"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TimeToExportMessage"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LocalTimeMessage"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LocalTime"));
 
             SetTrackingOnlyInModel();
             RefreshModel();
@@ -420,6 +423,10 @@ namespace Gallifrey.UI.Modern.Models
 
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ExportTarget"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ExportedTargetTotalMinutes"));
+
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HaveLocalTime"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LocalTimeMessage"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LocalTime"));
         }
 
         private void DailyEvent()
