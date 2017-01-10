@@ -152,9 +152,14 @@
       <Other>Update dependencies to latest versions</Other>
     </Others>
   </Version>
-  <Version Number="3.4.1.0" Name="Pre-Release">
-    <Features/>
-    <Bugs />   
+  <Version Number="3.4.1.1" Name="Pre-Release">
+    <Features>
+      <Feature>Allow local timers to be purged when old along with exported timers</Feature>
+    </Features>
+    <Bugs>
+      <Bug>Fix for Editing a local timer to become a jira time</Bug>
+      <Bug>Hide the "XX:XX To Export" on local timers</Bug>
+    </Bugs>
     <Others />   
   </Version>
 </Versions>
