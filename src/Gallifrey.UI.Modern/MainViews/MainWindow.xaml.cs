@@ -238,7 +238,7 @@ namespace Gallifrey.UI.Modern.MainViews
             }
 
             var idleTimeInfo = IdleTimeDetector.GetIdleTimeInfo();
-            if (idleTimeInfo.IdleTime.TotalMilliseconds > modelHelpers.Gallifrey.Settings.AppSettings.IdleTimeThresholdMilliseconds && !machineIdle)
+            if (idleTimeInfo.IdleTime.TotalMilliseconds >= modelHelpers.Gallifrey.Settings.AppSettings.IdleTimeThresholdMilliseconds && !machineIdle)
             {
                 machineIdle = true;
                 modelHelpers.Gallifrey.StartLockTimer(idleTimeInfo.IdleTime);
