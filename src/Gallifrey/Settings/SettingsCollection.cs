@@ -15,11 +15,11 @@ namespace Gallifrey.Settings
 
     public class SettingsCollection : ISettingsCollection
     {
-        public IAppSettings AppSettings { get; private set; }
-        public IJiraConnectionSettings JiraConnectionSettings { get; private set; }
-        public IUiSettings UiSettings { get; private set; }
-        public IInternalSettings InternalSettings { get; private set; }
-        public IExportSettings ExportSettings { get; private set; }
+        public IAppSettings AppSettings { get; }
+        public IJiraConnectionSettings JiraConnectionSettings { get; }
+        public IUiSettings UiSettings { get; }
+        public IInternalSettings InternalSettings { get; }
+        public IExportSettings ExportSettings { get; }
         public string InstallationHash => DataEncryption.GetSha256Hash($"{InternalSettings.InstallationInstaceId}-{JiraConnectionSettings.JiraUsername}");
 
         public SettingsCollection()

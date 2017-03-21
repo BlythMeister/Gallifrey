@@ -5,7 +5,7 @@ namespace Gallifrey.JiraIntegration
 {
     public class RecentJira
     {
-        public string JiraReference { get; private set; }
+        public string JiraReference { get; }
         public string JiraProjectName { get; private set; }
         public string JiraName { get; private set; }
         public string JiraParentReference { get; private set; }
