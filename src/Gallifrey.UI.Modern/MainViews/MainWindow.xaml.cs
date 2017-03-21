@@ -403,7 +403,7 @@ namespace Gallifrey.UI.Modern.MainViews
         
         private void GetBeta(object sender, RoutedEventArgs e)
         {
-            Process.Start(new ProcessStartInfo("http://releases.gallifreyapp.co.uk/download/modern/beta/setup.exe"));
+            Process.Start(new ProcessStartInfo("http://releases.gallifreyapp.co.uk/download/download-beta.html"));
         }
 
         private void MainWindow_OnClosed(object sender, EventArgs e)

@@ -152,7 +152,7 @@
       <Other>Update dependencies to latest versions</Other>
     </Others>
   </Version>
-  <Version Number="3.4.1.4" Name="Pre-Release">
+  <Version Number="3.4.1.5" Name="Pre-Release">
     <Features>
       <Feature>Allow local timers to be purged when old along with exported timers</Feature>
       <Feature>Improved Premium access security</Feature>
@@ -160,6 +160,8 @@
     <Bugs>
       <Bug>Fix for Editing a local timer to become a jira time</Bug>
       <Bug>Hide the "XX:XX To Export" on local timers</Bug>
+      <Bug>Correct get beta URL</Bug>
+      <Bug>Correct min/max date logic on add and edit</Bug>
     </Bugs>
     <Others>
       <Other>Update dependencies to latest versions</Other>
