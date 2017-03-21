@@ -25,7 +25,7 @@ namespace Gallifrey.UI.Modern.Helpers
                 ExceptionlessClient.Default.Unregister();
                 ExceptionlessClient.Default.Configuration.ApiKey = ConfigKeys.ExceptionlessApiKey;
                 ExceptionlessClient.Default.Configuration.DefaultTags.Add(modelHelpers.Gallifrey.VersionControl.VersionName.Replace("\n", " - "));
-                ExceptionlessClient.Default.Configuration.SetUserIdentity(modelHelpers.Gallifrey.Settings.InternalSettings.InstallationInstaceId.ToString(), modelHelpers.Gallifrey.JiraConnection.IsConnected ? modelHelpers.Gallifrey.JiraConnection.CurrentUser.displayName : "Unknown");
+                ExceptionlessClient.Default.Configuration.SetUserIdentity(modelHelpers.Gallifrey.Settings.InstallationHash, modelHelpers.Gallifrey.JiraConnection.IsConnected ? modelHelpers.Gallifrey.JiraConnection.CurrentUser.displayName : "Unknown");
                 ExceptionlessClient.Default.Configuration.SessionsEnabled = false;
                 ExceptionlessClient.Default.Configuration.Enabled = true;
                 ExceptionlessClient.Default.SubmittingEvent += ExceptionlessSubmittingEvent;

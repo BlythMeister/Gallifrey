@@ -155,6 +155,7 @@
   <Version Number="3.4.1.3" Name="Pre-Release">
     <Features>
       <Feature>Allow local timers to be purged when old along with exported timers</Feature>
+      <Feature>Improved Premium access security</Feature>
     </Features>
     <Bugs>
       <Bug>Fix for Editing a local timer to become a jira time</Bug>

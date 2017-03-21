@@ -39,7 +39,7 @@ namespace Gallifrey
         void Initialise();
         void Close();
         void TrackEvent(TrackingType trackingType);
-        void SaveSettings(bool jiraSettingsChanged);
+        void SaveSettings(bool jiraSettingsChanged, bool trackingOptOut);
         void StartLockTimer(TimeSpan? idleTime = null);
         Guid? StopLockTimer();
         IEnumerable<ChangeLogVersion> GetChangeLog(XDocument changeLogContent);
@@ -73,13 +73,13 @@ namespace Gallifrey
         public Backend(InstanceType instanceType)
         {
             settingsCollection = SettingsCollectionSerializer.DeSerialize();
-            trackUsage = new TrackUsage(settingsCollection.AppSettings, settingsCollection.InternalSettings, instanceType);
+            trackUsage = new TrackUsage(settingsCollection, instanceType);
             versionControl = new VersionControl(instanceType, trackUsage);
-            jiraTimerCollection = new JiraTimerCollection(settingsCollection.ExportSettings, trackUsage);
+            jiraTimerCollection = new JiraTimerCollection(settingsCollection, trackUsage);
             jiraTimerCollection.exportPrompt += OnExportPromptEvent;
             jiraConnection = new JiraConnection(trackUsage);
             idleTimerCollection = new IdleTimerCollection();
-            ActivityChecker = new ActivityChecker(jiraTimerCollection, settingsCollection.AppSettings);
+            ActivityChecker = new ActivityChecker(jiraTimerCollection, settingsCollection);
             withThanksCreator = new WithThanksCreator();
             premiumChecker = new PremiumChecker();
 
@@ -102,7 +102,7 @@ namespace Gallifrey
                 }
 
                 Settings.AppSettings.TimerRunningOnShutdown = null;
-                SaveSettings(false);
+                SaveSettings(false, false);
             }
         }
 
@@ -150,7 +150,7 @@ namespace Gallifrey
                     }
                 }
 
-                var isPremium = premiumChecker.CheckIfPremium(settingsCollection.InternalSettings.InstallationInstaceId);
+                var isPremium = premiumChecker.CheckIfPremium(settingsCollection.InstallationHash);
                 if (isPremium != settingsCollection.InternalSettings.IsPremium)
                 {
                     settingsCollection.InternalSettings.SetIsPremium(isPremium);
@@ -307,7 +307,7 @@ namespace Gallifrey
             trackUsage.TrackAppUsage(trackingType);
         }
 
-        public void SaveSettings(bool jiraSettingsChanged)
+        public void SaveSettings(bool jiraSettingsChanged, bool trackingOptOut)
         {
             settingsCollection.SaveSettings();
 
@@ -316,9 +316,11 @@ namespace Gallifrey
                 jiraConnection.ReConnect(settingsCollection.JiraConnectionSettings, settingsCollection.ExportSettings);
             }
 
-            ActivityChecker.UpdateAppSettings(settingsCollection.AppSettings);
-            jiraTimerCollection.UpdateAppSettings(settingsCollection.ExportSettings);
-            trackUsage.UpdateSettings(settingsCollection.AppSettings, settingsCollection.InternalSettings);
+            if (trackingOptOut)
+            {
+                trackUsage.TrackAppUsage(TrackingType.OptOut);
+            }
+
             SettingsChanged?.Invoke(this, null);
         }
 
@@ -366,7 +368,6 @@ namespace Gallifrey
             {
                 settingsCollection.InternalSettings.SetLastChangeLogVersion(versionControl.DeployedVersion);
                 settingsCollection.SaveSettings();
-                trackUsage.UpdateSettings(settingsCollection.AppSettings, settingsCollection.InternalSettings);
             }
 
             return changeLogItems;

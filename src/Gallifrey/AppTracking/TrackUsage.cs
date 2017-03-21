@@ -10,28 +10,25 @@ namespace Gallifrey.AppTracking
     public interface ITrackUsage
     {
         void TrackAppUsage(TrackingType trackingType);
-        void UpdateSettings(IAppSettings appSettings, IInternalSettings internalSettings);
     }
 
     public class TrackUsage : ITrackUsage
     {
-        private readonly InstanceType instanceType;      
-        private string trackingQueryString;
-        private IAppSettings appSettings;
+        private readonly ISettingsCollection settingsCollection;
+        private readonly InstanceType instanceType;
         private WebBrowser webBrowser;
 
-        public TrackUsage(IAppSettings appSettings, IInternalSettings internalSettings, InstanceType instanceType)
+        public TrackUsage(ISettingsCollection settingsCollection, InstanceType instanceType)
         {
-            this.appSettings = appSettings;
+            this.settingsCollection = settingsCollection;
             this.instanceType = instanceType;
-            SetTrackingQueryString(internalSettings);
             SetupBrowser();
             TrackAppUsage(TrackingType.AppLoad);
         }
 
         private bool IsTrackingEnabled(TrackingType trackingType)
         {
-            return appSettings.UsageTracking || trackingType == TrackingType.DailyHearbeat;
+            return settingsCollection.AppSettings.UsageTracking || trackingType == TrackingType.DailyHearbeat;
         }
 
         private void SetupBrowser()
@@ -39,10 +36,10 @@ namespace Gallifrey.AppTracking
             try
             {
                 webBrowser = new WebBrowser
-                                {
-                                    ScrollBarsEnabled = false,
-                                    ScriptErrorsSuppressed = true
-                                };
+                {
+                    ScrollBarsEnabled = false,
+                    ScriptErrorsSuppressed = true
+                };
 
             }
             catch (Exception)
@@ -63,7 +60,7 @@ namespace Gallifrey.AppTracking
 
                 try
                 {
-                    webBrowser.Navigate($"http://releases.gallifreyapp.co.uk/tracking/{trackingType}.html?{trackingQueryString}");
+                    webBrowser.Navigate(GetNavigateUrl(trackingType));
                     while (webBrowser.ReadyState != WebBrowserReadyState.Complete)
                     {
                         await Task.Delay(1000);
@@ -76,28 +73,15 @@ namespace Gallifrey.AppTracking
             }
         }
 
-        public void UpdateSettings(IAppSettings newAppSettings, IInternalSettings internalSettings)
-        {
-            SetTrackingQueryString(internalSettings);
-
-            if (appSettings.UsageTracking && !newAppSettings.UsageTracking)
-            {
-                TrackAppUsage(TrackingType.OptOut);
-            }
-
-            appSettings = newAppSettings;
-            SetupBrowser();
-        }
-
-        private void SetTrackingQueryString(IInternalSettings internalSettings)
+        private string GetNavigateUrl(TrackingType trackingType)
         {
             var prem = "Gallifrey";
-            if (internalSettings.IsPremium)
+            if (settingsCollection.InternalSettings.IsPremium)
             {
                 prem = "Gallifrey_Premium";
             }
 
-            trackingQueryString = $"utm_source={prem}&utm_medium={instanceType}&utm_campaign={internalSettings.LastChangeLogVersion}&uid={internalSettings.InstallationInstaceId}";
+            return $"http://releases.gallifreyapp.co.uk/tracking/{trackingType}.html?utm_source={prem}&utm_medium={instanceType}&utm_campaign={settingsCollection.InternalSettings.LastChangeLogVersion}&uid={settingsCollection.InstallationHash}";
         }
     }
 }

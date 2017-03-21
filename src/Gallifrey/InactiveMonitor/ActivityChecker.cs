@@ -10,42 +10,33 @@ namespace Gallifrey.InactiveMonitor
     {
         internal event EventHandler<int> NoActivityEvent;
         private readonly IJiraTimerCollection timerCollection;
+        private readonly ISettingsCollection settingsCollection;
         private readonly Timer hearbeat;
         private readonly ActivityStopwatch activityStopwatch;
         private readonly object lockObject;
-        private TimeSpan alertLimit;
-
-        internal ActivityChecker(IJiraTimerCollection timerCollection, IAppSettings appSettings)
+        
+        internal ActivityChecker(IJiraTimerCollection timerCollection, ISettingsCollection settingsCollection)
         {
             activityStopwatch = new ActivityStopwatch();
             this.timerCollection = timerCollection;
+            this.settingsCollection = settingsCollection;
             lockObject = new object();
 
             hearbeat = new Timer(500);
             hearbeat.Elapsed += HearbeatOnElapsed;
-
-            UpdateAppSettings(appSettings);
-        }
-
-        internal void UpdateAppSettings(IAppSettings appSettings)
-        {
-            alertLimit = TimeSpan.FromMilliseconds(appSettings.AlertTimeMilliseconds);
-
-            if (appSettings.AlertWhenNotRunning)
-            {
-                hearbeat.Start();
-            }
-            else
-            {
-                hearbeat.Stop();
-                activityStopwatch.Reset();
-            }
+            hearbeat.Start();
         }
 
         private void HearbeatOnElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
         {
             lock (lockObject)
             {
+                if (!settingsCollection.AppSettings.AlertWhenNotRunning)
+                {
+                    activityStopwatch.Reset();
+                    return;
+                }
+
                 if (activityStopwatch.IsPaused)
                 {
                     return;
@@ -65,7 +56,7 @@ namespace Gallifrey.InactiveMonitor
                         activityStopwatch.Start();
                     }
 
-                    if (activityStopwatch.Elapsed >= alertLimit)
+                    if (activityStopwatch.Elapsed >= TimeSpan.FromMilliseconds(settingsCollection.AppSettings.AlertTimeMilliseconds))
                     {
                         NoActivityEvent?.Invoke(this, (int)activityStopwatch.Elapsed.TotalMilliseconds);
                     }

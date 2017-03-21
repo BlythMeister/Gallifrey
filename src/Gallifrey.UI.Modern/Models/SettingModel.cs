@@ -96,6 +96,7 @@ namespace Gallifrey.UI.Modern.Models
 
         //Data Change Flags
         public bool JiraSettingsChanged { get; set; }
+        public bool TrackingOptOut { get; set; }
 
         //Behaviour Properties
         public int? TargetHoursPerDay
@@ -196,11 +197,16 @@ namespace Gallifrey.UI.Modern.Models
             settings.AppSettings.LockTimeThresholdMilliseconds = TrackLock ? (int)TimeSpan.FromMinutes((TrackLockThresholdMinutes ?? 1)).TotalMilliseconds : 0;
             settings.AppSettings.KeepTimersForDays = KeepTimersForDays ?? 7;
             settings.AppSettings.AutoUpdate = AutoUpdate;
-            settings.AppSettings.UsageTracking = AllowTracking;
             settings.AppSettings.TargetLogPerDay = new TimeSpan(TargetHoursPerDay ?? 0, TargetMinutesPerDay ?? 0, 0);
             settings.AppSettings.ExportDays = WorkingDays.Where(x => x.IsChecked).Select(x => x.DayOfWeek).ToList();
             settings.AppSettings.StartOfWeek = (DayOfWeek)Enum.Parse(typeof(DayOfWeek), StartOfWeek, true);
             settings.AppSettings.DefaultTimers = DefaultTimers.Split(',').SelectMany(x => x.Split(' ')).Where(x=>!string.IsNullOrWhiteSpace(x)).ToList();
+
+            if (settings.AppSettings.UsageTracking != AllowTracking)
+            {
+                settings.AppSettings.UsageTracking = AllowTracking;
+                if (!AllowTracking) TrackingOptOut = true;
+            }
 
             //UI Settings
             settings.UiSettings.Theme = Theme.Name;
