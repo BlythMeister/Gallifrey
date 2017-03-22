@@ -152,7 +152,7 @@
       <Other>Update dependencies to latest versions</Other>
     </Others>
   </Version>
-  <Version Number="3.4.1.5" Name="Pre-Release">
+  <Version Number="3.5.0.0">
     <Features>
       <Feature>Allow local timers to be purged when old along with exported timers</Feature>
       <Feature>Improved Premium access security</Feature>
