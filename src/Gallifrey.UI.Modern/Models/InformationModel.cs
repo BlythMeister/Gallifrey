@@ -11,7 +11,7 @@ namespace Gallifrey.UI.Modern.Models
     {
         public event PropertyChangedEventHandler PropertyChanged;
         public string Contributors { get; set; }
-        public string InstallationId { get; set; }
+        public string InstallationHash { get; set; }
         private readonly List<string> contributorList;
         private int position;
 
@@ -26,7 +26,7 @@ namespace Gallifrey.UI.Modern.Models
             position = 0;
             Contributors = contributorList[position];
 
-            InstallationId = gallifrey.Settings.InternalSettings.InstallationInstaceId.ToString();
+            InstallationHash = gallifrey.Settings.InstallationHash;
         }
 
         private string BuildThanksString(WithThanksDefinition withThanksDefinition)

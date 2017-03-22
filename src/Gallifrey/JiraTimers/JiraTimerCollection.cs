@@ -46,22 +46,17 @@ namespace Gallifrey.JiraTimers
 
     public class JiraTimerCollection : IJiraTimerCollection
     {
-        private IExportSettings exportSettings;
+        private readonly ISettingsCollection settingsCollection;
         private readonly ITrackUsage trackUsage;
         private readonly List<JiraTimer> timerList;
         internal event EventHandler<ExportPromptDetail> exportPrompt;
         public event EventHandler GeneralTimerModification;
 
-        internal JiraTimerCollection(IExportSettings exportSettings, ITrackUsage trackUsage)
+        internal JiraTimerCollection(ISettingsCollection settingsCollection, ITrackUsage trackUsage)
         {
-            this.exportSettings = exportSettings;
+            this.settingsCollection = settingsCollection;
             this.trackUsage = trackUsage;
             timerList = JiraTimerCollectionSerializer.DeSerialize();
-        }
-
-        internal void UpdateAppSettings(IExportSettings newExportSettings)
-        {
-            exportSettings = newExportSettings;
         }
 
         internal void SaveTimers()
@@ -130,7 +125,7 @@ namespace Gallifrey.JiraTimers
             }
             else
             {
-                if (exportSettings.ExportPrompt != null && exportSettings.ExportPrompt.OnCreatePreloaded && !newTimer.FullyExported && !newTimer.LocalTimer)
+                if (settingsCollection.ExportSettings.ExportPrompt != null && settingsCollection.ExportSettings.ExportPrompt.OnCreatePreloaded && !newTimer.FullyExported && !newTimer.LocalTimer)
                 {
                     exportPrompt?.Invoke(this, new ExportPromptDetail(newTimer.UniqueId, seedTime));
                 }
@@ -209,7 +204,7 @@ namespace Gallifrey.JiraTimers
             var stopTime = timerForInteration.StopTimer();
 
             SaveTimers();
-            if (exportSettings.ExportPrompt != null && exportSettings.ExportPrompt.OnStop && !timerForInteration.FullyExported && !automatedStop && !timerForInteration.LocalTimer)
+            if (settingsCollection.ExportSettings.ExportPrompt != null && settingsCollection.ExportSettings.ExportPrompt.OnStop && !timerForInteration.FullyExported && !automatedStop && !timerForInteration.LocalTimer)
             {
                 exportPrompt?.Invoke(this, new ExportPromptDetail(uniqueId, stopTime));
             }
@@ -226,9 +221,9 @@ namespace Gallifrey.JiraTimers
         {
             if (keepTimersForDays > 0) keepTimersForDays = keepTimersForDays * -1;
 
-            timerList.RemoveAll(timer => timer.FullyExported &&
-                timer.DateStarted.Date != DateTime.Now.Date &&
-                timer.DateStarted.Date <= DateTime.Now.AddDays(keepTimersForDays).Date);
+            timerList.RemoveAll(timer => (timer.FullyExported || timer.LocalTimer) &&
+                                         timer.DateStarted.Date != DateTime.Now.Date &&
+                                         timer.DateStarted.Date <= DateTime.Now.AddDays(keepTimersForDays).Date);
 
             SaveTimers();
         }
@@ -357,7 +352,7 @@ namespace Gallifrey.JiraTimers
             }
 
             SaveTimers();
-            if (exportSettings.ExportPrompt != null && exportSettings.ExportPrompt.OnManualAdjust && !timer.FullyExported && !timer.LocalTimer)
+            if (settingsCollection.ExportSettings.ExportPrompt != null && settingsCollection.ExportSettings.ExportPrompt.OnManualAdjust && !timer.FullyExported && !timer.LocalTimer)
             {
                 if (!addTime) adjustment = adjustment.Negate();
                 exportPrompt?.Invoke(this, new ExportPromptDetail(uniqueId, adjustment));
@@ -382,7 +377,7 @@ namespace Gallifrey.JiraTimers
                 timer.AddIdleTimer(idleTimer);
             }
             SaveTimers();
-            if (exportSettings.ExportPrompt != null && exportSettings.ExportPrompt.OnAddIdle && !timer.FullyExported && !timer.LocalTimer)
+            if (settingsCollection.ExportSettings.ExportPrompt != null && settingsCollection.ExportSettings.ExportPrompt.OnAddIdle && !timer.FullyExported && !timer.LocalTimer)
             {
                 var idleTime = new TimeSpan();
                 idleTime = idleTimers.Aggregate(idleTime, (current, idleTimer) => current.Add(idleTimer.IdleTimeValue));

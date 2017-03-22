@@ -26,7 +26,7 @@ namespace Gallifrey.UI.Modern.Flyouts
 
             try
             {
-                modelHelpers.Gallifrey.SaveSettings(DataModel.JiraSettingsChanged);
+                modelHelpers.Gallifrey.SaveSettings(DataModel.JiraSettingsChanged, DataModel.TrackingOptOut);
             }
             catch (MissingJiraConfigException)
             {

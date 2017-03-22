@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using Gallifrey.Settings;
@@ -48,6 +49,14 @@ namespace Gallifrey.Serialization
                     return Encoding.UTF8.GetString(plainTextBytes, 0, decryptedByteCount);
                 }
             }
+        }
+
+        internal static string GetSha256Hash(string text)
+        {
+            var bytes = Encoding.UTF8.GetBytes(text);
+            var hashstring = new SHA256Managed();
+            var hash = hashstring.ComputeHash(bytes);
+            return hash.Aggregate(string.Empty, (current, x) => current + $"{x:x2}");
         }
     }
 }

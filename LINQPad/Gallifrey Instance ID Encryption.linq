@@ -10,12 +10,18 @@ void Main()
 	var running = true;
 	while(running)
 	{
-		Console.WriteLine("Enter Command (Show/Add/Remove/Replace/Done)");
+		Console.WriteLine("Enter Command (Manual Edit/Show/Add/Remove/Replace/Done)");
 		var command = Console.ReadLine();
 		Util.ClearResults();
 		switch (command.ToLower())
 		{
-			case "show":
+			case "manual edit":
+				DecryptFile();
+				Console.WriteLine("Press Enter To Encrypt");
+				Console.ReadLine();
+				EncryptFile();
+				break;
+            case "show":
 				ShowFileContent();
 				break;
 			case "add":
@@ -43,9 +49,8 @@ void Main()
 private void ShowFileContent()
 {
 	DecryptFile();
-	var data = File.ReadAllText(path);
+	Console.WriteLine(File.ReadAllText(path));
 	EncryptFile();
-	Console.WriteLine(data);	
 }
 
 private void DoAdd()

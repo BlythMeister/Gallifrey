@@ -1,17 +1,18 @@
 using System;
 using System.Linq;
 using Gallifrey.Serialization;
+using Gallifrey.Settings;
 
 namespace Gallifrey.Versions
 {
     public interface IPremiumChecker
     {
-        bool CheckIfPremium(Guid installationId);
+        bool CheckIfPremium(string installtionHash);
     }
 
     public class PremiumChecker : IPremiumChecker
     {
-        public bool CheckIfPremium(Guid installationId)
+        public bool CheckIfPremium(string installtionHash)
         {
             try
             {
@@ -21,7 +22,7 @@ namespace Gallifrey.Versions
 
                 var descryptedContents = DataEncryption.Decrypt(webContents);
                 var lines = descryptedContents.Split('\n');
-                return lines.Any(x => GetInstallationId(x) == installationId.ToString().ToLower());
+                return lines.Select(GetPremiumHash).Any(premiumHash => premiumHash == installtionHash);
             }
             catch (Exception)
             {
@@ -29,7 +30,7 @@ namespace Gallifrey.Versions
             }
         }
 
-        private string GetInstallationId(string fileLine)
+        private string GetPremiumHash(string fileLine)
         {
             var trimedLine = fileLine.Trim().ToLower();
             return trimedLine.Contains(" ") ? trimedLine.Substring(0, trimedLine.IndexOf(" ", StringComparison.Ordinal)).Trim() : trimedLine;

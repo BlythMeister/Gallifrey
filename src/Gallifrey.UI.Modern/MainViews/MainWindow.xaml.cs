@@ -238,7 +238,7 @@ namespace Gallifrey.UI.Modern.MainViews
             }
 
             var idleTimeInfo = IdleTimeDetector.GetIdleTimeInfo();
-            if (idleTimeInfo.IdleTime.TotalMilliseconds > modelHelpers.Gallifrey.Settings.AppSettings.IdleTimeThresholdMilliseconds && !machineIdle)
+            if (idleTimeInfo.IdleTime.TotalMilliseconds >= modelHelpers.Gallifrey.Settings.AppSettings.IdleTimeThresholdMilliseconds && !machineIdle)
             {
                 machineIdle = true;
                 modelHelpers.Gallifrey.StartLockTimer(idleTimeInfo.IdleTime);
@@ -403,7 +403,7 @@ namespace Gallifrey.UI.Modern.MainViews
         
         private void GetBeta(object sender, RoutedEventArgs e)
         {
-            Process.Start(new ProcessStartInfo("http://releases.gallifreyapp.co.uk/download/modern/beta/setup.exe"));
+            Process.Start(new ProcessStartInfo("http://releases.gallifreyapp.co.uk/download/download-beta.html"));
         }
 
         private void MainWindow_OnClosed(object sender, EventArgs e)

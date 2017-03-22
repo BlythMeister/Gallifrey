@@ -6,7 +6,7 @@ namespace Gallifrey.IdleTimers
 {
     public class IdleTimer
     {
-        public DateTime DateStarted { get; private set; }
+        public DateTime DateStarted { get; }
         public DateTime? DateFinished { get; private set; }
         public TimeSpan IdleTimeValue { get; private set; }
         public Guid UniqueId { get; private set; }

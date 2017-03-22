@@ -20,7 +20,7 @@ namespace Gallifrey.UI.Modern.Models
         public string Reference => JiraTimer.JiraReference;
         public string ParentReference => JiraTimer.JiraParentReference;
         public bool HasParent => JiraTimer.HasParent;
-        public bool HasTimeToExport => !JiraTimer.FullyExported && !TrackingOnly;
+        public bool HasTimeToExport => !JiraTimer.LocalTimer && !JiraTimer.FullyExported && !TrackingOnly;
         public bool HasTimeToExportAndNotRunning => !JiraTimer.FullyExported && !JiraTimer.IsRunning;
         public bool IsRunning => JiraTimer.IsRunning;
         public bool HighlightTitle => JiraTimer.LocalTimer && !TrackingOnly;

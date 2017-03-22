@@ -18,7 +18,7 @@ namespace Gallifrey.JiraTimers
         public string JiraName { get; private set; }
         public string JiraParentReference { get; private set; }
         public string JiraParentName { get; private set; }
-        public DateTime DateStarted { get; private set; }
+        public DateTime DateStarted { get; }
         public TimeSpan CurrentTime { get; private set; }
         public TimeSpan ExportedTime { get; private set; }
         public Guid UniqueId { get; private set; }

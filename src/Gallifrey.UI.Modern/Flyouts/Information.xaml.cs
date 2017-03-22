@@ -44,10 +44,10 @@ namespace Gallifrey.UI.Modern.Flyouts
             modelHelpers.OpenFlyout(this);
         }
 
-        private async void InstallationIdClick(object sender, MouseButtonEventArgs mouseButtonEventArgs)
+        private async void InstallationHashClick(object sender, MouseButtonEventArgs mouseButtonEventArgs)
         {
-            Clipboard.SetText(modelHelpers.Gallifrey.Settings.InternalSettings.InstallationInstaceId.ToString());
-            await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Copied Installation Id", $"You Installation Id Of {modelHelpers.Gallifrey.Settings.InternalSettings.InstallationInstaceId} Has Been Copied To The Clipboard");
+            Clipboard.SetText(modelHelpers.Gallifrey.Settings.InstallationHash);
+            await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Copied Installation Hash", $"You Installation Has Of {modelHelpers.Gallifrey.Settings.InstallationHash} Has Been Copied To The Clipboard");
         }
     }
 }

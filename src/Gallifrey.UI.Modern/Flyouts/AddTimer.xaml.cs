@@ -61,7 +61,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                 return;
             }
 
-            if (DataModel.StartDate.Value < DataModel.MinDate || DataModel.StartDate.Value > DataModel.MaxDate)
+            if (DataModel.StartDate.Value.Date < DataModel.MinDate.Date || DataModel.StartDate.Value.Date > DataModel.MaxDate.Date)
             {
                 await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Invalid Date", $"You Must Enter A Start Date Between {DataModel.MinDate.ToShortDateString()} And {DataModel.MaxDate.ToShortDateString()}");
                 Focus();

@@ -25,9 +25,9 @@ namespace Gallifrey.Versions
         public event EventHandler NewVersionInstalled;
 
         private readonly ITrackUsage trackUsage;
-        public InstanceType InstanceType { get; private set; }
+        public InstanceType InstanceType { get; }
         public string VersionName { get; private set; }
-        public string AppName { get; private set; }
+        public string AppName { get; }
         public bool UpdateInstalled { get; private set; }
 
         private DateTime lastUpdateCheck;
