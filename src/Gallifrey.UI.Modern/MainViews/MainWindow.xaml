@@ -6,7 +6,7 @@
         xmlns:helpers="clr-namespace:Gallifrey.UI.Modern.Helpers"
         xmlns:mainViews="clr-namespace:Gallifrey.UI.Modern.MainViews"
         Height="675" Width="800" MinHeight="675" MinWidth="800" 
-        Icon="/Icons/clock_blue.ico" Title="{Binding AppTitle}"
+        Icon="/Icons/clock_blue.ico" IconScalingMode="ScaleDownLargerFrame"  Title="{Binding AppTitle}" TitleCharacterCasing="Upper"
         WindowTitleBrush="{DynamicResource AccentColorBrush}" NonActiveWindowTitleBrush="{DynamicResource AccentColorBrush}" BorderBrush="{DynamicResource AccentColorBrush}" BorderThickness="2"
         LeftWindowCommandsOverlayBehavior="HiddenTitleBar" RightWindowCommandsOverlayBehavior="HiddenTitleBar" WindowButtonCommandsOverlayBehavior="HiddenTitleBar" IconOverlayBehavior="HiddenTitleBar" IsWindowDraggable="True"
         Loaded="MainWindow_OnLoaded" Closed="MainWindow_OnClosed" KeyDown="MainWindow_KeyDown" Activated="MainWindow_Activated" StateChanged="MainWindow_StateChange"
@@ -22,12 +22,16 @@
                 <helpers:BooleanVisibilityConverter x:Key="BoolToVisInvert" Collapse="True" Invert="True"/>
                 <helpers:BooleanVisibilityConverter x:Key="BoolToVis" Collapse="True" Invert="False"/>
             </controls:WindowCommands.Resources>
-            
-            <Button Click="GetPremium" Content="Get Premium" Visibility="{Binding IsPremium, Converter={StaticResource BoolToVisInvert}}" />
-            <Button Click="GetBeta" Content="Become Beta Tester" Visibility="{Binding IsStable, Converter={StaticResource BoolToVis}}" />
-            <Button Click="ManualUpdateCheck" Content="{Binding VersionName}" Name="UpdateCheckButton"/>
+
+            <Button Click="GetPremium" Content="GET PREMIUM" Visibility="{Binding IsPremium, Converter={StaticResource BoolToVisInvert}}" FontFamily="{DynamicResource HeaderFontFamily}" FontSize="{DynamicResource WindowTitleFontSize}"/>
+            <Button Click="GetBeta" Content="BECOME BETA TESTER" Visibility="{Binding IsStable, Converter={StaticResource BoolToVis}}" FontFamily="{DynamicResource HeaderFontFamily}" FontSize="{DynamicResource WindowTitleFontSize}" />
+            <Button Click="ManualUpdateCheck" Content="{Binding VersionName}" Name="UpdateCheckButton" FontFamily="{DynamicResource HeaderFontFamily}" FontSize="{DynamicResource WindowTitleFontSize}" />
         </controls:WindowCommands>
     </controls:MetroWindow.RightWindowCommands>
+
+    <controls:MetroWindow.WindowButtonCommands>
+        <controls:WindowButtonCommands Style="{DynamicResource MahApps.Metro.Styles.WindowButtonCommands.Win10}" />
+    </controls:MetroWindow.WindowButtonCommands>
 
     <Grid>
         <Grid.RowDefinitions>

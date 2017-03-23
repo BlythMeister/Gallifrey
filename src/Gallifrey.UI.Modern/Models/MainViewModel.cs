@@ -50,7 +50,7 @@ namespace Gallifrey.UI.Modern.Models
         public string ExportTarget => ModelHelpers.Gallifrey.Settings.AppSettings.GetTargetThisWeek().FormatAsString(false);
         public string ExportedTargetTotalMinutes => ModelHelpers.Gallifrey.Settings.AppSettings.GetTargetThisWeek().TotalMinutes.ToString();
 
-        public string VersionName => ModelHelpers.Gallifrey.VersionControl.UpdateInstalled ? "Click To Install New Version" : ModelHelpers.Gallifrey.VersionControl.VersionName;
+        public string VersionName => ModelHelpers.Gallifrey.VersionControl.UpdateInstalled ? "NEW VERSION AVALIABLE" : ModelHelpers.Gallifrey.VersionControl.VersionName.ToUpper();
         public bool HasUpdate => ModelHelpers.Gallifrey.VersionControl.UpdateInstalled;
 
         public bool HasInactiveTime => !string.IsNullOrWhiteSpace(InactiveMinutes);

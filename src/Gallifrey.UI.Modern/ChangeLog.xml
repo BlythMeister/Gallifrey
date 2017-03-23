@@ -167,8 +167,11 @@
       <Other>Update dependencies to latest versions</Other>
     </Others>
   </Version>
-  <Version Number="3.5.0.0" Name="Pre-Release">
-    <Features />
+  <Version Number="3.5.0.1" Name="Pre-Release">
+    <Features>
+      <Feature>Apply some Windows 10 styling to window and checkboxes</Feature>
+      <Feature>Standardise the title bar font/casing</Feature>
+    </Features>
     <Bugs />
     <Others />
   </Version>
