@@ -124,7 +124,7 @@
                     <ListBox Grid.Row="2" Grid.Column="1" Margin="5" ItemsSource="{Binding WorkingDays, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <controls:ToggleSwitchButton IsChecked="{Binding IsChecked}" Content="{Binding DisplayName}" />
+                                <controls:ToggleSwitch Style="{DynamicResource MahApps.Metro.Styles.ToggleSwitch.Win10}" IsChecked="{Binding IsChecked}" Content="{Binding DisplayName}" />
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
@@ -167,7 +167,7 @@
                     <ListBox Grid.Row="1" Grid.Column="1" Margin="5" ItemsSource="{Binding ExportPrompts, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding TrackingOnly, Converter={StaticResource BoolToVisInvert}}">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <controls:ToggleSwitchButton IsChecked="{Binding IsChecked}" Content="{Binding DisplayName}" />
+                                <controls:ToggleSwitch Style="{DynamicResource MahApps.Metro.Styles.ToggleSwitch.Win10}" IsChecked="{Binding IsChecked}" Content="{Binding DisplayName}" />
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
