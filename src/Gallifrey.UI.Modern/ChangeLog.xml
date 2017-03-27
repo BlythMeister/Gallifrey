@@ -167,5 +167,16 @@
       <Other>Update dependencies to latest versions</Other>
     </Others>
   </Version>
+  <Version Number="3.5.1.0">
+    <Features>
+      <Feature>Apply some Windows 10 styling to window and checkboxes</Feature>
+      <Feature>Standardise the title bar font/casing</Feature>
+    </Features>
+    <Bugs>
+      <Bug>Fix missing tab underlines</Bug>
+      <Bug>Correct back colour on flyouts</Bug>
+    </Bugs>
+    <Others />
+  </Version>
 </Versions>
 

@@ -6,7 +6,7 @@
              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
              IsModal="True" Theme="Adapt" Position="Right" Header="Settings" CloseButtonIsCancel="True">
     <DockPanel Height="Auto" VerticalAlignment="Stretch" Width="393" Margin="5,5,5,5">
-        <controls:MetroAnimatedSingleRowTabControl TabStripPlacement="Top" controls:TabControlHelper.IsUnderlined="True" DockPanel.Dock="Top" VerticalAlignment="Stretch" Height="Auto">
+        <controls:MetroAnimatedSingleRowTabControl TabStripPlacement="Top" controls:TabControlHelper.Underlined="TabPanel" controls:TabControlHelper.Transition="Up" DockPanel.Dock="Top" VerticalAlignment="Stretch" Height="Auto">
             <TabItem Header="General">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -31,16 +31,16 @@
                     <controls:NumericUpDown Grid.Row="1" Grid.Column="1" Margin="5" VerticalAlignment="Center" Minimum="2" Maximum="150" Value="{Binding KeepTimersForDays, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" controls:TextBoxHelper.SelectAllOnFocus="True"/>
 
                     <TextBlock Grid.Row="2" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="Should Updated Be Automatically Applied">Auto Update?</TextBlock>
-                    <CheckBox Grid.Row="2" Grid.Column="1" Margin="5" VerticalAlignment="Center" IsChecked="{Binding AutoUpdate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <controls:ToggleSwitchButton Grid.Row="2" Grid.Column="1" Margin="5" Style="{DynamicResource MahApps.Metro.Styles.ToggleSwitchButton.Win10}" HorizontalAlignment="Left" VerticalAlignment="Center" IsChecked="{Binding AutoUpdate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
                     <TextBlock Grid.Row="3" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="Allow Gallifrey To Track Your App Usage (Which Functions You Use - No Personal Data Is Captured)">Anonymous Usage Tracking</TextBlock>
-                    <CheckBox Grid.Row="3" Grid.Column="1" Margin="5" VerticalAlignment="Center" IsChecked="{Binding AllowTracking, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Click="AllowTrackingClick"/>
+                    <controls:ToggleSwitchButton Grid.Row="3" Grid.Column="1" Margin="5" Style="{DynamicResource MahApps.Metro.Styles.ToggleSwitchButton.Win10}" HorizontalAlignment="Left" VerticalAlignment="Center" IsChecked="{Binding AllowTracking, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Click="AllowTrackingClick"/>
 
                     <TextBlock Grid.Row="4" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="Start Gallifrey When Your Machine Starts">Start On Boot</TextBlock>
-                    <CheckBox Grid.Row="4" Grid.Column="1" Margin="5" VerticalAlignment="Center" IsChecked="{Binding StartOnBoot, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    <controls:ToggleSwitchButton Grid.Row="4" Grid.Column="1" Margin="5" Style="{DynamicResource MahApps.Metro.Styles.ToggleSwitchButton.Win10}" HorizontalAlignment="Left" VerticalAlignment="Center" IsChecked="{Binding StartOnBoot, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                     <TextBlock Grid.Row="5" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="When Flyout Open Make UI TopMost Window">Top Most For Flyouts</TextBlock>
-                    <CheckBox Grid.Row="5" Grid.Column="1" Margin="5" VerticalAlignment="Center" IsChecked="{Binding TopMostOnFlyoutOpen, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    <controls:ToggleSwitchButton Grid.Row="5" Grid.Column="1" Margin="5" Style="{DynamicResource MahApps.Metro.Styles.ToggleSwitchButton.Win10}" HorizontalAlignment="Left" VerticalAlignment="Center" IsChecked="{Binding TopMostOnFlyoutOpen, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                     <TextBlock Grid.Row="6" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="UI Theme To Use">Theme</TextBlock>
                     <ComboBox Grid.Row="6" Grid.Column="1" Margin="5" SelectedItem="{Binding Theme}" ItemsSource="{Binding AvaliableThemes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
@@ -83,19 +83,19 @@
                     </Grid.RowDefinitions>
 
                     <TextBlock Grid.Row="0" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="Should Remind You If You Do Not Have Any Timers Running">Not Running Alert?</TextBlock>
-                    <CheckBox Grid.Row="0" Grid.Column="1" Margin="5" VerticalAlignment="Center" IsChecked="{Binding AlertWhenIdle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <controls:ToggleSwitchButton Grid.Row="0" Grid.Column="1" Margin="5" Style="{DynamicResource MahApps.Metro.Styles.ToggleSwitchButton.Win10}" HorizontalAlignment="Left" VerticalAlignment="Center" IsChecked="{Binding AlertWhenIdle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
                     <TextBlock Grid.Row="1" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="How Frequently Alerts Should Be Shown">Not Running Alert Time (Minutes)</TextBlock>
                     <controls:NumericUpDown Grid.Row="1" Grid.Column="1" Margin="5" VerticalAlignment="Center" Minimum="0" Maximum="120" Value="{Binding AlertMinutes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding AlertWhenIdle}" controls:TextBoxHelper.SelectAllOnFocus="True" />
 
                     <TextBlock Grid.Row="2" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="Should Track Time When Your Away From Your Machine">Track Machine Locked Time?</TextBlock>
-                    <CheckBox Grid.Row="2" Grid.Column="1" Margin="5" VerticalAlignment="Center" IsChecked="{Binding TrackLock, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <controls:ToggleSwitchButton Grid.Row="2" Grid.Column="1" Margin="5" Style="{DynamicResource MahApps.Metro.Styles.ToggleSwitchButton.Win10}" HorizontalAlignment="Left" VerticalAlignment="Center" IsChecked="{Binding TrackLock, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
                     <TextBlock Grid.Row="3" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="Threshold For Minimum Time Tracked When Your Away From Your Machine">Lock Time Threshold (Minutes)</TextBlock>
                     <controls:NumericUpDown Grid.Row="3" Grid.Column="1" Margin="5" VerticalAlignment="Center" Minimum="1" Maximum="120" Value="{Binding TrackLockThresholdMinutes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding TrackLock}" controls:TextBoxHelper.SelectAllOnFocus="True" />
 
                     <TextBlock Grid.Row="4" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="Should Track Time When Your Idle">Track Idle Time?</TextBlock>
-                    <CheckBox Grid.Row="4" Grid.Column="1" Margin="5" VerticalAlignment="Center" IsChecked="{Binding TrackIdle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <controls:ToggleSwitchButton Grid.Row="4" Grid.Column="1" Margin="5" Style="{DynamicResource MahApps.Metro.Styles.ToggleSwitchButton.Win10}" HorizontalAlignment="Left" VerticalAlignment="Center" IsChecked="{Binding TrackIdle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
                     <TextBlock Grid.Row="5" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="Threshold For Minimum Time Tracked When Idle">Idle Time Threshold (Minutes)</TextBlock>
                     <controls:NumericUpDown Grid.Row="5" Grid.Column="1" Margin="5" VerticalAlignment="Center" Minimum="1" Maximum="120" Value="{Binding TrackIdleThresholdMinutes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding TrackIdle}" controls:TextBoxHelper.SelectAllOnFocus="True" />
@@ -124,7 +124,7 @@
                     <ListBox Grid.Row="2" Grid.Column="1" Margin="5" ItemsSource="{Binding WorkingDays, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <CheckBox IsChecked="{Binding IsChecked}" Content="{Binding DisplayName}" />
+                                <controls:ToggleSwitch Style="{DynamicResource MahApps.Metro.Styles.ToggleSwitch.Win10}" IsChecked="{Binding IsChecked}" Content="{Binding DisplayName}" />
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
@@ -161,19 +161,19 @@
                     </Grid.Resources>
 
                     <TextBlock Grid.Row="0" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="Tracking Only, Check To Disable Export Functionality">Tracking Only</TextBlock>
-                    <CheckBox Grid.Row="0" Grid.Column="1" Margin="5" VerticalAlignment="Center" IsChecked="{Binding TrackingOnly, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <controls:ToggleSwitchButton Grid.Row="0" Grid.Column="1" Margin="5" Style="{DynamicResource MahApps.Metro.Styles.ToggleSwitchButton.Win10}" HorizontalAlignment="Left" VerticalAlignment="Center" IsChecked="{Binding TrackingOnly, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
                     <TextBlock Grid.Row="1" Grid.Column="0" Margin="5" HorizontalAlignment="Right" ToolTip="Events Which You Want To Have An Export Prompt For" Visibility="{Binding TrackingOnly, Converter={StaticResource BoolToVisInvert}}">Events</TextBlock>
                     <ListBox Grid.Row="1" Grid.Column="1" Margin="5" ItemsSource="{Binding ExportPrompts, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding TrackingOnly, Converter={StaticResource BoolToVisInvert}}">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <CheckBox IsChecked="{Binding IsChecked}" Content="{Binding DisplayName}" />
+                                <controls:ToggleSwitch Style="{DynamicResource MahApps.Metro.Styles.ToggleSwitch.Win10}" IsChecked="{Binding IsChecked}" Content="{Binding DisplayName}" />
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
 
                     <TextBlock Grid.Row="2" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="Should Export Prompt Offer You ALL Time To Export, Or Just Changed" Visibility="{Binding TrackingOnly, Converter={StaticResource BoolToVisInvert}}">Export All</TextBlock>
-                    <CheckBox Grid.Row="2" Grid.Column="1" Margin="5" VerticalAlignment="Center" IsChecked="{Binding ExportAll, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding TrackingOnly, Converter={StaticResource BoolToVisInvert}}"/>
+                    <controls:ToggleSwitchButton Grid.Row="2" Grid.Column="1" Margin="5" Style="{DynamicResource MahApps.Metro.Styles.ToggleSwitchButton.Win10}" HorizontalAlignment="Left" VerticalAlignment="Center" IsChecked="{Binding ExportAll, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding TrackingOnly, Converter={StaticResource BoolToVisInvert}}"/>
 
                     <TextBlock Grid.Row="3" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="The Default Option On The Export Window For Remaining Time" Visibility="{Binding TrackingOnly, Converter={StaticResource BoolToVisInvert}}">Default Remaining Action</TextBlock>
                     <ComboBox Grid.Row="3" Grid.Column="1" Margin="5" ItemsSource="{Binding RemainingAdjustmentValues}" SelectedItem="{Binding SelectedRemainingAdjustmentValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding TrackingOnly, Converter={StaticResource BoolToVisInvert}}"/>

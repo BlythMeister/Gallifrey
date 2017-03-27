@@ -55,7 +55,7 @@
                                 <TextBox Grid.Row="3" Grid.Column="1" Margin="0,5" Text="{Binding JiraDesc, Mode=OneWay}" IsEnabled="False" TextWrapping="Wrap" MaxLines="2"/>
 
                                 <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center">Export?</TextBlock>
-                                <CheckBox Grid.Row="4" Grid.Column="1" Margin="0,5" IsChecked="{Binding ShouldExport, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Click="ExportSingleClick" />
+                                <controls:ToggleSwitchButton Grid.Row="4" Grid.Column="1" Margin="0,5" Style="{DynamicResource MahApps.Metro.Styles.ToggleSwitchButton.Win10}" HorizontalAlignment="Left" IsChecked="{Binding ShouldExport, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Click="ExportSingleClick" />
                             </Grid>
                             <Grid Width="400" Margin="5,5,5,5" Visibility="{Binding ShouldExport, Converter={StaticResource BoolToVis}}">
                                 <Grid.RowDefinitions>
@@ -117,10 +117,10 @@
                                 <TextBox Grid.Row="5" Grid.Column="1" Margin="0,5" Text="{Binding Comment, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" AcceptsReturn="True" controls:TextBoxHelper.IsSpellCheckContextMenuEnabled="True" Height="45" VerticalScrollBarVisibility="Auto" controls:TextBoxHelper.Watermark="{Binding DefaultComment}"/>
 
                                 <TextBlock Grid.Row="6" Grid.Column="0" VerticalAlignment="Center">Add As Jira<LineBreak />Comment?</TextBlock>
-                                <CheckBox Grid.Row="6" Grid.Column="1" Margin="0,5" IsChecked="{Binding StandardComment, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                <controls:ToggleSwitchButton Grid.Row="6" Grid.Column="1" Margin="0,5" Style="{DynamicResource MahApps.Metro.Styles.ToggleSwitchButton.Win10}" HorizontalAlignment="Left" IsChecked="{Binding StandardComment, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                                 <TextBlock Grid.Row="7" Grid.Column="0" VerticalAlignment="Center">Change Status?</TextBlock>
-                                <CheckBox Grid.Row="7" Grid.Column="1" Margin="0,5" IsChecked="{Binding ChangeStatus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Click="ChangeStatusClick"/>
+                                <controls:ToggleSwitchButton Grid.Row="7" Grid.Column="1" Margin="0,5" Style="{DynamicResource MahApps.Metro.Styles.ToggleSwitchButton.Win10}" HorizontalAlignment="Left" IsChecked="{Binding ChangeStatus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Click="ChangeStatusClick"/>
                             </Grid>
                         </StackPanel>
                     </ScrollViewer>

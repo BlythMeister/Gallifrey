@@ -34,7 +34,7 @@ namespace Gallifrey.UI.Modern.Helpers
 
         public void CloseAllFlyouts()
         {
-            foreach (var item in openFlyouts)
+            foreach (var item in openFlyouts.ToList())
             {
                 CloseFlyout(item.Flyout);
             }
@@ -42,7 +42,7 @@ namespace Gallifrey.UI.Modern.Helpers
 
         public void HideAllFlyouts()
         {
-            foreach (var item in openFlyouts)
+            foreach (var item in openFlyouts.ToList())
             {
                 HideFlyout(item.Flyout);
             }

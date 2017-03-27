@@ -3,7 +3,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Timers;
 using Gallifrey.Exceptions.JiraTimers;
-using Gallifrey.ExtensionMethods;
 using Gallifrey.IdleTimers;
 using Gallifrey.Jira.Model;
 using Newtonsoft.Json;

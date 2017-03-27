@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
 using System.Windows.Input;
@@ -36,11 +35,10 @@ namespace Gallifrey.UI.Modern.MainViews
             var gallifrey = new Backend(instance);
             modelHelpers = new ModelHelpers(gallifrey, FlyoutsControl);
             exceptionlessHelper = new ExceptionlessHelper(modelHelpers);
-            exceptionlessHelper.RegisterExceptionless();
+            exceptionlessHelper.RegisterExceptionless();           
             var viewModel = new MainViewModel(modelHelpers);
             modelHelpers.RefreshModel();
             modelHelpers.SelectRunningTimer();
-
             DataContext = viewModel;
 
             gallifrey.NoActivityEvent += GallifreyOnNoActivityEvent;

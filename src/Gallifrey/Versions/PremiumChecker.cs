@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using Gallifrey.Serialization;
-using Gallifrey.Settings;
 
 namespace Gallifrey.Versions
 {
