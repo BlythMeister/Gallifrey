@@ -211,8 +211,8 @@ namespace Gallifrey.UI.Modern.Flyouts
             if (modelHelpers.Gallifrey.Settings.InternalSettings.IsPremium || DataModel.BulkExports.Count(x => x.ShouldExport) <= NonPremiumMaxExport) return;
 
             modelHelpers.ShowGetPremiumMessage("Without Gallifrey Premium You Are Limited To A Maximum Of 5 Bulk Exports");
-            var checkBox = (CheckBox)sender;
-            checkBox.IsChecked = false;
+            var toggle = (ToggleSwitchButton)sender;
+            toggle.IsChecked = false;
         }
 
         private List<BulkExportModel> GetTimers(ProgressDialogController dialogController, List<JiraTimer> timers)

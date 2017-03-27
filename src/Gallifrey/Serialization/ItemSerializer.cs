@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using Gallifrey.Exceptions.Serialization;
 using Newtonsoft.Json;

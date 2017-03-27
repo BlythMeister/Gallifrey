@@ -4,6 +4,7 @@ using Exceptionless;
 using Gallifrey.Settings;
 using Gallifrey.UI.Modern.Flyouts;
 using Gallifrey.Versions;
+using MahApps.Metro.Controls.Dialogs;
 
 namespace Gallifrey.UI.Modern.Helpers
 {
@@ -20,16 +21,20 @@ namespace Gallifrey.UI.Modern.Helpers
 
         public void RegisterExceptionless()
         {
-            if (modelHelpers.Gallifrey.VersionControl.IsAutomatedDeploy)
+
+            ExceptionlessClient.Default.Unregister();
+            ExceptionlessClient.Default.Configuration.ApiKey = ConfigKeys.ExceptionlessApiKey;
+            ExceptionlessClient.Default.Configuration.DefaultTags.Add(modelHelpers.Gallifrey.VersionControl.VersionName.Replace("\n", " - "));
+            ExceptionlessClient.Default.Configuration.SetUserIdentity(modelHelpers.Gallifrey.Settings.InstallationHash, modelHelpers.Gallifrey.JiraConnection.IsConnected ? modelHelpers.Gallifrey.JiraConnection.CurrentUser.displayName : "Unknown");
+            ExceptionlessClient.Default.Configuration.SessionsEnabled = false;
+            ExceptionlessClient.Default.Configuration.Enabled = true;
+            ExceptionlessClient.Default.SubmittingEvent += ExceptionlessSubmittingEvent;
+
+            if (modelHelpers.Gallifrey.VersionControl.IsAutomatedDeploy || true)
             {
-                ExceptionlessClient.Default.Unregister();
-                ExceptionlessClient.Default.Configuration.ApiKey = ConfigKeys.ExceptionlessApiKey;
-                ExceptionlessClient.Default.Configuration.DefaultTags.Add(modelHelpers.Gallifrey.VersionControl.VersionName.Replace("\n", " - "));
-                ExceptionlessClient.Default.Configuration.SetUserIdentity(modelHelpers.Gallifrey.Settings.InstallationHash, modelHelpers.Gallifrey.JiraConnection.IsConnected ? modelHelpers.Gallifrey.JiraConnection.CurrentUser.displayName : "Unknown");
-                ExceptionlessClient.Default.Configuration.SessionsEnabled = false;
-                ExceptionlessClient.Default.Configuration.Enabled = true;
-                ExceptionlessClient.Default.SubmittingEvent += ExceptionlessSubmittingEvent;
                 ExceptionlessClient.Default.Register();
+                //Prevent the framework from auto closing the app and let exceptionless handle errors
+                Application.Current.Dispatcher.UnhandledException += (sender, args) => args.Handled = true;
             }
         }
 

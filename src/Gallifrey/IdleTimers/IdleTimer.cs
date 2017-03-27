@@ -1,5 +1,4 @@
 ﻿using System;
-using Gallifrey.ExtensionMethods;
 using Newtonsoft.Json;
 
 namespace Gallifrey.IdleTimers
