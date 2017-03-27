@@ -4,7 +4,7 @@
              xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
              xmlns:helpers="clr-namespace:Gallifrey.UI.Modern.Helpers">
 
-    <controls:MetroAnimatedSingleRowTabControl TabStripPlacement="Left" ItemsSource="{Binding TimerDates}" DragOver="TabDragOver" Drop="TagDragDrop" AllowDrop="True" Margin="5,0,0,0" controls:TabControlHelper.Underlined="SelectedTabItem" controls:TabControlHelper.Transition="Up">
+    <controls:MetroAnimatedSingleRowTabControl TabStripPlacement="Left" ItemsSource="{Binding TimerDates}" DragOver="TabDragOver" Drop="TagDragDrop" AllowDrop="True" Margin="5,0,0,0" controls:TabControlHelper.Underlined="TabPanel" controls:TabControlHelper.Transition="Up">
         <TabControl.ItemContainerStyle>
             <Style TargetType="TabItem">
                 <Setter Property="Header" Value="{Binding Header}" />

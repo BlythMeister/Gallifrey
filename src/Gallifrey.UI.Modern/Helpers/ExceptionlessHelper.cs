@@ -30,7 +30,7 @@ namespace Gallifrey.UI.Modern.Helpers
             ExceptionlessClient.Default.Configuration.Enabled = true;
             ExceptionlessClient.Default.SubmittingEvent += ExceptionlessSubmittingEvent;
 
-            if (modelHelpers.Gallifrey.VersionControl.IsAutomatedDeploy || true)
+            if (modelHelpers.Gallifrey.VersionControl.IsAutomatedDeploy)
             {
                 ExceptionlessClient.Default.Register();
                 //Prevent the framework from auto closing the app and let exceptionless handle errors
