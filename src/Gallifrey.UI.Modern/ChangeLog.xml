@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <Versions xmlns="http://releases.gallifreyapp.co.uk/ChangeLog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://releases.gallifreyapp.co.uk/schemas/ChangeLogSchema.xsd">
   <Version Number="3.0.0.0">
     <Features>
@@ -167,7 +167,7 @@
       <Other>Update dependencies to latest versions</Other>
     </Others>
   </Version>
-  <Version Number="3.5.0.4" Name="Pre-Release">
+  <Version Number="3.5.1.0">
     <Features>
       <Feature>Apply some Windows 10 styling to window and checkboxes</Feature>
       <Feature>Standardise the title bar font/casing</Feature>
