@@ -178,9 +178,11 @@
     </Bugs>
     <Others />
   </Version> 
-  <Version Number="3.5.1.0" Name="Pre-Release">
+  <Version Number="3.5.1.1" Name="Pre-Release">
     <Features />
-    <Bugs />
+    <Bugs>
+      <Bug>Spelling mistake fixes</Bug>
+    </Bugs>
     <Others />
   </Version>
 </Versions>
