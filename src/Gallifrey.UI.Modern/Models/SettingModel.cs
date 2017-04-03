@@ -16,7 +16,7 @@ namespace Gallifrey.UI.Modern.Models
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        readonly RegistryKey registryKey = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+        private readonly RegistryKey registryKey = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
         private int targetHoursPerDay;
         private int targetMinutesPerDay;
         private bool trackingOnly;

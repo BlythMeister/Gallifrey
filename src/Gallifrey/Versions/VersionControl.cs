@@ -45,7 +45,7 @@ namespace Gallifrey.Versions
             SetVersionName();
 
             var instance = InstanceType == InstanceType.Stable ? "" : $" ({InstanceType})";
-            AppName = $"Gallifrey {instance}";
+            AppName = $"Gallifrey{instance}";
         }
 
         private void SetVersionName()

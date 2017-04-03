@@ -178,10 +178,11 @@
     </Bugs>
     <Others />
   </Version> 
-  <Version Number="3.5.1.1" Name="Pre-Release">
+  <Version Number="3.5.1.2" Name="Pre-Release">
     <Features />
     <Bugs>
       <Bug>Spelling mistake fixes</Bug>
+      <Bug>Remove extra space in "App Name" causing start on boot to fail</Bug>
     </Bugs>
     <Others />
   </Version>
