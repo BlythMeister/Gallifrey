@@ -46,7 +46,7 @@ namespace Gallifrey.JiraTimers
             IsRunning = false;
             currentRunningTime = new Stopwatch();
             runningWatcher = new Timer(100);
-            runningWatcher.Elapsed += runningWatcherElapsed;
+            runningWatcher.Elapsed += RunningWatcherElapsed;
             LastJiraTimeCheck = lastJiraTimeCheck;
             LocalTimer = localTimer;
         }
@@ -68,7 +68,7 @@ namespace Gallifrey.JiraTimers
 
         }
 
-        private void runningWatcherElapsed(object sender, ElapsedEventArgs e)
+        private void RunningWatcherElapsed(object sender, ElapsedEventArgs e)
         {
             if (currentRunningTime.IsRunning)
             {

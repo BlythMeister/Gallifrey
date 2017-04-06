@@ -195,8 +195,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             }
             else
             {
-                int minutesAdjustment;
-                if (!int.TryParse(enteredValue, out minutesAdjustment))
+                if (!int.TryParse(enteredValue, out int minutesAdjustment))
                 {
                     await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Invalid Time Entry", $"The Value '{enteredValue}' was not a number of minutes.");
                     Focus();
@@ -233,7 +232,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             {
                 DataModel.SetJiraReference(searchFlyout.SelectedJira.Reference);
             }
-            modelHelpers.OpenFlyout(this);
+            await modelHelpers.OpenFlyout(this);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
 using System.Windows.Input;
@@ -27,6 +28,7 @@ namespace Gallifrey.UI.Modern.MainViews
         private MainViewModel ViewModel => (MainViewModel)DataContext;
         private bool machineLocked;
         private bool machineIdle;
+        private Timer flyoutOpenCheck;
 
         public MainWindow(InstanceType instance)
         {
@@ -61,7 +63,7 @@ namespace Gallifrey.UI.Modern.MainViews
             idleDetectionHeartbeat.Elapsed += IdleDetectionCheck;
             idleDetectionHeartbeat.Enabled = true;
 
-            var flyoutOpenCheck = new Timer(100);
+            flyoutOpenCheck = new Timer(100);
             flyoutOpenCheck.Elapsed += FlyoutOpenCheck;
             flyoutOpenCheck.Enabled = true;
         }
@@ -250,24 +252,31 @@ namespace Gallifrey.UI.Modern.MainViews
 
         private void FlyoutOpenCheck(object sender, ElapsedEventArgs e)
         {
-            Dispatcher.Invoke(() =>
+            try
             {
-                if (modelHelpers.Gallifrey.Settings.UiSettings.TopMostOnFlyoutOpen)
+                Dispatcher.Invoke(() =>
                 {
-                    if (modelHelpers.FlyoutOpen)
+                    if (modelHelpers.Gallifrey.Settings.UiSettings.TopMostOnFlyoutOpen)
                     {
-                        this.FlashWindow();
-                        WindowState = WindowState.Normal;
-                        Activate();
-                    }
-                    else
-                    {
-                        this.StopFlashingWindow();
-                    }
+                        if (modelHelpers.FlyoutOpen)
+                        {
+                            this.FlashWindow();
+                            WindowState = WindowState.Normal;
+                            Activate();
+                        }
+                        else
+                        {
+                            this.StopFlashingWindow();
+                        }
 
-                    Topmost = modelHelpers.FlyoutOpen;
-                }
-            });
+                        Topmost = modelHelpers.FlyoutOpen;
+                    }
+                });
+            }
+            catch (TaskCanceledException)
+            {
+                //Surpress Exception
+            }
         }
 
         private async void StopLockTimer(int threshold)
@@ -406,6 +415,7 @@ namespace Gallifrey.UI.Modern.MainViews
 
         private void MainWindow_OnClosed(object sender, EventArgs e)
         {
+            flyoutOpenCheck.Stop();
             modelHelpers.Gallifrey.Settings.UiSettings.Height = (int)Height;
             modelHelpers.Gallifrey.Settings.UiSettings.Width = (int)Width;
             modelHelpers.Gallifrey.Close();

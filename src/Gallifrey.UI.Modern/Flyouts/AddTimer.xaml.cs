@@ -292,7 +292,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             {
                 DataModel.SetJiraReference(searchFlyout.SelectedJira.Reference);
             }
-            modelHelpers.OpenFlyout(this);
+            await modelHelpers.OpenFlyout(this);
         }
 
         private async void TransitionSelected(object sender, RoutedEventArgs e)

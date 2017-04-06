@@ -90,8 +90,7 @@ namespace Gallifrey.UI.Modern.Models
             set
             {
                 var newValue = value ?? 0;
-                bool hoursChanged;
-                HourMinuteHelper.UpdateMinutes(ref toExportHours, ref toExportMinutes, newValue, int.MaxValue, out hoursChanged);
+                HourMinuteHelper.UpdateMinutes(ref toExportHours, ref toExportMinutes, newValue, int.MaxValue, out bool hoursChanged);
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ToExportMinutes"));
                 if (hoursChanged)
                 {
@@ -130,8 +129,7 @@ namespace Gallifrey.UI.Modern.Models
             set
             {
                 var newValue = value ?? 0;
-                bool hoursChanged;
-                HourMinuteHelper.UpdateMinutes(ref remainingHours, ref remainingMinutes, newValue, 99, out hoursChanged);
+                HourMinuteHelper.UpdateMinutes(ref remainingHours, ref remainingMinutes, newValue, 99, out bool hoursChanged);
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("RemainingMinutes"));
                 if (hoursChanged)
                 {

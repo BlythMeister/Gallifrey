@@ -77,7 +77,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             else if (timersToShow.Count == 1)
             {
                 modelHelpers.CloseFlyout(this);
-                modelHelpers.OpenFlyout(new Export(modelHelpers, timersToShow.First().Timer.UniqueId, null, true));
+                await modelHelpers.OpenFlyout(new Export(modelHelpers, timersToShow.First().Timer.UniqueId, null, true));
             }
             else
             {
@@ -114,7 +114,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                     }
                 }
 
-                modelHelpers.OpenFlyout(this);
+                await modelHelpers.OpenFlyout(this);
             }
         }
 
@@ -137,7 +137,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             }
             catch (BulkExportException ex)
             {
-                modelHelpers.OpenFlyout(this);
+                await modelHelpers.OpenFlyout(this);
                 await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Error Exporting", $"{ex.Message}");
                 foreach (var timer in timersToExport.Where(x => !x.Timer.FullyExported))
                 {
@@ -154,7 +154,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             var changeStatusExports = timersToExport.Where(x => x.ChangeStatus);
             if (changeStatusExports.Any())
             {
-                modelHelpers.OpenFlyout(this);
+                await modelHelpers.OpenFlyout(this);
                 foreach (var timer in changeStatusExports)
                 {
                     while (!string.IsNullOrWhiteSpace(currentChangeStatusJiraRef))
