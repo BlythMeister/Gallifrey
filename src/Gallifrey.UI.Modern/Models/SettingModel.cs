@@ -105,7 +105,7 @@ namespace Gallifrey.UI.Modern.Models
             set
             {
                 var newValue = value ?? 0;
-                HourMinuteHelper.UpdateHours(ref targetHoursPerDay, newValue, 9);
+                HourMinuteHelper.UpdateHours(ref targetHoursPerDay, newValue, 23);
             }
         }
 
@@ -116,7 +116,7 @@ namespace Gallifrey.UI.Modern.Models
             {
                 var newValue = value ?? 0;
                 bool hoursChanged;
-                HourMinuteHelper.UpdateMinutes(ref targetHoursPerDay, ref targetMinutesPerDay, newValue, 9, out hoursChanged);
+                HourMinuteHelper.UpdateMinutes(ref targetHoursPerDay, ref targetMinutesPerDay, newValue, 23, out hoursChanged);
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TargetMinutesPerDay"));
                 if (hoursChanged)
                 {

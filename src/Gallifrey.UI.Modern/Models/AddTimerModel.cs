@@ -169,7 +169,7 @@ namespace Gallifrey.UI.Modern.Models
             set
             {
                 var newValue = value ?? 0;
-                HourMinuteHelper.UpdateHours(ref startHours, newValue, 9);
+                HourMinuteHelper.UpdateHours(ref startHours, newValue, 23);
             }
         }
 
@@ -180,7 +180,7 @@ namespace Gallifrey.UI.Modern.Models
             {
                 var newValue = value ?? 0;
                 bool hoursChanged;
-                HourMinuteHelper.UpdateMinutes(ref startHours, ref startMinutes, newValue, 9, out hoursChanged);
+                HourMinuteHelper.UpdateMinutes(ref startHours, ref startMinutes, newValue, 23, out hoursChanged);
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("StartMinutes"));
                 if (hoursChanged)
                 {

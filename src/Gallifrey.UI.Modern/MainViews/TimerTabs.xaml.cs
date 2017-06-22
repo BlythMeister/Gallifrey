@@ -32,16 +32,16 @@ namespace Gallifrey.UI.Modern.MainViews
             if (timerIds.Any())
             {
                 var timerId = timerIds.First();
-                
+
                 if (timerIds.Count > 1)
                 {
                     var timer = ModelHelpers.Gallifrey.JiraTimerCollection.GetTimer(timerId);
                     await DialogCoordinator.Instance.ShowMessageAsync(ModelHelpers.DialogContext, "Multiple Timers Selected", $"You Have 2 Timers Selected, Can Only Start 1.\nWill Start Timer: {timer.JiraReference}\n\n{timer.JiraName}");
                 }
-                
-                var runningTimer = ModelHelpers.Gallifrey.JiraTimerCollection.GetRunningTimerId();
 
-                if (runningTimer.HasValue && runningTimer.Value == timerId)
+                var runningTimerId = ModelHelpers.Gallifrey.JiraTimerCollection.GetRunningTimerId();
+
+                if (runningTimerId.HasValue && runningTimerId.Value == timerId)
                 {
                     ModelHelpers.Gallifrey.JiraTimerCollection.StopTimer(timerId, false);
                 }
