@@ -15,7 +15,7 @@ namespace Gallifrey.UI.Modern.Helpers
             }
             else if (newValue > maxHours)
             {
-                hourValue = 9;
+                hourValue = maxHours;
             }
             else
             {
