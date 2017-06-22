@@ -183,6 +183,8 @@
     <Bugs>
       <Bug>Spelling mistake fixes</Bug>
       <Bug>Remove extra space in "App Name" causing start on boot to fail</Bug>
+      <Bug>Fix for export remaining hours going 99 -> 9</Bug>
+      <Bug>Fix to allow timers over 10 hours to be edited. - New max 24 hours</Bug>
     </Bugs>
     <Others />
   </Version>

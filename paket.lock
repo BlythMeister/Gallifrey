@@ -1,4 +1,4 @@
-FRAMEWORK: NET46
+RESTRICTION: == net46
 NUGET
   remote: https://www.nuget.org/api/v2
     Atlassian.SDK (2.5)
@@ -9,7 +9,7 @@ NUGET
       Exceptionless (4.0.1951)
     Exceptionless.Wpf (4.0.1951)
       Exceptionless (4.0.1951)
-    MahApps.Metro (1.6.0-alpha001)
+    MahApps.Metro (1.6.0-alpha004)
     MahApps.Metro.IconPacks.Modern (1.9)
-    Newtonsoft.Json (10.0.2)
+    Newtonsoft.Json (10.0.3)
     RestSharp (105.2.3)
