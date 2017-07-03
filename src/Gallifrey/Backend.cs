@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
@@ -84,9 +85,9 @@ namespace Gallifrey
             premiumChecker = new PremiumChecker();
 
             ActivityChecker.NoActivityEvent += OnNoActivityEvent;
-            var cleanUpAndTrackingHearbeat = new Timer(TimeSpan.FromMinutes(15).TotalMilliseconds);
-            cleanUpAndTrackingHearbeat.Elapsed += CleanUpAndTrackingHearbeatOnElapsed;
-            cleanUpAndTrackingHearbeat.Start();
+            var cleanUpAndTrackingHeartbeat = new Timer(TimeSpan.FromMinutes(15).TotalMilliseconds);
+            cleanUpAndTrackingHeartbeat.Elapsed += CleanUpAndTrackingHearbeatOnElapsed;
+            cleanUpAndTrackingHeartbeat.Start();
 
             exportedHeartbeatMutex = new Mutex(false);
             var jiraExportHearbeat = new Timer(TimeSpan.FromMinutes(10).TotalMilliseconds);
@@ -274,6 +275,18 @@ namespace Gallifrey
                 {
                     throw new DebuggerException();
                 }
+            }
+
+            try
+            {
+                using (var client = new WebClient())
+                {
+                    client.DownloadData("http://releases.gallifreyapp.co.uk");
+                }
+            }
+            catch
+            {
+                throw new NoInternetConnectionException();
             }
 
             jiraConnection.ReConnect(settingsCollection.JiraConnectionSettings, settingsCollection.ExportSettings);

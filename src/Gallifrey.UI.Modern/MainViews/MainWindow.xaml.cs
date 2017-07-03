@@ -37,7 +37,7 @@ namespace Gallifrey.UI.Modern.MainViews
             var gallifrey = new Backend(instance);
             modelHelpers = new ModelHelpers(gallifrey, FlyoutsControl);
             exceptionlessHelper = new ExceptionlessHelper(modelHelpers);
-            exceptionlessHelper.RegisterExceptionless();           
+            exceptionlessHelper.RegisterExceptionless();
             var viewModel = new MainViewModel(modelHelpers);
             modelHelpers.RefreshModel();
             modelHelpers.SelectRunningTimer();
@@ -72,7 +72,9 @@ namespace Gallifrey.UI.Modern.MainViews
         {
             var debuggerMissing = false;
             var multipleInstances = false;
-            var showSettings = false;
+            var missingConfig = false;
+            var connectionError = false;
+            var noInternet = false;
             try
             {
                 var progressDialogHelper = new ProgressDialogHelper(modelHelpers.DialogContext);
@@ -83,13 +85,17 @@ namespace Gallifrey.UI.Modern.MainViews
                     modelHelpers.CloseApp();
                 }
             }
+            catch (NoInternetConnectionException)
+            {
+                noInternet = true;
+            }
             catch (MissingJiraConfigException)
             {
-                showSettings = true;
+                missingConfig = true;
             }
             catch (JiraConnectionException)
             {
-                showSettings = true;
+                connectionError = true;
             }
             catch (MultipleGallifreyRunningException)
             {
@@ -111,16 +117,115 @@ namespace Gallifrey.UI.Modern.MainViews
                 await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Multiple Instances", "You Can Only Have One Instance Of Gallifrey Running At A Time\nPlease Close The Other Instance");
                 modelHelpers.CloseApp();
             }
-            else if (showSettings)
+            else if (noInternet)
+            {
+                modelHelpers.Gallifrey.TrackEvent(TrackingType.NoInternet);
+                await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "No Internet Connection ", "Gallifrey Requires An Active Internet Connection To Work.\nPlease Try Again When You Have Internet");
+                modelHelpers.CloseApp();
+            }
+            else if (missingConfig)
             {
                 modelHelpers.Gallifrey.TrackEvent(TrackingType.SettingsMissing);
-                await modelHelpers.OpenFlyout(new Flyouts.Settings(modelHelpers));
-                if (!modelHelpers.Gallifrey.JiraConnection.IsConnected)
+                await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Welcome To Gallifrey", "You Current Have No Jira Settings In Gallifrey\nWe Therefore Think Your A New User, So Welcome!\n\nTo Get Started, We Need Your Jira Details");
+
+                var loggedIn = false;
+
+                while (!loggedIn)
                 {
-                    await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Connection Required", "You Must Have A Working Jira Connection To Use Gallifrey");
+                    var jiraSettings = modelHelpers.Gallifrey.Settings.JiraConnectionSettings;
+                    var url = await DialogCoordinator.Instance.ShowInputAsync(modelHelpers.DialogContext, "Jira URL", "Please Enter Your Jira Instance URL\nThis Is The URL You Go To When You Login Using A Browser\ne.g. https://MyCompany.atlassian.net", new MetroDialogSettings { DefaultText = jiraSettings.JiraUrl });
+                    var details = await DialogCoordinator.Instance.ShowLoginAsync(modelHelpers.DialogContext, "UserName & Password", "Please Enter Your UserName/Email Address & Password You Use To Login To Jira", new LoginDialogSettings { EnablePasswordPreview = true, InitialUsername = jiraSettings.JiraUsername, InitialPassword = jiraSettings.JiraPassword });
+
+                    jiraSettings.JiraUrl = url;
+                    jiraSettings.JiraUsername = details.Username;
+                    jiraSettings.JiraPassword = details.Password;
+
+                    try
+                    {
+                        modelHelpers.Gallifrey.SaveSettings(true, false);
+                        loggedIn = true;
+                    }
+                    catch (MissingJiraConfigException)
+                    {
+                        var result = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Missing Information", "Some Of The Jira Information We Requested Was Missing, Try Again?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No" });
+                        if (result == MessageDialogResult.Negative)
+                        {
+                            await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Come Back Soon", "Without A Correctly Configured Jira Connection Gallifrey Will Close, Please Come Back Soon!");
+                            modelHelpers.CloseApp();
+                        }
+                    }
+                    catch (JiraConnectionException)
+                    {
+                        var result = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Login Failure", "We Were Unable To Authenticate To Jira, Try Again?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No" });
+                        if (result == MessageDialogResult.Negative)
+                        {
+                            await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Come Back Soon", "Without A Correctly Configured Jira Connection Gallifrey Will Close, Please Come Back Soon!");
+                            modelHelpers.CloseApp();
+                        }
+                    }
+                }
+
+                var viewSettings = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "More Settings", "Gallifrey Has A Vast Range Of Settings, Would You Like To See Them Now?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No" });
+
+                if (viewSettings == MessageDialogResult.Affirmative)
+                {
+                    await modelHelpers.OpenFlyout(new Flyouts.Settings(modelHelpers));
+                    if (!modelHelpers.Gallifrey.JiraConnection.IsConnected)
+                    {
+                        await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Lost Jira Connection", "We Seem To Have Lost Jira Connection\nWithout A Correctly Configured Jira Connection Gallifrey Will Close");
+                        modelHelpers.CloseApp();
+                    }
+                }
+
+                modelHelpers.RefreshModel();
+            }
+            else if (connectionError)
+            {
+                modelHelpers.Gallifrey.TrackEvent(TrackingType.ConnectionError);
+                var userUpdate = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Login Failure", "We Were Unable To Authenticate To Jira, Please Confirm Login Details\nWould You Like To Update Your Details?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No" });
+
+                if (userUpdate == MessageDialogResult.Negative)
+                {
+                    await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Come Back Soon", "Without A Correctly Configured Jira Connection Gallifrey Will Close, Please Come Back Soon!");
                     modelHelpers.CloseApp();
                 }
-                modelHelpers.RefreshModel();
+
+                var loggedIn = false;
+
+                while (!loggedIn)
+                {
+                    var jiraSettings = modelHelpers.Gallifrey.Settings.JiraConnectionSettings;
+                    var url = await DialogCoordinator.Instance.ShowInputAsync(modelHelpers.DialogContext, "Jira URL", "Please Enter Your Jira Instance URL\nThis Is The URL You Go To When You Login Using A Browser\ne.g. https://MyCompany.atlassian.net", new MetroDialogSettings { DefaultText = jiraSettings.JiraUrl });
+                    var details = await DialogCoordinator.Instance.ShowLoginAsync(modelHelpers.DialogContext, "UserName & Password", "Please Enter Your UserName/Email Address & Password You Use To Login To Jira", new LoginDialogSettings { EnablePasswordPreview = true, InitialUsername = jiraSettings.JiraUsername, InitialPassword = jiraSettings.JiraPassword });
+
+                    jiraSettings.JiraUrl = url;
+                    jiraSettings.JiraUsername = details.Username;
+                    jiraSettings.JiraPassword = details.Password;
+
+                    try
+                    {
+                        modelHelpers.Gallifrey.SaveSettings(true, false);
+                        loggedIn = true;
+                    }
+                    catch (MissingJiraConfigException)
+                    {
+                        var result = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Missing Information", "Some Of The Jira Information We Requested Was Missing, Try Again?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No" });
+                        if (result == MessageDialogResult.Negative)
+                        {
+                            await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Come Back Soon", "Without A Correctly Configured Jira Connection Gallifrey Will Close, Please Come Back Soon!");
+                            modelHelpers.CloseApp();
+                        }
+                    }
+                    catch (JiraConnectionException)
+                    {
+                        var result = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Login Failure", "We Were Unable To Authenticate To Jira, Try Again?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No" });
+                        if (result == MessageDialogResult.Negative)
+                        {
+                            await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Come Back Soon", "Without A Correctly Configured Jira Connection Gallifrey Will Close, Please Come Back Soon!");
+                            modelHelpers.CloseApp();
+                        }
+                    }
+                }
             }
 
             if (modelHelpers.Gallifrey.VersionControl.IsAutomatedDeploy && modelHelpers.Gallifrey.VersionControl.IsFirstRun)
@@ -407,7 +512,7 @@ namespace Gallifrey.UI.Modern.MainViews
                 await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Update Error", "There Was An Error Trying To Update Gallifrey, If This Problem Persists Please Contact Support");
             }
         }
-        
+
         private void GetBeta(object sender, RoutedEventArgs e)
         {
             Process.Start(new ProcessStartInfo("http://releases.gallifreyapp.co.uk/download/download-beta.html"));

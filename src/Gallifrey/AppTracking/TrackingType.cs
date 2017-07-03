@@ -29,6 +29,8 @@
         ExportAll,
         ShowRunningTimer,
         MultipleInstancesRunning,
-        SettingsMissing
+        SettingsMissing,
+        NoInternet,
+        ConnectionError
     }
 }
