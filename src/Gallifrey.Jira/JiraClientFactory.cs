@@ -6,9 +6,7 @@ namespace Gallifrey.Jira
     {
         public static IJiraClient BuildJiraClient(string jiraUrl, string username, string password)
         {
-            if (string.IsNullOrWhiteSpace(jiraUrl) ||
-                    string.IsNullOrWhiteSpace(username) ||
-                    string.IsNullOrWhiteSpace(password))
+            if (string.IsNullOrWhiteSpace(jiraUrl) || string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
             {
                 throw new InvalidCredentialException("Required settings to create connection to jira are missing");
             }

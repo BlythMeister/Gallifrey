@@ -1,11 +1,11 @@
-﻿using System;
+﻿using Gallifrey.Rest.Exception;
+using Newtonsoft.Json;
+using RestSharp;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
-using Gallifrey.Rest.Exception;
-using Newtonsoft.Json;
-using RestSharp;
 
 namespace Gallifrey.Rest
 {
@@ -83,18 +83,16 @@ namespace Gallifrey.Rest
                     {
                         throw new ClientException($"Wrong status returned: {response.StatusDescription}. Message: {errorMessages.First()}");
                     }
-                    else
-                    {
-                        throw new ClientException($"Wrong status returned: {response.StatusDescription}");
-                    }
+
+                    throw new ClientException($"Wrong status returned: {response.StatusDescription}");
                 }
                 catch (ClientException)
                 {
                     throw;
                 }
-                catch (System.Exception ex)
+                catch (System.Exception)
                 {
-                    throw new ClientException($"Wrong status returned: {response.StatusDescription}", ex);
+                    throw new ClientException($"Wrong status returned: {response.StatusDescription}");
                 }
             }
         }

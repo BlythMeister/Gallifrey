@@ -1,9 +1,9 @@
-﻿using System;
+﻿using Gallifrey.Settings;
+using Gallifrey.Versions;
+using System;
 using System.Deployment.Application;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Gallifrey.Settings;
-using Gallifrey.Versions;
 
 namespace Gallifrey.AppTracking
 {
@@ -37,7 +37,6 @@ namespace Gallifrey.AppTracking
             {
                 webBrowser = new WebBrowser
                 {
-                    ScrollBarsEnabled = false,
                     ScriptErrorsSuppressed = true
                 };
 
@@ -51,7 +50,7 @@ namespace Gallifrey.AppTracking
 
         public async void TrackAppUsage(TrackingType trackingType)
         {
-            if (IsTrackingEnabled(trackingType) && ApplicationDeployment.IsNetworkDeployed)
+            if (IsTrackingEnabled(trackingType))
             {
                 if (webBrowser == null)
                 {
@@ -63,7 +62,7 @@ namespace Gallifrey.AppTracking
                     webBrowser.Navigate(GetNavigateUrl(trackingType));
                     while (webBrowser.ReadyState != WebBrowserReadyState.Complete)
                     {
-                        await Task.Delay(1000);
+                        await Task.Delay(500);
                     }
                 }
                 catch (Exception)
