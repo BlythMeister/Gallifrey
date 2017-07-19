@@ -115,15 +115,15 @@ namespace Gallifrey.Jira
         {
             var exportedRefs = new Dictionary<string, TimeSpan>();
 
-            if (hasTempo)
+            if (HasTempo)
             {
-                var logs = restClient.Get<List<TempoWorkLog>>(HttpStatusCode.OK, $"tempo-timesheets/3/worklogs?dateFrom={queryDate.ToString("yyyy-MM-dd")}&dateTo={queryDate.AddDays(1).ToString("yyyy-MM-dd")}&username={myUser.key}");
+                var logs = restClient.Get<List<TempoWorkLog>>(HttpStatusCode.OK, $"tempo-timesheets/3/worklogs?dateFrom={queryDate:yyyy-MM-dd}&dateTo={queryDate:yyyy-MM-dd}&username={myUser.key}");
                 foreach (var tempoWorkLog in logs)
                 {
                     var workLogTime = TimeSpan.FromSeconds(tempoWorkLog.timeSpentSeconds);
                     if (exportedRefs.ContainsKey(tempoWorkLog.issue.key))
                     {
-                        exportedRefs[tempoWorkLog.issue.key].Add(workLogTime);
+                        exportedRefs[tempoWorkLog.issue.key] = exportedRefs[tempoWorkLog.issue.key].Add(workLogTime);
                     }
                     else
                     {
@@ -133,7 +133,7 @@ namespace Gallifrey.Jira
             }
             else
             {
-                var issuesExportedTo = GetIssuesFromJql($"worklogAuthor = currentUser() and worklogDate = {queryDate.ToString("yyyy-MM-dd")}");
+                var issuesExportedTo = GetIssuesFromJql($"worklogAuthor = currentUser() and worklogDate = {queryDate:yyyy-MM-dd}");
 
                 foreach (var issue in issuesExportedTo)
                 {
@@ -148,7 +148,7 @@ namespace Gallifrey.Jira
 
         public TimeSpan GetWorkLoggedOnIssue(string issueRef, DateTime queryDate)
         {
-            if (hasTempo)
+            if (HasTempo)
             {
                 var logs = restClient.Get<List<TempoWorkLog>>(HttpStatusCode.OK, $"tempo-timesheets/3/worklogs?dateFrom={queryDate.ToString("yyyy-MM-dd")}&dateTo={queryDate.AddDays(1).ToString("yyyy-MM-dd")}&username={myUser.key}");
                 return TimeSpan.FromSeconds(logs.Where(x => x.issue.key == issueRef).Sum(x => x.timeSpentSeconds));
@@ -188,27 +188,26 @@ namespace Gallifrey.Jira
         public void AddWorkLog(string issueRef, WorkLogStrategy workLogStrategy, string comment, TimeSpan timeSpent, DateTime logDate, TimeSpan? remainingTime = null)
         {
             if (logDate.Kind != DateTimeKind.Local) logDate = DateTime.SpecifyKind(logDate, DateTimeKind.Local);
+            timeSpent = new TimeSpan(timeSpent.Hours, timeSpent.Minutes, 0);
 
-            if (hasTempo)
+            if (HasTempo)
             {
-                double? remaining = 0;
+                TempoWorkLog.TempoWorkLogIssue issue = new TempoWorkLog.TempoWorkLogIssue();
                 switch (workLogStrategy)
                 {
                     case WorkLogStrategy.Automatic:
-                        remaining = GetIssue(issueRef).fields.timetracking.remainingEstimateSeconds - timeSpent.TotalSeconds;
+                        var remaining = GetIssue(issueRef).fields.timetracking.remainingEstimateSeconds - timeSpent.TotalSeconds;
+                        issue = new TempoWorkLog.TempoWorkLogIssue { key = issueRef, remainingEstimateSeconds = remaining };
                         break;
                     case WorkLogStrategy.LeaveRemaining:
-                        remaining = null;
+                        issue = new TempoWorkLog.TempoWorkLogIssue { key = issueRef };
                         break;
                     case WorkLogStrategy.SetValue:
-                        remaining = remainingTime?.TotalSeconds ?? 0;
+                        issue = new TempoWorkLog.TempoWorkLogIssue { key = issueRef, remainingEstimateSeconds = remainingTime?.TotalSeconds ?? 0 };
                         break;
                 }
 
-                //remove seconds
-                timeSpent = new TimeSpan(timeSpent.Hours, timeSpent.Minutes, 0);
-
-                var tempoWorkLog = new TempoWorkLog { issue = new TempoWorkLog.TempoWorkLogIssue { key = issueRef, remainingEstimateSeconds = remaining }, timeSpentSeconds = timeSpent.TotalSeconds, dateStarted = $"{logDate:s}.000", comment = comment, author = new TempoWorkLog.TempoWorkLogUser { key = myUser.key, name = myUser.name, displayName = myUser.displayName } };
+                var tempoWorkLog = new TempoWorkLog { issue = issue, timeSpentSeconds = timeSpent.TotalSeconds, dateStarted = $"{logDate:s}.000", comment = comment, author = new TempoWorkLog.TempoWorkLogUser { key = myUser.key, name = myUser.name, displayName = myUser.displayName } };
                 restClient.Post(HttpStatusCode.OK, "tempo-timesheets/3/worklogs", tempoWorkLog);
             }
             else
