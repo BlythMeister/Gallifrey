@@ -287,5 +287,10 @@ namespace Gallifrey.UI.Modern.MainViews
                 default: return;
             }
         }
+
+        private void ForceError(object sender, RoutedEventArgs e)
+        {
+            throw new Exception("Forced Alpha Exception");
+        }
     }
 }

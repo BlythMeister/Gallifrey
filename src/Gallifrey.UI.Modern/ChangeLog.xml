@@ -178,11 +178,12 @@
     </Bugs>
     <Others />
   </Version> 
-  <Version Number="3.5.1.6" Name="Pre-Release">
+  <Version Number="3.5.1.7" Name="Pre-Release">
     <Features>
       <Feature>Add internet connection check before login to Jira</Feature>
       <Feature>Add new user setup flow</Feature>
       <Feature>Improve authentication failure on start handling</Feature>
+      <Feature>If Tempo api is found, us it for timesheet information</Feature>
     </Features>
     <Bugs>
       <Bug>Spelling mistake fixes</Bug>

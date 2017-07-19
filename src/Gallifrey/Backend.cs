@@ -1,13 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Timers;
-using System.Xml.Linq;
-using Gallifrey.AppTracking;
+﻿using Gallifrey.AppTracking;
 using Gallifrey.ChangeLog;
 using Gallifrey.Contributors;
 using Gallifrey.Exceptions;
@@ -19,6 +10,15 @@ using Gallifrey.JiraTimers;
 using Gallifrey.Serialization;
 using Gallifrey.Settings;
 using Gallifrey.Versions;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Timers;
+using System.Xml.Linq;
 using Timer = System.Timers.Timer;
 
 namespace Gallifrey
@@ -165,20 +165,18 @@ namespace Gallifrey
         private void JiraExportHearbeatHearbeatOnElapsed(object sender, ElapsedEventArgs e)
         {
             exportedHeartbeatMutex.WaitOne();
-            var issues = new List<Issue>();
-            var timersNotChecked = new Dictionary<string, List<Guid>>();
+            var issueCache = new List<Issue>();
 
             try
             {
                 var keepTimersForDays = settingsCollection.AppSettings.KeepTimersForDays;
                 if (keepTimersForDays > 0) keepTimersForDays = keepTimersForDays * -1;
                 var workingDate = DateTime.Now.AddDays(keepTimersForDays + 1);
-
-                var doMissingTimerCheck = false;
+                var doCheck = false;
 
                 if (lastMissingTimerCheck < DateTime.UtcNow.AddHours(-1))
                 {
-                    doMissingTimerCheck = true;
+                    doCheck = true;
                     lastMissingTimerCheck = DateTime.UtcNow;
                 }
 
@@ -186,75 +184,49 @@ namespace Gallifrey
                 {
                     var timersOnDate = jiraTimerCollection.GetTimersForADate(workingDate.Date).ToList();
 
-                    if (doMissingTimerCheck)
+                    if (doCheck || timersOnDate.Any(x => !x.LastJiraTimeCheck.HasValue || x.LastJiraTimeCheck.Value < DateTime.UtcNow.AddMinutes(-30)))
                     {
-                        var jirasExportedTo = JiraConnection.GetJiraIssuesFromJQL($"worklogAuthor = currentUser() and worklogDate = {workingDate.ToString("yyyy-MM-dd")}").ToList();
+                        var jirasExportedTo = JiraConnection.GetTimeLoggedOnDate(workingDate);
 
-                        foreach (var issue in jirasExportedTo)
+                        foreach (var timeExport in jirasExportedTo)
                         {
-                            if (!timersOnDate.Any(x => x.JiraReference == issue.key))
+                            if (!timersOnDate.Any(x => x.JiraReference == timeExport.Key))
                             {
-                                var issueWithWorklogs = issues.FirstOrDefault(x => x.key == issue.key);
+                                var issue = issueCache.FirstOrDefault(x => x.key == timeExport.Key);
 
-                                if (issueWithWorklogs == null)
+                                if (issue == null)
                                 {
-                                    issueWithWorklogs = jiraConnection.GetJiraIssue(issue.key, true);
-                                    issues.Add(issueWithWorklogs);
+                                    issue = jiraConnection.GetJiraIssue(timeExport.Key);
+                                    issueCache.Add(issue);
                                 }
 
-                                var timerReference = jiraTimerCollection.AddTimer(issueWithWorklogs, workingDate.Date, new TimeSpan(), false);
-                                jiraTimerCollection.RefreshFromJira(timerReference, issueWithWorklogs, jiraConnection.CurrentUser);
+                                var timerReference = jiraTimerCollection.AddTimer(issue, workingDate.Date, new TimeSpan(), false);
+                                jiraTimerCollection.RefreshFromJira(timerReference, issue, timeExport.Value);
                                 BackendModifiedTimers?.Invoke(this, null);
                             }
                         }
+
+                        foreach (var timer in timersOnDate.Where(x => !x.LocalTimer))
+                        {
+                            var issue = issueCache.FirstOrDefault(x => x.key == timer.JiraReference);
+                            if (issue == null)
+                            {
+                                issue = jiraConnection.GetJiraIssue(timer.JiraReference);
+                                issueCache.Add(issue);
+                            }
+
+                            var time = jirasExportedTo.ContainsKey(issue.key) ? jirasExportedTo[issue.key] : TimeSpan.Zero;
+                            jiraTimerCollection.RefreshFromJira(timer.UniqueId, issue, time);
+                        }
+
+                        workingDate = workingDate.AddDays(1);
                     }
-
-                    foreach (var timer in timersOnDate.Where(x => !x.LocalTimer))
-                    {
-                        var issueWithWorklogs = issues.FirstOrDefault(x => x.key == timer.JiraReference);
-
-                        //If we have already downloaded the jira, then just refresh it.
-                        //If we have not downloaded already, we should check if we need to refresh.
-                        //If we need to refresh, download and refresh. - add to collection for future reference
-
-                        if (issueWithWorklogs != null)
-                        {
-                            jiraTimerCollection.RefreshFromJira(timer.UniqueId, issueWithWorklogs, jiraConnection.CurrentUser);
-                        }
-                        else if (!timer.LastJiraTimeCheck.HasValue || timer.LastJiraTimeCheck.Value < DateTime.UtcNow.AddMinutes(-30))
-                        {
-                            issueWithWorklogs = jiraConnection.GetJiraIssue(timer.JiraReference, true);
-                            issues.Add(issueWithWorklogs);
-
-                            jiraTimerCollection.RefreshFromJira(timer.UniqueId, issueWithWorklogs, jiraConnection.CurrentUser);
-
-                            if (timersNotChecked.ContainsKey(timer.JiraReference))
-                            {
-                                foreach (var uncheckedTimer in timersNotChecked[timer.JiraReference])
-                                {
-                                    jiraTimerCollection.RefreshFromJira(uncheckedTimer, issueWithWorklogs, jiraConnection.CurrentUser);
-                                }
-
-                                timersNotChecked.Remove(timer.JiraReference);
-                            }
-                        }
-                        else
-                        {
-                            if (timersNotChecked.ContainsKey(timer.JiraReference))
-                            {
-                                timersNotChecked[timer.JiraReference].Add(timer.UniqueId);
-                            }
-                            else
-                            {
-                                timersNotChecked.Add(timer.JiraReference, new List<Guid> { timer.UniqueId });
-                            }
-                        }
-                    }
-
-                    workingDate = workingDate.AddDays(1);
                 }
             }
-            catch { /*Surpress the error*/ }
+            catch
+            {
+                /*Surpress the error*/
+            }
 
             exportedHeartbeatMutex.ReleaseMutex();
         }

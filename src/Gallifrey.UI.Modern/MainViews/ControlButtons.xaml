@@ -7,6 +7,7 @@
     <DockPanel>
         <DockPanel.Resources>
             <helpers:BooleanVisibilityConverter x:Key="BoolToVisInvert" Collapse="True" Invert="True"/>
+            <helpers:BooleanVisibilityConverter x:Key="BoolToVis" Collapse="True" Invert="False"/>
         </DockPanel.Resources>
 
         <WrapPanel HorizontalAlignment="Left" DockPanel.Dock="Left" Margin="10,0,0,0">
@@ -69,6 +70,14 @@
         </WrapPanel>
 
         <WrapPanel HorizontalAlignment="Right" DockPanel.Dock="Right" Margin="0,0,10,0">
+            <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="ForceError" Visibility="{Binding IsAlpha, Converter={StaticResource BoolToVis}}">
+                <Button.ToolTip>
+                    <TextBlock>
+                        Force An Unhandled Error
+                    </TextBlock>
+                </Button.ToolTip>
+                <iconPacks:PackIconModern Kind="Laser" Height="23" Width="23" />
+            </Button>
             <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="InfoButton">
                 <Button.ToolTip>
                     <TextBlock>

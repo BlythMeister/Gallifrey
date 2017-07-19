@@ -1,15 +1,15 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using Gallifrey.Exceptions.JiraIntegration;
+﻿using Gallifrey.Exceptions.JiraIntegration;
 using Gallifrey.Jira.Model;
 using Gallifrey.JiraTimers;
 using Gallifrey.UI.Modern.Helpers;
 using Gallifrey.UI.Modern.Models;
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace Gallifrey.UI.Modern.Flyouts
 {
@@ -40,14 +40,13 @@ namespace Gallifrey.UI.Modern.Flyouts
 
             DataContext = new ExportModel(timerToShow, exportTime, modelHelpers.Gallifrey.Settings.ExportSettings);
 
-            if (!skipJiraCheck)
+            if (!skipJiraCheck) //Previously loaded bulk export
             {
                 Issue jiraIssue = null;
-                var requireRefresh = !timerToShow.LastJiraTimeCheck.HasValue || timerToShow.LastJiraTimeCheck < DateTime.UtcNow.AddMinutes(-15);
                 var showError = false;
                 try
                 {
-                    var jiraDownloadResult = await progressDialogHelper.Do(() => modelHelpers.Gallifrey.JiraConnection.GetJiraIssue(timerToShow.JiraReference, requireRefresh), "Downloading Jira Work Logs To Ensure Accurate Export", true, false);
+                    var jiraDownloadResult = await progressDialogHelper.Do(() => modelHelpers.Gallifrey.JiraConnection.GetJiraIssue(timerToShow.JiraReference), "Downloading Jira Work Logs To Ensure Accurate Export", true, false);
 
                     switch (jiraDownloadResult.Status)
                     {
@@ -74,9 +73,10 @@ namespace Gallifrey.UI.Modern.Flyouts
                     return;
                 }
 
-                if (requireRefresh)
+                if (true || !timerToShow.LastJiraTimeCheck.HasValue || timerToShow.LastJiraTimeCheck < DateTime.UtcNow.AddMinutes(-5))
                 {
-                    modelHelpers.Gallifrey.JiraTimerCollection.RefreshFromJira(timerToShow.UniqueId, jiraIssue, modelHelpers.Gallifrey.JiraConnection.CurrentUser);
+                    var time = modelHelpers.Gallifrey.JiraConnection.GetTimeLoggedOnIssueOnDate(timerToShow.JiraReference, timerToShow.DateStarted);
+                    modelHelpers.Gallifrey.JiraTimerCollection.RefreshFromJira(timerToShow.UniqueId, jiraIssue, time);
                     timerToShow = modelHelpers.Gallifrey.JiraTimerCollection.GetTimer(timerToShow.UniqueId);
                 }
 

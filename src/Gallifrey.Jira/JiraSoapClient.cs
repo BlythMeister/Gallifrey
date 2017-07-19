@@ -1,9 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Atlassian.Jira;
 using Gallifrey.Jira.Enum;
 using Gallifrey.Jira.Model;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Issue = Gallifrey.Jira.Model.Issue;
 using Project = Gallifrey.Jira.Model.Project;
 
@@ -13,16 +13,18 @@ namespace Gallifrey.Jira
     {
         private readonly string username;
         private readonly Atlassian.Jira.Jira client;
+        public bool HasTempo { get; }
 
         public JiraSoapClient(string baseUrl, string username, string password)
         {
             this.username = username;
             client = new Atlassian.Jira.Jira(baseUrl, username, password) { MaxIssuesPerRequest = 999 };
+            client.GetAccessToken();
+            HasTempo = false;
         }
-        
+
         public User GetCurrentUser()
         {
-            client.GetAccessToken();
             return new User
             {
                 key = username,
@@ -49,37 +51,6 @@ namespace Gallifrey.Jira
                         id = issue.Status.Id
                     },
                     summary = issue.Summary
-                }
-            };
-        }
-
-        public Issue GetIssueWithWorklogs(string issueRef, string userName)
-        {
-            var issue = client.GetIssue(issueRef);
-            var worklogs = issue.GetWorklogs().Where(worklog => worklog.Author == userName)
-                                              .Select(worklog => new WorkLog { author = new User { name = worklog.Author }, comment = worklog.Comment, started = worklog.StartDate.Value, timeSpent = worklog.TimeSpent, timeSpentSeconds = worklog.TimeSpentInSeconds })
-                                              .ToList();
-            return new Issue
-            {
-                key = issue.Key.Value,
-                fields = new Fields
-                {
-                    project = new Project
-                    {
-                        key = issue.Project
-                    },
-                    status = new Status
-                    {
-                        name = issue.Status.Name,
-                        id = issue.Status.Id
-                    },
-                    worklog = new WorkLogs
-                    {
-                        maxResults = worklogs.Count,
-                        total = worklogs.Count,
-                        worklogs = worklogs
-                    },
-                    summary = issue.Summary,
                 }
             };
         }
@@ -144,6 +115,28 @@ namespace Gallifrey.Jira
         {
             var returnedFilters = client.GetFilters();
             return returnedFilters.Select(filter => new Filter { name = filter.Name });
+        }
+
+        public IReadOnlyDictionary<string, TimeSpan> GetWorkLoggedForDate(DateTime queryDate)
+        {
+            var exportedRefs = new Dictionary<string, TimeSpan>();
+            var issuesExportedTo = client.GetIssuesFromJql($"worklogAuthor = currentUser() and worklogDate = {queryDate.ToString("yyyy-MM-dd")}", 999);
+
+            foreach (var issue in issuesExportedTo)
+            {
+                var logs = issue.GetWorklogs().Where(worklog => worklog.Author == username && worklog.StartDate.HasValue && worklog.StartDate.Value.Date == queryDate.Date);
+                var timeSpent = TimeSpan.FromSeconds(logs.Sum(x => x.TimeSpentInSeconds));
+                exportedRefs.Add(issue.Key.Value, timeSpent);
+            }
+
+            return exportedRefs;
+        }
+
+        public TimeSpan GetWorkLoggedOnIssue(string issueRef, DateTime queryDate)
+        {
+            var issue = client.GetIssue(issueRef);
+            var logs = issue.GetWorklogs().Where(worklog => worklog.Author == username && worklog.StartDate.HasValue && worklog.StartDate.Value.Date == queryDate.Date);
+            return TimeSpan.FromSeconds(logs.Sum(x => x.TimeSpentInSeconds));
         }
 
         public Transitions GetIssueTransitions(string issueRef)

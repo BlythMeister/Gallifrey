@@ -1,20 +1,22 @@
-using System;
-using System.Collections.Generic;
 using Gallifrey.Jira.Enum;
 using Gallifrey.Jira.Model;
+using System;
+using System.Collections.Generic;
 
 namespace Gallifrey.Jira
 {
     public interface IJiraClient
     {
+        bool HasTempo { get; }
         User GetCurrentUser();
         Issue GetIssue(string issueRef);
-        Issue GetIssueWithWorklogs(string issueRef, string user);
         string GetJqlForFilter(string filterName);
         IEnumerable<Issue> GetIssuesFromFilter(string filterName);
         IEnumerable<Issue> GetIssuesFromJql(string jql);
         IEnumerable<Project> GetProjects();
         IEnumerable<Filter> GetFilters();
+        IReadOnlyDictionary<string, TimeSpan> GetWorkLoggedForDate(DateTime queryDate);
+        TimeSpan GetWorkLoggedOnIssue(string issueRef, DateTime queryDate);
         Transitions GetIssueTransitions(string issueRef);
         void TransitionIssue(string issueRef, string transitionName);
         void AddWorkLog(string issueRef, WorkLogStrategy workLogStrategy, string comment, TimeSpan timeSpent, DateTime logDate, TimeSpan? remainingTime = null);

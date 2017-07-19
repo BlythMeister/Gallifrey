@@ -22,17 +22,17 @@ namespace Gallifrey.Rest
             client = new RestClient { BaseUrl = new Uri(baseUrl), Timeout = (int)TimeSpan.FromMinutes(2).TotalMilliseconds };
         }
 
-        public void Post(HttpStatusCode expectedStatus, string path, Dictionary<string, object> data = null)
+        public void Post(HttpStatusCode expectedStatus, string path, object data = null)
         {
             Execute(Method.POST, expectedStatus, path, data);
         }
 
-        public void Put(HttpStatusCode expectedStatus, string path, Dictionary<string, object> data = null)
+        public void Put(HttpStatusCode expectedStatus, string path, object data = null)
         {
             Execute(Method.PUT, expectedStatus, path, data);
         }
 
-        public T Get<T>(HttpStatusCode expectedStatus, string path, Dictionary<string, object> data = null, Func<string, T> customDeserialize = null) where T : class
+        public T Get<T>(HttpStatusCode expectedStatus, string path, object data = null, Func<string, T> customDeserialize = null) where T : class
         {
             if (customDeserialize == null)
             {
@@ -44,13 +44,13 @@ namespace Gallifrey.Rest
             return customDeserialize(response.Content);
         }
 
-        private IRestResponse Execute(Method method, HttpStatusCode expectedStatus, string path, Dictionary<string, object> data = null)
+        private IRestResponse Execute(Method method, HttpStatusCode expectedStatus, string path, object data = null)
         {
             var request = CreateRequest(method, path);
             if (data != null)
             {
                 request.AddHeader("ContentType", "application/json");
-                request.AddBody(data);
+                request.AddJsonBody(data);
             }
 
             var response = client.Execute(request);

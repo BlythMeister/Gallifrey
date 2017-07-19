@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Authentication;
-using System.Threading.Tasks;
-using Gallifrey.AppTracking;
+﻿using Gallifrey.AppTracking;
 using Gallifrey.Comparers;
 using Gallifrey.Exceptions.JiraIntegration;
 using Gallifrey.Jira;
 using Gallifrey.Jira.Enum;
 using Gallifrey.Jira.Model;
 using Gallifrey.Settings;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Authentication;
+using System.Threading.Tasks;
 
 namespace Gallifrey.JiraIntegration
 {
@@ -17,7 +17,7 @@ namespace Gallifrey.JiraIntegration
     {
         void ReConnect(IJiraConnectionSettings newJiraConnectionSettings, IExportSettings newExportSettings);
         bool DoesJiraExist(string jiraRef);
-        Issue GetJiraIssue(string jiraRef, bool includeWorkLogs = false);
+        Issue GetJiraIssue(string jiraRef);
         IEnumerable<string> GetJiraFilters();
         IEnumerable<Issue> GetJiraIssuesFromFilter(string filterName);
         IEnumerable<Issue> GetJiraIssuesFromSearchText(string searchText);
@@ -26,6 +26,8 @@ namespace Gallifrey.JiraIntegration
         IEnumerable<Issue> GetJiraCurrentUserOpenIssues();
         IEnumerable<JiraProject> GetJiraProjects();
         IEnumerable<RecentJira> GetRecentJirasFound();
+        IReadOnlyDictionary<string, TimeSpan> GetTimeLoggedOnDate(DateTime queryDate);
+        TimeSpan GetTimeLoggedOnIssueOnDate(string issueRef, DateTime queryDate);
         void UpdateCache();
         void AssignToCurrentUser(string jiraRef);
         User CurrentUser { get; }
@@ -33,6 +35,7 @@ namespace Gallifrey.JiraIntegration
         void TransitionIssue(string jiraRef, string transition);
         IEnumerable<Status> GetTransitions(string jiraRef);
         event EventHandler LoggedIn;
+
     }
 
     public class JiraConnection : IJiraConnection
@@ -78,7 +81,11 @@ namespace Gallifrey.JiraIntegration
                     LoggedIn?.Invoke(this, null);
 
                     TrackingType trackingType;
-                    if (jira.GetType() == typeof(JiraRestClient))
+                    if (jira.GetType() == typeof(JiraRestClient) && jira.HasTempo)
+                    {
+                        trackingType = jiraConnectionSettings.JiraUrl.Contains(".atlassian.net") ? TrackingType.JiraConnectCloudRestWithTempo : TrackingType.JiraConnectSelfhostRestWithTempo;
+                    }
+                    else if (jira.GetType() == typeof(JiraRestClient))
                     {
                         trackingType = jiraConnectionSettings.JiraUrl.Contains(".atlassian.net") ? TrackingType.JiraConnectCloudRest : TrackingType.JiraConnectSelfhostRest;
                     }
@@ -122,12 +129,12 @@ namespace Gallifrey.JiraIntegration
             return false;
         }
 
-        public Issue GetJiraIssue(string jiraRef, bool includeWorkLogs = false)
+        public Issue GetJiraIssue(string jiraRef)
         {
             try
             {
                 CheckAndConnectJira();
-                var issue = includeWorkLogs ? jira.GetIssueWithWorklogs(jiraRef, CurrentUser.key) : jira.GetIssue(jiraRef);
+                var issue = jira.GetIssue(jiraRef);
 
                 recentJiraCollection.AddRecentJira(issue);
                 return issue;
@@ -248,6 +255,16 @@ namespace Gallifrey.JiraIntegration
         public IEnumerable<RecentJira> GetRecentJirasFound()
         {
             return recentJiraCollection.GetRecentJiraCollection();
+        }
+
+        public IReadOnlyDictionary<string, TimeSpan> GetTimeLoggedOnDate(DateTime queryDate)
+        {
+            return jira.GetWorkLoggedForDate(queryDate);
+        }
+
+        public TimeSpan GetTimeLoggedOnIssueOnDate(string issueRef, DateTime queryDate)
+        {
+            return jira.GetWorkLoggedOnIssue(issueRef, queryDate);
         }
 
         public void UpdateCache()

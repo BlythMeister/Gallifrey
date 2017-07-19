@@ -58,6 +58,7 @@
     <Compile Include="Model\User.cs" />
     <Compile Include="Model\WorkLog.cs" />
     <Compile Include="Model\WorkLogs.cs" />
+    <Compile Include="Model\TempoWorkLog.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="paket.references" />

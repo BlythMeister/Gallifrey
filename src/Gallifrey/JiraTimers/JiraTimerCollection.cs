@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Gallifrey.AppTracking;
+﻿using Gallifrey.AppTracking;
 using Gallifrey.Comparers;
 using Gallifrey.Exceptions.JiraTimers;
 using Gallifrey.IdleTimers;
@@ -9,6 +6,9 @@ using Gallifrey.Jira.Model;
 using Gallifrey.JiraIntegration;
 using Gallifrey.Serialization;
 using Gallifrey.Settings;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Gallifrey.JiraTimers
 {
@@ -40,7 +40,7 @@ namespace Gallifrey.JiraTimers
         bool AdjustTime(Guid uniqueId, int hours, int minutes, bool addTime);
         void AddJiraExportedTime(Guid uniqueId, int hours, int minutes);
         void AddIdleTimer(Guid uniqueId, List<IdleTimer> idleTimer);
-        void RefreshFromJira(Guid uniqueId, Issue jiraIssue, User currentUser);
+        void RefreshFromJira(Guid uniqueId, Issue jiraIssue, TimeSpan loggedTime);
         event EventHandler GeneralTimerModification;
     }
 
@@ -385,13 +385,13 @@ namespace Gallifrey.JiraTimers
             }
         }
 
-        public void RefreshFromJira(Guid uniqueId, Issue jiraIssue, User currentUser)
+        public void RefreshFromJira(Guid uniqueId, Issue jiraIssue, TimeSpan loggedTime)
         {
             var timer = GetTimer(uniqueId);
             if (timer != null)
             {
+                timer.SetJiraExportedTime(loggedTime);
                 timer.RefreshFromJira(jiraIssue);
-                timer.UpdateExportTimeFromJira(jiraIssue, currentUser);
                 SaveTimers();
             }
         }

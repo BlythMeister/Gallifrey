@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using Gallifrey.Comparers;
+﻿using Gallifrey.Comparers;
 using Gallifrey.Exceptions.JiraIntegration;
 using Gallifrey.Jira.Model;
 using Gallifrey.JiraTimers;
@@ -12,6 +6,12 @@ using Gallifrey.UI.Modern.Helpers;
 using Gallifrey.UI.Modern.Models;
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace Gallifrey.UI.Modern.Flyouts
 {
@@ -225,24 +225,23 @@ namespace Gallifrey.UI.Modern.Flyouts
             {
                 var timerToShow = timersToGet[i];
 
-                var requireRefresh = !timerToShow.LastJiraTimeCheck.HasValue || timerToShow.LastJiraTimeCheck < DateTime.UtcNow.AddMinutes(-15);
                 var model = new BulkExportModel(timerToShow, modelHelpers.Gallifrey.Settings.ExportSettings);
                 var jiraIssue = issuesRetrieved.FirstOrDefault(x => x.key == timerToShow.JiraReference);
 
                 if (i == 0)
                 {
-                    dialogController.SetMessage($"Downloading Jira Work Logs For {timerToShow.JiraReference} To Ensure Accurate Export");
+                    dialogController.SetMessage($"Downloading Jira Work Logs For {timerToShow.JiraReference} On {timerToShow.DateStarted:ddd, dd MMM} To Ensure Accurate Export");
                 }
                 else
                 {
-                    dialogController.SetMessage($"Downloading Jira Work Logs For {timerToShow.JiraReference} To Ensure Accurate Export\nDone {i} Of {timersToGet.Count}");
+                    dialogController.SetMessage($"Downloading Jira Work Logs For {timerToShow.JiraReference} On {timerToShow.DateStarted:ddd, dd MMM} To Ensure Accurate Export\nDone {i} Of {timersToGet.Count}");
                 }
 
                 if (jiraIssue == null)
                 {
                     try
                     {
-                        jiraIssue = modelHelpers.Gallifrey.JiraConnection.GetJiraIssue(timerToShow.JiraReference, requireRefresh);
+                        jiraIssue = modelHelpers.Gallifrey.JiraConnection.GetJiraIssue(timerToShow.JiraReference);
                         issuesRetrieved.Add(jiraIssue);
                     }
                     catch (Exception)
@@ -251,9 +250,10 @@ namespace Gallifrey.UI.Modern.Flyouts
                     }
                 }
 
-                if (requireRefresh)
+                if (!timerToShow.LastJiraTimeCheck.HasValue || timerToShow.LastJiraTimeCheck < DateTime.UtcNow.AddMinutes(-5))
                 {
-                    modelHelpers.Gallifrey.JiraTimerCollection.RefreshFromJira(timerToShow.UniqueId, jiraIssue, modelHelpers.Gallifrey.JiraConnection.CurrentUser);
+                    var time = modelHelpers.Gallifrey.JiraConnection.GetTimeLoggedOnIssueOnDate(timerToShow.JiraReference, timerToShow.DateStarted);
+                    modelHelpers.Gallifrey.JiraTimerCollection.RefreshFromJira(timerToShow.UniqueId, jiraIssue, time);
                     timerToShow = modelHelpers.Gallifrey.JiraTimerCollection.GetTimer(timerToShow.UniqueId);
                 }
 

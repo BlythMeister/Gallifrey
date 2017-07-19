@@ -30,9 +30,7 @@ namespace Gallifrey.Jira
         {
             try
             {
-                var jira = new JiraRestClient(jiraUrl, username, password);
-                jira.GetCurrentUser();
-                return jira;
+                return new JiraRestClient(jiraUrl, username, password);
             }
             catch (System.Exception)
             {
@@ -44,9 +42,7 @@ namespace Gallifrey.Jira
         {
             try
             {
-                var jira = new JiraSoapClient(jiraUrl, username, password);
-                jira.GetCurrentUser();
-                return jira;
+                return new JiraSoapClient(jiraUrl, username, password);
             }
             catch (System.Exception)
             {

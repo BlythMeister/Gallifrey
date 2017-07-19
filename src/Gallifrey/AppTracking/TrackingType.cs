@@ -21,6 +21,8 @@
         InformationShown,
         JiraConnectCloudRest,
         JiraConnectCloudSoap,
+        JiraConnectCloudRestWithTempo,
+        JiraConnectSelfhostRestWithTempo,
         JiraConnectSelfhostRest,
         JiraConnectSelfhostSoap,
         AutoUpdateInstalled,
