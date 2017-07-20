@@ -248,7 +248,7 @@ namespace Gallifrey.UI.Modern.Models
                             try
                             {
                                 var jira = jiraCache.FirstOrDefault(x => x.key == defaultJira);
-                                if (jira == null)
+                                if (jira == null && ModelHelpers.Gallifrey.JiraConnection.IsConnected)
                                 {
                                     jira = ModelHelpers.Gallifrey.JiraConnection.GetJiraIssue(defaultJira);
                                     jiraCache.Add(jira);

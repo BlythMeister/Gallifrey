@@ -314,31 +314,31 @@ namespace Gallifrey.JiraTimers
         public TimeSpan GetTotalLocalTime()
         {
             var unexportedTime = new TimeSpan();
-            return timerList.Where(timer => timer.LocalTimer && !timer.IsRunning && !timer.FullyExported).Aggregate(unexportedTime, (current, jiraTimer) => current.Add(new TimeSpan(jiraTimer.TimeToExport.Hours, jiraTimer.TimeToExport.Minutes, 0)));
+            return timerList.Where(timer => timer.LocalTimer && !timer.IsRunning && !timer.FullyExported).ToList().Aggregate(unexportedTime, (current, jiraTimer) => current.Add(new TimeSpan(jiraTimer.TimeToExport.Hours, jiraTimer.TimeToExport.Minutes, 0)));
         }
 
         public TimeSpan GetTotalExportableTime()
         {
             var unexportedTime = new TimeSpan();
-            return timerList.Where(timer => !timer.LocalTimer && !timer.IsRunning && !timer.FullyExported).Aggregate(unexportedTime, (current, jiraTimer) => current.Add(new TimeSpan(jiraTimer.TimeToExport.Hours, jiraTimer.TimeToExport.Minutes, 0)));
+            return timerList.Where(timer => !timer.LocalTimer && !timer.IsRunning && !timer.FullyExported).ToList().Aggregate(unexportedTime, (current, jiraTimer) => current.Add(new TimeSpan(jiraTimer.TimeToExport.Hours, jiraTimer.TimeToExport.Minutes, 0)));
         }
 
         public TimeSpan GetTotalExportedTimeThisWeek(DayOfWeek startOfWeek)
         {
             var exportedTime = new TimeSpan();
-            return timerList.Where(jiraTimer => jiraTimer.IsThisWeek(startOfWeek)).Aggregate(exportedTime, (current, jiraTimer) => current.Add(jiraTimer.ExportedTime));
+            return timerList.Where(jiraTimer => jiraTimer.IsThisWeek(startOfWeek)).ToList().Aggregate(exportedTime, (current, jiraTimer) => current.Add(jiraTimer.ExportedTime));
         }
 
         public TimeSpan GetTotalTimeForDate(DateTime timerDate)
         {
             var time = new TimeSpan();
-            return timerList.Where(jiraTimer => jiraTimer.DateStarted.Date == timerDate.Date).Aggregate(time, (current, jiraTimer) => current.Add(new TimeSpan(jiraTimer.ExactCurrentTime.Hours, jiraTimer.ExactCurrentTime.Minutes, jiraTimer.ExactCurrentTime.Seconds)));
+            return timerList.Where(jiraTimer => jiraTimer.DateStarted.Date == timerDate.Date).ToList().Aggregate(time, (current, jiraTimer) => current.Add(new TimeSpan(jiraTimer.ExactCurrentTime.Hours, jiraTimer.ExactCurrentTime.Minutes, jiraTimer.ExactCurrentTime.Seconds)));
         }
 
         public TimeSpan GetTotalTimeForDateNoSeconds(DateTime timerDate)
         {
             var unexportedTime = new TimeSpan();
-            return timerList.Where(timer => timer.DateStarted.Date == timerDate.Date).Aggregate(unexportedTime, (current, jiraTimer) => current.Add(new TimeSpan(jiraTimer.ExactCurrentTime.Hours, jiraTimer.ExactCurrentTime.Minutes, 0)));
+            return timerList.Where(timer => timer.DateStarted.Date == timerDate.Date).ToList().Aggregate(unexportedTime, (current, jiraTimer) => current.Add(new TimeSpan(jiraTimer.ExactCurrentTime.Hours, jiraTimer.ExactCurrentTime.Minutes, 0)));
         }
 
         public bool AdjustTime(Guid uniqueId, int hours, int minutes, bool addTime)

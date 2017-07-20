@@ -5,7 +5,7 @@
         public class TempoWorkLogIssue
         {
             public string key { get; set; }
-            public double remainingEstimateSeconds { get; set; }
+            public double? remainingEstimateSeconds { get; set; }
         }
 
         public class TempoWorkLogUser
