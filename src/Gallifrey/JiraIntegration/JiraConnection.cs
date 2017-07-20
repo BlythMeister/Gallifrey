@@ -26,8 +26,8 @@ namespace Gallifrey.JiraIntegration
         IEnumerable<Issue> GetJiraCurrentUserOpenIssues();
         IEnumerable<JiraProject> GetJiraProjects();
         IEnumerable<RecentJira> GetRecentJirasFound();
-        IReadOnlyDictionary<string, TimeSpan> GetTimeLoggedOnDate(DateTime queryDate);
-        TimeSpan GetTimeLoggedOnIssueOnDate(string issueRef, DateTime queryDate);
+        IEnumerable<StandardWorkLog> GetWorkLoggedForDates(IEnumerable<DateTime> queryDates);
+        IEnumerable<StandardWorkLog> GetWorkLoggedForDatesFilteredIssues(IEnumerable<DateTime> queryDates, IEnumerable<string> issueRefs);
         void UpdateCache();
         void AssignToCurrentUser(string jiraRef);
         User CurrentUser { get; }
@@ -75,7 +75,7 @@ namespace Gallifrey.JiraIntegration
             {
                 try
                 {
-                    jira = JiraClientFactory.BuildJiraClient(jiraConnectionSettings.JiraUrl, jiraConnectionSettings.JiraUsername, jiraConnectionSettings.JiraPassword);
+                    jira = JiraClientFactory.BuildJiraClient(jiraConnectionSettings.JiraUrl, jiraConnectionSettings.JiraUsername, jiraConnectionSettings.JiraPassword, jiraConnectionSettings.UseTempo);
 
                     CurrentUser = jira.GetCurrentUser();
                     LoggedIn?.Invoke(this, null);
@@ -257,14 +257,14 @@ namespace Gallifrey.JiraIntegration
             return recentJiraCollection.GetRecentJiraCollection();
         }
 
-        public IReadOnlyDictionary<string, TimeSpan> GetTimeLoggedOnDate(DateTime queryDate)
+        public IEnumerable<StandardWorkLog> GetWorkLoggedForDates(IEnumerable<DateTime> queryDates)
         {
-            return jira.GetWorkLoggedForDate(queryDate);
+            return jira.GetWorkLoggedForDatesFilteredIssues(queryDates, null);
         }
 
-        public TimeSpan GetTimeLoggedOnIssueOnDate(string issueRef, DateTime queryDate)
+        public IEnumerable<StandardWorkLog> GetWorkLoggedForDatesFilteredIssues(IEnumerable<DateTime> queryDates, IEnumerable<string> issueRefs)
         {
-            return jira.GetWorkLoggedOnIssue(issueRef, queryDate);
+            return jira.GetWorkLoggedForDatesFilteredIssues(queryDates, issueRefs);
         }
 
         public void UpdateCache()

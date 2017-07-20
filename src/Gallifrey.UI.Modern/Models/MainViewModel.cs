@@ -60,7 +60,6 @@ namespace Gallifrey.UI.Modern.Models
         public bool HaveLocalTime => !string.IsNullOrWhiteSpace(LocalTimeMessage);
         public bool IsPremium => ModelHelpers.Gallifrey.Settings.InternalSettings.IsPremium;
         public bool IsStable => ModelHelpers.Gallifrey.VersionControl.InstanceType == InstanceType.Stable;
-        public bool IsAlpha => ModelHelpers.Gallifrey.VersionControl.InstanceType == InstanceType.Alpha;
         public bool TrackingOnly => ModelHelpers.Gallifrey.Settings.ExportSettings.TrackingOnly;
 
         public string AppTitle

@@ -17,18 +17,25 @@ namespace Gallifrey.Jira
         private readonly User myUser;
         public bool HasTempo { get; }
 
-        public JiraRestClient(string baseUrl, string username, string password)
+        public JiraRestClient(string baseUrl, string username, string password, bool useTempo)
         {
             var url = baseUrl + (baseUrl.EndsWith("/") ? "" : "/") + "rest/";
             restClient = new SimpleRestClient(url, username, password, GetErrorMessages);
             myUser = GetCurrentUser();
-            try
+            if (useTempo)
             {
-                //NOTE THIS IS NOT THE RIGHT TYPE, BUT NOT EXPECTING VALID DATA ANYWAY
-                restClient.Get<List<string>>(HttpStatusCode.OK, "tempo-timesheets/3/worklogs?dateFrom=1990-01-01&dateTo=1990-01-02");
-                HasTempo = true;
+                try
+                {
+                    //NOTE THIS IS NOT THE RIGHT TYPE, BUT NOT EXPECTING VALID DATA ANYWAY
+                    restClient.Get<List<string>>(HttpStatusCode.OK, "tempo-timesheets/3/worklogs?dateFrom=1990-01-01&dateTo=1990-01-02");
+                    HasTempo = true;
+                }
+                catch (Exception)
+                {
+                    HasTempo = false;
+                }
             }
-            catch (Exception)
+            else
             {
                 HasTempo = false;
             }
@@ -111,54 +118,72 @@ namespace Gallifrey.Jira
             return restClient.Get<List<Filter>>(HttpStatusCode.OK, "api/2/filter/favourite");
         }
 
-        public IReadOnlyDictionary<string, TimeSpan> GetWorkLoggedForDate(DateTime queryDate)
+        public IEnumerable<StandardWorkLog> GetWorkLoggedForDatesFilteredIssues(IEnumerable<DateTime> queryDates, IEnumerable<string> issueRefs)
         {
-            var exportedRefs = new Dictionary<string, TimeSpan>();
+            var workLogs = new List<StandardWorkLog>();
 
             if (HasTempo)
             {
-                var logs = restClient.Get<List<TempoWorkLog>>(HttpStatusCode.OK, $"tempo-timesheets/3/worklogs?dateFrom={queryDate:yyyy-MM-dd}&dateTo={queryDate:yyyy-MM-dd}&username={myUser.key}");
-                foreach (var tempoWorkLog in logs)
+                foreach (var queryDate in queryDates)
                 {
-                    var workLogTime = TimeSpan.FromSeconds(tempoWorkLog.timeSpentSeconds);
-                    if (exportedRefs.ContainsKey(tempoWorkLog.issue.key))
+                    var logs = restClient.Get<List<TempoWorkLog>>(HttpStatusCode.OK, $"tempo-timesheets/3/worklogs?dateFrom={queryDate:yyyy-MM-dd}&dateTo={queryDate:yyyy-MM-dd}&username={myUser.key}");
+                    foreach (var tempoWorkLog in logs)
                     {
-                        exportedRefs[tempoWorkLog.issue.key] = exportedRefs[tempoWorkLog.issue.key].Add(workLogTime);
-                    }
-                    else
-                    {
-                        exportedRefs.Add(tempoWorkLog.issue.key, workLogTime);
+                        if (issueRefs == null || issueRefs.Any(x => string.Equals(x, tempoWorkLog.issue.key, StringComparison.InvariantCultureIgnoreCase)))
+                        {
+                            var workLogReturn = workLogs.FirstOrDefault(x => x.JiraRef == tempoWorkLog.issue.key && x.LoggedDate.Date == queryDate.Date);
+                            if (workLogReturn != null)
+                            {
+                                workLogReturn.AddTime(tempoWorkLog.timeSpentSeconds);
+                            }
+                            else
+                            {
+                                workLogs.Add(new StandardWorkLog(tempoWorkLog.issue.key, queryDate.Date, tempoWorkLog.timeSpentSeconds));
+                            }
+                        }
                     }
                 }
             }
             else
             {
-                var issuesExportedTo = GetIssuesFromJql($"worklogAuthor = currentUser() and worklogDate = {queryDate:yyyy-MM-dd}");
-
-                foreach (var issue in issuesExportedTo)
+                var workLogCache = new Dictionary<string, WorkLogs>();
+                foreach (var queryDate in queryDates)
                 {
-                    var logs = restClient.Get(HttpStatusCode.OK, $"api/2/issue/{issue.key}/worklog", customDeserialize: s => FilterWorklogsToUser(s, myUser.key));
-                    var timeSpent = TimeSpan.FromSeconds(logs.worklogs.Where(x => x.started.Date == queryDate.Date).Sum(x => x.timeSpentSeconds));
-                    exportedRefs.Add(issue.key, timeSpent);
+                    var issuesExportedTo = GetIssuesFromJql($"worklogAuthor = currentUser() and worklogDate = {queryDate:yyyy-MM-dd}");
+                    foreach (var issue in issuesExportedTo)
+                    {
+                        if (issueRefs == null || issueRefs.Any(x => string.Equals(x, issue.key, StringComparison.InvariantCultureIgnoreCase)))
+                        {
+                            WorkLogs logs;
+                            if (workLogCache.ContainsKey(issue.key))
+                            {
+                                logs = workLogCache[issue.key];
+                            }
+                            else
+                            {
+                                logs = restClient.Get(HttpStatusCode.OK, $"api/2/issue/{issue.key}/worklog", customDeserialize: s => FilterWorklogsToUser(s, myUser.key));
+                                workLogCache.Add(issue.key, logs);
+                            }
+
+                            foreach (var workLog in logs.worklogs.Where(x => x.started.Date == queryDate.Date))
+                            {
+                                var workLogReturn = workLogs.FirstOrDefault(x => x.JiraRef == issue.key && x.LoggedDate.Date == queryDate.Date);
+                                if (workLogReturn != null)
+                                {
+                                    workLogReturn.AddTime(workLog.timeSpentSeconds);
+                                }
+                                else
+                                {
+                                    workLogs.Add(new StandardWorkLog(issue.key, queryDate.Date, workLog.timeSpentSeconds));
+                                }
+
+                            }
+                        }
+                    }
                 }
             }
 
-            return exportedRefs;
-        }
-
-        public TimeSpan GetWorkLoggedOnIssue(string issueRef, DateTime queryDate)
-        {
-            if (HasTempo)
-            {
-                var logs = restClient.Get<List<TempoWorkLog>>(HttpStatusCode.OK, $"tempo-timesheets/3/worklogs?dateFrom={queryDate.ToString("yyyy-MM-dd")}&dateTo={queryDate.AddDays(1).ToString("yyyy-MM-dd")}&username={myUser.key}");
-                return TimeSpan.FromSeconds(logs.Where(x => x.issue.key == issueRef).Sum(x => x.timeSpentSeconds));
-            }
-            else
-            {
-                var issue = GetIssue(issueRef);
-                var logs = restClient.Get(HttpStatusCode.OK, $"api/2/issue/{issue.key}/worklog", customDeserialize: s => FilterWorklogsToUser(s, myUser.key));
-                return TimeSpan.FromSeconds(logs.worklogs.Where(x => x.started.Date == queryDate.Date).Sum(x => x.timeSpentSeconds));
-            }
+            return workLogs;
         }
 
         public Transitions GetIssueTransitions(string issueRef)
@@ -189,6 +214,7 @@ namespace Gallifrey.Jira
         {
             if (logDate.Kind != DateTimeKind.Local) logDate = DateTime.SpecifyKind(logDate, DateTimeKind.Local);
             timeSpent = new TimeSpan(timeSpent.Hours, timeSpent.Minutes, 0);
+            if (string.IsNullOrWhiteSpace(comment)) comment = "N/A";
 
             if (HasTempo)
             {
@@ -207,7 +233,7 @@ namespace Gallifrey.Jira
                         break;
                 }
 
-                var tempoWorkLog = new TempoWorkLog { issue = issue, timeSpentSeconds = timeSpent.TotalSeconds, dateStarted = $"{logDate:s}.000", comment = comment, author = new TempoWorkLog.TempoWorkLogUser { key = myUser.key, name = myUser.name, displayName = myUser.displayName } };
+                var tempoWorkLog = new TempoWorkLog { issue = issue, timeSpentSeconds = timeSpent.TotalSeconds, dateStarted = $"{logDate:s}.000", comment = comment, author = new TempoWorkLog.TempoWorkLogUser { key = myUser.key, name = myUser.name } };
                 restClient.Post(HttpStatusCode.OK, "tempo-timesheets/3/worklogs", tempoWorkLog);
             }
             else

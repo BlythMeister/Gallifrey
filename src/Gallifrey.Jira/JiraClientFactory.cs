@@ -4,7 +4,7 @@ namespace Gallifrey.Jira
 {
     public static class JiraClientFactory
     {
-        public static IJiraClient BuildJiraClient(string jiraUrl, string username, string password)
+        public static IJiraClient BuildJiraClient(string jiraUrl, string username, string password, bool useTempo)
         {
             if (string.IsNullOrWhiteSpace(jiraUrl) || string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
             {
@@ -13,7 +13,7 @@ namespace Gallifrey.Jira
 
             jiraUrl = jiraUrl.Replace("/secure/Dashboard.jspa", "");
 
-            var jira = ConnectUsingRest(jiraUrl, username, password);
+            var jira = ConnectUsingRest(jiraUrl, username, password, useTempo);
             if (jira == null)
             {
                 jira = ConnectUsingSoap(jiraUrl, username, password);
@@ -26,11 +26,11 @@ namespace Gallifrey.Jira
             return jira;
         }
 
-        private static IJiraClient ConnectUsingRest(string jiraUrl, string username, string password)
+        private static IJiraClient ConnectUsingRest(string jiraUrl, string username, string password, bool useTempo)
         {
             try
             {
-                return new JiraRestClient(jiraUrl, username, password);
+                return new JiraRestClient(jiraUrl, username, password, useTempo);
             }
             catch (System.Exception)
             {

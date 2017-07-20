@@ -180,46 +180,52 @@ namespace Gallifrey
                     lastMissingTimerCheck = DateTime.UtcNow;
                 }
 
+                var checkDates = new Dictionary<DateTime, List<JiraTimer>>();
+
                 while (workingDate.Date <= DateTime.Now.Date)
                 {
                     var timersOnDate = jiraTimerCollection.GetTimersForADate(workingDate.Date).ToList();
 
                     if (doCheck || timersOnDate.Any(x => !x.LastJiraTimeCheck.HasValue || x.LastJiraTimeCheck.Value < DateTime.UtcNow.AddMinutes(-30)))
                     {
-                        var jirasExportedTo = JiraConnection.GetTimeLoggedOnDate(workingDate);
+                        checkDates.Add(workingDate, timersOnDate);
+                        workingDate = workingDate.AddDays(1);
+                    }
+                }
 
-                        foreach (var timeExport in jirasExportedTo)
+                var jirasExportedTo = jiraConnection.GetWorkLoggedForDates(checkDates.Keys).ToList();
+
+                foreach (var checkDate in checkDates)
+                {
+                    foreach (var timeExport in jirasExportedTo.Where(x => x.LoggedDate.Date == checkDate.Key.Date))
+                    {
+                        if (!checkDate.Value.Any(x => x.JiraReference == timeExport.JiraRef))
                         {
-                            if (!timersOnDate.Any(x => x.JiraReference == timeExport.Key))
-                            {
-                                var issue = issueCache.FirstOrDefault(x => x.key == timeExport.Key);
+                            var issue = issueCache.FirstOrDefault(x => x.key == timeExport.JiraRef);
 
-                                if (issue == null)
-                                {
-                                    issue = jiraConnection.GetJiraIssue(timeExport.Key);
-                                    issueCache.Add(issue);
-                                }
-
-                                var timerReference = jiraTimerCollection.AddTimer(issue, workingDate.Date, new TimeSpan(), false);
-                                jiraTimerCollection.RefreshFromJira(timerReference, issue, timeExport.Value);
-                                BackendModifiedTimers?.Invoke(this, null);
-                            }
-                        }
-
-                        foreach (var timer in timersOnDate.Where(x => !x.LocalTimer))
-                        {
-                            var issue = issueCache.FirstOrDefault(x => x.key == timer.JiraReference);
                             if (issue == null)
                             {
-                                issue = jiraConnection.GetJiraIssue(timer.JiraReference);
+                                issue = jiraConnection.GetJiraIssue(timeExport.JiraRef);
                                 issueCache.Add(issue);
                             }
 
-                            var time = jirasExportedTo.ContainsKey(issue.key) ? jirasExportedTo[issue.key] : TimeSpan.Zero;
-                            jiraTimerCollection.RefreshFromJira(timer.UniqueId, issue, time);
+                            var timerReference = jiraTimerCollection.AddTimer(issue, checkDate.Key.Date, new TimeSpan(), false);
+                            jiraTimerCollection.RefreshFromJira(timerReference, issue, timeExport.TimeSpent);
+                            BackendModifiedTimers?.Invoke(this, null);
+                        }
+                    }
+
+                    foreach (var timer in checkDate.Value.Where(x => !x.LocalTimer))
+                    {
+                        var issue = issueCache.FirstOrDefault(x => x.key == timer.JiraReference);
+                        if (issue == null)
+                        {
+                            issue = jiraConnection.GetJiraIssue(timer.JiraReference);
+                            issueCache.Add(issue);
                         }
 
-                        workingDate = workingDate.AddDays(1);
+                        var time = jirasExportedTo.FirstOrDefault(x => x.JiraRef == timer.JiraReference && x.LoggedDate.Date == checkDate.Key.Date)?.TimeSpent;
+                        jiraTimerCollection.RefreshFromJira(timer.UniqueId, issue, time ?? TimeSpan.Zero);
                     }
                 }
             }

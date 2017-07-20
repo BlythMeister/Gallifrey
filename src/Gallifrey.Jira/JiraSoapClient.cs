@@ -3,6 +3,7 @@ using Gallifrey.Jira.Enum;
 using Gallifrey.Jira.Model;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Issue = Gallifrey.Jira.Model.Issue;
 using Project = Gallifrey.Jira.Model.Project;
@@ -117,26 +118,48 @@ namespace Gallifrey.Jira
             return returnedFilters.Select(filter => new Filter { name = filter.Name });
         }
 
-        public IReadOnlyDictionary<string, TimeSpan> GetWorkLoggedForDate(DateTime queryDate)
+        public IEnumerable<StandardWorkLog> GetWorkLoggedForDatesFilteredIssues(IEnumerable<DateTime> queryDates, IEnumerable<string> issueRefs)
         {
-            var exportedRefs = new Dictionary<string, TimeSpan>();
-            var issuesExportedTo = client.GetIssuesFromJql($"worklogAuthor = currentUser() and worklogDate = {queryDate.ToString("yyyy-MM-dd")}", 999);
+            var workLogs = new List<StandardWorkLog>();
+            var workLogCache = new Dictionary<string, ReadOnlyCollection<Worklog>>();
 
-            foreach (var issue in issuesExportedTo)
+            foreach (var queryDate in queryDates)
             {
-                var logs = issue.GetWorklogs().Where(worklog => worklog.Author == username && worklog.StartDate.HasValue && worklog.StartDate.Value.Date == queryDate.Date);
-                var timeSpent = TimeSpan.FromSeconds(logs.Sum(x => x.TimeSpentInSeconds));
-                exportedRefs.Add(issue.Key.Value, timeSpent);
+                var issuesExportedTo = client.GetIssuesFromJql($"worklogAuthor = currentUser() and worklogDate = {queryDate.ToString("yyyy-MM-dd")}", 999);
+
+                foreach (var issue in issuesExportedTo)
+                {
+                    if (issueRefs == null || issueRefs.Any(x => string.Equals(x, issue.Key.Value, StringComparison.InvariantCultureIgnoreCase)))
+                    {
+                        ReadOnlyCollection<Worklog> logs;
+
+                        if (workLogCache.ContainsKey(issue.Key.Value))
+                        {
+                            logs = workLogCache[issue.Key.Value];
+                        }
+                        else
+                        {
+                            logs = issue.GetWorklogs();
+                            workLogCache.Add(issue.Key.Value, logs);
+                        }
+
+                        foreach (var workLog in logs.Where(worklog => worklog.Author == username && worklog.StartDate.HasValue && worklog.StartDate.Value.Date == queryDate.Date))
+                        {
+                            var workLogReturn = workLogs.FirstOrDefault(x => x.JiraRef == issue.Key.Value && x.LoggedDate.Date == workLog.StartDate.Value.Date);
+                            if (workLogReturn != null)
+                            {
+                                workLogReturn.AddTime(workLog.TimeSpentInSeconds);
+                            }
+                            else
+                            {
+                                workLogs.Add(new StandardWorkLog(issue.Key.Value, workLog.StartDate.Value, workLog.TimeSpentInSeconds));
+                            }
+                        }
+                    }
+                }
             }
 
-            return exportedRefs;
-        }
-
-        public TimeSpan GetWorkLoggedOnIssue(string issueRef, DateTime queryDate)
-        {
-            var issue = client.GetIssue(issueRef);
-            var logs = issue.GetWorklogs().Where(worklog => worklog.Author == username && worklog.StartDate.HasValue && worklog.StartDate.Value.Date == queryDate.Date);
-            return TimeSpan.FromSeconds(logs.Sum(x => x.TimeSpentInSeconds));
+            return workLogs;
         }
 
         public Transitions GetIssueTransitions(string issueRef)

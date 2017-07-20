@@ -1,21 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Windows;
-using Gallifrey.AppTracking;
+﻿using Gallifrey.AppTracking;
 using Gallifrey.IdleTimers;
 using Gallifrey.UI.Modern.Flyouts;
 using Gallifrey.UI.Modern.Helpers;
 using Gallifrey.UI.Modern.Models;
 using MahApps.Metro.Controls.Dialogs;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Windows;
 
 namespace Gallifrey.UI.Modern.MainViews
 {
     public partial class ControlButtons
     {
-        private MainViewModel ViewModel => (MainViewModel) DataContext;
-        private ModelHelpers ModelHelpers => ((MainViewModel) DataContext).ModelHelpers;
+        private MainViewModel ViewModel => (MainViewModel)DataContext;
+        private ModelHelpers ModelHelpers => ((MainViewModel)DataContext).ModelHelpers;
 
         public ControlButtons()
         {
@@ -48,7 +48,7 @@ namespace Gallifrey.UI.Modern.MainViews
             if (recordedToDate < target)
             {
                 var dummyIdleTimer = new IdleTimer(DateTime.Now, DateTime.Now, target.Subtract(recordedToDate), Guid.NewGuid());
-                var addTimer = new AddTimer(ModelHelpers, startDate: startDate, idleTimers: new List<IdleTimer> {dummyIdleTimer}, enableDateChange: false);
+                var addTimer = new AddTimer(ModelHelpers, startDate: startDate, idleTimers: new List<IdleTimer> { dummyIdleTimer }, enableDateChange: false);
                 await ModelHelpers.OpenFlyout(addTimer);
                 if (addTimer.AddedTimer)
                 {
@@ -108,7 +108,7 @@ namespace Gallifrey.UI.Modern.MainViews
             {
                 jiraRef = pastedData;
             }
-        
+
             if (ModelHelpers.Gallifrey.JiraConnection.DoesJiraExist(jiraRef))
             {
                 var startDate = ViewModel.TimerDates.FirstOrDefault(x => x.DateIsSelected)?.TimerDate ?? DateTime.Today;
@@ -286,11 +286,6 @@ namespace Gallifrey.UI.Modern.MainViews
                 case RemoteButtonTrigger.PayPal: PayPalButton(this, null); break;
                 default: return;
             }
-        }
-
-        private void ForceError(object sender, RoutedEventArgs e)
-        {
-            throw new Exception("Forced Alpha Exception");
         }
     }
 }

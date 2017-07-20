@@ -6,6 +6,7 @@ using Gallifrey.UI.Modern.Models;
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -75,7 +76,12 @@ namespace Gallifrey.UI.Modern.Flyouts
 
                 if (true || !timerToShow.LastJiraTimeCheck.HasValue || timerToShow.LastJiraTimeCheck < DateTime.UtcNow.AddMinutes(-5))
                 {
-                    var time = modelHelpers.Gallifrey.JiraConnection.GetTimeLoggedOnIssueOnDate(timerToShow.JiraReference, timerToShow.DateStarted);
+                    var logs = modelHelpers.Gallifrey.JiraConnection.GetWorkLoggedForDatesFilteredIssues(new List<DateTime> { timerToShow.DateStarted }, new List<string> { timerToShow.JiraReference });
+                    var time = TimeSpan.Zero;
+                    foreach (var standardWorkLog in logs.Where(x => x.JiraRef == timerToShow.JiraReference && x.LoggedDate.Date == timerToShow.DateStarted.Date))
+                    {
+                        time = time.Add(standardWorkLog.TimeSpent);
+                    }
                     modelHelpers.Gallifrey.JiraTimerCollection.RefreshFromJira(timerToShow.UniqueId, jiraIssue, time);
                     timerToShow = modelHelpers.Gallifrey.JiraTimerCollection.GetTimer(timerToShow.UniqueId);
                 }
