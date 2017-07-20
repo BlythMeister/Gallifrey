@@ -214,11 +214,11 @@ namespace Gallifrey.Jira
         {
             if (logDate.Kind != DateTimeKind.Local) logDate = DateTime.SpecifyKind(logDate, DateTimeKind.Local);
             timeSpent = new TimeSpan(timeSpent.Hours, timeSpent.Minutes, 0);
-            if (string.IsNullOrWhiteSpace(comment)) comment = "N/A";
 
             if (HasTempo)
             {
-                TempoWorkLog.TempoWorkLogIssue issue = new TempoWorkLog.TempoWorkLogIssue();
+                if (string.IsNullOrWhiteSpace(comment)) comment = "N/A";
+                var issue = new TempoWorkLog.TempoWorkLogIssue();
                 switch (workLogStrategy)
                 {
                     case WorkLogStrategy.Automatic:
