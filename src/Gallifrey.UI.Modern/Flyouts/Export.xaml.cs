@@ -74,7 +74,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                     return;
                 }
 
-                if (true || !timerToShow.LastJiraTimeCheck.HasValue || timerToShow.LastJiraTimeCheck < DateTime.UtcNow.AddMinutes(-5))
+                if (!timerToShow.LastJiraTimeCheck.HasValue || timerToShow.LastJiraTimeCheck < DateTime.UtcNow.AddMinutes(-5))
                 {
                     var logs = modelHelpers.Gallifrey.JiraConnection.GetWorkLoggedForDatesFilteredIssues(new List<DateTime> { timerToShow.DateStarted }, new List<string> { timerToShow.JiraReference });
                     var time = TimeSpan.Zero;
