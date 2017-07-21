@@ -117,7 +117,7 @@
                        Donate By PayPal<LineBreak/>ALT + F6
                     </TextBlock>
                 </Button.ToolTip>
-                <iconPacks:PackIconModern Kind="Money" Height="23" Width="23" />
+                <iconPacks:PackIconModern Kind="Paypal" Height="23" Width="23" />
             </Button>
         </WrapPanel>
     </DockPanel>
