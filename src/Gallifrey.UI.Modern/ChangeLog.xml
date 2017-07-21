@@ -178,7 +178,7 @@
     </Bugs>
     <Others />
   </Version> 
-  <Version Number="3.5.1.11" Name="Pre-Release">
+  <Version Number="3.5.1.12" Name="Pre-Release">
     <Features>
       <Feature>Add internet connection check before login to Jira</Feature>
       <Feature>Add new user setup flow</Feature>
@@ -190,6 +190,8 @@
       <Bug>Remove extra space in "App Name" causing start on boot to fail</Bug>
       <Bug>Fix for export remaining hours going 99 -> 9</Bug>
       <Bug>Fix to allow timers over 10 hours to be edited. - New max 24 hours</Bug>
+      <Bug>Default timers do not add if timer running over midnight</Bug>
+      <Bug>Default timers could be deleted, but instantly re-appear</Bug>
     </Bugs>
     <Others />
   </Version>

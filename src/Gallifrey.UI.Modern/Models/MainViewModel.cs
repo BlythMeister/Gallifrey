@@ -239,33 +239,30 @@ namespace Gallifrey.UI.Modern.Models
                     dateModel.RemoveTimerModel(removeTimer);
                 }
 
-                if (!dateModel.Timers.Any())
+                foreach (var defaultJira in ModelHelpers.Gallifrey.Settings.AppSettings.DefaultTimers ?? new List<string>())
                 {
-                    foreach (var defaultJira in ModelHelpers.Gallifrey.Settings.AppSettings.DefaultTimers ?? new List<string>())
+                    if (!dateModel.Timers.Any(x => x.JiraTimer.JiraReference == defaultJira))
                     {
-                        if (!dateModel.Timers.Any(x => x.JiraTimer.JiraReference == defaultJira))
+                        try
                         {
-                            try
+                            var jira = jiraCache.FirstOrDefault(x => x.key == defaultJira);
+                            if (jira == null && ModelHelpers.Gallifrey.JiraConnection.IsConnected)
                             {
-                                var jira = jiraCache.FirstOrDefault(x => x.key == defaultJira);
-                                if (jira == null && ModelHelpers.Gallifrey.JiraConnection.IsConnected)
-                                {
-                                    jira = ModelHelpers.Gallifrey.JiraConnection.GetJiraIssue(defaultJira);
-                                    jiraCache.Add(jira);
-                                }
+                                jira = ModelHelpers.Gallifrey.JiraConnection.GetJiraIssue(defaultJira);
+                                jiraCache.Add(jira);
+                            }
 
-                                if (jira != null)
-                                {
-                                    var timerId = ModelHelpers.Gallifrey.JiraTimerCollection.AddTimer(jira, timerDate.Date, TimeSpan.Zero, false);
-                                    var timer = ModelHelpers.Gallifrey.JiraTimerCollection.GetTimer(timerId);
-                                    timer.PropertyChanged += (sender, args) => TimerChanged();
-                                    dateModel.AddTimerModel(new TimerModel(timer));
-                                }
-                            }
-                            catch (Exception)
+                            if (jira != null)
                             {
-                                // ignored
+                                var timerId = ModelHelpers.Gallifrey.JiraTimerCollection.AddTimer(jira, timerDate.Date, TimeSpan.Zero, false);
+                                var timer = ModelHelpers.Gallifrey.JiraTimerCollection.GetTimer(timerId);
+                                timer.PropertyChanged += (sender, args) => TimerChanged();
+                                dateModel.AddTimerModel(new TimerModel(timer));
                             }
+                        }
+                        catch (Exception)
+                        {
+                            // ignored
                         }
                     }
                 }
