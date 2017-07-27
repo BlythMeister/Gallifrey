@@ -189,8 +189,9 @@ namespace Gallifrey
                     if (doCheck || timersOnDate.Any(x => !x.LastJiraTimeCheck.HasValue || x.LastJiraTimeCheck.Value < DateTime.UtcNow.AddMinutes(-30)))
                     {
                         checkDates.Add(workingDate, timersOnDate);
-                        workingDate = workingDate.AddDays(1);
                     }
+
+                    workingDate = workingDate.AddDays(1);
                 }
 
                 var jirasExportedTo = jiraConnection.GetWorkLoggedForDates(checkDates.Keys).ToList();
