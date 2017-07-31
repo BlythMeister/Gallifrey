@@ -343,7 +343,7 @@ namespace Gallifrey
             if (runningTimerWhenIdle.HasValue)
             {
                 var timer = jiraTimerCollection.GetTimer(runningTimerWhenIdle.Value);
-                if (timer.DateStarted.Date == DateTime.Now.Date)
+                if (timer != null && timer.DateStarted.Date == DateTime.Now.Date)
                 {
                     jiraTimerCollection.StartTimer(runningTimerWhenIdle.Value);
                 }

@@ -1,4 +1,4 @@
-framework: net46
+framework: auto-detect
 source https://www.nuget.org/api/v2
 
 nuget Atlassian.SDK @= 2.5.0
