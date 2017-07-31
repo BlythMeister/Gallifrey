@@ -122,10 +122,29 @@ namespace Gallifrey.Jira
         {
             var workLogs = new List<StandardWorkLog>();
             var workLogCache = new Dictionary<string, ReadOnlyCollection<Worklog>>();
+            var issueCache = new Dictionary<string, Atlassian.Jira.Issue>();
 
             foreach (var queryDate in queryDates)
             {
-                var issuesExportedTo = client.GetIssuesFromJql($"worklogAuthor = currentUser() and worklogDate = {queryDate.ToString("yyyy-MM-dd")}", 999);
+                List<Atlassian.Jira.Issue> issuesExportedTo;
+
+                try
+                {
+                    issuesExportedTo = client.GetIssuesFromJql($"worklogAuthor = currentUser() and worklogDate = {queryDate.ToString("yyyy-MM-dd")}", 999).ToList();
+                }
+                catch (Exception)
+                {
+                    issuesExportedTo = new List<Atlassian.Jira.Issue>();
+                    foreach (var issueRef in issueRefs)
+                    {
+                        if (!issueCache.ContainsKey(issueRef))
+                        {
+                            issueCache.Add(issueRef, client.GetIssue(issueRef));
+                        }
+
+                        issuesExportedTo.Add(issueCache[issueRef]);
+                    }
+                }
 
                 foreach (var issue in issuesExportedTo)
                 {
@@ -158,6 +177,8 @@ namespace Gallifrey.Jira
                     }
                 }
             }
+
+
 
             return workLogs;
         }
