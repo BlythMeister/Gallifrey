@@ -1,12 +1,4 @@
-﻿using System;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Timers;
-using System.Windows;
-using System.Windows.Input;
-using System.Xml.Linq;
-using Gallifrey.AppTracking;
+﻿using Gallifrey.AppTracking;
 using Gallifrey.Exceptions;
 using Gallifrey.Exceptions.JiraIntegration;
 using Gallifrey.ExtensionMethods;
@@ -18,6 +10,14 @@ using Gallifrey.UI.Modern.Models;
 using Gallifrey.Versions;
 using MahApps.Metro.Controls.Dialogs;
 using Microsoft.Win32;
+using System;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Timers;
+using System.Windows;
+using System.Windows.Input;
+using System.Xml.Linq;
 
 namespace Gallifrey.UI.Modern.MainViews
 {
@@ -375,6 +375,10 @@ namespace Gallifrey.UI.Modern.MainViews
                         }
 
                         Topmost = modelHelpers.FlyoutOpen;
+                    }
+                    else
+                    {
+                        Topmost = false;
                     }
                 });
             }
