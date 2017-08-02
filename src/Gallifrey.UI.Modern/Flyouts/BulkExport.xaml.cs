@@ -38,7 +38,6 @@ namespace Gallifrey.UI.Modern.Flyouts
             await Task.Delay(50);
             modelHelpers.HideFlyout(this);
             var timersToShow = new List<BulkExportModel>();
-            var showError = false;
             try
             {
                 var jiraDownloadResult = await progressDialogHelper.Do(controller => GetTimers(controller, timers), "Downloading Jira Work Logs To Ensure Accurate Export", true, true);
@@ -48,10 +47,6 @@ namespace Gallifrey.UI.Modern.Flyouts
                     case ProgressResult.JiraHelperStatus.Cancelled:
                         modelHelpers.CloseFlyout(this);
                         return;
-                    case ProgressResult.JiraHelperStatus.Errored:
-                        await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Unable To Locate Jira", "There Was An Error Getting Work Logs");
-                        showError = true;
-                        break;
                     case ProgressResult.JiraHelperStatus.Success:
                         timersToShow = jiraDownloadResult.RetVal;
                         break;
@@ -60,11 +55,6 @@ namespace Gallifrey.UI.Modern.Flyouts
             catch (BulkExportException ex)
             {
                 await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Unable To Locate Jira", ex.Message);
-                showError = true;
-            }
-
-            if (showError)
-            {
                 modelHelpers.CloseFlyout(this);
                 return;
             }
@@ -247,7 +237,15 @@ namespace Gallifrey.UI.Modern.Flyouts
                 }
             }
 
-            var logs = modelHelpers.Gallifrey.JiraConnection.GetWorkLoggedForDatesFilteredIssues(dates.Distinct(), references.Distinct());
+            IEnumerable<StandardWorkLog> logs;
+            try
+            {
+                logs = modelHelpers.Gallifrey.JiraConnection.GetWorkLoggedForDatesFilteredIssues(dates.Distinct(), references.Distinct());
+            }
+            catch (Exception)
+            {
+                throw new BulkExportException($"Unable To Get WorkLogs!\nCannot Export Time");
+            }
 
             foreach (var timerToShow in timersToGet)
             {
@@ -315,8 +313,6 @@ namespace Gallifrey.UI.Modern.Flyouts
             {
             }
         }
-
-
 
         private async void TransitionSelected(object sender, RoutedEventArgs e)
         {

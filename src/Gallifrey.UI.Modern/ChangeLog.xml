@@ -178,7 +178,7 @@
     </Bugs>
     <Others />
   </Version> 
-  <Version Number="3.5.1.17" Name="Pre-Release">
+  <Version Number="3.5.1.18" Name="Pre-Release">
     <Features>
       <Feature>Add internet connection check before login to Jira</Feature>
       <Feature>Add new user setup flow</Feature>
@@ -192,6 +192,7 @@
       <Bug>Fix to allow timers over 10 hours to be edited. - New max 24 hours</Bug>
       <Bug>Default timers do not add if timer running over midnight</Bug>
       <Bug>Default timers could be deleted, but instantly re-appear</Bug>
+      <Bug>Improved error handling when checking timers for exported time</Bug>
     </Bugs>
     <Others />
   </Version>
