@@ -241,7 +241,7 @@ namespace Gallifrey.UI.Modern.Models
 
                 foreach (var defaultJira in ModelHelpers.Gallifrey.Settings.AppSettings.DefaultTimers ?? new List<string>())
                 {
-                    if (!dateModel.Timers.Any(x => x.JiraTimer.JiraReference == defaultJira))
+                    if (!dateModel.Timers.Any(x => x.JiraTimer.JiraReference == defaultJira) && dateModel.TimerDate.Date <= DateTime.Now.Date)
                     {
                         try
                         {

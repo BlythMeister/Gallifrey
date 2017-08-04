@@ -133,17 +133,20 @@ namespace Gallifrey.UI.Modern.MainViews
             {
                 var timer = ModelHelpers.Gallifrey.JiraTimerCollection.GetTimer(selectedTimerId);
 
-                if (ModelHelpers.Gallifrey.Settings.AppSettings.DefaultTimers.Any(x => x == timer.JiraReference))
+                if (timer != null)
                 {
-                    await DialogCoordinator.Instance.ShowMessageAsync(ModelHelpers.DialogContext, "Default Timer", $"The Timer {timer.JiraReference} Is A Default Time And Cannot Be Deleted.");
-                }
-                else
-                {
-                    var result = await DialogCoordinator.Instance.ShowMessageAsync(ModelHelpers.DialogContext, "Are You Sure?", $"Are You Sure You Want To Delete {timer.JiraReference}\n\n{timer.JiraName}\nFor: {timer.DateStarted.Date.ToString("ddd, dd MMM")}", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
-
-                    if (result == MessageDialogResult.Affirmative)
+                    if (ModelHelpers.Gallifrey.Settings.AppSettings.DefaultTimers.Any(x => x == timer.JiraReference) && timer.DateStarted.Date <= DateTime.Now.Date)
                     {
-                        ModelHelpers.Gallifrey.JiraTimerCollection.RemoveTimer(selectedTimerId);
+                        await DialogCoordinator.Instance.ShowMessageAsync(ModelHelpers.DialogContext, "Default Timer", $"The Timer {timer.JiraReference} Is A Default Time And Cannot Be Deleted.");
+                    }
+                    else
+                    {
+                        var result = await DialogCoordinator.Instance.ShowMessageAsync(ModelHelpers.DialogContext, "Are You Sure?", $"Are You Sure You Want To Delete {timer.JiraReference}\n\n{timer.JiraName}\nFor: {timer.DateStarted.Date.ToString("ddd, dd MMM")}", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
+
+                        if (result == MessageDialogResult.Affirmative)
+                        {
+                            ModelHelpers.Gallifrey.JiraTimerCollection.RemoveTimer(selectedTimerId);
+                        }
                     }
                 }
             }
