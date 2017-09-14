@@ -32,6 +32,7 @@ namespace Gallifrey.JiraIntegration
         void AssignToCurrentUser(string jiraRef);
         User CurrentUser { get; }
         bool IsConnected { get; }
+        bool HasTempo { get; }
         void TransitionIssue(string jiraRef, string transition);
         IEnumerable<Status> GetTransitions(string jiraRef);
         event EventHandler LoggedIn;
@@ -50,6 +51,7 @@ namespace Gallifrey.JiraIntegration
 
         public User CurrentUser { get; private set; }
         public bool IsConnected => jira != null;
+        public bool HasTempo => jira != null && jira.HasTempo;
         public event EventHandler LoggedIn;
 
         public JiraConnection(ITrackUsage trackUsage)

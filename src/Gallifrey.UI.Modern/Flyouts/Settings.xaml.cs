@@ -1,14 +1,15 @@
-﻿using System.Windows;
-using Gallifrey.Exceptions.JiraIntegration;
+﻿using Gallifrey.Exceptions.JiraIntegration;
 using Gallifrey.UI.Modern.Helpers;
 using Gallifrey.UI.Modern.Models;
 using MahApps.Metro.Controls.Dialogs;
+using System.Windows;
 
 namespace Gallifrey.UI.Modern.Flyouts
 {
     public partial class Settings
     {
         private readonly ModelHelpers modelHelpers;
+        private readonly ProgressDialogHelper progressDialogHelper;
         private SettingModel DataModel => (SettingModel)DataContext;
 
         public Settings(ModelHelpers modelHelpers)
@@ -16,6 +17,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             this.modelHelpers = modelHelpers;
             InitializeComponent();
 
+            progressDialogHelper = new ProgressDialogHelper(modelHelpers.DialogContext);
             DataContext = new SettingModel(modelHelpers.Gallifrey.Settings, modelHelpers.Gallifrey.VersionControl);
         }
 
@@ -26,7 +28,15 @@ namespace Gallifrey.UI.Modern.Flyouts
 
             try
             {
-                modelHelpers.Gallifrey.SaveSettings(DataModel.JiraSettingsChanged, DataModel.TrackingOptOut);
+                if (DataModel.JiraSettingsChanged)
+                {
+                    var trackingOptOut = DataModel.TrackingOptOut;
+                    await progressDialogHelper.Do(() => modelHelpers.Gallifrey.SaveSettings(true, trackingOptOut), "Checking Jira Credentials", false, false);
+                }
+                else
+                {
+                    modelHelpers.Gallifrey.SaveSettings(false, DataModel.TrackingOptOut);
+                }
             }
             catch (MissingJiraConfigException)
             {
@@ -39,6 +49,14 @@ namespace Gallifrey.UI.Modern.Flyouts
 
             if (successfulSave)
             {
+                if (modelHelpers.Gallifrey.Settings.JiraConnectionSettings.UseTempo && !modelHelpers.Gallifrey.JiraConnection.HasTempo)
+                {
+                    await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Missing Tempo", "We Were Unable To Locate A Tempo Endpoint\nGallifrey Will Fall Back To Standard Jira Endpoints");
+                    modelHelpers.Gallifrey.Settings.JiraConnectionSettings.UseTempo = false;
+                    //Even though we have changed jira settings, we are changing because tempo is not in use, so don't reconnect
+                    modelHelpers.Gallifrey.SaveSettings(false, false);
+                }
+
                 modelHelpers.CloseFlyout(this);
                 var themeChanged = ThemeHelper.ChangeTheme(DataModel.Theme.Name, DataModel.Accent.Name);
 
@@ -52,7 +70,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             }
             else
             {
-                await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext,"Invalid Jira Configuration", "You Cannot Save With Invalid Jira Configuration.\nTo Save You Have To Have A Valid Connection To Jira");
+                await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Invalid Jira Configuration", "You Cannot Save With Invalid Jira Configuration.\nTo Save You Have To Have A Valid Connection To Jira");
                 Focus();
             }
         }

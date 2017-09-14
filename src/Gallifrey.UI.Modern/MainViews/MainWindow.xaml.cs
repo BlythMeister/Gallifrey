@@ -25,6 +25,7 @@ namespace Gallifrey.UI.Modern.MainViews
     {
         private readonly ModelHelpers modelHelpers;
         private readonly ExceptionlessHelper exceptionlessHelper;
+        private readonly ProgressDialogHelper progressDialogHelper;
         private MainViewModel ViewModel => (MainViewModel)DataContext;
         private bool machineLocked;
         private bool machineIdle;
@@ -36,8 +37,12 @@ namespace Gallifrey.UI.Modern.MainViews
 
             var gallifrey = new Backend(instance);
             modelHelpers = new ModelHelpers(gallifrey, FlyoutsControl);
+
             exceptionlessHelper = new ExceptionlessHelper(modelHelpers);
             exceptionlessHelper.RegisterExceptionless();
+
+            progressDialogHelper = new ProgressDialogHelper(modelHelpers.DialogContext);
+
             var viewModel = new MainViewModel(modelHelpers);
             modelHelpers.RefreshModel();
             modelHelpers.SelectRunningTimer();
@@ -128,54 +133,7 @@ namespace Gallifrey.UI.Modern.MainViews
                 modelHelpers.Gallifrey.TrackEvent(TrackingType.SettingsMissing);
                 await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Welcome To Gallifrey", "You Current Have No Jira Settings In Gallifrey\nWe Therefore Think Your A New User, So Welcome!\n\nTo Get Started, We Need Your Jira Details");
 
-                var loggedIn = false;
-
-                while (!loggedIn)
-                {
-                    var jiraSettings = modelHelpers.Gallifrey.Settings.JiraConnectionSettings;
-                    var url = await DialogCoordinator.Instance.ShowInputAsync(modelHelpers.DialogContext, "Jira URL", "Please Enter Your Jira Instance URL\nThis Is The URL You Go To When You Login Using A Browser\ne.g. https://MyCompany.atlassian.net", new MetroDialogSettings { DefaultText = jiraSettings.JiraUrl });
-                    var details = await DialogCoordinator.Instance.ShowLoginAsync(modelHelpers.DialogContext, "UserName & Password", "Please Enter Your UserName/Email Address & Password You Use To Login To Jira", new LoginDialogSettings { EnablePasswordPreview = true, InitialUsername = jiraSettings.JiraUsername, InitialPassword = jiraSettings.JiraPassword });
-
-                    jiraSettings.JiraUrl = url;
-                    jiraSettings.JiraUsername = details.Username;
-                    jiraSettings.JiraPassword = details.Password;
-
-                    try
-                    {
-                        modelHelpers.Gallifrey.SaveSettings(true, false);
-                        loggedIn = true;
-                    }
-                    catch (MissingJiraConfigException)
-                    {
-                        var result = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Missing Information", "Some Of The Jira Information We Requested Was Missing, Try Again?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No" });
-                        if (result == MessageDialogResult.Negative)
-                        {
-                            await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Come Back Soon", "Without A Correctly Configured Jira Connection Gallifrey Will Close, Please Come Back Soon!");
-                            modelHelpers.CloseApp();
-                        }
-                    }
-                    catch (JiraConnectionException)
-                    {
-                        var result = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Login Failure", "We Were Unable To Authenticate To Jira, Try Again?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No" });
-                        if (result == MessageDialogResult.Negative)
-                        {
-                            await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Come Back Soon", "Without A Correctly Configured Jira Connection Gallifrey Will Close, Please Come Back Soon!");
-                            modelHelpers.CloseApp();
-                        }
-                    }
-                }
-
-                var viewSettings = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "More Settings", "Gallifrey Has A Vast Range Of Settings, Would You Like To See Them Now?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No" });
-
-                if (viewSettings == MessageDialogResult.Affirmative)
-                {
-                    await modelHelpers.OpenFlyout(new Flyouts.Settings(modelHelpers));
-                    if (!modelHelpers.Gallifrey.JiraConnection.IsConnected)
-                    {
-                        await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Lost Jira Connection", "We Seem To Have Lost Jira Connection\nWithout A Correctly Configured Jira Connection Gallifrey Will Close");
-                        modelHelpers.CloseApp();
-                    }
-                }
+                await NewUserOnBoarding();
 
                 modelHelpers.RefreshModel();
             }
@@ -190,42 +148,7 @@ namespace Gallifrey.UI.Modern.MainViews
                     modelHelpers.CloseApp();
                 }
 
-                var loggedIn = false;
-
-                while (!loggedIn)
-                {
-                    var jiraSettings = modelHelpers.Gallifrey.Settings.JiraConnectionSettings;
-                    var url = await DialogCoordinator.Instance.ShowInputAsync(modelHelpers.DialogContext, "Jira URL", "Please Enter Your Jira Instance URL\nThis Is The URL You Go To When You Login Using A Browser\ne.g. https://MyCompany.atlassian.net", new MetroDialogSettings { DefaultText = jiraSettings.JiraUrl });
-                    var details = await DialogCoordinator.Instance.ShowLoginAsync(modelHelpers.DialogContext, "UserName & Password", "Please Enter Your UserName/Email Address & Password You Use To Login To Jira", new LoginDialogSettings { EnablePasswordPreview = true, InitialUsername = jiraSettings.JiraUsername, InitialPassword = jiraSettings.JiraPassword });
-
-                    jiraSettings.JiraUrl = url;
-                    jiraSettings.JiraUsername = details.Username;
-                    jiraSettings.JiraPassword = details.Password;
-
-                    try
-                    {
-                        modelHelpers.Gallifrey.SaveSettings(true, false);
-                        loggedIn = true;
-                    }
-                    catch (MissingJiraConfigException)
-                    {
-                        var result = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Missing Information", "Some Of The Jira Information We Requested Was Missing, Try Again?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No" });
-                        if (result == MessageDialogResult.Negative)
-                        {
-                            await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Come Back Soon", "Without A Correctly Configured Jira Connection Gallifrey Will Close, Please Come Back Soon!");
-                            modelHelpers.CloseApp();
-                        }
-                    }
-                    catch (JiraConnectionException)
-                    {
-                        var result = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Login Failure", "We Were Unable To Authenticate To Jira, Try Again?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No" });
-                        if (result == MessageDialogResult.Negative)
-                        {
-                            await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Come Back Soon", "Without A Correctly Configured Jira Connection Gallifrey Will Close, Please Come Back Soon!");
-                            modelHelpers.CloseApp();
-                        }
-                    }
-                }
+                await UserLoginFailure();
             }
 
             if (modelHelpers.Gallifrey.VersionControl.IsAutomatedDeploy && modelHelpers.Gallifrey.VersionControl.IsFirstRun)
@@ -239,6 +162,81 @@ namespace Gallifrey.UI.Modern.MainViews
             }
 
             exceptionlessHelper.RegisterExceptionless();
+        }
+
+        private async Task NewUserOnBoarding()
+        {
+            await UserLoginFailure();
+
+            var viewSettings = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "More Settings", "Gallifrey Has A Vast Range Of Settings, Would You Like To See Them Now?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No" });
+
+            if (viewSettings == MessageDialogResult.Affirmative)
+            {
+                await modelHelpers.OpenFlyout(new Flyouts.Settings(modelHelpers));
+                if (!modelHelpers.Gallifrey.JiraConnection.IsConnected)
+                {
+                    var userUpdate = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Lost Jira Connection", "We Seem To Have Lost Jira Connection\nWould You Like To Update Your Details?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No" });
+
+                    if (userUpdate == MessageDialogResult.Negative)
+                    {
+                        await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Come Back Soon", "Without A Correctly Configured Jira Connection Gallifrey Will Close, Please Come Back Soon!");
+                        modelHelpers.CloseApp();
+                    }
+
+                    await UserLoginFailure();
+                }
+            }
+        }
+
+        private async Task UserLoginFailure()
+        {
+            var loggedIn = false;
+
+            while (!loggedIn)
+            {
+                var jiraSettings = modelHelpers.Gallifrey.Settings.JiraConnectionSettings;
+                var url = await DialogCoordinator.Instance.ShowInputAsync(modelHelpers.DialogContext, "Jira URL", "Please Enter Your Jira Instance URL\nThis Is The URL You Go To When You Login Using A Browser\ne.g. https://MyCompany.atlassian.net", new MetroDialogSettings { DefaultText = jiraSettings.JiraUrl });
+                var details = await DialogCoordinator.Instance.ShowLoginAsync(modelHelpers.DialogContext, "UserName & Password", "Please Enter Your UserName/Email Address & Password You Use To Login To Jira", new LoginDialogSettings { EnablePasswordPreview = true, InitialUsername = jiraSettings.JiraUsername, InitialPassword = jiraSettings.JiraPassword });
+                var useTempo = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Tempo", "Do You Want To Use Tempo To Record Timesheets?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No" });
+
+                jiraSettings.JiraUrl = url;
+                jiraSettings.JiraUsername = details.Username;
+                jiraSettings.JiraPassword = details.Password;
+                jiraSettings.UseTempo = useTempo == MessageDialogResult.Affirmative;
+
+                try
+                {
+                    await progressDialogHelper.Do(() => modelHelpers.Gallifrey.SaveSettings(true, false), "Checking Jira Credentials", false, false);
+
+                    if (jiraSettings.UseTempo && !modelHelpers.Gallifrey.JiraConnection.HasTempo)
+                    {
+                        await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Missing Tempo", "We Were Unable To Locate A Tempo Endpoint\nGallifrey Will Fall Back To Standard Jira Endpoints");
+                        jiraSettings.UseTempo = false;
+                        //Even though we have changed jira settings, we are changing because tempo is not in use, so don't reconnect
+                        modelHelpers.Gallifrey.SaveSettings(false, false);
+                    }
+
+                    loggedIn = true;
+                }
+                catch (MissingJiraConfigException)
+                {
+                    var result = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Missing Information", "Some Of The Jira Information We Requested Was Missing, Try Again?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No" });
+                    if (result == MessageDialogResult.Negative)
+                    {
+                        await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Come Back Soon", "Without A Correctly Configured Jira Connection Gallifrey Will Close, Please Come Back Soon!");
+                        modelHelpers.CloseApp();
+                    }
+                }
+                catch (JiraConnectionException)
+                {
+                    var result = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Login Failure", "We Were Unable To Authenticate To Jira, Try Again?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No" });
+                    if (result == MessageDialogResult.Negative)
+                    {
+                        await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Come Back Soon", "Without A Correctly Configured Jira Connection Gallifrey Will Close, Please Come Back Soon!");
+                        modelHelpers.CloseApp();
+                    }
+                }
+            }
         }
 
         private async void GallifreyOnExportPromptEvent(object sender, ExportPromptDetail e)
