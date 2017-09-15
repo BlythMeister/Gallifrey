@@ -1,9 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Atlassian.Jira;
 using Gallifrey.Jira.Enum;
 using Gallifrey.Jira.Model;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using Issue = Gallifrey.Jira.Model.Issue;
 using Project = Gallifrey.Jira.Model.Project;
 
@@ -13,16 +14,18 @@ namespace Gallifrey.Jira
     {
         private readonly string username;
         private readonly Atlassian.Jira.Jira client;
+        public bool HasTempo { get; }
 
         public JiraSoapClient(string baseUrl, string username, string password)
         {
             this.username = username;
             client = new Atlassian.Jira.Jira(baseUrl, username, password) { MaxIssuesPerRequest = 999 };
+            client.GetAccessToken();
+            HasTempo = false;
         }
-        
+
         public User GetCurrentUser()
         {
-            client.GetAccessToken();
             return new User
             {
                 key = username,
@@ -49,37 +52,6 @@ namespace Gallifrey.Jira
                         id = issue.Status.Id
                     },
                     summary = issue.Summary
-                }
-            };
-        }
-
-        public Issue GetIssueWithWorklogs(string issueRef, string userName)
-        {
-            var issue = client.GetIssue(issueRef);
-            var worklogs = issue.GetWorklogs().Where(worklog => worklog.Author == userName)
-                                              .Select(worklog => new WorkLog { author = new User { name = worklog.Author }, comment = worklog.Comment, started = worklog.StartDate.Value, timeSpent = worklog.TimeSpent, timeSpentSeconds = worklog.TimeSpentInSeconds })
-                                              .ToList();
-            return new Issue
-            {
-                key = issue.Key.Value,
-                fields = new Fields
-                {
-                    project = new Project
-                    {
-                        key = issue.Project
-                    },
-                    status = new Status
-                    {
-                        name = issue.Status.Name,
-                        id = issue.Status.Id
-                    },
-                    worklog = new WorkLogs
-                    {
-                        maxResults = worklogs.Count,
-                        total = worklogs.Count,
-                        worklogs = worklogs
-                    },
-                    summary = issue.Summary,
                 }
             };
         }
@@ -144,6 +116,71 @@ namespace Gallifrey.Jira
         {
             var returnedFilters = client.GetFilters();
             return returnedFilters.Select(filter => new Filter { name = filter.Name });
+        }
+
+        public IEnumerable<StandardWorkLog> GetWorkLoggedForDatesFilteredIssues(IEnumerable<DateTime> queryDates, IEnumerable<string> issueRefs)
+        {
+            var workLogs = new List<StandardWorkLog>();
+            var workLogCache = new Dictionary<string, ReadOnlyCollection<Worklog>>();
+            var issueCache = new Dictionary<string, Atlassian.Jira.Issue>();
+
+            foreach (var queryDate in queryDates)
+            {
+                List<Atlassian.Jira.Issue> issuesExportedTo;
+
+                try
+                {
+                    issuesExportedTo = client.GetIssuesFromJql($"worklogAuthor = currentUser() and worklogDate = {queryDate.ToString("yyyy-MM-dd")}", 999).ToList();
+                }
+                catch (Exception)
+                {
+                    issuesExportedTo = new List<Atlassian.Jira.Issue>();
+                    foreach (var issueRef in issueRefs)
+                    {
+                        if (!issueCache.ContainsKey(issueRef))
+                        {
+                            issueCache.Add(issueRef, client.GetIssue(issueRef));
+                        }
+
+                        issuesExportedTo.Add(issueCache[issueRef]);
+                    }
+                }
+
+                foreach (var issue in issuesExportedTo)
+                {
+                    if (issueRefs == null || issueRefs.Any(x => string.Equals(x, issue.Key.Value, StringComparison.InvariantCultureIgnoreCase)))
+                    {
+                        ReadOnlyCollection<Worklog> logs;
+
+                        if (workLogCache.ContainsKey(issue.Key.Value))
+                        {
+                            logs = workLogCache[issue.Key.Value];
+                        }
+                        else
+                        {
+                            logs = issue.GetWorklogs();
+                            workLogCache.Add(issue.Key.Value, logs);
+                        }
+
+                        foreach (var workLog in logs.Where(worklog => worklog.Author == username && worklog.StartDate.HasValue && worklog.StartDate.Value.Date == queryDate.Date))
+                        {
+                            var workLogReturn = workLogs.FirstOrDefault(x => x.JiraRef == issue.Key.Value && x.LoggedDate.Date == workLog.StartDate.Value.Date);
+                            if (workLogReturn != null)
+                            {
+                                workLogReturn.AddTime(workLog.TimeSpentInSeconds);
+                            }
+                            else
+                            {
+                                workLogs.Add(new StandardWorkLog(issue.Key.Value, workLog.StartDate.Value, workLog.TimeSpentInSeconds));
+                            }
+                        }
+                    }
+                }
+            }
+
+
+
+            return workLogs;
         }
 
         public Transitions GetIssueTransitions(string issueRef)

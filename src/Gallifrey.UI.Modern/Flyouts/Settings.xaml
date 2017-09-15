@@ -206,6 +206,9 @@
 
                     <TextBlock Grid.Row="2" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="Your Jira Password">Password</TextBlock>
                     <PasswordBox Grid.Row="2" Grid.Column="1" Margin="5" VerticalAlignment="Center" helpers:PasswordBoxHelper.BindPassword="true" helpers:PasswordBoxHelper.BoundPassword="{Binding JiraPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                    <TextBlock Grid.Row="3" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="Use Tempo If The Jira Instance Has It">Use Tempo</TextBlock>
+                    <controls:ToggleSwitchButton Grid.Row="3" Grid.Column="1" Margin="5" Style="{DynamicResource MahApps.Metro.Styles.ToggleSwitchButton.Win10}" HorizontalAlignment="Left" VerticalAlignment="Center" IsChecked="{Binding UseTempo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 </Grid>
             </TabItem>
         </controls:MetroAnimatedSingleRowTabControl>

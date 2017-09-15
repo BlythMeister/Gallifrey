@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using Gallifrey.Comparers;
+﻿using Gallifrey.Comparers;
 using Gallifrey.Exceptions.JiraIntegration;
 using Gallifrey.Jira.Model;
 using Gallifrey.JiraTimers;
@@ -12,6 +6,12 @@ using Gallifrey.UI.Modern.Helpers;
 using Gallifrey.UI.Modern.Models;
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace Gallifrey.UI.Modern.Flyouts
 {
@@ -38,7 +38,6 @@ namespace Gallifrey.UI.Modern.Flyouts
             await Task.Delay(50);
             modelHelpers.HideFlyout(this);
             var timersToShow = new List<BulkExportModel>();
-            var showError = false;
             try
             {
                 var jiraDownloadResult = await progressDialogHelper.Do(controller => GetTimers(controller, timers), "Downloading Jira Work Logs To Ensure Accurate Export", true, true);
@@ -48,10 +47,6 @@ namespace Gallifrey.UI.Modern.Flyouts
                     case ProgressResult.JiraHelperStatus.Cancelled:
                         modelHelpers.CloseFlyout(this);
                         return;
-                    case ProgressResult.JiraHelperStatus.Errored:
-                        await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Unable To Locate Jira", "There Was An Error Getting Work Logs");
-                        showError = true;
-                        break;
                     case ProgressResult.JiraHelperStatus.Success:
                         timersToShow = jiraDownloadResult.RetVal;
                         break;
@@ -60,11 +55,6 @@ namespace Gallifrey.UI.Modern.Flyouts
             catch (BulkExportException ex)
             {
                 await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Unable To Locate Jira", ex.Message);
-                showError = true;
-            }
-
-            if (showError)
-            {
                 modelHelpers.CloseFlyout(this);
                 return;
             }
@@ -77,7 +67,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             else if (timersToShow.Count == 1)
             {
                 modelHelpers.CloseFlyout(this);
-                modelHelpers.OpenFlyout(new Export(modelHelpers, timersToShow.First().Timer.UniqueId, null, true));
+                await modelHelpers.OpenFlyout(new Export(modelHelpers, timersToShow.First().Timer.UniqueId, null, true));
             }
             else
             {
@@ -114,7 +104,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                     }
                 }
 
-                modelHelpers.OpenFlyout(this);
+                await modelHelpers.OpenFlyout(this);
             }
         }
 
@@ -137,7 +127,6 @@ namespace Gallifrey.UI.Modern.Flyouts
             }
             catch (BulkExportException ex)
             {
-                modelHelpers.OpenFlyout(this);
                 await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Error Exporting", $"{ex.Message}");
                 foreach (var timer in timersToExport.Where(x => !x.Timer.FullyExported))
                 {
@@ -154,7 +143,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             var changeStatusExports = timersToExport.Where(x => x.ChangeStatus);
             if (changeStatusExports.Any())
             {
-                modelHelpers.OpenFlyout(this);
+                await modelHelpers.OpenFlyout(this);
                 foreach (var timer in changeStatusExports)
                 {
                     while (!string.IsNullOrWhiteSpace(currentChangeStatusJiraRef))
@@ -221,28 +210,18 @@ namespace Gallifrey.UI.Modern.Flyouts
             var issuesRetrieved = new List<Issue>();
             var timersToGet = timers.Where(x => !x.LocalTimer && !x.IsRunning).ToList();
 
-            for (var i = 0; i < timersToGet.Count; i++)
+            var dates = new List<DateTime>();
+            var references = new List<string>();
+
+            foreach (var timerToShow in timersToGet)
             {
-                var timerToShow = timersToGet[i];
-
-                var requireRefresh = !timerToShow.LastJiraTimeCheck.HasValue || timerToShow.LastJiraTimeCheck < DateTime.UtcNow.AddMinutes(-15);
-                var model = new BulkExportModel(timerToShow, modelHelpers.Gallifrey.Settings.ExportSettings);
                 var jiraIssue = issuesRetrieved.FirstOrDefault(x => x.key == timerToShow.JiraReference);
-
-                if (i == 0)
-                {
-                    dialogController.SetMessage($"Downloading Jira Work Logs For {timerToShow.JiraReference} To Ensure Accurate Export");
-                }
-                else
-                {
-                    dialogController.SetMessage($"Downloading Jira Work Logs For {timerToShow.JiraReference} To Ensure Accurate Export\nDone {i} Of {timersToGet.Count}");
-                }
 
                 if (jiraIssue == null)
                 {
                     try
                     {
-                        jiraIssue = modelHelpers.Gallifrey.JiraConnection.GetJiraIssue(timerToShow.JiraReference, requireRefresh);
+                        jiraIssue = modelHelpers.Gallifrey.JiraConnection.GetJiraIssue(timerToShow.JiraReference);
                         issuesRetrieved.Add(jiraIssue);
                     }
                     catch (Exception)
@@ -251,15 +230,38 @@ namespace Gallifrey.UI.Modern.Flyouts
                     }
                 }
 
-                if (requireRefresh)
+                if (!timerToShow.LastJiraTimeCheck.HasValue || timerToShow.LastJiraTimeCheck < DateTime.UtcNow.AddMinutes(-5))
                 {
-                    modelHelpers.Gallifrey.JiraTimerCollection.RefreshFromJira(timerToShow.UniqueId, jiraIssue, modelHelpers.Gallifrey.JiraConnection.CurrentUser);
-                    timerToShow = modelHelpers.Gallifrey.JiraTimerCollection.GetTimer(timerToShow.UniqueId);
+                    dates.Add(timerToShow.DateStarted.Date);
+                    references.Add(timerToShow.JiraReference);
                 }
+            }
 
+            IEnumerable<StandardWorkLog> logs;
+            try
+            {
+                logs = modelHelpers.Gallifrey.JiraConnection.GetWorkLoggedForDatesFilteredIssues(dates.Distinct(), references.Distinct());
+            }
+            catch (Exception)
+            {
+                throw new BulkExportException($"Unable To Get WorkLogs!\nCannot Export Time");
+            }
+
+            foreach (var timerToShow in timersToGet)
+            {
+                var jiraIssue = issuesRetrieved.FirstOrDefault(x => x.key == timerToShow.JiraReference);
+
+                var time = TimeSpan.Zero;
+                foreach (var standardWorkLog in logs.Where(x => x.JiraRef == timerToShow.JiraReference && x.LoggedDate.Date == timerToShow.DateStarted.Date))
+                {
+                    time = time.Add(standardWorkLog.TimeSpent);
+                }
+                modelHelpers.Gallifrey.JiraTimerCollection.RefreshFromJira(timerToShow.UniqueId, jiraIssue, time);
+
+                var updatedTimer = modelHelpers.Gallifrey.JiraTimerCollection.GetTimer(timerToShow.UniqueId);
                 if (!timerToShow.FullyExported)
                 {
-                    model.UpdateTimer(timerToShow, jiraIssue);
+                    var model = new BulkExportModel(updatedTimer, modelHelpers.Gallifrey.Settings.ExportSettings);
                     timersToShow.Add(model);
                 }
             }
@@ -311,8 +313,6 @@ namespace Gallifrey.UI.Modern.Flyouts
             {
             }
         }
-
-
 
         private async void TransitionSelected(object sender, RoutedEventArgs e)
         {

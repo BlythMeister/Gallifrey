@@ -41,7 +41,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             {
                 await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "No Change Log", "There Is No Change Log To Show");
             }
-            modelHelpers.OpenFlyout(this);
+            await modelHelpers.OpenFlyout(this);
         }
 
         private async void InstallationHashClick(object sender, MouseButtonEventArgs mouseButtonEventArgs)

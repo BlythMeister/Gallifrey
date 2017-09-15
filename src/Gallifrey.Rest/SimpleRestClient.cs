@@ -1,11 +1,11 @@
-﻿using System;
+﻿using Gallifrey.Rest.Exception;
+using Newtonsoft.Json;
+using RestSharp;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
-using Gallifrey.Rest.Exception;
-using Newtonsoft.Json;
-using RestSharp;
 
 namespace Gallifrey.Rest
 {
@@ -22,17 +22,17 @@ namespace Gallifrey.Rest
             client = new RestClient { BaseUrl = new Uri(baseUrl), Timeout = (int)TimeSpan.FromMinutes(2).TotalMilliseconds };
         }
 
-        public void Post(HttpStatusCode expectedStatus, string path, Dictionary<string, object> data = null)
+        public void Post(HttpStatusCode expectedStatus, string path, object data = null)
         {
             Execute(Method.POST, expectedStatus, path, data);
         }
 
-        public void Put(HttpStatusCode expectedStatus, string path, Dictionary<string, object> data = null)
+        public void Put(HttpStatusCode expectedStatus, string path, object data = null)
         {
             Execute(Method.PUT, expectedStatus, path, data);
         }
 
-        public T Get<T>(HttpStatusCode expectedStatus, string path, Dictionary<string, object> data = null, Func<string, T> customDeserialize = null) where T : class
+        public T Get<T>(HttpStatusCode expectedStatus, string path, object data = null, Func<string, T> customDeserialize = null) where T : class
         {
             if (customDeserialize == null)
             {
@@ -44,13 +44,13 @@ namespace Gallifrey.Rest
             return customDeserialize(response.Content);
         }
 
-        private IRestResponse Execute(Method method, HttpStatusCode expectedStatus, string path, Dictionary<string, object> data = null)
+        private IRestResponse Execute(Method method, HttpStatusCode expectedStatus, string path, object data = null)
         {
             var request = CreateRequest(method, path);
             if (data != null)
             {
                 request.AddHeader("ContentType", "application/json");
-                request.AddBody(data);
+                request.AddJsonBody(data);
             }
 
             var response = client.Execute(request);
@@ -83,18 +83,16 @@ namespace Gallifrey.Rest
                     {
                         throw new ClientException($"Wrong status returned: {response.StatusDescription}. Message: {errorMessages.First()}");
                     }
-                    else
-                    {
-                        throw new ClientException($"Wrong status returned: {response.StatusDescription}");
-                    }
+
+                    throw new ClientException($"Wrong status returned: {response.StatusDescription}");
                 }
                 catch (ClientException)
                 {
                     throw;
                 }
-                catch (System.Exception ex)
+                catch (System.Exception)
                 {
-                    throw new ClientException($"Wrong status returned: {response.StatusDescription}", ex);
+                    throw new ClientException($"Wrong status returned: {response.StatusDescription}");
                 }
             }
         }

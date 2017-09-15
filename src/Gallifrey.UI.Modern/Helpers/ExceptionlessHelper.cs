@@ -1,10 +1,9 @@
-﻿using System;
-using System.Windows;
-using Exceptionless;
+﻿using Exceptionless;
 using Gallifrey.Settings;
 using Gallifrey.UI.Modern.Flyouts;
 using Gallifrey.Versions;
-using MahApps.Metro.Controls.Dialogs;
+using System;
+using System.Windows;
 
 namespace Gallifrey.UI.Modern.Helpers
 {
@@ -21,7 +20,6 @@ namespace Gallifrey.UI.Modern.Helpers
 
         public void RegisterExceptionless()
         {
-
             ExceptionlessClient.Default.Unregister();
             ExceptionlessClient.Default.Configuration.ApiKey = ConfigKeys.ExceptionlessApiKey;
             ExceptionlessClient.Default.Configuration.DefaultTags.Add(modelHelpers.Gallifrey.VersionControl.VersionName.Replace("\n", " - "));

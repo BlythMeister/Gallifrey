@@ -179,7 +179,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                 }
                 else
                 {
-                    modelHelpers.OpenFlyout(this);
+                    await modelHelpers.OpenFlyout(this);
                 }
             }
         }

@@ -177,6 +177,24 @@
       <Bug>Correct back colour on flyouts</Bug>
     </Bugs>
     <Others />
+  </Version> 
+  <Version Number="3.6.0.0">
+    <Features>
+      <Feature>Add internet connection check before login to Jira</Feature>
+      <Feature>Add new user setup flow</Feature>
+      <Feature>Improve authentication failure on start handling</Feature>
+      <Feature>If Tempo api is found, us it for timesheet information</Feature>
+    </Features>
+    <Bugs>
+      <Bug>Spelling mistake fixes</Bug>
+      <Bug>Remove extra space in "App Name" causing start on boot to fail</Bug>
+      <Bug>Fix for export remaining hours going 99 -> 9</Bug>
+      <Bug>Fix to allow timers over 10 hours to be edited. - New max 24 hours</Bug>
+      <Bug>Default timers do not add if timer running over midnight</Bug>
+      <Bug>Default timers could be deleted, but instantly re-appear</Bug>
+      <Bug>Improved error handling when checking timers for exported time</Bug>
+    </Bugs>
+    <Others />
   </Version>
 </Versions>
 

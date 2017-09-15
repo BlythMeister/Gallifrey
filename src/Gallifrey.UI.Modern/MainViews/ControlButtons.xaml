@@ -7,6 +7,7 @@
     <DockPanel>
         <DockPanel.Resources>
             <helpers:BooleanVisibilityConverter x:Key="BoolToVisInvert" Collapse="True" Invert="True"/>
+            <helpers:BooleanVisibilityConverter x:Key="BoolToVis" Collapse="True" Invert="False"/>
         </DockPanel.Resources>
 
         <WrapPanel HorizontalAlignment="Left" DockPanel.Dock="Left" Margin="10,0,0,0">
@@ -116,7 +117,7 @@
                        Donate By PayPal<LineBreak/>ALT + F6
                     </TextBlock>
                 </Button.ToolTip>
-                <iconPacks:PackIconModern Kind="Money" Height="23" Width="23" />
+                <iconPacks:PackIconModern Kind="Paypal" Height="23" Width="23" />
             </Button>
         </WrapPanel>
     </DockPanel>

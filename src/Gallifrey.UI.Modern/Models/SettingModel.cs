@@ -1,14 +1,14 @@
-﻿using System;
+﻿using Gallifrey.Settings;
+using Gallifrey.UI.Modern.Helpers;
+using Gallifrey.Versions;
+using MahApps.Metro;
+using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Windows.Media;
-using Gallifrey.Settings;
-using Gallifrey.UI.Modern.Helpers;
-using Gallifrey.Versions;
-using MahApps.Metro;
-using Microsoft.Win32;
 
 namespace Gallifrey.UI.Modern.Models
 {
@@ -16,7 +16,7 @@ namespace Gallifrey.UI.Modern.Models
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        readonly RegistryKey registryKey = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+        private readonly RegistryKey registryKey = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
         private int targetHoursPerDay;
         private int targetMinutesPerDay;
         private bool trackingOnly;
@@ -72,6 +72,7 @@ namespace Gallifrey.UI.Modern.Models
         public string JiraUrl { get; set; }
         public string JiraUsername { get; set; }
         public string JiraPassword { get; set; }
+        public bool UseTempo { get; set; }
 
         //Export Settings
         public bool ExportAll { get; set; }
@@ -105,7 +106,7 @@ namespace Gallifrey.UI.Modern.Models
             set
             {
                 var newValue = value ?? 0;
-                HourMinuteHelper.UpdateHours(ref targetHoursPerDay, newValue, 9);
+                HourMinuteHelper.UpdateHours(ref targetHoursPerDay, newValue, 23);
             }
         }
 
@@ -116,7 +117,7 @@ namespace Gallifrey.UI.Modern.Models
             {
                 var newValue = value ?? 0;
                 bool hoursChanged;
-                HourMinuteHelper.UpdateMinutes(ref targetHoursPerDay, ref targetMinutesPerDay, newValue, 9, out hoursChanged);
+                HourMinuteHelper.UpdateMinutes(ref targetHoursPerDay, ref targetMinutesPerDay, newValue, 23, out hoursChanged);
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TargetMinutesPerDay"));
                 if (hoursChanged)
                 {
@@ -163,6 +164,7 @@ namespace Gallifrey.UI.Modern.Models
             JiraUrl = settings.JiraConnectionSettings.JiraUrl;
             JiraUsername = settings.JiraConnectionSettings.JiraUsername;
             JiraPassword = settings.JiraConnectionSettings.JiraPassword;
+            UseTempo = settings.JiraConnectionSettings.UseTempo;
 
             //Export Settings
             TrackingOnly = settings.ExportSettings.TrackingOnly;
@@ -200,7 +202,7 @@ namespace Gallifrey.UI.Modern.Models
             settings.AppSettings.TargetLogPerDay = new TimeSpan(TargetHoursPerDay ?? 0, TargetMinutesPerDay ?? 0, 0);
             settings.AppSettings.ExportDays = WorkingDays.Where(x => x.IsChecked).Select(x => x.DayOfWeek).ToList();
             settings.AppSettings.StartOfWeek = (DayOfWeek)Enum.Parse(typeof(DayOfWeek), StartOfWeek, true);
-            settings.AppSettings.DefaultTimers = DefaultTimers.Split(',').SelectMany(x => x.Split(' ')).Where(x=>!string.IsNullOrWhiteSpace(x)).ToList();
+            settings.AppSettings.DefaultTimers = DefaultTimers.Split(',').SelectMany(x => x.Split(' ')).Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
 
             if (settings.AppSettings.UsageTracking != AllowTracking)
             {
@@ -228,7 +230,8 @@ namespace Gallifrey.UI.Modern.Models
             //Jira Settings
             if (settings.JiraConnectionSettings.JiraUrl != JiraUrl ||
                 settings.JiraConnectionSettings.JiraUsername != JiraUsername ||
-                settings.JiraConnectionSettings.JiraPassword != JiraPassword)
+                settings.JiraConnectionSettings.JiraPassword != JiraPassword ||
+                settings.JiraConnectionSettings.UseTempo != UseTempo)
             {
                 JiraSettingsChanged = true;
             }
@@ -240,6 +243,7 @@ namespace Gallifrey.UI.Modern.Models
             settings.JiraConnectionSettings.JiraUrl = JiraUrl;
             settings.JiraConnectionSettings.JiraUsername = JiraUsername;
             settings.JiraConnectionSettings.JiraPassword = JiraPassword;
+            settings.JiraConnectionSettings.UseTempo = UseTempo;
 
             //Export Settings
             settings.ExportSettings.ExportPrompt.OnAddIdle = ExportPrompts.First(x => x.Key == "Locked").IsChecked && !TrackingOnly;

@@ -1,11 +1,11 @@
-﻿using System;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Timers;
-using Gallifrey.Exceptions.JiraTimers;
+﻿using Gallifrey.Exceptions.JiraTimers;
 using Gallifrey.IdleTimers;
 using Gallifrey.Jira.Model;
 using Newtonsoft.Json;
+using System;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Timers;
 
 namespace Gallifrey.JiraTimers
 {
@@ -46,7 +46,7 @@ namespace Gallifrey.JiraTimers
             IsRunning = false;
             currentRunningTime = new Stopwatch();
             runningWatcher = new Timer(100);
-            runningWatcher.Elapsed += runningWatcherElapsed;
+            runningWatcher.Elapsed += RunningWatcherElapsed;
             LastJiraTimeCheck = lastJiraTimeCheck;
             LocalTimer = localTimer;
         }
@@ -68,7 +68,7 @@ namespace Gallifrey.JiraTimers
 
         }
 
-        private void runningWatcherElapsed(object sender, ElapsedEventArgs e)
+        private void RunningWatcherElapsed(object sender, ElapsedEventArgs e)
         {
             if (currentRunningTime.IsRunning)
             {
@@ -171,8 +171,12 @@ namespace Gallifrey.JiraTimers
             {
                 ManualAdjustment(exportedvsActual, true);
             }
+
+            LastJiraTimeCheck = DateTime.UtcNow;
+
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ExactCurrentTime"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TimeToExport"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LastJiraTimeCheck"));
         }
 
         public void AddJiraExportedTime(TimeSpan loggedTime)
@@ -203,7 +207,7 @@ namespace Gallifrey.JiraTimers
             }
 
             LastJiraTimeCheck = DateTime.UtcNow;
-            
+
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("JiraReference"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("JiraProjectName"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("JiraName"));
@@ -212,22 +216,6 @@ namespace Gallifrey.JiraTimers
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasParent"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LastJiraTimeCheck"));
         }
-
-        public void UpdateExportTimeFromJira(Issue jiraIssue, User currentUser)
-        {
-            if (jiraIssue == null) return;
-
-            LocalTimer = false;
-
-            SetJiraExportedTime(jiraIssue.GetCurrentLoggedTimeForDate(DateStarted, currentUser));
-
-            LastJiraTimeCheck = DateTime.UtcNow;
-
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ExactCurrentTime"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TimeToExport"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LastJiraTimeCheck"));
-        }
-
 
         public void UpdateLocalTimerDescription(string localTimerDescription)
         {

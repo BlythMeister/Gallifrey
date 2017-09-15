@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Authentication;
-using System.Threading.Tasks;
-using Gallifrey.AppTracking;
+﻿using Gallifrey.AppTracking;
 using Gallifrey.Comparers;
 using Gallifrey.Exceptions.JiraIntegration;
 using Gallifrey.Jira;
 using Gallifrey.Jira.Enum;
 using Gallifrey.Jira.Model;
 using Gallifrey.Settings;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Authentication;
+using System.Threading.Tasks;
 
 namespace Gallifrey.JiraIntegration
 {
@@ -17,7 +17,7 @@ namespace Gallifrey.JiraIntegration
     {
         void ReConnect(IJiraConnectionSettings newJiraConnectionSettings, IExportSettings newExportSettings);
         bool DoesJiraExist(string jiraRef);
-        Issue GetJiraIssue(string jiraRef, bool includeWorkLogs = false);
+        Issue GetJiraIssue(string jiraRef);
         IEnumerable<string> GetJiraFilters();
         IEnumerable<Issue> GetJiraIssuesFromFilter(string filterName);
         IEnumerable<Issue> GetJiraIssuesFromSearchText(string searchText);
@@ -26,13 +26,17 @@ namespace Gallifrey.JiraIntegration
         IEnumerable<Issue> GetJiraCurrentUserOpenIssues();
         IEnumerable<JiraProject> GetJiraProjects();
         IEnumerable<RecentJira> GetRecentJirasFound();
+        IEnumerable<StandardWorkLog> GetWorkLoggedForDates(IEnumerable<DateTime> queryDates);
+        IEnumerable<StandardWorkLog> GetWorkLoggedForDatesFilteredIssues(IEnumerable<DateTime> queryDates, IEnumerable<string> issueRefs);
         void UpdateCache();
         void AssignToCurrentUser(string jiraRef);
         User CurrentUser { get; }
         bool IsConnected { get; }
+        bool HasTempo { get; }
         void TransitionIssue(string jiraRef, string transition);
         IEnumerable<Status> GetTransitions(string jiraRef);
         event EventHandler LoggedIn;
+
     }
 
     public class JiraConnection : IJiraConnection
@@ -47,6 +51,7 @@ namespace Gallifrey.JiraIntegration
 
         public User CurrentUser { get; private set; }
         public bool IsConnected => jira != null;
+        public bool HasTempo => jira != null && jira.HasTempo;
         public event EventHandler LoggedIn;
 
         public JiraConnection(ITrackUsage trackUsage)
@@ -72,13 +77,17 @@ namespace Gallifrey.JiraIntegration
             {
                 try
                 {
-                    jira = JiraClientFactory.BuildJiraClient(jiraConnectionSettings.JiraUrl, jiraConnectionSettings.JiraUsername, jiraConnectionSettings.JiraPassword);
+                    jira = JiraClientFactory.BuildJiraClient(jiraConnectionSettings.JiraUrl, jiraConnectionSettings.JiraUsername, jiraConnectionSettings.JiraPassword, jiraConnectionSettings.UseTempo);
 
                     CurrentUser = jira.GetCurrentUser();
                     LoggedIn?.Invoke(this, null);
 
                     TrackingType trackingType;
-                    if (jira.GetType() == typeof(JiraRestClient))
+                    if (jira.GetType() == typeof(JiraRestClient) && jira.HasTempo)
+                    {
+                        trackingType = jiraConnectionSettings.JiraUrl.Contains(".atlassian.net") ? TrackingType.JiraConnectCloudRestWithTempo : TrackingType.JiraConnectSelfhostRestWithTempo;
+                    }
+                    else if (jira.GetType() == typeof(JiraRestClient))
                     {
                         trackingType = jiraConnectionSettings.JiraUrl.Contains(".atlassian.net") ? TrackingType.JiraConnectCloudRest : TrackingType.JiraConnectSelfhostRest;
                     }
@@ -122,12 +131,12 @@ namespace Gallifrey.JiraIntegration
             return false;
         }
 
-        public Issue GetJiraIssue(string jiraRef, bool includeWorkLogs = false)
+        public Issue GetJiraIssue(string jiraRef)
         {
             try
             {
                 CheckAndConnectJira();
-                var issue = includeWorkLogs ? jira.GetIssueWithWorklogs(jiraRef, CurrentUser.key) : jira.GetIssue(jiraRef);
+                var issue = jira.GetIssue(jiraRef);
 
                 recentJiraCollection.AddRecentJira(issue);
                 return issue;
@@ -248,6 +257,16 @@ namespace Gallifrey.JiraIntegration
         public IEnumerable<RecentJira> GetRecentJirasFound()
         {
             return recentJiraCollection.GetRecentJiraCollection();
+        }
+
+        public IEnumerable<StandardWorkLog> GetWorkLoggedForDates(IEnumerable<DateTime> queryDates)
+        {
+            return jira.GetWorkLoggedForDatesFilteredIssues(queryDates, null);
+        }
+
+        public IEnumerable<StandardWorkLog> GetWorkLoggedForDatesFilteredIssues(IEnumerable<DateTime> queryDates, IEnumerable<string> issueRefs)
+        {
+            return jira.GetWorkLoggedForDatesFilteredIssues(queryDates, issueRefs);
         }
 
         public void UpdateCache()

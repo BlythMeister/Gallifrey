@@ -1,15 +1,15 @@
-FRAMEWORK: NET46
+RESTRICTION: == net46
 NUGET
   remote: https://www.nuget.org/api/v2
     Atlassian.SDK (2.5)
-    Exceptionless (4.0.1934)
-    Exceptionless.Portable (4.0.1934)
-      Exceptionless (>= 4.0.1934)
-    Exceptionless.Windows (4.0.1934)
-      Exceptionless (4.0.1934)
-    Exceptionless.Wpf (4.0.1934)
-      Exceptionless (4.0.1934)
-    MahApps.Metro (1.5.0-alpha015)
-    MahApps.Metro.IconPacks.Modern (1.7.1)
-    Newtonsoft.Json (10.0.1)
+    Exceptionless (4.0.1955)
+    Exceptionless.Portable (4.0.1955)
+      Exceptionless (>= 4.0.1955)
+    Exceptionless.Windows (4.0.1955)
+      Exceptionless (4.0.1955)
+    Exceptionless.Wpf (4.0.1955)
+      Exceptionless (4.0.1955)
+    MahApps.Metro (1.6.0-alpha009)
+    MahApps.Metro.IconPacks.Modern (1.9)
+    Newtonsoft.Json (10.0.3)
     RestSharp (105.2.3)

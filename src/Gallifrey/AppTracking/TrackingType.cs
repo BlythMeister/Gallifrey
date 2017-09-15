@@ -21,6 +21,8 @@
         InformationShown,
         JiraConnectCloudRest,
         JiraConnectCloudSoap,
+        JiraConnectCloudRestWithTempo,
+        JiraConnectSelfhostRestWithTempo,
         JiraConnectSelfhostRest,
         JiraConnectSelfhostSoap,
         AutoUpdateInstalled,
@@ -29,6 +31,8 @@
         ExportAll,
         ShowRunningTimer,
         MultipleInstancesRunning,
-        SettingsMissing
+        SettingsMissing,
+        NoInternet,
+        ConnectionError
     }
 }

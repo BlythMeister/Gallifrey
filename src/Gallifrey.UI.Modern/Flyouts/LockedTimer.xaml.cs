@@ -291,7 +291,7 @@ namespace Gallifrey.UI.Modern.Flyouts
 
                 if (modelHelpers.Gallifrey.IdleTimerCollection.GetUnusedLockTimers().Any())
                 {
-                    modelHelpers.OpenFlyout(this);
+                    await modelHelpers.OpenFlyout(this);
                     DataModel.RefreshLockedTimers(modelHelpers.Gallifrey.IdleTimerCollection.GetUnusedLockTimers());
                 }
                 else
@@ -302,7 +302,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             }
             else
             {
-                modelHelpers.OpenFlyout(this);
+                await modelHelpers.OpenFlyout(this);
             }
         }
 

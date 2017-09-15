@@ -83,13 +83,25 @@ if(Test-Path "Output")
 .paket\paket.bootstrapper.exe --run restore
 if(-Not ($ENV:PATH -like "*MSBuild*"))
 {
-	if(Test-Path "${Env:ProgramFiles(x86)}\MSBuild\14.0\bin")
+	if(Test-Path "${Env:ProgramFiles(x86)}\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin")
 	{
-		$ENV:Path = $ENV:Path + ";${Env:ProgramFiles(x86)}\MSBuild\14.0\bin"
+		$ENV:Path = $ENV:Path + ";${Env:ProgramFiles(x86)}\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin"
+	}	
+    if(Test-Path "${Env:ProgramFiles(x86)}\Microsoft Visual Studio\2017\Professional\MSBuild\15.0\Bin")
+	{
+		$ENV:Path = $ENV:Path + ";${Env:ProgramFiles(x86)}\Microsoft Visual Studio\2017\Professional\MSBuild\15.0\Bin"
+	}	
+    if(Test-Path "${Env:ProgramFiles(x86)}\Microsoft Visual Studio\2017\Community\MSBuild\15.0\Bin")
+	{
+		$ENV:Path = $ENV:Path + ";${Env:ProgramFiles(x86)}\Microsoft Visual Studio\2017\Community\MSBuild\15.0\Bin"
+	}	
+    if(Test-Path "${Env:ProgramFiles(x86)}\Microsoft Visual Studio\2017\BuildTools\MSBuild\15.0\Bin")
+	{
+		$ENV:Path = $ENV:Path + ";${Env:ProgramFiles(x86)}\Microsoft Visual Studio\2017\BuildTools\MSBuild\15.0\Bin"
 	}
-	if(Test-Path "${Env:ProgramFiles(x86)}\MSBuild\14.0\bin")
+    if(Test-Path "${Env:ProgramFiles(x86)}\MSBuild\15.0\Bin")
 	{
-		$ENV:Path = $ENV:Path + ";${Env:ProgramFiles(x86)}\MSBuild\14.0\bin"
+		$ENV:Path = $ENV:Path + ";${Env:ProgramFiles(x86)}\MSBuild\15.0\Bin"
 	}
 }
 

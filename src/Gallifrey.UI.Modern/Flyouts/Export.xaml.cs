@@ -1,15 +1,16 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using Gallifrey.Exceptions.JiraIntegration;
+﻿using Gallifrey.Exceptions.JiraIntegration;
 using Gallifrey.Jira.Model;
 using Gallifrey.JiraTimers;
 using Gallifrey.UI.Modern.Helpers;
 using Gallifrey.UI.Modern.Models;
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace Gallifrey.UI.Modern.Flyouts
 {
@@ -40,47 +41,31 @@ namespace Gallifrey.UI.Modern.Flyouts
 
             DataContext = new ExportModel(timerToShow, exportTime, modelHelpers.Gallifrey.Settings.ExportSettings);
 
-            if (!skipJiraCheck)
+            if (!skipJiraCheck) //Previously loaded bulk export
             {
-                Issue jiraIssue = null;
-                var requireRefresh = !timerToShow.LastJiraTimeCheck.HasValue || timerToShow.LastJiraTimeCheck < DateTime.UtcNow.AddMinutes(-15);
-                var showError = false;
                 try
                 {
-                    var jiraDownloadResult = await progressDialogHelper.Do(() => modelHelpers.Gallifrey.JiraConnection.GetJiraIssue(timerToShow.JiraReference, requireRefresh), "Downloading Jira Work Logs To Ensure Accurate Export", true, false);
+                    var show = timerToShow;
+                    var jiraDownloadResult = await progressDialogHelper.Do(controller => UpdateTimerFromJira(show), "Downloading Jira Work Logs To Ensure Accurate Export", true, true);
 
                     switch (jiraDownloadResult.Status)
                     {
                         case ProgressResult.JiraHelperStatus.Cancelled:
                             modelHelpers.CloseFlyout(this);
                             return;
-                        case ProgressResult.JiraHelperStatus.Errored:
-                            showError = true;
-                            break;
                         case ProgressResult.JiraHelperStatus.Success:
-                            jiraIssue = jiraDownloadResult.RetVal;
+                            var returnVal = jiraDownloadResult.RetVal;
+                            timerToShow = returnVal.Item1;
+                            DataModel.UpdateTimer(returnVal.Item1, returnVal.Item2);
                             break;
                     }
                 }
-                catch (Exception)
+                catch (ExportException ex)
                 {
-                    showError = true;
-                }
-
-                if (showError)
-                {
-                    await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Unable To Locate Jira", $"Unable To Locate Jira {timerToShow.JiraReference}!\nCannot Export Time\nPlease Verify/Correct Jira Reference");
+                    await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Unable To Locate Jira", ex.Message);
                     modelHelpers.CloseFlyout(this);
                     return;
                 }
-
-                if (requireRefresh)
-                {
-                    modelHelpers.Gallifrey.JiraTimerCollection.RefreshFromJira(timerToShow.UniqueId, jiraIssue, modelHelpers.Gallifrey.JiraConnection.CurrentUser);
-                    timerToShow = modelHelpers.Gallifrey.JiraTimerCollection.GetTimer(timerToShow.UniqueId);
-                }
-
-                DataModel.UpdateTimer(timerToShow, jiraIssue);
             }
 
             if (timerToShow.FullyExported)
@@ -98,6 +83,43 @@ namespace Gallifrey.UI.Modern.Flyouts
             }
 
             await modelHelpers.OpenFlyout(this);
+        }
+
+        private Tuple<JiraTimer, Issue> UpdateTimerFromJira(JiraTimer timerToShow)
+        {
+            Issue jiraIssue;
+            try
+            {
+                jiraIssue = modelHelpers.Gallifrey.JiraConnection.GetJiraIssue(timerToShow.JiraReference);
+            }
+            catch (Exception)
+            {
+                throw new ExportException($"Unable To Locate Jira {timerToShow.JiraReference}!\nCannot Export Time\nPlease Verify/Correct Jira Reference");
+            }
+
+            if (!timerToShow.LastJiraTimeCheck.HasValue || timerToShow.LastJiraTimeCheck < DateTime.UtcNow.AddMinutes(-5))
+            {
+                IEnumerable<StandardWorkLog> logs;
+                try
+                {
+                    logs = modelHelpers.Gallifrey.JiraConnection.GetWorkLoggedForDatesFilteredIssues(new List<DateTime> { timerToShow.DateStarted }, new List<string> { timerToShow.JiraReference });
+                }
+                catch (Exception)
+                {
+                    throw new ExportException($"Unable To Get WorkLogs For Jira {timerToShow.JiraReference}!\nCannot Export Time");
+                }
+
+                var time = TimeSpan.Zero;
+                foreach (var standardWorkLog in logs.Where(x => x.JiraRef == timerToShow.JiraReference && x.LoggedDate.Date == timerToShow.DateStarted.Date))
+                {
+                    time = time.Add(standardWorkLog.TimeSpent);
+                }
+                modelHelpers.Gallifrey.JiraTimerCollection.RefreshFromJira(timerToShow.UniqueId, jiraIssue, time);
+                var newTimerToShow = modelHelpers.Gallifrey.JiraTimerCollection.GetTimer(timerToShow.UniqueId);
+                return new Tuple<JiraTimer, Issue>(newTimerToShow, jiraIssue);
+            }
+
+            return new Tuple<JiraTimer, Issue>(timerToShow, jiraIssue);
         }
 
         private async void ExportButton(object sender, RoutedEventArgs e)
@@ -225,6 +247,13 @@ namespace Gallifrey.UI.Modern.Flyouts
                     DataModel.ChangeStatus = false;
                     Focus();
                 }
+            }
+        }
+
+        private class ExportException : Exception
+        {
+            public ExportException(string message) : base(message)
+            {
             }
         }
     }

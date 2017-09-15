@@ -1,3 +1,8 @@
+using Gallifrey.Comparers;
+using Gallifrey.ExtensionMethods;
+using Gallifrey.Jira.Model;
+using Gallifrey.UI.Modern.Helpers;
+using Gallifrey.Versions;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -5,10 +10,6 @@ using System.ComponentModel;
 using System.Linq;
 using System.Timers;
 using System.Windows;
-using Gallifrey.Comparers;
-using Gallifrey.ExtensionMethods;
-using Gallifrey.UI.Modern.Helpers;
-using Gallifrey.Versions;
 
 namespace Gallifrey.UI.Modern.Models
 {
@@ -50,7 +51,7 @@ namespace Gallifrey.UI.Modern.Models
         public string ExportTarget => ModelHelpers.Gallifrey.Settings.AppSettings.GetTargetThisWeek().FormatAsString(false);
         public string ExportedTargetTotalMinutes => ModelHelpers.Gallifrey.Settings.AppSettings.GetTargetThisWeek().TotalMinutes.ToString();
 
-        public string VersionName => ModelHelpers.Gallifrey.VersionControl.UpdateInstalled ? "NEW VERSION AVALIABLE" : ModelHelpers.Gallifrey.VersionControl.VersionName.ToUpper();
+        public string VersionName => ModelHelpers.Gallifrey.VersionControl.UpdateInstalled ? "NEW VERSION AVAILABLE" : ModelHelpers.Gallifrey.VersionControl.VersionName.ToUpper();
         public bool HasUpdate => ModelHelpers.Gallifrey.VersionControl.UpdateInstalled;
 
         public bool HasInactiveTime => !string.IsNullOrWhiteSpace(InactiveMinutes);
@@ -193,6 +194,7 @@ namespace Gallifrey.UI.Modern.Models
             var workingDays = ModelHelpers.Gallifrey.Settings.AppSettings.ExportDays.ToList();
             var workingDate = DateTime.Now.AddDays((ModelHelpers.Gallifrey.Settings.AppSettings.KeepTimersForDays - 1) * -1).Date;
             var validTimerDates = new List<DateTime>();
+            var jiraCache = new List<Issue>();
 
             while (workingDate.Date <= DateTime.Now.Date)
             {
@@ -237,27 +239,30 @@ namespace Gallifrey.UI.Modern.Models
                     dateModel.RemoveTimerModel(removeTimer);
                 }
 
-                if (!dateModel.Timers.Any())
+                foreach (var defaultJira in ModelHelpers.Gallifrey.Settings.AppSettings.DefaultTimers ?? new List<string>())
                 {
-                    foreach (var defaultJira in ModelHelpers.Gallifrey.Settings.AppSettings.DefaultTimers ?? new List<string>())
+                    if (!dateModel.Timers.Any(x => x.JiraTimer.JiraReference == defaultJira) && dateModel.TimerDate.Date <= DateTime.Now.Date)
                     {
-                        if (!dateModel.Timers.Any(x => x.JiraTimer.JiraReference == defaultJira))
+                        try
                         {
-                            try
+                            var jira = jiraCache.FirstOrDefault(x => x.key == defaultJira);
+                            if (jira == null && ModelHelpers.Gallifrey.JiraConnection.IsConnected)
                             {
-                                var jira = ModelHelpers.Gallifrey.JiraConnection.GetJiraIssue(defaultJira);
-                                if (jira != null)
-                                {
-                                    var timerId = ModelHelpers.Gallifrey.JiraTimerCollection.AddTimer(jira, timerDate.Date, TimeSpan.Zero, false);
-                                    var timer = ModelHelpers.Gallifrey.JiraTimerCollection.GetTimer(timerId);
-                                    timer.PropertyChanged += (sender, args) => TimerChanged();
-                                    dateModel.AddTimerModel(new TimerModel(timer));
-                                }
+                                jira = ModelHelpers.Gallifrey.JiraConnection.GetJiraIssue(defaultJira);
+                                jiraCache.Add(jira);
                             }
-                            catch (Exception)
+
+                            if (jira != null)
                             {
-                                // ignored
+                                var timerId = ModelHelpers.Gallifrey.JiraTimerCollection.AddTimer(jira, timerDate.Date, TimeSpan.Zero, false);
+                                var timer = ModelHelpers.Gallifrey.JiraTimerCollection.GetTimer(timerId);
+                                timer.PropertyChanged += (sender, args) => TimerChanged();
+                                dateModel.AddTimerModel(new TimerModel(timer));
                             }
+                        }
+                        catch (Exception)
+                        {
+                            // ignored
                         }
                     }
                 }
