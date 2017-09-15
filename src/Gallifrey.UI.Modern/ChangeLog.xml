@@ -196,5 +196,10 @@
     </Bugs>
     <Others />
   </Version>
+    <Version Number="3.6.0.1" Name="Pre-Release">
+    <Features />
+    <Bugs />
+    <Others />
+  </Version>
 </Versions>
 
