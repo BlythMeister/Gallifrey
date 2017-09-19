@@ -9,6 +9,7 @@ NUGET
       Exceptionless (4.0.1955)
     Exceptionless.Wpf (4.0.1955)
       Exceptionless (4.0.1955)
+    FAKE (4.63.2)
     MahApps.Metro (1.6.0-alpha009)
     MahApps.Metro.IconPacks.Modern (1.9)
     Newtonsoft.Json (10.0.3)

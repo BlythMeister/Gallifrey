@@ -5,6 +5,7 @@ nuget Atlassian.SDK @= 2.5.0
 nuget Exceptionless.Portable
 nuget Exceptionless.Windows
 nuget Exceptionless.Wpf
+nuget FAKE
 nuget MahApps.Metro prerelease
 nuget MahApps.Metro.IconPacks.Modern
 nuget Newtonsoft.Json
