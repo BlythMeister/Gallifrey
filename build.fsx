@@ -14,7 +14,7 @@ let branchName = match isAppVeyor with
                  | _ -> getBranchName currentDirectory
                  
 let isPR = match isAppVeyor with
-           | true-> not(string.IsNullOrWhiteSpace(AppVeyorEnvironment.PullRequestNumber))
+           | true-> not(String.IsNullOrWhiteSpace(AppVeyorEnvironment.PullRequestNumber))
            | _ -> false
                  
 let isStable = not(isPR) && branchName = "master"
