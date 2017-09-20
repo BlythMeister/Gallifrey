@@ -93,7 +93,7 @@ Target "Publish" (fun _ ->
 
     let publishRelease (releaseType:string) = 
         let sourceRoot = outputDir @@ releaseType
-        let destinationRoot = releasesRepo @@ "download" @@ "modern-temp" @@ (releaseType.ToLower())
+        let destinationRoot = releasesRepo @@ "download" @@ "modern" @@ (releaseType.ToLower())
         ensureDirectory destinationRoot
         File.Copy(sourceRoot @@ (sprintf "Gallifrey.UI.Modern.%s.application" releaseType), destinationRoot @@ (sprintf "Gallifrey.UI.Modern.%s.application" releaseType), true)
 
