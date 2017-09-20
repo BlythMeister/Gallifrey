@@ -86,32 +86,33 @@ Target "Package" (fun _ ->
 )
 
 Target "Publish" (fun _ ->
-    //let publishRelease (releaseType:string) = 
-    //    let sourceRoot = outputDir @@ releaseType
-    //    let destinationRoot = currentDirectory @@ "Releases" @@ "download" @@ "modern-temp" @@ (releaseType.ToLower())
-    //    ensureDirectory destinationRoot
-    //    File.Copy(sourceRoot @@ (sprintf "Gallifrey.UI.Modern.%s.application" releaseType), destinationRoot @@ (sprintf "Gallifrey.UI.Modern.%s.application" releaseType), true)
+    let publishRelease (releaseType:string) = 
+        let sourceRoot = outputDir @@ releaseType
+        let destinationRoot = currentDirectory @@ "Releases" @@ "download" @@ "modern-temp" @@ (releaseType.ToLower())
+        ensureDirectory destinationRoot
+        File.Copy(sourceRoot @@ (sprintf "Gallifrey.UI.Modern.%s.application" releaseType), destinationRoot @@ (sprintf "Gallifrey.UI.Modern.%s.application" releaseType), true)
 
-    //    let destinationFiles = destinationRoot @@ "Application Files"
-    //    ensureDirectory destinationFiles
-    //    Directory.GetDirectories(sourceRoot @@ "Application Files")
-    //    |> Seq.map(fun x -> new DirectoryInfo(x))
-    //    |> Seq.iter(fun x -> Directory.Move(x.FullName, destinationFiles @@ x.Name))
+        let destinationFiles = destinationRoot @@ "Application Files"
+        ensureDirectory destinationFiles
+        Directory.GetDirectories(sourceRoot @@ "Application Files")
+        |> Seq.map(fun x -> new DirectoryInfo(x))
+        |> Seq.iter(fun x -> Directory.Move(x.FullName, destinationFiles @@ x.Name))
     
-    //let releasesRepo = outputDir @@ "Releases"
-    //DeleteDir releasesRepo |> ignore
-    //cloneSingleBranch outputDir "git@github.com:BlythMeister/Gallifrey.Releases.git" "master" "Releases"
-
-    //publishRelease "Alpha"
-    //if isBeta then publishRelease "Beta"
-    //if isStable then publishRelease "Stable"
-
-    //StageAll releasesRepo
-    //Commit releasesRepo (sprintf "Publish - %s" versionNumber)
-    //push releasesRepo
-
+    
     PushArtifacts (Directory.GetFiles(outputDir, "*.zip", SearchOption.TopDirectoryOnly))
     PushArtifacts (Directory.GetFiles(outputDir, "*.exe", SearchOption.TopDirectoryOnly))
+    
+    let releasesRepo = outputDir @@ "Releases"
+    DeleteDir releasesRepo |> ignore
+    cloneSingleBranch outputDir "https://github.com/BlythMeister/Gallifrey.Releases.git" "master" "Releases"
+
+    publishRelease "Alpha"
+    if isBeta then publishRelease "Beta"
+    if isStable then publishRelease "Stable"
+
+    StageAll releasesRepo
+    Commit releasesRepo (sprintf "Publish - %s" versionNumber)
+    push releasesRepo    
 )
 
 Target "Default" DoNothing
