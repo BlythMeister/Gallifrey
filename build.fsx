@@ -12,10 +12,14 @@ let changeLogPath = currentDirectory @@ "src" @@ "Gallifrey.UI.Modern" @@ "Chang
 let branchName = match isAppVeyor with
                  | true-> AppVeyorEnvironment.RepoBranch
                  | _ -> getBranchName currentDirectory
-
-let isStable = branchName = "master"
-let isBeta = isStable || branchName = "release"
-let isAlpha = isBeta || branchName = "develop"
+                 
+let isPR = match isAppVeyor with
+           | true-> not(AppVeyorEnvironment.PullRequestNumber = "")
+           | _ -> false
+                 
+let isStable = not(isPR) && branchName = "master"
+let isBeta = not(isPR) && (isStable || branchName = "release")
+let isAlpha = not(isPR) && (isBeta || branchName = "develop")
 
 printfn "Running On Branch: %s" branchName
 
