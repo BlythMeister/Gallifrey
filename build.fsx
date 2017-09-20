@@ -98,13 +98,13 @@ Target "Publish" (fun _ ->
 
         let destinationFiles = destinationRoot @@ "Application Files"
         ensureDirectory destinationFiles
-        let preCount = Directory.GetDirectories(destinationFiles).Count()
+        let preCount = Directory.GetDirectories(destinationFiles) |> Seq.length
         
         Directory.GetDirectories(sourceRoot @@ "Application Files")
         |> Seq.map(fun x -> new DirectoryInfo(x))
         |> Seq.iter(fun x -> Directory.Move(x.FullName, destinationFiles @@ x.Name))
         
-        let postCount = Directory.GetDirectories(destinationFiles).Count()
+        let postCount = Directory.GetDirectories(destinationFiles) |> Seq.length
 
         if postCount > preCount then
             StageAll releasesRepo
