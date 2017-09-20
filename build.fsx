@@ -14,6 +14,8 @@ let branchName = getBranchName currentDirectory
 let isStable = branchName = "master"
 let isBeta = isStable || branchName = "develop"
 
+printfn "Running On Branch: %s" branchName
+
 let baseVersion = match isAppVeyor with
                   | true -> AppVeyorEnvironment.BuildVersion.Substring(0, AppVeyorEnvironment.BuildVersion.LastIndexOf("."))
                   | _ -> "0.0.0"
