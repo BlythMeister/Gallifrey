@@ -111,7 +111,7 @@ Target "Publish" (fun _ ->
             Commit releasesRepo (sprintf "Publish %s - %s" releaseType versionNumber)
             
             if isStable then
-                pushTag currentDirectory origin baseVersion
+                pushTag currentDirectory "origin" baseVersion
 
     if isAlpha then publishRelease "Alpha"
     if isBeta then publishRelease "Beta"
