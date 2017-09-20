@@ -95,6 +95,7 @@ Target "Publish" (fun _ ->
     let releasesRepo = outputDir @@ "Releases"
     DeleteDir releasesRepo |> ignore
 
+    setEnableProcessTracing false
     let authKey = environVar "access_token"
     cloneSingleBranch outputDir (sprintf "https://%s:x-oauth-basic@github.com/BlythMeister/Gallifrey.Releases.git" authKey) "master" "Releases"
     directRunGitCommandAndFail releasesRepo "config --global user.email \"publish@gallifreyapp.co.uk\""
@@ -128,6 +129,8 @@ Target "Publish" (fun _ ->
     if isStable then publishRelease "Stable"
 
     pushBranch releasesRepo "origin" "master"
+    
+    setEnableProcessTracing true
 )
 
 Target "Default" DoNothing
