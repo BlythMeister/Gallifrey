@@ -91,7 +91,9 @@ Target "Package" (fun _ ->
 Target "Publish" (fun _ ->
     PushArtifacts (Directory.GetFiles(outputDir, "*.zip", SearchOption.TopDirectoryOnly))
     PushArtifacts (Directory.GetFiles(outputDir, "*.exe", SearchOption.TopDirectoryOnly))
+)
 
+Target "Release" (fun _ ->
     let releasesRepo = outputDir @@ "Releases"
     DeleteDir releasesRepo |> ignore
 
@@ -136,7 +138,8 @@ Target "Default" DoNothing
     ==> "VersionUpdate"
     ==> "Build"
     ==> "Package"
-    =?> ("Publish", isAppVeyor && (isAlpha || isBeta || isStable))
+    =?> ("Publish", isAppVeyor)
+    =?> ("Release", isAppVeyor && (isAlpha || isBeta || isStable))
     ==> "Default"
 
 RunParameterTargetOrDefault "target" "Default"
