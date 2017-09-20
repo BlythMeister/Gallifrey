@@ -30,9 +30,9 @@
     <ErrorReportUrl>https://github.com/BlythMeister/Gallifrey</ErrorReportUrl>
     <ProductName>Gallifrey %28Beta%29</ProductName>
     <PublisherName>Gallifrey</PublisherName>
-    <MinimumRequiredVersion>3.6.0.0</MinimumRequiredVersion>
+    <MinimumRequiredVersion>0.0.0.0</MinimumRequiredVersion>
     <ApplicationRevision>25</ApplicationRevision>
-    <ApplicationVersion>3.6.0.0</ApplicationVersion>
+    <ApplicationVersion>0.0.0.0</ApplicationVersion>
     <UseApplicationTrust>true</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -137,7 +137,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Gallifrey.UI.Modern\Gallifrey.UI.Modern.csproj">
       <Project>{e3d0aa93-144a-4d2d-a41b-8d29e01d4566}</Project>
-      <Name>Gallifrey.UI</Name>
+      <Name>Gallifrey.UI.Modern</Name>
     </ProjectReference>
     <ProjectReference Include="..\Gallifrey\Gallifrey.csproj">
       <Project>{4C344D86-4086-4F87-BD0F-4F8E23610CD7}</Project>
