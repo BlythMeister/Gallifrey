@@ -67,6 +67,7 @@ Target "Package" (fun _ ->
         let source = srcDir @@ (sprintf "Gallifrey.UI.Modern.%s" releaseType) @@ "bin" @@ "Release" @@ "app.publish"
         let destination = outputDir @@ releaseType
         Directory.Move(source, destination)
+        CreateZip destination (outputDir @@ (sprintf "%s.zip" releaseType)) "" DefaultZipLevel false (Directory.GetFiles(destination, "*.*", SearchOption.AllDirectories))
 
     moveArtifacts "Alpha"
 
@@ -104,7 +105,8 @@ Target "Publish" (fun _ ->
     //Commit releasesRepo (sprintf "Publish - %s" versionNumber)
     //push releasesRepo
 
-    PushArtifacts (Directory.GetFiles(outputDir, "*.*", SearchOption.AllDirectories))
+    PushArtifacts (Directory.GetFiles(outputDir, "*.zip", SearchOption.TopDirectoryOnly))
+    PushArtifacts (Directory.GetFiles(outputDir, "*.exe", SearchOption.TopDirectoryOnly))
 )
 
 Target "Default" DoNothing
