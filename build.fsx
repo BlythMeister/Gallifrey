@@ -10,7 +10,10 @@ let outputDir = currentDirectory @@ "Output"
 let srcDir = currentDirectory @@ "src"
 let isAppVeyor = buildServer = AppVeyor
 let changeLogPath = currentDirectory @@ "src" @@ "Gallifrey.UI.Modern" @@ "ChangeLog.xml"
-let branchName = getBranchName currentDirectory
+let branchName = match isAppVeyor with
+                 | true-> AppVeyorEnvironment.RepoBranch
+                 | _ -> getBranchName currentDirectory
+
 let isStable = branchName = "master"
 let isBeta = isStable || branchName = "develop"
 
