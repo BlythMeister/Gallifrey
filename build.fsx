@@ -36,17 +36,13 @@ Target "Clean" (fun _ ->
 )
 
 Target "VersionUpdate" (fun _ ->
-
-
     BulkReplaceAssemblyInfoVersions "src/" (fun f -> { f with AssemblyVersion = versionNumber; AssemblyInformationalVersion = versionNumber; AssemblyFileVersion = versionNumber })
+        
+    File.WriteAllText(changeLogPath, File.ReadAllText(changeLogPath).Replace("<Version Number=\"0.0.0.0\" Name=\"Pre-Release\">", (sprintf "<Version Number=\"%s\" Name=\"Pre-Release\">" versionNumber)))
 
-    
-    if isAppVeyor then
-        File.WriteAllText(changeLogPath, File.ReadAllText(changeLogPath).Replace("<Version Number=\"0.0.0.0\" Name=\"Pre-Release\">", (sprintf "<Version Number=\"%s\" Name=\"Pre-Release\">" versionNumber)))
-
-        Directory.GetFiles(srcDir, "*proj", SearchOption.AllDirectories)
-        |> Seq.iter(fun x -> File.WriteAllText(x, File.ReadAllText(x).Replace("<MinimumRequiredVersion>0.0.0.0</MinimumRequiredVersion>", (sprintf "<MinimumRequiredVersion>%s</MinimumRequiredVersion>" versionNumber))
-                                                                     .Replace("<ApplicationVersion>0.0.0.0</ApplicationVersion>", (sprintf "<ApplicationVersion>%s</ApplicationVersion>" versionNumber))))
+    Directory.GetFiles(srcDir, "*proj", SearchOption.AllDirectories)
+    |> Seq.iter(fun x -> File.WriteAllText(x, File.ReadAllText(x).Replace("<MinimumRequiredVersion>0.0.0.0</MinimumRequiredVersion>", (sprintf "<MinimumRequiredVersion>%s</MinimumRequiredVersion>" versionNumber))
+                                                                 .Replace("<ApplicationVersion>0.0.0.0</ApplicationVersion>", (sprintf "<ApplicationVersion>%s</ApplicationVersion>" versionNumber))))
 )
 
 Target "Build" (fun _ ->
@@ -61,10 +57,6 @@ Target "Build" (fun _ ->
                              }
 
     build setParams (srcDir @@ "Gallifrey.sln")
-)
-
-Target "Test" (fun _ ->
-    printfn "There are no tests to run yet...."
 )
 
 Target "Package" (fun _ ->
@@ -86,6 +78,16 @@ Target "Package" (fun _ ->
 )
 
 Target "Publish" (fun _ ->
+    PushArtifacts (Directory.GetFiles(outputDir, "*.zip", SearchOption.TopDirectoryOnly))
+    PushArtifacts (Directory.GetFiles(outputDir, "*.exe", SearchOption.TopDirectoryOnly))
+
+    let releasesRepo = outputDir @@ "Releases"
+    DeleteDir releasesRepo |> ignore
+
+    cloneSingleBranch outputDir "https://github.com/BlythMeister/Gallifrey.Releases.git" "master" "Releases"
+    fireAndForgetGitCommand releasesRepo "config --global user.email \"publish@gallifreyapp.co.uk\""
+    fireAndForgetGitCommand releasesRepo "config --global user.name \"Gallifrey Auto Publish\""
+
     let publishRelease (releaseType:string) = 
         let sourceRoot = outputDir @@ releaseType
         let destinationRoot = currentDirectory @@ "Releases" @@ "download" @@ "modern-temp" @@ (releaseType.ToLower())
@@ -97,21 +99,14 @@ Target "Publish" (fun _ ->
         Directory.GetDirectories(sourceRoot @@ "Application Files")
         |> Seq.map(fun x -> new DirectoryInfo(x))
         |> Seq.iter(fun x -> Directory.Move(x.FullName, destinationFiles @@ x.Name))
-    
-    
-    PushArtifacts (Directory.GetFiles(outputDir, "*.zip", SearchOption.TopDirectoryOnly))
-    PushArtifacts (Directory.GetFiles(outputDir, "*.exe", SearchOption.TopDirectoryOnly))
-    
-    let releasesRepo = outputDir @@ "Releases"
-    DeleteDir releasesRepo |> ignore
-    cloneSingleBranch outputDir "https://github.com/BlythMeister/Gallifrey.Releases.git" "master" "Releases"
+
+        StageAll releasesRepo
+        Commit releasesRepo (sprintf "Publish %s - %s" releaseType versionNumber)
 
     publishRelease "Alpha"
     if isBeta then publishRelease "Beta"
     if isStable then publishRelease "Stable"
 
-    StageAll releasesRepo
-    Commit releasesRepo (sprintf "Publish - %s" versionNumber)
     push releasesRepo    
 )
 
@@ -120,7 +115,6 @@ Target "Default" DoNothing
 "Clean"
     ==> "VersionUpdate"
     ==> "Build"
-    ==> "Test"
     ==> "Package"
     =?> ("Publish", isAppVeyor)
     ==> "Default"
