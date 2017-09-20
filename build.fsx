@@ -15,7 +15,8 @@ let branchName = match isAppVeyor with
                  | _ -> getBranchName currentDirectory
 
 let isStable = branchName = "master"
-let isBeta = isStable || branchName = "develop"
+let isBeta = isStable || branchName = "release"
+let isAlpha = isBeta || branchName = "develop"
 
 printfn "Running On Branch: %s" branchName
 
@@ -66,13 +67,14 @@ Target "Package" (fun _ ->
         Directory.Move(source, destination)
         CreateZip destination (outputDir @@ (sprintf "%s.zip" releaseType)) "" DefaultZipLevel false (Directory.GetFiles(destination, "*.*", SearchOption.AllDirectories))
 
-    moveArtifacts "Alpha"
+    if isAlpha then
+        moveArtifacts "Alpha"
 
-    if isBeta then 
+    if isBeta then
         moveArtifacts "Beta"
         File.Copy(outputDir @@ "Beta" @@ "setup.exe", outputDir @@ "beta-setup.exe")
 
-    if isStable then 
+    if isStable then
         moveArtifacts "Stable"
         File.Copy(outputDir @@ "Stable" @@ "setup.exe", outputDir @@ "stable-setup.exe")
 )
@@ -88,7 +90,6 @@ Target "Publish" (fun _ ->
     cloneSingleBranch outputDir (sprintf "https://%s:x-oauth-basic@github.com/BlythMeister/Gallifrey.Releases.git" authKey) "master" "Releases"
     directRunGitCommandAndFail releasesRepo "config --global user.email \"publish@gallifreyapp.co.uk\""
     directRunGitCommandAndFail releasesRepo "config --global user.name \"Gallifrey Auto Publish\""
-    
 
     let publishRelease (releaseType:string) = 
         let sourceRoot = outputDir @@ releaseType
@@ -105,7 +106,7 @@ Target "Publish" (fun _ ->
         StageAll releasesRepo
         Commit releasesRepo (sprintf "Publish %s - %s" releaseType versionNumber)
 
-    publishRelease "Alpha"
+    if isAlpha then publishRelease "Alpha"
     if isBeta then publishRelease "Beta"
     if isStable then publishRelease "Stable"
 
@@ -118,7 +119,7 @@ Target "Default" DoNothing
     ==> "VersionUpdate"
     ==> "Build"
     ==> "Package"
-    =?> ("Publish", isAppVeyor)
+    =?> ("Publish", isAppVeyor && (isAlpha || isBeta || isStable))
     ==> "Default"
 
 RunParameterTargetOrDefault "target" "Default"
