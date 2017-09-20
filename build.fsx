@@ -69,37 +69,42 @@ Target "Package" (fun _ ->
         Directory.Move(source, destination)
 
     moveArtifacts "Alpha"
-    moveArtifacts "Beta"
-    moveArtifacts "Stable"
 
-    File.Copy(outputDir @@ "Stable" @@ "setup.exe", outputDir @@ "stable-setup.exe")
-    File.Copy(outputDir @@ "Beta" @@ "setup.exe", outputDir @@ "beta-setup.exe")
+    if isBeta then 
+        moveArtifacts "Beta"
+        File.Copy(outputDir @@ "Beta" @@ "setup.exe", outputDir @@ "beta-setup.exe")
+
+    if isStable then 
+        moveArtifacts "Stable"
+        File.Copy(outputDir @@ "Stable" @@ "setup.exe", outputDir @@ "stable-setup.exe")
 )
 
 Target "Publish" (fun _ ->
-    let publishRelease (releaseType:string) = 
-        let sourceRoot = outputDir @@ releaseType
-        let destinationRoot = currentDirectory @@ "Releases" @@ "download" @@ "modern-temp" @@ (releaseType.ToLower())
-        ensureDirectory destinationRoot
-        File.Copy(sourceRoot @@ (sprintf "Gallifrey.UI.Modern.%s.application" releaseType), destinationRoot @@ (sprintf "Gallifrey.UI.Modern.%s.application" releaseType), true)
+    //let publishRelease (releaseType:string) = 
+    //    let sourceRoot = outputDir @@ releaseType
+    //    let destinationRoot = currentDirectory @@ "Releases" @@ "download" @@ "modern-temp" @@ (releaseType.ToLower())
+    //    ensureDirectory destinationRoot
+    //    File.Copy(sourceRoot @@ (sprintf "Gallifrey.UI.Modern.%s.application" releaseType), destinationRoot @@ (sprintf "Gallifrey.UI.Modern.%s.application" releaseType), true)
 
-        let destinationFiles = destinationRoot @@ "Application Files"
-        ensureDirectory destinationFiles
-        Directory.GetDirectories(sourceRoot @@ "Application Files")
-        |> Seq.map(fun x -> new DirectoryInfo(x))
-        |> Seq.iter(fun x -> Directory.Move(x.FullName, destinationFiles @@ x.Name))
+    //    let destinationFiles = destinationRoot @@ "Application Files"
+    //    ensureDirectory destinationFiles
+    //    Directory.GetDirectories(sourceRoot @@ "Application Files")
+    //    |> Seq.map(fun x -> new DirectoryInfo(x))
+    //    |> Seq.iter(fun x -> Directory.Move(x.FullName, destinationFiles @@ x.Name))
     
-    let releasesRepo = outputDir @@ "Releases"
-    DeleteDir releasesRepo |> ignore
-    cloneSingleBranch outputDir "git@github.com:BlythMeister/Gallifrey.Releases.git" "master" "Releases"
+    //let releasesRepo = outputDir @@ "Releases"
+    //DeleteDir releasesRepo |> ignore
+    //cloneSingleBranch outputDir "git@github.com:BlythMeister/Gallifrey.Releases.git" "master" "Releases"
 
-    publishRelease "Alpha"
-    if isBeta then publishRelease "Beta"
-    if isStable then publishRelease "Stable"
+    //publishRelease "Alpha"
+    //if isBeta then publishRelease "Beta"
+    //if isStable then publishRelease "Stable"
 
-    StageAll releasesRepo
-    Commit releasesRepo (sprintf "Publish - %s" versionNumber)
-    push releasesRepo
+    //StageAll releasesRepo
+    //Commit releasesRepo (sprintf "Publish - %s" versionNumber)
+    //push releasesRepo
+
+    PushArtifact (fun p -> { p with  Path = outputDir })
 )
 
 Target "Release" (fun _ ->
@@ -114,7 +119,6 @@ Target "Default" DoNothing
     ==> "Test"
     ==> "Package"
     =?> ("Publish", isAppVeyor)
-    =?> ("Release", isAppVeyor && isStable)
     ==> "Default"
 
 RunParameterTargetOrDefault "target" "Default"
