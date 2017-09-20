@@ -3,6 +3,7 @@
 open Fake
 open Fake.Git
 open Fake.AppVeyor
+open System
 open System.IO
 
 let outputDir = currentDirectory @@ "Output"
@@ -14,7 +15,7 @@ let branchName = match isAppVeyor with
                  | _ -> getBranchName currentDirectory
                  
 let isPR = match isAppVeyor with
-           | true-> not(String.IsNullOrWhiteSpace(AppVeyorEnvironment.PullRequestNumber))
+           | true-> not(String.IsNullOrWhiteSpace AppVeyorEnvironment.PullRequestNumber)
            | _ -> false
                  
 let isStable = not(isPR) && branchName = "master"
