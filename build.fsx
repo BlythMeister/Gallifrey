@@ -22,6 +22,7 @@ let isBeta = not(isPR) && (isStable || branchName = "release")
 let isAlpha = not(isPR) && (isBeta || branchName = "develop")
 
 printfn "Running On Branch: %s" branchName
+printfn "PR Number: %s" AppVeyorEnvironment.PullRequestNumber
 
 let baseVersion = match isAppVeyor with
                   | true -> AppVeyorEnvironment.BuildVersion.Substring(0, AppVeyorEnvironment.BuildVersion.LastIndexOf("."))
