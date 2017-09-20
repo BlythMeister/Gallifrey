@@ -19,18 +19,25 @@ Target "Clean" (fun _ ->
 Target "VersionUpdate" (fun _ ->
     let baseVersion = match isAppVeyor with
                       | true -> AppVeyorEnvironment.BuildVersion.Substring(0, AppVeyorEnvironment.BuildVersion.LastIndexOf("."))
-                      | _ -> "3.6.0"
+                      | _ -> "0.0.0"
 
     let buildNumber = match isAppVeyor with
                       | true -> AppVeyorEnvironment.BuildNumber
-                      | _ -> "6"
+                      | _ -> "0"
 
     let versionNumber = match branchName with
                         | "master" -> sprintf "%s.0" baseVersion                        
                         | _ -> sprintf "%s.%s" baseVersion buildNumber
 
     BulkReplaceAssemblyInfoVersions "src/" (fun f -> { f with AssemblyVersion = versionNumber; AssemblyInformationalVersion = versionNumber; AssemblyFileVersion = versionNumber })
-    File.WriteAllText(changeLogPath, File.ReadAllText(changeLogPath).Replace("<Version Number=\"0.0.0.0\" Name=\"Pre-Release\">", (sprintf "<Version Number=\"%s\" Name=\"Pre-Release\">" versionNumber)))
+
+    
+    if isAppVeyor then
+        File.WriteAllText(changeLogPath, File.ReadAllText(changeLogPath).Replace("<Version Number=\"0.0.0.0\" Name=\"Pre-Release\">", (sprintf "<Version Number=\"%s\" Name=\"Pre-Release\">" versionNumber)))
+
+        Directory.GetFiles(srcDir, "*proj", SearchOption.AllDirectories)
+        |> Seq.iter(fun x -> File.WriteAllText(x, File.ReadAllText(x).Replace("<MinimumRequiredVersion>0.0.0.0</MinimumRequiredVersion>", (sprintf "<MinimumRequiredVersion>%s</MinimumRequiredVersion>" versionNumber))
+                                                                     .Replace("<ApplicationVersion>0.0.0.0</ApplicationVersion>", (sprintf "<ApplicationVersion>%s</ApplicationVersion>" versionNumber))))
 )
 
 Target "Build" DoNothing
