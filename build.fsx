@@ -104,11 +104,7 @@ Target "Publish" (fun _ ->
     //Commit releasesRepo (sprintf "Publish - %s" versionNumber)
     //push releasesRepo
 
-    PushArtifact (fun p -> { p with  Path = outputDir })
-)
-
-Target "Release" (fun _ ->
-    printfn "Create GitHub Release here..."
+    PushArtifacts (Directory.GetFiles(outputDir, "*.*", SearchOption.AllDirectories))
 )
 
 Target "Default" DoNothing
