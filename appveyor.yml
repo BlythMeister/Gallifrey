@@ -1,0 +1,7 @@
+version: '3.6.0.{build}'
+skip_tags: true
+image: Visual Studio 2017
+clone_folder: c:\project\gallifrey
+build_script:
+- build.cmd
+test: off
