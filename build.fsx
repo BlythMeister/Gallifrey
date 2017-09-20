@@ -84,9 +84,11 @@ Target "Publish" (fun _ ->
     let releasesRepo = outputDir @@ "Releases"
     DeleteDir releasesRepo |> ignore
 
-    cloneSingleBranch outputDir "https://github.com/BlythMeister/Gallifrey.Releases.git" "master" "Releases"
+    let authKey = environVar "access_token"
+    cloneSingleBranch outputDir (sprintf "https://%s:x-oauth-basic@github.com/BlythMeister/Gallifrey.Releases.git" authKey) "master" "Releases"
     directRunGitCommandAndFail releasesRepo "config --global user.email \"publish@gallifreyapp.co.uk\""
     directRunGitCommandAndFail releasesRepo "config --global user.name \"Gallifrey Auto Publish\""
+    
 
     let publishRelease (releaseType:string) = 
         let sourceRoot = outputDir @@ releaseType
