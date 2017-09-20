@@ -5,3 +5,6 @@ clone_folder: c:\project\gallifrey
 build_script:
 - build.cmd
 test: off
+environment:
+  access_token:
+    secure: cBjCd4Q0pww6q7jKVN/LDBSHTMzmB+77vLQ9j4yq/KneIQi74rl6TgB4+5X7sd9w
