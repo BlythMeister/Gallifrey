@@ -1,9 +1,8 @@
-open Fake.AppVeyor
-
-#r    @"packages/FAKE/tools/FakeLib.dll"
+#r @"packages/FAKE/tools/FakeLib.dll"
 
 open Fake
 open Fake.Git
+open Fake.AppVeyor
 open System.IO
 
 let outputDir = currentDirectory @@ "Output"
@@ -99,12 +98,20 @@ Target "Publish" (fun _ ->
 
         let destinationFiles = destinationRoot @@ "Application Files"
         ensureDirectory destinationFiles
+        let preCount = Directory.GetDirectories(destinationFiles).Count()
+        
         Directory.GetDirectories(sourceRoot @@ "Application Files")
         |> Seq.map(fun x -> new DirectoryInfo(x))
         |> Seq.iter(fun x -> Directory.Move(x.FullName, destinationFiles @@ x.Name))
+        
+        let postCount = Directory.GetDirectories(destinationFiles).Count()
 
-        StageAll releasesRepo
-        Commit releasesRepo (sprintf "Publish %s - %s" releaseType versionNumber)
+        if postCount > preCount then
+            StageAll releasesRepo
+            Commit releasesRepo (sprintf "Publish %s - %s" releaseType versionNumber)
+            
+            if isStable then
+                pushTag currentDirectory origin baseVersion
 
     if isAlpha then publishRelease "Alpha"
     if isBeta then publishRelease "Beta"
