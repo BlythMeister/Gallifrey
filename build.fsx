@@ -85,12 +85,12 @@ Target "Publish" (fun _ ->
     DeleteDir releasesRepo |> ignore
 
     cloneSingleBranch outputDir "https://github.com/BlythMeister/Gallifrey.Releases.git" "master" "Releases"
-    fireAndForgetGitCommand releasesRepo "config --global user.email \"publish@gallifreyapp.co.uk\""
-    fireAndForgetGitCommand releasesRepo "config --global user.name \"Gallifrey Auto Publish\""
+    directRunGitCommandAndFail releasesRepo "config --global user.email \"publish@gallifreyapp.co.uk\""
+    directRunGitCommandAndFail releasesRepo "config --global user.name \"Gallifrey Auto Publish\""
 
     let publishRelease (releaseType:string) = 
         let sourceRoot = outputDir @@ releaseType
-        let destinationRoot = currentDirectory @@ "Releases" @@ "download" @@ "modern-temp" @@ (releaseType.ToLower())
+        let destinationRoot = releasesRepo @@ "download" @@ "modern-temp" @@ (releaseType.ToLower())
         ensureDirectory destinationRoot
         File.Copy(sourceRoot @@ (sprintf "Gallifrey.UI.Modern.%s.application" releaseType), destinationRoot @@ (sprintf "Gallifrey.UI.Modern.%s.application" releaseType), true)
 
@@ -107,7 +107,7 @@ Target "Publish" (fun _ ->
     if isBeta then publishRelease "Beta"
     if isStable then publishRelease "Stable"
 
-    push releasesRepo    
+    pushBranch releasesRepo "origin" "master"
 )
 
 Target "Default" DoNothing
