@@ -132,13 +132,19 @@ Target "Publish-Release" (fun _ ->
             
             StageAll releasesRepo
             Commit releasesRepo (sprintf "Publish %s - %s" releaseType versionNumber)
-            if isStable then pushTag currentDirectory "origin" baseVersion
+            true
+        else
+            false
                            
-    if isAlpha then publishRelease "Alpha"
-    if isBeta then publishRelease "Beta"
-    if isStable then publishRelease "Stable"
+    let publishedAlpha = if isAlpha then publishRelease "Alpha" else false
+    let publishedBeta = if isBeta then publishRelease "Beta" else false
+    let publishedStable = if isStable then publishRelease "Stable" else false
 
-    pushBranch releasesRepo "origin" "master"   
+    if publishedAlpha || publishedBeta || publishedStable then
+        pushBranch releasesRepo "origin" "master"   
+        if isStable then 
+            tag currentDirectory baseVersion
+            pushTag currentDirectory "origin" baseVersion
 )
 
 Target "Default" DoNothing
