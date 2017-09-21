@@ -120,13 +120,13 @@ Target "Publish-Release" (fun _ ->
         | true, "Beta" -> CleanDir destinationAppFilesRoot
         | _, _ -> ensureDirectory destinationAppFilesRoot 
        
-        let destinationAppFiles = destinationAppFilesRoot @@ (sprintf "Gallifrey.UI.Modern.Alpha_%s" (versionNumber.Replace(".","_")))
+        let destinationAppFiles = destinationAppFilesRoot @@ (sprintf "Gallifrey.UI.Modern.%s_%s" releaseType (versionNumber.Replace(".","_")))
 
         if not(Directory.Exists destinationAppFiles) then
             printfn "Publish Relase Type: %s" releaseType
             let sourceRoot = outputDir @@ releaseType
 
-            let sourceAppFiles = sourceRoot @@ "Application Files" @@ (sprintf "Gallifrey.UI.Modern.Alpha_%s" (versionNumber.Replace(".","_")))
+            let sourceAppFiles = sourceRoot @@ "Application Files" @@ (sprintf "Gallifrey.UI.Modern.%s_%s" releaseType (versionNumber.Replace(".","_")))
             File.Copy(sourceRoot @@ (sprintf "Gallifrey.UI.Modern.%s.application" releaseType), destinationRoot @@ (sprintf "Gallifrey.UI.Modern.%s.application" releaseType), true)
             Directory.Move(sourceAppFiles, destinationAppFiles)
             
