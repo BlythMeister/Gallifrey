@@ -204,5 +204,12 @@
       <Other>Automated build and deplpyment setup</Other>
     </Others>
   </Version>
+  <Version Number="3.6.2.0">
+    <Features />
+    <Bugs />
+    <Others>
+      <Other>Deployment setup changes</Other>
+    </Others>
+  </Version>
 </Versions>
 
