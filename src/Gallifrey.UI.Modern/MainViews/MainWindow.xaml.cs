@@ -26,10 +26,10 @@ namespace Gallifrey.UI.Modern.MainViews
         private readonly ModelHelpers modelHelpers;
         private readonly ExceptionlessHelper exceptionlessHelper;
         private readonly ProgressDialogHelper progressDialogHelper;
+        private readonly Timer flyoutOpenCheck;
         private MainViewModel ViewModel => (MainViewModel)DataContext;
         private bool machineLocked;
         private bool machineIdle;
-        private Timer flyoutOpenCheck;
 
         public MainWindow(InstanceType instance)
         {
@@ -363,16 +363,20 @@ namespace Gallifrey.UI.Modern.MainViews
                     {
                         if (modelHelpers.FlyoutOpen)
                         {
-                            this.FlashWindow();
-                            WindowState = WindowState.Normal;
-                            Activate();
+                            if (!Topmost)
+                            {
+                                this.FlashWindow();
+                                WindowState = WindowState.Normal;
+                                Activate();
+                            }
+
+                            Topmost = true;
                         }
                         else
                         {
                             this.StopFlashingWindow();
+                            Topmost = false;
                         }
-
-                        Topmost = modelHelpers.FlyoutOpen;
                     }
                     else
                     {
@@ -589,7 +593,7 @@ namespace Gallifrey.UI.Modern.MainViews
 
         private void MainWindow_StateChange(object sender, EventArgs e)
         {
-            if (Topmost && WindowState == WindowState.Minimized)
+            if (modelHelpers.Gallifrey.Settings.UiSettings.TopMostOnFlyoutOpen && modelHelpers.FlyoutOpen && WindowState == WindowState.Minimized)
             {
                 WindowState = WindowState.Normal;
             }
