@@ -101,14 +101,16 @@ Target "Publish-Release" (fun _ ->
     let releasesRepo = outputDir @@ "Releases"
 
     //Hide process tracing so the access token doesn't show
-    printfn "Downloading Releases Repo from GitHub"
+    
+    cloneSingleBranch outputDir "https://github.com/BlythMeister/Gallifrey.Releases.git" "master" "Releases"
+    
     enableProcessTracing <- false
     let authKey = environVar "access_token"
-    cloneSingleBranch outputDir (sprintf "https://%s:x-oauth-basic@github.com/BlythMeister/Gallifrey.Releases.git" authKey) "master" "Releases"
-    enableProcessTracing <- true
-
+    directRunGitCommandAndFail currentDirectory (sprintf "remote set-url origin https://%s:x-oauth-basic@github.com/BlythMeister/Gallifrey.Releases.git" authKey)
+    directRunGitCommandAndFail releasesRepo (sprintf "remote set-url origin https://%s:x-oauth-basic@github.com/BlythMeister/Gallifrey.Releases.git" authKey)
     directRunGitCommandAndFail releasesRepo "config --global user.email \"publish@gallifreyapp.co.uk\""
     directRunGitCommandAndFail releasesRepo "config --global user.name \"Gallifrey Auto Publish\""
+    enableProcessTracing <- true    
 
     let publishRelease (releaseType:string) =         
         let destinationRoot = releasesRepo @@ "download" @@ "modern" @@ (releaseType.ToLower())
