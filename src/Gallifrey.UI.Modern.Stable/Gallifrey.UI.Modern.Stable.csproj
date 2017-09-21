@@ -30,9 +30,9 @@
     <ErrorReportUrl>https://github.com/BlythMeister/Gallifrey</ErrorReportUrl>
     <ProductName>Gallifrey</ProductName>
     <PublisherName>Gallifrey</PublisherName>
-    <MinimumRequiredVersion>3.6.0.0</MinimumRequiredVersion>
+    <MinimumRequiredVersion>0.0.0.0</MinimumRequiredVersion>
     <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>3.6.0.0</ApplicationVersion>
+    <ApplicationVersion>0.0.0.0</ApplicationVersion>
     <UseApplicationTrust>true</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -137,7 +137,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Gallifrey.UI.Modern\Gallifrey.UI.Modern.csproj">
       <Project>{e3d0aa93-144a-4d2d-a41b-8d29e01d4566}</Project>
-      <Name>Gallifrey.UI</Name>
+      <Name>Gallifrey.UI.Modern</Name>
     </ProjectReference>
     <ProjectReference Include="..\Gallifrey\Gallifrey.csproj">
       <Project>{4C344D86-4086-4F87-BD0F-4F8E23610CD7}</Project>
@@ -217,6 +217,22 @@
   <Choose>
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.6'">
       <ItemGroup>
+        <Reference Include="ControlzEx">
+          <HintPath>..\..\packages\ControlzEx\lib\net45\ControlzEx.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+        <Reference Include="System.Windows.Interactivity">
+          <HintPath>..\..\packages\ControlzEx\lib\net45\System.Windows.Interactivity.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
+  <Choose>
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.6'">
+      <ItemGroup>
         <Reference Include="Exceptionless">
           <HintPath>..\..\packages\Exceptionless\lib\net45\Exceptionless.dll</HintPath>
           <Private>True</Private>
@@ -252,11 +268,6 @@
       <ItemGroup>
         <Reference Include="MahApps.Metro">
           <HintPath>..\..\packages\MahApps.Metro\lib\net45\MahApps.Metro.dll</HintPath>
-          <Private>True</Private>
-          <Paket>True</Paket>
-        </Reference>
-        <Reference Include="System.Windows.Interactivity">
-          <HintPath>..\..\packages\MahApps.Metro\lib\net45\System.Windows.Interactivity.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>

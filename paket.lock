@@ -2,6 +2,7 @@ RESTRICTION: == net46
 NUGET
   remote: https://www.nuget.org/api/v2
     Atlassian.SDK (2.5)
+    ControlzEx (3.0.2.4)
     Exceptionless (4.0.1955)
     Exceptionless.Portable (4.0.1955)
       Exceptionless (>= 4.0.1955)
@@ -9,7 +10,9 @@ NUGET
       Exceptionless (4.0.1955)
     Exceptionless.Wpf (4.0.1955)
       Exceptionless (4.0.1955)
-    MahApps.Metro (1.6.0-alpha009)
-    MahApps.Metro.IconPacks.Modern (1.9)
+    FAKE (4.63.2)
+    MahApps.Metro (1.6.0-alpha016)
+      ControlzEx (> 3.0.1 < 4.0)
+    MahApps.Metro.IconPacks.Modern (1.9.1)
     Newtonsoft.Json (10.0.3)
     RestSharp (105.2.3)
