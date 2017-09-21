@@ -1,10 +1,16 @@
-version: '3.6.0.{build}'
+version: '3.6.1.{build}'
+environment:
+  access_token:
+    secure: cBjCd4Q0pww6q7jKVN/LDBSHTMzmB+77vLQ9j4yq/KneIQi74rl6TgB4+5X7sd9w
 skip_tags: true
 image: Visual Studio 2017
 clone_folder: c:\project\gallifrey
 build_script:
-- build.cmd
+- cmd: build.cmd
 test: off
-environment:
-  access_token:
-    secure: cBjCd4Q0pww6q7jKVN/LDBSHTMzmB+77vLQ9j4yq/KneIQi74rl6TgB4+5X7sd9w
+deploy: off
+notifications:
+- provider: GitHubPullRequest
+  on_build_success: true
+  on_build_failure: true
+  on_build_status_changed: true
