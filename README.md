@@ -2,6 +2,7 @@ Gallifrey
 =========
 
 [![Gitter](https://img.shields.io/badge/Gitter-Join%20Chat-green.svg?style=flat)](https://gitter.im/BlythMeister/Gallifrey)
+[![Build status](https://ci.appveyor.com/api/projects/status/r7pncss5a8qg3jj0/branch/master?svg=true)](https://ci.appveyor.com/project/BlythMeister/gallifrey/branch/master)
 [![Release](https://img.shields.io/github/release/BlythMeister/Gallifrey.svg?style=flat)](https://github.com/BlythMeister/Gallifrey/releases/latest)
 [![Issues](https://img.shields.io/github/issues/BlythMeister/Gallifrey.svg?style=flat)](https://github.com/BlythMeister/Gallifrey/issues)
 [![Twitter Follow](https://img.shields.io/twitter/follow/GallifreyApp.svg?style=social?style=flat)](https://twitter.com/GallifreyApp)
@@ -16,7 +17,7 @@ Downloads
 Gallifrey has a beta and stable version of the app.
 **Please note**, the Beta is the current work in progress & I cannot guarantee that it is 100% stable! 
 
-###Download Links
+### Download Links
 
 **Installing on Windows 8+ will alert with SmartScreen, you should be able to "Run Anyway" until I can afford a proper certificate, there is no way around this!  After a couple of runs, the warning should stop**
 
