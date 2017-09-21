@@ -200,8 +200,8 @@
     <Features />
     <Bugs />
     <Others>
-      <Other>Dependency date</Other>
-      <Other>Automated build and deplpyment setup</Other>
+      <Other>Dependency update</Other>
+      <Other>Automated build and deployment setup</Other>
     </Others>
   </Version>
   <Version Number="3.6.2.0">
