@@ -204,5 +204,10 @@
       <Other>Automated build and deplpyment setup</Other>
     </Others>
   </Version>
+  <Version Number="0.0.0.0" Name="Pre-Release">
+    <Features />
+    <Bugs />
+    <Others/>
+  </Version>
 </Versions>
 
