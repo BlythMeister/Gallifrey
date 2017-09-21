@@ -101,14 +101,16 @@ Target "Publish-Release" (fun _ ->
     let releasesRepo = outputDir @@ "Releases"
 
     //Hide process tracing so the access token doesn't show
-    printfn "Downloading Releases Repo from GitHub"
+    
+    cloneSingleBranch outputDir "https://github.com/BlythMeister/Gallifrey.Releases.git" "master" "Releases"
+    
     enableProcessTracing <- false
     let authKey = environVar "access_token"
-    cloneSingleBranch outputDir (sprintf "https://%s:x-oauth-basic@github.com/BlythMeister/Gallifrey.Releases.git" authKey) "master" "Releases"
-    enableProcessTracing <- true
-
+    directRunGitCommandAndFail currentDirectory (sprintf "remote set-url origin https://%s:x-oauth-basic@github.com/BlythMeister/Gallifrey.Releases.git" authKey)
+    directRunGitCommandAndFail releasesRepo (sprintf "remote set-url origin https://%s:x-oauth-basic@github.com/BlythMeister/Gallifrey.Releases.git" authKey)
     directRunGitCommandAndFail releasesRepo "config --global user.email \"publish@gallifreyapp.co.uk\""
     directRunGitCommandAndFail releasesRepo "config --global user.name \"Gallifrey Auto Publish\""
+    enableProcessTracing <- true    
 
     let publishRelease (releaseType:string) =         
         let destinationRoot = releasesRepo @@ "download" @@ "modern" @@ (releaseType.ToLower())
@@ -132,13 +134,19 @@ Target "Publish-Release" (fun _ ->
             
             StageAll releasesRepo
             Commit releasesRepo (sprintf "Publish %s - %s" releaseType versionNumber)
-            if isStable then pushTag currentDirectory "origin" baseVersion
+            true
+        else
+            false
                            
-    if isAlpha then publishRelease "Alpha"
-    if isBeta then publishRelease "Beta"
-    if isStable then publishRelease "Stable"
+    let publishedAlpha = if isAlpha then publishRelease "Alpha" else false
+    let publishedBeta = if isBeta then publishRelease "Beta" else false
+    let publishedStable = if isStable then publishRelease "Stable" else false
 
-    pushBranch releasesRepo "origin" "master"   
+    if publishedAlpha || publishedBeta || publishedStable then
+        pushBranch releasesRepo "origin" "master"   
+        if isStable then 
+            tag currentDirectory baseVersion
+            pushTag currentDirectory "origin" baseVersion
 )
 
 Target "Default" DoNothing
