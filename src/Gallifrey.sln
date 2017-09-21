@@ -27,8 +27,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{11E6F1E6
 		..\appveyor.yml = ..\appveyor.yml
 		..\build.cmd = ..\build.cmd
 		..\build.fsx = ..\build.fsx
-		..\Build.ps1 = ..\Build.ps1
-		..\CopyOutputToReleasesRepo.ps1 = ..\CopyOutputToReleasesRepo.ps1
 	EndProjectSection
 EndProject
 Global

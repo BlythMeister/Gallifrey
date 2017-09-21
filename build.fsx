@@ -106,7 +106,7 @@ Target "Publish-Release" (fun _ ->
     
     enableProcessTracing <- false
     let authKey = environVar "access_token"
-    directRunGitCommandAndFail currentDirectory (sprintf "remote set-url origin https://%s:x-oauth-basic@github.com/BlythMeister/Gallifrey.Releases.git" authKey)
+    directRunGitCommandAndFail currentDirectory (sprintf "remote set-url origin https://%s:x-oauth-basic@github.com/BlythMeister/Gallifrey.git" authKey)
     directRunGitCommandAndFail releasesRepo (sprintf "remote set-url origin https://%s:x-oauth-basic@github.com/BlythMeister/Gallifrey.Releases.git" authKey)
     directRunGitCommandAndFail releasesRepo "config --global user.email \"publish@gallifreyapp.co.uk\""
     directRunGitCommandAndFail releasesRepo "config --global user.name \"Gallifrey Auto Publish\""
@@ -120,6 +120,8 @@ Target "Publish-Release" (fun _ ->
         match isStable, releaseType with
         | true, "Alpha" 
         | true, "Beta" -> CleanDir destinationAppFilesRoot
+                          StageAll releasesRepo
+                          Commit releasesRepo (sprintf "Clean %s - Due to Stable Release" releaseType)
         | _, _ -> ensureDirectory destinationAppFilesRoot 
        
         let destinationAppFiles = destinationAppFilesRoot @@ (sprintf "Gallifrey.UI.Modern.%s_%s" releaseType (versionNumber.Replace(".","_")))
