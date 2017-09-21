@@ -177,7 +177,7 @@
       <Bug>Correct back colour on flyouts</Bug>
     </Bugs>
     <Others />
-  </Version> 
+  </Version>
   <Version Number="3.6.0.0">
     <Features>
       <Feature>Add internet connection check before login to Jira</Feature>
@@ -196,10 +196,13 @@
     </Bugs>
     <Others />
   </Version>
-    <Version Number="0.0.0.0" Name="Pre-Release">
+  <Version Number="0.0.0.0" Name="Pre-Release">
     <Features />
     <Bugs />
-    <Others />
+    <Others>
+      <Other>Dependency date</Other>
+      <Other>Automated build and deplpyment setup</Other>
+    </Others>
   </Version>
 </Versions>
 
