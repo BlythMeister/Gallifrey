@@ -222,6 +222,7 @@
     <Features />
     <Bugs>
       <Bug>Fix issue with TopMost for flyouts</Bug>
+      <Bug>Fix issue with saving user if connection couldn't be made</Bug>
     </Bugs>
     <Others/>
   </Version>

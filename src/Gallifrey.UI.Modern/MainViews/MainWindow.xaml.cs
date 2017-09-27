@@ -206,7 +206,7 @@ namespace Gallifrey.UI.Modern.MainViews
 
                 try
                 {
-                    await progressDialogHelper.Do(() => modelHelpers.Gallifrey.SaveSettings(true, false), "Checking Jira Credentials", false, false);
+                    await progressDialogHelper.Do(() => modelHelpers.Gallifrey.SaveSettings(true, false), "Checking Jira Credentials", false, true);
 
                     if (jiraSettings.UseTempo && !modelHelpers.Gallifrey.JiraConnection.HasTempo)
                     {

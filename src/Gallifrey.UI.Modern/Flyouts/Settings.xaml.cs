@@ -31,7 +31,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                 if (DataModel.JiraSettingsChanged)
                 {
                     var trackingOptOut = DataModel.TrackingOptOut;
-                    await progressDialogHelper.Do(() => modelHelpers.Gallifrey.SaveSettings(true, trackingOptOut), "Checking Jira Credentials", false, false);
+                    await progressDialogHelper.Do(() => modelHelpers.Gallifrey.SaveSettings(true, trackingOptOut), "Checking Jira Credentials", false, true);
                 }
                 else
                 {
