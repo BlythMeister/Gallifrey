@@ -228,7 +228,9 @@
   </Version>
   <Version Number="0.0.0.0" Name="Pre-Release">
     <Features />
-    <Bugs/>
+    <Bugs>
+      <Bug>Fix issue with usage tracking</Bug>
+    </Bugs>
     <Others/>
   </Version>
 </Versions>

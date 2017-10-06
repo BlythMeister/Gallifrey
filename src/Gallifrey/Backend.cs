@@ -142,7 +142,7 @@ namespace Gallifrey
 
                 if (settingsCollection.InternalSettings.LastHeartbeatTracked.Date < DateTime.UtcNow.Date)
                 {
-                    if (versionControl.IsAutomatedDeploy)
+                    if (versionControl.IsAutomatedDeploy && jiraConnection.IsConnected)
                     {
                         DailyTrackingEvent?.Invoke(this, null);
                         trackUsage.TrackAppUsage(TrackingType.DailyHearbeat);
