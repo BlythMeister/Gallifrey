@@ -2,7 +2,6 @@ using System;
 using System.Deployment.Application;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Gallifrey.AppTracking;
 
 namespace Gallifrey.Versions
 {
@@ -18,13 +17,14 @@ namespace Gallifrey.Versions
         Task<UpdateResult> CheckForUpdates(bool manualCheck = false);
         void ManualReinstall();
         event EventHandler NewVersionInstalled;
+        event EventHandler<bool> UpdateCheckOccured;
     }
 
     public class VersionControl : IVersionControl
     {
         public event EventHandler NewVersionInstalled;
+        public event EventHandler<bool> UpdateCheckOccured;
 
-        private readonly ITrackUsage trackUsage;
         public InstanceType InstanceType { get; }
         public string VersionName { get; private set; }
         public string AppName { get; }
@@ -36,9 +36,8 @@ namespace Gallifrey.Versions
         public Version DeployedVersion => UpdateInstalled ? ApplicationDeployment.CurrentDeployment.UpdatedVersion : ApplicationDeployment.CurrentDeployment.CurrentVersion;
         public bool IsFirstRun => ApplicationDeployment.CurrentDeployment.IsFirstRun;
 
-        public VersionControl(InstanceType instanceType, ITrackUsage trackUsage)
+        public VersionControl(InstanceType instanceType)
         {
-            this.trackUsage = trackUsage;
             InstanceType = instanceType;
             lastUpdateCheck = DateTime.MinValue;
 
@@ -75,11 +74,12 @@ namespace Gallifrey.Versions
 
             if (manualCheck)
             {
-                trackUsage.TrackAppUsage(TrackingType.UpdateCheckManual);
+                UpdateCheckOccured?.Invoke(this, true);
             }
             else
             {
-                trackUsage.TrackAppUsage(TrackingType.UpdateCheck);
+                UpdateCheckOccured?.Invoke(this, false);
+
             }
             lastUpdateCheck = DateTime.UtcNow;
 

@@ -230,6 +230,7 @@
     <Features />
     <Bugs>
       <Bug>Fix issue with usage tracking</Bug>
+      <Bug>Prevent usage tracking on custom/debug installs</Bug>
     </Bugs>
     <Others/>
   </Version>

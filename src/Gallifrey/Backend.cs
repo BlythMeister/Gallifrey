@@ -74,8 +74,10 @@ namespace Gallifrey
         public Backend(InstanceType instanceType)
         {
             settingsCollection = SettingsCollectionSerializer.DeSerialize();
-            trackUsage = new TrackUsage(settingsCollection, instanceType);
-            versionControl = new VersionControl(instanceType, trackUsage);
+            versionControl = new VersionControl(instanceType);
+            trackUsage = new TrackUsage(versionControl, settingsCollection, instanceType);
+            versionControl.UpdateCheckOccured += (sender, b) => trackUsage.TrackAppUsage(b ? TrackingType.UpdateCheckManual : TrackingType.UpdateCheck);
+
             jiraTimerCollection = new JiraTimerCollection(settingsCollection, trackUsage);
             jiraTimerCollection.exportPrompt += OnExportPromptEvent;
             jiraConnection = new JiraConnection(trackUsage);

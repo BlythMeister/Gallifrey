@@ -1,7 +1,6 @@
 ﻿using Gallifrey.Settings;
 using Gallifrey.Versions;
 using System;
-using System.Deployment.Application;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -14,12 +13,14 @@ namespace Gallifrey.AppTracking
 
     public class TrackUsage : ITrackUsage
     {
+        private readonly IVersionControl versionControl;
         private readonly ISettingsCollection settingsCollection;
         private readonly InstanceType instanceType;
         private WebBrowser webBrowser;
 
-        public TrackUsage(ISettingsCollection settingsCollection, InstanceType instanceType)
+        public TrackUsage(IVersionControl versionControl, ISettingsCollection settingsCollection, InstanceType instanceType)
         {
+            this.versionControl = versionControl;
             this.settingsCollection = settingsCollection;
             this.instanceType = instanceType;
             SetupBrowser();
@@ -28,7 +29,7 @@ namespace Gallifrey.AppTracking
 
         private bool IsTrackingEnabled(TrackingType trackingType)
         {
-            return settingsCollection.AppSettings.UsageTracking || trackingType == TrackingType.DailyHearbeat;
+            return versionControl.IsAutomatedDeploy && (settingsCollection.AppSettings.UsageTracking || trackingType == TrackingType.DailyHearbeat);
         }
 
         private void SetupBrowser()
