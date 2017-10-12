@@ -226,7 +226,7 @@
     </Bugs>
     <Others/>
   </Version>
-  <Version Number="0.0.0.0" Name="Pre-Release">
+  <Version Number="3.6.5.0">
     <Features />
     <Bugs>
       <Bug>Fix issue with usage tracking</Bug>
@@ -235,5 +235,13 @@
     </Bugs>
     <Others/>
   </Version>
+  <!--
+  Template for VNext if not present above
+  <Version Number="0.0.0.0" Name="Pre-Release">
+    <Features />
+    <Bugs />
+    <Others/>
+  </Version>
+  -->
 </Versions>
 

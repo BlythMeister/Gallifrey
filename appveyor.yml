@@ -1,4 +1,4 @@
-version: '3.6.4.{build}'
+version: '3.6.5.{build}'
 environment:
   access_token:
     secure: cBjCd4Q0pww6q7jKVN/LDBSHTMzmB+77vLQ9j4yq/KneIQi74rl6TgB4+5X7sd9w
