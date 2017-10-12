@@ -231,6 +231,7 @@
     <Bugs>
       <Bug>Fix issue with usage tracking</Bug>
       <Bug>Prevent usage tracking on custom/debug installs</Bug>
+      <Bug>Allow background update checking when machine is locked, but do not auto restart</Bug>
     </Bugs>
     <Others/>
   </Version>

@@ -445,10 +445,7 @@ namespace Gallifrey.UI.Modern.MainViews
         {
             Dispatcher.Invoke(() =>
             {
-                if (!machineLocked && !modelHelpers.FlyoutOpen)
-                {
-                    PerformUpdate(false, false);
-                }
+                PerformUpdate(false, false);
             });
         }
 
@@ -484,7 +481,7 @@ namespace Gallifrey.UI.Modern.MainViews
                     }
                     else
                     {
-                        if (modelHelpers.Gallifrey.Settings.AppSettings.AutoUpdate)
+                        if (modelHelpers.Gallifrey.Settings.AppSettings.AutoUpdate && !machineLocked && !modelHelpers.FlyoutOpen)
                         {
                             modelHelpers.CloseApp(true);
                             modelHelpers.Gallifrey.TrackEvent(TrackingType.AutoUpdateInstalled);
