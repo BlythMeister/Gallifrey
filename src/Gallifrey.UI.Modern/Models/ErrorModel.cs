@@ -10,9 +10,10 @@ namespace Gallifrey.UI.Modern.Models
         public string EmailAddress { get; set; }
         public string Description { get; set; }
 
-        public ErrorModel(Event exceptionlessEvent)
+        public ErrorModel(Event exceptionlessEvent, string initialEmailAddress)
         {
             ExceptionlessEvent = exceptionlessEvent;
+            EmailAddress = initialEmailAddress;
         }
 
         public void SetUserDetailsInEvent()

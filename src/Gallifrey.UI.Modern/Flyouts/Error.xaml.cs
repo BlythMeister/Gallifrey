@@ -1,9 +1,9 @@
-﻿using System.Windows;
-using Exceptionless;
+﻿using Exceptionless;
 using Exceptionless.Models;
 using Gallifrey.UI.Modern.Helpers;
 using Gallifrey.UI.Modern.Models;
 using MahApps.Metro.Controls.Dialogs;
+using System.Windows;
 
 namespace Gallifrey.UI.Modern.Flyouts
 {
@@ -16,7 +16,12 @@ namespace Gallifrey.UI.Modern.Flyouts
         {
             this.modelHelpers = modelHelpers;
             InitializeComponent();
-            DataContext = new ErrorModel(exceptionlessEvent);
+            var initialEmailAddress = string.Empty;
+            if (modelHelpers.Gallifrey.JiraConnection.IsConnected && !string.IsNullOrWhiteSpace(modelHelpers.Gallifrey.JiraConnection.CurrentUser.emailAddress))
+            {
+                initialEmailAddress = modelHelpers.Gallifrey.JiraConnection.CurrentUser.emailAddress;
+            }
+            DataContext = new ErrorModel(exceptionlessEvent, initialEmailAddress);
         }
 
         private async void SendReport(object sender, RoutedEventArgs e)

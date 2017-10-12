@@ -1,9 +1,10 @@
 ﻿using Exceptionless;
+using Exceptionless.Models.Data;
 using Gallifrey.Settings;
-using Gallifrey.UI.Modern.Flyouts;
 using Gallifrey.Versions;
 using System;
 using System.Windows;
+using Error = Gallifrey.UI.Modern.Flyouts.Error;
 
 namespace Gallifrey.UI.Modern.Helpers
 {
@@ -20,10 +21,31 @@ namespace Gallifrey.UI.Modern.Helpers
 
         public void RegisterExceptionless()
         {
+            var userInfo = new UserInfo(modelHelpers.Gallifrey.Settings.InstallationHash, "Unknown");
+            if (modelHelpers.Gallifrey.JiraConnection.IsConnected)
+            {
+                if (!string.IsNullOrWhiteSpace(modelHelpers.Gallifrey.JiraConnection.CurrentUser.displayName))
+                {
+                    userInfo.Name = modelHelpers.Gallifrey.JiraConnection.CurrentUser.displayName;
+                }
+                else if (!string.IsNullOrWhiteSpace(modelHelpers.Gallifrey.JiraConnection.CurrentUser.name))
+                {
+                    userInfo.Name = modelHelpers.Gallifrey.JiraConnection.CurrentUser.name;
+                }
+                else
+                {
+                    userInfo.Name = modelHelpers.Gallifrey.Settings.JiraConnectionSettings.JiraUsername;
+                }
+            }
+            else
+            {
+                userInfo.Name = modelHelpers.Gallifrey.Settings.JiraConnectionSettings.JiraUsername;
+            }
+
             ExceptionlessClient.Default.Unregister();
             ExceptionlessClient.Default.Configuration.ApiKey = ConfigKeys.ExceptionlessApiKey;
             ExceptionlessClient.Default.Configuration.DefaultTags.Add(modelHelpers.Gallifrey.VersionControl.VersionName.Replace("\n", " - "));
-            ExceptionlessClient.Default.Configuration.SetUserIdentity(modelHelpers.Gallifrey.Settings.InstallationHash, modelHelpers.Gallifrey.JiraConnection.IsConnected ? modelHelpers.Gallifrey.JiraConnection.CurrentUser.displayName : "Unknown");
+            ExceptionlessClient.Default.Configuration.SetUserIdentity(userInfo);
             ExceptionlessClient.Default.Configuration.SessionsEnabled = false;
             ExceptionlessClient.Default.Configuration.Enabled = true;
             ExceptionlessClient.Default.SubmittingEvent += ExceptionlessSubmittingEvent;
