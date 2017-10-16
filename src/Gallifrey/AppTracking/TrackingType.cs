@@ -27,7 +27,6 @@
         JiraConnectSelfhostSoap,
         AutoUpdateInstalled,
         ManualUpdateRestart,
-        ManualUpdateCheck,
         ExportAll,
         ShowRunningTimer,
         MultipleInstancesRunning,
