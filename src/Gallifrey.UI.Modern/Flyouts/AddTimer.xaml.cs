@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using Gallifrey.Exceptions.JiraIntegration;
+﻿using Gallifrey.Exceptions.JiraIntegration;
 using Gallifrey.Exceptions.JiraTimers;
 using Gallifrey.IdleTimers;
 using Gallifrey.Jira.Model;
@@ -12,6 +6,12 @@ using Gallifrey.UI.Modern.Helpers;
 using Gallifrey.UI.Modern.Models;
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace Gallifrey.UI.Modern.Flyouts
 {
@@ -79,7 +79,7 @@ namespace Gallifrey.UI.Modern.Flyouts
 
             Issue jiraIssue = null;
             var jiraRef = string.Empty;
-            
+
             if (!DataModel.LocalTimer)
             {
                 try
@@ -156,7 +156,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                         if (transitionResult.Status == ProgressResult.JiraHelperStatus.Success)
                         {
                             var transitionsAvaliable = transitionResult.RetVal;
-                            
+
                             var timeSelectorDialog = (BaseMetroDialog)this.Resources["TransitionSelector"];
                             await DialogCoordinator.Instance.ShowMetroDialogAsync(modelHelpers.DialogContext, timeSelectorDialog);
 
@@ -244,7 +244,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                 var doneSomething = false;
                 if (seedTime.TotalMinutes > 0 || !DataModel.TimeEditable)
                 {
-                    var result = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Duplicate Timer", $"The Timer Already Exists On {DataModel.StartDate.Value.ToString("ddd, dd MMM")}, Would You Like To Add The Time?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
+                    var result = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Duplicate Timer", $"The Timer Already Exists On {startDate.ToString("ddd, dd MMM")}, Would You Like To Add The Time?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
 
                     if (result == MessageDialogResult.Affirmative)
                     {

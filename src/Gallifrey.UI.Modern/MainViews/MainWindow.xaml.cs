@@ -464,7 +464,7 @@ namespace Gallifrey.UI.Modern.MainViews
                 }
                 else
                 {
-                    updateResult = await modelHelpers.Gallifrey.VersionControl.CheckForUpdates();
+                    updateResult = await modelHelpers.Gallifrey.VersionControl.CheckForUpdates(false);
                 }
 
                 if (updateResult == UpdateResult.Updated)

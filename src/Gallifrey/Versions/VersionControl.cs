@@ -14,7 +14,7 @@ namespace Gallifrey.Versions
         Version DeployedVersion { get; }
         bool IsFirstRun { get; }
         string AppName { get; }
-        Task<UpdateResult> CheckForUpdates(bool manualCheck = false);
+        Task<UpdateResult> CheckForUpdates(bool manualCheck);
         void ManualReinstall();
         event EventHandler NewVersionInstalled;
         event EventHandler<bool> UpdateCheckOccured;
