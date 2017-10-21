@@ -236,7 +236,9 @@
     <Others/>
   </Version>
   <Version Number="0.0.0.0" Name="Pre-Release">
-    <Features />
+    <Features>
+      <Feature>Groundwork to get updates migrated over to HTTPS rather than HTTP</Feature>
+    </Features>
     <Bugs>
       <Bug>Fix error with bulk add message for duplicate timers (wrong date shown)</Bug>
     </Bugs>

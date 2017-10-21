@@ -495,11 +495,11 @@ namespace Gallifrey.UI.Modern.MainViews
                 {
                     await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Unable To Update", "You Cannot Auto Update This Version Of Gallifrey");
                 }
-                else if (manualUpdateCheck && updateResult == UpdateResult.Error)
+                else if ((manualUpdateCheck || promptReinstall) && updateResult == UpdateResult.Error)
                 {
                     throw new Exception();//Trigger error condition
                 }
-                else if (manualUpdateCheck && promptReinstall && updateResult == UpdateResult.ReinstallNeeded)
+                else if ((manualUpdateCheck || promptReinstall) && updateResult == UpdateResult.ReinstallNeeded)
                 {
                     var messageResult = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Update Error", "To Update An Uninstall/Reinstall Is Required.\nThis Can Happen Automatically\nNo Timers Will Be Lost\nDo You Want To Update Now?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
 
