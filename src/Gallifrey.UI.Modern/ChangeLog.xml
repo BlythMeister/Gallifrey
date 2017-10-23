@@ -235,7 +235,7 @@
     </Bugs>
     <Others/>
   </Version>
-  <Version Number="0.0.0.0" Name="Pre-Release">
+  <Version Number="3.6.6.0">
     <Features>
       <Feature>Groundwork to get updates migrated over to HTTPS rather than HTTP</Feature>
     </Features>
