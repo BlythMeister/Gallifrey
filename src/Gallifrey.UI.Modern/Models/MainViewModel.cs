@@ -26,11 +26,11 @@ namespace Gallifrey.UI.Modern.Models
             ModelHelpers = modelHelpers;
             TimerDates = new ObservableCollection<TimerDateModel>();
 
-            var backgroundRefresh = new Timer(3600000);
+            var backgroundRefresh = new Timer(TimeSpan.FromHours(1).TotalMilliseconds);
             backgroundRefresh.Elapsed += (sender, args) => RefreshModel();
             backgroundRefresh.Start();
 
-            modelHelpers.Gallifrey.VersionControl.NewVersionInstalled += (sender, args) => NewVersionInstalled();
+            modelHelpers.Gallifrey.VersionControl.NewVersionPresent += (sender, args) => NewVersionPresent();
             modelHelpers.Gallifrey.IsPremiumChanged += (sender, args) => PremiumChanged();
             modelHelpers.Gallifrey.BackendModifiedTimers += (sender, args) => BackendModification();
             modelHelpers.Gallifrey.SettingsChanged += (sender, args) => SettingsChanged();
@@ -356,10 +356,11 @@ namespace Gallifrey.UI.Modern.Models
 
         #region Events
 
-        private void NewVersionInstalled()
+        private void NewVersionPresent()
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("VersionName"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasUpdate"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ReinstallNeeded"));
         }
 
         private void BackendModification()

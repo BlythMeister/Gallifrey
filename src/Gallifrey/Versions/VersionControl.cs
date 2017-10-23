@@ -17,13 +17,13 @@ namespace Gallifrey.Versions
         string AppName { get; }
         Task<UpdateResult> CheckForUpdates(bool manualCheck);
         void ManualReinstall();
-        event EventHandler NewVersionInstalled;
+        event EventHandler NewVersionPresent;
         event EventHandler<bool> UpdateCheckOccured;
     }
 
     public class VersionControl : IVersionControl
     {
-        public event EventHandler NewVersionInstalled;
+        public event EventHandler NewVersionPresent;
         public event EventHandler<bool> UpdateCheckOccured;
 
         public InstanceType InstanceType { get; }
@@ -95,7 +95,7 @@ namespace Gallifrey.Versions
                     {
                         SetVersionName();
                         UpdateInstalled = true;
-                        NewVersionInstalled?.Invoke(this, null);
+                        NewVersionPresent?.Invoke(this, null);
                         return UpdateResult.Updated;
                     });
                 }
@@ -112,6 +112,7 @@ namespace Gallifrey.Versions
             catch (TrustNotGrantedException)
             {
                 UpdateReinstallNeeded = true;
+                NewVersionPresent?.Invoke(this, null);
                 return Task.Factory.StartNew(() => UpdateResult.ReinstallNeeded);
             }
             catch (Exception)
