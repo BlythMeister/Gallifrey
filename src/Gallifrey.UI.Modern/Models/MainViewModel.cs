@@ -51,8 +51,9 @@ namespace Gallifrey.UI.Modern.Models
         public string ExportTarget => ModelHelpers.Gallifrey.Settings.AppSettings.GetTargetThisWeek().FormatAsString(false);
         public string ExportedTargetTotalMinutes => ModelHelpers.Gallifrey.Settings.AppSettings.GetTargetThisWeek().TotalMinutes.ToString();
 
-        public string VersionName => ModelHelpers.Gallifrey.VersionControl.UpdateInstalled ? "NEW VERSION AVAILABLE" : ModelHelpers.Gallifrey.VersionControl.VersionName.ToUpper();
+        public string VersionName => ModelHelpers.Gallifrey.VersionControl.UpdateInstalled || ModelHelpers.Gallifrey.VersionControl.UpdateReinstallNeeded ? "NEW VERSION AVAILABLE" : ModelHelpers.Gallifrey.VersionControl.VersionName.ToUpper();
         public bool HasUpdate => ModelHelpers.Gallifrey.VersionControl.UpdateInstalled;
+        public bool ReinstallNeeded => ModelHelpers.Gallifrey.VersionControl.UpdateReinstallNeeded;
 
         public bool HasInactiveTime => !string.IsNullOrWhiteSpace(InactiveMinutes);
         public bool TimerRunning => !string.IsNullOrWhiteSpace(CurrentRunningTimerDescription);

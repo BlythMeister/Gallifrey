@@ -10,6 +10,7 @@ namespace Gallifrey.Versions
         InstanceType InstanceType { get; }
         bool IsAutomatedDeploy { get; }
         bool UpdateInstalled { get; }
+        bool UpdateReinstallNeeded { get; }
         string VersionName { get; }
         Version DeployedVersion { get; }
         bool IsFirstRun { get; }
@@ -29,6 +30,7 @@ namespace Gallifrey.Versions
         public string VersionName { get; private set; }
         public string AppName { get; }
         public bool UpdateInstalled { get; private set; }
+        public bool UpdateReinstallNeeded { get; private set; }
 
         private DateTime lastUpdateCheck;
 
@@ -109,6 +111,7 @@ namespace Gallifrey.Versions
             }
             catch (TrustNotGrantedException)
             {
+                UpdateReinstallNeeded = true;
                 return Task.Factory.StartNew(() => UpdateResult.ReinstallNeeded);
             }
             catch (Exception)

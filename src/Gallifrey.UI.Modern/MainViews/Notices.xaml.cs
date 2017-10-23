@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Windows.Input;
-using Gallifrey.AppTracking;
+﻿using Gallifrey.AppTracking;
 using Gallifrey.IdleTimers;
 using Gallifrey.UI.Modern.Flyouts;
 using Gallifrey.UI.Modern.Helpers;
 using Gallifrey.UI.Modern.Models;
 using MahApps.Metro.Controls.Dialogs;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Windows.Input;
 
 namespace Gallifrey.UI.Modern.MainViews
 {
@@ -56,6 +56,15 @@ namespace Gallifrey.UI.Modern.MainViews
             if (ModelHelpers.Gallifrey.VersionControl.UpdateInstalled)
             {
                 ModelHelpers.CloseApp(true);
+                ModelHelpers.Gallifrey.TrackEvent(TrackingType.ManualUpdateRestart);
+            }
+        }
+
+        private void ReinstallUpdate(object sender, MouseButtonEventArgs e)
+        {
+            if (ModelHelpers.Gallifrey.VersionControl.UpdateReinstallNeeded)
+            {
+                ModelHelpers.Gallifrey.VersionControl.ManualReinstall();
                 ModelHelpers.Gallifrey.TrackEvent(TrackingType.ManualUpdateRestart);
             }
         }

@@ -27,6 +27,8 @@ namespace Gallifrey.UI.Modern.MainViews
         private readonly ExceptionlessHelper exceptionlessHelper;
         private readonly ProgressDialogHelper progressDialogHelper;
         private readonly Timer flyoutOpenCheck;
+        private readonly Timer updateHeartbeat;
+        private readonly Timer idleDetectionHeartbeat;
         private MainViewModel ViewModel => (MainViewModel)DataContext;
         private bool machineLocked;
         private bool machineIdle;
@@ -56,25 +58,20 @@ namespace Gallifrey.UI.Modern.MainViews
             Width = gallifrey.Settings.UiSettings.Width;
             ThemeHelper.ChangeTheme(gallifrey.Settings.UiSettings.Theme, gallifrey.Settings.UiSettings.Accent);
 
-            if (gallifrey.VersionControl.IsAutomatedDeploy)
-            {
-                PerformUpdate(false, true);
-                var updateHeartbeat = new Timer(TimeSpan.FromMinutes(1).TotalMilliseconds);
-                updateHeartbeat.Elapsed += AutoUpdateCheck;
-                updateHeartbeat.Enabled = true;
-            }
+            updateHeartbeat = new Timer(TimeSpan.FromMinutes(1).TotalMilliseconds);
+            updateHeartbeat.Elapsed += AutoUpdateCheck;
 
-            var idleDetectionHeartbeat = new Timer(TimeSpan.FromSeconds(30).TotalMilliseconds);
+            idleDetectionHeartbeat = new Timer(TimeSpan.FromSeconds(30).TotalMilliseconds);
             idleDetectionHeartbeat.Elapsed += IdleDetectionCheck;
-            idleDetectionHeartbeat.Enabled = true;
 
             flyoutOpenCheck = new Timer(100);
             flyoutOpenCheck.Elapsed += FlyoutOpenCheck;
-            flyoutOpenCheck.Enabled = true;
         }
 
         private async void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
+            await PerformUpdate(UpdateType.StartUp);
+
             var debuggerMissing = false;
             var multipleInstances = false;
             var missingConfig = false;
@@ -162,6 +159,9 @@ namespace Gallifrey.UI.Modern.MainViews
             }
 
             exceptionlessHelper.RegisterExceptionless();
+            updateHeartbeat.Enabled = true;
+            idleDetectionHeartbeat.Enabled = true;
+            flyoutOpenCheck.Enabled = true;
         }
 
         private async Task NewUserOnBoarding()
@@ -433,7 +433,7 @@ namespace Gallifrey.UI.Modern.MainViews
 
         private void ManualUpdateCheck(object sender, RoutedEventArgs e)
         {
-            PerformUpdate(true, true);
+            PerformUpdate(UpdateType.Manual).Wait();
         }
 
         private void GetPremium(object sender, RoutedEventArgs e)
@@ -445,16 +445,27 @@ namespace Gallifrey.UI.Modern.MainViews
         {
             Dispatcher.Invoke(() =>
             {
-                PerformUpdate(false, false);
+                if (modelHelpers.Gallifrey.VersionControl.IsAutomatedDeploy)
+                {
+                    PerformUpdate(UpdateType.Auto).Wait();
+                }
             });
         }
 
-        private async void PerformUpdate(bool manualUpdateCheck, bool promptReinstall)
+        private enum UpdateType
+        {
+            Manual,
+            Auto,
+            StartUp
+        }
+
+        private async Task PerformUpdate(UpdateType updateType)
         {
             try
             {
+                //Do Update
                 UpdateResult updateResult;
-                if (manualUpdateCheck)
+                if (updateType == UpdateType.Manual || updateType == UpdateType.StartUp)
                 {
                     var controller = await DialogCoordinator.Instance.ShowProgressAsync(modelHelpers.DialogContext, "Please Wait", "Checking For Updates");
                     controller.SetIndeterminate();
@@ -466,40 +477,35 @@ namespace Gallifrey.UI.Modern.MainViews
                     updateResult = await modelHelpers.Gallifrey.VersionControl.CheckForUpdates(false);
                 }
 
-                if (updateResult == UpdateResult.Updated)
+                //Handle Update Result
+                if (updateResult == UpdateResult.Updated && (updateType == UpdateType.Manual || updateType == UpdateType.StartUp))
                 {
-                    if (manualUpdateCheck)
-                    {
-                        var messageResult = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Update Found", "Restart Now To Install Update?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
+                    var messageResult = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Update Found", "Restart Now To Install Update?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
 
-                        if (messageResult == MessageDialogResult.Affirmative)
-                        {
-                            modelHelpers.CloseApp(true);
-                            modelHelpers.Gallifrey.TrackEvent(TrackingType.ManualUpdateRestart);
-                        }
-                    }
-                    else
+                    if (messageResult == MessageDialogResult.Affirmative)
                     {
-                        if (modelHelpers.Gallifrey.Settings.AppSettings.AutoUpdate && !machineLocked && !modelHelpers.FlyoutOpen)
-                        {
-                            modelHelpers.CloseApp(true);
-                            modelHelpers.Gallifrey.TrackEvent(TrackingType.AutoUpdateInstalled);
-                        }
+                        modelHelpers.CloseApp(true);
+                        modelHelpers.Gallifrey.TrackEvent(TrackingType.ManualUpdateRestart);
                     }
                 }
-                else if (manualUpdateCheck && updateResult == UpdateResult.NoUpdate)
+                else if (updateResult == UpdateResult.Updated && modelHelpers.Gallifrey.Settings.AppSettings.AutoUpdate && !machineLocked && !modelHelpers.FlyoutOpen)
                 {
-                    await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "No Update Found", "There Are No Updates At This Time, Check Back Soon!");
+                    modelHelpers.CloseApp(true);
+                    modelHelpers.Gallifrey.TrackEvent(TrackingType.AutoUpdateInstalled);
                 }
-                else if (manualUpdateCheck && updateResult == UpdateResult.NotDeployable)
+                else if (updateResult == UpdateResult.NotDeployable && updateType == UpdateType.Manual)
                 {
                     await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Unable To Update", "You Cannot Auto Update This Version Of Gallifrey");
                 }
-                else if ((manualUpdateCheck || promptReinstall) && updateResult == UpdateResult.Error)
+                else if ((updateResult == UpdateResult.NoUpdate || updateResult == UpdateResult.TooSoon) && updateType == UpdateType.Manual)
+                {
+                    await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "No Update Found", "There Are No Updates At This Time, Check Back Soon!");
+                }
+                else if (updateResult == UpdateResult.Error && updateType == UpdateType.Manual)
                 {
                     throw new Exception();//Trigger error condition
                 }
-                else if ((manualUpdateCheck || promptReinstall) && updateResult == UpdateResult.ReinstallNeeded)
+                else if (updateResult == UpdateResult.ReinstallNeeded && (updateType == UpdateType.Manual || updateType == UpdateType.StartUp))
                 {
                     var messageResult = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Update Error", "To Update An Uninstall/Reinstall Is Required.\nThis Can Happen Automatically\nNo Timers Will Be Lost\nDo You Want To Update Now?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
 
