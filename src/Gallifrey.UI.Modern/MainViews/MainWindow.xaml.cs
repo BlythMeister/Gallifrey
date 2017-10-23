@@ -431,9 +431,9 @@ namespace Gallifrey.UI.Modern.MainViews
             }
         }
 
-        private void ManualUpdateCheck(object sender, RoutedEventArgs e)
+        private async void ManualUpdateCheck(object sender, RoutedEventArgs e)
         {
-            PerformUpdate(UpdateType.Manual).Wait();
+            await PerformUpdate(UpdateType.Manual);
         }
 
         private void GetPremium(object sender, RoutedEventArgs e)
@@ -443,11 +443,11 @@ namespace Gallifrey.UI.Modern.MainViews
 
         private void AutoUpdateCheck(object sender, ElapsedEventArgs e)
         {
-            Dispatcher.Invoke(() =>
+            Dispatcher.Invoke(async () =>
             {
                 if (modelHelpers.Gallifrey.VersionControl.IsAutomatedDeploy)
                 {
-                    PerformUpdate(UpdateType.Auto).Wait();
+                    await PerformUpdate(UpdateType.Auto);
                 }
             });
         }
