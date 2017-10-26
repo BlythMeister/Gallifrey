@@ -248,7 +248,9 @@
     <Features>
       <Feature>Improve the target bar to include exported and unexported time</Feature>
     </Features>
-    <Bugs />
+    <Bugs>
+      <Bug>Fixes to auto-reinstaller logic</Bug>
+    </Bugs>
     <Others>
       <Other>Updates now pull over HTTPS</Other>
     </Others>
