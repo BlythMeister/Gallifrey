@@ -245,7 +245,9 @@
     <Others/>
   </Version>
   <Version Number="0.0.0.0" Name="Pre-Release">
-    <Features />
+    <Features>
+      <Feature>Improve the target bar to include exported and unexported time</Feature>
+    </Features>
     <Bugs />
     <Others>
       <Other>Updates now pull over HTTPS</Other>

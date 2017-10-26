@@ -49,7 +49,6 @@ namespace Gallifrey.UI.Modern.Models
         public string Exported => ModelHelpers.Gallifrey.JiraTimerCollection.GetTotalExportedTimeThisWeek(ModelHelpers.Gallifrey.Settings.AppSettings.StartOfWeek).FormatAsString(false);
 
         public string ExportTarget => ModelHelpers.Gallifrey.Settings.AppSettings.GetTargetThisWeek().FormatAsString(false);
-        public string ExportedTargetTotalMinutes => ModelHelpers.Gallifrey.Settings.AppSettings.GetTargetThisWeek().TotalMinutes.ToString();
 
         public string VersionName => ModelHelpers.Gallifrey.VersionControl.UpdateInstalled || ModelHelpers.Gallifrey.VersionControl.UpdateReinstallNeeded ? "NEW VERSION AVAILABLE" : ModelHelpers.Gallifrey.VersionControl.VersionName.ToUpper();
         public bool HasUpdate => ModelHelpers.Gallifrey.VersionControl.UpdateInstalled;
@@ -141,22 +140,6 @@ namespace Gallifrey.UI.Modern.Models
             }
         }
 
-        public string ExportedTotalMinutes
-        {
-            get
-            {
-                var maximum = ModelHelpers.Gallifrey.Settings.AppSettings.GetTargetThisWeek().TotalMinutes;
-                var value = ModelHelpers.Gallifrey.JiraTimerCollection.GetTotalExportedTimeThisWeek(ModelHelpers.Gallifrey.Settings.AppSettings.StartOfWeek).TotalMinutes;
-
-                if (value > maximum)
-                {
-                    value = maximum;
-                }
-
-                return value.ToString();
-            }
-        }
-
         public void SetNoActivityMilliseconds(int millisecondsSinceActivity)
         {
             TimeTimeActivity = TimeSpan.FromMilliseconds(millisecondsSinceActivity);
@@ -187,6 +170,64 @@ namespace Gallifrey.UI.Modern.Models
                 }
             }
         }
+
+        public string TargetBarExportPercentage
+        {
+            get
+            {
+                var targetValues = new TargetBarValues(ModelHelpers.Gallifrey);
+                return $"{targetValues.ExportedWidth}*";
+            }
+        }
+
+        public string TargetBarTrackedPercentage
+        {
+            get
+            {
+                var targetValues = new TargetBarValues(ModelHelpers.Gallifrey);
+                return $"{targetValues.TrackedWidth}*";
+            }
+        }
+
+        public string TargetBarUntrackedPercentage
+        {
+            get
+            {
+                var targetValues = new TargetBarValues(ModelHelpers.Gallifrey);
+                return $"{targetValues.UntrackedWidth}*";
+            }
+        }
+
+        public class TargetBarValues
+        {
+            public double TrackedWidth { get; }
+            public double ExportedWidth { get; }
+            public double UntrackedWidth { get; }
+
+            public TargetBarValues(IBackend gallifrey)
+            {
+                var target = gallifrey.Settings.AppSettings.GetTargetThisWeek().TotalMinutes;
+                var tracked = gallifrey.JiraTimerCollection.GetTotalTimeThisWeekNoSeconds(gallifrey.Settings.AppSettings.StartOfWeek).TotalMinutes;
+                var exported = gallifrey.JiraTimerCollection.GetTotalExportedTimeThisWeek(gallifrey.Settings.AppSettings.StartOfWeek).TotalMinutes;
+                var untracked = target - tracked;
+                UntrackedWidth = (untracked / target) * 100;
+                ExportedWidth = (exported / target) * 100;
+                TrackedWidth = ((tracked - exported) / target) * 100;
+
+                if (ExportedWidth >= 100)
+                {
+                    ExportedWidth = 100;
+                    TrackedWidth = 0;
+                    UntrackedWidth = 0;
+                }
+                else if ((ExportedWidth + TrackedWidth) > 100)
+                {
+                    TrackedWidth = 100 - ExportedWidth;
+                    UntrackedWidth = 0;
+                }
+            }
+        }
+
 
         #region Private Helpers
 
@@ -392,20 +433,21 @@ namespace Gallifrey.UI.Modern.Models
 
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TimerRunning"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("CurrentRunningTimerDescription"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ExportedTotalMinutes"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HaveLocalTime"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LocalTimeMessage"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LocalTime"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ExportableTime"));
 
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ExportTarget"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ExportedTargetTotalMinutes"));
+
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TargetBarExportPercentage"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TargetBarTrackedPercentage"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TargetBarUntrackedPercentage"));
         }
 
         private void SettingsChanged()
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ExportTarget"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ExportedTargetTotalMinutes"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TrackingOnly"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HaveTimeToExport"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ExportableTime"));
@@ -413,6 +455,10 @@ namespace Gallifrey.UI.Modern.Models
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HaveLocalTime"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LocalTimeMessage"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LocalTime"));
+
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TargetBarExportPercentage"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TargetBarTrackedPercentage"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TargetBarUntrackedPercentage"));
 
             SetTrackingOnlyInModel();
             RefreshModel();
@@ -429,17 +475,23 @@ namespace Gallifrey.UI.Modern.Models
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("CurrentRunningTimerDescription"));
 
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ExportTarget"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ExportedTargetTotalMinutes"));
 
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HaveLocalTime"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LocalTimeMessage"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LocalTime"));
+
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TargetBarExportPercentage"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TargetBarTrackedPercentage"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TargetBarUntrackedPercentage"));
         }
 
         private void DailyEvent()
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ExportTarget"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ExportedTargetTotalMinutes"));
+
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TargetBarExportPercentage"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TargetBarTrackedPercentage"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TargetBarUntrackedPercentage"));
         }
 
         #endregion
