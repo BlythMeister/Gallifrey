@@ -1,10 +1,10 @@
 ﻿using Microsoft.Win32;
 using System;
-using System.Deployment.Application;
 using System.Diagnostics;
 using System.Security.Policy;
 using System.Text;
 using System.Threading;
+using System.Windows.Forms;
 
 namespace Gallifrey.DeploymentUtils
 {
@@ -22,12 +22,12 @@ namespace Gallifrey.DeploymentUtils
 
         public static void AutoInstall(string applicationUriString)
         {
-            using (var host = new InPlaceHostingManager(new Uri(applicationUriString), false))
+            var webBrowser = new WebBrowser
             {
-                GetApplicationManifest(host);
-                host.AssertApplicationRequirements();
-                DownloadApplication(host);
-            }
+                ScriptErrorsSuppressed = true
+            };
+
+            webBrowser.Navigate(applicationUriString);
         }
 
         private static void PushUninstallOKButton(string displayName)
@@ -94,56 +94,6 @@ namespace Gallifrey.DeploymentUtils
             }
             uninstallKey.Close();
             return uninstallString;
-        }
-
-        private static void GetApplicationManifest(InPlaceHostingManager host)
-        {
-            var waitHandle = new AutoResetEvent(false);
-            Exception exception = null;
-
-            host.GetManifestCompleted += (sender, e) =>
-            {
-
-                if (e.Error != null)
-                {
-                    exception = e.Error;
-                }
-
-                waitHandle.Set();
-
-            };
-
-            host.GetManifestAsync();
-
-            waitHandle.WaitOne();
-
-            if (exception != null) throw exception;
-
-        }
-
-        private static void DownloadApplication(InPlaceHostingManager host)
-        {
-
-            var waitHandle = new AutoResetEvent(false);
-            Exception exception = null;
-
-            host.DownloadApplicationCompleted += (sender, e) =>
-            {
-
-                if (e.Error != null)
-                {
-                    exception = e.Error;
-                }
-
-                waitHandle.Set();
-
-            };
-
-            host.DownloadApplicationAsync();
-
-            waitHandle.WaitOne();
-
-            if (exception != null) throw exception;
         }
     }
 }
