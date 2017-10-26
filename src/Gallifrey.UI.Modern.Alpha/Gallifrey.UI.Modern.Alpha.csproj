@@ -25,8 +25,8 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>true</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <InstallUrl>http://releases.gallifreyapp.co.uk/download/modern/alpha/</InstallUrl>
-    <UpdateUrl>http://releases.gallifreyapp.co.uk/download/modern/alpha/</UpdateUrl>
+    <InstallUrl>https://releases.gallifreyapp.co.uk/download/modern/alpha/</InstallUrl>
+    <UpdateUrl>https://releases.gallifreyapp.co.uk/download/modern/alpha/</UpdateUrl>
     <SupportUrl>https://github.com/BlythMeister/Gallifrey</SupportUrl>
     <ErrorReportUrl>https://github.com/BlythMeister/Gallifrey</ErrorReportUrl>
     <ProductName>Gallifrey %28Alpha%29</ProductName>
