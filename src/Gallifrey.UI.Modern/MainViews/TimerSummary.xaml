@@ -47,19 +47,21 @@
                 <TextBlock Text="Export Target: "/>
                 <TextBlock Text="{Binding ExportTarget, Mode=OneWay}" />
             </WrapPanel>
-            <Grid Grid.Column="7" HorizontalAlignment="Stretch" Margin="10,3,10,3" VerticalAlignment="Center">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="{Binding TargetBarExportPercentage, Mode=OneWay}"/>
-                    <ColumnDefinition Width="{Binding TargetBarTrackedPercentage, Mode=OneWay}"/>
-                    <ColumnDefinition Width="{Binding TargetBarUntrackedPercentage, Mode=OneWay}"/>
-                </Grid.ColumnDefinitions>
-                <Rectangle Grid.Column="0" Fill="{DynamicResource AccentColorBrush}"/>
-                <TextBlock Grid.Column="0" Text="Exported" ToolTip="Exported" VerticalAlignment="Center" Foreground="{DynamicResource IdealForegroundColorBrush}" Margin="2" HorizontalAlignment="Center" TextTrimming="CharacterEllipsis" />
-                <Rectangle Grid.Column="1" Fill="{DynamicResource AccentColorBrush3}"/>
-                <TextBlock Grid.Column="1" Text="Unexported" ToolTip="Unexported" VerticalAlignment="Center" Foreground="{DynamicResource IdealForegroundColorBrush}" Margin="2" HorizontalAlignment="Center" TextTrimming="CharacterEllipsis" />
-                <Rectangle Grid.Column="2" Fill="{DynamicResource TextBrush}"/>
-                <TextBlock Grid.Column="2" Text="Remaining" ToolTip="Remaining" VerticalAlignment="Center" Foreground="{DynamicResource WindowBackgroundBrush}" Margin="2" HorizontalAlignment="Center" TextTrimming="CharacterEllipsis" />
-            </Grid>
+            <Border Grid.Column="7" BorderBrush="{DynamicResource GrayHoverBrush}" BorderThickness="1" HorizontalAlignment="Stretch" Margin="10,3,10,3" VerticalAlignment="Center">
+                <Grid HorizontalAlignment="Stretch">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="{Binding TargetBarExportedPercentage, Mode=OneWay}"/>
+                        <ColumnDefinition Width="{Binding TargetBarUnexportedPercentage, Mode=OneWay}"/>
+                        <ColumnDefinition Width="{Binding TargetBarRemainingPercentage, Mode=OneWay}"/>
+                    </Grid.ColumnDefinitions>
+                    <Rectangle Grid.Column="0" Fill="{DynamicResource AccentColorBrush}"/>
+                    <TextBlock Grid.Column="0" HorizontalAlignment="Stretch" ToolTip="{Binding TargetBarExportedLabel, Mode=OneWay}" />
+                    <Rectangle Grid.Column="1" Fill="{DynamicResource AccentColorBrush3}"/>
+                    <TextBlock Grid.Column="1" HorizontalAlignment="Stretch" ToolTip="{Binding TargetBarUnexportedLabel, Mode=OneWay}" />
+                    <Rectangle Grid.Column="2" Fill="{DynamicResource TextBrush}"/>
+                    <TextBlock Grid.Column="2" HorizontalAlignment="Stretch" ToolTip="{Binding TargetBarRemainingLabel, Mode=OneWay}" />
+                </Grid>
+            </Border>
         </Grid>
     </Border>
 </UserControl>
