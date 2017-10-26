@@ -126,7 +126,6 @@ namespace Gallifrey.Versions
             var installUrl = ApplicationDeployment.CurrentDeployment.UpdateLocation.AbsoluteUri;
             DeploymentUtils.Uninstaller.UninstallMe();
             DeploymentUtils.Uninstaller.AutoInstall(installUrl);
-            Application.Exit();
         }
     }
 }
