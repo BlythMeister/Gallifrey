@@ -32,7 +32,6 @@ namespace Gallifrey.JiraTimers
         Guid ChangeLocalTimerDescription(Guid editedTimerId, string localTimerDescription);
         Guid ChangeTimerDate(Guid timerGuid, DateTime newStartDate);
         Tuple<int, int> GetNumberExported();
-        TimeSpan GetStoppedTotalLocalTime();
         TimeSpan GetStoppedTotalExportableTime();
         TimeSpan GetTotalLocalTime();
         TimeSpan GetTotalExportableTime();
@@ -312,12 +311,6 @@ namespace Gallifrey.JiraTimers
         public Tuple<int, int> GetNumberExported()
         {
             return new Tuple<int, int>(timerList.Count(jiraTimer => jiraTimer.FullyExported), timerList.Count);
-        }
-
-        public TimeSpan GetStoppedTotalLocalTime()
-        {
-            var unexportedTime = new TimeSpan();
-            return timerList.Where(timer => timer.LocalTimer && !timer.IsRunning && !timer.FullyExported).ToList().Aggregate(unexportedTime, (current, jiraTimer) => current.Add(new TimeSpan(jiraTimer.TimeToExport.Hours, jiraTimer.TimeToExport.Minutes, 0)));
         }
 
         public TimeSpan GetStoppedTotalExportableTime()

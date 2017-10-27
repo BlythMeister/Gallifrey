@@ -93,8 +93,7 @@ namespace Gallifrey.UI.Modern.Models
                 }
 
                 var unexportedTime = ModelHelpers.Gallifrey.JiraTimerCollection.GetStoppedTotalExportableTime();
-                var unexportedTimers = ModelHelpers.Gallifrey.JiraTimerCollection.GetStoppedUnexportedTimers();
-                var unexportedCount = unexportedTimers.Count(x => !x.LocalTimer);
+                var unexportedCount = ModelHelpers.Gallifrey.JiraTimerCollection.GetStoppedUnexportedTimers().Count(x => !x.LocalTimer);
 
                 var excludingRunning = string.Empty;
                 var runningTimerId = ModelHelpers.Gallifrey.JiraTimerCollection.GetRunningTimerId();
@@ -120,22 +119,10 @@ namespace Gallifrey.UI.Modern.Models
                     return string.Empty;
                 }
 
-                var localTime = ModelHelpers.Gallifrey.JiraTimerCollection.GetStoppedTotalLocalTime();
-                var unexportedTimers = ModelHelpers.Gallifrey.JiraTimerCollection.GetStoppedUnexportedTimers();
-                var unexportedCount = unexportedTimers.Count(x => x.LocalTimer);
+                var localTime = ModelHelpers.Gallifrey.JiraTimerCollection.GetTotalLocalTime();
+                var unexportedCount = ModelHelpers.Gallifrey.JiraTimerCollection.GetAllLocalTimers().Count(x => x.LocalTimer);
 
-                var excludingRunning = string.Empty;
-                var runningTimerId = ModelHelpers.Gallifrey.JiraTimerCollection.GetRunningTimerId();
-                if (runningTimerId.HasValue)
-                {
-                    var runningTimer = ModelHelpers.Gallifrey.JiraTimerCollection.GetTimer(runningTimerId.Value);
-                    if (runningTimer.LocalTimer)
-                    {
-                        excludingRunning = "(Excluding 1 Running Timer)";
-                    }
-                }
-
-                return localTime.TotalMinutes > 0 ? $"You Have {unexportedCount} Local Timer{(unexportedCount > 1 ? "s" : "")} Worth {localTime.FormatAsString(false)} {excludingRunning}" : string.Empty;
+                return localTime.TotalMinutes > 0 ? $"You Have {unexportedCount} Local Timer{(unexportedCount > 1 ? "s" : "")} Worth {localTime.FormatAsString(false)}" : string.Empty;
             }
         }
 
