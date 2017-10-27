@@ -15,4 +15,9 @@ NUGET
       ControlzEx (> 3.0.2 < 4.0)
     MahApps.Metro.IconPacks.Modern (1.9.1)
     Newtonsoft.Json (10.0.3)
+    Octokit (0.27)
     RestSharp (105.2.3)
+GITHUB
+  remote: fsharp/FAKE
+    modules/Octokit/Octokit.fsx (838f43e1e6ac18014b2515799fe7fa0e23186fbc)
+      Octokit (>= 0.20)

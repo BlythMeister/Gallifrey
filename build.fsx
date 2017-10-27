@@ -1,10 +1,15 @@
 #r @"packages/FAKE/tools/FakeLib.dll"
+#r "System.Xml.Linq"
+
+#load "paket-files/fsharp/FAKE/modules/Octokit/Octokit.fsx"
 
 open Fake
 open Fake.Git
 open Fake.AppVeyor
 open System
 open System.IO
+open System.Xml.Linq
+open Octokit
 
 let outputDir = currentDirectory @@ "Output"
 let srcDir = currentDirectory @@ "src"
@@ -104,8 +109,9 @@ Target "Publish-Release" (fun _ ->
     
     cloneSingleBranch outputDir "https://github.com/BlythMeister/Gallifrey.Releases.git" "master" "Releases"
     
-    enableProcessTracing <- false
     let authKey = environVar "access_token"
+
+    enableProcessTracing <- false
     directRunGitCommandAndFail currentDirectory (sprintf "remote set-url origin https://%s:x-oauth-basic@github.com/BlythMeister/Gallifrey.git" authKey)
     directRunGitCommandAndFail releasesRepo (sprintf "remote set-url origin https://%s:x-oauth-basic@github.com/BlythMeister/Gallifrey.Releases.git" authKey)
     directRunGitCommandAndFail releasesRepo "config --global user.email \"publish@gallifreyapp.co.uk\""
@@ -121,7 +127,7 @@ Target "Publish-Release" (fun _ ->
         | true, "Alpha" 
         | true, "Beta" -> CleanDir destinationAppFilesRoot
                           StageAll releasesRepo
-                          Commit releasesRepo (sprintf "Clean %s - Due to Stable Release" releaseType)
+                          Commit.Commit releasesRepo (sprintf "Clean %s - Due to Stable Release" releaseType)
         | _, _ -> ensureDirectory destinationAppFilesRoot 
        
         let destinationAppFiles = destinationAppFilesRoot @@ (sprintf "Gallifrey.UI.Modern.%s_%s" releaseType (versionNumber.Replace(".","_")))
@@ -135,7 +141,7 @@ Target "Publish-Release" (fun _ ->
             Directory.Move(sourceAppFiles, destinationAppFiles)
             
             StageAll releasesRepo
-            Commit releasesRepo (sprintf "Publish %s - %s" releaseType versionNumber)
+            Commit.Commit releasesRepo (sprintf "Publish %s - %s" releaseType versionNumber)
             true
         else
             false
@@ -145,10 +151,38 @@ Target "Publish-Release" (fun _ ->
     let publishedStable = if isStable then publishRelease "Stable" else false
 
     if publishedAlpha || publishedBeta || publishedStable then
-        pushBranch releasesRepo "origin" "master"   
+        pushBranch releasesRepo "origin" "master"
+
         if isStable then 
             tag currentDirectory baseVersion
             pushTag currentDirectory "origin" baseVersion
+
+            let versionLog = XDocument.Load(changeLogPath)
+                             |> fun changelog -> changelog.Descendants(XName.Get("Version", "http://releases.gallifreyapp.co.uk/ChangeLog"))
+                             |> Seq.filter(fun x -> x.Attribute(XName.Get("Number")).Value.StartsWith(baseVersion))                 
+            let features = versionLog.Descendants(XName.Get("Feature", "http://releases.gallifreyapp.co.uk/ChangeLog")) |> Seq.map(fun x -> sprintf "* %s" x.Value) |> Seq.toList
+            let bugs = versionLog.Descendants(XName.Get("Bug", "http://releases.gallifreyapp.co.uk/ChangeLog")) |> Seq.map(fun x -> sprintf "* %s" x.Value) |> Seq.toList
+            let others = versionLog.Descendants(XName.Get("Other", "http://releases.gallifreyapp.co.uk/ChangeLog")) |> Seq.map(fun x -> sprintf "* %s" x.Value) |> Seq.toList
+
+            let releaseNotes = [
+                                if features |> List.isEmpty |> not then yield ["# Features"; ""]
+                                yield features
+                                if features |> List.isEmpty |> not then yield [""]
+                                if bugs |> List.isEmpty |> not then yield ["# Bugs"; ""]
+                                yield bugs
+                                if bugs |> List.isEmpty |> not then yield [""]
+                                if others |> List.isEmpty |> not then yield ["# Others"; ""]
+                                yield others
+                                if others |> List.isEmpty |> not then yield [""]
+                               ]
+                               |> List.concat
+
+            createClientWithToken authKey
+            |> createDraft "BlythMeister" "Gallifrey" baseVersion false releaseNotes
+            |> uploadFile (outputDir @@ "beta-setup.exe")
+            |> uploadFile (outputDir @@ "stable-setup.exe")
+            |> releaseDraft
+            |> Async.RunSynchronously
 )
 
 Target "Default" DoNothing

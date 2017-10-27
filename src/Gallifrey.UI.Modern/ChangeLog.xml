@@ -244,7 +244,7 @@
     </Bugs>
     <Others/>
   </Version>
-  <Version Number="0.0.0.0" Name="Pre-Release">
+  <Version Number="3.7.0.0">
     <Features>
       <Feature>Improve the target bar to include exported and unexported time</Feature>
     </Features>
