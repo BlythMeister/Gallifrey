@@ -1,5 +1,5 @@
 Tag: X.X.X
-Title: Version X.X.X
+Title: X.X.X
 Body (Remove Empty Sections):
 
 # Features

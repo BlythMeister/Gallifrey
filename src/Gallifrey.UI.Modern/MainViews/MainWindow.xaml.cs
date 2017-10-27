@@ -564,6 +564,7 @@ namespace Gallifrey.UI.Modern.MainViews
                     case Key.U: trigger = RemoteButtonTrigger.Export; break;
                     case Key.L: trigger = RemoteButtonTrigger.LockTimer; break;
                     case Key.S: trigger = RemoteButtonTrigger.Settings; break;
+                    case Key.B: trigger = RemoteButtonTrigger.Save; break;
                     case Key.C: trigger = RemoteButtonTrigger.Copy; break;
                     case Key.V: trigger = RemoteButtonTrigger.Paste; break;
                     default: return;
@@ -593,6 +594,7 @@ namespace Gallifrey.UI.Modern.MainViews
                     case Key.F5: trigger = RemoteButtonTrigger.Export; break;
                     case Key.F6: trigger = RemoteButtonTrigger.LockTimer; break;
                     case Key.F7: trigger = RemoteButtonTrigger.Settings; break;
+                    case Key.F8: trigger = RemoteButtonTrigger.Save; break;
                     default: return;
                 }
             }

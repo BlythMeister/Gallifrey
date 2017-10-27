@@ -27,6 +27,8 @@ let isStable = branchName = "master"
 let isBeta = (isStable || branchName = "release")
 let isAlpha = (isBeta || branchName = "develop")
 
+let githubApiKey = environVar "github_api_key"
+
 printfn "Running On Branch: %s" branchName
 printfn "PR Number: %s" AppVeyorEnvironment.PullRequestNumber
 printfn "IsPR: %b" isPR
@@ -109,11 +111,9 @@ Target "Publish-Release" (fun _ ->
     
     cloneSingleBranch outputDir "https://github.com/BlythMeister/Gallifrey.Releases.git" "master" "Releases"
     
-    let authKey = environVar "access_token"
-
     enableProcessTracing <- false
-    directRunGitCommandAndFail currentDirectory (sprintf "remote set-url origin https://%s:x-oauth-basic@github.com/BlythMeister/Gallifrey.git" authKey)
-    directRunGitCommandAndFail releasesRepo (sprintf "remote set-url origin https://%s:x-oauth-basic@github.com/BlythMeister/Gallifrey.Releases.git" authKey)
+    directRunGitCommandAndFail currentDirectory (sprintf "remote set-url origin https://%s:x-oauth-basic@github.com/BlythMeister/Gallifrey.git" githubApiKey)
+    directRunGitCommandAndFail releasesRepo (sprintf "remote set-url origin https://%s:x-oauth-basic@github.com/BlythMeister/Gallifrey.Releases.git" githubApiKey)
     directRunGitCommandAndFail releasesRepo "config --global user.email \"publish@gallifreyapp.co.uk\""
     directRunGitCommandAndFail releasesRepo "config --global user.name \"Gallifrey Auto Publish\""
     enableProcessTracing <- true    
@@ -177,7 +177,7 @@ Target "Publish-Release" (fun _ ->
                                ]
                                |> List.concat
 
-            createClientWithToken authKey
+            createClientWithToken githubApiKey
             |> createDraft "BlythMeister" "Gallifrey" baseVersion false releaseNotes
             |> uploadFile (outputDir @@ "beta-setup.exe")
             |> uploadFile (outputDir @@ "stable-setup.exe")

@@ -67,6 +67,14 @@
                 </Button.ToolTip>
                 <iconPacks:PackIconModern Kind="Settings" Height="23" Width="23" />
             </Button>
+            <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="SaveButton">
+                <Button.ToolTip>
+                    <TextBlock>
+                        Export Timers To CSV<LineBreak/>F8 or CTRL + B
+                    </TextBlock>
+                </Button.ToolTip>
+                <iconPacks:PackIconModern Kind="DiskDownload" Height="23" Width="23" />
+            </Button>
         </WrapPanel>
 
         <WrapPanel HorizontalAlignment="Right" DockPanel.Dock="Right" Margin="0,0,10,0">

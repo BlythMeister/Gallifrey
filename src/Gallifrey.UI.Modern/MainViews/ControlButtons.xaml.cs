@@ -1,4 +1,5 @@
 ﻿using Gallifrey.AppTracking;
+using Gallifrey.ExtensionMethods;
 using Gallifrey.IdleTimers;
 using Gallifrey.UI.Modern.Flyouts;
 using Gallifrey.UI.Modern.Helpers;
@@ -7,8 +8,12 @@ using MahApps.Metro.Controls.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Windows;
+using System.Windows.Forms;
+using Clipboard = System.Windows.Clipboard;
 
 namespace Gallifrey.UI.Modern.MainViews
 {
@@ -228,11 +233,6 @@ namespace Gallifrey.UI.Modern.MainViews
             ModelHelpers.OpenFlyout(new LockedTimer(ModelHelpers));
         }
 
-        private void InfoButton(object sender, RoutedEventArgs e)
-        {
-            ModelHelpers.OpenFlyout(new Information(ModelHelpers));
-        }
-
         private async void SettingsButton(object sender, RoutedEventArgs e)
         {
             await ModelHelpers.OpenFlyout(new Flyouts.Settings(ModelHelpers));
@@ -242,6 +242,35 @@ namespace Gallifrey.UI.Modern.MainViews
                 ModelHelpers.CloseApp();
             }
             ModelHelpers.RefreshModel();
+        }
+
+        private void SaveButton(object sender, RoutedEventArgs e)
+        {
+            var saveFile = new SaveFileDialog
+            {
+                DefaultExt = "csv",
+                Filter = "Comma Seperated File|*.csv"
+            };
+            saveFile.ShowDialog();
+
+            if (!string.IsNullOrWhiteSpace(saveFile.FileName))
+            {
+                var fileOutput = new StringBuilder();
+
+                fileOutput.AppendLine("Timer ID,LocalTimer?,Jira Reference,Jira Description,Work Date,Time Spent");
+
+                foreach (var timer in ModelHelpers.Gallifrey.JiraTimerCollection.GetAllTimersWithTime())
+                {
+                    fileOutput.AppendLine($"{timer.UniqueId},{timer.LocalTimer},{timer.JiraReference},\"{timer.JiraName}\",{timer.DateStarted.Date},{timer.ExactCurrentTime.FormatAsString()}");
+                }
+
+                File.WriteAllText(saveFile.FileName, fileOutput.ToString());
+            }
+        }
+
+        private void InfoButton(object sender, RoutedEventArgs e)
+        {
+            ModelHelpers.OpenFlyout(new Information(ModelHelpers));
         }
 
         private void EmailButton(object sender, RoutedEventArgs e)
@@ -288,12 +317,14 @@ namespace Gallifrey.UI.Modern.MainViews
                 case RemoteButtonTrigger.Export: ExportButton(this, null); break;
                 case RemoteButtonTrigger.LockTimer: LockTimerButton(this, null); break;
                 case RemoteButtonTrigger.Settings: SettingsButton(this, null); break;
+                case RemoteButtonTrigger.Save: SaveButton(this, null); break;
                 case RemoteButtonTrigger.Info: InfoButton(this, null); break;
                 case RemoteButtonTrigger.Twitter: TwitterButton(this, null); break;
                 case RemoteButtonTrigger.Email: EmailButton(this, null); break;
                 case RemoteButtonTrigger.Gitter: GitterButton(this, null); break;
                 case RemoteButtonTrigger.GitHub: GitHubButton(this, null); break;
                 case RemoteButtonTrigger.PayPal: PayPalButton(this, null); break;
+
                 default: return;
             }
         }

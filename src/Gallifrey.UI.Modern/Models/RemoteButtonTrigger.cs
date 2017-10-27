@@ -17,6 +17,7 @@ namespace Gallifrey.UI.Modern.Models
         GitHub,
         PayPal,
         Gitter,
-        AddToFill
+        AddToFill,
+        Save
     }
 }
