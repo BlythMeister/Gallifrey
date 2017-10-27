@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Security.Policy;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Gallifrey.DeploymentUtils
@@ -20,20 +21,20 @@ namespace Gallifrey.DeploymentUtils
             PushUninstallOKButton(displayName);
         }
 
-        public static void AutoInstall(string applicationUriString)
+        public static async void AutoInstall(string applicationUriString)
         {
-            var mutex = new Mutex(false);
             var webBrowser = new WebBrowser
             {
                 ScriptErrorsSuppressed = true,
                 AllowNavigation = true
             };
 
-            webBrowser.Navigated += (sender, args) => mutex.ReleaseMutex();
-
             webBrowser.Navigate(applicationUriString);
 
-            mutex.WaitOne(TimeSpan.FromMinutes(2));
+            while (webBrowser.ReadyState != WebBrowserReadyState.Complete)
+            {
+                await Task.Delay(500);
+            }
         }
 
         private static void PushUninstallOKButton(string displayName)
