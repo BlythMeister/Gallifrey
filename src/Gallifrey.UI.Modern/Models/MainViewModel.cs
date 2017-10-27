@@ -92,7 +92,7 @@ namespace Gallifrey.UI.Modern.Models
                     return string.Empty;
                 }
 
-                var unexportedTime = ModelHelpers.Gallifrey.JiraTimerCollection.GetTotalExportableTime();
+                var unexportedTime = ModelHelpers.Gallifrey.JiraTimerCollection.GetStoppedTotalExportableTime();
                 var unexportedTimers = ModelHelpers.Gallifrey.JiraTimerCollection.GetStoppedUnexportedTimers();
                 var unexportedCount = unexportedTimers.Count(x => !x.LocalTimer);
 
@@ -120,7 +120,7 @@ namespace Gallifrey.UI.Modern.Models
                     return string.Empty;
                 }
 
-                var localTime = ModelHelpers.Gallifrey.JiraTimerCollection.GetTotalLocalTime();
+                var localTime = ModelHelpers.Gallifrey.JiraTimerCollection.GetStoppedTotalLocalTime();
                 var unexportedTimers = ModelHelpers.Gallifrey.JiraTimerCollection.GetStoppedUnexportedTimers();
                 var unexportedCount = unexportedTimers.Count(x => x.LocalTimer);
 

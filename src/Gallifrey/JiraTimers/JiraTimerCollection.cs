@@ -32,6 +32,8 @@ namespace Gallifrey.JiraTimers
         Guid ChangeLocalTimerDescription(Guid editedTimerId, string localTimerDescription);
         Guid ChangeTimerDate(Guid timerGuid, DateTime newStartDate);
         Tuple<int, int> GetNumberExported();
+        TimeSpan GetStoppedTotalLocalTime();
+        TimeSpan GetStoppedTotalExportableTime();
         TimeSpan GetTotalLocalTime();
         TimeSpan GetTotalExportableTime();
         TimeSpan GetTotalExportedTimeThisWeek(DayOfWeek startOfWeek);
@@ -312,16 +314,28 @@ namespace Gallifrey.JiraTimers
             return new Tuple<int, int>(timerList.Count(jiraTimer => jiraTimer.FullyExported), timerList.Count);
         }
 
-        public TimeSpan GetTotalLocalTime()
+        public TimeSpan GetStoppedTotalLocalTime()
         {
             var unexportedTime = new TimeSpan();
             return timerList.Where(timer => timer.LocalTimer && !timer.IsRunning && !timer.FullyExported).ToList().Aggregate(unexportedTime, (current, jiraTimer) => current.Add(new TimeSpan(jiraTimer.TimeToExport.Hours, jiraTimer.TimeToExport.Minutes, 0)));
         }
 
-        public TimeSpan GetTotalExportableTime()
+        public TimeSpan GetStoppedTotalExportableTime()
         {
             var unexportedTime = new TimeSpan();
             return timerList.Where(timer => !timer.LocalTimer && !timer.IsRunning && !timer.FullyExported).ToList().Aggregate(unexportedTime, (current, jiraTimer) => current.Add(new TimeSpan(jiraTimer.TimeToExport.Hours, jiraTimer.TimeToExport.Minutes, 0)));
+        }
+
+        public TimeSpan GetTotalLocalTime()
+        {
+            var unexportedTime = new TimeSpan();
+            return timerList.Where(timer => timer.LocalTimer && !timer.FullyExported).ToList().Aggregate(unexportedTime, (current, jiraTimer) => current.Add(new TimeSpan(jiraTimer.TimeToExport.Hours, jiraTimer.TimeToExport.Minutes, 0)));
+        }
+
+        public TimeSpan GetTotalExportableTime()
+        {
+            var unexportedTime = new TimeSpan();
+            return timerList.Where(timer => !timer.LocalTimer && !timer.FullyExported).ToList().Aggregate(unexportedTime, (current, jiraTimer) => current.Add(new TimeSpan(jiraTimer.TimeToExport.Hours, jiraTimer.TimeToExport.Minutes, 0)));
         }
 
         public TimeSpan GetTotalExportedTimeThisWeek(DayOfWeek startOfWeek)
