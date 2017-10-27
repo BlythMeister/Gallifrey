@@ -22,12 +22,18 @@ namespace Gallifrey.DeploymentUtils
 
         public static void AutoInstall(string applicationUriString)
         {
+            var mutex = new Mutex(false);
             var webBrowser = new WebBrowser
             {
-                ScriptErrorsSuppressed = true
+                ScriptErrorsSuppressed = true,
+                AllowNavigation = true
             };
 
+            webBrowser.Navigated += (sender, args) => mutex.ReleaseMutex();
+
             webBrowser.Navigate(applicationUriString);
+
+            mutex.WaitOne(TimeSpan.FromMinutes(2));
         }
 
         private static void PushUninstallOKButton(string displayName)
