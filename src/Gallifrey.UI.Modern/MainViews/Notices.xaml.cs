@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace Gallifrey.UI.Modern.MainViews
@@ -51,21 +52,40 @@ namespace Gallifrey.UI.Modern.MainViews
             unexportedMutex.ReleaseMutex();
         }
 
-        private void InstallUpdate(object sender, MouseButtonEventArgs e)
+        private async void InstallUpdate(object sender, MouseButtonEventArgs e)
         {
             if (ModelHelpers.Gallifrey.VersionControl.UpdateInstalled)
             {
-                ModelHelpers.CloseApp(true);
-                ModelHelpers.Gallifrey.TrackEvent(TrackingType.ManualUpdateRestart);
+                try
+                {
+                    ModelHelpers.CloseApp(true);
+                    ModelHelpers.Gallifrey.TrackEvent(TrackingType.ManualUpdateRestart);
+                }
+                catch (Exception)
+                {
+                    await DialogCoordinator.Instance.ShowMessageAsync(ModelHelpers.DialogContext, "Update Error", "There Was An Error Trying To Update Gallifrey, If This Problem Persists Please Contact Support");
+                }
             }
         }
 
-        private void ReinstallUpdate(object sender, MouseButtonEventArgs e)
+        private async void ReinstallUpdate(object sender, MouseButtonEventArgs e)
         {
             if (ModelHelpers.Gallifrey.VersionControl.UpdateReinstallNeeded)
             {
-                ModelHelpers.Gallifrey.VersionControl.ManualReinstall();
-                ModelHelpers.Gallifrey.TrackEvent(TrackingType.ManualUpdateRestart);
+                try
+                {
+                    ModelHelpers.Gallifrey.TrackEvent(TrackingType.ManualUpdateRestart);
+                    ModelHelpers.Gallifrey.VersionControl.ManualReinstall();
+                    await Task.Delay(TimeSpan.FromSeconds(2));
+                }
+                catch (Exception)
+                {
+                    await DialogCoordinator.Instance.ShowMessageAsync(ModelHelpers.DialogContext, "Reinstall Error", "There Was An Error Trying To Reinstall Gallifrey, You May Need To Re-Download The App");
+                }
+                finally
+                {
+                    ModelHelpers.CloseApp();
+                }
             }
         }
 

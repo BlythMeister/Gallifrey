@@ -511,9 +511,19 @@ namespace Gallifrey.UI.Modern.MainViews
 
                     if (messageResult == MessageDialogResult.Affirmative)
                     {
-                        modelHelpers.Gallifrey.VersionControl.ManualReinstall();
-                        await Task.Delay(TimeSpan.FromSeconds(2));
-                        modelHelpers.CloseApp();
+                        try
+                        {
+                            modelHelpers.Gallifrey.VersionControl.ManualReinstall();
+                            await Task.Delay(TimeSpan.FromSeconds(2));
+                        }
+                        catch (Exception)
+                        {
+                            await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Update Error", "There Was An Error Trying To Update Gallifrey, You May Need To Re-Download The App");
+                        }
+                        finally
+                        {
+                            modelHelpers.CloseApp();
+                        }
                     }
                 }
             }
