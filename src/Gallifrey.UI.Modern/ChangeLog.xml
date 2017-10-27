@@ -251,10 +251,9 @@
     <Bugs>
       <Bug>Fixes to auto-reinstaller logic</Bug>
       <Bug>Fixes to the time calculations in notices and bottom bar</Bug>
+      <Bug>Fixes for HTTPS migration</Bug>
     </Bugs>
-    <Others>
-      <Other>Updates now pull over HTTPS</Other>
-    </Others>
+    <Others/>
   </Version>
   <!--
   Template for VNext if not present above
