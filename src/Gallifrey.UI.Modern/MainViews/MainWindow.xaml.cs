@@ -512,6 +512,7 @@ namespace Gallifrey.UI.Modern.MainViews
                     if (messageResult == MessageDialogResult.Affirmative)
                     {
                         modelHelpers.Gallifrey.VersionControl.ManualReinstall();
+                        await Task.Delay(TimeSpan.FromSeconds(20));
                         modelHelpers.CloseApp();
                     }
                 }
