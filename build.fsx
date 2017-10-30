@@ -58,7 +58,16 @@ Target "VersionUpdate" (fun _ ->
     BulkReplaceAssemblyInfoVersions "src/" (fun f -> { f with AssemblyVersion = versionNumber; AssemblyInformationalVersion = versionNumber; AssemblyFileVersion = versionNumber })
     
     printfn "Update Change Log Versions"
-    File.WriteAllText(changeLogPath, File.ReadAllText(changeLogPath).Replace("<Version Number=\"0.0.0.0\" Name=\"Pre-Release\">", (sprintf "<Version Number=\"%s\" Name=\"Pre-Release\">" versionNumber)))
+    let changeLog = XDocument.Load(changeLogPath)
+
+    let versionLog = changeLog
+                     |> fun changelog -> changelog.Descendants(XName.Get("Version", "http://releases.gallifreyapp.co.uk/ChangeLog"))
+                     |> Seq.filter(fun x -> x.Attribute(XName.Get("Number")).Value = "0.0.0.0")
+                     |> Seq.head
+    
+    versionLog.Attribute(XName.Get("Number")).Value <- versionNumber    
+
+    changeLog.Save(changeLogPath)
 
     printfn "Update Click-Once Settings Versions"
     Directory.GetFiles(srcDir, "*proj", SearchOption.AllDirectories)
@@ -153,13 +162,17 @@ Target "Publish-Release" (fun _ ->
     if publishedAlpha || publishedBeta || publishedStable then
         pushBranch releasesRepo "origin" "master"
 
-        if isStable then 
-            tag currentDirectory baseVersion
-            pushTag currentDirectory "origin" baseVersion
+        let releaseVersion = if isStable then baseVersion else versionNumber
+
+        if isStable || isBeta then 
+            tag currentDirectory releaseVersion
+            pushTag currentDirectory "origin" releaseVersion
 
             let versionLog = XDocument.Load(changeLogPath)
                              |> fun changelog -> changelog.Descendants(XName.Get("Version", "http://releases.gallifreyapp.co.uk/ChangeLog"))
-                             |> Seq.filter(fun x -> x.Attribute(XName.Get("Number")).Value.StartsWith(baseVersion))                 
+                             |> Seq.filter(fun x -> x.Attribute(XName.Get("Number")).Value.StartsWith(releaseVersion))
+                             |> Seq.head
+
             let features = versionLog.Descendants(XName.Get("Feature", "http://releases.gallifreyapp.co.uk/ChangeLog")) |> Seq.map(fun x -> sprintf "* %s" x.Value) |> Seq.toList
             let bugs = versionLog.Descendants(XName.Get("Bug", "http://releases.gallifreyapp.co.uk/ChangeLog")) |> Seq.map(fun x -> sprintf "* %s" x.Value) |> Seq.toList
             let others = versionLog.Descendants(XName.Get("Other", "http://releases.gallifreyapp.co.uk/ChangeLog")) |> Seq.map(fun x -> sprintf "* %s" x.Value) |> Seq.toList
@@ -174,13 +187,14 @@ Target "Publish-Release" (fun _ ->
                                 if others |> List.isEmpty |> not then yield ["# Others"; ""]
                                 yield others
                                 if others |> List.isEmpty |> not then yield [""]
+                                if not(isStable) then yield ["*NB: This is a cumulative change log for next release*"]
                                ]
                                |> List.concat
 
             createClientWithToken githubApiKey
-            |> createDraft "BlythMeister" "Gallifrey" baseVersion false releaseNotes
-            |> uploadFile (outputDir @@ "beta-setup.exe")
-            |> uploadFile (outputDir @@ "stable-setup.exe")
+            |> createDraft "BlythMeister" "Gallifrey" releaseVersion (not(isStable)) releaseNotes
+            |> fun x -> if isBeta then uploadFile (outputDir @@ "beta-setup.exe") x else x
+            |> fun x -> if isStable then uploadFile (outputDir @@ "stable-setup.exe") x else x
             |> releaseDraft
             |> Async.RunSynchronously
 )

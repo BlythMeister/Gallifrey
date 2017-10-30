@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Versions xmlns="http://releases.gallifreyapp.co.uk/ChangeLog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://releases.gallifreyapp.co.uk/schemas/ChangeLogSchema.xsd">
   <Version Number="3.0.0.0">
     <Features>
@@ -22,21 +22,21 @@
       <Feature>Context Menu On Timers</Feature>
     </Features>
     <Bugs />
-    <Others/>
+    <Others />
   </Version>
   <Version Number="3.0.1.0">
     <Features />
     <Bugs>
       <Bug>Change the way the SOAP client is created to fix connection issue</Bug>
     </Bugs>
-    <Others/>
+    <Others />
   </Version>
   <Version Number="3.0.2.0">
-    <Features/>
+    <Features />
     <Bugs>
       <Bug>Fix bug with locked timers adding with search</Bug>
     </Bugs>
-    <Others/>
+    <Others />
   </Version>
   <Version Number="3.1.0.0">
     <Features>
@@ -64,7 +64,7 @@
     </Bugs>
     <Others />
   </Version>
-  <Version Number="3.2.0.0" Name="">
+  <Version Number="3.2.0.0">
     <Features>
       <Feature>Adding "Premium" switch for a Premium set of features</Feature>
       <Feature>Time adjustment now increments/decrements hours when minutes full/empty</Feature>
@@ -76,9 +76,9 @@
       <Bug>Fix issue following an empty search locking the search flyout</Bug>
       <Bug>Fix issue when time entry is blank showing error message</Bug>
     </Bugs>
-    <Others/>
+    <Others />
   </Version>
-  <Version Number="3.2.1.0" Name="">
+  <Version Number="3.2.1.0">
     <Features>
       <Feature>If bulk export fails, you are now given chance to retry or cancel</Feature>
     </Features>
@@ -87,9 +87,9 @@
       <Bug>Fix spelling errors</Bug>
       <Bug>Fix the installationID not being generated on new installs</Bug>
     </Bugs>
-    <Others/>
+    <Others />
   </Version>
-  <Version Number="3.3.0.0" Name="">
+  <Version Number="3.3.0.0">
     <Features>
       <Feature>Added ability to cancel issue search when adding timer</Feature>
       <Feature>Added a timeout on all non-cancellable progress dialogs</Feature>
@@ -115,14 +115,14 @@
       <Other>Temp timers are now "Local" timers in preparation for exporting to a destination other than Jira</Other>
     </Others>
   </Version>
-  <Version Number="3.3.1.0" Name="">
-    <Features/>
+  <Version Number="3.3.1.0">
+    <Features />
     <Bugs>
       <Bug>Fix the context menu</Bug>
     </Bugs>
-    <Others/>
+    <Others />
   </Version>
-  <Version Number="3.4.0.0" Name="">
+  <Version Number="3.4.0.0">
     <Features>
       <Feature>Added config to turn lock/idle timers on/off</Feature>
       <Feature>Added configurable threshold fo lock/idle time</Feature>
@@ -143,8 +143,8 @@
       <Other>Attempt to fix slow memory leak</Other>
     </Others>
   </Version>
-  <Version Number="3.4.1.0" Name="">
-    <Features/>
+  <Version Number="3.4.1.0">
+    <Features />
     <Bugs>
       <Bug>Fix for re-showing old bulk export due to hidden flyout not closing properly</Bug>
     </Bugs>
@@ -188,7 +188,7 @@
     <Bugs>
       <Bug>Spelling mistake fixes</Bug>
       <Bug>Remove extra space in "App Name" causing start on boot to fail</Bug>
-      <Bug>Fix for export remaining hours going 99 -> 9</Bug>
+      <Bug>Fix for export remaining hours going 99 -&gt; 9</Bug>
       <Bug>Fix to allow timers over 10 hours to be edited. - New max 24 hours</Bug>
       <Bug>Default timers do not add if timer running over midnight</Bug>
       <Bug>Default timers could be deleted, but instantly re-appear</Bug>
@@ -224,7 +224,7 @@
       <Bug>Fix issue with TopMost for flyouts</Bug>
       <Bug>Fix issue with saving user if connection couldn't be made</Bug>
     </Bugs>
-    <Others/>
+    <Others />
   </Version>
   <Version Number="3.6.5.0">
     <Features />
@@ -233,7 +233,7 @@
       <Bug>Prevent usage tracking on custom/debug installs</Bug>
       <Bug>Allow background update checking when machine is locked, but do not auto restart</Bug>
     </Bugs>
-    <Others/>
+    <Others />
   </Version>
   <Version Number="3.6.6.0">
     <Features>
@@ -242,7 +242,7 @@
     <Bugs>
       <Bug>Fix error with bulk add message for duplicate timers (wrong date shown)</Bug>
     </Bugs>
-    <Others/>
+    <Others />
   </Version>
   <Version Number="3.7.0.0">
     <Features>
@@ -253,14 +253,14 @@
       <Bug>Fixes to the time calculations in notices and bottom bar</Bug>
       <Bug>Fixes for HTTPS migration</Bug>
     </Bugs>
-    <Others/>
+    <Others />
   </Version>
   <Version Number="0.0.0.0" Name="Pre-Release">
     <Features>
       <Feature>Added save of all timers as a CSV file</Feature>
     </Features>
     <Bugs />
-    <Others/>
+    <Others />
   </Version>
   <!--
   Template for VNext if not present above
@@ -271,4 +271,3 @@
   </Version>
   -->
 </Versions>
-
