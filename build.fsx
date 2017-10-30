@@ -71,8 +71,12 @@ Target "VersionUpdate" (fun _ ->
 
     printfn "Update Click-Once Settings Versions"
     Directory.GetFiles(srcDir, "*proj", SearchOption.AllDirectories)
-    |> Seq.iter(fun x -> File.WriteAllText(x, File.ReadAllText(x).Replace("<MinimumRequiredVersion>0.0.0.0</MinimumRequiredVersion>", (sprintf "<MinimumRequiredVersion>%s</MinimumRequiredVersion>" versionNumber))
-                                                                 .Replace("<ApplicationVersion>0.0.0.0</ApplicationVersion>", (sprintf "<ApplicationVersion>%s</ApplicationVersion>" versionNumber))))
+    |> Seq.map(fun path -> path, XDocument.Load(path))
+    |> Seq.filter(fun (_, (document:XDocument)) -> document.Descendants(XName.Get("OutputType", "http://schemas.microsoft.com/developer/msbuild/2003")) |> Seq.head |> fun x -> x.Value = "WinExe")
+    |> Seq.iter(fun (path, (document:XDocument)) -> document.Descendants(XName.Get("MinimumRequiredVersion","http://schemas.microsoft.com/developer/msbuild/2003")) |> Seq.head |> fun x -> x.Value <- versionNumber
+                                                    document.Descendants(XName.Get("ApplicationVersion","http://schemas.microsoft.com/developer/msbuild/2003")) |> Seq.head |> fun x -> x.Value <- versionNumber
+                                                    document.Save(path)
+               )
 )
 
 Target "Build" (fun _ ->
