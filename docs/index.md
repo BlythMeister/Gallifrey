@@ -12,7 +12,7 @@ Not only does Gallifrey interact with Jira, but if you have the Tempo Jira plug-
 
 <div class="hidden-sm hidden-xs">
 ![UI Example]({{ site.url }}/images/MainUI.png)
-<div>
+</div>
 
 # Features
 
