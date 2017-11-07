@@ -21,7 +21,7 @@ When donating any amount, please include your installation hash (found at the bo
 
 ### £2.00 (GBP) - Premium Access Minimum
 
-TODO - Image & Check PayPal form amount
+![premium]({{ site.url }}/images/donations/premium.png)
 
 <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
 <input type="hidden" name="cmd" value="_s-xclick">
@@ -32,7 +32,7 @@ TODO - Image & Check PayPal form amount
 
 ### £5.00 (GBP) - Coffee & Cake
 
-TODO - Image & Check PayPal form amount
+![coffee & cake]({{ site.url }}/images/donations/coffeeCake.png)
 
 <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
 <input type="hidden" name="cmd" value="_s-xclick">
@@ -43,7 +43,7 @@ TODO - Image & Check PayPal form amount
 
 ### £10.00 (GBP) - Buy me lunch
 
-TODO - Image & Check PayPal form amount
+![lunch]({{ site.url }}/images/donations/lunch.png)
 
 <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
 <input type="hidden" name="cmd" value="_s-xclick">
@@ -54,7 +54,7 @@ TODO - Image & Check PayPal form amount
 
 ### £20.00 (GBP) - Buy me a meal
 
-TODO - Image & Check PayPal form amount
+![takeaway]({{ site.url }}/images/donations/takeaway.png)
 
 <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
 <input type="hidden" name="cmd" value="_s-xclick">
@@ -65,7 +65,7 @@ TODO - Image & Check PayPal form amount
 
 ### £40.00 (GBP) - Buy me a night out
 
-TODO - Image & Check PayPal form amount
+![beer]({{ site.url }}/images/donations/beer.png)
 
 <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
 <input type="hidden" name="cmd" value="_s-xclick">
@@ -76,7 +76,7 @@ TODO - Image & Check PayPal form amount
 
 ### £80.00 (GBP) - Get your name in the app
 
-TODO - Image & Check PayPal form amount
+![my name is ???]({{ site.url }}/images/donations/myName.png)
 
 <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
 <input type="hidden" name="cmd" value="_s-xclick">
@@ -87,7 +87,7 @@ TODO - Image & Check PayPal form amount
 
 ### £££ - Choose your donation amount
 
-TODO - Image & Check PayPal form amount
+![you decide]({{ site.url }}/images/donations/youdecide.png)
 
 <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
 <input type="hidden" name="cmd" value="_s-xclick">
