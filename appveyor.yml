@@ -1,7 +1,15 @@
-version: '3.7.0.{build}'
 environment:
   github_api_key:
     secure: cBjCd4Q0pww6q7jKVN/LDBSHTMzmB+77vLQ9j4yq/KneIQi74rl6TgB4+5X7sd9w
+skip_commits:
+  files:
+    - docs/*
+    - LinqPad/*
+    - .github/*
+    - .releaseinfo/*
+    - '**/*.html'
+    - '**/*.md'
+version: '3.7.0.{build}'
 skip_tags: true
 image: Visual Studio 2017
 clone_folder: c:\project\gallifrey
