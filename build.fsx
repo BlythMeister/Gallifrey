@@ -124,14 +124,14 @@ Target "Publish-Release" (fun _ ->
         let destinationAppFiles = destinationAppFilesRoot @@ (sprintf "Gallifrey.UI.Modern.%s_%s" releaseType (versionNumber.Replace(".","_")))
 
         if not(Directory.Exists destinationAppFiles) then
-        	ensureDirectory destinationRoot       
+            ensureDirectory destinationRoot       
             
             match isStable, releaseType with
             | true, "Alpha" 
-        	| true, "Beta" -> CleanDir destinationAppFilesRoot
+            | true, "Beta" -> CleanDir destinationAppFilesRoot
                               StageAll releasesRepo
                               Commit.Commit releasesRepo (sprintf "Clean %s - Due to Stable Release" releaseType)
-        	| _, _ -> ensureDirectory destinationAppFilesRoot
+            | _, _ -> ensureDirectory destinationAppFilesRoot
         
             printfn "Publish Relase Type: %s" releaseType
             let sourceRoot = outputDir @@ releaseType
