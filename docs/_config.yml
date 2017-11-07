@@ -16,10 +16,10 @@ webmaster_verifications:
 twitter:
     username: GallifreyApp
 
-#facebook:
-#   app_id: 1934053506806190
-#   publisher: 285001657
-#   admins: 285001657
+facebook:
+   app_id: 1444417962337528
+   publisher: 285001657
+   admins: 285001657
 
 social:
     name: Gallifrey App
