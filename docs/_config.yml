@@ -1,17 +1,16 @@
 #Basic Settings
 title: Gallifrey App
 description: "Get the best assistant to help manage your 'wibbily wobbly timey wimey' for Jira! A simple, light-weight Jira time logging companion to help you travel the Jira universe!"
-url: https://redesign.gallifreyapp.co.uk
-#REAL: url: https://www.gallifreyapp.co.uk
+url: https://www.gallifreyapp.co.uk
 logo: /images/clockIcon.png
 lang: en_GB
 
 GoogleAnalytics: UA-51628201-1
 
 #Webmaster tools
-#webmaster_verifications:
-#  google: HV11HFJBxWBjSBdvj2X1ARYcyV0gkh2RC2RN-BBPOQc
-#  bing: 70C9C40BE160CF8A17564E2F00B21581
+webmaster_verifications:
+  google: mgN_dzKniNX81z2ReK46tTzOgoTND0YinWOLNZKMsws
+  bing: 70C9C40BE160CF8A17564E2F00B21581
 
 #Social
 twitter:
