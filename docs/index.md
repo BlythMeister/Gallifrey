@@ -10,6 +10,8 @@ With direct access into Jira you can capture your time throughout the day or wee
 
 Not only does Gallifrey interact with Jira, but if you have the Tempo Jira plug-in, Gallifrey will still work and even better, Gallifrey will use the Tempo API rather than the Jira API so it works exactly the same as entering time online.
 
+![UI]({{ site.url }}/images/mainUI.png)
+
 # Features
 
 * Daily timer management
