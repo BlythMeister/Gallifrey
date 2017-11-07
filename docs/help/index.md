@@ -1,10 +1,12 @@
 ---
-title: TODO
-description: TODO
+title: Help
+description: Proving support on Twitter, Email and through GitHub we are here to help.
 ---
 # Support
 
 You can get app support via <a href="https://twitter.com/GallifreyApp" target="_blank">twitter</a> or via <a href="mailto:support@GallifreyApp.co.uk"  target="_blank">email</a>.
+
+If you would like to chat to someone to get assistance, we have a public <a href="https://gitter.im/BlythMeister/Gallifrey" target="_blank">gitter</a> channel you can use.
 
 We are using GitHub issues to maintain a backlog and track bugs, so feel free to raise issues there <a href="https://github.com/BlythMeister/Gallifrey/issues" target="_blank">https://github.com/BlythMeister/Gallifrey/issues</a>
 
