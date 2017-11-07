@@ -21,8 +21,8 @@ When donating any amount, please include your installation hash (found at the bo
 
 ### £2.00 (GBP) - Premium Access Minimum
 
-![premium]({{ site.url }}/images/donations/premium.png)
 <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+<img alt="premium" src="{{ site.url }}/images/donations/premium.png"/>
 <input type="hidden" name="cmd" value="_s-xclick">
 <input type="hidden" name="hosted_button_id" value="8BZ4YEJH5HULY">
 <input type="image" src="https://www.paypalobjects.com/en_GB/i/btn/btn_donate_SM.gif" border="0" name="submit" alt="PayPal – The safer, easier way to pay online!">
@@ -31,8 +31,8 @@ When donating any amount, please include your installation hash (found at the bo
 
 ### £5.00 (GBP) - Coffee & Cake
 
-![coffee & cake]({{ site.url }}/images/donations/coffeeCake.png)
 <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+<img alt="coffee and cake" src="{{ site.url }}/images/donations/coffeeCake.png"/>
 <input type="hidden" name="cmd" value="_s-xclick">
 <input type="hidden" name="hosted_button_id" value="SMFNAFP8SW3QY">
 <input type="image" src="https://www.paypalobjects.com/en_GB/i/btn/btn_donate_SM.gif" border="0" name="submit" alt="PayPal – The safer, easier way to pay online!">
@@ -41,8 +41,8 @@ When donating any amount, please include your installation hash (found at the bo
 
 ### £10.00 (GBP) - Buy me lunch
 
-![lunch]({{ site.url }}/images/donations/lunch.png)
 <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+<img alt="lunch" src="{{ site.url }}/images/donations/lunch.png"/>
 <input type="hidden" name="cmd" value="_s-xclick">
 <input type="hidden" name="hosted_button_id" value="SZSAUBM2H3876">
 <input type="image" src="https://www.paypalobjects.com/en_GB/i/btn/btn_donate_SM.gif" border="0" name="submit" alt="PayPal – The safer, easier way to pay online!">
