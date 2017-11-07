@@ -10,6 +10,9 @@ With direct access into Jira you can capture your time throughout the day or wee
 
 Not only does Gallifrey interact with Jira, but if you have the Tempo Jira plug-in, Gallifrey will still work and even better, Gallifrey will use the Tempo API rather than the Jira API so it works exactly the same as entering time online.
 
+Gallifrey really is the 1 stop shop for all your Jira time tracking needs and best of all it's free!
+We are committed that Gallifrey will remain free for all users forever.  Whilst some features are slightly limited to those who have donated time or money, Gallifrey will capture and export time without any sort of donation, so why not try it today!
+
 <div class="hidden-sm hidden-xs">
 <img alt="UI Example" src="{{ site.url }}/images/MainUI.png"/>
 </div>

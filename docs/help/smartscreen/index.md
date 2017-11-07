@@ -1,6 +1,6 @@
 ---
-title: Windows 
-description: TODO
+title: Windows SmartScreen
+description: Helpful advice on dealing with Windows SmartScreen
 ---
 # SmartScreen Help
 
@@ -12,13 +12,13 @@ By doing this you will circumvent the Windows SmartScreen feature as this does n
 
 When prompted with this:
 
-![Smartscreen page 1]({{ site.url }}/images/help/smartscreen1.png "OK Screen")
+![Smartscreen page 1]({{ site.url }}/images/help/smartscreen1.png)
 
 Press the "More info" text
 
 When prompted with this:
 
-![Smartscreen page 2]({{ site.url }}/images/help/smartscreen2.png "Run anyway Screen")
+![Smartscreen page 2]({{ site.url }}/images/help/smartscreen2.png)
 
 Press the "Run anyway" text
 
