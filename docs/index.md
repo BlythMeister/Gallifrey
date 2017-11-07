@@ -1,39 +1,36 @@
-# Gallifrey
+---
+title: Gallifrey
+description: "Get the best assistant to help manage your 'wibbily wobbly timey wimey' for Jira! A simple, light-weight Jira time logging companion to help you travel the Jira universe!"
+---
+# What Is Gallifrey?
 
-Gallifrey will make anyone a Jira time lord!
+Gallifrey is a simple, light-weight Jira time logging companion to help you travel the Jira universe!
 
-A simple, light-weight Jira time logging companion to help you travel the Jira universe!
+With direct access into Jira you can capture your time throughout the day or week and export in bulk updating issues as you go.
 
-# Why Is The App Called Gallifrey
+Not only does Gallifrey interact with Jira, but if you have the Tempo Jira plug-in, Gallifrey will still work and even better, Gallifrey will use the Tempo API rather than the Jira API so it works exactly the same as entering time online.
 
-Gallifrey is the home of the time lords in the hit BBC TV show Dr Who....Need i say more?
-*This product is in no way linked/affiliated to Dr Who or the BBC (apart from the name)*
+# Features
 
-# Downloads
+* Daily timer management
+* Manual timer adjustment
+* Export direct to Jira & set remaining estimate
+* Jira issue search (with saved filters)
+* Alerts when no timer is running
+* Machine locked time capture (including remote desktop connect/disconnect)
+* Automatic Updates
+* Background Sync (keeping Gallifrey up-to-date with time manually added to Jira)
+* Export stats & a target export amount complete with progress bar
+* Customised working weeks for target export
+* Drag & Drop items from Jira in your browser
+* Export reminders
+* Keyboard shortcuts
+* Assign Issues when starting timers
+* Displaying Parent details for sub tasks
+* Support for SOAP and REST Jira APIs & the Tempo REST API. - This includes cloud or self-hosted instances
 
-Gallifrey uses automatic updates, so once you have installed, updates will be served to you when they are published.
+# System Requirements
 
-**Be aware when installing on Windows 8 the "SmartScreen" feature will flag up this app as a problem, for more information [click here](smartscreen.html)**
-
-## Download Links
-
-**Please note**, the Beta is the current work in progress & I cannot guarantee that it is 100% stable!
-
-* <a href="http://releases.gallifreyapp.co.uk/download/download-stable.html" onclick="trackOutboundLink('http://releases.gallifreyapp.co.uk/download/download-stable.html'); return false;">Stable Release - Click Here</a>
-* <a href="http://releases.gallifreyapp.co.uk/download/download-beta.html" onclick="trackOutboundLink('http://releases.gallifreyapp.co.uk/download/download-beta.html'); return false;">Beta Release - Click Here</a>
-
-# Support
-
-You can get app support via <a href="https://twitter.com/GallifreyApp" onclick="trackOutboundLink('https://twitter.com/GallifreyApp'); return false;">twitter</a> or via email (Support@GallifreyApp.co.uk).
-
-We are using GitHub issues to maintain a backlog and track bugs, so feel free to raise issues there <a href="https://github.com/BlythMeister/Gallifrey/issues" onclick="trackOutboundLink('https://github.com/BlythMeister/Gallifrey/issues'); return false;">https://github.com/BlythMeister/Gallifrey/issues</a>
-
-# Atlassian Marketplace
-
-Gallifrey is listed on the Atlassian Marketplace, you can view the listing <a href="https://marketplace.atlassian.com/plugins/Gallifrey" onclick="trackOutboundLink('https://marketplace.atlassian.com/plugins/Gallifrey'); return false;">here</a>.
-
-The app has been approved by Atlassian to get listed here!
-
-# User Guide
-
-Our online user guide is avaliable from this site, just [click here](userguide.html)
+* Windows 7 or higher
+* Jira instance (cloud or self-hosted) any version.
+* .net Framework 4.6 or higher

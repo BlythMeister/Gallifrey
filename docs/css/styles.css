@@ -1,0 +1,160 @@
+html {
+    height: 100%;
+}
+
+body {
+    padding: 15px;
+    margin: 0;
+    background-color:black;
+    background-image:
+    radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 40px),
+    radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 30px),
+    radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 40px),
+    radial-gradient(rgba(255,255,255,.4), rgba(255,255,255,.1) 2px, transparent 30px);
+    background-size: 550px 550px, 350px 350px, 250px 250px, 150px 150px; 
+    background-position: 0 0, 40px 60px, 130px 270px, 70px 100px;
+}
+
+.container-rounded {
+    border-radius: 10px;
+    box-shadow: 0 0 20px grey;
+    background-color: #F2F2F2;
+    padding: 15px;
+}
+
+.dropdown-menu-justified {
+    width: 100%;
+    text-align: center;
+}
+
+.dont-break-out {
+    /* These are technically the same, but use both */
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    -ms-word-break: break-all;
+    /* This is the dangerous one in WebKit, as it breaks things wherever */
+    word-break: break-all;
+    /* Instead use this non-standard one: */
+    word-break: break-word;
+    /* Adds a hyphen where the word breaks, if supported (No Blink) */
+    -ms-hyphens: auto;
+    -moz-hyphens: auto;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+}
+
+.container {
+    display: table;
+    min-width: 260px;
+    box-sizing: border-box;
+}
+
+.container .row .no-float {
+    display: table-cell;
+    float: none;
+    vertical-align: top;
+}
+
+.header {
+    margin-top: 5px;
+    margin-bottom: 15px;
+    border-bottom: 1px solid grey;
+}
+
+.footer {
+    margin-top: 15px;
+    margin-bottom: 5px;
+    border-top: 1px solid grey;
+    padding-top: 10px;
+}
+
+.nav {
+    padding-left: 5px;
+}
+
+.mainFrame {
+    padding-left: 20px;
+    margin-bottom: 0;
+}
+
+@media (min-width:991px) {
+    .mainFrame {
+        border-right: 1px solid grey;
+    }
+}
+
+.sidebar {
+    height: 100%;
+}
+
+.sidebar .aboutus {
+    padding-bottom: 10px;
+}
+
+.sidebar .aboutus .avatar {
+    height: 80px;
+    width: 80px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+    box-shadow: 0 0 10px grey;
+}
+
+.sidebar .downloads {
+    border-top: 1px solid grey;
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
+
+.sidebar .paypal {
+    border-top: 1px solid grey;
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
+
+.sidebar .recentNews {
+    border-top: 1px solid grey;
+    padding-bottom: 10px;
+}
+
+.sidebar .recentNews .media-underline {
+    border-bottom: 1px solid grey;
+}
+
+.devide-bottom {
+    border-bottom: 1px solid grey;
+}
+
+.devide-top {
+    border-top: 1px solid grey;
+}
+
+.fa {
+    padding-top: 6px;
+    font-size: 18px;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 50%;
+    vertical-align: middle;
+}
+
+.fa.fa-twitter {
+    background: #1DA1F2;
+    color: #FFFFFF;
+}
+
+.fa.fa-github {
+    background: #000000;
+    color: #FFFFFF;
+}
+
+.fa.fa-rss {
+    background: #FF6600;
+    color: #FFFFFF;
+}
+
+a.fa:hover {
+    opacity: 0.7;
+    text-decoration: none;
+}

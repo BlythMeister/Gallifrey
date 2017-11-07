@@ -1,0 +1,38 @@
+---
+title: News
+description: Up to the minute information about Gallifrey
+---
+{% comment %}
+NOTE: This has to be HTML for the paginator to work
+{% endcomment %}
+
+<h2>Latest News <a href="{{ site.url }}/feed.xml" class="fa fa-rss"></a></h2>
+
+{% for post in paginator.posts %}
+<div class="{% if forloop.last == false %}devide-bottom{% endif %}">
+    <h3><a href="{{ post.url }}">{{ post.title }}</a></h3>
+    {{ post.content }}
+</div>
+{% endfor %}
+
+{% if paginator.total_pages > 1 %}
+<nav>
+    <ul class="pagination">
+        <li class="{% if paginator.previous_page %}{% else %}disabled{% endif %}">
+            <a href="{{ paginator.previous_page_path }}">&laquo;</a>
+        </li>
+        {% for page in (1..paginator.total_pages) %}
+        {% if page == paginator.page %}
+        <li class="active"><a href="#">{{ page }}</a></li>
+        {% elsif page == 1 %}
+        <li><a href="{{ site.url }}/news">{{ page }}</a></li>
+        {% else %}
+        <li><a href="{{ site.paginate_path | replace: ':num', page }}">{{ page }}</a></li>
+        {% endif %}
+        {% endfor %}
+        <li class="{% if paginator.next_page %}{% else %}disabled{% endif %}">
+            <a href="{{ paginator.next_page_path }}">&raquo;</a>
+        </li>
+    </ul>
+</nav>
+{% endif %}
