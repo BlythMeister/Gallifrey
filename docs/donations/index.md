@@ -21,7 +21,7 @@ When donating any amount, please include your installation hash (found at the bo
 
 ### £2.00 (GBP) - Premium Access Minimum
 
-<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top" style="vertical-align:middle;">
 <img alt="premium" src="{{ site.url }}/images/donations/premium.png"/>
 <input type="hidden" name="cmd" value="_s-xclick">
 <input type="hidden" name="hosted_button_id" value="8BZ4YEJH5HULY">
@@ -31,7 +31,7 @@ When donating any amount, please include your installation hash (found at the bo
 
 ### £5.00 (GBP) - Coffee & Cake
 
-<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top" style="vertical-align:middle;">
 <img alt="coffee and cake" src="{{ site.url }}/images/donations/coffeeCake.png"/>
 <input type="hidden" name="cmd" value="_s-xclick">
 <input type="hidden" name="hosted_button_id" value="SMFNAFP8SW3QY">
@@ -41,7 +41,7 @@ When donating any amount, please include your installation hash (found at the bo
 
 ### £10.00 (GBP) - Buy me lunch
 
-<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top" style="vertical-align:middle;">
 <img alt="lunch" src="{{ site.url }}/images/donations/lunch.png"/>
 <input type="hidden" name="cmd" value="_s-xclick">
 <input type="hidden" name="hosted_button_id" value="SZSAUBM2H3876">
@@ -51,8 +51,8 @@ When donating any amount, please include your installation hash (found at the bo
 
 ### £20.00 (GBP) - Buy me a meal
 
-![takeaway]({{ site.url }}/images/donations/takeaway.png)
-<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top" style="vertical-align:middle;">
+<img alt="takeaway" src="{{ site.url }}/images/donations/takeaway.png"/>
 <input type="hidden" name="cmd" value="_s-xclick">
 <input type="hidden" name="hosted_button_id" value="4T84MVAN8ZS9N">
 <input type="image" src="https://www.paypalobjects.com/en_GB/i/btn/btn_donate_SM.gif" border="0" name="submit" alt="PayPal – The safer, easier way to pay online!">
@@ -61,8 +61,8 @@ When donating any amount, please include your installation hash (found at the bo
 
 ### £40.00 (GBP) - Buy me a night out
 
-![beer]({{ site.url }}/images/donations/beer.png)
-<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top" style="vertical-align:middle;">
+<img alt="beer" src="{{ site.url }}/images/donations/beer.png"/>
 <input type="hidden" name="cmd" value="_s-xclick">
 <input type="hidden" name="hosted_button_id" value="8XDTDQAADCYGN">
 <input type="image" src="https://www.paypalobjects.com/en_GB/i/btn/btn_donate_SM.gif" border="0" name="submit" alt="PayPal – The safer, easier way to pay online!">
@@ -71,8 +71,8 @@ When donating any amount, please include your installation hash (found at the bo
 
 ### £80.00 (GBP) - Get your name in the app
 
-![my name is ???]({{ site.url }}/images/donations/myName.png)
-<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top" style="vertical-align:middle;">
+<img alt="my name is ???" src="{{ site.url }}/images/donations/myName.png"/>
 <input type="hidden" name="cmd" value="_s-xclick">
 <input type="hidden" name="hosted_button_id" value="RMBHZM34BRXDA">
 <input type="image" src="https://www.paypalobjects.com/en_GB/i/btn/btn_donate_SM.gif" border="0" name="submit" alt="PayPal – The safer, easier way to pay online!">
@@ -81,8 +81,8 @@ When donating any amount, please include your installation hash (found at the bo
 
 ### £££ - Choose your donation amount
 
-![you decide]({{ site.url }}/images/donations/youdecide.png)
-<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top" style="vertical-align:middle;">
+<img alt="you decide" src="{{ site.url }}/images/donations/youdecide.png"/>
 <input type="hidden" name="cmd" value="_s-xclick">
 <input type="hidden" name="hosted_button_id" value="8RWB7ASGLW29S">
 <input type="image" src="https://www.paypalobjects.com/en_GB/i/btn/btn_donate_SM.gif" border="0" name="submit" alt="PayPal – The safer, easier way to pay online!">
