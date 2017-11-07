@@ -25,8 +25,8 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>true</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <InstallUrl>http://releases.gallifreyapp.co.uk/download/modern/beta/</InstallUrl>
-    <UpdateUrl>http://releases.gallifreyapp.co.uk/download/modern/beta/</UpdateUrl>
+    <InstallUrl>https://releases.gallifreyapp.co.uk/download/modern/beta/</InstallUrl>
+    <UpdateUrl>https://releases.gallifreyapp.co.uk/download/modern/beta/</UpdateUrl>
     <SupportUrl>https://github.com/BlythMeister/Gallifrey</SupportUrl>
     <ErrorReportUrl>https://github.com/BlythMeister/Gallifrey</ErrorReportUrl>
     <ProductName>Gallifrey %28Beta%29</ProductName>
