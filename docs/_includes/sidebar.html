@@ -1,0 +1,48 @@
+<div class="col-lg-12 aboutus">
+    <div>
+        <h4>About Us</h4>
+        <img src="{{ site.url }}/images/clockIcon.png" class="avatar" />
+    </div>
+    <div>
+        <p>
+            Get the best assistant to help manage your 'wibbily wobbly timey wimey' for Jira! A simple, light-weight Jira time logging companion to help you travel the Jira universe!
+        </p>
+    </div>
+    <div>
+        <a href="https://www.twitter.com/GallifreyApp" class="fa fa-twitter" target="_blank"></a>
+        <a href="https://github.com/BlythMeister/Gallifrey" class="fa fa-github" target="_blank"></a>
+    </div>
+</div>
+<div class="col-lg-12 downloads">
+    <h4>Downloads</h4>
+    <p>
+        <a href="{{ site.url }}/downloads/stable" target="_blank">Stable</a>
+    </p>
+    <p>
+        <a href="{{ site.url }}/downloads/beta" target="_blank">Beta</a>
+    </p>
+</div>
+<div class="col-lg-12 paypal">
+    <h4>Please Help Us</h4>
+    <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+        <input type="hidden" name="cmd" value="_s-xclick">
+        <input type="hidden" name="hosted_button_id" value="R4877TJL3D6BQ">
+        <input type="image" src="https://www.paypalobjects.com/en_US/GB/i/btn/btn_donateCC_LG.gif" border="0" name="submit" alt="PayPal ? The safer, easier way to pay online.">
+        <img alt="" border="0" src="https://www.paypalobjects.com/en_GB/i/scr/pixel.gif" width="1" height="1">
+    </form>	
+</div>
+<div class="col-lg-12 recentNews">
+    <h4>Latest News <a href="{{ site.url }}/feed.xml" class="fa fa-rss"></a></h4>
+    {% assign publishedPosts = site.posts | where: 'show', 'true' %}
+    {% for post in publishedPosts  limit:3 %}
+    <div class="media {% if forloop.last == false %}media-underline{% endif %}">
+        <div class="media-body">
+            <a href="{{ post.url }}">
+                <h5 class="media-heading">{{ post.title }}</h5>
+            </a>
+            <p><i class="fa fa-calendar">&nbsp;</i>{{ post.date | date: "%d %B %Y" }}</p>
+            {{ post.excerpt }}
+        </div>
+    </div>
+    {% endfor %}
+</div>
