@@ -105,6 +105,12 @@ body {
     padding-top: 10px;
 }
 
+.sidebar .pricing {
+    border-top: 1px solid grey;
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
+
 .sidebar .paypal {
     border-top: 1px solid grey;
     padding-bottom: 10px;
