@@ -2,4 +2,4 @@
 # www.google.com/support/webmasters/bin/answer.py?hl=en&answer=156449
 
 User-agent: *
-Sitemap: https://www.blyth.me.uk/sitemap.xml
+Sitemap: https://www.gallifreyapp.co.uk/sitemap.xml
