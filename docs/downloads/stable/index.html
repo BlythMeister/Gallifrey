@@ -1,29 +1,18 @@
-<!DOCTYPE html>
-
-<HTML> <BODY>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+---
+title: Stable Download
+description: Download the latest stable version
+---
 <script language="javascript" type="text/javascript">  
-
 $(document).ready(function () {
-     GetLatestReleaseInfo();  
-});  
-
-
-function GetLatestReleaseInfo() {
-   $.getJSON("https://api.github.com/repos/BlythMeister/Gallifrey/releases/latest").done(function (json) {
-		
-		var downloadURL = "https://github.com/BlythMeister/Gallifrey/releases/latest";
-		
+    $.getJSON("https://api.github.com/repos/BlythMeister/Gallifrey/releases/latest").done(function (json) {		
+		var downloadURL = "https://github.com/BlythMeister/Gallifrey/releases/latest";		
 		$.each(json.assets, function() {
 			if(this.name === "stable-setup.exe")
 			{
 				downloadURL = this.browser_download_url;
 			}
-		})
-                  
+		})                  
         window.location.href = downloadURL;
-   });    
-}  
+    }); 
+});
 </script>
-</BODY>
-</HTML>
