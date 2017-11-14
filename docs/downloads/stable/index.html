@@ -13,6 +13,9 @@ $(document).ready(function () {
 			}
 		})                  
         window.location.href = downloadURL;
+        $("a[id='downloadLink']").attr('href', downloadURL)
     }); 
 });
 </script>
+<h1 id="download-links">Beta Download</h1>
+<p>Your download should start automatically, if your browser prevents this, click <a id="downloadLink" href="#">here</a></p>
