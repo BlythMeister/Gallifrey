@@ -71,8 +71,11 @@
   <Choose>
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.6'">
       <ItemGroup>
+        <Reference Include="System.Web">
+          <Paket>True</Paket>
+        </Reference>
         <Reference Include="RestSharp">
-          <HintPath>..\..\packages\RestSharp\lib\net46\RestSharp.dll</HintPath>
+          <HintPath>..\..\packages\RestSharp\lib\net452\RestSharp.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>

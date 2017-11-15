@@ -284,6 +284,24 @@
   <Choose>
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.6'">
       <ItemGroup>
+        <Reference Include="Microsoft.VisualBasic">
+          <Paket>True</Paket>
+        </Reference>
+        <Reference Include="System.Configuration">
+          <Paket>True</Paket>
+        </Reference>
+        <Reference Include="System.Net.Http">
+          <Paket>True</Paket>
+        </Reference>
+        <Reference Include="System.Net.Http.WebRequest">
+          <Paket>True</Paket>
+        </Reference>
+        <Reference Include="System.Numerics">
+          <Paket>True</Paket>
+        </Reference>
+        <Reference Include="System.Runtime.Serialization">
+          <Paket>True</Paket>
+        </Reference>
         <Reference Include="Exceptionless">
           <HintPath>..\..\packages\Exceptionless\lib\net45\Exceptionless.dll</HintPath>
           <Private>True</Private>
