@@ -264,6 +264,13 @@
       <Other>Updates downloaded over HTTPS</Other>
     </Others>
   </Version>
+  <Version Number="0.0.0.0" Name="Pre-Release">
+    <Features />
+    <Bugs />
+    <Others>
+      <Other>Dependency updates</Other>
+    </Others>
+  </Version>
   <!--
   Template for VNext if not present above
   <Version Number="0.0.0.0" Name="Pre-Release">
