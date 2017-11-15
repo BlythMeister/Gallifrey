@@ -60,12 +60,15 @@ Target "VersionUpdate" (fun _ ->
     printfn "Update Change Log Versions"
     let changeLog = XDocument.Load(changeLogPath)
 
-    let versionLog = changeLog
-                     |> fun changelog -> changelog.Descendants(XName.Get("Version", "http://releases.gallifreyapp.co.uk/ChangeLog"))
-                     |> Seq.filter(fun x -> x.Attribute(XName.Get("Number")).Value = "0.0.0.0")
-                     |> Seq.head
+    let versionLogs = changeLog
+                      |> fun changelog -> changelog.Descendants(XName.Get("Version", "http://releases.gallifreyapp.co.uk/ChangeLog"))
+                      |> Seq.filter(fun x -> x.Attribute(XName.Get("Number")).Value = "0.0.0.0" || x.Attribute(XName.Get("Number")).Value = versionNumber)
     
-    versionLog.Attribute(XName.Get("Number")).Value <- versionNumber    
+    if versionLogs |> Seq.isEmpty then failwithf "No change log for version 0.0.0.0 or %s" versionNumber
+
+    versionLogs
+    |> Seq.head
+    |> fun versionLog -> versionLog.Attribute(XName.Get("Number")).Value <- versionNumber    
 
     changeLog.Save(changeLogPath)
 
