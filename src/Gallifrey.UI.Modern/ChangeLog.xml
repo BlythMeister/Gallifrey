@@ -255,12 +255,14 @@
     </Bugs>
     <Others />
   </Version>
-  <Version Number="0.0.0.0" Name="Pre-Release">
+  <Version Number="3.7.1.0">
     <Features>
       <Feature>Added save of all timers as a CSV file</Feature>
     </Features>
     <Bugs />
-    <Others />
+    <Others>
+      <Other>Updates downloaded over HTTPS</Other>
+    </Others>
   </Version>
   <!--
   Template for VNext if not present above
