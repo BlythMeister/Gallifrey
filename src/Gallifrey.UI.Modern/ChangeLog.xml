@@ -266,7 +266,9 @@
   </Version>
   <Version Number="0.0.0.0" Name="Pre-Release">
     <Features />
-    <Bugs />
+    <Bugs>
+      <Bug>Performance improvement on search for text within filter</Bug>
+    </Bugs>
     <Others>
       <Other>Dependency updates</Other>
     </Others>

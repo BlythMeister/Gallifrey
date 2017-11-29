@@ -21,7 +21,7 @@ namespace Gallifrey.JiraIntegration
         IEnumerable<string> GetJiraFilters();
         IEnumerable<Issue> GetJiraIssuesFromFilter(string filterName);
         IEnumerable<Issue> GetJiraIssuesFromSearchText(string searchText);
-        IEnumerable<Issue> GetJiraIssuesFromJQL(string jqlText);
+        IEnumerable<Issue> GetJiraIssuesFromSearchTextLimitedToKeys(string searchText, IEnumerable<string> jiraKeys);
         void LogTime(string jiraRef, DateTime exportTimeStamp, TimeSpan exportTime, WorkLogStrategy strategy, bool addStandardComment, string comment = "", TimeSpan? remainingTime = null);
         IEnumerable<Issue> GetJiraCurrentUserOpenIssues();
         IEnumerable<JiraProject> GetJiraProjects();
@@ -36,7 +36,6 @@ namespace Gallifrey.JiraIntegration
         void TransitionIssue(string jiraRef, string transition);
         IEnumerable<Status> GetTransitions(string jiraRef);
         event EventHandler LoggedIn;
-
     }
 
     public class JiraConnection : IJiraConnection
@@ -202,12 +201,15 @@ namespace Gallifrey.JiraIntegration
             }
         }
 
-        public IEnumerable<Issue> GetJiraIssuesFromJQL(string jqlText)
+        public IEnumerable<Issue> GetJiraIssuesFromSearchTextLimitedToKeys(string searchText, IEnumerable<string> jiraKeys)
         {
             try
             {
                 CheckAndConnectJira();
-                var issues = jira.GetIssuesFromJql(jqlText);
+                trackUsage.TrackAppUsage(TrackingType.SearchText);
+                var searchTextJql = GetJql(searchText);
+                var keysJql = $"key in (\"{String.Join("\",\"", jiraKeys)}\")";
+                var issues = jira.GetIssuesFromJql($"({keysJql}) AND ({searchTextJql})");
                 recentJiraCollection.AddRecentJiras(issues);
                 return issues.OrderBy(x => x.key, new JiraReferenceComparer());
             }
@@ -371,7 +373,7 @@ namespace Gallifrey.JiraIntegration
             var keyQuery = string.Empty;
             try
             {
-                if ((jira.GetIssue(searchText) != null))
+                if (searchText.Contains("-") && jira.GetIssue(searchText) != null)
                 {
                     keyQuery = $"(key = \"{searchText}\")";
                 }

@@ -1,19 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows;
-using Gallifrey.Jira.Model;
+﻿using Gallifrey.Jira.Model;
 using Gallifrey.JiraIntegration;
 using Gallifrey.UI.Modern.Helpers;
 using Gallifrey.UI.Modern.Models;
 using MahApps.Metro.Controls.Dialogs;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows;
 
 namespace Gallifrey.UI.Modern.Flyouts
 {
     public partial class Search
     {
         public JiraIssueDisplayModel SelectedJira { get; private set; }
-        private SearchModel DataModel => (SearchModel) DataContext;
+        private SearchModel DataModel => (SearchModel)DataContext;
         private readonly ModelHelpers modelHelpers;
         private readonly bool openFromAdd;
         private readonly bool openFromEdit;
@@ -101,9 +101,9 @@ namespace Gallifrey.UI.Modern.Flyouts
                     var searchFilter = DataModel.SelectedFilter;
                     searchFunc = () =>
                     {
-                        var searchTermResults = modelHelpers.Gallifrey.JiraConnection.GetJiraIssuesFromSearchText(searchTerm);
-                        var searchFilterResults = modelHelpers.Gallifrey.JiraConnection.GetJiraIssuesFromFilter(searchFilter);
-                        return searchTermResults.Where(x => searchFilterResults.Any(y => y.key == x.key));
+                        var searchFilterResults = modelHelpers.Gallifrey.JiraConnection.GetJiraIssuesFromFilter(searchFilter).ToList();
+                        var filteredToSearchText = modelHelpers.Gallifrey.JiraConnection.GetJiraIssuesFromSearchTextLimitedToKeys(searchTerm, searchFilterResults.Select(x => x.key));
+                        return searchFilterResults.Where(x => filteredToSearchText.Any(f => f.key == x.key));
                     };
                 }
                 else if (!string.IsNullOrWhiteSpace(DataModel.SearchTerm))

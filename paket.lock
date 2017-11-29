@@ -16,7 +16,7 @@ NUGET
     MahApps.Metro.IconPacks.Modern (1.9.1)
     Newtonsoft.Json (10.0.3)
     Octokit (0.28)
-    RestSharp (106.0.1)
+    RestSharp (106.1)
 GITHUB
   remote: fsharp/FAKE
     modules/Octokit/Octokit.fsx (0341a2e614eb2a7f34607cec914eb0ed83ce9add)
