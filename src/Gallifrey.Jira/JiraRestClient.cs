@@ -161,7 +161,7 @@ namespace Gallifrey.Jira
                             }
                             else
                             {
-                                logs = restClient.Get(HttpStatusCode.OK, $"api/2/issue/{issue.key}/worklog", customDeserialize: s => FilterWorklogsToUser(s, myUser.key));
+                                logs = restClient.Get(HttpStatusCode.OK, $"api/2/issue/{issue.key}/worklog", customDeserialize: s => FilterWorklogsToUser(s, myUser));
                                 workLogCache.Add(issue.key, logs);
                             }
 
@@ -289,10 +289,14 @@ namespace Gallifrey.Jira
             restClient.Post(HttpStatusCode.Created, $"api/2/issue/{issueRef}/comment", postData);
         }
 
-        private static WorkLogs FilterWorklogsToUser(string rawJson, string user)
+        private static WorkLogs FilterWorklogsToUser(string rawJson, User user)
         {
             var jsonObject = JObject.Parse(rawJson);
-            var filtered = jsonObject["worklogs"].Children().Where(x => ((string)x["author"]["name"]).ToLower() == user.ToLower());
+            var filtered = jsonObject["worklogs"].Children().Where(x =>
+            {
+                var logName = ((string)x["author"]["name"]).ToLower();
+                return logName == user.name.ToLower() || logName == user.key.ToLower();
+            });
             jsonObject["worklogs"] = new JArray(filtered);
             return jsonObject.ToObject<WorkLogs>();
         }
