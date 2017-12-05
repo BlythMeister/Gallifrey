@@ -295,7 +295,9 @@ namespace Gallifrey.Jira
             var filtered = jsonObject["worklogs"].Children().Where(x =>
             {
                 var logName = ((string)x["author"]["name"]).ToLower();
-                return logName == user.name.ToLower() || logName == user.key.ToLower();
+                var userNameMatch = !string.IsNullOrWhiteSpace(user.name) && logName == user.name.ToLower();
+                var userKeyMatch = !string.IsNullOrWhiteSpace(user.key) && logName == user.key.ToLower();
+                return userNameMatch || userKeyMatch;
             });
             jsonObject["worklogs"] = new JArray(filtered);
             return jsonObject.ToObject<WorkLogs>();

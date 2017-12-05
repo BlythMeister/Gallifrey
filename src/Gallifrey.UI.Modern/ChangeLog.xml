@@ -264,7 +264,7 @@
       <Other>Updates downloaded over HTTPS</Other>
     </Others>
   </Version>
-  <Version Number="0.0.0.0">
+  <Version Number="3.7.2.0">
     <Features />
     <Bugs>
       <Bug>Performance improvement on search for text within filter</Bug>
@@ -274,6 +274,13 @@
       <Other>Dependency updates</Other>
       <Other>Update all Gallifrey URLs in app to be SSL</Other>
     </Others>
+  </Version>
+  <Version Number="3.7.3.0">
+    <Features />
+    <Bugs>
+      <Bug>Fix issue with worklog query</Bug>
+    </Bugs>
+    <Others/>
   </Version>
   <!--
   Template for VNext if not present above
