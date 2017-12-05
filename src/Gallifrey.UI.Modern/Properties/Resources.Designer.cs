@@ -62,7 +62,7 @@ namespace Gallifrey.UI.Modern.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
-        ///&lt;Versions xmlns=&quot;http://releases.gallifreyapp.co.uk/ChangeLog&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xsi:noNamespaceSchemaLocation=&quot;http://releases.gallifreyapp.co.uk/schemas/ChangeLogSchema.xsd&quot;&gt;
+        ///&lt;Versions xmlns=&quot;https://releases.gallifreyapp.co.uk/ChangeLog&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xsi:noNamespaceSchemaLocation=&quot;https://releases.gallifreyapp.co.uk/schemas/ChangeLogSchema.xsd&quot;&gt;
         ///  &lt;Version Number=&quot;3.0.0&quot;&gt;
         ///    &lt;Features&gt;
         ///      &lt;Feature&gt;Add/Edit/Delete Timers&lt;/Feature&gt;

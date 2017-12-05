@@ -61,7 +61,7 @@ Target "VersionUpdate" (fun _ ->
     let changeLog = XDocument.Load(changeLogPath)
 
     let versionLogs = changeLog
-                      |> fun changelog -> changelog.Descendants(XName.Get("Version", "http://releases.gallifreyapp.co.uk/ChangeLog"))
+                      |> fun changelog -> changelog.Descendants(XName.Get("Version", "https://releases.gallifreyapp.co.uk/ChangeLog"))
                       |> Seq.filter(fun x -> x.Attribute(XName.Get("Number")).Value = "0.0.0.0" || x.Attribute(XName.Get("Number")).Value = versionNumber)
     
     if versionLogs |> Seq.isEmpty then failwithf "No change log for version 0.0.0.0 or %s" versionNumber
@@ -176,13 +176,13 @@ Target "Publish-Release" (fun _ ->
             pushTag currentDirectory "origin" releaseVersion
 
             let versionLog = XDocument.Load(changeLogPath)
-                             |> fun changelog -> changelog.Descendants(XName.Get("Version", "http://releases.gallifreyapp.co.uk/ChangeLog"))
+                             |> fun changelog -> changelog.Descendants(XName.Get("Version", "https://releases.gallifreyapp.co.uk/ChangeLog"))
                              |> Seq.filter(fun x -> x.Attribute(XName.Get("Number")).Value.StartsWith(releaseVersion))
                              |> Seq.head
 
-            let features = versionLog.Descendants(XName.Get("Feature", "http://releases.gallifreyapp.co.uk/ChangeLog")) |> Seq.map(fun x -> sprintf "* %s" x.Value) |> Seq.toList
-            let bugs = versionLog.Descendants(XName.Get("Bug", "http://releases.gallifreyapp.co.uk/ChangeLog")) |> Seq.map(fun x -> sprintf "* %s" x.Value) |> Seq.toList
-            let others = versionLog.Descendants(XName.Get("Other", "http://releases.gallifreyapp.co.uk/ChangeLog")) |> Seq.map(fun x -> sprintf "* %s" x.Value) |> Seq.toList
+            let features = versionLog.Descendants(XName.Get("Feature", "https://releases.gallifreyapp.co.uk/ChangeLog")) |> Seq.map(fun x -> sprintf "* %s" x.Value) |> Seq.toList
+            let bugs = versionLog.Descendants(XName.Get("Bug", "https://releases.gallifreyapp.co.uk/ChangeLog")) |> Seq.map(fun x -> sprintf "* %s" x.Value) |> Seq.toList
+            let others = versionLog.Descendants(XName.Get("Other", "https://releases.gallifreyapp.co.uk/ChangeLog")) |> Seq.map(fun x -> sprintf "* %s" x.Value) |> Seq.toList
 
             let releaseNotes = [
                                 if features |> List.isEmpty |> not then yield ["# Features"; ""]

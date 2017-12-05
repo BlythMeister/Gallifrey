@@ -262,7 +262,7 @@ namespace Gallifrey
             {
                 using (var client = new WebClient())
                 {
-                    client.DownloadData("http://releases.gallifreyapp.co.uk");
+                    client.DownloadData("https://releases.gallifreyapp.co.uk");
                 }
             }
             catch

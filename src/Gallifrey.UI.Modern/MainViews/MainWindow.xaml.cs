@@ -535,7 +535,7 @@ namespace Gallifrey.UI.Modern.MainViews
 
         private void GetBeta(object sender, RoutedEventArgs e)
         {
-            Process.Start(new ProcessStartInfo("http://releases.gallifreyapp.co.uk/download/download-beta.html"));
+            Process.Start(new ProcessStartInfo("https://www.gallifreyapp.co.uk/downloads/beta"));
         }
 
         private void MainWindow_OnClosed(object sender, EventArgs e)
@@ -594,7 +594,7 @@ namespace Gallifrey.UI.Modern.MainViews
                     case Key.F5: trigger = RemoteButtonTrigger.Export; break;
                     case Key.F6: trigger = RemoteButtonTrigger.Save; break;
                     case Key.F7: trigger = RemoteButtonTrigger.LockTimer; break;
-                    case Key.F8: trigger = RemoteButtonTrigger.Settings; break;                    
+                    case Key.F8: trigger = RemoteButtonTrigger.Settings; break;
                     default: return;
                 }
             }
