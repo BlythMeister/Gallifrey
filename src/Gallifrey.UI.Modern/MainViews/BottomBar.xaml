@@ -7,7 +7,7 @@
                 Contact Us By <Hyperlink NavigateUri="https://twitter.com/GallifreyApp" Foreground="{DynamicResource IdealForegroundColorBrush}" RequestNavigate="Hyperlink_RequestNavigate">Twitter</Hyperlink>, <Hyperlink NavigateUri="https://gitter.im/BlythMeister/Gallifrey" Foreground="{DynamicResource IdealForegroundColorBrush}" RequestNavigate="Hyperlink_RequestNavigate">Gitter</Hyperlink> Or <Hyperlink NavigateUri="mailto:contact@gallifreyapp.co.uk?subject=Gallifrey App Contact" Foreground="{DynamicResource IdealForegroundColorBrush}" RequestNavigate="Hyperlink_RequestNavigate">E-Mail</Hyperlink>. Raise Or Fix A Bug On <Hyperlink NavigateUri="https://github.com/BlythMeister/Gallifrey" Foreground="{DynamicResource IdealForegroundColorBrush}" RequestNavigate="Hyperlink_RequestNavigate">GitHub</Hyperlink>.
         </TextBlock>
         <TextBlock HorizontalAlignment="Right" Margin="0,0,5,0" Foreground="{DynamicResource IdealForegroundColorBrush}" VerticalAlignment="Center">
-            Please Help Support Gallifrey By <Hyperlink NavigateUri="http://www.gallifreyapp.co.uk/donations.html" Foreground="{DynamicResource IdealForegroundColorBrush}" RequestNavigate="Hyperlink_RequestNavigate">Donating</Hyperlink>
+            Please Help Support Gallifrey By <Hyperlink NavigateUri="https://www.gallifreyapp.co.uk/donations.html" Foreground="{DynamicResource IdealForegroundColorBrush}" RequestNavigate="Hyperlink_RequestNavigate">Donating</Hyperlink>
         </TextBlock>
 
     </DockPanel>
