@@ -264,7 +264,7 @@
       <Other>Updates downloaded over HTTPS</Other>
     </Others>
   </Version>
-  <Version Number="0.0.0.0" Name="Pre-Release">
+  <Version Number="0.0.0.0">
     <Features />
     <Bugs>
       <Bug>Performance improvement on search for text within filter</Bug>
@@ -272,6 +272,7 @@
     </Bugs>
     <Others>
       <Other>Dependency updates</Other>
+      <Other>Update all Gallifrey URLs in app to be SSL</Other>
     </Others>
   </Version>
   <!--
