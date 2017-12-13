@@ -56,7 +56,7 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <TextBlock Grid.Row="0" FontSize="18" Margin="0,0,0,5" Text="Donate" TextDecorations="Underline" />
-            <TextBlock Grid.Row="1" TextWrapping="Wrap" Margin="0,0,0,5" VerticalAlignment="Center">Help us keep the project alive by <Hyperlink NavigateUri="https://www.gallifreyapp.co.uk/donations.html" Foreground="{DynamicResource TextBrush}" RequestNavigate="Hyperlink_RequestNavigate">donating</Hyperlink>.</TextBlock>
+            <TextBlock Grid.Row="1" TextWrapping="Wrap" Margin="0,0,0,5" VerticalAlignment="Center">Help us keep the project alive by <Hyperlink NavigateUri="https://www.gallifreyapp.co.uk/donations" Foreground="{DynamicResource TextBrush}" RequestNavigate="Hyperlink_RequestNavigate">donating</Hyperlink>.</TextBlock>
         </Grid>
         <Grid Grid.Row="4">
             <Grid.RowDefinitions>

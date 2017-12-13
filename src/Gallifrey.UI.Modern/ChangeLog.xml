@@ -284,7 +284,9 @@
   </Version>
   <Version Number="0.0.0.0" Name="Pre-Release">
     <Features />
-    <Bugs />
+    <Bugs>
+      <Bug>Update donations URLs to remove the superfluous .html extension</Bug>
+    </Bugs>
     <Others />
   </Version>
   <!--
