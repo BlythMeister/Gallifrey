@@ -282,7 +282,7 @@
     </Bugs>
     <Others/>
   </Version>
-  <Version Number="0.0.0.0" Name="Pre-Release">
+  <Version Number="3.7.4.0">
     <Features />
     <Bugs>
       <Bug>Update donations URLs to remove the superfluous .html extension</Bug>
