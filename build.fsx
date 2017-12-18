@@ -219,11 +219,12 @@ Target "Publish-ReleaseNotes" (fun _ ->
             |> fun x -> x.AppendLine("---")
             |> fun x -> x.AppendLine("")
             |> fun x -> x.AppendLine(sprintf "We have now released version %s." releaseVersion)
+            |> fun x -> x.AppendLine("")
             |> fun x -> x.AppendLine("This version contains the following changes:")
             |> fun x -> x.AppendLine("")
-            |> fun x -> x.AppendLine(String.Join("\n", releaseNotes))
+            |> fun x -> x.AppendLine(String.Join("\n", releaseNotes).Replace("# ","#### "))
             |> fun x -> x.AppendLine("")
-            |> fun x -> x.AppendLine("To download the latest version of the app head to https://www.gallifreyapp.co.uk/downloads/stable")
+            |> fun x -> x.AppendLine("To download the latest version of the app head to <https://www.gallifreyapp.co.uk/downloads/stable>")
             |> fun x -> File.WriteAllText(releasesNewsFile, x.ToString())
 
             checkoutBranch currentDirectory branchName
