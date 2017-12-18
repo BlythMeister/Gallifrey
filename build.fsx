@@ -162,6 +162,7 @@ Target "Publish-Release" (fun _ ->
             Commit.Commit releasesRepo (sprintf "Publish %s - %s" releaseType versionNumber)
             true
         else
+            printfn "Already have %s version %s published" releaseType versionNumber
             false
                            
     let publishedAlpha = if isAlpha then publishRelease "Alpha" else false
