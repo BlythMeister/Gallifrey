@@ -200,6 +200,7 @@ Target "Publish-Release" (fun _ ->
             
             if isStable then
                 let currentDate = DateTime.UtcNow
+                let releasesNewsFile = newsPostDir @@ sprintf "%s-release-%s.md" (currentDate.ToString("yyyy-MM-dd")) (releaseVersion.Replace(".", "-"))
                 
                 new StringBuilder()
                 |> fun x -> x.AppendLine("---")
@@ -215,10 +216,10 @@ Target "Publish-Release" (fun _ ->
                 |> fun x -> x.AppendLine(String.Join("\n", releaseNotes))
                 |> fun x -> x.AppendLine("")
                 |> fun x -> x.AppendLine("To download the latest version of the app head to https://www.gallifreyapp.co.uk/downloads/stable")
-                |> fun x -> File.WriteAllText(newsPostDir @@ sprintf "%s-release-%s.md" (currentDate.ToString("yyyy-MM-dd")) (releaseVersion.Replace(".", "-")), x.ToString())
+                |> fun x -> File.WriteAllText(releasesNewsFile, x.ToString())
 
                 checkoutBranch currentDirectory branchName
-                StageAll currentDirectory
+                StageFile currentDirectory releasesNewsFile |> ignore
                 Commit.Commit currentDirectory (sprintf "Create news for stable release - %s" releaseVersion)    
                 pushBranch currentDirectory "origin" branchName
 
