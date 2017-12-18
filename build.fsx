@@ -129,12 +129,12 @@ Target "Publish-Release" (fun _ ->
     
     cloneSingleBranch outputDir "https://github.com/BlythMeister/Gallifrey.Releases.git" "master" "Releases"
     
-    enableProcessTracing <- false
+    //enableProcessTracing <- false
     directRunGitCommandAndFail currentDirectory (sprintf "remote set-url origin https://%s:x-oauth-basic@github.com/BlythMeister/Gallifrey.git" githubApiKey)
     directRunGitCommandAndFail releasesRepo (sprintf "remote set-url origin https://%s:x-oauth-basic@github.com/BlythMeister/Gallifrey.Releases.git" githubApiKey)
     directRunGitCommandAndFail releasesRepo "config --global user.email \"publish@gallifreyapp.co.uk\""
     directRunGitCommandAndFail releasesRepo "config --global user.name \"Gallifrey Auto Publish\""
-    enableProcessTracing <- true    
+    //enableProcessTracing <- true    
 
     let publishRelease (releaseType:string) =         
         let destinationRoot = releasesRepo @@ "download" @@ "modern" @@ (releaseType.ToLower())
@@ -158,8 +158,8 @@ Target "Publish-Release" (fun _ ->
             File.Copy(sourceRoot @@ (sprintf "Gallifrey.UI.Modern.%s.application" releaseType), destinationRoot @@ (sprintf "Gallifrey.UI.Modern.%s.application" releaseType), true)
             Directory.Move(sourceAppFiles, destinationAppFiles)
             
-            StageAll releasesRepo
-            Commit.Commit releasesRepo (sprintf "Publish %s - %s" releaseType versionNumber)
+            //StageAll releasesRepo
+            //Commit.Commit releasesRepo (sprintf "Publish %s - %s" releaseType versionNumber)
             true
         else
             false
