@@ -289,10 +289,13 @@
     </Bugs>
     <Others />
   </Version>
-  <Version Number="0.0.0.0" Name="Pre-Release">
+  <Version Number="0.0.0.0">
     <Features />
     <Bugs />
-    <Others/>
+    <Others>
+      <Other>Dependency update</Other>
+      <Other>Auto publish news post on stable build</Other>
+    </Others>
   </Version>
   <!--
   Template for VNext if not present above

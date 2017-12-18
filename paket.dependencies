@@ -2,8 +2,6 @@ framework: auto-detect
 source https://www.nuget.org/api/v2
 
 nuget Atlassian.SDK @= 2.5.0
-nuget Exceptionless.Portable
-nuget Exceptionless.Windows
 nuget Exceptionless.Wpf
 nuget FAKE
 nuget MahApps.Metro prerelease

@@ -8,10 +8,12 @@ open Fake.Git
 open Fake.AppVeyor
 open System
 open System.IO
+open System.Text
 open System.Xml.Linq
 open Octokit
 
 let outputDir = currentDirectory @@ "Output"
+let newsPostDir = currentDirectory @@ "docs" @@ "_posts"
 let srcDir = currentDirectory @@ "src"
 let isAppVeyor = buildServer = AppVeyor
 let changeLogPath = currentDirectory @@ "src" @@ "Gallifrey.UI.Modern" @@ "ChangeLog.xml"
@@ -172,9 +174,6 @@ Target "Publish-Release" (fun _ ->
         let releaseVersion = if isStable then baseVersion else versionNumber
 
         if isStable || isBeta then 
-            tag currentDirectory releaseVersion
-            pushTag currentDirectory "origin" releaseVersion
-
             let versionLog = XDocument.Load(changeLogPath)
                              |> fun changelog -> changelog.Descendants(XName.Get("Version", "https://releases.gallifreyapp.co.uk/ChangeLog"))
                              |> Seq.filter(fun x -> x.Attribute(XName.Get("Number")).Value.StartsWith(releaseVersion))
@@ -197,6 +196,31 @@ Target "Publish-Release" (fun _ ->
                                 if not(isStable) then yield ["*NB: This is a cumulative change log for next release*"]
                                ]
                                |> List.concat
+            
+            if isStable then
+                let currentDate = DateTime.UtcNow
+                
+                new StringBuilder()
+                |> fun x -> x.AppendLine("---")
+                |> fun x -> x.AppendLine(sprintf "title: Released Version %s" releaseVersion)
+                |> fun x -> x.AppendLine(sprintf "date: %s +0000" (currentDate.ToString("yyyy-MM-dd HH:mm")))
+                |> fun x -> x.AppendLine(sprintf "excerpt: We have now released version %s." releaseVersion)
+                |> fun x -> x.AppendLine("show: true")
+                |> fun x -> x.AppendLine("---")
+                |> fun x -> x.AppendLine("")
+                |> fun x -> x.AppendLine(sprintf "We have now released version %s." releaseVersion)
+                |> fun x -> x.AppendLine("This version contains the following changes:")
+                |> fun x -> x.AppendLine("")
+                |> fun x -> x.AppendLine(String.Join("\n", releaseNotes))
+                |> fun x -> x.AppendLine("")
+                |> fun x -> x.AppendLine("To download the latest version of the app head to https://www.gallifreyapp.co.uk/downloads/stable")
+                |> fun x -> File.WriteAllText(newsPostDir @@ sprintf "%s-release-%s" (currentDate.ToString("yyyy-MM-dd")) releaseVersion, x.ToString())
+
+                StageAll currentDirectory
+                Commit.Commit currentDirectory (sprintf "Create news for stable release - %s" versionNumber)                               
+
+            tag currentDirectory releaseVersion
+            pushTag currentDirectory "origin" releaseVersion
 
             createClientWithToken githubApiKey
             |> createDraft "BlythMeister" "Gallifrey" releaseVersion (not(isStable)) releaseNotes
