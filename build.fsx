@@ -215,10 +215,11 @@ Target "Publish-Release" (fun _ ->
                 |> fun x -> x.AppendLine(String.Join("\n", releaseNotes))
                 |> fun x -> x.AppendLine("")
                 |> fun x -> x.AppendLine("To download the latest version of the app head to https://www.gallifreyapp.co.uk/downloads/stable")
-                |> fun x -> File.WriteAllText(newsPostDir @@ sprintf "%s-release-%s" (currentDate.ToString("yyyy-MM-dd")) releaseVersion, x.ToString())
+                |> fun x -> File.WriteAllText(newsPostDir @@ sprintf "%s-release-%s.md" (currentDate.ToString("yyyy-MM-dd")) releaseVersion, x.ToString())
 
                 StageAll currentDirectory
-                Commit.Commit currentDirectory (sprintf "Create news for stable release - %s" versionNumber)                               
+                Commit.Commit currentDirectory (sprintf "Create news for stable release - %s" versionNumber)    
+                pushBranch currentDirectory "origin" "master"
 
             tag currentDirectory releaseVersion
             pushTag currentDirectory "origin" releaseVersion
