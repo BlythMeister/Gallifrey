@@ -318,6 +318,13 @@
       <Other>Publish fixes</Other>
     </Others>
   </Version>
+  <Version Number="0.0.0.0" Name="Pre-Release">
+    <Features />
+    <Bugs />
+    <Others>
+      <Other>Automatic cloudflare cache purge on build</Other>
+    </Others>
+  </Version>
   <!--
   Template for VNext if not present above
   <Version Number="0.0.0.0" Name="Pre-Release">

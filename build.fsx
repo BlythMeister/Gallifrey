@@ -9,6 +9,7 @@ open Fake.AppVeyor
 open System
 open System.IO
 open System.Text
+open System.Net
 open System.Xml.Linq
 open Octokit
 
@@ -30,6 +31,9 @@ let isBeta = (isStable || branchName = "release")
 let isAlpha = (isBeta || branchName = "develop")
 
 let githubApiKey = environVar "github_api_key"
+let cloudflareApiKey = environVar "cloudflare_api_key"
+let cloudflareEmail = environVar "cloudflare_email"
+let cloudflareZone = environVar "cloudflare_zone"
 
 printfn "Running On Branch: %s" branchName
 printfn "PR Number: %s" AppVeyorEnvironment.PullRequestNumber
@@ -171,6 +175,15 @@ Target "Publish-Release" (fun _ ->
 
     if publishedAlpha || publishedBeta || publishedStable then
         pushBranch releasesRepo "origin" "master"
+
+        printfn "Purging Cloudflare"
+        let client = new WebClient()
+        client.Headers.Add("X-Auth-Email", cloudflareEmail)
+        client.Headers.Add("X-Auth-Key", cloudflareApiKey)
+        client.Headers.Add("Content-Type", "application/json")
+        let result = client.UploadString(sprintf "https://api.cloudflare.com/client/v4/zones/%s/purge_cache" cloudflareZone, "DELETE", "{\"purge_everything\":true}")
+        client.Dispose()
+        printfn "Cloudflare response: %s" result
 
         let releaseVersion = if isStable then baseVersion else versionNumber
 
