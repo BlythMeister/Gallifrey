@@ -6,7 +6,7 @@ NUGET
     Exceptionless (4.1.1972)
     Exceptionless.Wpf (4.1.1972)
       Exceptionless (4.1.1972)
-    FAKE (4.64.2)
+    FAKE (4.63.2)
     MahApps.Metro (1.6.0-alpha0184)
       ControlzEx (> 3.0.2 < 4.0)
     MahApps.Metro.IconPacks.Modern (1.9.1)
@@ -15,5 +15,5 @@ NUGET
     RestSharp (106.1)
 GITHUB
   remote: fsharp/FAKE
-    modules/Octokit/Octokit.fsx (642a01a5e17b870f816cdd7ee09115e018b786f0)
+    modules/Octokit/Octokit.fsx (0341a2e614eb2a7f34607cec914eb0ed83ce9add)
       Octokit (>= 0.20)
