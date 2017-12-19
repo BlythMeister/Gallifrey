@@ -1,4 +1,4 @@
-<div class="aboutus">
+<div class="topItem">
     <div>
         <h4>About Us</h4>
         <img src="{{ site.url }}/images/clockIcon.png" class="avatar" />
@@ -13,7 +13,7 @@
         <a href="https://github.com/BlythMeister/Gallifrey" class="fa fa-github" target="_blank"></a>
     </div>
 </div>
-<div class="downloads">
+<div class="middleItem">
     <h4>Downloads</h4>
     <p>
         <a href="{{ site.url }}/downloads/stable" target="_blank">Stable</a>
@@ -26,7 +26,7 @@
         Check <a href="{{ site.url }}/downloads">here</a> for more information.
     </p>
 </div>
-<div class="pricing">
+<div class="middleItem">
     <h4>Price</h4>
     <p>
         Gallifrey is <b>free</b> to use <b>forever</b>!<br />
@@ -34,7 +34,7 @@
         We only ask for a small <a href="{{ site.url }}/donations">donation</a> to unlock some premium features.
     </p>
 </div>
-<div class="paypal">
+<div class="middleItem">
     <h4>Please Help Us</h4>
     <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
         <input type="hidden" name="cmd" value="_s-xclick">
@@ -43,7 +43,7 @@
         <img alt="" border="0" src="https://www.paypalobjects.com/en_GB/i/scr/pixel.gif" width="1" height="1">
     </form>	
 </div>
-<div class="recentNews">
+<div class="bottomItem">
     <h4>Latest News <a href="{{ site.url }}/feed.xml" class="fa fa-rss"></a></h4>
     {% assign publishedPosts = site.posts | where: 'show', 'true' %}
     {% for post in publishedPosts  limit:3 %}

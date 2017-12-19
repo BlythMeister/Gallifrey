@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿{% comment %}
+NOTE: When loading as a post the content is under "page" set this as "post" so we can use the same includes
+{% endcomment %}
+{% assign post = page %}
+<!DOCTYPE html>
 <html lang="{{ site.lang }}">
 <head>
     {% include head.html %}
@@ -11,29 +15,8 @@
         </div>
         <div class="row">
             <div id="content" class="col-lg-9 col-md-8 mainFrame no-float dont-break-out">
-                <div class="row">
-                    <div class="col-lg-12">
-                        {% assign post = page %}
-                        <h2>{{ post.title }}</h2>
-                                               
-                        <p class="devide-top">
-                            {{ content }}
-                        </p>
-                        
-                        <p>
-                            <div class="pull-left">
-                                {% if post.previous.url %}
-                                <a href="{{post.previous.url}}" title="Previous Post: {{post.previous.title}}">&laquo; {{post.previous.title}}</a>
-                                {% endif %}
-                            </div>
-                            <div class="pull-right">
-                                {% if post.next.url %}
-                                <a href="{{post.next.url}}" title="Next Post: {{post.next.title}}">{{post.next.title}} &raquo; </a>
-                                {% endif %}
-                            </div>
-                        </p>
-                    </div>
-                </div>
+                {% include postContent.html %}
+                {% include advert.html %}
             </div>
             <div class="col-lg-3 col-md-4 hidden-sm hidden-xs sidebar no-float" align="center">
                 {% include sidebar.html %}
