@@ -280,7 +280,7 @@
     <Bugs>
       <Bug>Fix issue with worklog query</Bug>
     </Bugs>
-    <Others/>
+    <Others />
   </Version>
   <Version Number="3.7.4.0">
     <Features />
@@ -322,6 +322,8 @@
     <Features />
     <Bugs />
     <Others>
+      <Other>.NET 4.6.2 minimum required framework version</Other>
+      <Other>External dependencies updated</Other>
       <Other>Automatic cloudflare cache purge on build</Other>
     </Others>
   </Version>
