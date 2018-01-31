@@ -11,11 +11,8 @@
         </div>
         <div class="row">
             <div id="content" class="col-lg-9 col-md-8 mainFrame no-float dont-break-out">
-                <div class="row">
-                    <div class="col-lg-12">
-                        {{ content }}
-                    </div>
-                </div>
+                {% include content.html %}
+                {% include advert.html %}
             </div>
             <div class="col-lg-3 col-md-4 hidden-sm hidden-xs sidebar no-float" align="center">
                 {% include sidebar.html %}
