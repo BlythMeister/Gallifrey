@@ -139,6 +139,11 @@ body {
     color: #FFFFFF;
 }
 
+.fa.fa-envelope {
+    background: #FF7F8C;
+    color: #FFFFFF;
+}
+
 .fa.fa-rss {
     background: #FF6600;
     color: #FFFFFF;
