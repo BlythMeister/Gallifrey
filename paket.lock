@@ -58,5 +58,5 @@ NUGET
     System.Xml.ReaderWriter (4.3.1)
 GITHUB
   remote: fsharp/FAKE
-    modules/Octokit/Octokit.fsx (d383ad81321f728c9a18165a328ab692ec05cc2c)
+    modules/Octokit/Octokit.fsx (a1a090e5db1d50c1ad549d076286716a9ed042bf)
       Octokit (>= 0.20)
