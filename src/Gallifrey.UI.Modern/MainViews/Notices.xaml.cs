@@ -54,38 +54,32 @@ namespace Gallifrey.UI.Modern.MainViews
 
         private async void InstallUpdate(object sender, MouseButtonEventArgs e)
         {
-            if (ModelHelpers.Gallifrey.VersionControl.UpdateInstalled)
+            try
             {
-                try
-                {
-                    ModelHelpers.CloseApp(true);
-                    ModelHelpers.Gallifrey.TrackEvent(TrackingType.ManualUpdateRestart);
-                }
-                catch (Exception)
-                {
-                    await DialogCoordinator.Instance.ShowMessageAsync(ModelHelpers.DialogContext, "Update Error", "There Was An Error Trying To Update Gallifrey, If This Problem Persists Please Contact Support");
-                }
+                ModelHelpers.CloseApp(true);
+                ModelHelpers.Gallifrey.TrackEvent(TrackingType.ManualUpdateRestart);
+            }
+            catch (Exception)
+            {
+                await DialogCoordinator.Instance.ShowMessageAsync(ModelHelpers.DialogContext, "Update Error", "There Was An Error Trying To Update Gallifrey, If This Problem Persists Please Contact Support");
             }
         }
 
         private async void ReinstallUpdate(object sender, MouseButtonEventArgs e)
         {
-            if (ModelHelpers.Gallifrey.VersionControl.UpdateReinstallNeeded)
+            try
             {
-                try
-                {
-                    ModelHelpers.Gallifrey.TrackEvent(TrackingType.ManualUpdateRestart);
-                    ModelHelpers.Gallifrey.VersionControl.ManualReinstall();
-                    await Task.Delay(TimeSpan.FromSeconds(2));
-                }
-                catch (Exception)
-                {
-                    await DialogCoordinator.Instance.ShowMessageAsync(ModelHelpers.DialogContext, "Reinstall Error", "There Was An Error Trying To Reinstall Gallifrey, You May Need To Re-Download The App");
-                }
-                finally
-                {
-                    ModelHelpers.CloseApp();
-                }
+                ModelHelpers.Gallifrey.TrackEvent(TrackingType.ManualUpdateRestart);
+                ModelHelpers.Gallifrey.VersionControl.ManualReinstall();
+                await Task.Delay(TimeSpan.FromSeconds(2));
+            }
+            catch (Exception)
+            {
+                await DialogCoordinator.Instance.ShowMessageAsync(ModelHelpers.DialogContext, "Reinstall Error", "There Was An Error Trying To Reinstall Gallifrey, You May Need To Re-Download The App");
+            }
+            finally
+            {
+                ModelHelpers.CloseApp();
             }
         }
 

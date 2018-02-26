@@ -322,6 +322,7 @@
     <Features />
     <Bugs>
       <Bug>Ensure that all TLS protocol are supported</Bug>
+      <Bug>Better handling of failed updated (where reinstall not required)</Bug>
     </Bugs>
     <Others>
       <Other>External dependencies updated</Other>

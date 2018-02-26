@@ -8,6 +8,8 @@
             <helpers:BooleanVisibilityConverter x:Key="BoolToVis" Collapse="True" Invert="False"/>
         </StackPanel.Resources>
 
+        <TextBlock Background="{DynamicResource AccentColorBrush}" FontSize="17" Foreground="{DynamicResource IdealForegroundColorBrush}" TextAlignment="Center" Padding="5,0" Margin="0,0,0,2" Text="An Update Has Failed To Install, Click Here To Apply" MouseDown="InstallUpdate" ToolTip="To Install The Update Click Here!" TextWrapping="Wrap" Visibility="{Binding UpdateError, Converter={StaticResource BoolToVis}}" />
+
         <TextBlock Background="{DynamicResource AccentColorBrush}" FontSize="17" Foreground="{DynamicResource IdealForegroundColorBrush}" TextAlignment="Center" Padding="5,0" Margin="0,0,0,2" Text="An Update Has Been Installed, Click Here To Apply" MouseDown="InstallUpdate" ToolTip="To Install The Update Click Here!" TextWrapping="Wrap" Visibility="{Binding HasUpdate, Converter={StaticResource BoolToVis}}" />
 
         <TextBlock Background="{DynamicResource AccentColorBrush}" FontSize="17" Foreground="{DynamicResource IdealForegroundColorBrush}" TextAlignment="Center" Padding="5,0" Margin="0,0,0,2" Text="A Reinstall Is Required To Update, Click Here To Apply" MouseDown="ReinstallUpdate" ToolTip="To Install The Update Click Here!" TextWrapping="Wrap" Visibility="{Binding ReinstallNeeded, Converter={StaticResource BoolToVis}}" />

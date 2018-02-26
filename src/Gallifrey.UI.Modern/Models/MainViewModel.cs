@@ -1,8 +1,3 @@
-using Gallifrey.Comparers;
-using Gallifrey.ExtensionMethods;
-using Gallifrey.Jira.Model;
-using Gallifrey.UI.Modern.Helpers;
-using Gallifrey.Versions;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,6 +5,11 @@ using System.ComponentModel;
 using System.Linq;
 using System.Timers;
 using System.Windows;
+using Gallifrey.Comparers;
+using Gallifrey.ExtensionMethods;
+using Gallifrey.Jira.Model;
+using Gallifrey.UI.Modern.Helpers;
+using Gallifrey.Versions;
 
 namespace Gallifrey.UI.Modern.Models
 {
@@ -32,7 +32,7 @@ namespace Gallifrey.UI.Modern.Models
             backgroundRefresh.Elapsed += (sender, args) => RefreshModel();
             backgroundRefresh.Start();
 
-            modelHelpers.Gallifrey.VersionControl.NewVersionPresent += (sender, args) => NewVersionPresent();
+            modelHelpers.Gallifrey.VersionControl.UpdateStateChange += (sender, args) => NewVersionPresent();
             modelHelpers.Gallifrey.IsPremiumChanged += (sender, args) => PremiumChanged();
             modelHelpers.Gallifrey.BackendModifiedTimers += (sender, args) => BackendModification();
             modelHelpers.Gallifrey.SettingsChanged += (sender, args) => SettingsChanged();
@@ -56,6 +56,7 @@ namespace Gallifrey.UI.Modern.Models
         public string VersionName => ModelHelpers.Gallifrey.VersionControl.UpdateInstalled || ModelHelpers.Gallifrey.VersionControl.UpdateReinstallNeeded ? "NEW VERSION AVAILABLE" : ModelHelpers.Gallifrey.VersionControl.VersionName.ToUpper();
         public bool HasUpdate => ModelHelpers.Gallifrey.VersionControl.UpdateInstalled;
         public bool ReinstallNeeded => ModelHelpers.Gallifrey.VersionControl.UpdateReinstallNeeded;
+        public bool UpdateError => ModelHelpers.Gallifrey.VersionControl.UpdateError;
 
         public bool HasInactiveTime => !string.IsNullOrWhiteSpace(InactiveMinutes);
         public bool TimerRunning => !string.IsNullOrWhiteSpace(CurrentRunningTimerDescription);
@@ -389,6 +390,7 @@ namespace Gallifrey.UI.Modern.Models
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("VersionName"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasUpdate"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ReinstallNeeded"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("UpdateError"));
         }
 
         private void BackendModification()
