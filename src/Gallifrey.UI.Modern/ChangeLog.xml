@@ -320,7 +320,9 @@
   </Version>
   <Version Number="0.0.0.0" Name="Pre-Release">
     <Features />
-    <Bugs />
+    <Bugs>
+      <Bug>Ensure that all TLS protocol are supported</Bug>
+    </Bugs>
     <Others>
       <Other>External dependencies updated</Other>
       <Other>Automatic cloudflare cache purge on build</Other>
