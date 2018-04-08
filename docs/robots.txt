@@ -3,3 +3,4 @@
 
 User-agent: *
 Sitemap: https://www.gallifreyapp.co.uk/sitemap.xml
+Disallow:
