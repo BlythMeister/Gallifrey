@@ -326,6 +326,7 @@
       <Bug>Ensure that all TLS protocol are supported</Bug>
       <Bug>Better handling of failed updated (where reinstall not required)</Bug>
       <Bug>Fix a couple of bugs reported by users</Bug>
+      <Bug>Replace RinjndaelManaged class for AesCryptoServiceProvider</Bug>
     </Bugs>
     <Others>
       <Other>External dependencies updated</Other>
