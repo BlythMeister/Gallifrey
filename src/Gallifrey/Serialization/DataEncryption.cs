@@ -1,9 +1,9 @@
-﻿using System;
+﻿using Gallifrey.Settings;
+using System;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using Gallifrey.Settings;
 
 namespace Gallifrey.Serialization
 {
@@ -15,7 +15,7 @@ namespace Gallifrey.Serialization
             var plainTextBytes = Encoding.UTF8.GetBytes(plainText);
             var password = new PasswordDeriveBytes(ConfigKeys.DataEncryptionPassPhrase, null);
             var keyBytes = password.GetBytes(ConfigKeys.DataEncryptionKeysize / 8);
-            var symmetricKey = new RijndaelManaged { Mode = CipherMode.CBC };
+            var symmetricKey = new AesCryptoServiceProvider();
             var encryptor = symmetricKey.CreateEncryptor(keyBytes, initVectorBytes);
 
             using (var memoryStream = new MemoryStream())
@@ -36,7 +36,7 @@ namespace Gallifrey.Serialization
             var cipherTextBytes = Convert.FromBase64String(cipherText);
             var password = new PasswordDeriveBytes(ConfigKeys.DataEncryptionPassPhrase, null);
             var keyBytes = password.GetBytes(ConfigKeys.DataEncryptionKeysize / 8);
-            var symmetricKey = new RijndaelManaged { Mode = CipherMode.CBC };
+            var symmetricKey = new AesCryptoServiceProvider();
             var decryptor = symmetricKey.CreateDecryptor(keyBytes, initVectorBytes);
 
             using (var memoryStream = new MemoryStream(cipherTextBytes))
