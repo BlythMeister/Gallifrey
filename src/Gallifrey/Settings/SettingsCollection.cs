@@ -1,4 +1,5 @@
 ﻿using Gallifrey.Serialization;
+using System;
 
 namespace Gallifrey.Settings
 {
@@ -23,8 +24,8 @@ namespace Gallifrey.Settings
         public IInternalSettings InternalSettings { get; }
         public IExportSettings ExportSettings { get; }
         public string InstallationHash => DataEncryption.GetSha256Hash($"{InternalSettings.InstallationInstaceId}-{JiraConnectionSettings.JiraUsername}");
-        public string UserHash => DataEncryption.GetSha256Hash($"{JiraConnectionSettings.JiraUsername.ToLower()}-{JiraConnectionSettings.JiraUrl.ToLower()}");
-        public string SiteHash => DataEncryption.GetSha256Hash(JiraConnectionSettings.JiraUrl.ToLower());
+        public string UserHash => DataEncryption.GetSha256Hash($"{JiraConnectionSettings.JiraUsername.ToLower()}-{new Uri(JiraConnectionSettings.JiraUrl).Host.ToLower()}");
+        public string SiteHash => DataEncryption.GetSha256Hash(new Uri(JiraConnectionSettings.JiraUrl).Host.ToLower());
 
         public SettingsCollection()
         {

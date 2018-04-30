@@ -271,7 +271,6 @@ namespace Gallifrey
             }
 
             jiraConnection.ReConnect(settingsCollection.JiraConnectionSettings, settingsCollection.ExportSettings);
-            SettingsChanged?.Invoke(this, null);
 
             Task.Factory.StartNew(() =>
             {

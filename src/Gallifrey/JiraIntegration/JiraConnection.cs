@@ -63,11 +63,6 @@ namespace Gallifrey.JiraIntegration
 
         public void ReConnect(IJiraConnectionSettings newJiraConnectionSettings, IExportSettings newExportSettings)
         {
-            newJiraConnectionSettings.JiraUrl = newJiraConnectionSettings.JiraUrl.Replace("/secure/Dashboard.jspa", "");
-            if (newJiraConnectionSettings.JiraUrl.EndsWith("/"))
-            {
-                newJiraConnectionSettings.JiraUrl = newJiraConnectionSettings.JiraUrl.Substring(0, newJiraConnectionSettings.JiraUrl.Length - 1);
-            }
             exportSettings = newExportSettings;
             jiraConnectionSettings = newJiraConnectionSettings;
             jira = null;

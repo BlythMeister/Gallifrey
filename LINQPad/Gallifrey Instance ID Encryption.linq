@@ -10,12 +10,12 @@ void Main()
 	var running = true;
 	while(running)
 	{
-		Console.WriteLine("Enter Command (Manual Edit/Show/Add/Remove/Replace/Done/Calculate Site Hash)");
+		Console.WriteLine("Enter Command (Manual Edit/Show/Add/Remove/Replace/Done/Site Hash)");
 		var command = Console.ReadLine();
 		Util.ClearResults();
 		switch (command.ToLower())
 		{
-			case "calculate site hash":
+			case "site hash":
 				CalculateSiteHash();
 				break;			
 			case "manual edit":
@@ -54,7 +54,7 @@ void CalculateSiteHash()
 {
 	Console.WriteLine("Enter Site URL");
 	var text = Console.ReadLine();
-	var bytes = Encoding.UTF8.GetBytes($"site-{text.ToLower()}");
+	var bytes = Encoding.UTF8.GetBytes(new Uri(text).Host.ToLower());
 	var hashstring = new SHA256Managed();
 	var hash = hashstring.ComputeHash(bytes);
 	Console.WriteLine(hash.Aggregate(string.Empty, (current, x) => current + $"{x:x2}"));
