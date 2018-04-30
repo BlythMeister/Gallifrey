@@ -22,7 +22,7 @@ If you would would be interested in a support licence, please <a href="mailto:in
 
 There is a minimum donation required in order to gain access to premium features.
 
-The smallest donation to get premium access is **£2.00 (GBP)** for a single user access. - This access is non transferable and will be linked to the initial email address the donation comes from
+The smallest donation to get premium access is **£3.00 (GBP)** for a single user access. - This access is non transferable and will be linked to the initial email address the donation comes from
 
 If you are looking to unlock premium for your company or team then a yearly donation of **£50.00 (GBP)**.  To discuss this further, please reach out to me by <a href="mailto:info@GallifreyApp.co.uk" target="_blank">email</a>
 
@@ -42,7 +42,7 @@ When donating any amount, please include your installation hash (found at the bo
 <img alt="" border="0" src="https://www.paypalobjects.com/en_GB/i/scr/pixel.gif" width="1" height="1">
 </form>
 
-### £2.00 (GBP) - Single User Premium Access Minimum
+### £3.00 (GBP) - Single User Premium Access Minimum
 
 <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top" style="vertical-align:middle;">
 <img alt="premium" src="{{ site.url }}/images/donations/premium.png"/>
