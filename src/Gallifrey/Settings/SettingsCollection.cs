@@ -23,8 +23,8 @@ namespace Gallifrey.Settings
         public IInternalSettings InternalSettings { get; }
         public IExportSettings ExportSettings { get; }
         public string InstallationHash => DataEncryption.GetSha256Hash($"{InternalSettings.InstallationInstaceId}-{JiraConnectionSettings.JiraUsername}");
-        public string UserHash => DataEncryption.GetSha256Hash($"user-{JiraConnectionSettings.JiraUsername.ToLower()}-{JiraConnectionSettings.JiraUrl.ToLower()}");
-        public string SiteHash => DataEncryption.GetSha256Hash($"site-{JiraConnectionSettings.JiraUrl.ToLower()}");
+        public string UserHash => DataEncryption.GetSha256Hash($"{JiraConnectionSettings.JiraUsername.ToLower()}-{JiraConnectionSettings.JiraUrl.ToLower()}");
+        public string SiteHash => DataEncryption.GetSha256Hash(JiraConnectionSettings.JiraUrl.ToLower());
 
         public SettingsCollection()
         {

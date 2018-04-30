@@ -11,8 +11,6 @@ namespace Gallifrey.Jira
                 throw new InvalidCredentialException("Required settings to create connection to jira are missing");
             }
 
-            jiraUrl = jiraUrl.Replace("/secure/Dashboard.jspa", "");
-
             var jira = ConnectUsingRest(jiraUrl, username, password, useTempo);
             if (jira == null)
             {

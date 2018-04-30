@@ -21,7 +21,7 @@ namespace Gallifrey.Versions
                     var webContents = wc.DownloadString("https://releases.gallifreyapp.co.uk/download/PremiumInstanceIds");
                     var descryptedContents = DataEncryption.Decrypt(webContents);
                     var lines = descryptedContents.Split('\n');
-                    return lines.Select(GetPremiumHash).Any(premiumHash => premiumHash == settingsCollection.InstallationHash || premiumHash == settingsCollection.UserHash || premiumHash == settingsCollection.SiteHash);
+                    return lines.Select(GetPremiumHash).Any(premiumHash => premiumHash == settingsCollection.InstallationHash || premiumHash == $"user-{settingsCollection.UserHash}" || premiumHash == $"site-{settingsCollection.SiteHash}");
                 }
             }
             catch (Exception)
