@@ -82,7 +82,7 @@ When donating any amount, please include your installation hash (found at the bo
 <img alt="" border="0" src="https://www.paypalobjects.com/en_GB/i/scr/pixel.gif" width="1" height="1">
 </form>
 
-### £40.00 (GBP) - Buy me a night out
+### £50.00 (GBP) - Buy me a night out
 
 <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top" style="vertical-align:middle;">
 <img alt="beer" src="{{ site.url }}/images/donations/beer.png"/>
@@ -92,7 +92,7 @@ When donating any amount, please include your installation hash (found at the bo
 <img alt="" border="0" src="https://www.paypalobjects.com/en_GB/i/scr/pixel.gif" width="1" height="1">
 </form>
 
-### £80.00 (GBP) - Get your name in the app
+### £100.00 (GBP) - Get your name in the app
 
 <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top" style="vertical-align:middle;">
 <img alt="my name is ???" src="{{ site.url }}/images/donations/myName.png"/>
