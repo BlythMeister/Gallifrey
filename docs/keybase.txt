@@ -1,0 +1,55 @@
+==================================================================
+https://keybase.io/blythmeister
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of https://www.gallifreyapp.co.uk
+  * I am blythmeister (https://keybase.io/blythmeister) on keybase.
+  * I have a public key ASBwvtTm8cs1SATrLmvuqsQcKo9NKAUSTG8veaNmHfwdswo
+
+To do so, I am signing this object:
+
+{
+  "body": {
+    "key": {
+      "eldest_kid": "012070bed4e6f1cb354804eb2e6beeaac41c2a8f4d2805124c6f2f79a3661dfc1db30a",
+      "host": "keybase.io",
+      "kid": "012070bed4e6f1cb354804eb2e6beeaac41c2a8f4d2805124c6f2f79a3661dfc1db30a",
+      "uid": "2ca2678a891fe354044984f69cb29719",
+      "username": "blythmeister"
+    },
+    "merkle_root": {
+      "ctime": 1520584830,
+      "hash": "f3347bcfa536959ebecf5fe7bae7051c2a16be7ae34bd6223d17db8df430d6506f865753cf81fa8573de8d95a4af41ebf82accc86beef07748fcab49391669c9",
+      "hash_meta": "6feadd07cfa243eb2b45e8abdab15ef1e1ff5ad784b4cf40151cc5ca8a865629",
+      "seqno": 2208562
+    },
+    "service": {
+      "hostname": "www.gallifreyapp.co.uk",
+      "protocol": "https:"
+    },
+    "type": "web_service_binding",
+    "version": 1
+  },
+  "client": {
+    "name": "keybase.io go client",
+    "version": "1.0.45"
+  },
+  "ctime": 1520584845,
+  "expire_in": 504576000,
+  "prev": "8a4284ea10d92b3616075494bcac5e1a4ec9757efe78c2d41e2516b8d2dd5432",
+  "seqno": 15,
+  "tag": "signature"
+}
+
+which yields the signature:
+
+hKRib2R5hqhkZXRhY2hlZMOpaGFzaF90eXBlCqNrZXnEIwEgcL7U5vHLNUgE6y5r7qrEHCqPTSgFEkxvL3mjZh38HbMKp3BheWxvYWTFA1N7ImJvZHkiOnsia2V5Ijp7ImVsZGVzdF9raWQiOiIwMTIwNzBiZWQ0ZTZmMWNiMzU0ODA0ZWIyZTZiZWVhYWM0MWMyYThmNGQyODA1MTI0YzZmMmY3OWEzNjYxZGZjMWRiMzBhIiwiaG9zdCI6ImtleWJhc2UuaW8iLCJraWQiOiIwMTIwNzBiZWQ0ZTZmMWNiMzU0ODA0ZWIyZTZiZWVhYWM0MWMyYThmNGQyODA1MTI0YzZmMmY3OWEzNjYxZGZjMWRiMzBhIiwidWlkIjoiMmNhMjY3OGE4OTFmZTM1NDA0NDk4NGY2OWNiMjk3MTkiLCJ1c2VybmFtZSI6ImJseXRobWVpc3RlciJ9LCJtZXJrbGVfcm9vdCI6eyJjdGltZSI6MTUyMDU4NDgzMCwiaGFzaCI6ImYzMzQ3YmNmYTUzNjk1OWViZWNmNWZlN2JhZTcwNTFjMmExNmJlN2FlMzRiZDYyMjNkMTdkYjhkZjQzMGQ2NTA2Zjg2NTc1M2NmODFmYTg1NzNkZThkOTVhNGFmNDFlYmY4MmFjY2M4NmJlZWYwNzc0OGZjYWI0OTM5MTY2OWM5IiwiaGFzaF9tZXRhIjoiNmZlYWRkMDdjZmEyNDNlYjJiNDVlOGFiZGFiMTVlZjFlMWZmNWFkNzg0YjRjZjQwMTUxY2M1Y2E4YTg2NTYyOSIsInNlcW5vIjoyMjA4NTYyfSwic2VydmljZSI6eyJob3N0bmFtZSI6Ind3dy5nYWxsaWZyZXlhcHAuY28udWsiLCJwcm90b2NvbCI6Imh0dHBzOiJ9LCJ0eXBlIjoid2ViX3NlcnZpY2VfYmluZGluZyIsInZlcnNpb24iOjF9LCJjbGllbnQiOnsibmFtZSI6ImtleWJhc2UuaW8gZ28gY2xpZW50IiwidmVyc2lvbiI6IjEuMC40NSJ9LCJjdGltZSI6MTUyMDU4NDg0NSwiZXhwaXJlX2luIjo1MDQ1NzYwMDAsInByZXYiOiI4YTQyODRlYTEwZDkyYjM2MTYwNzU0OTRiY2FjNWUxYTRlYzk3NTdlZmU3OGMyZDQxZTI1MTZiOGQyZGQ1NDMyIiwic2Vxbm8iOjE1LCJ0YWciOiJzaWduYXR1cmUifaNzaWfEQEHfdQkpGWm3muDB85kAYMyGRszT66eoQC5G+HCRSgkiyzYqG51StSRyGhJo0iXFYy5O9Cf1pz+DqUrH1JL/QQ6oc2lnX3R5cGUgpGhhc2iCpHR5cGUIpXZhbHVlxCDSyM19dX2bmG4DJgJeEmVOMi1HZRMNJwBmnCN0ckoT7KN0YWfNAgKndmVyc2lvbgE=
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/blythmeister
+
+==================================================================
