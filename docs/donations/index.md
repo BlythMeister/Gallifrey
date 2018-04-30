@@ -24,8 +24,9 @@ There is a minimum donation required in order to gain access to premium features
 
 The smallest donation to get premium access is **£2.00 (GBP)** for a single user access. - This access is non transferable and will be linked to the initial email address the donation comes from
 
-If you are looking to unlock premium for your company or team the smallest donation to get premium access is **£3.00 (GBP)** per seat.
-Rather than single user access, you will block buy "slots" which can be filled and maintained and transfered to any user.
+If you are looking to unlock premium for your company or team then a yearly donation of **£50.00 (GBP)**.  To discuss this further, please reach out to me by <a href="mailto:info@GallifreyApp.co.uk" target="_blank">email</a>
+
+This is not a support licence for garenteed support, if you require this please contact by <a href="mailto:info@GallifreyApp.co.uk" target="_blank">email</a>
 
 When donating any amount, please include your installation hash (found at the bottom of the information screen) as your donation message so we can unlock premium for you.
 
