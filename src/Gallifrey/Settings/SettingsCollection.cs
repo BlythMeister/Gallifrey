@@ -10,6 +10,8 @@ namespace Gallifrey.Settings
         IInternalSettings InternalSettings { get; }
         IExportSettings ExportSettings { get; }
         string InstallationHash { get; }
+        string UserHash { get; }
+        string SiteHash { get; }
         void SaveSettings();
     }
 
@@ -21,6 +23,8 @@ namespace Gallifrey.Settings
         public IInternalSettings InternalSettings { get; }
         public IExportSettings ExportSettings { get; }
         public string InstallationHash => DataEncryption.GetSha256Hash($"{InternalSettings.InstallationInstaceId}-{JiraConnectionSettings.JiraUsername}");
+        public string UserHash => DataEncryption.GetSha256Hash($"user-{JiraConnectionSettings.JiraUsername.ToLower()}-{JiraConnectionSettings.JiraUrl.ToLower()}");
+        public string SiteHash => DataEncryption.GetSha256Hash($"site-{JiraConnectionSettings.JiraUrl.ToLower()}");
 
         public SettingsCollection()
         {

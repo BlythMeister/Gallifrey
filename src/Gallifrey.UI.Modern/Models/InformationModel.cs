@@ -1,9 +1,9 @@
+using Gallifrey.Contributors;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Timers;
-using Gallifrey.Contributors;
 
 namespace Gallifrey.UI.Modern.Models
 {
@@ -11,7 +11,7 @@ namespace Gallifrey.UI.Modern.Models
     {
         public event PropertyChangedEventHandler PropertyChanged;
         public string Contributors { get; set; }
-        public string InstallationHash { get; set; }
+        public string UserHash { get; set; }
         private readonly List<string> contributorList;
         private int position;
 
@@ -26,7 +26,7 @@ namespace Gallifrey.UI.Modern.Models
             position = 0;
             Contributors = contributorList[position];
 
-            InstallationHash = gallifrey.Settings.InstallationHash;
+            UserHash = gallifrey.Settings.UserHash;
         }
 
         private string BuildThanksString(WithThanksDefinition withThanksDefinition)

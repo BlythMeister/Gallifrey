@@ -1,13 +1,14 @@
-﻿using System.Diagnostics;
+﻿using Gallifrey.AppTracking;
+using Gallifrey.UI.Modern.Helpers;
+using Gallifrey.UI.Modern.Models;
+using MahApps.Metro.Controls.Dialogs;
+using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Navigation;
 using System.Xml.Linq;
-using Gallifrey.AppTracking;
-using Gallifrey.UI.Modern.Helpers;
-using Gallifrey.UI.Modern.Models;
-using MahApps.Metro.Controls.Dialogs;
 
 namespace Gallifrey.UI.Modern.Flyouts
 {
@@ -44,10 +45,17 @@ namespace Gallifrey.UI.Modern.Flyouts
             await modelHelpers.OpenFlyout(this);
         }
 
-        private async void InstallationHashClick(object sender, MouseButtonEventArgs mouseButtonEventArgs)
+        private async void UserHashClick(object sender, MouseButtonEventArgs mouseButtonEventArgs)
         {
-            Clipboard.SetText(modelHelpers.Gallifrey.Settings.InstallationHash);
-            await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Copied Installation Hash", $"You Installation Has Of {modelHelpers.Gallifrey.Settings.InstallationHash} Has Been Copied To The Clipboard");
+            try
+            {
+                Clipboard.SetText(modelHelpers.Gallifrey.Settings.UserHash);
+                await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Copied Installation Hash", $"Your Installation Hash Of {modelHelpers.Gallifrey.Settings.UserHash} Has Been Copied To The Clipboard");
+            }
+            catch (Exception)
+            {
+                await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Error Getting Hash", $"There Was An Error Putting Your Installation Hash Of {modelHelpers.Gallifrey.Settings.UserHash} Onto The Clipboard");
+            }
         }
     }
 }

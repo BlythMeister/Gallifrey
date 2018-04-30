@@ -319,7 +319,9 @@
     </Others>
   </Version>
   <Version Number="0.0.0.0" Name="Pre-Release">
-    <Features />
+    <Features>
+      <Feature>Update premium hash unlock to include site unlock</Feature>
+    </Features>
     <Bugs>
       <Bug>Ensure that all TLS protocol are supported</Bug>
       <Bug>Better handling of failed updated (where reinstall not required)</Bug>
