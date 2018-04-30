@@ -1,5 +1,6 @@
 using System;
 using System.Deployment.Application;
+using System.Net;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -74,6 +75,18 @@ namespace Gallifrey.Versions
             if (lastUpdateCheck >= DateTime.UtcNow.AddMinutes(-5) && !manualCheck)
             {
                 return Task.Factory.StartNew(() => UpdateResult.TooSoon);
+            }
+
+            try
+            {
+                using (var client = new WebClient())
+                {
+                    client.DownloadData("https://releases.gallifreyapp.co.uk");
+                }
+            }
+            catch
+            {
+                return Task.Factory.StartNew(() => UpdateResult.NoInternet);
             }
 
             UpdateCheckOccured?.Invoke(this, manualCheck);
