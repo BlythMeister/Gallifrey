@@ -54,7 +54,10 @@ void CalculateSiteHash()
 {
 	Console.WriteLine("Enter Site URL");
 	var text = Console.ReadLine();
-	var bytes = Encoding.UTF8.GetBytes(new Uri(text).Host.ToLower());
+	if(!text.StartsWith("http")) text = "http://" + text;
+	var hostName = new Uri(text).Host;
+	Console.WriteLine($"HostName: {hostName}");
+	var bytes = Encoding.UTF8.GetBytes(hostName.ToLower());
 	var hashstring = new SHA256Managed();
 	var hash = hashstring.ComputeHash(bytes);
 	Console.WriteLine(hash.Aggregate(string.Empty, (current, x) => current + $"{x:x2}"));
