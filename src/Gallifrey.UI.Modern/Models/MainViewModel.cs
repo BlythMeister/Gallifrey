@@ -148,20 +148,26 @@ namespace Gallifrey.UI.Modern.Models
             if (TimeActivity.TotalMinutes > 0)
             {
                 var minutesPlural = TimeActivity.TotalMinutes > 1 ? "s" : "";
-                InactiveMinutes = $"No Timer Running For {TimeActivity.TotalMinutes} Minute{minutesPlural}";
+                var newMessage = $"No Timer Running For {TimeActivity.TotalMinutes} Minute{minutesPlural}";
 
-                if (millisecondsSinceActivity % ModelHelpers.Gallifrey.Settings.AppSettings.AlertTimeMilliseconds == 0)
+                if (newMessage != InactiveMinutes)
                 {
-                    ModelHelpers.ShowNotification(InactiveMinutes);
+                    InactiveMinutes = newMessage;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("InactiveMinutes"));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasInactiveTime"));
+
+                    if (TimeActivity.TotalMinutes % TimeSpan.FromMilliseconds(ModelHelpers.Gallifrey.Settings.AppSettings.AlertTimeMilliseconds).TotalMinutes == 0)
+                    {
+                        ModelHelpers.ShowNotification(InactiveMinutes);
+                    }
                 }
             }
             else
             {
                 InactiveMinutes = string.Empty;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("InactiveMinutes"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasInactiveTime"));
             }
-
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("InactiveMinutes"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasInactiveTime"));
         }
 
         public IEnumerable<Guid> GetSelectedTimerIds()
