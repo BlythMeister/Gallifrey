@@ -276,7 +276,7 @@ namespace Gallifrey.UI.Modern.MainViews
         private void EmailButton(object sender, RoutedEventArgs e)
         {
             ModelHelpers.Gallifrey.TrackEvent(TrackingType.ContactClick);
-            Process.Start(new ProcessStartInfo("mailto:contact@gallifreyapp.co.uk?subject=Gallifrey App Contact"));
+            Process.Start(new ProcessStartInfo("mailto:support@gallifreyapp.co.uk?subject=Gallifrey App Contact"));
         }
 
         private void TwitterButton(object sender, RoutedEventArgs e)
