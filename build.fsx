@@ -170,9 +170,9 @@ Target "Publish-ClickOnce" (fun _ ->
         else
             printfn "Already have %s version %s published" releaseType versionNumber
                            
-    if isAlpha then publishRelease "Alpha" else false
-    if isBeta then publishRelease "Beta" else false
-    if isStable then publishRelease "Stable" else false
+    if isAlpha then publishRelease "Alpha"
+    if isBeta then publishRelease "Beta"
+    if isStable then publishRelease "Stable"
 )
 
 Target "Publish-ReleaseNotes" (fun _ ->    
