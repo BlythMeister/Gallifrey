@@ -48,7 +48,7 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <TextBlock Grid.Row="0" FontSize="18" Margin="0,0,0,5" Text="Support" TextDecorations="Underline" />
-            <TextBlock Grid.Row="1" TextWrapping="Wrap" Margin="0,0,0,5" VerticalAlignment="Center">Contact Us By Email Or Social Networks!<LineBreak />Email: <Hyperlink NavigateUri="mailto:support@gallifreyapp.co.uk?subject=Gallifrey App Contact" Foreground="{DynamicResource TextBrush}" RequestNavigate="Hyperlink_RequestNavigate">GallifreyApp@gmail.com</Hyperlink><LineBreak />Twitter: <Hyperlink NavigateUri="https://twitter.com/GallifreyApp" Foreground="{DynamicResource TextBrush}" RequestNavigate="Hyperlink_RequestNavigate">@GallifreyApp</Hyperlink></TextBlock>
+            <TextBlock Grid.Row="1" TextWrapping="Wrap" Margin="0,0,0,5" VerticalAlignment="Center">Contact Us By Email Or Social Networks!<LineBreak />Email: <Hyperlink NavigateUri="mailto:support@gallifreyapp.co.uk?subject=Gallifrey App Contact" Foreground="{DynamicResource TextBrush}" RequestNavigate="Hyperlink_RequestNavigate">support@GallifreyApp.co.uk</Hyperlink><LineBreak />Twitter: <Hyperlink NavigateUri="https://twitter.com/GallifreyApp" Foreground="{DynamicResource TextBrush}" RequestNavigate="Hyperlink_RequestNavigate">@GallifreyApp</Hyperlink></TextBlock>
         </Grid>
         <Grid Grid.Row="3">
             <Grid.RowDefinitions>
