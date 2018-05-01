@@ -335,7 +335,7 @@
   </Version>
   <Version Number="0.0.0.0" Name="Pre-Release">
     <Features>
-      <Feature>Added notification pop-up for update avaliable & no timer running</Feature>
+      <Feature>Added notification pop-up for update avaliable and when no timer running</Feature>
     </Features>
     <Bugs />
     <Others/>
