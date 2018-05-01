@@ -44,7 +44,7 @@ namespace Gallifrey.Settings
 
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
         public IEnumerable<DayOfWeek> ExportDays { get; set; }
-        
+
         [DefaultValue(DayOfWeek.Monday)]
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
         public DayOfWeek StartOfWeek { get; set; }

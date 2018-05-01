@@ -1,8 +1,7 @@
-﻿using System;
-using System.Runtime.ExceptionServices;
+﻿using MahApps.Metro.Controls.Dialogs;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
-using MahApps.Metro.Controls.Dialogs;
 
 namespace Gallifrey.UI.Modern.Helpers
 {
@@ -44,7 +43,7 @@ namespace Gallifrey.UI.Modern.Helpers
             var controller = await DialogCoordinator.Instance.ShowProgressAsync(dialogContext, "Please Wait", message, canCancel);
             controller.SetIndeterminate();
 
-            var controllerCancel = Task.Factory.StartNew(delegate
+            var controllerCancel = Task.Factory.StartNew(() =>
             {
                 while (true)
                 {
@@ -57,6 +56,7 @@ namespace Gallifrey.UI.Modern.Helpers
                     {
                         break;
                     }
+
                     Thread.Sleep(100);
                 }
             }, cancellationTokenSource.Token);
@@ -83,7 +83,7 @@ namespace Gallifrey.UI.Modern.Helpers
 
                         if (throwErrors && functionTask.Exception != null)
                         {
-                            ExceptionDispatchInfo.Capture(functionTask.Exception.InnerException).Throw();
+                            throw functionTask.Exception.InnerException ?? functionTask.Exception;
                         }
                     }
                 }
@@ -102,11 +102,7 @@ namespace Gallifrey.UI.Modern.Helpers
             finally
             {
                 cancellationTokenSource.Cancel();
-
-                if (controller != null)
-                {
-                    await controller.CloseAsync();
-                }
+                await controller.CloseAsync();
             }
         }
     }

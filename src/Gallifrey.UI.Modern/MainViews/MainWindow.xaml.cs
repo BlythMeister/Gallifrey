@@ -493,6 +493,10 @@ namespace Gallifrey.UI.Modern.MainViews
                     modelHelpers.CloseApp(true);
                     modelHelpers.Gallifrey.TrackEvent(TrackingType.AutoUpdateInstalled);
                 }
+                else if (updateResult == UpdateResult.NoInternet && updateType == UpdateType.Manual)
+                {
+                    await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Unable To Update", "Unable To Access https://releases.gallifreyapp.co.uk To Check For Updates");
+                }
                 else if (updateResult == UpdateResult.NotDeployable && updateType == UpdateType.Manual)
                 {
                     await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Unable To Update", "You Cannot Auto Update This Version Of Gallifrey");
@@ -501,7 +505,7 @@ namespace Gallifrey.UI.Modern.MainViews
                 {
                     await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "No Update Found", "There Are No Updates At This Time, Check Back Soon!");
                 }
-                else if (updateResult == UpdateResult.Error && updateType == UpdateType.Manual)
+                else if (updateResult == UpdateResult.Error && (updateType == UpdateType.Manual || updateType == UpdateType.StartUp))
                 {
                     throw new Exception();//Trigger error condition
                 }

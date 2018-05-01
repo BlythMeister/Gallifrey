@@ -9,6 +9,7 @@ open Fake.AppVeyor
 open System
 open System.IO
 open System.Text
+open System.Net
 open System.Xml.Linq
 open Octokit
 
@@ -28,8 +29,12 @@ let isPR = match isAppVeyor with
 let isStable = branchName = "master"
 let isBeta = (isStable || branchName = "release")
 let isAlpha = (isBeta || branchName = "develop")
+let mutable donePublish = false
 
 let githubApiKey = environVar "github_api_key"
+let cloudflareApiKey = environVar "cloudflare_api_key"
+let cloudflareEmail = environVar "cloudflare_email"
+let cloudflareZone = environVar "cloudflare_zone"
 
 printfn "Running On Branch: %s" branchName
 printfn "PR Number: %s" AppVeyorEnvironment.PullRequestNumber
@@ -122,7 +127,7 @@ Target "Publish-Artifacts" (fun _ ->
     PushArtifacts (Directory.GetFiles(outputDir, "*.exe", SearchOption.TopDirectoryOnly))
 )
 
-Target "Publish-Release" (fun _ ->    
+Target "Publish-ClickOnce" (fun _ ->    
     let releasesRepo = outputDir @@ "Releases"
 
     //Hide process tracing so the access token doesn't show
@@ -171,67 +176,82 @@ Target "Publish-Release" (fun _ ->
 
     if publishedAlpha || publishedBeta || publishedStable then
         pushBranch releasesRepo "origin" "master"
+        donePublish <- true        
+)
 
+Target "Publish-ReleaseNotes" (fun _ ->    
+    if donePublish && (isStable || isBeta) then
         let releaseVersion = if isStable then baseVersion else versionNumber
 
-        if isStable || isBeta then 
-            let versionLog = XDocument.Load(changeLogPath)
-                             |> fun changelog -> changelog.Descendants(XName.Get("Version", "https://releases.gallifreyapp.co.uk/ChangeLog"))
-                             |> Seq.filter(fun x -> x.Attribute(XName.Get("Number")).Value.StartsWith(releaseVersion))
-                             |> Seq.head
+        let versionLog = XDocument.Load(changeLogPath)
+                            |> fun changelog -> changelog.Descendants(XName.Get("Version", "https://releases.gallifreyapp.co.uk/ChangeLog"))
+                            |> Seq.filter(fun x -> x.Attribute(XName.Get("Number")).Value.StartsWith(releaseVersion))
+                            |> Seq.head
 
-            let features = versionLog.Descendants(XName.Get("Feature", "https://releases.gallifreyapp.co.uk/ChangeLog")) |> Seq.map(fun x -> sprintf "* %s" x.Value) |> Seq.toList
-            let bugs = versionLog.Descendants(XName.Get("Bug", "https://releases.gallifreyapp.co.uk/ChangeLog")) |> Seq.map(fun x -> sprintf "* %s" x.Value) |> Seq.toList
-            let others = versionLog.Descendants(XName.Get("Other", "https://releases.gallifreyapp.co.uk/ChangeLog")) |> Seq.map(fun x -> sprintf "* %s" x.Value) |> Seq.toList
+        let features = versionLog.Descendants(XName.Get("Feature", "https://releases.gallifreyapp.co.uk/ChangeLog")) |> Seq.map(fun x -> sprintf "* %s" x.Value) |> Seq.toList
+        let bugs = versionLog.Descendants(XName.Get("Bug", "https://releases.gallifreyapp.co.uk/ChangeLog")) |> Seq.map(fun x -> sprintf "* %s" x.Value) |> Seq.toList
+        let others = versionLog.Descendants(XName.Get("Other", "https://releases.gallifreyapp.co.uk/ChangeLog")) |> Seq.map(fun x -> sprintf "* %s" x.Value) |> Seq.toList
 
-            let releaseNotes = [
-                                if features |> List.isEmpty |> not then yield ["# Features"; ""]
-                                yield features
-                                if features |> List.isEmpty |> not then yield [""]
-                                if bugs |> List.isEmpty |> not then yield ["# Bugs"; ""]
-                                yield bugs
-                                if bugs |> List.isEmpty |> not then yield [""]
-                                if others |> List.isEmpty |> not then yield ["# Others"; ""]
-                                yield others
-                                if others |> List.isEmpty |> not then yield [""]
-                                if not(isStable) then yield ["*NB: This is a cumulative change log for next release*"]
-                               ]
-                               |> List.concat
+        let releaseNotes = [
+                            if features |> List.isEmpty |> not then yield ["# Features"; ""]
+                            yield features
+                            if features |> List.isEmpty |> not then yield [""]
+                            if bugs |> List.isEmpty |> not then yield ["# Bugs"; ""]
+                            yield bugs
+                            if bugs |> List.isEmpty |> not then yield [""]
+                            if others |> List.isEmpty |> not then yield ["# Others"; ""]
+                            yield others
+                            if others |> List.isEmpty |> not then yield [""]
+                            if not(isStable) then yield ["*NB: This is a cumulative change log for next release*"]
+                            ]
+                            |> List.concat
             
-            if isStable then
-                let currentDate = DateTime.UtcNow
-                let releasesNewsFile = newsPostDir @@ sprintf "%s-release-%s.md" (currentDate.ToString("yyyy-MM-dd")) (releaseVersion.Replace(".", "-"))
+        if isStable then
+            let currentDate = DateTime.UtcNow
+            let releasesNewsFile = newsPostDir @@ sprintf "%s-release-%s.md" (currentDate.ToString("yyyy-MM-dd")) (releaseVersion.Replace(".", "-"))
                 
-                new StringBuilder()
-                |> fun x -> x.AppendLine("---")
-                |> fun x -> x.AppendLine(sprintf "title: Released Version %s" releaseVersion)
-                |> fun x -> x.AppendLine(sprintf "date: %s +0000" (currentDate.ToString("yyyy-MM-dd HH:mm")))
-                |> fun x -> x.AppendLine(sprintf "excerpt: We have now released version %s." releaseVersion)
-                |> fun x -> x.AppendLine("show: true")
-                |> fun x -> x.AppendLine("---")
-                |> fun x -> x.AppendLine("")
-                |> fun x -> x.AppendLine(sprintf "We have now released version %s." releaseVersion)
-                |> fun x -> x.AppendLine("This version contains the following changes:")
-                |> fun x -> x.AppendLine("")
-                |> fun x -> x.AppendLine(String.Join("\n", releaseNotes))
-                |> fun x -> x.AppendLine("")
-                |> fun x -> x.AppendLine("To download the latest version of the app head to https://www.gallifreyapp.co.uk/downloads/stable")
-                |> fun x -> File.WriteAllText(releasesNewsFile, x.ToString())
+            new StringBuilder()
+            |> fun x -> x.AppendLine("---")
+            |> fun x -> x.AppendLine(sprintf "title: Released Version %s" releaseVersion)
+            |> fun x -> x.AppendLine(sprintf "date: %s +0000" (currentDate.ToString("yyyy-MM-dd HH:mm")))
+            |> fun x -> x.AppendLine(sprintf "excerpt: We have now released version %s." releaseVersion)
+            |> fun x -> x.AppendLine("show: true")
+            |> fun x -> x.AppendLine("---")
+            |> fun x -> x.AppendLine("")
+            |> fun x -> x.AppendLine(sprintf "We have now released version %s." releaseVersion)
+            |> fun x -> x.AppendLine("")
+            |> fun x -> x.AppendLine("This version contains the following changes:")
+            |> fun x -> x.AppendLine("")
+            |> fun x -> x.AppendLine(String.Join("\n", releaseNotes).Replace("# ","#### "))
+            |> fun x -> x.AppendLine("")
+            |> fun x -> x.AppendLine("To download the latest version of the app head to <https://www.gallifreyapp.co.uk/downloads/stable>")
+            |> fun x -> File.WriteAllText(releasesNewsFile, x.ToString())
 
-                checkoutBranch currentDirectory branchName
-                StageFile currentDirectory releasesNewsFile |> ignore
-                Commit.Commit currentDirectory (sprintf "Create news for stable release - %s" releaseVersion)    
-                pushBranch currentDirectory "origin" branchName
+            checkoutBranch currentDirectory branchName
+            StageFile currentDirectory releasesNewsFile |> ignore
+            Commit.Commit currentDirectory (sprintf "Create news for stable release - %s" releaseVersion)    
+            pushBranch currentDirectory "origin" branchName
 
-            tag currentDirectory releaseVersion
-            pushTag currentDirectory "origin" releaseVersion
+        tag currentDirectory releaseVersion
+        pushTag currentDirectory "origin" releaseVersion
 
-            createClientWithToken githubApiKey
-            |> createDraft "BlythMeister" "Gallifrey" releaseVersion (not(isStable)) releaseNotes
-            |> fun x -> if isBeta then uploadFile (outputDir @@ "beta-setup.exe") x else x
-            |> fun x -> if isStable then uploadFile (outputDir @@ "stable-setup.exe") x else x
-            |> releaseDraft
-            |> Async.RunSynchronously
+        createClientWithToken githubApiKey
+        |> createDraft "BlythMeister" "Gallifrey" releaseVersion (not(isStable)) releaseNotes
+        |> fun x -> if isBeta then uploadFile (outputDir @@ "beta-setup.exe") x else x
+        |> fun x -> if isStable then uploadFile (outputDir @@ "stable-setup.exe") x else x
+        |> releaseDraft
+        |> Async.RunSynchronously
+)
+
+Target "Publish-PurgeCloudflareCache" (fun _ ->    
+    printfn "Purging Cloudflare"
+    let client = new WebClient()
+    client.Headers.Add("X-Auth-Email", cloudflareEmail)
+    client.Headers.Add("X-Auth-Key", cloudflareApiKey)
+    client.Headers.Add("Content-Type", "application/json")
+    let result = client.UploadString(sprintf "https://api.cloudflare.com/client/v4/zones/%s/purge_cache" cloudflareZone, "DELETE", "{\"purge_everything\":true}")
+    client.Dispose()
+    printfn "Cloudflare response: %s" result
 )
 
 Target "Default" DoNothing
@@ -241,7 +261,9 @@ Target "Default" DoNothing
     ==> "Build"
     ==> "Package"
     =?> ("Publish-Artifacts", isAppVeyor)
-    =?> ("Publish-Release", isAppVeyor && not(isPR) && (isAlpha || isBeta || isStable))
+    =?> ("Publish-ClickOnce", isAppVeyor && not(isPR) && (isAlpha || isBeta || isStable))
+    =?> ("Publish-ReleaseNotes", isAppVeyor && not(isPR) && (isAlpha || isBeta || isStable))
+    =?> ("Publish-PurgeCloudflareCache", isAppVeyor)
     ==> "Default"
 
 RunParameterTargetOrDefault "target" "Default"

@@ -1,27 +1,28 @@
+using Gallifrey.Serialization;
+using Gallifrey.Settings;
 using System;
 using System.Linq;
-using Gallifrey.Serialization;
 
 namespace Gallifrey.Versions
 {
     public interface IPremiumChecker
     {
-        bool CheckIfPremium(string installtionHash);
+        bool CheckIfPremium(ISettingsCollection settingsCollection);
     }
 
     public class PremiumChecker : IPremiumChecker
     {
-        public bool CheckIfPremium(string installtionHash)
+        public bool CheckIfPremium(ISettingsCollection settingsCollection)
         {
             try
             {
-                string webContents;
                 using (var wc = new System.Net.WebClient())
-                    webContents = wc.DownloadString("https://releases.gallifreyapp.co.uk/download/PremiumInstanceIds");
-
-                var descryptedContents = DataEncryption.Decrypt(webContents);
-                var lines = descryptedContents.Split('\n');
-                return lines.Select(GetPremiumHash).Any(premiumHash => premiumHash == installtionHash);
+                {
+                    var webContents = wc.DownloadString("https://releases.gallifreyapp.co.uk/download/PremiumInstanceIds");
+                    var descryptedContents = DataEncryption.Decrypt(webContents);
+                    var lines = descryptedContents.Split('\n');
+                    return lines.Select(GetPremiumHash).Any(premiumHash => premiumHash == settingsCollection.InstallationHash || premiumHash == $"user-{settingsCollection.UserHash}" || premiumHash == $"site-{settingsCollection.SiteHash}");
+                }
             }
             catch (Exception)
             {

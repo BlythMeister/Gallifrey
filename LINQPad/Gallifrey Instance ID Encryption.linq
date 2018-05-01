@@ -10,13 +10,17 @@ void Main()
 	var running = true;
 	while(running)
 	{
-		Console.WriteLine("Enter Command (Manual Edit/Show/Add/Remove/Replace/Done)");
+		Console.WriteLine("Enter Command (Manual Edit/Show/Add/Remove/Replace/Done/Site Hash)");
 		var command = Console.ReadLine();
 		Util.ClearResults();
 		switch (command.ToLower())
 		{
+			case "site hash":
+				CalculateSiteHash();
+				break;			
 			case "manual edit":
 				DecryptFile();
+				Process.Start(path);
 				Console.WriteLine("Press Enter To Encrypt");
 				Console.ReadLine();
 				EncryptFile();
@@ -44,6 +48,19 @@ void Main()
 		Console.WriteLine("");
 	}
 	
+}
+
+void CalculateSiteHash()
+{
+	Console.WriteLine("Enter Site URL");
+	var text = Console.ReadLine();
+	if(!text.StartsWith("http")) text = "http://" + text;
+	var hostName = new Uri(text).Host;
+	Console.WriteLine($"HostName: {hostName}");
+	var bytes = Encoding.UTF8.GetBytes(hostName.ToLower());
+	var hashstring = new SHA256Managed();
+	var hash = hashstring.ComputeHash(bytes);
+	Console.WriteLine(hash.Aggregate(string.Empty, (current, x) => current + $"{x:x2}"));
 }
 
 private void ShowFileContent()

@@ -140,7 +140,7 @@ namespace Gallifrey.UI.Modern.MainViews
 
                 if (timer != null)
                 {
-                    if (ModelHelpers.Gallifrey.Settings.AppSettings.DefaultTimers.Any(x => x == timer.JiraReference) && timer.DateStarted.Date <= DateTime.Now.Date)
+                    if (ModelHelpers.Gallifrey.Settings.AppSettings.DefaultTimers != null && ModelHelpers.Gallifrey.Settings.AppSettings.DefaultTimers.Any(x => x == timer.JiraReference) && timer.DateStarted.Date <= DateTime.Now.Date)
                     {
                         await DialogCoordinator.Instance.ShowMessageAsync(ModelHelpers.DialogContext, "Default Timer", $"The Timer {timer.JiraReference} Is A Default Time And Cannot Be Deleted.");
                     }

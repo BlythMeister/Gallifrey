@@ -280,7 +280,7 @@
     <Bugs>
       <Bug>Fix issue with worklog query</Bug>
     </Bugs>
-    <Others/>
+    <Others />
   </Version>
   <Version Number="3.7.4.0">
     <Features />
@@ -316,6 +316,21 @@
     <Bugs />
     <Others>
       <Other>Publish fixes</Other>
+    </Others>
+  </Version>
+  <Version Number="0.0.0.0" Name="Pre-Release">
+    <Features>
+      <Feature>Update premium hash unlock to include site unlock</Feature>
+    </Features>
+    <Bugs>
+      <Bug>Ensure that all TLS protocol are supported</Bug>
+      <Bug>Better handling of failed updated (where reinstall not required)</Bug>
+      <Bug>Fix a couple of bugs reported by users</Bug>
+      <Bug>Replace RinjndaelManaged class for AesCryptoServiceProvider</Bug>
+    </Bugs>
+    <Others>
+      <Other>External dependencies updated</Other>
+      <Other>Automatic cloudflare cache purge on build</Other>
     </Others>
   </Version>
   <!--

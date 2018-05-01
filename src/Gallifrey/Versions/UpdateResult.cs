@@ -7,6 +7,7 @@
         NoUpdate,
         TooSoon,
         Error,
-        ReinstallNeeded
+        ReinstallNeeded,
+        NoInternet
     }
 }

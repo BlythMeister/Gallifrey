@@ -153,7 +153,7 @@ namespace Gallifrey
                     }
                 }
 
-                var isPremium = premiumChecker.CheckIfPremium(settingsCollection.InstallationHash);
+                var isPremium = premiumChecker.CheckIfPremium(settingsCollection);
                 if (isPremium != settingsCollection.InternalSettings.IsPremium)
                 {
                     settingsCollection.InternalSettings.SetIsPremium(isPremium);
