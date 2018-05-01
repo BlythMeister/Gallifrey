@@ -1,7 +1,7 @@
 <small>
     <span class="date"><i class="fa fa-calendar">&nbsp;</i>{{ post.date | date: "%d %B %Y" }}</span>
     <span> | </span>
-    <span class="edit"><i class="fa fa-pencil">&nbsp;</i><a href="https://github.com/BlythMeister/Gallifrey/edit/master/docs/{{ post.url }}">Edit Post</a></span>
+    <span class="edit"><i class="fa fa-pencil">&nbsp;</i><a href="https://github.com/BlythMeister/Gallifrey/edit/master/docs/{{ post.path }}" target="_blank"">Edit Post</a></span>
     {% if post.tags.size > 0 %}
     <br />    
     {% if post.tags.size > 1 %}
