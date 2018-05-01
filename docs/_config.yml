@@ -25,6 +25,9 @@ social:
     name: Gallifrey App
     links:
         - https://www.twitter.com/GallifreyApp
+        
+#Link format
+permalink: pretty
 
 #Pagination
 paginate: 5
