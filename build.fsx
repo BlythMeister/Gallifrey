@@ -169,7 +169,6 @@ Target "Publish-ClickOnce" (fun _ ->
             donePublish <- true 
         else
             printfn "Already have %s version %s published" releaseType versionNumber
-            false
                            
     if isAlpha then publishRelease "Alpha" else false
     if isBeta then publishRelease "Beta" else false
