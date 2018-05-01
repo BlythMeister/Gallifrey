@@ -165,18 +165,15 @@ Target "Publish-ClickOnce" (fun _ ->
             
             StageAll releasesRepo
             Commit.Commit releasesRepo (sprintf "Publish %s - %s" releaseType versionNumber)
-            true
+            pushBranch releasesRepo "origin" "master"
+            donePublish <- true 
         else
             printfn "Already have %s version %s published" releaseType versionNumber
             false
                            
-    let publishedAlpha = if isAlpha then publishRelease "Alpha" else false
-    let publishedBeta = if isBeta then publishRelease "Beta" else false
-    let publishedStable = if isStable then publishRelease "Stable" else false
-
-    if publishedAlpha || publishedBeta || publishedStable then
-        pushBranch releasesRepo "origin" "master"
-        donePublish <- true        
+    if isAlpha then publishRelease "Alpha" else false
+    if isBeta then publishRelease "Beta" else false
+    if isStable then publishRelease "Stable" else false
 )
 
 Target "Publish-ReleaseNotes" (fun _ ->    
