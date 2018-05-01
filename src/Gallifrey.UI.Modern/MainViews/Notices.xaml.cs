@@ -91,7 +91,7 @@ namespace Gallifrey.UI.Modern.MainViews
 
         private async void CreateTimerFromInactive(object sender, MouseButtonEventArgs e)
         {
-            var dummyIdleTimer = new IdleTimer(DateTime.Now, DateTime.Now, Model.TimeTimeActivity, Guid.NewGuid());
+            var dummyIdleTimer = new IdleTimer(DateTime.Now, DateTime.Now, Model.TimeActivity, Guid.NewGuid());
             var addFlyout = new AddTimer(ModelHelpers, idleTimers: new List<IdleTimer> { dummyIdleTimer }, enableDateChange: false);
             await ModelHelpers.OpenFlyout(addFlyout);
             if (addFlyout.AddedTimer)

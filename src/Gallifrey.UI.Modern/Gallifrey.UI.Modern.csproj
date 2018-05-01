@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -74,6 +74,10 @@
     <Compile Include="Helpers\ExceptionlessHelper.cs" />
     <Compile Include="Helpers\BooleanVisibilityConverter.cs" />
     <Compile Include="Helpers\IdleTimeDetector.cs" />
+    <Compile Include="Models\ToastNotification.cs" />
+    <Compile Include="MainViews\ToastNotificationDisplayPart.xaml.cs">
+      <DependentUpon>ToastNotificationDisplayPart.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Models\BulkExportContainerModel.cs" />
     <Compile Include="Models\BulkExportModel.cs" />
     <Compile Include="Flyouts\LockedTimer.xaml.cs">
@@ -221,6 +225,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="MainViews\ToastNotificationDisplayPart.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="MainViews\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -336,6 +344,17 @@
       <ItemGroup>
         <Reference Include="MahApps.Metro.IconPacks.Modern">
           <HintPath>..\..\packages\MahApps.Metro.IconPacks.Modern\lib\net46\MahApps.Metro.IconPacks.Modern.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
+  <Choose>
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.6'">
+      <ItemGroup>
+        <Reference Include="ToastNotifications">
+          <HintPath>..\..\packages\ToastNotifications\lib\net40\ToastNotifications.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>

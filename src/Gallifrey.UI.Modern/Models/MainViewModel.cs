@@ -1,3 +1,8 @@
+using Gallifrey.Comparers;
+using Gallifrey.ExtensionMethods;
+using Gallifrey.Jira.Model;
+using Gallifrey.UI.Modern.Helpers;
+using Gallifrey.Versions;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -5,11 +10,6 @@ using System.ComponentModel;
 using System.Linq;
 using System.Timers;
 using System.Windows;
-using Gallifrey.Comparers;
-using Gallifrey.ExtensionMethods;
-using Gallifrey.Jira.Model;
-using Gallifrey.UI.Modern.Helpers;
-using Gallifrey.Versions;
 
 namespace Gallifrey.UI.Modern.Models
 {
@@ -21,7 +21,7 @@ namespace Gallifrey.UI.Modern.Models
         public event PropertyChangedEventHandler PropertyChanged;
         public ObservableCollection<TimerDateModel> TimerDates { get; private set; }
         public string InactiveMinutes { get; private set; }
-        public TimeSpan TimeTimeActivity { get; private set; }
+        public TimeSpan TimeActivity { get; private set; }
 
         public MainViewModel(ModelHelpers modelHelpers)
         {
@@ -141,14 +141,19 @@ namespace Gallifrey.UI.Modern.Models
 
         public void SetNoActivityMilliseconds(int millisecondsSinceActivity)
         {
-            TimeTimeActivity = TimeSpan.FromMilliseconds(millisecondsSinceActivity);
-            TimeTimeActivity = TimeTimeActivity.Subtract(TimeSpan.FromMilliseconds(TimeTimeActivity.Milliseconds));
-            TimeTimeActivity = TimeTimeActivity.Subtract(TimeSpan.FromSeconds(TimeTimeActivity.Seconds));
+            TimeActivity = TimeSpan.FromMilliseconds(millisecondsSinceActivity);
+            TimeActivity = TimeActivity.Subtract(TimeSpan.FromMilliseconds(TimeActivity.Milliseconds));
+            TimeActivity = TimeActivity.Subtract(TimeSpan.FromSeconds(TimeActivity.Seconds));
 
-            if (TimeTimeActivity.TotalMinutes > 0)
+            if (TimeActivity.TotalMinutes > 0)
             {
-                var minutesPlural = TimeTimeActivity.TotalMinutes > 1 ? "s" : "";
-                InactiveMinutes = $"No Timer Running For {TimeTimeActivity.TotalMinutes} Minute{minutesPlural}";
+                var minutesPlural = TimeActivity.TotalMinutes > 1 ? "s" : "";
+                InactiveMinutes = $"No Timer Running For {TimeActivity.TotalMinutes} Minute{minutesPlural}";
+
+                if (millisecondsSinceActivity % ModelHelpers.Gallifrey.Settings.AppSettings.AlertTimeMilliseconds == 0)
+                {
+                    ModelHelpers.ShowNotification(InactiveMinutes);
+                }
             }
             else
             {

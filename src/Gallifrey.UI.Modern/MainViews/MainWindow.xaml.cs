@@ -493,6 +493,10 @@ namespace Gallifrey.UI.Modern.MainViews
                     modelHelpers.CloseApp(true);
                     modelHelpers.Gallifrey.TrackEvent(TrackingType.AutoUpdateInstalled);
                 }
+                else if (updateResult == UpdateResult.Updated)
+                {
+                    modelHelpers.ShowNotification("Update Found, Restart Now To Install!");
+                }
                 else if (updateResult == UpdateResult.NoInternet && updateType == UpdateType.Manual)
                 {
                     await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Unable To Update", "Unable To Access https://releases.gallifreyapp.co.uk To Check For Updates");
