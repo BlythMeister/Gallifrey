@@ -122,7 +122,7 @@ namespace Gallifrey.UI.Modern.MainViews
             else if (noInternet)
             {
                 modelHelpers.Gallifrey.TrackEvent(TrackingType.NoInternet);
-                await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "No Internet Connection ", "Gallifrey Requires An Active Internet Connection To Work.\nPlease Try Again When You Have Internet");
+                await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "No Internet Connection", "Gallifrey Requires An Active Internet Connection To Work.\nPlease Try Again When You Have Internet");
                 modelHelpers.CloseApp();
             }
             else if (missingConfig)
