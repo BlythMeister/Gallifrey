@@ -17,6 +17,7 @@ namespace Gallifrey.UI.Modern.Helpers
     {
         private readonly FlyoutsControl flyoutsControl;
         private readonly List<OpenFlyoutDetails> openFlyouts;
+        private readonly Notifier toastNotifier;
         public IBackend Gallifrey { get; }
         public DialogContext DialogContext { get; }
         public bool FlyoutOpen => openFlyouts.Count(x => !x.IsHidden) > 0;
@@ -33,7 +34,14 @@ namespace Gallifrey.UI.Modern.Helpers
             Gallifrey = gallifrey;
             DialogContext = new DialogContext();
             openFlyouts = new List<OpenFlyoutDetails>();
-
+            toastNotifier = new Notifier(cfg =>
+            {
+                cfg.LifetimeSupervisor = new TimeAndCountBasedLifetimeSupervisor(TimeSpan.FromSeconds(10), MaximumNotificationCount.FromCount(15));
+                cfg.PositionProvider = new PrimaryScreenPositionProvider(Corner.BottomRight, 10, 40);
+                cfg.Dispatcher = Application.Current.Dispatcher;
+                cfg.DisplayOptions.TopMost = true;
+                cfg.DisplayOptions.Width = 400;
+            });
         }
 
         #region Flyouts
@@ -206,21 +214,11 @@ namespace Gallifrey.UI.Modern.Helpers
 
         public void ShowNotification(string message)
         {
-            using (var toastNotifier = new Notifier(cfg =>
-            {
-                cfg.LifetimeSupervisor = new TimeAndCountBasedLifetimeSupervisor(TimeSpan.FromSeconds(10), MaximumNotificationCount.FromCount(15));
-                cfg.PositionProvider = new PrimaryScreenPositionProvider(Corner.BottomRight, 10, 40);
-                cfg.Dispatcher = Application.Current.Dispatcher;
-                cfg.DisplayOptions.TopMost = true;
-                cfg.DisplayOptions.Width = 400;
-            }))
-            {
-                var instanceType = Gallifrey.VersionControl.InstanceType;
-                var appName = Gallifrey.Settings.InternalSettings.IsPremium ? "Gallifrey Premium" : "Gallifrey";
-                var title = (instanceType == InstanceType.Stable ? $"{appName}" : $"{appName} ({instanceType})").ToUpper();
+            var instanceType = Gallifrey.VersionControl.InstanceType;
+            var appName = Gallifrey.Settings.InternalSettings.IsPremium ? "Gallifrey Premium" : "Gallifrey";
+            var title = (instanceType == InstanceType.Stable ? $"{appName}" : $"{appName} ({instanceType})").ToUpper();
 
-                toastNotifier.Notify<ToastNotification>(() => new ToastNotification(title, message));
-            }
+            toastNotifier.Notify<ToastNotification>(() => new ToastNotification(title, message));
         }
     }
 }

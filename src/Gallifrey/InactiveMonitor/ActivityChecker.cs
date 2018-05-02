@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Gallifrey.JiraTimers;
+using Gallifrey.Settings;
+using System;
 using System.Diagnostics;
 using System.Timers;
-using Gallifrey.JiraTimers;
-using Gallifrey.Settings;
 
 namespace Gallifrey.InactiveMonitor
 {
@@ -14,7 +14,9 @@ namespace Gallifrey.InactiveMonitor
         private readonly Timer hearbeat;
         private readonly ActivityStopwatch activityStopwatch;
         private readonly object lockObject;
-        
+
+        public TimeSpan Elapsed => activityStopwatch.Elapsed;
+
         internal ActivityChecker(IJiraTimerCollection timerCollection, ISettingsCollection settingsCollection)
         {
             activityStopwatch = new ActivityStopwatch();
@@ -58,7 +60,7 @@ namespace Gallifrey.InactiveMonitor
 
                     if (activityStopwatch.Elapsed >= TimeSpan.FromMilliseconds(settingsCollection.AppSettings.AlertTimeMilliseconds))
                     {
-                        NoActivityEvent?.Invoke(this, (int)activityStopwatch.Elapsed.TotalMilliseconds);
+                        NotifyNoActivity();
                     }
                 }
             }
@@ -76,8 +78,19 @@ namespace Gallifrey.InactiveMonitor
 
         public void Reset()
         {
-            NoActivityEvent?.Invoke(this, 0);
             activityStopwatch.Reset();
+            NotifyNoActivity();
+        }
+
+        public void SetValue(TimeSpan value)
+        {
+            activityStopwatch.Reset(value);
+            NotifyNoActivity();
+        }
+
+        private void NotifyNoActivity()
+        {
+            NoActivityEvent?.Invoke(this, (int)activityStopwatch.Elapsed.TotalMilliseconds);
         }
 
         private class ActivityStopwatch
@@ -85,7 +98,7 @@ namespace Gallifrey.InactiveMonitor
             private readonly Stopwatch timer;
             private TimeSpan manualAdjustmentValue;
 
-            public TimeSpan Elapsed => timer.Elapsed.Subtract(manualAdjustmentValue);
+            public TimeSpan Elapsed => timer.Elapsed.Add(manualAdjustmentValue);
             public bool IsRunning => timer.IsRunning;
             public bool IsPaused { get; private set; }
 
@@ -97,8 +110,14 @@ namespace Gallifrey.InactiveMonitor
 
             public void Reset()
             {
+                Reset(TimeSpan.Zero);
+            }
+
+            public void Reset(TimeSpan value)
+            {
+                timer.Stop();
                 timer.Reset();
-                manualAdjustmentValue = TimeSpan.Zero;
+                manualAdjustmentValue = value;
             }
 
             public void Pause(TimeSpan? manualAdjustTimeSpan)
@@ -107,7 +126,7 @@ namespace Gallifrey.InactiveMonitor
                 timer.Stop();
                 if (manualAdjustTimeSpan.HasValue)
                 {
-                    manualAdjustmentValue = manualAdjustmentValue.Add(manualAdjustTimeSpan.Value);
+                    manualAdjustmentValue = manualAdjustmentValue.Add(manualAdjustTimeSpan.Value.Negate());
                 }
             }
 

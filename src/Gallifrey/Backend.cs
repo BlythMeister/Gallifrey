@@ -107,6 +107,14 @@ namespace Gallifrey
                 Settings.AppSettings.TimerRunningOnShutdown = null;
                 SaveSettings(false, false);
             }
+
+            if (Settings.AppSettings.NoTimerRunningOnShutdown.HasValue)
+            {
+                ActivityChecker.SetValue(Settings.AppSettings.NoTimerRunningOnShutdown.Value);
+
+                Settings.AppSettings.NoTimerRunningOnShutdown = null;
+                SaveSettings(false, false);
+            }
         }
 
         private void OnExportPromptEvent(object sender, ExportPromptDetail promptDetail)
@@ -288,6 +296,7 @@ namespace Gallifrey
                 jiraTimerCollection.StopTimer(runningTimer.Value, false);
             }
             settingsCollection.AppSettings.TimerRunningOnShutdown = runningTimer;
+            settingsCollection.AppSettings.NoTimerRunningOnShutdown = ActivityChecker.Elapsed;
 
             idleTimerCollection.StopLockedTimers();
 
