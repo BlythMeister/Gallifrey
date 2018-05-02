@@ -9,15 +9,18 @@ string passphrase = "";
 
 void Main()
 {
-	Console.WriteLine("Encryption Passphrase");
-	passphrase = Console.ReadLine();
-	
-	if(string.IsNullOrWhiteSpace(passphrase))
+	if(path.EndsWith(".dat"))
 	{
-		Console.WriteLine("Passphrase is required!"); 
-		return;
-	}
+		Console.WriteLine("Encryption Passphrase");
+		passphrase = Console.ReadLine();
 
+		if (string.IsNullOrWhiteSpace(passphrase))
+		{
+			Console.WriteLine("Passphrase is required!");
+			return;
+		}
+	}
+	
 	var running = true;
 	while(running)
 	{
@@ -176,9 +179,16 @@ internal static class DataEncryption
 {
 	internal static string Encrypt(string plainText, string passPhrase)
 	{
-		var vector = GetSha256Hash(Guid.NewGuid().ToString()).Substring(0,16).Replace("|","~");
-		var encrypted = Encrypt(plainText, passPhrase, vector);
-		return $"V1|{vector}|{encrypted}";
+		if (passPhrase == string.Empty)
+		{
+			return Encrypt(plainText, "WOq2kKSbvHTcKp9e", "pId6i1bN1aCVTaHN");
+		}
+		else
+		{
+			var vector = GetSha256Hash(Guid.NewGuid().ToString()).Substring(0,16).Replace("|","~");
+			var encrypted = Encrypt(plainText, passPhrase, vector);
+			return $"V1|{vector}|{encrypted}";
+		}
 	}
 
 	internal static string Decrypt(string cipherText, string passPhrase)
