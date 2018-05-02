@@ -341,6 +341,7 @@
     <Bugs>
       <Bug>Security update on encrypted data</Bug>
       <Bug>Fix issue with application staying running on close</Bug>
+      <Bug>Added settings so machine proxy is followed</Bug>
     </Bugs>
     <Others />
   </Version>
