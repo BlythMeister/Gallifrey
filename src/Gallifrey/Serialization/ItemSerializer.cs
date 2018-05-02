@@ -1,14 +1,16 @@
-﻿using System;
+﻿using Gallifrey.Exceptions.Serialization;
+using Newtonsoft.Json;
+using System;
+using System.DirectoryServices.AccountManagement;
 using System.IO;
 using System.Threading;
-using Gallifrey.Exceptions.Serialization;
-using Newtonsoft.Json;
 
 namespace Gallifrey.Serialization
 {
     public class ItemSerializer<T> where T : new()
     {
         private readonly string savePath;
+        private readonly string encryptionPassPhrase = UserPrincipal.Current.Sid.ToString();
         private string TempWritePath => savePath + ".temp";
         private string BackupPath => savePath + ".bak";
 
@@ -53,7 +55,7 @@ namespace Gallifrey.Serialization
                         File.Copy(savePath, BackupPath, true);
                     }
                 }
-                File.WriteAllText(savePath, DataEncryption.Encrypt(JsonConvert.SerializeObject(obj)));
+                File.WriteAllText(savePath, DataEncryption.Encrypt(JsonConvert.SerializeObject(obj), encryptionPassPhrase));
             }
             catch (Exception ex)
             {
@@ -102,7 +104,7 @@ namespace Gallifrey.Serialization
         {
             try
             {
-                var text = DataEncryption.Decrypt(encryptedString);
+                var text = DataEncryption.Decrypt(encryptedString, encryptionPassPhrase);
                 return JsonConvert.DeserializeObject<T>(text);
             }
             catch (Exception)

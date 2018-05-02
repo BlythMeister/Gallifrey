@@ -18,14 +18,16 @@ let newsPostDir = currentDirectory @@ "docs" @@ "_posts"
 let srcDir = currentDirectory @@ "src"
 let isAppVeyor = buildServer = AppVeyor
 let changeLogPath = currentDirectory @@ "src" @@ "Gallifrey.UI.Modern" @@ "ChangeLog.xml"
+let keysFilePath = currentDirectory @@ "src" @@ "Gallifrey" @@ "Settings" @@ "ConfigKeys.cs"
+
 let branchName = match isAppVeyor with
                  | true-> AppVeyorEnvironment.RepoBranch
                  | _ -> getBranchName currentDirectory
-                 
+
 let isPR = match isAppVeyor with
            | true-> not(String.IsNullOrWhiteSpace AppVeyorEnvironment.PullRequestNumber)
            | _ -> false
-                 
+
 let isStable = branchName = "master"
 let isBeta = (isStable || branchName = "release")
 let isAlpha = (isBeta || branchName = "develop")
@@ -35,6 +37,8 @@ let githubApiKey = environVar "github_api_key"
 let cloudflareApiKey = environVar "cloudflare_api_key"
 let cloudflareEmail = environVar "cloudflare_email"
 let cloudflareZone = environVar "cloudflare_zone"
+let exceptionlessApiKey = environVar "exceptionless_api_key"
+let premimumEncryptionPassphrase = environVar "premium_passphrase"
 
 printfn "Running On Branch: %s" branchName
 printfn "PR Number: %s" AppVeyorEnvironment.PullRequestNumber
@@ -52,10 +56,10 @@ let buildNumber = match isAppVeyor with
                   | _ -> "0"
 
 let versionNumber = match isStable with
-                    | true -> sprintf "%s.0" baseVersion                        
+                    | true -> sprintf "%s.0" baseVersion
                     | _ -> sprintf "%s.%s" baseVersion buildNumber
 
-Target "Clean" (fun _ -> 
+Target "Clean" (fun _ ->
     printfn "Clean & Ensure Output Directory"
     CleanDir outputDir
 )
@@ -63,19 +67,19 @@ Target "Clean" (fun _ ->
 Target "VersionUpdate" (fun _ ->
     printfn "Update Assembly Info Versions"
     BulkReplaceAssemblyInfoVersions "src/" (fun f -> { f with AssemblyVersion = versionNumber; AssemblyInformationalVersion = versionNumber; AssemblyFileVersion = versionNumber })
-    
+
     printfn "Update Change Log Versions"
     let changeLog = XDocument.Load(changeLogPath)
 
     let versionLogs = changeLog
                       |> fun changelog -> changelog.Descendants(XName.Get("Version", "https://releases.gallifreyapp.co.uk/ChangeLog"))
                       |> Seq.filter(fun x -> x.Attribute(XName.Get("Number")).Value = "0.0.0.0" || x.Attribute(XName.Get("Number")).Value = versionNumber)
-    
+
     if versionLogs |> Seq.isEmpty then failwithf "No change log for version 0.0.0.0 or %s" versionNumber
 
     versionLogs
     |> Seq.head
-    |> fun versionLog -> versionLog.Attribute(XName.Get("Number")).Value <- versionNumber    
+    |> fun versionLog -> versionLog.Attribute(XName.Get("Number")).Value <- versionNumber
 
     changeLog.Save(changeLogPath)
 
@@ -87,6 +91,13 @@ Target "VersionUpdate" (fun _ ->
                                                     document.Descendants(XName.Get("ApplicationVersion","http://schemas.microsoft.com/developer/msbuild/2003")) |> Seq.head |> fun x -> x.Value <- versionNumber
                                                     document.Save(path)
                )
+)
+
+Target "AddKeys" (fun _ ->
+    let exceptionlessKey = sprintf "public static string ExceptionlessApiKey => \"%s\";" exceptionlessApiKey
+    let premiumEncryptionKey = sprintf "public static string PremiumEncryptionPassPhrase => \"%s\";" premimumEncryptionPassphrase
+
+    File.WriteAllText(keysFilePath, File.ReadAllText(keysFilePath).Replace("public static string PremiumEncryptionPassPhrase => string.Empty;", premiumEncryptionKey).Replace("public static string ExceptionlessApiKey => string.Empty;", exceptionlessKey))
 )
 
 Target "Build" (fun _ ->
@@ -104,7 +115,7 @@ Target "Build" (fun _ ->
 )
 
 Target "Package" (fun _ ->
-    let moveArtifacts releaseType = 
+    let moveArtifacts releaseType =
         let source = srcDir @@ (sprintf "Gallifrey.UI.Modern.%s" releaseType) @@ "bin" @@ "Release" @@ "app.publish"
         let destination = outputDir @@ releaseType
         Directory.Move(source, destination)
@@ -127,55 +138,55 @@ Target "Publish-Artifacts" (fun _ ->
     PushArtifacts (Directory.GetFiles(outputDir, "*.exe", SearchOption.TopDirectoryOnly))
 )
 
-Target "Publish-ClickOnce" (fun _ ->    
+Target "Publish-ClickOnce" (fun _ ->
     let releasesRepo = outputDir @@ "Releases"
 
     //Hide process tracing so the access token doesn't show
-    
+
     cloneSingleBranch outputDir "https://github.com/BlythMeister/Gallifrey.Releases.git" "master" "Releases"
-    
+
     enableProcessTracing <- false
     directRunGitCommandAndFail currentDirectory (sprintf "remote set-url origin https://%s:x-oauth-basic@github.com/BlythMeister/Gallifrey.git" githubApiKey)
     directRunGitCommandAndFail releasesRepo (sprintf "remote set-url origin https://%s:x-oauth-basic@github.com/BlythMeister/Gallifrey.Releases.git" githubApiKey)
     directRunGitCommandAndFail releasesRepo "config --global user.email \"publish@gallifreyapp.co.uk\""
     directRunGitCommandAndFail releasesRepo "config --global user.name \"Gallifrey Auto Publish\""
-    enableProcessTracing <- true    
+    enableProcessTracing <- true
 
-    let publishRelease (releaseType:string) =         
+    let publishRelease (releaseType:string) =
         let destinationRoot = releasesRepo @@ "download" @@ "modern" @@ (releaseType.ToLower())
         let destinationAppFilesRoot = destinationRoot @@ "Application Files"
         let destinationAppFiles = destinationAppFilesRoot @@ (sprintf "Gallifrey.UI.Modern.%s_%s" releaseType (versionNumber.Replace(".","_")))
 
         if not(Directory.Exists destinationAppFiles) then
-            ensureDirectory destinationRoot       
-            
+            ensureDirectory destinationRoot
+
             match isStable, releaseType with
-            | true, "Alpha" 
+            | true, "Alpha"
             | true, "Beta" -> CleanDir destinationAppFilesRoot
                               StageAll releasesRepo
                               Commit.Commit releasesRepo (sprintf "Clean %s - Due to Stable Release" releaseType)
             | _, _ -> ensureDirectory destinationAppFilesRoot
-        
+
             printfn "Publish Relase Type: %s" releaseType
             let sourceRoot = outputDir @@ releaseType
 
             let sourceAppFiles = sourceRoot @@ "Application Files" @@ (sprintf "Gallifrey.UI.Modern.%s_%s" releaseType (versionNumber.Replace(".","_")))
             File.Copy(sourceRoot @@ (sprintf "Gallifrey.UI.Modern.%s.application" releaseType), destinationRoot @@ (sprintf "Gallifrey.UI.Modern.%s.application" releaseType), true)
             Directory.Move(sourceAppFiles, destinationAppFiles)
-            
+
             StageAll releasesRepo
             Commit.Commit releasesRepo (sprintf "Publish %s - %s" releaseType versionNumber)
             pushBranch releasesRepo "origin" "master"
-            donePublish <- true 
+            donePublish <- true
         else
             printfn "Already have %s version %s published" releaseType versionNumber
-                           
+
     if isAlpha then publishRelease "Alpha"
     if isBeta then publishRelease "Beta"
     if isStable then publishRelease "Stable"
 )
 
-Target "Publish-ReleaseNotes" (fun _ ->    
+Target "Publish-ReleaseNotes" (fun _ ->
     if donePublish && (isStable || isBeta) then
         let releaseVersion = if isStable then baseVersion else versionNumber
 
@@ -201,18 +212,18 @@ Target "Publish-ReleaseNotes" (fun _ ->
                             if not(isStable) then yield ["*NB: This is a cumulative change log for next release*"]
                             ]
                             |> List.concat
-            
+
         if isStable then
             let currentDate = DateTime.UtcNow
             let releasesNewsFile = newsPostDir @@ sprintf "%s-release-%s.md" (currentDate.ToString("yyyy-MM-dd")) (releaseVersion.Replace(".", "-"))
-                
+
             new StringBuilder()
             |> fun x -> x.AppendLine("---")
             |> fun x -> x.AppendLine(sprintf "title: Released Version %s" releaseVersion)
             |> fun x -> x.AppendLine(sprintf "date: %s +0000" (currentDate.ToString("yyyy-MM-dd HH:mm")))
             |> fun x -> x.AppendLine(sprintf "excerpt: We have now released version %s." releaseVersion)
             |> fun x -> x.AppendLine("tags: [release, breaking news]")
-            |> fun x -> x.AppendLine("show: true")            
+            |> fun x -> x.AppendLine("show: true")
             |> fun x -> x.AppendLine("---")
             |> fun x -> x.AppendLine("")
             |> fun x -> x.AppendLine(sprintf "We have now released version %s." releaseVersion)
@@ -226,7 +237,7 @@ Target "Publish-ReleaseNotes" (fun _ ->
 
             checkoutBranch currentDirectory branchName
             StageFile currentDirectory releasesNewsFile |> ignore
-            Commit.Commit currentDirectory (sprintf "Create news for stable release - %s" releaseVersion)    
+            Commit.Commit currentDirectory (sprintf "Create news for stable release - %s" releaseVersion)
             pushBranch currentDirectory "origin" branchName
 
         tag currentDirectory releaseVersion
@@ -240,7 +251,7 @@ Target "Publish-ReleaseNotes" (fun _ ->
         |> Async.RunSynchronously
 )
 
-Target "Publish-PurgeCloudflareCache" (fun _ ->    
+Target "Publish-PurgeCloudflareCache" (fun _ ->
     printfn "Purging Cloudflare"
     let client = new WebClient()
     client.Headers.Add("X-Auth-Email", cloudflareEmail)
@@ -255,6 +266,7 @@ Target "Default" DoNothing
 
 "Clean"
     ==> "VersionUpdate"
+    ==> "AddKeys"
     ==> "Build"
     ==> "Package"
     =?> ("Publish-Artifacts", isAppVeyor)

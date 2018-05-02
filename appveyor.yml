@@ -7,6 +7,10 @@ environment:
     secure: qN/S16EFstjHdpD+CqmQPi5nB+PNQ6appSFSPg+WFYwXZJ+gxsdmZRLluO4nnsjn
   cloudflare_email:
     secure: 7MMGMp4bOy0b/HWDC5vBEbDm/S7GPCZCcy6zAPOjhVo=
+  exceptionless_api_key:
+    secure: rpRT6VBsFjNaJqx+0c06VQrzCIfecio50+4ujXHQtDCWZLPP/V+KDMl7p2YW0eHR
+  premium_passphrase:
+    secure: TG8hldByFABNxwe4pz8aCGECcXnrtx7ReyrT+5Q9doUDBgzH8bAAOvaZIP1PHZFUhp7HxDgtsbaYfcsjsK35FfxFpTXJGz7lH6iF5ng8iCE=
 skip_commits:
   files:
     - docs/*

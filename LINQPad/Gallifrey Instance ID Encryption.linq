@@ -3,10 +3,21 @@
   <Namespace>System.Security.Cryptography</Namespace>
 </Query>
 
-string path = @"F:\GIT\Gallifrey.Releases\download\PremiumInstanceIds";
+//string path = @"F:\GIT\Gallifrey.Releases\download\PremiumInstanceIds";
+string path = @"F:\GIT\Gallifrey.Releases\download\PremiumInstanceIds.dat";
+string passphrase = "";
 
 void Main()
 {
+	Console.WriteLine("Encryption Passphrase");
+	passphrase = Console.ReadLine();
+	
+	if(string.IsNullOrWhiteSpace(passphrase))
+	{
+		Console.WriteLine("Passphrase is required!"); 
+		return;
+	}
+
 	var running = true;
 	while(running)
 	{
@@ -153,61 +164,84 @@ private void DoReplace()
 
 private void DecryptFile()
 {
-	File.WriteAllText(path, DataEncryption.Decrypt(File.ReadAllText(path)));
+	File.WriteAllText(path, DataEncryption.Decrypt(File.ReadAllText(path), passphrase));
 }
 
 private void EncryptFile()
 {
-	File.WriteAllText(path, DataEncryption.Encrypt(File.ReadAllText(path)));
+	File.WriteAllText(path, DataEncryption.Encrypt(File.ReadAllText(path), passphrase));
 }
 
 internal static class DataEncryption
-    {
-        //TODO: Maybe these shouldn't be stored in plain code?
-        //TODO: Though, this is to make hacking the app settings a pain, rather than pure security.
-        private const string PassPhrase = "WOq2kKSbvHTcKp9e";
-        private const string InitVector = "pId6i1bN1aCVTaHN";
-        private const int Keysize = 256;
+{
+	internal static string Encrypt(string plainText, string passPhrase)
+	{
+		var vector = GetSha256Hash(Guid.NewGuid().ToString()).Substring(0,16).Replace("|","~");
+		var encrypted = Encrypt(plainText, passPhrase, vector);
+		return $"V1|{vector}|{encrypted}";
+	}
 
-        internal static string Encrypt(string plainText)
-        {
-            var initVectorBytes = Encoding.UTF8.GetBytes(InitVector);
-            var plainTextBytes = Encoding.UTF8.GetBytes(plainText);
-            var password = new PasswordDeriveBytes(PassPhrase, null);
-            var keyBytes = password.GetBytes(Keysize / 8);
-            var symmetricKey = new RijndaelManaged { Mode = CipherMode.CBC };
-            var encryptor = symmetricKey.CreateEncryptor(keyBytes, initVectorBytes);
+	internal static string Decrypt(string cipherText, string passPhrase)
+	{
+		var cipherParts = cipherText.Split(new[] { '|' }, 3);
 
-            using (var memoryStream = new MemoryStream())
-            {
-                using (var cryptoStream = new CryptoStream(memoryStream, encryptor, CryptoStreamMode.Write))
-                {
-                    cryptoStream.Write(plainTextBytes, 0, plainTextBytes.Length);
-                    cryptoStream.FlushFinalBlock();
-                    var cipherTextBytes = memoryStream.ToArray();
-                    return Convert.ToBase64String(cipherTextBytes);
-                }
-            }
-        }
+		if (cipherParts.Length == 3 && cipherParts[0] == "V1")
+		{
+			return Decrypt(cipherParts[2], passPhrase, cipherParts[1]);
+		}
+		else
+		{
+			return Decrypt(cipherText, "WOq2kKSbvHTcKp9e", "pId6i1bN1aCVTaHN");
+		}
+	}
 
-        internal static string Decrypt(string cipherText)
-        {
-            var initVectorBytes = Encoding.ASCII.GetBytes(InitVector);
-            var cipherTextBytes = Convert.FromBase64String(cipherText);
-            var password = new PasswordDeriveBytes(PassPhrase, null);
-            var keyBytes = password.GetBytes(Keysize / 8);
-            var symmetricKey = new RijndaelManaged { Mode = CipherMode.CBC };
-            var decryptor = symmetricKey.CreateDecryptor(keyBytes, initVectorBytes);
+	private static string Encrypt(string plainText, string passPhrase, string vector)
+	{
+		var initVectorBytes = Encoding.UTF8.GetBytes(vector);
+		var plainTextBytes = Encoding.UTF8.GetBytes(plainText);
+		var password = new PasswordDeriveBytes(passPhrase, null);
+		var keyBytes = password.GetBytes(32);
+		var symmetricKey = new AesCryptoServiceProvider();
+		var encryptor = symmetricKey.CreateEncryptor(keyBytes, initVectorBytes);
 
-            using (var memoryStream = new MemoryStream(cipherTextBytes))
-            {
-                using (var cryptoStream = new CryptoStream(memoryStream, decryptor, CryptoStreamMode.Read))
-                {
-                    var plainTextBytes = new byte[cipherTextBytes.Length];
-                    var decryptedByteCount = cryptoStream.Read(plainTextBytes, 0, plainTextBytes.Length);
+		using (var memoryStream = new MemoryStream())
+		{
+			using (var cryptoStream = new CryptoStream(memoryStream, encryptor, CryptoStreamMode.Write))
+			{
+				cryptoStream.Write(plainTextBytes, 0, plainTextBytes.Length);
+				cryptoStream.FlushFinalBlock();
+				var cipherTextBytes = memoryStream.ToArray();
+				return Convert.ToBase64String(cipherTextBytes);
+			}
+		}
+	}
 
-                    return Encoding.UTF8.GetString(plainTextBytes, 0, decryptedByteCount);
-                }
-            }
-        }
-    }
+	private static string Decrypt(string cipherText, string passPhrase, string vector)
+	{
+		var initVectorBytes = Encoding.ASCII.GetBytes(vector);
+		var cipherTextBytes = Convert.FromBase64String(cipherText);
+		var password = new PasswordDeriveBytes(passPhrase, null);
+		var keyBytes = password.GetBytes(32);
+		var symmetricKey = new AesCryptoServiceProvider();
+		var decryptor = symmetricKey.CreateDecryptor(keyBytes, initVectorBytes);
+
+		using (var memoryStream = new MemoryStream(cipherTextBytes))
+		{
+			using (var cryptoStream = new CryptoStream(memoryStream, decryptor, CryptoStreamMode.Read))
+			{
+				var plainTextBytes = new byte[cipherTextBytes.Length];
+				var decryptedByteCount = cryptoStream.Read(plainTextBytes, 0, plainTextBytes.Length);
+
+				return Encoding.UTF8.GetString(plainTextBytes, 0, decryptedByteCount);
+			}
+		}
+	}
+
+	internal static string GetSha256Hash(string text)
+	{
+		var bytes = Encoding.UTF8.GetBytes(text);
+		var hashstring = new SHA256Managed();
+		var hash = hashstring.ComputeHash(bytes);
+		return hash.Aggregate(string.Empty, (current, x) => current + $"{x:x2}");
+	}
+}

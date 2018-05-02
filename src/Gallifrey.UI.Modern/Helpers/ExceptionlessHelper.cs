@@ -43,6 +43,12 @@ namespace Gallifrey.UI.Modern.Helpers
             }
 
             ExceptionlessClient.Default.Unregister();
+
+            if (string.IsNullOrWhiteSpace(ConfigKeys.ExceptionlessApiKey))
+            {
+                return;
+            }
+
             ExceptionlessClient.Default.Configuration.ApiKey = ConfigKeys.ExceptionlessApiKey;
             ExceptionlessClient.Default.Configuration.DefaultTags.Add(modelHelpers.Gallifrey.VersionControl.VersionName.Replace("\n", " - "));
             ExceptionlessClient.Default.Configuration.SetUserIdentity(userInfo);
