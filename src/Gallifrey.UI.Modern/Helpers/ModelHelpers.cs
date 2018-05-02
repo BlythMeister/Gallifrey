@@ -173,6 +173,8 @@ namespace Gallifrey.UI.Modern.Helpers
 
         public void CloseApp(bool restart = false)
         {
+            Dispose();
+
             if (restart && Gallifrey.VersionControl.IsAutomatedDeploy)
             {
                 System.Windows.Forms.Application.Restart();
