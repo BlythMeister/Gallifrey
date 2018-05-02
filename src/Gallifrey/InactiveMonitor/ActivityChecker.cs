@@ -84,7 +84,7 @@ namespace Gallifrey.InactiveMonitor
 
         public void SetValue(TimeSpan value)
         {
-            activityStopwatch.Reset(value);
+            activityStopwatch.StartWithSeed(value);
             NotifyNoActivity();
         }
 
@@ -115,14 +115,8 @@ namespace Gallifrey.InactiveMonitor
 
             public void Reset()
             {
-                Reset(TimeSpan.Zero);
-            }
-
-            public void Reset(TimeSpan value)
-            {
-                timer.Stop();
                 timer.Reset();
-                manualAdjustmentValue = value;
+                manualAdjustmentValue = TimeSpan.Zero;
             }
 
             public void Pause(TimeSpan? manualAdjustTimeSpan)
@@ -145,6 +139,13 @@ namespace Gallifrey.InactiveMonitor
             {
                 Reset();
                 timer.Start();
+            }
+
+            public void StartWithSeed(TimeSpan value)
+            {
+                timer.Reset();
+                timer.Start();
+                manualAdjustmentValue = value;
             }
         }
     }
