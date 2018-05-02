@@ -23,7 +23,7 @@ using Timer = System.Timers.Timer;
 
 namespace Gallifrey
 {
-    public interface IBackend
+    public interface IBackend : IDisposable
     {
         IJiraTimerCollection JiraTimerCollection { get; }
         IIdleTimerCollection IdleTimerCollection { get; }
@@ -38,7 +38,6 @@ namespace Gallifrey
         event EventHandler IsPremiumChanged;
         event EventHandler SettingsChanged;
         void Initialise();
-        void Close();
         void TrackEvent(TrackingType trackingType);
         void SaveSettings(bool jiraSettingsChanged, bool trackingOptOut);
         void StartLockTimer(TimeSpan? idleTime = null);
@@ -58,6 +57,8 @@ namespace Gallifrey
         private readonly WithThanksCreator withThanksCreator;
         private readonly PremiumChecker premiumChecker;
         private readonly Mutex exportedHeartbeatMutex;
+        private readonly Timer cleanUpAndTrackingHeartbeat;
+        private readonly Timer jiraExportHearbeat;
 
         public event EventHandler<int> NoActivityEvent;
         public event EventHandler<ExportPromptDetail> ExportPromptEvent;
@@ -87,12 +88,12 @@ namespace Gallifrey
             premiumChecker = new PremiumChecker();
 
             ActivityChecker.NoActivityEvent += OnNoActivityEvent;
-            var cleanUpAndTrackingHeartbeat = new Timer(TimeSpan.FromMinutes(15).TotalMilliseconds);
+            cleanUpAndTrackingHeartbeat = new Timer(TimeSpan.FromMinutes(15).TotalMilliseconds);
             cleanUpAndTrackingHeartbeat.Elapsed += CleanUpAndTrackingHearbeatOnElapsed;
             cleanUpAndTrackingHeartbeat.Start();
 
             exportedHeartbeatMutex = new Mutex(false);
-            var jiraExportHearbeat = new Timer(TimeSpan.FromMinutes(10).TotalMilliseconds);
+            jiraExportHearbeat = new Timer(TimeSpan.FromMinutes(10).TotalMilliseconds);
             jiraExportHearbeat.Elapsed += JiraExportHearbeatHearbeatOnElapsed;
             jiraExportHearbeat.Start();
 
@@ -287,9 +288,13 @@ namespace Gallifrey
             });
         }
 
-        public void Close()
+        public void Dispose()
         {
             trackUsage.TrackAppUsage(TrackingType.AppClose);
+
+            cleanUpAndTrackingHeartbeat.Dispose();
+            jiraExportHearbeat.Dispose();
+
             var runningTimer = jiraTimerCollection.GetRunningTimerId();
             if (runningTimer.HasValue)
             {
@@ -303,6 +308,8 @@ namespace Gallifrey
             jiraTimerCollection.SaveTimers();
             idleTimerCollection.SaveTimers();
             settingsCollection.SaveSettings();
+
+            ActivityChecker.Dispose();
         }
 
         public void TrackEvent(TrackingType trackingType)

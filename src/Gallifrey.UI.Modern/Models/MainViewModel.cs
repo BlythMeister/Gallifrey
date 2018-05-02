@@ -13,9 +13,10 @@ using System.Windows;
 
 namespace Gallifrey.UI.Modern.Models
 {
-    public class MainViewModel : INotifyPropertyChanged
+    public class MainViewModel : INotifyPropertyChanged, IDisposable
     {
         private readonly TargetBarValues targetBarValues;
+        private readonly Timer backgroundRefresh;
 
         public ModelHelpers ModelHelpers { get; }
         public event PropertyChangedEventHandler PropertyChanged;
@@ -28,7 +29,7 @@ namespace Gallifrey.UI.Modern.Models
             ModelHelpers = modelHelpers;
             TimerDates = new ObservableCollection<TimerDateModel>();
 
-            var backgroundRefresh = new Timer(TimeSpan.FromHours(1).TotalMilliseconds);
+            backgroundRefresh = new Timer(TimeSpan.FromHours(1).TotalMilliseconds);
             backgroundRefresh.Elapsed += (sender, args) => RefreshModel();
             backgroundRefresh.Start();
 
@@ -44,6 +45,11 @@ namespace Gallifrey.UI.Modern.Models
             modelHelpers.SelectTimerEvent += (sender, timerId) => SetSelectedTimer(timerId);
 
             targetBarValues = new TargetBarValues(modelHelpers.Gallifrey);
+        }
+
+        public void Dispose()
+        {
+            backgroundRefresh.Dispose();
         }
 
         public string ExportedNumber => ModelHelpers.Gallifrey.JiraTimerCollection.GetNumberExported().Item1.ToString();
@@ -511,5 +517,7 @@ namespace Gallifrey.UI.Modern.Models
         }
 
         #endregion
+
+
     }
 }

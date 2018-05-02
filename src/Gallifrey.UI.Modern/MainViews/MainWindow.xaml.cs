@@ -546,12 +546,14 @@ namespace Gallifrey.UI.Modern.MainViews
             Process.Start(new ProcessStartInfo("https://www.gallifreyapp.co.uk/downloads/beta"));
         }
 
-        private void MainWindow_OnClosed(object sender, EventArgs e)
+        protected override void OnClosed(EventArgs e)
         {
+            base.OnClosed(e);
             flyoutOpenCheck.Stop();
             modelHelpers.Gallifrey.Settings.UiSettings.Height = (int)Height;
             modelHelpers.Gallifrey.Settings.UiSettings.Width = (int)Width;
-            modelHelpers.Gallifrey.Close();
+            modelHelpers.Dispose();
+            ViewModel.Dispose();
         }
 
         private void MainWindow_KeyDown(object sender, KeyEventArgs e)

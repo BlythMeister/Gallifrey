@@ -13,7 +13,7 @@ using ToastNotifications.Position;
 
 namespace Gallifrey.UI.Modern.Helpers
 {
-    public class ModelHelpers
+    public class ModelHelpers : IDisposable
     {
         private readonly FlyoutsControl flyoutsControl;
         private readonly List<OpenFlyoutDetails> openFlyouts;
@@ -219,6 +219,12 @@ namespace Gallifrey.UI.Modern.Helpers
             var title = (instanceType == InstanceType.Stable ? $"{appName}" : $"{appName} ({instanceType})").ToUpper();
 
             toastNotifier.Notify<ToastNotification>(() => new ToastNotification(title, message));
+        }
+
+        public void Dispose()
+        {
+            toastNotifier.Dispose();
+            Gallifrey.Dispose();
         }
     }
 }

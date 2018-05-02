@@ -6,7 +6,7 @@ using System.Timers;
 
 namespace Gallifrey.InactiveMonitor
 {
-    public class ActivityChecker
+    public class ActivityChecker : IDisposable
     {
         internal event EventHandler<int> NoActivityEvent;
         private readonly IJiraTimerCollection timerCollection;
@@ -91,6 +91,11 @@ namespace Gallifrey.InactiveMonitor
         private void NotifyNoActivity()
         {
             NoActivityEvent?.Invoke(this, (int)activityStopwatch.Elapsed.TotalMilliseconds);
+        }
+
+        public void Dispose()
+        {
+            hearbeat.Dispose();
         }
 
         private class ActivityStopwatch

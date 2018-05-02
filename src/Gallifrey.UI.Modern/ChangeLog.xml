@@ -340,6 +340,7 @@
     </Features>
     <Bugs>
       <Bug>Security update on encrypted data</Bug>
+      <Bug>Fix issue with application staying running on close</Bug>
     </Bugs>
     <Others />
   </Version>
