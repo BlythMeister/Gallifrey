@@ -33,7 +33,7 @@ Please help us keep this project up and running by donating.
 Support
 =========
 
-You can get app support via [twitter](https://twitter.com/GallifreyApp) or via email (GallifreyApp@gmail.com).
+You can get app support via [twitter](https://twitter.com/GallifreyApp) or via [email](support@GallifreyApp.co.uk).
 There is also a Gitter chat room (https://gitter.im/BlythMeister/Gallifrey).
 We are using GitHub issues to maintain a backlog and track bugs, so feel free to raise issues there (https://github.com/BlythMeister/Gallifrey/issues)
 
