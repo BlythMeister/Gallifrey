@@ -21,29 +21,13 @@ namespace Gallifrey.Serialization
 
             if (cipherParts.Length == 3 && cipherParts[0] == "V1")
             {
-                try
-                {
-                    return Decrypt(cipherParts[2], passPhrase, cipherParts[1]);
-                }
-                catch (Exception)
-                {
-#pragma warning disable 618
-                    return OldDecrypt(cipherParts[2], passPhrase, cipherParts[1]);
-#pragma warning restore 618
-                }
+                return Decrypt(cipherParts[2], passPhrase, cipherParts[1]);
             }
 
             //Legacy handling
-            try
-            {
-                return Decrypt(cipherText, "WOq2kKSbvHTcKp9e", "pId6i1bN1aCVTaHN");
-            }
-            catch (Exception)
-            {
 #pragma warning disable 618
-                return OldDecrypt(cipherText, "WOq2kKSbvHTcKp9e", "pId6i1bN1aCVTaHN");
+            return OldDecrypt(cipherText, "WOq2kKSbvHTcKp9e", "pId6i1bN1aCVTaHN");
 #pragma warning restore 618
-            }
         }
 
         private static string Encrypt(string plainText, string passPhrase, string vector)
