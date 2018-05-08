@@ -3,13 +3,12 @@
   <Namespace>System.Security.Cryptography</Namespace>
 </Query>
 
-//string path = @"F:\GIT\Gallifrey.Releases\download\PremiumInstanceIds";
 string path = @"F:\GIT\Gallifrey.Releases\download\PremiumInstanceIds.dat";
-string passphrase = "";
+string passphrase = string.Empty;
 
 void Main()
 {
-	if(path.EndsWith(".dat"))
+	if (string.IsNullOrWhiteSpace(passphrase))
 	{
 		Console.WriteLine("Encryption Passphrase");
 		passphrase = Console.ReadLine();
@@ -20,9 +19,9 @@ void Main()
 			return;
 		}
 	}
-	
+
 	var running = true;
-	while(running)
+	while (running)
 	{
 		Console.WriteLine("Enter Command (Manual Edit/Show/Add/Remove/Replace/Done/Site Hash)");
 		var command = Console.ReadLine();
@@ -31,7 +30,7 @@ void Main()
 		{
 			case "site hash":
 				CalculateSiteHash();
-				break;			
+				break;
 			case "manual edit":
 				DecryptFile();
 				Process.Start(path);
@@ -39,7 +38,7 @@ void Main()
 				Console.ReadLine();
 				EncryptFile();
 				break;
-            case "show":
+			case "show":
 				ShowFileContent();
 				break;
 			case "add":
@@ -55,20 +54,20 @@ void Main()
 				running = false;
 				break;
 			default:
-				Console.WriteLine("Unknown Function {0}", command); 
+				Console.WriteLine("Unknown Function {0}", command);
 				break;
-		}	
+		}
 		Console.WriteLine("");
 		Console.WriteLine("");
 	}
-	
+
 }
 
 void CalculateSiteHash()
 {
 	Console.WriteLine("Enter Site URL");
 	var text = Console.ReadLine();
-	if(!text.StartsWith("http")) text = "http://" + text;
+	if (!text.StartsWith("http")) text = "http://" + text;
 	var hostName = new Uri(text).Host;
 	Console.WriteLine($"HostName: {hostName}");
 	var bytes = Encoding.UTF8.GetBytes(hostName.ToLower());
@@ -90,7 +89,7 @@ private void DoAdd()
 	var instanceId = Console.ReadLine();
 	Console.WriteLine("Enter Details (Name/Reason)");
 	var detail = Console.ReadLine();
-	var infoToAdd = string.Format("{0} - {1}",instanceId,detail);
+	var infoToAdd = string.Format("{0} - {1}", instanceId, detail);
 	DecryptFile();
 	var lines = File.ReadAllLines(path).ToList();
 	lines.Add(infoToAdd);
@@ -108,7 +107,7 @@ private void DoRemove()
 	var removed = false;
 	foreach (string line in File.ReadAllLines(path))
 	{
-		if(!line.StartsWith(instanceId))
+		if (!line.StartsWith(instanceId))
 		{
 			lines.Add(line);
 		}
@@ -119,14 +118,14 @@ private void DoRemove()
 	}
 	File.WriteAllLines(path, lines);
 	EncryptFile();
-	if(removed)
+	if (removed)
 	{
 		Console.WriteLine("Removed: {0}", instanceId);
 	}
 	else
 	{
 		Console.WriteLine("Unable to locate: {0}", instanceId);
-	}	
+	}
 }
 
 private void DoReplace()
@@ -140,7 +139,7 @@ private void DoReplace()
 	var swapped = false;
 	foreach (string line in File.ReadAllLines(path))
 	{
-		if(!line.StartsWith(oldInstanceId))
+		if (!line.StartsWith(oldInstanceId))
 		{
 			lines.Add(line);
 		}
@@ -150,11 +149,11 @@ private void DoReplace()
 			lines.Add(line.Replace(oldInstanceId, newInstanceId));
 		}
 	}
-		
+
 	File.WriteAllLines(path, lines);
 	EncryptFile();
-		
-	if(swapped)
+
+	if (swapped)
 	{
 		Console.WriteLine("Replaced: {0} With: {1}", oldInstanceId, newInstanceId);
 	}
@@ -162,7 +161,7 @@ private void DoReplace()
 	{
 		Console.WriteLine("Unable to locate old id: {0}", oldInstanceId);
 	}
-	
+
 }
 
 private void DecryptFile()
@@ -185,7 +184,7 @@ internal static class DataEncryption
 		}
 		else
 		{
-			var vector = GetSha256Hash(Guid.NewGuid().ToString()).Substring(0,16).Replace("|","~");
+			var vector = GetSha256Hash(Guid.NewGuid().ToString()).Substring(0, 16).Replace("|", "~");
 			var encrypted = Encrypt(plainText, passPhrase, vector);
 			return $"V1|{vector}|{encrypted}";
 		}
@@ -209,7 +208,7 @@ internal static class DataEncryption
 	{
 		var initVectorBytes = Encoding.UTF8.GetBytes(vector);
 		var plainTextBytes = Encoding.UTF8.GetBytes(plainText);
-		var password = new PasswordDeriveBytes(passPhrase, null);
+		var password = new Rfc2898DeriveBytes(passPhrase, initVectorBytes);
 		var keyBytes = password.GetBytes(32);
 		var symmetricKey = new AesCryptoServiceProvider();
 		var encryptor = symmetricKey.CreateEncryptor(keyBytes, initVectorBytes);
@@ -230,7 +229,7 @@ internal static class DataEncryption
 	{
 		var initVectorBytes = Encoding.ASCII.GetBytes(vector);
 		var cipherTextBytes = Convert.FromBase64String(cipherText);
-		var password = new PasswordDeriveBytes(passPhrase, null);
+		var password = new Rfc2898DeriveBytes(passPhrase, initVectorBytes);
 		var keyBytes = password.GetBytes(32);
 		var symmetricKey = new AesCryptoServiceProvider();
 		var decryptor = symmetricKey.CreateDecryptor(keyBytes, initVectorBytes);

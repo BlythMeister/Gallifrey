@@ -142,8 +142,8 @@ namespace Gallifrey
                     }
                 }
 
-                var isPremium = !versionControl.IsAutomatedDeploy || premiumChecker.CheckIfPremium(settingsCollection);
-                if (isPremium != settingsCollection.InternalSettings.IsPremium)
+                var isPremium = premiumChecker.CheckIfPremium(settingsCollection);
+                if (!versionControl.IsAutomatedDeploy || isPremium != settingsCollection.InternalSettings.IsPremium)
                 {
                     settingsCollection.InternalSettings.SetIsPremium(isPremium);
                     settingsCollection.SaveSettings();
