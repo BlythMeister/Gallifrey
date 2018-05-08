@@ -27,7 +27,8 @@ namespace Gallifrey.Jira
                 try
                 {
                     //NOTE THIS IS NOT THE RIGHT TYPE, BUT NOT EXPECTING VALID DATA ANYWAY
-                    restClient.Get<List<string>>(HttpStatusCode.OK, "tempo-timesheets/3/worklogs?dateFrom=1990-01-01&dateTo=1990-01-02");
+                    var queryDate = DateTime.UtcNow;
+                    restClient.Get<List<string>>(HttpStatusCode.OK, $"tempo-timesheets/3/worklogs?dateFrom={queryDate:yyyy-MM-dd}&dateTo={queryDate:yyyy-MM-dd}&username={myUser.key}");
                     HasTempo = true;
                 }
                 catch (Exception)
