@@ -1,13 +1,14 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using Exceptionless;
 using Gallifrey.Exceptions.JiraIntegration;
 using Gallifrey.Exceptions.JiraTimers;
 using Gallifrey.Jira.Model;
 using Gallifrey.UI.Modern.Helpers;
 using Gallifrey.UI.Modern.Models;
 using MahApps.Metro.Controls.Dialogs;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows;
 
 namespace Gallifrey.UI.Modern.Flyouts
 {
@@ -110,8 +111,9 @@ namespace Gallifrey.UI.Modern.Flyouts
                             return;
                         }
                     }
-                    catch (NoResultsFoundException)
+                    catch (NoResultsFoundException ex)
                     {
+                        ExceptionlessClient.Default.SubmitException(ex);
                         await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Invalid Jira", $"Unable To Locate The Jira '{jiraRef}'");
                         Focus();
                         return;

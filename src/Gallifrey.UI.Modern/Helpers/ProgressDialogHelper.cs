@@ -1,4 +1,5 @@
-﻿using MahApps.Metro.Controls.Dialogs;
+﻿using Exceptionless;
+using MahApps.Metro.Controls.Dialogs;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -90,13 +91,14 @@ namespace Gallifrey.UI.Modern.Helpers
 
                 return result;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 if (throwErrors)
                 {
                     throw;
                 }
 
+                ExceptionlessClient.Default.SubmitException(ex);
                 return ProgressResult.GetErrored<T>();
             }
             finally

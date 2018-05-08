@@ -112,9 +112,9 @@ namespace Gallifrey.UI.Modern.Helpers
                     ExceptionlessClient.Default.SubmitFeatureUsage(featureName);
                 });
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //suppress errors if tracking fails
+                ExceptionlessClient.Default.SubmitException(ex);
             }
         }
     }

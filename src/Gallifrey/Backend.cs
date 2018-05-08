@@ -1,7 +1,6 @@
 ﻿using Gallifrey.AppTracking;
 using Gallifrey.ChangeLog;
 using Gallifrey.Contributors;
-using Gallifrey.Exceptions;
 using Gallifrey.IdleTimers;
 using Gallifrey.InactiveMonitor;
 using Gallifrey.Jira.Model;
@@ -12,9 +11,7 @@ using Gallifrey.Settings;
 using Gallifrey.Versions;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
@@ -241,43 +238,14 @@ namespace Gallifrey
                     }
                 }
             }
-            catch
-            {
-                /*Surpress the error*/
-            }
+            catch { /*Surpress the error*/ }
 
             exportedHeartbeatMutex.ReleaseMutex();
         }
 
         public void Initialise()
         {
-            if (versionControl.IsAutomatedDeploy)
-            {
-                var processes = Process.GetProcesses();
-                if (processes.Count(process => process.ProcessName.Contains("Gallifrey") && !process.ProcessName.Contains("vshost")) > 1)
-                {
-                    throw new MultipleGallifreyRunningException();
-                }
-            }
-            else
-            {
-                if (!Debugger.IsAttached)
-                {
-                    throw new DebuggerException();
-                }
-            }
 
-            try
-            {
-                using (var client = new WebClient())
-                {
-                    client.DownloadData("https://releases.gallifreyapp.co.uk");
-                }
-            }
-            catch
-            {
-                throw new NoInternetConnectionException();
-            }
 
             jiraConnection.ReConnect(settingsCollection.JiraConnectionSettings, settingsCollection.ExportSettings);
 

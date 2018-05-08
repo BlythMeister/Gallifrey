@@ -52,10 +52,8 @@
     <Compile Include="Contributors\WithThanksDefinition.cs" />
     <Compile Include="DeploymentUtils\Uninstaller.cs" />
     <Compile Include="DeploymentUtils\W322Utils.cs" />
-    <Compile Include="Exceptions\DebuggerException.cs" />
     <Compile Include="Exceptions\JiraIntegration\CommentException.cs" />
     <Compile Include="Exceptions\JiraTimers\IdleTimerRunningException.cs" />
-    <Compile Include="Exceptions\NoInternetConnectionException.cs" />
     <Compile Include="Exceptions\Serialization\SerializerError.cs" />
     <Compile Include="ExtensionMethods\DateTimeExtensionMethods.cs" />
     <Compile Include="IdleTimers\IdleTimer.cs" />
@@ -67,7 +65,6 @@
     <Compile Include="Exceptions\JiraIntegration\JiraConnectionException.cs" />
     <Compile Include="Exceptions\JiraTimers\DuplicateTimerException.cs" />
     <Compile Include="InactiveMonitor\ActivityChecker.cs" />
-    <Compile Include="Exceptions\MultipleGallifreyRunningException.cs" />
     <Compile Include="Settings\ConfigKeys.cs" />
     <Compile Include="Versions\PremiumChecker.cs" />
     <Compile Include="Serialization\ItemSerializer.cs" />

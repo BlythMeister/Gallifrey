@@ -1,4 +1,5 @@
-﻿using Gallifrey.AppTracking;
+﻿using Exceptionless;
+using Gallifrey.AppTracking;
 using Gallifrey.ExtensionMethods;
 using Gallifrey.IdleTimers;
 using Gallifrey.UI.Modern.Flyouts;
@@ -104,9 +105,9 @@ namespace Gallifrey.UI.Modern.MainViews
                     jiraRef = uriDrag.Substring(uriDrag.LastIndexOf("/") + 1);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //ignored
+                ExceptionlessClient.Default.SubmitException(ex);
             }
 
             if (string.IsNullOrWhiteSpace(jiraRef))

@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-             IsModal="True" Theme="Adapt" Position="Right" Header="Unexpected Error" CloseButtonIsCancel="True">
+             IsModal="True" Theme="Adapt" Position="Right" Header="Unexpected Error" CloseButtonIsCancel="False" CloseButtonVisibility="Collapsed">
     <StackPanel Width="350" Margin="5,5,5,5" >
         <TextBlock Padding="5" TextWrapping="Wrap">
             Unfortunately Gallifrey has encountered an unrecoverable error.<LineBreak />
@@ -19,7 +19,7 @@
         <TextBlock Padding="5">Email Address</TextBlock>
         <TextBox Text="{Binding EmailAddress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" controls:TextBoxHelper.Watermark="Optional"/>
         <TextBlock Padding="5">Description</TextBlock>
-        <TextBox Text="{Binding Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MaxLines="2" MinLines="2" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" TextWrapping="Wrap" controls:TextBoxHelper.Watermark="Optional"/>
+        <TextBox Text="{Binding Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MaxLines="3" MinLines="3" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" TextWrapping="Wrap" controls:TextBoxHelper.Watermark="Optional"/>
         <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="55" Height="55" Margin="2" Click="SendReport" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsDefault="True" ToolTip="Submit Error Report">
             <iconPacks:PackIconModern Kind="MessageSend" Height="30" Width="29" />
         </Button>

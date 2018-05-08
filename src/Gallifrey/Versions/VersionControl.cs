@@ -127,7 +127,7 @@ namespace Gallifrey.Versions
             {
                 UpdateError = true;
                 UpdateStateChange?.Invoke(this, null);
-                return Task.Factory.StartNew(() => UpdateResult.Error);
+                throw;
             }
         }
 

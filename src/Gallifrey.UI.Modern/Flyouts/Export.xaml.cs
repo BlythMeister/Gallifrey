@@ -1,4 +1,5 @@
-﻿using Gallifrey.Exceptions.JiraIntegration;
+﻿using Exceptionless;
+using Gallifrey.Exceptions.JiraIntegration;
 using Gallifrey.Jira.Model;
 using Gallifrey.JiraTimers;
 using Gallifrey.UI.Modern.Helpers;
@@ -62,6 +63,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                 }
                 catch (ExportException ex)
                 {
+                    ExceptionlessClient.Default.SubmitException(ex);
                     await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Unable To Locate Jira", ex.Message);
                     modelHelpers.CloseFlyout(this);
                     return;
@@ -92,8 +94,9 @@ namespace Gallifrey.UI.Modern.Flyouts
             {
                 jiraIssue = modelHelpers.Gallifrey.JiraConnection.GetJiraIssue(timerToShow.JiraReference);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                ExceptionlessClient.Default.SubmitException(ex);
                 throw new ExportException($"Unable To Locate Jira {timerToShow.JiraReference}!\nCannot Export Time\nPlease Verify/Correct Jira Reference");
             }
 
@@ -104,8 +107,9 @@ namespace Gallifrey.UI.Modern.Flyouts
                 {
                     logs = modelHelpers.Gallifrey.JiraConnection.GetWorkLoggedForDatesFilteredIssues(new List<DateTime> { timerToShow.DateStarted }, new List<string> { timerToShow.JiraReference });
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
+                    ExceptionlessClient.Default.SubmitException(ex);
                     throw new ExportException($"Unable To Get WorkLogs For Jira {timerToShow.JiraReference}!\nCannot Export Time");
                 }
 
@@ -159,8 +163,9 @@ namespace Gallifrey.UI.Modern.Flyouts
                             var messageBox = timeSelectorDialog.FindChild<TextBlock>("Message");
                             messageBox.Text = $"Please Select The Status Update You Would Like To Perform To {jiraRef}";
                         }
-                        catch (Exception)
+                        catch (Exception ex)
                         {
+                            ExceptionlessClient.Default.SubmitException(ex);
                             await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Status Update Error", "Unable To Change The Status Of This Issue");
                         }
                     }
@@ -176,6 +181,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             }
             catch (WorkLogException ex)
             {
+                ExceptionlessClient.Default.SubmitException(ex);
                 if (ex.InnerException != null)
                 {
                     dialog = DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Error Exporting", $"Unable To Log Work!\nError Message From Jira: {ex.InnerException.Message}");
@@ -185,8 +191,9 @@ namespace Gallifrey.UI.Modern.Flyouts
                     dialog = DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Error Exporting", "Unable To Log Work!");
                 }
             }
-            catch (CommentException)
+            catch (CommentException ex)
             {
+                ExceptionlessClient.Default.SubmitException(ex);
                 dialog = DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Error Adding Comment", "The Comment Was Not Added");
             }
 
@@ -214,8 +221,9 @@ namespace Gallifrey.UI.Modern.Flyouts
 
                 modelHelpers.Gallifrey.JiraConnection.TransitionIssue(DataModel.JiraRef, selectedTransition);
             }
-            catch (StateChangedException)
+            catch (StateChangedException ex)
             {
+                ExceptionlessClient.Default.SubmitException(ex);
                 if (string.IsNullOrWhiteSpace(selectedTransition))
                 {
                     await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Status Update Error", "Unable To Change The Status Of This Issue");

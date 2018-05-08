@@ -378,10 +378,7 @@ namespace Gallifrey.JiraIntegration
                     keyQuery = $"(key = \"{searchText}\")";
                 }
             }
-            catch
-            {
-                //ignored
-            }
+            catch { /*ignored*/ }
 
             var jql = string.Empty;
             if (!string.IsNullOrWhiteSpace(nonProjectText))

@@ -1,4 +1,5 @@
-﻿using Gallifrey.Exceptions.JiraIntegration;
+﻿using Exceptionless;
+using Gallifrey.Exceptions.JiraIntegration;
 using Gallifrey.Exceptions.JiraTimers;
 using Gallifrey.IdleTimers;
 using Gallifrey.Jira.Model;
@@ -97,8 +98,9 @@ namespace Gallifrey.UI.Modern.Flyouts
                         return;
                     }
                 }
-                catch (NoResultsFoundException)
+                catch (NoResultsFoundException ex)
                 {
+                    ExceptionlessClient.Default.SubmitException(ex);
                     await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Invalid Jira", $"Unable To Locate The Jira '{jiraRef}'");
                     Focus();
                     return;
@@ -141,8 +143,9 @@ namespace Gallifrey.UI.Modern.Flyouts
                     {
                         await progressDialogHelper.Do(() => modelHelpers.Gallifrey.JiraConnection.AssignToCurrentUser(jiraRef), "Assigning Issue", false, true);
                     }
-                    catch (JiraConnectionException)
+                    catch (JiraConnectionException ex)
                     {
+                        ExceptionlessClient.Default.SubmitException(ex);
                         await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Assign Jira Error", "Unable To Locate Assign Jira To Current User");
                     }
                 }
@@ -169,8 +172,9 @@ namespace Gallifrey.UI.Modern.Flyouts
                             stillDoingThings = true;
                         }
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
+                        ExceptionlessClient.Default.SubmitException(ex);
                         await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Status Update Error", "Unable To Change The Status Of This Issue");
                     }
                 }
@@ -311,8 +315,9 @@ namespace Gallifrey.UI.Modern.Flyouts
 
                 await progressDialogHelper.Do(() => modelHelpers.Gallifrey.JiraConnection.TransitionIssue(jiraRef, selectedTransition), "Changing Status", false, true);
             }
-            catch (StateChangedException)
+            catch (StateChangedException ex)
             {
+                ExceptionlessClient.Default.SubmitException(ex);
                 if (string.IsNullOrWhiteSpace(selectedTransition))
                 {
                     await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Status Update Error", "Unable To Change The Status Of This Issue");
