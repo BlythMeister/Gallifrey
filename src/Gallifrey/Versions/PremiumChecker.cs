@@ -16,7 +16,7 @@ namespace Gallifrey.Versions
         {
             if (string.IsNullOrWhiteSpace(ConfigKeys.PremiumEncryptionPassPhrase))
             {
-                return true;
+                return false;
             }
 
             try
