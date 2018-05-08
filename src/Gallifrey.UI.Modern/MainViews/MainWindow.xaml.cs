@@ -51,10 +51,6 @@ namespace Gallifrey.UI.Modern.MainViews
             modelHelpers.SelectRunningTimer();
             DataContext = viewModel;
 
-            gallifrey.NoActivityEvent += GallifreyOnNoActivityEvent;
-            gallifrey.ExportPromptEvent += GallifreyOnExportPromptEvent;
-            SystemEvents.SessionSwitch += SessionSwitchHandler;
-
             Height = gallifrey.Settings.UiSettings.Height;
             Width = gallifrey.Settings.UiSettings.Width;
             ThemeHelper.ChangeTheme(gallifrey.Settings.UiSettings.Theme, gallifrey.Settings.UiSettings.Accent);
@@ -79,22 +75,16 @@ namespace Gallifrey.UI.Modern.MainViews
             Ok
         }
 
-        private InitialiseResult Initialise()
+        private InitialiseResult CheckAndInitialaise()
         {
-            if (modelHelpers.Gallifrey.VersionControl.IsAutomatedDeploy)
+            if (Process.GetProcesses().Count(process => process.ProcessName.Contains("Gallifrey")) > 1)
             {
-                var processes = Process.GetProcesses();
-                if (processes.Count(process => process.ProcessName.Contains("Gallifrey") && !process.ProcessName.Contains("vshost")) > 1)
-                {
-                    return InitialiseResult.MultipleGallifreyRunning;
-                }
+                return InitialiseResult.MultipleGallifreyRunning;
             }
-            else
+
+            if (!modelHelpers.Gallifrey.VersionControl.IsAutomatedDeploy && !Debugger.IsAttached)
             {
-                if (!Debugger.IsAttached)
-                {
-                    return InitialiseResult.DebuggerNotAttached;
-                }
+                return InitialiseResult.DebuggerNotAttached;
             }
 
             try
@@ -128,9 +118,12 @@ namespace Gallifrey.UI.Modern.MainViews
         private async void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
             await PerformUpdate(UpdateType.StartUp);
+            await Initialse();
+        }
 
-
-            var result = await progressDialogHelper.Do(Initialise, "Initialising Gallifrey", true, true);
+        private async Task Initialse()
+        {
+            var result = await progressDialogHelper.Do(CheckAndInitialaise, "Initialising Gallifrey", true, true);
             if (result.Status == ProgressResult.JiraHelperStatus.Cancelled)
             {
                 await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Gallifrey Not Initialised", "Gallifrey Initialisation Was Cancelled, The App Will Now Close");
@@ -145,14 +138,28 @@ namespace Gallifrey.UI.Modern.MainViews
             else if (result.RetVal == InitialiseResult.MultipleGallifreyRunning)
             {
                 modelHelpers.Gallifrey.TrackEvent(TrackingType.MultipleInstancesRunning);
-                await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Multiple Instances", "You Can Only Have One Instance Of Gallifrey Running At A Time\nPlease Close The Other Instance");
-                modelHelpers.CloseApp();
+                var userChoice = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Multiple Instances", "You Can Only Have One Instance Of Gallifrey Running At A Time", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Check Again", NegativeButtonText = "Close Now" });
+                if (userChoice == MessageDialogResult.Affirmative)
+                {
+                    await Initialse();
+                }
+                else
+                {
+                    modelHelpers.CloseApp();
+                }
             }
             else if (result.RetVal == InitialiseResult.NoInternetConnection)
             {
                 modelHelpers.Gallifrey.TrackEvent(TrackingType.NoInternet);
-                await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "No Internet Connection", "Gallifrey Requires An Active Internet Connection To Work.\nPlease Try Again When You Have Internet");
-                modelHelpers.CloseApp();
+                var userChoice = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "No Internet Connection", "Gallifrey Requires An Active Internet Connection To Work.", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Check Again", NegativeButtonText = "Close Now" });
+                if (userChoice == MessageDialogResult.Affirmative)
+                {
+                    await Initialse();
+                }
+                else
+                {
+                    modelHelpers.CloseApp();
+                }
             }
             else if (result.RetVal == InitialiseResult.MissingConfig)
             {
@@ -191,6 +198,9 @@ namespace Gallifrey.UI.Modern.MainViews
             updateHeartbeat.Enabled = true;
             idleDetectionHeartbeat.Enabled = true;
             flyoutOpenCheck.Enabled = true;
+            modelHelpers.Gallifrey.NoActivityEvent += GallifreyOnNoActivityEvent;
+            modelHelpers.Gallifrey.ExportPromptEvent += GallifreyOnExportPromptEvent;
+            SystemEvents.SessionSwitch += SessionSwitchHandler;
         }
 
         private async Task NewUserOnBoarding()
@@ -321,7 +331,7 @@ namespace Gallifrey.UI.Modern.MainViews
 
         private void SessionSwitchHandler(object sender, SessionSwitchEventArgs e)
         {
-            if (!modelHelpers.Gallifrey.Settings.AppSettings.TrackLockTime)
+            if (!modelHelpers.Gallifrey.Settings.AppSettings.TrackLockTime || !modelHelpers.Gallifrey.IsInitialised)
             {
                 return;
             }
@@ -358,7 +368,7 @@ namespace Gallifrey.UI.Modern.MainViews
 
         private void IdleDetectionCheck(object sender, ElapsedEventArgs e)
         {
-            if (!modelHelpers.Gallifrey.Settings.AppSettings.TrackIdleTime)
+            if (!modelHelpers.Gallifrey.Settings.AppSettings.TrackIdleTime || !modelHelpers.Gallifrey.IsInitialised)
             {
                 return;
             }
@@ -492,6 +502,11 @@ namespace Gallifrey.UI.Modern.MainViews
         {
             try
             {
+                if (!modelHelpers.Gallifrey.IsInitialised)
+                {
+                    return;
+                }
+
                 //Do Update
                 UpdateResult updateResult;
                 if (updateType == UpdateType.Manual || updateType == UpdateType.StartUp)

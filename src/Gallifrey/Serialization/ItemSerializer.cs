@@ -1,7 +1,6 @@
 ﻿using Gallifrey.Exceptions.Serialization;
 using Newtonsoft.Json;
 using System;
-using System.DirectoryServices.AccountManagement;
 using System.IO;
 using System.Threading;
 
@@ -10,21 +9,23 @@ namespace Gallifrey.Serialization
     public class ItemSerializer<T> where T : new()
     {
         private readonly string savePath;
-        private readonly string saveDirectory;
         private readonly string serialisationErrorDirectory;
-        private readonly string encryptionPassPhrase = UserPrincipal.Current.Sid.ToString();
+        private readonly string encryptionPassPhrase;
         private string TempWritePath => savePath + ".temp";
         private string BackupPath => savePath + ".bak";
 
         public ItemSerializer(string fileName)
         {
-            saveDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Gallifrey");
+            var saveDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Gallifrey");
+
+            encryptionPassPhrase = $@"{Environment.UserDomainName}\{Environment.UserName}";
             serialisationErrorDirectory = Path.Combine(saveDirectory, "Errors");
+            savePath = Path.Combine(saveDirectory, fileName);
 
             try
             {
                 if (!Directory.Exists(saveDirectory)) Directory.CreateDirectory(saveDirectory);
-                savePath = Path.Combine(saveDirectory, fileName);
+                if (!Directory.Exists(serialisationErrorDirectory)) Directory.CreateDirectory(serialisationErrorDirectory);
             }
             catch (Exception)
             {

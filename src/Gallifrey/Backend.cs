@@ -32,6 +32,8 @@ namespace Gallifrey
         event EventHandler BackendModifiedTimers;
         event EventHandler IsPremiumChanged;
         event EventHandler SettingsChanged;
+        event EventHandler<int> NoActivityEvent;
+        event EventHandler<ExportPromptDetail> ExportPromptEvent;
         void Initialise();
         void TrackEvent(TrackingType trackingType);
         void SaveSettings(bool jiraSettingsChanged, bool trackingOptOut);
@@ -39,10 +41,13 @@ namespace Gallifrey
         Guid? StopLockTimer();
         IEnumerable<ChangeLogVersion> GetChangeLog(XDocument changeLogContent);
         void ResetInactiveAlert();
+        bool IsInitialised { get; }
     }
 
     public class Backend : IBackend
     {
+        public bool IsInitialised { get; private set; }
+
         private readonly JiraTimerCollection jiraTimerCollection;
         private readonly IdleTimerCollection idleTimerCollection;
         private readonly SettingsCollection settingsCollection;
@@ -85,12 +90,10 @@ namespace Gallifrey
             ActivityChecker.NoActivityEvent += OnNoActivityEvent;
             cleanUpAndTrackingHeartbeat = new Timer(TimeSpan.FromMinutes(15).TotalMilliseconds);
             cleanUpAndTrackingHeartbeat.Elapsed += CleanUpAndTrackingHearbeatOnElapsed;
-            cleanUpAndTrackingHeartbeat.Start();
 
             exportedHeartbeatMutex = new Mutex(false);
             jiraExportHearbeat = new Timer(TimeSpan.FromMinutes(10).TotalMilliseconds);
             jiraExportHearbeat.Elapsed += JiraExportHearbeatHearbeatOnElapsed;
-            jiraExportHearbeat.Start();
 
             if (Settings.AppSettings.TimerRunningOnShutdown.HasValue)
             {
@@ -243,9 +246,10 @@ namespace Gallifrey
 
         public void Initialise()
         {
-
-
             jiraConnection.ReConnect(settingsCollection.JiraConnectionSettings, settingsCollection.ExportSettings);
+            cleanUpAndTrackingHeartbeat.Start();
+            jiraExportHearbeat.Start();
+            IsInitialised = true;
 
             Task.Factory.StartNew(() =>
             {
