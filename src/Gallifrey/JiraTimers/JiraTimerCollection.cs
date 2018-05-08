@@ -57,7 +57,12 @@ namespace Gallifrey.JiraTimers
         {
             this.settingsCollection = settingsCollection;
             this.trackUsage = trackUsage;
-            timerList = JiraTimerCollectionSerializer.DeSerialize();
+            timerList = new List<JiraTimer>();
+        }
+
+        internal void Initialise()
+        {
+            timerList.AddRange(JiraTimerCollectionSerializer.DeSerialize());
         }
 
         internal void SaveTimers()

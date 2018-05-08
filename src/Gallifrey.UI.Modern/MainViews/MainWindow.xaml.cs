@@ -47,8 +47,6 @@ namespace Gallifrey.UI.Modern.MainViews
             progressDialogHelper = new ProgressDialogHelper(modelHelpers.DialogContext);
 
             var viewModel = new MainViewModel(modelHelpers);
-            modelHelpers.RefreshModel();
-            modelHelpers.SelectRunningTimer();
             DataContext = viewModel;
 
             Height = gallifrey.Settings.UiSettings.Height;
@@ -111,6 +109,9 @@ namespace Gallifrey.UI.Modern.MainViews
             {
                 return InitialiseResult.ConnectionError;
             }
+
+            modelHelpers.RefreshModel();
+            modelHelpers.SelectRunningTimer();
 
             return InitialiseResult.Ok;
         }

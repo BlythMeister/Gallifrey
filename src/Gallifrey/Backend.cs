@@ -51,6 +51,7 @@ namespace Gallifrey
         private readonly JiraTimerCollection jiraTimerCollection;
         private readonly IdleTimerCollection idleTimerCollection;
         private readonly SettingsCollection settingsCollection;
+        private readonly RecentJiraCollection recentJiraCollection;
         private readonly ITrackUsage trackUsage;
         private readonly JiraConnection jiraConnection;
         private readonly VersionControl versionControl;
@@ -77,43 +78,25 @@ namespace Gallifrey
             settingsCollection = SettingsCollectionSerializer.DeSerialize();
             versionControl = new VersionControl(instanceType);
             trackUsage = new TrackUsage(versionControl, settingsCollection, instanceType);
-            versionControl.UpdateCheckOccured += (sender, b) => trackUsage.TrackAppUsage(b ? TrackingType.UpdateCheckManual : TrackingType.UpdateCheck);
-
             jiraTimerCollection = new JiraTimerCollection(settingsCollection, trackUsage);
-            jiraTimerCollection.ExportPrompt += OnExportPromptEvent;
-            jiraConnection = new JiraConnection(trackUsage);
+            recentJiraCollection = new RecentJiraCollection();
+            jiraConnection = new JiraConnection(trackUsage, recentJiraCollection);
             idleTimerCollection = new IdleTimerCollection();
             ActivityChecker = new ActivityChecker(jiraTimerCollection, settingsCollection);
             withThanksCreator = new WithThanksCreator();
             premiumChecker = new PremiumChecker();
 
+
+            versionControl.UpdateCheckOccured += (sender, b) => trackUsage.TrackAppUsage(b ? TrackingType.UpdateCheckManual : TrackingType.UpdateCheck);
+            jiraTimerCollection.ExportPrompt += OnExportPromptEvent;
             ActivityChecker.NoActivityEvent += OnNoActivityEvent;
+
             cleanUpAndTrackingHeartbeat = new Timer(TimeSpan.FromMinutes(15).TotalMilliseconds);
             cleanUpAndTrackingHeartbeat.Elapsed += CleanUpAndTrackingHearbeatOnElapsed;
 
             exportedHeartbeatMutex = new Mutex(false);
             jiraExportHearbeat = new Timer(TimeSpan.FromMinutes(10).TotalMilliseconds);
             jiraExportHearbeat.Elapsed += JiraExportHearbeatHearbeatOnElapsed;
-
-            if (Settings.AppSettings.TimerRunningOnShutdown.HasValue)
-            {
-                var timer = jiraTimerCollection.GetTimer(Settings.AppSettings.TimerRunningOnShutdown.Value);
-                if (timer != null && timer.DateStarted.Date == DateTime.Now.Date)
-                {
-                    JiraTimerCollection.StartTimer(Settings.AppSettings.TimerRunningOnShutdown.Value);
-                }
-
-                Settings.AppSettings.TimerRunningOnShutdown = null;
-                SaveSettings(false, false);
-            }
-
-            if (Settings.AppSettings.NoTimerRunningOnShutdown.HasValue)
-            {
-                ActivityChecker.SetValue(Settings.AppSettings.NoTimerRunningOnShutdown.Value);
-
-                Settings.AppSettings.NoTimerRunningOnShutdown = null;
-                SaveSettings(false, false);
-            }
         }
 
         private void OnExportPromptEvent(object sender, ExportPromptDetail promptDetail)
@@ -249,6 +232,31 @@ namespace Gallifrey
             jiraConnection.ReConnect(settingsCollection.JiraConnectionSettings, settingsCollection.ExportSettings);
             cleanUpAndTrackingHeartbeat.Start();
             jiraExportHearbeat.Start();
+            idleTimerCollection.Initialise();
+            jiraTimerCollection.Initialise();
+            recentJiraCollection.Initialise();
+            BackendModifiedTimers?.Invoke(this, null);
+
+            if (Settings.AppSettings.TimerRunningOnShutdown.HasValue)
+            {
+                var timer = jiraTimerCollection.GetTimer(Settings.AppSettings.TimerRunningOnShutdown.Value);
+                if (timer != null && timer.DateStarted.Date == DateTime.Now.Date)
+                {
+                    JiraTimerCollection.StartTimer(Settings.AppSettings.TimerRunningOnShutdown.Value);
+                }
+
+                Settings.AppSettings.TimerRunningOnShutdown = null;
+                SaveSettings(false, false);
+            }
+
+            if (Settings.AppSettings.NoTimerRunningOnShutdown.HasValue)
+            {
+                ActivityChecker.SetValue(Settings.AppSettings.NoTimerRunningOnShutdown.Value);
+
+                Settings.AppSettings.NoTimerRunningOnShutdown = null;
+                SaveSettings(false, false);
+            }
+
             IsInitialised = true;
 
             Task.Factory.StartNew(() =>

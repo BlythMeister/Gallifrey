@@ -48,10 +48,10 @@ namespace Gallifrey.JiraIntegration
         public bool HasTempo => jira != null && jira.HasTempo;
         public event EventHandler LoggedIn;
 
-        public JiraConnection(ITrackUsage trackUsage)
+        public JiraConnection(ITrackUsage trackUsage, IRecentJiraCollection recentJiraCollection)
         {
             this.trackUsage = trackUsage;
-            recentJiraCollection = new RecentJiraCollection();
+            this.recentJiraCollection = recentJiraCollection;
             jiraProjectCache = new List<JiraProject>();
             lastCacheUpdate = DateTime.MinValue;
         }

@@ -1,5 +1,4 @@
-﻿using Exceptionless;
-using Gallifrey.AppTracking;
+﻿using Gallifrey.AppTracking;
 using Gallifrey.ExtensionMethods;
 using Gallifrey.IdleTimers;
 using Gallifrey.UI.Modern.Flyouts;
@@ -93,24 +92,15 @@ namespace Gallifrey.UI.Modern.MainViews
 
         private async void PasteButton()
         {
-            var pastedData = Clipboard.GetText();
-            string jiraRef = null;
-            try
-            {
-                var pastedUri = new Uri(pastedData);
-                var jiraUri = new Uri(ModelHelpers.Gallifrey.Settings.JiraConnectionSettings.JiraUrl);
-                if (pastedUri.Host == jiraUri.Host)
-                {
-                    var uriDrag = pastedUri.AbsolutePath;
-                    jiraRef = uriDrag.Substring(uriDrag.LastIndexOf("/", StringComparison.InvariantCultureIgnoreCase) + 1);
-                }
-            }
-            catch (Exception ex)
-            {
-                ExceptionlessClient.Default.SubmitException(ex);
-            }
+            var pastedData = Clipboard.GetText().Trim();
+            string jiraRef;
 
-            if (string.IsNullOrWhiteSpace(jiraRef))
+            if (Uri.TryCreate(pastedData, UriKind.Absolute, out var pastedUri) && Uri.TryCreate(ModelHelpers.Gallifrey.Settings.JiraConnectionSettings.JiraUrl, UriKind.Absolute, out var jiraUri) && pastedUri.Host == jiraUri.Host)
+            {
+                var uriDrag = pastedUri.AbsolutePath;
+                jiraRef = uriDrag.Substring(uriDrag.LastIndexOf("/", StringComparison.InvariantCultureIgnoreCase) + 1);
+            }
+            else
             {
                 jiraRef = pastedData;
             }

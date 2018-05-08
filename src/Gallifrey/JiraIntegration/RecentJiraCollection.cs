@@ -22,7 +22,12 @@ namespace Gallifrey.JiraIntegration
 
         internal RecentJiraCollection()
         {
-            recentJiraList = RecentJiraCollectionSerializer.DeSerialize();
+            recentJiraList = new List<RecentJira>();
+        }
+
+        internal void Initialise()
+        {
+            recentJiraList.AddRange(RecentJiraCollectionSerializer.DeSerialize());
         }
 
         internal void SaveCache()
