@@ -86,7 +86,6 @@ namespace Gallifrey
             withThanksCreator = new WithThanksCreator();
             premiumChecker = new PremiumChecker();
 
-
             versionControl.UpdateCheckOccured += (sender, b) => trackUsage.TrackAppUsage(b ? TrackingType.UpdateCheckManual : TrackingType.UpdateCheck);
             jiraTimerCollection.ExportPrompt += OnExportPromptEvent;
             ActivityChecker.NoActivityEvent += OnNoActivityEvent;
@@ -257,13 +256,11 @@ namespace Gallifrey
                 SaveSettings(false, false);
             }
 
+            CleanUpAndTrackingHearbeatOnElapsed(this, null);
+
             IsInitialised = true;
 
-            Task.Factory.StartNew(() =>
-            {
-                CleanUpAndTrackingHearbeatOnElapsed(this, null);
-                JiraExportHearbeatHearbeatOnElapsed(this, null);
-            });
+            Task.Run(() => { JiraExportHearbeatHearbeatOnElapsed(this, null); });
         }
 
         public void Dispose()

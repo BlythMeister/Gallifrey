@@ -44,7 +44,7 @@ namespace Gallifrey.UI.Modern.Helpers
             var controller = await DialogCoordinator.Instance.ShowProgressAsync(dialogContext, "Please Wait", message, canCancel);
             controller.SetIndeterminate();
 
-            var controllerCancel = Task.Factory.StartNew(() =>
+            var controllerCancel = Task.Run(() =>
             {
                 while (true)
                 {
@@ -64,7 +64,7 @@ namespace Gallifrey.UI.Modern.Helpers
 
             try
             {
-                var functionTask = Task.Factory.StartNew(() => function.Invoke(controller), cancellationTokenSource.Token);
+                var functionTask = Task.Run(() => function.Invoke(controller), cancellationTokenSource.Token);
 
                 ProgressResult<T> result;
                 if (await Task.WhenAny(functionTask, controllerCancel) == controllerCancel)

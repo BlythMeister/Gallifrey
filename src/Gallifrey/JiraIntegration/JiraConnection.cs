@@ -62,7 +62,7 @@ namespace Gallifrey.JiraIntegration
             jiraConnectionSettings = newJiraConnectionSettings;
             jira = null;
             CheckAndConnectJira();
-            Task.Factory.StartNew(UpdateJiraProjectCache);
+            Task.Run(() => UpdateJiraProjectCache());
         }
 
         private void CheckAndConnectJira()
