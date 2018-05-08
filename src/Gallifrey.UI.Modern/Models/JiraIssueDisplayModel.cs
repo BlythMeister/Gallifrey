@@ -5,7 +5,7 @@ namespace Gallifrey.UI.Modern.Models
 {
     public class JiraIssueDisplayModel
     {
-        public string Reference { get; set; }
+        public string Reference { get; }
         public string Description { get; set; }
         public string ParentReference { get; set; }
         public string ParentDescription { get; set; }
@@ -35,8 +35,7 @@ namespace Gallifrey.UI.Modern.Models
 
         public override bool Equals(object obj)
         {
-            var other = obj as JiraIssueDisplayModel;
-            return other != null && Reference.Equals(other.Reference);
+            return obj is JiraIssueDisplayModel other && Reference.Equals(other.Reference);
         }
 
         public override int GetHashCode()

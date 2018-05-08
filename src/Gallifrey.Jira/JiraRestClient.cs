@@ -119,7 +119,7 @@ namespace Gallifrey.Jira
             return restClient.Get<List<Filter>>(HttpStatusCode.OK, "api/2/filter/favourite");
         }
 
-        public IEnumerable<StandardWorkLog> GetWorkLoggedForDatesFilteredIssues(IEnumerable<DateTime> queryDates, IEnumerable<string> issueRefs)
+        public IEnumerable<StandardWorkLog> GetWorkLoggedForDatesFilteredIssues(List<DateTime> queryDates, List<string> issueRefs)
         {
             var workLogs = new List<StandardWorkLog>();
 
@@ -205,7 +205,7 @@ namespace Gallifrey.Jira
 
             var postData = new Dictionary<string, object>
             {
-                { "transition", new { id = transition.id } }
+                { "transition", new {transition.id } }
             };
 
             restClient.Post(HttpStatusCode.NoContent, $"api/2/issue/{issueRef}/transitions", postData);
@@ -241,7 +241,7 @@ namespace Gallifrey.Jira
             {
                 var postData = new Dictionary<string, object>
                 {
-                    { "started", $"{logDate.ToString("yyyy-MM-ddTHH:mm:ss.fff")}{logDate.ToString("zzz").Replace(":", "")}"},
+                    { "started", $"{logDate:yyyy-MM-ddTHH:mm:ss.fff}{logDate.ToString("zzz").Replace(":", "")}"},
                     { "comment", comment },
                     { "timeSpent", $"{timeSpent.Hours}h {timeSpent.Minutes}m"},
                 };

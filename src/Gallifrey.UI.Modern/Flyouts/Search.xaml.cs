@@ -35,7 +35,7 @@ namespace Gallifrey.UI.Modern.Flyouts
 
         private async void LoadSearch()
         {
-            Func<SearchModel> getSearchModel = () =>
+            SearchModel GetSearchModel()
             {
                 var recent = new List<RecentJira>();
                 var filters = new List<string>();
@@ -69,9 +69,9 @@ namespace Gallifrey.UI.Modern.Flyouts
                 }
 
                 return new SearchModel(filters, recent, issues, openFromEdit);
-            };
+            }
 
-            var result = await progressDialogHelper.Do(getSearchModel, "Loading Search Information", true, false);
+            var result = await progressDialogHelper.Do(GetSearchModel, "Loading Search Information", true, false);
 
             switch (result.Status)
             {

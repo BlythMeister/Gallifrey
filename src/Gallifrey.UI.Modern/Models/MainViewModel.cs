@@ -273,21 +273,21 @@ namespace Gallifrey.UI.Modern.Models
 
                 foreach (var timer in dateTimers)
                 {
-                    if (!dateModel.Timers.Any(x => x.JiraTimer.UniqueId == timer.UniqueId))
+                    if (dateModel.Timers.All(x => x.JiraTimer.UniqueId != timer.UniqueId))
                     {
                         timer.PropertyChanged += (sender, args) => TimerChanged();
                         dateModel.AddTimerModel(new TimerModel(timer));
                     }
                 }
 
-                foreach (var removeTimer in dateModel.Timers.Where(timerModel => !dateTimers.Any(x => x.UniqueId == timerModel.JiraTimer.UniqueId)).ToList())
+                foreach (var removeTimer in dateModel.Timers.Where(timerModel => dateTimers.All(x => x.UniqueId != timerModel.JiraTimer.UniqueId)).ToList())
                 {
                     dateModel.RemoveTimerModel(removeTimer);
                 }
 
                 foreach (var defaultJira in ModelHelpers.Gallifrey.Settings.AppSettings.DefaultTimers ?? new List<string>())
                 {
-                    if (!dateModel.Timers.Any(x => x.JiraTimer.JiraReference == defaultJira) && dateModel.TimerDate.Date <= DateTime.Now.Date)
+                    if (dateModel.Timers.All(x => x.JiraTimer.JiraReference != defaultJira) && dateModel.TimerDate.Date <= DateTime.Now.Date)
                     {
                         try
                         {

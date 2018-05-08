@@ -5,12 +5,7 @@ using System.Linq;
 
 namespace Gallifrey.Versions
 {
-    public interface IPremiumChecker
-    {
-        bool CheckIfPremium(ISettingsCollection settingsCollection);
-    }
-
-    public class PremiumChecker : IPremiumChecker
+    public class PremiumChecker
     {
         public bool CheckIfPremium(ISettingsCollection settingsCollection)
         {

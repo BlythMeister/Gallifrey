@@ -17,7 +17,6 @@ namespace Gallifrey.JiraTimers
         IEnumerable<DateTime> GetValidTimerDates();
         IEnumerable<JiraTimer> GetTimersForADate(DateTime timerDate);
         IEnumerable<JiraTimer> GetStoppedUnexportedTimers();
-        IEnumerable<JiraTimer> GetAllUnexportedTimers();
         IEnumerable<JiraTimer> GetAllLocalTimers();
         IEnumerable<JiraTimer> GetAllTimersWithTime();
         IEnumerable<RecentJira> GetJiraReferencesForLastDays(int days);
@@ -27,7 +26,6 @@ namespace Gallifrey.JiraTimers
         void StartTimer(Guid uniqueId);
         void StopTimer(Guid uniqueId, bool automatedStop);
         Guid? GetRunningTimerId();
-        void RemoveTimersOlderThanDays(int keepTimersForDays);
         JiraTimer GetTimer(Guid timerGuid);
         Guid RenameTimer(Guid timerGuid, Issue newIssue);
         Guid ChangeLocalTimerDescription(Guid editedTimerId, string localTimerDescription);
@@ -52,7 +50,7 @@ namespace Gallifrey.JiraTimers
         private readonly ISettingsCollection settingsCollection;
         private readonly ITrackUsage trackUsage;
         private readonly List<JiraTimer> timerList;
-        internal event EventHandler<ExportPromptDetail> exportPrompt;
+        internal event EventHandler<ExportPromptDetail> ExportPrompt;
         public event EventHandler GeneralTimerModification;
 
         internal JiraTimerCollection(ISettingsCollection settingsCollection, ITrackUsage trackUsage)
@@ -135,7 +133,7 @@ namespace Gallifrey.JiraTimers
             {
                 if (settingsCollection.ExportSettings.ExportPrompt != null && settingsCollection.ExportSettings.ExportPrompt.OnCreatePreloaded && !newTimer.FullyExported && !newTimer.LocalTimer)
                 {
-                    exportPrompt?.Invoke(this, new ExportPromptDetail(newTimer.UniqueId, seedTime));
+                    ExportPrompt?.Invoke(this, new ExportPromptDetail(newTimer.UniqueId, seedTime));
                 }
             }
             return newTimer.UniqueId;
@@ -214,7 +212,7 @@ namespace Gallifrey.JiraTimers
             SaveTimers();
             if (settingsCollection.ExportSettings.ExportPrompt != null && settingsCollection.ExportSettings.ExportPrompt.OnStop && !timerForInteration.FullyExported && !automatedStop && !timerForInteration.LocalTimer)
             {
-                exportPrompt?.Invoke(this, new ExportPromptDetail(uniqueId, stopTime));
+                ExportPrompt?.Invoke(this, new ExportPromptDetail(uniqueId, stopTime));
             }
         }
 
@@ -375,7 +373,7 @@ namespace Gallifrey.JiraTimers
             if (settingsCollection.ExportSettings.ExportPrompt != null && settingsCollection.ExportSettings.ExportPrompt.OnManualAdjust && !timer.FullyExported && !timer.LocalTimer)
             {
                 if (!addTime) adjustment = adjustment.Negate();
-                exportPrompt?.Invoke(this, new ExportPromptDetail(uniqueId, adjustment));
+                ExportPrompt?.Invoke(this, new ExportPromptDetail(uniqueId, adjustment));
             }
 
             return true;
@@ -401,7 +399,7 @@ namespace Gallifrey.JiraTimers
             {
                 var idleTime = new TimeSpan();
                 idleTime = idleTimers.Aggregate(idleTime, (current, idleTimer) => current.Add(idleTimer.IdleTimeValue));
-                exportPrompt?.Invoke(this, new ExportPromptDetail(uniqueId, idleTime));
+                ExportPrompt?.Invoke(this, new ExportPromptDetail(uniqueId, idleTime));
             }
         }
 

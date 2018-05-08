@@ -41,7 +41,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             var timersToShow = new List<BulkExportModel>();
             try
             {
-                var jiraDownloadResult = await progressDialogHelper.Do(controller => GetTimers(controller, timers), "Downloading Jira Work Logs To Ensure Accurate Export", true, true);
+                var jiraDownloadResult = await progressDialogHelper.Do(controller => GetTimers(timers), "Downloading Jira Work Logs To Ensure Accurate Export", true, true);
 
                 switch (jiraDownloadResult.Status)
                 {
@@ -116,7 +116,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             {
                 if (exportModel.Timer.TimeToExport < exportModel.ToExport)
                 {
-                    await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, $"Invalid Export Timer - {exportModel.JiraRef}", $"You Cannot Export More Than The Timer States Un-Exported\nThis Value Is {exportModel.ToExport.ToString(@"hh\:mm")}!");
+                    await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, $"Invalid Export Timer - {exportModel.JiraRef}", $"You Cannot Export More Than The Timer States Un-Exported\nThis Value Is {exportModel.ToExport:hh\\:mm}!");
                     return;
                 }
             }
@@ -157,7 +157,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                     {
                         var transitionsAvaliable = modelHelpers.Gallifrey.JiraConnection.GetTransitions(timer.JiraRef);
 
-                        var timeSelectorDialog = (BaseMetroDialog)this.Resources["TransitionSelector"];
+                        var timeSelectorDialog = (BaseMetroDialog)Resources["TransitionSelector"];
                         await DialogCoordinator.Instance.ShowMetroDialogAsync(modelHelpers.DialogContext, timeSelectorDialog);
 
                         var comboBox = timeSelectorDialog.FindChild<ComboBox>("Items");
@@ -206,7 +206,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             toggle.IsChecked = false;
         }
 
-        private List<BulkExportModel> GetTimers(ProgressDialogController dialogController, List<JiraTimer> timers)
+        private List<BulkExportModel> GetTimers(List<JiraTimer> timers)
         {
             var timersToShow = new List<BulkExportModel>();
             var issuesRetrieved = new List<Issue>();
@@ -279,14 +279,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             {
                 var exportModel = timersToExport[i];
 
-                if (i == 0)
-                {
-                    dialogController.SetMessage($"Exporting Timer {exportModel.JiraRef} For {exportModel.ExportDate.Date.ToString("ddd, dd MMM")}");
-                }
-                else
-                {
-                    dialogController.SetMessage($"Exporting Timer {exportModel.JiraRef} For {exportModel.ExportDate.Date.ToString("ddd, dd MMM")}\nDone {i} Of {timersToExport.Count}");
-                }
+                dialogController.SetMessage(i == 0 ? $"Exporting Timer {exportModel.JiraRef} For {exportModel.ExportDate.Date:ddd, dd MMM}" : $"Exporting Timer {exportModel.JiraRef} For {exportModel.ExportDate.Date:ddd, dd MMM}\nDone {i} Of {timersToExport.Count}");
 
                 try
                 {
@@ -326,7 +319,7 @@ namespace Gallifrey.UI.Modern.Flyouts
 
             try
             {
-                var dialog = (BaseMetroDialog)this.Resources["TransitionSelector"];
+                var dialog = (BaseMetroDialog)Resources["TransitionSelector"];
                 var comboBox = dialog.FindChild<ComboBox>("Items");
 
                 selectedTransition = (string)comboBox.SelectedItem;
@@ -357,7 +350,7 @@ namespace Gallifrey.UI.Modern.Flyouts
 
         private async void CancelTransition(object sender, RoutedEventArgs e)
         {
-            var dialog = (BaseMetroDialog)this.Resources["TransitionSelector"];
+            var dialog = (BaseMetroDialog)Resources["TransitionSelector"];
             await DialogCoordinator.Instance.HideMetroDialogAsync(modelHelpers.DialogContext, dialog);
 
             currentChangeStatusJiraRef = string.Empty;

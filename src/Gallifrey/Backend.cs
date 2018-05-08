@@ -28,8 +28,6 @@ namespace Gallifrey
         IJiraConnection JiraConnection { get; }
         IVersionControl VersionControl { get; }
         List<WithThanksDefinition> WithThanksDefinitions { get; }
-        event EventHandler<int> NoActivityEvent;
-        event EventHandler<ExportPromptDetail> ExportPromptEvent;
         event EventHandler DailyTrackingEvent;
         event EventHandler BackendModifiedTimers;
         event EventHandler IsPremiumChanged;
@@ -77,7 +75,7 @@ namespace Gallifrey
             versionControl.UpdateCheckOccured += (sender, b) => trackUsage.TrackAppUsage(b ? TrackingType.UpdateCheckManual : TrackingType.UpdateCheck);
 
             jiraTimerCollection = new JiraTimerCollection(settingsCollection, trackUsage);
-            jiraTimerCollection.exportPrompt += OnExportPromptEvent;
+            jiraTimerCollection.ExportPrompt += OnExportPromptEvent;
             jiraConnection = new JiraConnection(trackUsage);
             idleTimerCollection = new IdleTimerCollection();
             ActivityChecker = new ActivityChecker(jiraTimerCollection, settingsCollection);
@@ -208,7 +206,7 @@ namespace Gallifrey
                 {
                     foreach (var timeExport in jirasExportedTo.Where(x => x.LoggedDate.Date == checkDate.Key.Date))
                     {
-                        if (!checkDate.Value.Any(x => x.JiraReference == timeExport.JiraRef))
+                        if (checkDate.Value.All(x => x.JiraReference != timeExport.JiraRef))
                         {
                             var issue = issueCache.FirstOrDefault(x => x.key == timeExport.JiraRef);
 

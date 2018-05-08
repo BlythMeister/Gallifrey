@@ -1,9 +1,9 @@
+using Gallifrey.Comparers;
+using Gallifrey.JiraTimers;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using Gallifrey.Comparers;
-using Gallifrey.JiraTimers;
 
 namespace Gallifrey.UI.Modern.Models
 {
@@ -15,7 +15,7 @@ namespace Gallifrey.UI.Modern.Models
         public DateTime TimerDate { get; }
         public ObservableCollection<TimerModel> Timers { get; set; }
 
-        public string Header => $"{TimerDate.ToString("ddd, dd MMM")} [{jiraTimerCollection.GetTotalTimeForDate(TimerDate)}]";
+        public string Header => $"{TimerDate:ddd, dd MMM} [{jiraTimerCollection.GetTotalTimeForDate(TimerDate)}]";
         public bool DateIsSelected { get; set; }
         public bool TrackingOnly { get; private set; }
 

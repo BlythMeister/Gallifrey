@@ -68,15 +68,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                 return;
             }
 
-            TimeSpan seedTime;
-            if (DataModel.TimeEditable)
-            {
-                seedTime = new TimeSpan(DataModel.StartHours ?? 0, DataModel.StartMinutes ?? 0, 0);
-            }
-            else
-            {
-                seedTime = new TimeSpan();
-            }
+            var seedTime = DataModel.TimeEditable ? new TimeSpan(DataModel.StartHours ?? 0, DataModel.StartMinutes ?? 0, 0) : new TimeSpan();
 
             Issue jiraIssue = null;
             var jiraRef = string.Empty;
@@ -160,7 +152,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                         {
                             var transitionsAvaliable = transitionResult.RetVal;
 
-                            var timeSelectorDialog = (BaseMetroDialog)this.Resources["TransitionSelector"];
+                            var timeSelectorDialog = (BaseMetroDialog)Resources["TransitionSelector"];
                             await DialogCoordinator.Instance.ShowMetroDialogAsync(modelHelpers.DialogContext, timeSelectorDialog);
 
                             var comboBox = timeSelectorDialog.FindChild<ComboBox>("Items");
@@ -197,7 +189,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                 var addTimer = true;
                 if (!modelHelpers.Gallifrey.Settings.AppSettings.ExportDays.Contains(workingDate.DayOfWeek))
                 {
-                    var result = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Add For Non-Working Day?", $"The Date {workingDate.ToString("ddd, dd MMM")} Is Not A Working Day.\nWould You Still Like To Add A Timer For This Date?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
+                    var result = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Add For Non-Working Day?", $"The Date {workingDate:ddd, dd MMM} Is Not A Working Day.\nWould You Still Like To Add A Timer For This Date?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
 
                     if (result == MessageDialogResult.Negative)
                     {
@@ -210,7 +202,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                     var added = await AddSingleTimer(jiraIssue, seedTime, workingDate);
                     if (!added && workingDate < DataModel.EndDate.Value)
                     {
-                        var result = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Continue Adding?", $"The Timer For {workingDate.ToString("ddd, dd MMM")} Was Not Added.\nWould You Like To Carry On Adding For The Remaining Dates?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
+                        var result = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Continue Adding?", $"The Timer For {workingDate:ddd, dd MMM} Was Not Added.\nWould You Like To Carry On Adding For The Remaining Dates?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
 
                         if (result == MessageDialogResult.Negative)
                         {
@@ -229,14 +221,7 @@ namespace Gallifrey.UI.Modern.Flyouts
         {
             try
             {
-                if (DataModel.LocalTimer)
-                {
-                    NewTimerId = modelHelpers.Gallifrey.JiraTimerCollection.AddLocalTimer(DataModel.LocalTimerDescription, startDate, seedTime, DataModel.StartNow);
-                }
-                else
-                {
-                    NewTimerId = modelHelpers.Gallifrey.JiraTimerCollection.AddTimer(jiraIssue, startDate, seedTime, DataModel.StartNow);
-                }
+                NewTimerId = DataModel.LocalTimer ? modelHelpers.Gallifrey.JiraTimerCollection.AddLocalTimer(DataModel.LocalTimerDescription, startDate, seedTime, DataModel.StartNow) : modelHelpers.Gallifrey.JiraTimerCollection.AddTimer(jiraIssue, startDate, seedTime, DataModel.StartNow);
                 AddedTimer = true;
                 if (!DataModel.TimeEditable)
                 {
@@ -248,7 +233,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                 var doneSomething = false;
                 if (seedTime.TotalMinutes > 0 || !DataModel.TimeEditable)
                 {
-                    var result = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Duplicate Timer", $"The Timer Already Exists On {startDate.ToString("ddd, dd MMM")}, Would You Like To Add The Time?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
+                    var result = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Duplicate Timer", $"The Timer Already Exists On {startDate:ddd, dd MMM}, Would You Like To Add The Time?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
 
                     if (result == MessageDialogResult.Affirmative)
                     {
@@ -305,7 +290,7 @@ namespace Gallifrey.UI.Modern.Flyouts
 
             try
             {
-                var dialog = (BaseMetroDialog)this.Resources["TransitionSelector"];
+                var dialog = (BaseMetroDialog)Resources["TransitionSelector"];
                 var comboBox = dialog.FindChild<ComboBox>("Items");
 
                 selectedTransition = (string)comboBox.SelectedItem;
@@ -334,7 +319,7 @@ namespace Gallifrey.UI.Modern.Flyouts
 
         private async void CancelTransition(object sender, RoutedEventArgs e)
         {
-            var dialog = (BaseMetroDialog)this.Resources["TransitionSelector"];
+            var dialog = (BaseMetroDialog)Resources["TransitionSelector"];
             await DialogCoordinator.Instance.HideMetroDialogAsync(modelHelpers.DialogContext, dialog);
 
             modelHelpers.CloseFlyout(this);

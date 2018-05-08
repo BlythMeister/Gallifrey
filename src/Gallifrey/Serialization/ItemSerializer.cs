@@ -10,24 +10,21 @@ namespace Gallifrey.Serialization
     public class ItemSerializer<T> where T : new()
     {
         private readonly string savePath;
+        private readonly string saveDirectory;
+        private readonly string serialisationErrorDirectory;
         private readonly string encryptionPassPhrase = UserPrincipal.Current.Sid.ToString();
         private string TempWritePath => savePath + ".temp";
         private string BackupPath => savePath + ".bak";
 
-        public ItemSerializer()
+        public ItemSerializer(string fileName)
         {
-        }
+            saveDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Gallifrey");
+            serialisationErrorDirectory = Path.Combine(saveDirectory, "Errors");
 
-        public ItemSerializer(string fileName) : this(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Gallifrey"), fileName)
-        {
-        }
-
-        public ItemSerializer(string directory, string fileName)
-        {
             try
             {
-                if (!Directory.Exists(directory)) Directory.CreateDirectory(directory);
-                savePath = Path.Combine(directory, fileName);
+                if (!Directory.Exists(saveDirectory)) Directory.CreateDirectory(saveDirectory);
+                savePath = Path.Combine(saveDirectory, fileName);
             }
             catch (Exception)
             {
@@ -107,10 +104,11 @@ namespace Gallifrey.Serialization
                 var text = DataEncryption.Decrypt(encryptedString, encryptionPassPhrase);
                 return JsonConvert.DeserializeObject<T>(text);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 if (retryCount >= 3)
                 {
+                    File.WriteAllText(Path.Combine(serialisationErrorDirectory, $"{DateTime.UtcNow:s}_{Guid.NewGuid().ToString()}.log"), ex.ToString());
                     return new T();
                 }
 

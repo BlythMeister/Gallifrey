@@ -14,13 +14,11 @@ namespace Gallifrey.Versions
         bool UpdateReinstallNeeded { get; }
         bool UpdateError { get; }
         string VersionName { get; }
-        Version DeployedVersion { get; }
         bool IsFirstRun { get; }
         string AppName { get; }
         Task<UpdateResult> CheckForUpdates(bool manualCheck);
         void ManualReinstall();
         event EventHandler UpdateStateChange;
-        event EventHandler<bool> UpdateCheckOccured;
     }
 
     public class VersionControl : IVersionControl

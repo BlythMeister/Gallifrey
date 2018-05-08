@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
@@ -9,14 +10,17 @@ namespace Gallifrey.UI.Modern.Extensions
     {
         #region Window Flashing API Stuff
 
+        // ReSharper disable InconsistentNaming
         private const uint FLASHW_STOP = 0; //Stop flashing. The system restores the window to its original state.
         private const uint FLASHW_CAPTION = 1; //Flash the window caption.
         private const uint FLASHW_TRAY = 2; //Flash the taskbar button.
         private const uint FLASHW_ALL = 3; //Flash both the window caption and taskbar button.
         private const uint FLASHW_TIMER = 4; //Flash continuously, until the FLASHW_STOP flag is set.
         private const uint FLASHW_TIMERNOFG = 12; //Flash continuously until the window comes to the foreground.
+        // ReSharper restore InconsistentNaming
 
         [StructLayout(LayoutKind.Sequential)]
+        [SuppressMessage("ReSharper", "InconsistentNaming")]
         private struct FLASHWINFO
         {
             public uint cbSize; //The size of the structure in bytes.

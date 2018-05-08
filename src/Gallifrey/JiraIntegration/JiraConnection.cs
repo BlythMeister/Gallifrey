@@ -15,7 +15,6 @@ namespace Gallifrey.JiraIntegration
 {
     public interface IJiraConnection
     {
-        void ReConnect(IJiraConnectionSettings newJiraConnectionSettings, IExportSettings newExportSettings);
         bool DoesJiraExist(string jiraRef);
         Issue GetJiraIssue(string jiraRef);
         IEnumerable<string> GetJiraFilters();
@@ -24,11 +23,7 @@ namespace Gallifrey.JiraIntegration
         IEnumerable<Issue> GetJiraIssuesFromSearchTextLimitedToKeys(string searchText, IEnumerable<string> jiraKeys);
         void LogTime(string jiraRef, DateTime exportTimeStamp, TimeSpan exportTime, WorkLogStrategy strategy, bool addStandardComment, string comment = "", TimeSpan? remainingTime = null);
         IEnumerable<Issue> GetJiraCurrentUserOpenIssues();
-        IEnumerable<JiraProject> GetJiraProjects();
-        IEnumerable<RecentJira> GetRecentJirasFound();
-        IEnumerable<StandardWorkLog> GetWorkLoggedForDates(IEnumerable<DateTime> queryDates);
         IEnumerable<StandardWorkLog> GetWorkLoggedForDatesFilteredIssues(IEnumerable<DateTime> queryDates, IEnumerable<string> issueRefs);
-        void UpdateCache();
         void AssignToCurrentUser(string jiraRef);
         User CurrentUser { get; }
         bool IsConnected { get; }
@@ -191,7 +186,7 @@ namespace Gallifrey.JiraIntegration
             {
                 CheckAndConnectJira();
                 trackUsage.TrackAppUsage(TrackingType.SearchText);
-                var issues = jira.GetIssuesFromJql(GetJql(searchText));
+                var issues = jira.GetIssuesFromJql(GetJql(searchText)).ToList();
                 recentJiraCollection.AddRecentJiras(issues);
                 return issues.OrderBy(x => x.key, new JiraReferenceComparer());
             }
@@ -209,7 +204,7 @@ namespace Gallifrey.JiraIntegration
                 trackUsage.TrackAppUsage(TrackingType.SearchText);
                 var searchTextJql = GetJql(searchText);
                 var keysJql = $"key in (\"{String.Join("\",\"", jiraKeys)}\")";
-                var issues = jira.GetIssuesFromJql($"({keysJql}) AND ({searchTextJql})");
+                var issues = jira.GetIssuesFromJql($"({keysJql}) AND ({searchTextJql})").ToList();
                 recentJiraCollection.AddRecentJiras(issues);
                 return issues.OrderBy(x => x.key, new JiraReferenceComparer());
             }
@@ -224,7 +219,7 @@ namespace Gallifrey.JiraIntegration
             try
             {
                 CheckAndConnectJira();
-                var issues = jira.GetIssuesFromJql("assignee in (currentUser()) AND status not in (Closed,Resolved)");
+                var issues = jira.GetIssuesFromJql("assignee in (currentUser()) AND status not in (Closed,Resolved)").ToList();
                 recentJiraCollection.AddRecentJiras(issues);
                 return issues.OrderBy(x => x.key, new JiraReferenceComparer());
             }
@@ -251,24 +246,14 @@ namespace Gallifrey.JiraIntegration
             }
         }
 
-        public IEnumerable<JiraProject> GetJiraProjects()
-        {
-            return jiraProjectCache;
-        }
-
-        public IEnumerable<RecentJira> GetRecentJirasFound()
-        {
-            return recentJiraCollection.GetRecentJiraCollection();
-        }
-
         public IEnumerable<StandardWorkLog> GetWorkLoggedForDates(IEnumerable<DateTime> queryDates)
         {
-            return jira.GetWorkLoggedForDatesFilteredIssues(queryDates, null);
+            return jira.GetWorkLoggedForDatesFilteredIssues(queryDates.ToList(), null);
         }
 
         public IEnumerable<StandardWorkLog> GetWorkLoggedForDatesFilteredIssues(IEnumerable<DateTime> queryDates, IEnumerable<string> issueRefs)
         {
-            return jira.GetWorkLoggedForDatesFilteredIssues(queryDates, issueRefs);
+            return jira.GetWorkLoggedForDatesFilteredIssues(queryDates.ToList(), issueRefs.ToList());
         }
 
         public void UpdateCache()
@@ -343,25 +328,24 @@ namespace Gallifrey.JiraIntegration
             }
             catch (Exception ex)
             {
-                throw new JiraConnectionException("Unable to change issue state.", ex);
+                throw new StateChangedException("Unable to change issue state.", ex);
             }
         }
 
         private string GetJql(string searchText)
         {
-            var projects = jira.GetProjects().ToList();
             var projectQuery = string.Empty;
             var nonProjectText = string.Empty;
             foreach (var keyword in searchText.Split(' '))
             {
-                var firstProjectMatch = projects.FirstOrDefault(x => x.key == keyword);
+                var firstProjectMatch = jiraProjectCache.FirstOrDefault(x => x.JiraProjectCode == keyword);
                 if (firstProjectMatch != null)
                 {
                     if (!string.IsNullOrWhiteSpace(projectQuery))
                     {
                         projectQuery += " OR ";
                     }
-                    projectQuery += $"project = \"{firstProjectMatch.name}\"";
+                    projectQuery += $"project = \"{firstProjectMatch.JiraProjectName}\"";
                 }
                 else
                 {
@@ -373,7 +357,7 @@ namespace Gallifrey.JiraIntegration
             var keyQuery = string.Empty;
             try
             {
-                if (searchText.Contains("-") && jira.GetIssue(searchText) != null)
+                if (searchText.Contains("-") && (recentJiraCollection.GetRecentJiraCollection().Any(x => x.JiraReference == searchText) || jira.GetIssue(searchText) != null))
                 {
                     keyQuery = $"(key = \"{searchText}\")";
                 }
@@ -383,37 +367,16 @@ namespace Gallifrey.JiraIntegration
             var jql = string.Empty;
             if (!string.IsNullOrWhiteSpace(nonProjectText))
             {
-                if (string.IsNullOrWhiteSpace(jql))
-                {
-                    jql = $"(Summary ~ \"{nonProjectText}\" OR Description ~ \"{nonProjectText}\")";
-                }
-                else
-                {
-                    jql = $"({jql}) AND (Summary ~ \"{nonProjectText}\" OR Description ~ \"{nonProjectText}\")";
-                }
+                jql = string.IsNullOrWhiteSpace(jql) ? $"(Summary ~ \"{nonProjectText}\" OR Description ~ \"{nonProjectText}\")" : $"({jql}) AND (Summary ~ \"{nonProjectText}\" OR Description ~ \"{nonProjectText}\")";
             }
             if (!string.IsNullOrWhiteSpace(projectQuery))
             {
-                if (string.IsNullOrWhiteSpace(jql))
-                {
-                    jql = $"({projectQuery})";
-                }
-                else
-                {
-                    jql = $"({jql}) AND ({projectQuery})";
-                }
+                jql = string.IsNullOrWhiteSpace(jql) ? $"({projectQuery})" : $"({jql}) AND ({projectQuery})";
             }
 
             if (!string.IsNullOrWhiteSpace(keyQuery))
             {
-                if (string.IsNullOrWhiteSpace(jql))
-                {
-                    jql = $"({keyQuery})";
-                }
-                else
-                {
-                    jql = $"({jql}) OR ({keyQuery})";
-                }
+                jql = string.IsNullOrWhiteSpace(jql) ? $"({keyQuery})" : $"({jql}) OR ({keyQuery})";
             }
 
             return jql;

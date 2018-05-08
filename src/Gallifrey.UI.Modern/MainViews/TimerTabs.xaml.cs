@@ -115,7 +115,7 @@ namespace Gallifrey.UI.Modern.MainViews
         private async Task AddFromUrl(string url)
         {
             var uriDrag = new Uri(url).AbsolutePath;
-            var jiraRef = uriDrag.Substring(uriDrag.LastIndexOf("/") + 1);
+            var jiraRef = uriDrag.Substring(uriDrag.LastIndexOf("/", StringComparison.InvariantCultureIgnoreCase) + 1);
             var todaysDate = DateTime.Now.Date;
             var dayTimers = ModelHelpers.Gallifrey.JiraTimerCollection.GetTimersForADate(todaysDate).ToList();
 

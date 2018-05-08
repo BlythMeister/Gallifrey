@@ -15,7 +15,7 @@ namespace Gallifrey.Jira
         IEnumerable<Issue> GetIssuesFromJql(string jql);
         IEnumerable<Project> GetProjects();
         IEnumerable<Filter> GetFilters();
-        IEnumerable<StandardWorkLog> GetWorkLoggedForDatesFilteredIssues(IEnumerable<DateTime> queryDates, IEnumerable<string> issueRefs);
+        IEnumerable<StandardWorkLog> GetWorkLoggedForDatesFilteredIssues(List<DateTime> queryDates, List<string> issueRefs);
         Transitions GetIssueTransitions(string issueRef);
         void TransitionIssue(string issueRef, string transitionName);
         void AddWorkLog(string issueRef, WorkLogStrategy workLogStrategy, string comment, TimeSpan timeSpent, DateTime logDate, TimeSpan? remainingTime = null);

@@ -16,7 +16,7 @@ namespace Gallifrey.UI.Modern.Helpers
 
         public new Uri Source
         {
-            get { return source; }
+            get => source;
             set
             {
                 source = value;

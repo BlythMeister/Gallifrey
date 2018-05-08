@@ -21,12 +21,28 @@ namespace Gallifrey.Serialization
 
             if (cipherParts.Length == 3 && cipherParts[0] == "V1")
             {
-                return Decrypt(cipherParts[2], passPhrase, cipherParts[1]);
+                try
+                {
+                    return Decrypt(cipherParts[2], passPhrase, cipherParts[1]);
+                }
+                catch (Exception)
+                {
+#pragma warning disable 618
+                    return OldDecrypt(cipherParts[2], passPhrase, cipherParts[1]);
+#pragma warning restore 618
+                }
             }
-            else
+
+            //Legacy handling
+            try
             {
-                //Legacy handling
                 return Decrypt(cipherText, "WOq2kKSbvHTcKp9e", "pId6i1bN1aCVTaHN");
+            }
+            catch (Exception)
+            {
+#pragma warning disable 618
+                return OldDecrypt(cipherText, "WOq2kKSbvHTcKp9e", "pId6i1bN1aCVTaHN");
+#pragma warning restore 618
             }
         }
 
@@ -34,10 +50,8 @@ namespace Gallifrey.Serialization
         {
             var initVectorBytes = Encoding.UTF8.GetBytes(vector);
             var plainTextBytes = Encoding.UTF8.GetBytes(plainText);
-            var password = new PasswordDeriveBytes(passPhrase, null);
-            var keyBytes = password.GetBytes(32);
-            var symmetricKey = new AesCryptoServiceProvider();
-            var encryptor = symmetricKey.CreateEncryptor(keyBytes, initVectorBytes);
+            var keyBytes = new Rfc2898DeriveBytes(passPhrase, initVectorBytes).GetBytes(32);
+            var encryptor = new AesCryptoServiceProvider().CreateEncryptor(keyBytes, initVectorBytes);
 
             using (var memoryStream = new MemoryStream())
             {
@@ -52,6 +66,26 @@ namespace Gallifrey.Serialization
         }
 
         private static string Decrypt(string cipherText, string passPhrase, string vector)
+        {
+            var initVectorBytes = Encoding.ASCII.GetBytes(vector);
+            var cipherTextBytes = Convert.FromBase64String(cipherText);
+            var keyBytes = new Rfc2898DeriveBytes(passPhrase, initVectorBytes).GetBytes(32);
+            var decryptor = new AesCryptoServiceProvider().CreateDecryptor(keyBytes, initVectorBytes);
+
+            using (var memoryStream = new MemoryStream(cipherTextBytes))
+            {
+                using (var cryptoStream = new CryptoStream(memoryStream, decryptor, CryptoStreamMode.Read))
+                {
+                    var plainTextBytes = new byte[cipherTextBytes.Length];
+                    var decryptedByteCount = cryptoStream.Read(plainTextBytes, 0, plainTextBytes.Length);
+
+                    return Encoding.UTF8.GetString(plainTextBytes, 0, decryptedByteCount);
+                }
+            }
+        }
+
+        [Obsolete("Here for legacy")]
+        private static string OldDecrypt(string cipherText, string passPhrase, string vector)
         {
             var initVectorBytes = Encoding.ASCII.GetBytes(vector);
             var cipherTextBytes = Convert.FromBase64String(cipherText);

@@ -13,7 +13,6 @@ namespace Gallifrey.Settings
         string InstallationHash { get; }
         string UserHash { get; }
         string SiteHash { get; }
-        void SaveSettings();
     }
 
     public class SettingsCollection : ISettingsCollection
@@ -27,6 +26,7 @@ namespace Gallifrey.Settings
         public string UserHash => DataEncryption.GetSha256Hash($"{JiraConnectionSettings.JiraUsername.ToLower()}-{new Uri(JiraConnectionSettings.JiraUrl).Host.ToLower()}");
         public string SiteHash => DataEncryption.GetSha256Hash(new Uri(JiraConnectionSettings.JiraUrl).Host.ToLower());
 
+        // ReSharper disable once UnusedMember.Global
         public SettingsCollection()
         {
             AppSettings = new AppSettings();
@@ -34,15 +34,6 @@ namespace Gallifrey.Settings
             UiSettings = new UiSettings();
             InternalSettings = new InternalSettings();
             ExportSettings = new ExportSettings();
-        }
-
-        public SettingsCollection(IAppSettings appSettings, IJiraConnectionSettings jiraConnectionSettings, IUiSettings uiSettings, IInternalSettings internalSettings, IExportSettings exportSettings)
-        {
-            AppSettings = appSettings;
-            JiraConnectionSettings = jiraConnectionSettings;
-            UiSettings = uiSettings;
-            InternalSettings = internalSettings;
-            ExportSettings = exportSettings;
         }
 
         public void SaveSettings()

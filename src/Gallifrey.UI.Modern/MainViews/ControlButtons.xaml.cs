@@ -69,15 +69,15 @@ namespace Gallifrey.UI.Modern.MainViews
 
         }
 
-        private async void CopyButton(object sender, RoutedEventArgs e)
+        private async void CopyButton()
         {
-            var selectedTimers = ViewModel.GetSelectedTimerIds();
+            var selectedTimers = ViewModel.GetSelectedTimerIds().ToList();
 
-            if (selectedTimers.Count() > 1)
+            if (selectedTimers.Count > 1)
             {
                 await DialogCoordinator.Instance.ShowMessageAsync(ModelHelpers.DialogContext, "Too Many Timers Selected", "Please Select Only One Timer When Copying Reference");
             }
-            else if (selectedTimers != null && selectedTimers.Count() == 1)
+            else if (selectedTimers.Count == 1)
             {
                 var selectedTimer = ModelHelpers.Gallifrey.JiraTimerCollection.GetTimer(selectedTimers.First());
                 if (selectedTimer.LocalTimer)
@@ -91,7 +91,7 @@ namespace Gallifrey.UI.Modern.MainViews
             }
         }
 
-        private async void PasteButton(object sender, RoutedEventArgs e)
+        private async void PasteButton()
         {
             var pastedData = Clipboard.GetText();
             string jiraRef = null;
@@ -102,7 +102,7 @@ namespace Gallifrey.UI.Modern.MainViews
                 if (pastedUri.Host == jiraUri.Host)
                 {
                     var uriDrag = pastedUri.AbsolutePath;
-                    jiraRef = uriDrag.Substring(uriDrag.LastIndexOf("/") + 1);
+                    jiraRef = uriDrag.Substring(uriDrag.LastIndexOf("/", StringComparison.InvariantCultureIgnoreCase) + 1);
                 }
             }
             catch (Exception ex)
@@ -147,7 +147,7 @@ namespace Gallifrey.UI.Modern.MainViews
                     }
                     else
                     {
-                        var result = await DialogCoordinator.Instance.ShowMessageAsync(ModelHelpers.DialogContext, "Are You Sure?", $"Are You Sure You Want To Delete {timer.JiraReference}\n\n{timer.JiraName}\nFor: {timer.DateStarted.Date.ToString("ddd, dd MMM")}", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
+                        var result = await DialogCoordinator.Instance.ShowMessageAsync(ModelHelpers.DialogContext, "Are You Sure?", $"Are You Sure You Want To Delete {timer.JiraReference}\n\n{timer.JiraName}\nFor: {timer.DateStarted.Date:ddd, dd MMM}", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
 
                         if (result == MessageDialogResult.Affirmative)
                         {
@@ -310,8 +310,8 @@ namespace Gallifrey.UI.Modern.MainViews
             {
                 case RemoteButtonTrigger.Add: AddButton(this, null); break;
                 case RemoteButtonTrigger.AddToFill: AddToFillDay(); break;
-                case RemoteButtonTrigger.Copy: CopyButton(this, null); break;
-                case RemoteButtonTrigger.Paste: PasteButton(this, null); break;
+                case RemoteButtonTrigger.Copy: CopyButton(); break;
+                case RemoteButtonTrigger.Paste: PasteButton(); break;
                 case RemoteButtonTrigger.Delete: DeleteButton(this, null); break;
                 case RemoteButtonTrigger.Search: SearchButton(this, null); break;
                 case RemoteButtonTrigger.Edit: EditButton(this, null); break;

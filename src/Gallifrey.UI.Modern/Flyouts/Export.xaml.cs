@@ -130,7 +130,7 @@ namespace Gallifrey.UI.Modern.Flyouts
         {
             if (DataModel.Timer.TimeToExport < DataModel.ToExport)
             {
-                await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Invalid Export", $"You Cannot Export More Than The Timer States Un-Exported\nThis Value Is {DataModel.ToExport.ToString(@"hh\:mm")}!");
+                await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Invalid Export", $"You Cannot Export More Than The Timer States Un-Exported\nThis Value Is {DataModel.ToExport:hh\\:mm}!");
                 return;
             }
 
@@ -154,7 +154,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                         {
                             var transitionsAvaliable = modelHelpers.Gallifrey.JiraConnection.GetTransitions(DataModel.JiraRef);
 
-                            var timeSelectorDialog = (BaseMetroDialog)this.Resources["TransitionSelector"];
+                            var timeSelectorDialog = (BaseMetroDialog)Resources["TransitionSelector"];
                             await DialogCoordinator.Instance.ShowMetroDialogAsync(modelHelpers.DialogContext, timeSelectorDialog);
 
                             var comboBox = timeSelectorDialog.FindChild<ComboBox>("Items");
@@ -182,14 +182,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             catch (WorkLogException ex)
             {
                 ExceptionlessClient.Default.SubmitException(ex);
-                if (ex.InnerException != null)
-                {
-                    dialog = DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Error Exporting", $"Unable To Log Work!\nError Message From Jira: {ex.InnerException.Message}");
-                }
-                else
-                {
-                    dialog = DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Error Exporting", "Unable To Log Work!");
-                }
+                dialog = DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Error Exporting", ex.InnerException != null ? $"Unable To Log Work!\nError Message From Jira: {ex.InnerException.Message}" : "Unable To Log Work!");
             }
             catch (CommentException ex)
             {
@@ -212,7 +205,7 @@ namespace Gallifrey.UI.Modern.Flyouts
 
             try
             {
-                var dialog = (BaseMetroDialog)this.Resources["TransitionSelector"];
+                var dialog = (BaseMetroDialog)Resources["TransitionSelector"];
                 var comboBox = dialog.FindChild<ComboBox>("Items");
 
                 selectedTransition = (string)comboBox.SelectedItem;
@@ -239,7 +232,7 @@ namespace Gallifrey.UI.Modern.Flyouts
 
         private async void CancelTransition(object sender, RoutedEventArgs e)
         {
-            var dialog = (BaseMetroDialog)this.Resources["TransitionSelector"];
+            var dialog = (BaseMetroDialog)Resources["TransitionSelector"];
             await DialogCoordinator.Instance.HideMetroDialogAsync(modelHelpers.DialogContext, dialog);
 
             modelHelpers.CloseFlyout(this);

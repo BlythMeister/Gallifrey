@@ -1,9 +1,9 @@
+using Gallifrey.IdleTimers;
+using Gallifrey.UI.Modern.Helpers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using Gallifrey.IdleTimers;
-using Gallifrey.UI.Modern.Helpers;
 
 namespace Gallifrey.UI.Modern.Models
 {
@@ -32,7 +32,7 @@ namespace Gallifrey.UI.Modern.Models
 
         public bool StartNow
         {
-            get { return startNow; }
+            get => startNow;
             set
             {
                 startNow = value;
@@ -42,7 +42,7 @@ namespace Gallifrey.UI.Modern.Models
 
         public bool AssignToMe
         {
-            get { return assignToMe; }
+            get => assignToMe;
             set
             {
                 assignToMe = value;
@@ -52,7 +52,7 @@ namespace Gallifrey.UI.Modern.Models
 
         public bool ChangeStatus
         {
-            get { return changeStatus; }
+            get => changeStatus;
             set
             {
                 changeStatus = value;
@@ -60,13 +60,13 @@ namespace Gallifrey.UI.Modern.Models
             }
         }
 
-        
+
 
         public bool TimeEditable => IdleTimers == null || IdleTimers.Count == 0;
 
         public bool LocalTimer
         {
-            get { return localTimer; }
+            get => localTimer;
             set
             {
                 localTimer = value;
@@ -76,7 +76,7 @@ namespace Gallifrey.UI.Modern.Models
 
         public bool DatePeriod
         {
-            get { return datePeriod; }
+            get => datePeriod;
             set
             {
                 datePeriod = value;
@@ -87,7 +87,7 @@ namespace Gallifrey.UI.Modern.Models
 
         public DateTime? StartDate
         {
-            get { return startDate; }
+            get => startDate;
             set
             {
                 startDate = value;
@@ -104,7 +104,7 @@ namespace Gallifrey.UI.Modern.Models
 
         public DateTime? EndDate
         {
-            get { return endDate; }
+            get => endDate;
             set
             {
                 endDate = value;
@@ -165,7 +165,7 @@ namespace Gallifrey.UI.Modern.Models
 
         public int? StartHours
         {
-            get { return startHours; }
+            get => startHours;
             set
             {
                 var newValue = value ?? 0;
@@ -175,12 +175,11 @@ namespace Gallifrey.UI.Modern.Models
 
         public int? StartMinutes
         {
-            get { return startMinutes; }
+            get => startMinutes;
             set
             {
                 var newValue = value ?? 0;
-                bool hoursChanged;
-                HourMinuteHelper.UpdateMinutes(ref startHours, ref startMinutes, newValue, 23, out hoursChanged);
+                HourMinuteHelper.UpdateMinutes(ref startHours, ref startMinutes, newValue, 23, out var hoursChanged);
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("StartMinutes"));
                 if (hoursChanged)
                 {

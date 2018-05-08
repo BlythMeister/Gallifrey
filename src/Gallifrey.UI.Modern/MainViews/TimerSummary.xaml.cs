@@ -4,7 +4,7 @@
     {
         public TimerSummary()
         {
-            InitializeComponent();    
+            InitializeComponent();
         }
     }
 }

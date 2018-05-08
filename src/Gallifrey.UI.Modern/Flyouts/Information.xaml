@@ -75,7 +75,7 @@
             </Grid.RowDefinitions>
             <TextBlock Grid.Row="0" FontSize="18" Margin="0,0,0,5" Text="Installation Hash" TextDecorations="Underline" />
             <TextBlock Grid.Row="1" Text="Your installation has a hash of:"></TextBlock>
-            <TextBlock x:Name="cur" Grid.Row="2" TextWrapping="Wrap" Margin="0,0,0,5" VerticalAlignment="Center" Text="{Binding UserHash}" PreviewMouseDown="UserHashClick" TextDecorations="Underline" Cursor="Hand"/>
+            <TextBlock Grid.Row="2" TextWrapping="Wrap" Margin="0,0,0,5" VerticalAlignment="Center" Text="{Binding UserHash}" PreviewMouseDown="UserHashClick" TextDecorations="Underline" Cursor="Hand"/>
             <TextBlock Grid.Row="3" Text="Click the installation hash to copy to the clipboard"></TextBlock>
         </Grid>
     </Grid>

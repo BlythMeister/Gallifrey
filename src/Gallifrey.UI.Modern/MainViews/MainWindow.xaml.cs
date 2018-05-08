@@ -76,7 +76,7 @@ namespace Gallifrey.UI.Modern.MainViews
             NoInternetConnection,
             MissingConfig,
             ConnectionError,
-            OK
+            Ok
         }
 
         private InitialiseResult Initialise()
@@ -122,7 +122,7 @@ namespace Gallifrey.UI.Modern.MainViews
                 return InitialiseResult.ConnectionError;
             }
 
-            return InitialiseResult.OK;
+            return InitialiseResult.Ok;
         }
 
         private async void MainWindow_OnLoaded(object sender, RoutedEventArgs e)

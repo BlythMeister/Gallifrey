@@ -185,7 +185,7 @@ namespace Gallifrey.UI.Modern.Flyouts
 
         private async void DoAdjustment(string enteredValue, bool addTime)
         {
-            var adjustmentTimespan = new TimeSpan();
+            TimeSpan adjustmentTimespan;
             if (enteredValue.Contains(":"))
             {
                 if (!TimeSpan.TryParse(enteredValue, out adjustmentTimespan))
@@ -197,7 +197,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             }
             else
             {
-                if (!int.TryParse(enteredValue, out int minutesAdjustment))
+                if (!int.TryParse(enteredValue, out var minutesAdjustment))
                 {
                     await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Invalid Time Entry", $"The Value '{enteredValue}' was not a number of minutes.");
                     Focus();

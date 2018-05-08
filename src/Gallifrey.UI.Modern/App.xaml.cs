@@ -1,8 +1,8 @@
-﻿using System.Collections;
+﻿using Gallifrey.UI.Modern.MainViews;
+using Gallifrey.Versions;
+using System.Collections;
 using System.Net;
 using System.Windows;
-using Gallifrey.UI.Modern.MainViews;
-using Gallifrey.Versions;
 
 namespace Gallifrey.UI.Modern
 {
@@ -23,11 +23,11 @@ namespace Gallifrey.UI.Modern
 
         private static void WalkDictionary(ResourceDictionary resources)
         {
-            foreach (DictionaryEntry entry in resources)
+            foreach (DictionaryEntry unused in resources)
             {
             }
 
-            foreach (ResourceDictionary rd in resources.MergedDictionaries)
+            foreach (var rd in resources.MergedDictionaries)
                 WalkDictionary(rd);
         }
     }

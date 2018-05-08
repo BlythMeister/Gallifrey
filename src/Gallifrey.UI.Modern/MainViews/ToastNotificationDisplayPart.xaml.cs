@@ -1,10 +1,9 @@
 ﻿using Gallifrey.UI.Modern.Models;
 using System.Windows.Input;
-using ToastNotifications.Core;
 
 namespace Gallifrey.UI.Modern.MainViews
 {
-    public partial class ToastNotificationDisplayPart : NotificationDisplayPart
+    public partial class ToastNotificationDisplayPart
     {
         public ToastNotificationDisplayPart(ToastNotification notification)
         {

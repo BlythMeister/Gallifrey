@@ -1,5 +1,5 @@
-﻿using System;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using System;
 
 namespace Gallifrey.JiraIntegration
 {
@@ -32,21 +32,19 @@ namespace Gallifrey.JiraIntegration
             JiraParentName = jiraParentName;
         }
 
-        public void UpdateDetail(string jiraProjectName, string jiraName, string jiraParentReference, string jiraParentName, DateTime dateSeen)
+        public void UpdateDetail(RecentJira recentJira)
         {
-            JiraProjectName = jiraProjectName;
-            JiraName = jiraName;
-            JiraParentReference = jiraParentReference;
-            JiraParentName = jiraParentName;
-            DateSeen = dateSeen;
+            JiraProjectName = recentJira.JiraProjectName;
+            JiraName = recentJira.JiraName;
+            JiraParentReference = recentJira.JiraParentReference;
+            JiraParentName = recentJira.JiraParentName;
+            DateSeen = DateTime.UtcNow;
         }
 
         public override bool Equals(object obj)
         {
             // Try to cast the object to compare to to be a Person
-            var otherRecentJira = obj as RecentJira;
-
-            return otherRecentJira != null && JiraReference == otherRecentJira.JiraReference;
+            return obj is RecentJira otherRecentJira && JiraReference == otherRecentJira.JiraReference;
         }
 
         public override int GetHashCode()

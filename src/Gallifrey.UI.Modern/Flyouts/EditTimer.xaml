@@ -20,7 +20,6 @@
         <Grid.Resources>
             <helpers:BooleanVisibilityConverter x:Key="BoolToVisInverted" Collapse="True" Invert="True"/>
             <helpers:BooleanVisibilityConverter x:Key="BoolToVis" Collapse="True" Invert="False"/>
-            <helpers:BooleanInvertConverter x:Key="BoolInvert"/>
         </Grid.Resources>
 
         <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center">
@@ -37,7 +36,7 @@
                 </Style>
             </TextBlock.Style>
         </TextBlock>
-        
+
         <Grid Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Margin="0,5">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -50,7 +49,7 @@
             <controls:ToggleSwitchButton Style="{DynamicResource MahApps.Metro.Styles.ToggleSwitchButton.Win10}" HorizontalAlignment="Left"  Grid.Column="1" Margin="5,0" IsChecked="{Binding LocalTimer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding JiraReferenceEditable}" />
             <TextBlock Grid.Column="2" VerticalAlignment="Center">Local Timer?</TextBlock>
         </Grid>
-        
+
         <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Padding="2">Date</TextBlock>
         <DatePicker Grid.Row="1" Grid.Column="1" Margin="0,5" IsTodayHighlighted="False" DisplayDate="{Binding DisplayDate}" DisplayDateStart="{Binding MinDate}" DisplayDateEnd="{Binding MaxDate}" SelectedDate="{Binding RunDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding DateEditable}" />
 
