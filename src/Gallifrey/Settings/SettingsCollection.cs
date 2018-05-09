@@ -17,16 +17,16 @@ namespace Gallifrey.Settings
 
     public class SettingsCollection : ISettingsCollection
     {
-        public IAppSettings AppSettings { get; }
-        public IJiraConnectionSettings JiraConnectionSettings { get; }
-        public IUiSettings UiSettings { get; }
-        public IInternalSettings InternalSettings { get; }
-        public IExportSettings ExportSettings { get; }
+        public IAppSettings AppSettings { get; private set; }
+        public IJiraConnectionSettings JiraConnectionSettings { get; private set; }
+        public IUiSettings UiSettings { get; private set; }
+        public IInternalSettings InternalSettings { get; private set; }
+        public IExportSettings ExportSettings { get; private set; }
         public string InstallationHash => DataEncryption.GetSha256Hash($"{InternalSettings.InstallationInstaceId}-{JiraConnectionSettings.JiraUsername}");
         public string UserHash => DataEncryption.GetSha256Hash($"{JiraConnectionSettings.JiraUsername.ToLower()}-{new Uri(JiraConnectionSettings.JiraUrl).Host.ToLower()}");
         public string SiteHash => DataEncryption.GetSha256Hash(new Uri(JiraConnectionSettings.JiraUrl).Host.ToLower());
+        private bool isIntialised;
 
-        // ReSharper disable once UnusedMember.Global
         public SettingsCollection()
         {
             AppSettings = new AppSettings();
@@ -34,10 +34,36 @@ namespace Gallifrey.Settings
             UiSettings = new UiSettings();
             InternalSettings = new InternalSettings();
             ExportSettings = new ExportSettings();
+            isIntialised = false;
+        }
+
+        public SettingsCollection(ISettingsCollection settings)
+        {
+            AppSettings = settings.AppSettings;
+            JiraConnectionSettings = settings.JiraConnectionSettings;
+            UiSettings = settings.UiSettings;
+            InternalSettings = settings.InternalSettings;
+            ExportSettings = settings.ExportSettings;
+
+            isIntialised = false;
+        }
+
+        public void Initialise()
+        {
+            var settings = SettingsCollectionSerializer.DeSerialize();
+
+            AppSettings = settings.AppSettings;
+            JiraConnectionSettings = settings.JiraConnectionSettings;
+            UiSettings = settings.UiSettings;
+            InternalSettings = settings.InternalSettings;
+            ExportSettings = settings.ExportSettings;
+
+            isIntialised = true;
         }
 
         public void SaveSettings()
         {
+            if (!isIntialised) return;
             SettingsCollectionSerializer.Serialize(this);
         }
     }

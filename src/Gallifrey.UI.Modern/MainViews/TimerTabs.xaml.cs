@@ -1,5 +1,4 @@
 ﻿using Exceptionless;
-using Gallifrey.Exceptions.JiraIntegration;
 using Gallifrey.Exceptions.JiraTimers;
 using Gallifrey.UI.Modern.Flyouts;
 using Gallifrey.UI.Modern.Helpers;
@@ -130,9 +129,13 @@ namespace Gallifrey.UI.Modern.MainViews
                 //Validate jira is real
                 try
                 {
-                    ModelHelpers.Gallifrey.JiraConnection.GetJiraIssue(jiraRef);
+                    if (!ModelHelpers.Gallifrey.JiraConnection.DoesJiraExist(jiraRef))
+                    {
+                        await DialogCoordinator.Instance.ShowMessageAsync(ModelHelpers.DialogContext, "Invalid Jira", $"Unable To Locate That Jira.\n\nJira Ref Dropped: '{jiraRef}'");
+                        return;
+                    }
                 }
-                catch (NoResultsFoundException ex)
+                catch (Exception ex)
                 {
                     ExceptionlessClient.Default.SubmitException(ex);
                     await DialogCoordinator.Instance.ShowMessageAsync(ModelHelpers.DialogContext, "Invalid Jira", $"Unable To Locate That Jira.\n\nJira Ref Dropped: '{jiraRef}'");

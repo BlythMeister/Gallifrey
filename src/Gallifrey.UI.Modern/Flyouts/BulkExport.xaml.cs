@@ -223,8 +223,20 @@ namespace Gallifrey.UI.Modern.Flyouts
                 {
                     try
                     {
-                        jiraIssue = modelHelpers.Gallifrey.JiraConnection.GetJiraIssue(timerToShow.JiraReference);
-                        issuesRetrieved.Add(jiraIssue);
+                        if (modelHelpers.Gallifrey.JiraConnection.DoesJiraExist(timerToShow.JiraReference))
+                        {
+                            jiraIssue = modelHelpers.Gallifrey.JiraConnection.GetJiraIssue(timerToShow.JiraReference);
+                            issuesRetrieved.Add(jiraIssue);
+                        }
+                        else
+                        {
+                            throw new BulkExportException($"Unable To Locate Jira {timerToShow.JiraReference}!\nCannot Export Time\nPlease Verify/Correct Jira Reference");
+                        }
+
+                    }
+                    catch (BulkExportException)
+                    {
+                        throw;
                     }
                     catch (Exception ex)
                     {

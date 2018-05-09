@@ -75,24 +75,26 @@ namespace Gallifrey.UI.Modern.Flyouts
 
             if (!DataModel.LocalTimer)
             {
-                try
-                {
-                    jiraRef = DataModel.JiraReference;
-                    var jiraDownloadResult = await progressDialogHelper.Do(() => modelHelpers.Gallifrey.JiraConnection.GetJiraIssue(jiraRef), "Searching For Jira Issue", true, true);
+                jiraRef = DataModel.JiraReference;
 
-                    if (jiraDownloadResult.Status == ProgressResult.JiraHelperStatus.Success)
+                void GetIssue()
+                {
+                    if (modelHelpers.Gallifrey.JiraConnection.DoesJiraExist(jiraRef))
                     {
-                        jiraIssue = jiraDownloadResult.RetVal;
-                    }
-                    else
-                    {
-                        Focus();
-                        return;
+                        jiraIssue = modelHelpers.Gallifrey.JiraConnection.GetJiraIssue(jiraRef);
                     }
                 }
-                catch (NoResultsFoundException ex)
+
+                var jiraDownloadResult = await progressDialogHelper.Do(GetIssue, "Searching For Jira Issue", true, false);
+
+                if (jiraDownloadResult.Status == ProgressResult.JiraHelperStatus.Cancelled)
                 {
-                    ExceptionlessClient.Default.SubmitException(ex);
+                    Focus();
+                    return;
+                }
+
+                if (jiraIssue == null)
+                {
                     await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Invalid Jira", $"Unable To Locate The Jira '{jiraRef}'");
                     Focus();
                     return;

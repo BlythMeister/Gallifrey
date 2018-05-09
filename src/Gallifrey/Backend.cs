@@ -6,7 +6,6 @@ using Gallifrey.InactiveMonitor;
 using Gallifrey.Jira.Model;
 using Gallifrey.JiraIntegration;
 using Gallifrey.JiraTimers;
-using Gallifrey.Serialization;
 using Gallifrey.Settings;
 using Gallifrey.Versions;
 using System;
@@ -16,6 +15,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Xml.Linq;
+using Gallifrey.Serialization;
 using Timer = System.Timers.Timer;
 
 namespace Gallifrey
@@ -75,7 +75,7 @@ namespace Gallifrey
 
         public Backend(InstanceType instanceType)
         {
-            settingsCollection = SettingsCollectionSerializer.DeSerialize();
+            settingsCollection = new SettingsCollection(SettingsCollectionSerializer.DeSerialize());
             versionControl = new VersionControl(instanceType);
             trackUsage = new TrackUsage(versionControl, settingsCollection, instanceType);
             jiraTimerCollection = new JiraTimerCollection(settingsCollection, trackUsage);
@@ -195,22 +195,22 @@ namespace Gallifrey
                         {
                             var issue = issueCache.FirstOrDefault(x => x.key == timeExport.JiraRef);
 
-                            if (issue == null)
+                            if (issue == null && jiraConnection.DoesJiraExist(timeExport.JiraRef))
                             {
                                 issue = jiraConnection.GetJiraIssue(timeExport.JiraRef);
                                 issueCache.Add(issue);
                             }
 
                             var timerReference = jiraTimerCollection.AddTimer(issue, checkDate.Key.Date, new TimeSpan(), false);
-                            jiraTimerCollection.RefreshFromJira(timerReference, issue, timeExport.TimeSpent);
                             BackendModifiedTimers?.Invoke(this, null);
+                            jiraTimerCollection.RefreshFromJira(timerReference, issue, timeExport.TimeSpent);
                         }
                     }
 
                     foreach (var timer in checkDate.Value.Where(x => !x.LocalTimer))
                     {
                         var issue = issueCache.FirstOrDefault(x => x.key == timer.JiraReference);
-                        if (issue == null)
+                        if (issue == null && jiraConnection.DoesJiraExist(timer.JiraReference))
                         {
                             issue = jiraConnection.GetJiraIssue(timer.JiraReference);
                             issueCache.Add(issue);
@@ -228,12 +228,14 @@ namespace Gallifrey
 
         public void Initialise()
         {
-            jiraConnection.ReConnect(settingsCollection.JiraConnectionSettings, settingsCollection.ExportSettings);
-            cleanUpAndTrackingHeartbeat.Start();
-            jiraExportHearbeat.Start();
+            settingsCollection.Initialise();
             idleTimerCollection.Initialise();
             jiraTimerCollection.Initialise();
             recentJiraCollection.Initialise();
+
+            jiraConnection.ReConnect(settingsCollection.JiraConnectionSettings, settingsCollection.ExportSettings);
+            cleanUpAndTrackingHeartbeat.Start();
+            jiraExportHearbeat.Start();
             BackendModifiedTimers?.Invoke(this, null);
 
             if (Settings.AppSettings.TimerRunningOnShutdown.HasValue)

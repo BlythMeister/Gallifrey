@@ -109,10 +109,17 @@ namespace Gallifrey.JiraIntegration
             try
             {
                 CheckAndConnectJira();
-                var issue = GetJiraIssue(jiraRef);
-                if (issue != null)
+                var issues = jira.GetIssuesFromJql($"key = \"{jiraRef}\"").ToList();
+
+                if (issues.Any())
                 {
+                    recentJiraCollection.AddRecentJiras(issues);
                     return true;
+                }
+                else
+                {
+                    recentJiraCollection.Remove(jiraRef);
+                    return false;
                 }
             }
             catch (Exception)
@@ -120,9 +127,6 @@ namespace Gallifrey.JiraIntegration
                 recentJiraCollection.Remove(jiraRef);
                 return false;
             }
-
-            recentJiraCollection.Remove(jiraRef);
-            return false;
         }
 
         public Issue GetJiraIssue(string jiraRef)

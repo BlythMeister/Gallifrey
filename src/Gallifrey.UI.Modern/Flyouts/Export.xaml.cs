@@ -89,6 +89,11 @@ namespace Gallifrey.UI.Modern.Flyouts
 
         private Tuple<JiraTimer, Issue> UpdateTimerFromJira(JiraTimer timerToShow)
         {
+            if (!modelHelpers.Gallifrey.JiraConnection.DoesJiraExist(timerToShow.JiraReference))
+            {
+                throw new ExportException($"Unable To Locate Jira {timerToShow.JiraReference}!\nCannot Export Time\nPlease Verify/Correct Jira Reference");
+            }
+
             Issue jiraIssue;
             try
             {

@@ -1,3 +1,4 @@
+using Exceptionless;
 using Gallifrey.Comparers;
 using Gallifrey.ExtensionMethods;
 using Gallifrey.Jira.Model;
@@ -285,6 +286,7 @@ namespace Gallifrey.UI.Modern.Models
                     dateModel.RemoveTimerModel(removeTimer);
                 }
 
+                var nonExistentDefaultJiras = new List<string>();
                 foreach (var defaultJira in ModelHelpers.Gallifrey.Settings.AppSettings.DefaultTimers ?? new List<string>())
                 {
                     if (dateModel.Timers.All(x => x.JiraTimer.JiraReference != defaultJira) && dateModel.TimerDate.Date <= DateTime.Now.Date)
@@ -294,8 +296,15 @@ namespace Gallifrey.UI.Modern.Models
                             var jira = jiraCache.FirstOrDefault(x => x.key == defaultJira);
                             if (jira == null && ModelHelpers.Gallifrey.JiraConnection.IsConnected)
                             {
-                                jira = ModelHelpers.Gallifrey.JiraConnection.GetJiraIssue(defaultJira);
-                                jiraCache.Add(jira);
+                                if (!ModelHelpers.Gallifrey.JiraConnection.DoesJiraExist(defaultJira))
+                                {
+                                    nonExistentDefaultJiras.Add(defaultJira);
+                                }
+                                else
+                                {
+                                    jira = ModelHelpers.Gallifrey.JiraConnection.GetJiraIssue(defaultJira);
+                                    jiraCache.Add(jira);
+                                }
                             }
 
                             if (jira != null)
@@ -306,11 +315,21 @@ namespace Gallifrey.UI.Modern.Models
                                 dateModel.AddTimerModel(new TimerModel(timer));
                             }
                         }
-                        catch (Exception)
+                        catch (Exception ex)
                         {
-                            // ignored
+                            ExceptionlessClient.Default.SubmitException(ex);
                         }
                     }
+                }
+
+                if (nonExistentDefaultJiras.Any())
+                {
+                    foreach (var nonExistentDefaultJira in nonExistentDefaultJiras)
+                    {
+                        ModelHelpers.Gallifrey.Settings.AppSettings.DefaultTimers.Remove(nonExistentDefaultJira);
+                    }
+
+                    ModelHelpers.Gallifrey.SaveSettings(false, false);
                 }
             }
 
