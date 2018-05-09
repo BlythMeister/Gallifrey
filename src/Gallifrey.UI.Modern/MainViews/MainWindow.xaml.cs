@@ -118,8 +118,7 @@ namespace Gallifrey.UI.Modern.MainViews
 
         private async void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
-            await PerformUpdate(UpdateType.StartUp);
-            await Initialse();
+            await Initialse().ContinueWith(_ => PerformUpdate(UpdateType.StartUp));
         }
 
         private async Task Initialse()
