@@ -73,7 +73,7 @@ namespace Gallifrey.UI.Modern.MainViews
             Ok
         }
 
-        private InitialiseResult CheckAndInitialaise()
+        private InitialiseResult Initialise()
         {
             if (Process.GetProcesses().Count(process => process.ProcessName.Contains("Gallifrey")) > 1)
             {
@@ -118,12 +118,12 @@ namespace Gallifrey.UI.Modern.MainViews
 
         private async void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
-            await Initialse().ContinueWith(_ => PerformUpdate(UpdateType.StartUp));
+            await MainWindow_OnLoaded();
         }
 
-        private async Task Initialse()
+        private async Task MainWindow_OnLoaded()
         {
-            var result = await progressDialogHelper.Do(CheckAndInitialaise, "Initialising Gallifrey", true, true);
+            var result = await progressDialogHelper.Do(Initialise, "Initialising Gallifrey", true, true);
             if (result.Status == ProgressResult.JiraHelperStatus.Cancelled)
             {
                 await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Gallifrey Not Initialised", "Gallifrey Initialisation Was Cancelled, The App Will Now Close");
@@ -141,7 +141,7 @@ namespace Gallifrey.UI.Modern.MainViews
                 var userChoice = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Multiple Instances", "You Can Only Have One Instance Of Gallifrey Running At A Time", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Check Again", NegativeButtonText = "Close Now" });
                 if (userChoice == MessageDialogResult.Affirmative)
                 {
-                    await Initialse();
+                    await MainWindow_OnLoaded();
                 }
                 else
                 {
@@ -154,7 +154,7 @@ namespace Gallifrey.UI.Modern.MainViews
                 var userChoice = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "No Internet Connection", "Gallifrey Requires An Active Internet Connection To Work.", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Check Again", NegativeButtonText = "Close Now" });
                 if (userChoice == MessageDialogResult.Affirmative)
                 {
-                    await Initialse();
+                    await MainWindow_OnLoaded();
                 }
                 else
                 {
@@ -183,6 +183,8 @@ namespace Gallifrey.UI.Modern.MainViews
 
                 await UserLoginFailure();
             }
+
+            await PerformUpdate(UpdateType.StartUp);
 
             if (modelHelpers.Gallifrey.VersionControl.IsAutomatedDeploy && modelHelpers.Gallifrey.VersionControl.IsFirstRun)
             {
