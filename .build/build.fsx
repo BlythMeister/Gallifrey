@@ -173,7 +173,8 @@ Target "Publish-ReleaseRepo" (fun _ ->
 
     let publishPremiumInstances() = 
         let copyFile fileName = 
-            File.Copy(premiumDir @@ fileName, releasesRepo @@ "download" @@ fileName)
+            printfn "Publishing %s" fileName
+            File.Copy(premiumDir @@ fileName, releasesRepo @@ "download" @@ fileName, true)
 
         copyFile "PremiumInstanceIds"
         copyFile "PremiumInstanceIds.dat"
@@ -256,6 +257,8 @@ Target "Publish-ReleaseNotes" (fun _ ->
         |> fun x -> if isStable then uploadFile (outputDir @@ "stable-setup.exe") x else x
         |> releaseDraft
         |> Async.RunSynchronously
+    else
+         printfn "No releases pushed, so skipping release notes"
 )
 
 Target "Publish-PurgeCloudflareCache" (fun _ ->    
