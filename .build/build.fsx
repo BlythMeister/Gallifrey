@@ -1,7 +1,7 @@
-#r @"packages/FAKE/tools/FakeLib.dll"
+#r @"../packages/FAKE/tools/FakeLib.dll"
 #r "System.Xml.Linq"
 
-#load "paket-files/fsharp/FAKE/modules/Octokit/Octokit.fsx"
+#load "../paket-files/fsharp/FAKE/modules/Octokit/Octokit.fsx"
 
 open Fake
 open Fake.Git
