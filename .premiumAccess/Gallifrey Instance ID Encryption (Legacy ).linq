@@ -3,7 +3,7 @@
   <Namespace>System.Security.Cryptography</Namespace>
 </Query>
 
-string path = @"F:\GIT\Gallifrey.Releases\download\PremiumInstanceIds";
+string path = @"F:\GIT\Gallifrey\.premiumAccess\PremiumInstanceIds";
 
 void Main()
 {
