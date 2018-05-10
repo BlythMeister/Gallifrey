@@ -26,7 +26,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{11E6F1E6
 	ProjectSection(SolutionItems) = preProject
 		..\appveyor.yml = ..\appveyor.yml
 		..\build.cmd = ..\build.cmd
-		..\build.fsx = ..\build.fsx
+		..\build.fsx = ..\.build\build.fsx
 	EndProjectSection
 EndProject
 Global

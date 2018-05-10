@@ -9,10 +9,10 @@ environment:
     secure: 7MMGMp4bOy0b/HWDC5vBEbDm/S7GPCZCcy6zAPOjhVo=
 skip_commits:
   files:
-    - docs/*
-    - LinqPad/*
+    - .fake/*
     - .github/*
-    - .releaseinfo/*
+    - .paket/*
+    - docs/*  
     - '**/*.html'
     - '**/*.md'
 version: '3.8.0.{build}'
