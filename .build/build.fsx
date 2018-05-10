@@ -1,7 +1,7 @@
-#r @"packages/FAKE/tools/FakeLib.dll"
+#r @"../packages/FAKE/tools/FakeLib.dll"
 #r "System.Xml.Linq"
 
-#load "paket-files/fsharp/FAKE/modules/Octokit/Octokit.fsx"
+#load "../paket-files/fsharp/FAKE/modules/Octokit/Octokit.fsx"
 
 open Fake
 open Fake.Git
@@ -16,6 +16,7 @@ open Octokit
 let outputDir = currentDirectory @@ "Output"
 let newsPostDir = currentDirectory @@ "docs" @@ "_posts"
 let srcDir = currentDirectory @@ "src"
+let premiumDir = currentDirectory @@ ".premiumAccess"
 let isAppVeyor = buildServer = AppVeyor
 let changeLogPath = currentDirectory @@ "src" @@ "Gallifrey.UI.Modern" @@ "ChangeLog.xml"
 let keysFilePath = currentDirectory @@ "src" @@ "Gallifrey" @@ "Settings" @@ "ConfigKeys.cs"
@@ -138,7 +139,7 @@ Target "Publish-Artifacts" (fun _ ->
     PushArtifacts (Directory.GetFiles(outputDir, "*.exe", SearchOption.TopDirectoryOnly))
 )
 
-Target "Publish-ClickOnce" (fun _ ->
+Target "Publish-ReleaseRepo" (fun _ ->
     let releasesRepo = outputDir @@ "Releases"
 
     //Hide process tracing so the access token doesn't show
@@ -181,13 +182,31 @@ Target "Publish-ClickOnce" (fun _ ->
         else
             printfn "Already have %s version %s published" releaseType versionNumber
 
-    if isAlpha then publishRelease "Alpha"
-    if isBeta then publishRelease "Beta"
-    if isStable then publishRelease "Stable"
+    let publishPremiumInstances() = 
+        let copyFile fileName = 
+            printfn "Publishing %s" fileName
+            File.Copy(premiumDir @@ fileName, releasesRepo @@ "download" @@ fileName, true)
+
+        copyFile "PremiumInstanceIds"
+        copyFile "PremiumInstanceIds.dat"
+
+        StageAll releasesRepo
+        Commit.Commit releasesRepo "PremiumInstanceIds Update"
+        pushBranch releasesRepo "origin" "master"
+                           
+    if isAlpha then 
+        publishRelease "Alpha"
+
+    if isBeta then 
+        publishRelease "Beta"
+
+    if isStable then 
+        publishRelease "Stable"
+        publishPremiumInstances()
 )
 
 Target "Publish-ReleaseNotes" (fun _ ->
-    if donePublish && (isStable || isBeta) then
+    if donePublish then
         let releaseVersion = if isStable then baseVersion else versionNumber
 
         let versionLog = XDocument.Load(changeLogPath)
@@ -249,6 +268,8 @@ Target "Publish-ReleaseNotes" (fun _ ->
         |> fun x -> if isStable then uploadFile (outputDir @@ "stable-setup.exe") x else x
         |> releaseDraft
         |> Async.RunSynchronously
+    else
+         printfn "No releases pushed, so skipping release notes"
 )
 
 Target "Publish-PurgeCloudflareCache" (fun _ ->
@@ -270,8 +291,8 @@ Target "Default" DoNothing
     ==> "Build"
     ==> "Package"
     =?> ("Publish-Artifacts", isAppVeyor)
-    =?> ("Publish-ClickOnce", isAppVeyor && not(isPR) && (isAlpha || isBeta || isStable))
-    =?> ("Publish-ReleaseNotes", isAppVeyor && not(isPR) && (isAlpha || isBeta || isStable))
+    =?> ("Publish-ReleaseRepo", isAppVeyor && not(isPR) && (isAlpha || isBeta || isStable))
+    =?> ("Publish-ReleaseNotes", isAppVeyor && not(isPR) && (isBeta || isStable))
     =?> ("Publish-PurgeCloudflareCache", isAppVeyor)
     ==> "Default"
 

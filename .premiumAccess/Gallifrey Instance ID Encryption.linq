@@ -3,8 +3,8 @@
   <Namespace>System.Security.Cryptography</Namespace>
 </Query>
 
-string path = @"F:\GIT\Gallifrey.Releases\download\PremiumInstanceIds.dat";
-string passphrase = string.Empty;
+string path = @"F:\GIT\Gallifrey\.premiumAccess\PremiumInstanceIds.dat";
+string passphrase = "";
 
 void Main()
 {
@@ -178,16 +178,9 @@ internal static class DataEncryption
 {
 	internal static string Encrypt(string plainText, string passPhrase)
 	{
-		if (passPhrase == string.Empty)
-		{
-			return Encrypt(plainText, "WOq2kKSbvHTcKp9e", "pId6i1bN1aCVTaHN");
-		}
-		else
-		{
-			var vector = GetSha256Hash(Guid.NewGuid().ToString()).Substring(0, 16).Replace("|", "~");
-			var encrypted = Encrypt(plainText, passPhrase, vector);
-			return $"V1|{vector}|{encrypted}";
-		}
+		var vector = GetSha256Hash(Guid.NewGuid().ToString()).Substring(0, 16).Replace("|", "~");
+		var encrypted = Encrypt(plainText, passPhrase, vector);
+		return $"V1|{vector}|{encrypted}";
 	}
 
 	internal static string Decrypt(string cipherText, string passPhrase)
@@ -198,10 +191,8 @@ internal static class DataEncryption
 		{
 			return Decrypt(cipherParts[2], passPhrase, cipherParts[1]);
 		}
-		else
-		{
-			return Decrypt(cipherText, "WOq2kKSbvHTcKp9e", "pId6i1bN1aCVTaHN");
-		}
+		
+		throw new Exception();
 	}
 
 	private static string Encrypt(string plainText, string passPhrase, string vector)

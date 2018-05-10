@@ -13,10 +13,10 @@ environment:
     secure: TG8hldByFABNxwe4pz8aCGECcXnrtx7ReyrT+5Q9doUDBgzH8bAAOvaZIP1PHZFUhp7HxDgtsbaYfcsjsK35FfxFpTXJGz7lH6iF5ng8iCE=
 skip_commits:
   files:
-    - docs/*
-    - LinqPad/*
+    - .fake/*
     - .github/*
-    - .releaseinfo/*
+    - .paket/*
+    - docs/*  
     - '**/*.html'
     - '**/*.md'
 version: '3.8.0.{build}'
