@@ -173,14 +173,19 @@ namespace Gallifrey.UI.Modern.Helpers
 
         public void CloseApp(bool restart = false)
         {
-            Dispose();
-
-            if (restart && Gallifrey.VersionControl.IsAutomatedDeploy)
+            Application.Current.Dispatcher.Invoke(() =>
             {
-                System.Windows.Forms.Application.Restart();
-            }
+                Dispose();
 
-            Application.Current.Shutdown();
+                if (restart && Gallifrey.VersionControl.IsAutomatedDeploy)
+                {
+                    System.Windows.Forms.Application.Restart();
+                }
+                else
+                {
+                    Application.Current.Shutdown();
+                }
+            });
         }
 
         public async void ShowGetPremiumMessage(string message = "")
