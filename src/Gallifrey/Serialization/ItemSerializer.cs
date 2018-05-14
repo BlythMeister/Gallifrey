@@ -109,7 +109,7 @@ namespace Gallifrey.Serialization
             {
                 if (retryCount >= 3)
                 {
-                    File.WriteAllText(Path.Combine(serialisationErrorDirectory, $"{DateTime.UtcNow:s}_{Guid.NewGuid().ToString()}.log"), ex.ToString());
+                    File.WriteAllText(Path.Combine(serialisationErrorDirectory, $"{DateTime.UtcNow:yyyy-MM-dd_hh-mm-ss}_{Guid.NewGuid().ToString()}.log"), ex.ToString());
                     return new T();
                 }
 

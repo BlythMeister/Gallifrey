@@ -1,4 +1,5 @@
 ﻿using Gallifrey.Serialization;
+using Newtonsoft.Json;
 using System;
 
 namespace Gallifrey.Settings
@@ -22,9 +23,9 @@ namespace Gallifrey.Settings
         public IUiSettings UiSettings { get; private set; }
         public IInternalSettings InternalSettings { get; private set; }
         public IExportSettings ExportSettings { get; private set; }
-        public string InstallationHash => DataEncryption.GetSha256Hash($"{InternalSettings.InstallationInstaceId}-{JiraConnectionSettings.JiraUsername}");
-        public string UserHash => DataEncryption.GetSha256Hash($"{JiraConnectionSettings.JiraUsername.ToLower()}-{new Uri(JiraConnectionSettings.JiraUrl).Host.ToLower()}");
-        public string SiteHash => DataEncryption.GetSha256Hash(new Uri(JiraConnectionSettings.JiraUrl).Host.ToLower());
+        [JsonIgnore] public string InstallationHash => DataEncryption.GetSha256Hash($"{InternalSettings.InstallationInstaceId}-{JiraConnectionSettings.JiraUsername}");
+        [JsonIgnore] public string UserHash => DataEncryption.GetSha256Hash($"{JiraConnectionSettings.JiraUsername.ToLower()}-{new Uri(JiraConnectionSettings.JiraUrl).Host.ToLower()}");
+        [JsonIgnore] public string SiteHash => DataEncryption.GetSha256Hash(new Uri(JiraConnectionSettings.JiraUrl).Host.ToLower());
         private bool isIntialised;
 
         public SettingsCollection()
