@@ -530,14 +530,14 @@ namespace Gallifrey.UI.Modern.MainViews
 
                     if (messageResult == MessageDialogResult.Affirmative)
                     {
-                        modelHelpers.CloseApp(true);
                         modelHelpers.Gallifrey.TrackEvent(TrackingType.ManualUpdateRestart);
+                        modelHelpers.CloseApp(true);
                     }
                 }
                 else if (updateResult == UpdateResult.Updated && modelHelpers.Gallifrey.Settings.AppSettings.AutoUpdate && !machineLocked && !modelHelpers.FlyoutOpen)
                 {
-                    modelHelpers.CloseApp(true);
                     modelHelpers.Gallifrey.TrackEvent(TrackingType.AutoUpdateInstalled);
+                    modelHelpers.CloseApp(true);
                 }
                 else if (updateResult == UpdateResult.Updated)
                 {

@@ -57,8 +57,8 @@ namespace Gallifrey.UI.Modern.MainViews
         {
             try
             {
-                ModelHelpers.CloseApp(true);
                 ModelHelpers.Gallifrey.TrackEvent(TrackingType.ManualUpdateRestart);
+                ModelHelpers.CloseApp(true);
             }
             catch (Exception ex)
             {

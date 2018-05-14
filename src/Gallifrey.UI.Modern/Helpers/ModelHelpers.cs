@@ -4,6 +4,7 @@ using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -175,7 +176,10 @@ namespace Gallifrey.UI.Modern.Helpers
         {
             if (restart && Gallifrey.VersionControl.IsAutomatedDeploy)
             {
-                System.Windows.Forms.Application.Restart();
+                var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Programs), "Gallifrey", $"{Gallifrey.VersionControl.AppName}.appref-ms");
+                if (!File.Exists(path)) throw new Exception("Unable to locate start file");
+                System.Diagnostics.Process.Start(path);
+                Application.Current.Shutdown();
             }
             else
             {
