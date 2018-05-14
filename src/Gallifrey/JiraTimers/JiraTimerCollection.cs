@@ -319,7 +319,7 @@ namespace Gallifrey.JiraTimers
 
         public Tuple<int, int> GetNumberExported()
         {
-            return new Tuple<int, int>(timerList.Count(jiraTimer => jiraTimer.FullyExported), timerList.Count);
+            return new Tuple<int, int>(timerList.Count(jiraTimer => jiraTimer.FullyExported && jiraTimer.CurrentTime > TimeSpan.Zero), timerList.Count(jiraTimer => jiraTimer.CurrentTime > TimeSpan.Zero));
         }
 
         public TimeSpan GetStoppedTotalExportableTime()
