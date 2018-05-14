@@ -599,8 +599,7 @@ namespace Gallifrey.UI.Modern.MainViews
             flyoutOpenCheck.Stop();
             modelHelpers.Gallifrey.Settings.UiSettings.Height = (int)Height;
             modelHelpers.Gallifrey.Settings.UiSettings.Width = (int)Width;
-            modelHelpers.Dispose();
-            ViewModel.Dispose();
+            modelHelpers.Gallifrey.Close();
         }
 
         private void MainWindow_KeyDown(object sender, KeyEventArgs e)

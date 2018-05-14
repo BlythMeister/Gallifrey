@@ -6,6 +6,7 @@ using Gallifrey.InactiveMonitor;
 using Gallifrey.Jira.Model;
 using Gallifrey.JiraIntegration;
 using Gallifrey.JiraTimers;
+using Gallifrey.Serialization;
 using Gallifrey.Settings;
 using Gallifrey.Versions;
 using System;
@@ -15,12 +16,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Xml.Linq;
-using Gallifrey.Serialization;
 using Timer = System.Timers.Timer;
 
 namespace Gallifrey
 {
-    public interface IBackend : IDisposable
+    public interface IBackend
     {
         IJiraTimerCollection JiraTimerCollection { get; }
         IIdleTimerCollection IdleTimerCollection { get; }
@@ -35,6 +35,7 @@ namespace Gallifrey
         event EventHandler<int> NoActivityEvent;
         event EventHandler<ExportPromptDetail> ExportPromptEvent;
         void Initialise();
+        void Close();
         void TrackEvent(TrackingType trackingType);
         void SaveSettings(bool jiraSettingsChanged, bool trackingOptOut);
         void StartLockTimer(TimeSpan? idleTime = null);
@@ -265,12 +266,9 @@ namespace Gallifrey
             Task.Run(() => { JiraExportHearbeatHearbeatOnElapsed(this, null); });
         }
 
-        public void Dispose()
+        public void Close()
         {
             trackUsage.TrackAppUsage(TrackingType.AppClose);
-
-            cleanUpAndTrackingHeartbeat.Dispose();
-            jiraExportHearbeat.Dispose();
 
             var runningTimer = jiraTimerCollection.GetRunningTimerId();
             if (runningTimer.HasValue)
@@ -285,8 +283,6 @@ namespace Gallifrey
             jiraTimerCollection.SaveTimers();
             idleTimerCollection.SaveTimers();
             settingsCollection.SaveSettings();
-
-            ActivityChecker.Dispose();
         }
 
         public void TrackEvent(TrackingType trackingType)

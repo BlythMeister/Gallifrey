@@ -182,8 +182,8 @@ Target "Publish-ReleaseRepo" (fun _ ->
         else
             printfn "Already have %s version %s published" releaseType versionNumber
 
-    let publishPremiumInstances() = 
-        let copyFile fileName = 
+    let publishPremiumInstances() =
+        let copyFile fileName =
             printfn "Publishing %s" fileName
             File.Copy(premiumDir @@ fileName, releasesRepo @@ "download" @@ fileName, true)
 
@@ -193,14 +193,14 @@ Target "Publish-ReleaseRepo" (fun _ ->
         StageAll releasesRepo
         Commit.Commit releasesRepo "PremiumInstanceIds Update"
         pushBranch releasesRepo "origin" "master"
-                           
-    if isAlpha then 
+
+    if isAlpha then
         publishRelease "Alpha"
 
-    if isBeta then 
+    if isBeta then
         publishRelease "Beta"
 
-    if isStable then 
+    if isStable then
         publishRelease "Stable"
         publishPremiumInstances()
 )

@@ -13,7 +13,7 @@ using ToastNotifications.Position;
 
 namespace Gallifrey.UI.Modern.Helpers
 {
-    public class ModelHelpers : IDisposable
+    public class ModelHelpers
     {
         private readonly FlyoutsControl flyoutsControl;
         private readonly List<OpenFlyoutDetails> openFlyouts;
@@ -173,19 +173,14 @@ namespace Gallifrey.UI.Modern.Helpers
 
         public void CloseApp(bool restart = false)
         {
-            Application.Current.Dispatcher.Invoke(() =>
+            if (restart && Gallifrey.VersionControl.IsAutomatedDeploy)
             {
-                Dispose();
-
-                if (restart && Gallifrey.VersionControl.IsAutomatedDeploy)
-                {
-                    System.Windows.Forms.Application.Restart();
-                }
-                else
-                {
-                    Application.Current.Shutdown();
-                }
-            });
+                System.Windows.Forms.Application.Restart();
+            }
+            else
+            {
+                Application.Current.Shutdown();
+            }
         }
 
         public async void ShowGetPremiumMessage(string message = "")
@@ -226,12 +221,6 @@ namespace Gallifrey.UI.Modern.Helpers
             var title = (instanceType == InstanceType.Stable ? $"{appName}" : $"{appName} ({instanceType})").ToUpper();
 
             toastNotifier.Notify<ToastNotification>(() => new ToastNotification(title, message));
-        }
-
-        public void Dispose()
-        {
-            toastNotifier.Dispose();
-            Gallifrey.Dispose();
         }
     }
 }

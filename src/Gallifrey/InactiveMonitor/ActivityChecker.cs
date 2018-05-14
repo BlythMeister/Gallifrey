@@ -6,12 +6,11 @@ using System.Timers;
 
 namespace Gallifrey.InactiveMonitor
 {
-    public class ActivityChecker : IDisposable
+    public class ActivityChecker
     {
         internal event EventHandler<int> NoActivityEvent;
         private readonly IJiraTimerCollection timerCollection;
         private readonly ISettingsCollection settingsCollection;
-        private readonly Timer hearbeat;
         private readonly ActivityStopwatch activityStopwatch;
         private readonly object lockObject;
 
@@ -24,7 +23,7 @@ namespace Gallifrey.InactiveMonitor
             this.settingsCollection = settingsCollection;
             lockObject = new object();
 
-            hearbeat = new Timer(500);
+            var hearbeat = new Timer(500);
             hearbeat.Elapsed += HearbeatOnElapsed;
             hearbeat.Start();
         }
@@ -91,11 +90,6 @@ namespace Gallifrey.InactiveMonitor
         private void NotifyNoActivity()
         {
             NoActivityEvent?.Invoke(this, (int)activityStopwatch.Elapsed.TotalMilliseconds);
-        }
-
-        public void Dispose()
-        {
-            hearbeat.Dispose();
         }
 
         private class ActivityStopwatch
