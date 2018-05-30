@@ -1,10 +1,10 @@
 <small>
-    <span class="date"><i class="fab fa-calendar">&nbsp;</i>{{ post.date | date: "%d %B %Y" }}</span>
+    <span class="date"><i class="far fa-calendar">&nbsp;</i>{{ post.date | date: "%d %B %Y" }}</span>
     <span> | </span>
     <span class="edit"><i class="fab fa-pencil">&nbsp;</i><a href="https://github.com/BlythMeister/blyth.me.uk/edit/master/{{ post.path }}" target="_blank">Edit Post</a></span>
     {% if post.comments %}
     <span> | </span>
-    <span class="comments"><i class="fab fa-comment">&nbsp;</i><a href="{{ post.url }}#disqus_thread">View Comments</a></span>
+    <span class="comments"><i class="far fa-comment">&nbsp;</i><a href="{{ post.url }}#disqus_thread">View Comments</a></span>
     {% endif %}
     {% if post.tags.size > 0 %}
     <br />    

@@ -11,7 +11,7 @@
     <div>
         <a href="https://www.twitter.com/GallifreyApp" class="fab fa-twitter" target="_blank"></a>
         <a href="https://github.com/BlythMeister/Gallifrey" class="fab fa-github" target="_blank"></a>
-        <a href="mailto:support@GallifreyApp.co.uk" class="fab fa-envelope" target="_blank"></a>
+        <a href="mailto:support@GallifreyApp.co.uk" class="far fa-envelope" target="_blank"></a>
     </div>
 </div>
 <div class="middleItem">
@@ -52,7 +52,7 @@
     </p>
 </div>
 <div class="bottomItem">
-    <h4>Latest News <a href="{{ site.url }}/feed.xml" class="fab fa-rss"></a></h4>
+    <h4>Latest News <a href="{{ site.url }}/feed.xml" class="fas fa-rss"></a></h4>
     {% assign publishedPosts = site.posts | where: 'show', 'true' %}
     {% for post in publishedPosts  limit:3 %}
     <div class="media {% if forloop.last == false %}media-underline{% endif %}">
