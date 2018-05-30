@@ -3,6 +3,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
+<!-- ReportURI -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src cdn.report-uri.com; style-src 'self' fonts.googleapis.com; font-src fonts.gstatic.com; connect-src blythmeister.report-uri.com; upgrade-insecure-requests">
+<script type="text/json" id="csp-report-uri">
+{
+    "keys" : ["blockedURI", "columnNumber", "disposition", "documentURI", "effectiveDirective", "lineNumber", "originalPolicy", "referrer", "sample", "sourceFile", "statusCode", "violatedDirective"],
+    "reportUri" : "https://blythmeister.report-uri.com/r/d/csp/enforce"
+}
+</script>
+<script src="https://cdn.report-uri.com/libs/report-uri-js/1.0.1/report-uri-js.min.js" integrity="sha256-Cng8gUe98XCqh5hc8nAM3y5I1iQHBjzOl8X3/iAd4jE=" crossorigin="anonymous"></script>
+
+
 <!--BEGIN LINKS-->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
