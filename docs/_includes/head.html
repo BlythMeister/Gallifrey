@@ -4,7 +4,7 @@
 <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
 <!-- ReportURI -->
-<meta http-equiv="Content-Security-Policy" content="connect-src blythmeister.report-uri.com; script-src cdn.report-uri.com;">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' cdn.report-uri.com; style-src 'self' 'unsafe-inline'; connect-src blythmeister.report-uri.com; upgrade-insecure-requests;">
 <script type="text/json" id="csp-report-uri">
 {
     "keys" : ["blockedURI", "columnNumber", "disposition", "documentURI", "effectiveDirective", "lineNumber", "originalPolicy", "referrer", "sample", "sourceFile", "statusCode", "violatedDirective"],
