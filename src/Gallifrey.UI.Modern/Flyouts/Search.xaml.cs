@@ -1,4 +1,5 @@
-﻿using Gallifrey.Jira.Model;
+﻿using Exceptionless;
+using Gallifrey.Jira.Model;
 using Gallifrey.JiraIntegration;
 using Gallifrey.UI.Modern.Helpers;
 using Gallifrey.UI.Modern.Models;
@@ -34,7 +35,7 @@ namespace Gallifrey.UI.Modern.Flyouts
 
         private async void LoadSearch()
         {
-            Func<SearchModel> getSearchModel = () =>
+            SearchModel GetSearchModel()
             {
                 var recent = new List<RecentJira>();
                 var filters = new List<string>();
@@ -44,33 +45,33 @@ namespace Gallifrey.UI.Modern.Flyouts
                 {
                     recent = modelHelpers.Gallifrey.JiraTimerCollection.GetJiraReferencesForLastDays(50).ToList();
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    //Ignore
+                    ExceptionlessClient.Default.SubmitException(ex);
                 }
 
                 try
                 {
                     filters = modelHelpers.Gallifrey.JiraConnection.GetJiraFilters().ToList();
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    //Ignore
+                    ExceptionlessClient.Default.SubmitException(ex);
                 }
 
                 try
                 {
                     issues = modelHelpers.Gallifrey.JiraConnection.GetJiraCurrentUserOpenIssues().ToList();
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    //Ignore
+                    ExceptionlessClient.Default.SubmitException(ex);
                 }
 
                 return new SearchModel(filters, recent, issues, openFromEdit);
-            };
+            }
 
-            var result = await progressDialogHelper.Do(getSearchModel, "Loading Search Information", true, false);
+            var result = await progressDialogHelper.Do(GetSearchModel, "Loading Search Information", true, false);
 
             switch (result.Status)
             {
@@ -147,8 +148,9 @@ namespace Gallifrey.UI.Modern.Flyouts
                         break;
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                ExceptionlessClient.Default.SubmitException(ex);
                 await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "No Results", "There Was An Error Getting Search Results");
                 Focus();
                 DataModel.ClearSearchResults();

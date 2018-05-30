@@ -15,10 +15,10 @@ namespace Gallifrey.DeploymentUtils
         {
             var publicKeyToken = GetPublicKeyToken();
             var uninstallString = GetUninstallString(publicKeyToken, out var displayName);
-            var runDLL32 = uninstallString.Substring(0, 12);
+            var runDll32 = uninstallString.Substring(0, 12);
             var args = uninstallString.Substring(13);
-            Process.Start(runDLL32, args);
-            PushUninstallOKButton(displayName);
+            Process.Start(runDll32, args);
+            PushUninstallOkButton(displayName);
         }
 
         public static async void AutoInstall(string applicationUriString)
@@ -37,24 +37,24 @@ namespace Gallifrey.DeploymentUtils
             }
         }
 
-        private static void PushUninstallOKButton(string displayName)
+        private static void PushUninstallOkButton(string displayName)
         {
             var uninstallerWin = FindUninstallerWindow(displayName);
-            var OKButton = FindUninstallerOKButton(uninstallerWin);
-            Win32Utils.DoButtonClick(OKButton);
+            var okButton = FindUninstallerOkButton(uninstallerWin);
+            Win32Utils.DoButtonClick(okButton);
         }
 
-        private static IntPtr FindUninstallerOKButton(IntPtr uninstallerWindow)
+        private static IntPtr FindUninstallerOkButton(IntPtr uninstallerWindow)
         {
             var w32 = new Win32Utils();
-            var OKButton = IntPtr.Zero;
-            while (OKButton == IntPtr.Zero)
+            var okButton = IntPtr.Zero;
+            while (okButton == IntPtr.Zero)
             {
-                OKButton = w32.SearchForChildWindow(uninstallerWindow, "&OK");
+                okButton = w32.SearchForChildWindow(uninstallerWindow, "&OK");
                 Thread.Sleep(500);
             }
 
-            return OKButton;
+            return okButton;
         }
 
         private static IntPtr FindUninstallerWindow(string displayName)
@@ -83,22 +83,26 @@ namespace Gallifrey.DeploymentUtils
         }
 
 
-        private static string GetUninstallString(string PublicKeyToken, out string DisplayName)
+        private static string GetUninstallString(string publicKeyToken, out string displayName)
         {
             string uninstallString = null;
-            var searchString = "PublicKeyToken=" + PublicKeyToken;
+            var searchString = "PublicKeyToken=" + publicKeyToken;
             var uninstallKey = Registry.CurrentUser.OpenSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall");
-            var appKeyNames = uninstallKey.GetSubKeyNames();
-            DisplayName = null;
-            foreach (var appKeyName in appKeyNames)
+            displayName = null;
+            if (uninstallKey == null) return string.Empty;
+
+            foreach (var appKeyName in uninstallKey.GetSubKeyNames())
             {
                 var appKey = uninstallKey.OpenSubKey(appKeyName);
+                if (appKey == null) continue;
+
                 uninstallString = (string)appKey.GetValue("UninstallString");
-                DisplayName = (string)appKey.GetValue("DisplayName");
+                displayName = (string)appKey.GetValue("DisplayName");
                 appKey.Close();
-                if (uninstallString.Contains(searchString))
-                    break;
+
+                if (uninstallString.Contains(searchString)) break;
             }
+
             uninstallKey.Close();
             return uninstallString;
         }

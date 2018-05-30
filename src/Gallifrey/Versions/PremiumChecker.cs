@@ -5,21 +5,21 @@ using System.Linq;
 
 namespace Gallifrey.Versions
 {
-    public interface IPremiumChecker
-    {
-        bool CheckIfPremium(ISettingsCollection settingsCollection);
-    }
-
-    public class PremiumChecker : IPremiumChecker
+    public class PremiumChecker
     {
         public bool CheckIfPremium(ISettingsCollection settingsCollection)
         {
+            if (string.IsNullOrWhiteSpace(ConfigKeys.PremiumEncryptionPassPhrase))
+            {
+                return false;
+            }
+
             try
             {
                 using (var wc = new System.Net.WebClient())
                 {
-                    var webContents = wc.DownloadString("https://releases.gallifreyapp.co.uk/download/PremiumInstanceIds");
-                    var descryptedContents = DataEncryption.Decrypt(webContents);
+                    var webContents = wc.DownloadString("https://releases.gallifreyapp.co.uk/download/PremiumInstanceIds.dat");
+                    var descryptedContents = DataEncryption.Decrypt(webContents, ConfigKeys.PremiumEncryptionPassPhrase);
                     var lines = descryptedContents.Split('\n');
                     return lines.Select(GetPremiumHash).Any(premiumHash => premiumHash == settingsCollection.InstallationHash || premiumHash == $"user-{settingsCollection.UserHash}" || premiumHash == $"site-{settingsCollection.SiteHash}");
                 }

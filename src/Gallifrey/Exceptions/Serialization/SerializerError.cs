@@ -9,7 +9,7 @@ namespace Gallifrey.Exceptions.Serialization
         {
         }
 
-        public SerializerError(string message) 
+        public SerializerError(string message)
             : base(message)
         {
         }

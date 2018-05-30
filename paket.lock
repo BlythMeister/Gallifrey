@@ -14,7 +14,8 @@ NUGET
     Newtonsoft.Json (11.0.2)
     Octokit (0.29)
     RestSharp (106.2.2)
+    ToastNotifications (2.2.5)
 GITHUB
   remote: fsharp/FAKE
-    modules/Octokit/Octokit.fsx (7f99a9c4350b6b15a044254977c882574cd72b61)
+    modules/Octokit/Octokit.fsx (e567c2e86f3292e23cacbb87473a1b44c0d30cda)
       Octokit (>= 0.20)

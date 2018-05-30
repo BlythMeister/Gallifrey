@@ -12,6 +12,7 @@ namespace Gallifrey.JiraTimers
     public class JiraTimer : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
+        public Guid UniqueId { get; }
         public string JiraReference { get; private set; }
         public string JiraProjectName { get; private set; }
         public string JiraName { get; private set; }
@@ -20,7 +21,6 @@ namespace Gallifrey.JiraTimers
         public DateTime DateStarted { get; }
         public TimeSpan CurrentTime { get; private set; }
         public TimeSpan ExportedTime { get; private set; }
-        public Guid UniqueId { get; private set; }
         public bool IsRunning { get; private set; }
         public DateTime? LastJiraTimeCheck { get; private set; }
         public bool LocalTimer { get; private set; }

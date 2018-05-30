@@ -75,9 +75,9 @@
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
-                    <TextBlock Grid.Row="0" Margin="0 5 0 0" FontSize="{DynamicResource DialogMessageFontSize}" Text="" TextWrapping="Wrap" x:Name="Message"/>
-                    
-                    <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Height="85">
+                    <TextBlock Grid.Row="0" Margin="0 5 0 0" FontSize="{DynamicResource DialogMessageFontSize}" Text="" TextWrapping="Wrap" x:Name="TimeLocateMessage"/>
+
+                    <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Height="85">
                         <Button Height="45" MinWidth="70" Margin="0 0 5 0" Click="AddToNewTimer">
                             <TextBlock>New<LineBreak/>Timer</TextBlock>
                         </Button>
@@ -104,7 +104,7 @@
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
-                    <TextBlock Grid.Row="0" Margin="0 5 0 0" FontSize="{DynamicResource DialogMessageFontSize}" TextWrapping="Wrap" x:Name="Message" />
+                    <TextBlock Grid.Row="0" Margin="0 5 0 0" FontSize="{DynamicResource DialogMessageFontSize}" TextWrapping="Wrap" x:Name="TimerSelectorMessage" />
                     <ComboBox Grid.Row="1" Margin="0 5 0 0" FontSize="{DynamicResource DialogMessageFontSize}" controls:ControlsHelper.FocusBorderBrush="{DynamicResource AccentColorBrush}" x:Name="Items" />
 
                     <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Height="85">

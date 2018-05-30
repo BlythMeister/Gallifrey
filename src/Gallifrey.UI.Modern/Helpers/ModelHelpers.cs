@@ -1,11 +1,16 @@
+using Gallifrey.UI.Modern.Models;
+using Gallifrey.Versions;
+using MahApps.Metro.Controls;
+using MahApps.Metro.Controls.Dialogs;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
-using Gallifrey.UI.Modern.Models;
-using MahApps.Metro.Controls;
-using MahApps.Metro.Controls.Dialogs;
+using ToastNotifications;
+using ToastNotifications.Lifetime;
+using ToastNotifications.Position;
 
 namespace Gallifrey.UI.Modern.Helpers
 {
@@ -13,21 +18,31 @@ namespace Gallifrey.UI.Modern.Helpers
     {
         private readonly FlyoutsControl flyoutsControl;
         private readonly List<OpenFlyoutDetails> openFlyouts;
+        private readonly Notifier toastNotifier;
         public IBackend Gallifrey { get; }
         public DialogContext DialogContext { get; }
-        public bool FlyoutOpen => openFlyouts.Count(x=>!x.IsHidden) > 0;
+        public bool FlyoutOpen => openFlyouts.Count(x => !x.IsHidden) > 0;
+
 
         public event EventHandler<Guid> SelectTimerEvent;
         public event EventHandler SelectRunningTimerEvent;
         public event EventHandler RefreshModelEvent;
         public event EventHandler<RemoteButtonTrigger> RemoteButtonTrigger;
-        
+
         public ModelHelpers(IBackend gallifrey, FlyoutsControl flyoutsControl)
         {
             this.flyoutsControl = flyoutsControl;
             Gallifrey = gallifrey;
             DialogContext = new DialogContext();
             openFlyouts = new List<OpenFlyoutDetails>();
+            toastNotifier = new Notifier(cfg =>
+            {
+                cfg.LifetimeSupervisor = new TimeAndCountBasedLifetimeSupervisor(TimeSpan.FromSeconds(10), MaximumNotificationCount.FromCount(15));
+                cfg.PositionProvider = new PrimaryScreenPositionProvider(Corner.BottomRight, 10, 40);
+                cfg.Dispatcher = Application.Current.Dispatcher;
+                cfg.DisplayOptions.TopMost = true;
+                cfg.DisplayOptions.Width = 400;
+            });
         }
 
         #region Flyouts
@@ -161,10 +176,15 @@ namespace Gallifrey.UI.Modern.Helpers
         {
             if (restart && Gallifrey.VersionControl.IsAutomatedDeploy)
             {
-                System.Windows.Forms.Application.Restart();
+                var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Programs), "Gallifrey", $"{Gallifrey.VersionControl.AppName}.appref-ms");
+                if (!File.Exists(path)) throw new Exception("Unable to locate start file");
+                System.Diagnostics.Process.Start(path);
+                Application.Current.Shutdown();
             }
-
-            Application.Current.Shutdown();
+            else
+            {
+                Application.Current.Shutdown();
+            }
         }
 
         public async void ShowGetPremiumMessage(string message = "")
@@ -196,6 +216,15 @@ namespace Gallifrey.UI.Modern.Helpers
                     TriggerRemoteButtonPress(Models.RemoteButtonTrigger.PayPal);
                     break;
             }
+        }
+
+        public void ShowNotification(string message)
+        {
+            var instanceType = Gallifrey.VersionControl.InstanceType;
+            var appName = Gallifrey.Settings.InternalSettings.IsPremium ? "Gallifrey Premium" : "Gallifrey";
+            var title = (instanceType == InstanceType.Stable ? $"{appName}" : $"{appName} ({instanceType})").ToUpper();
+
+            toastNotifier.Notify<ToastNotification>(() => new ToastNotification(title, message));
         }
     }
 }

@@ -26,8 +26,8 @@ namespace Gallifrey.Jira
             {
                 try
                 {
-                    //NOTE THIS IS NOT THE RIGHT TYPE, BUT NOT EXPECTING VALID DATA ANYWAY
-                    restClient.Get<List<string>>(HttpStatusCode.OK, "tempo-timesheets/3/worklogs?dateFrom=1990-01-01&dateTo=1990-01-02");
+                    var queryDate = DateTime.UtcNow;
+                    restClient.Get<List<TempoWorkLog>>(HttpStatusCode.OK, $"tempo-timesheets/3/worklogs?dateFrom={queryDate:yyyy-MM-dd}&dateTo={queryDate:yyyy-MM-dd}&username={myUser.key}");
                     HasTempo = true;
                 }
                 catch (Exception)
@@ -118,7 +118,7 @@ namespace Gallifrey.Jira
             return restClient.Get<List<Filter>>(HttpStatusCode.OK, "api/2/filter/favourite");
         }
 
-        public IEnumerable<StandardWorkLog> GetWorkLoggedForDatesFilteredIssues(IEnumerable<DateTime> queryDates, IEnumerable<string> issueRefs)
+        public IEnumerable<StandardWorkLog> GetWorkLoggedForDatesFilteredIssues(List<DateTime> queryDates, List<string> issueRefs)
         {
             var workLogs = new List<StandardWorkLog>();
 
@@ -204,7 +204,7 @@ namespace Gallifrey.Jira
 
             var postData = new Dictionary<string, object>
             {
-                { "transition", new { id = transition.id } }
+                { "transition", new {transition.id } }
             };
 
             restClient.Post(HttpStatusCode.NoContent, $"api/2/issue/{issueRef}/transitions", postData);
@@ -240,7 +240,7 @@ namespace Gallifrey.Jira
             {
                 var postData = new Dictionary<string, object>
                 {
-                    { "started", $"{logDate.ToString("yyyy-MM-ddTHH:mm:ss.fff")}{logDate.ToString("zzz").Replace(":", "")}"},
+                    { "started", $"{logDate:yyyy-MM-ddTHH:mm:ss.fff}{logDate.ToString("zzz").Replace(":", "")}"},
                     { "comment", comment },
                     { "timeSpent", $"{timeSpent.Hours}h {timeSpent.Minutes}m"},
                 };

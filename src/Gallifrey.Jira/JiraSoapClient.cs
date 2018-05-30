@@ -118,7 +118,7 @@ namespace Gallifrey.Jira
             return returnedFilters.Select(filter => new Filter { name = filter.Name });
         }
 
-        public IEnumerable<StandardWorkLog> GetWorkLoggedForDatesFilteredIssues(IEnumerable<DateTime> queryDates, IEnumerable<string> issueRefs)
+        public IEnumerable<StandardWorkLog> GetWorkLoggedForDatesFilteredIssues(List<DateTime> queryDates, List<string> issueRefs)
         {
             var workLogs = new List<StandardWorkLog>();
             var workLogCache = new Dictionary<string, ReadOnlyCollection<Worklog>>();
@@ -130,7 +130,7 @@ namespace Gallifrey.Jira
 
                 try
                 {
-                    issuesExportedTo = client.GetIssuesFromJql($"worklogAuthor = currentUser() and worklogDate = {queryDate.ToString("yyyy-MM-dd")}", 999).ToList();
+                    issuesExportedTo = client.GetIssuesFromJql($"worklogAuthor = currentUser() and worklogDate = {queryDate:yyyy-MM-dd}", 999).ToList();
                 }
                 catch (Exception)
                 {

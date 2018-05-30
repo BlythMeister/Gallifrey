@@ -15,7 +15,7 @@ namespace Gallifrey.UI.Modern.Helpers
         //False = Collapse/Hidden
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            var bValue = (bool)value;
+            var bValue = value != null && (bool)value;
 
             if (Invert)
             {
@@ -32,7 +32,7 @@ namespace Gallifrey.UI.Modern.Helpers
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            return ((Visibility)value) == Visibility.Visible;
+            return value != null && ((Visibility)value) == Visibility.Visible;
         }
     }
 }

@@ -7,7 +7,6 @@
     <DockPanel>
         <DockPanel.Resources>
             <helpers:BooleanVisibilityConverter x:Key="BoolToVisInvert" Collapse="True" Invert="True"/>
-            <helpers:BooleanVisibilityConverter x:Key="BoolToVis" Collapse="True" Invert="False"/>
         </DockPanel.Resources>
 
         <WrapPanel HorizontalAlignment="Left" DockPanel.Dock="Left" Margin="10,0,0,0">

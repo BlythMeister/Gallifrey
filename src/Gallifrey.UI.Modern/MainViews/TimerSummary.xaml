@@ -21,11 +21,11 @@
                 <helpers:BooleanVisibilityConverter x:Key="BoolToVis" Collapse="True" Invert="False"/>
             </Grid.Resources>
 
-            <WrapPanel Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" Visibility="{Binding TrackingOnly, Converter={StaticResource BoolToVis}}">
+            <WrapPanel Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0,0,0" Visibility="{Binding TrackingOnly, Converter={StaticResource BoolToVis}}">
                 <TextBlock Text="Total Timers: "/>
                 <TextBlock Text="{Binding TotalTimerCount}" />
             </WrapPanel>
-            <WrapPanel Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" Visibility="{Binding TrackingOnly, Converter={StaticResource BoolToVisInvert}}">
+            <WrapPanel Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0,0,0" Visibility="{Binding TrackingOnly, Converter={StaticResource BoolToVisInvert}}">
                 <TextBlock Text="Exported: "/>
                 <TextBlock Text="{Binding ExportedNumber}" />
                 <TextBlock Text="/" />
@@ -47,7 +47,7 @@
                 <TextBlock Text="Export Target: "/>
                 <TextBlock Text="{Binding ExportTarget, Mode=OneWay}" />
             </WrapPanel>
-            <Border Grid.Column="7" BorderBrush="{DynamicResource GrayHoverBrush}" BorderThickness="1" HorizontalAlignment="Stretch" Margin="10,3,10,3" VerticalAlignment="Center">
+            <Border Grid.Column="7" BorderBrush="{DynamicResource GrayHoverBrush}" BorderThickness="1" HorizontalAlignment="Stretch" Margin="10,3,5,3" VerticalAlignment="Center">
                 <Grid HorizontalAlignment="Stretch">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="{Binding TargetBarExportedPercentage, Mode=OneWay}"/>

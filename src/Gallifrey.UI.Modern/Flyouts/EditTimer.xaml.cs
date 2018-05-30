@@ -1,13 +1,12 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
-using Gallifrey.Exceptions.JiraIntegration;
-using Gallifrey.Exceptions.JiraTimers;
+﻿using Gallifrey.Exceptions.JiraTimers;
 using Gallifrey.Jira.Model;
 using Gallifrey.UI.Modern.Helpers;
 using Gallifrey.UI.Modern.Models;
 using MahApps.Metro.Controls.Dialogs;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows;
 
 namespace Gallifrey.UI.Modern.Flyouts
 {
@@ -93,24 +92,26 @@ namespace Gallifrey.UI.Modern.Flyouts
                 }
                 else
                 {
-                    Issue jiraIssue;
-                    var jiraRef = string.Empty;
-                    try
-                    {
-                        jiraRef = DataModel.JiraReference;
-                        var jiraDownloadResult = await progressDialogHelper.Do(() => modelHelpers.Gallifrey.JiraConnection.GetJiraIssue(jiraRef), "Searching For Jira Issue", true, true);
+                    Issue jiraIssue = null;
+                    var jiraRef = DataModel.JiraReference;
 
-                        if (jiraDownloadResult.Status == ProgressResult.JiraHelperStatus.Success)
+                    void GetIssue()
+                    {
+                        if (modelHelpers.Gallifrey.JiraConnection.DoesJiraExist(jiraRef))
                         {
-                            jiraIssue = jiraDownloadResult.RetVal;
-                        }
-                        else
-                        {
-                            Focus();
-                            return;
+                            jiraIssue = modelHelpers.Gallifrey.JiraConnection.GetJiraIssue(jiraRef);
                         }
                     }
-                    catch (NoResultsFoundException)
+
+                    var jiraDownloadResult = await progressDialogHelper.Do(GetIssue, "Searching For Jira Issue", true, false);
+
+                    if (jiraDownloadResult.Status == ProgressResult.JiraHelperStatus.Cancelled)
+                    {
+                        Focus();
+                        return;
+                    }
+
+                    if (jiraIssue == null)
                     {
                         await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Invalid Jira", $"Unable To Locate The Jira '{jiraRef}'");
                         Focus();
@@ -183,7 +184,7 @@ namespace Gallifrey.UI.Modern.Flyouts
 
         private async void DoAdjustment(string enteredValue, bool addTime)
         {
-            var adjustmentTimespan = new TimeSpan();
+            TimeSpan adjustmentTimespan;
             if (enteredValue.Contains(":"))
             {
                 if (!TimeSpan.TryParse(enteredValue, out adjustmentTimespan))
@@ -195,7 +196,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             }
             else
             {
-                if (!int.TryParse(enteredValue, out int minutesAdjustment))
+                if (!int.TryParse(enteredValue, out var minutesAdjustment))
                 {
                     await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Invalid Time Entry", $"The Value '{enteredValue}' was not a number of minutes.");
                     Focus();

@@ -14,13 +14,11 @@ namespace Gallifrey.Versions
         bool UpdateReinstallNeeded { get; }
         bool UpdateError { get; }
         string VersionName { get; }
-        Version DeployedVersion { get; }
         bool IsFirstRun { get; }
         string AppName { get; }
         Task<UpdateResult> CheckForUpdates(bool manualCheck);
         void ManualReinstall();
         event EventHandler UpdateStateChange;
-        event EventHandler<bool> UpdateCheckOccured;
     }
 
     public class VersionControl : IVersionControl
@@ -69,12 +67,12 @@ namespace Gallifrey.Versions
         {
             if (!IsAutomatedDeploy)
             {
-                return Task.Factory.StartNew(() => UpdateResult.NotDeployable);
+                return Task.Run(() => UpdateResult.NotDeployable);
             }
 
             if (lastUpdateCheck >= DateTime.UtcNow.AddMinutes(-5) && !manualCheck)
             {
-                return Task.Factory.StartNew(() => UpdateResult.TooSoon);
+                return Task.Run(() => UpdateResult.TooSoon);
             }
 
             try
@@ -86,7 +84,7 @@ namespace Gallifrey.Versions
             }
             catch
             {
-                return Task.Factory.StartNew(() => UpdateResult.NoInternet);
+                return Task.Run(() => UpdateResult.NoInternet);
             }
 
             UpdateCheckOccured?.Invoke(this, manualCheck);
@@ -98,7 +96,7 @@ namespace Gallifrey.Versions
 
                 if (updateInfo.UpdateAvailable && updateInfo.AvailableVersion > ApplicationDeployment.CurrentDeployment.CurrentVersion)
                 {
-                    return Task.Factory.StartNew(() => ApplicationDeployment.CurrentDeployment.Update()).ContinueWith(task =>
+                    return Task.Run(() => ApplicationDeployment.CurrentDeployment.Update()).ContinueWith(task =>
                     {
                         SetVersionName();
                         UpdateInstalled = true;
@@ -107,7 +105,7 @@ namespace Gallifrey.Versions
                     });
                 }
 
-                return Task.Factory.StartNew(() =>
+                return Task.Run(() =>
                 {
                     //If manual put a delay in here...the UI goes all weird if it's not
                     if (manualCheck)
@@ -121,13 +119,13 @@ namespace Gallifrey.Versions
             {
                 UpdateReinstallNeeded = true;
                 UpdateStateChange?.Invoke(this, null);
-                return Task.Factory.StartNew(() => UpdateResult.ReinstallNeeded);
+                return Task.Run(() => UpdateResult.ReinstallNeeded);
             }
             catch (Exception)
             {
                 UpdateError = true;
                 UpdateStateChange?.Invoke(this, null);
-                return Task.Factory.StartNew(() => UpdateResult.Error);
+                throw;
             }
         }
 

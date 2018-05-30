@@ -2,8 +2,8 @@
 {
     public class JiraProject
     {
-        public string JiraProjectCode { get; private set; }
-        public string JiraProjectName { get; private set; }
+        public string JiraProjectCode { get; }
+        public string JiraProjectName { get; }
 
         public JiraProject(string jiraProjectCode, string jiraProjectName)
         {

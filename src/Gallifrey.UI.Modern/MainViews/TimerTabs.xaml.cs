@@ -1,15 +1,15 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using Gallifrey.Exceptions.JiraIntegration;
+﻿using Exceptionless;
 using Gallifrey.Exceptions.JiraTimers;
 using Gallifrey.UI.Modern.Flyouts;
 using Gallifrey.UI.Modern.Helpers;
 using Gallifrey.UI.Modern.Models;
 using MahApps.Metro.Controls.Dialogs;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
 using DragDropEffects = System.Windows.DragDropEffects;
 using DragEventArgs = System.Windows.DragEventArgs;
 
@@ -114,7 +114,7 @@ namespace Gallifrey.UI.Modern.MainViews
         private async Task AddFromUrl(string url)
         {
             var uriDrag = new Uri(url).AbsolutePath;
-            var jiraRef = uriDrag.Substring(uriDrag.LastIndexOf("/") + 1);
+            var jiraRef = uriDrag.Substring(uriDrag.LastIndexOf("/", StringComparison.InvariantCultureIgnoreCase) + 1);
             var todaysDate = DateTime.Now.Date;
             var dayTimers = ModelHelpers.Gallifrey.JiraTimerCollection.GetTimersForADate(todaysDate).ToList();
 
@@ -129,10 +129,15 @@ namespace Gallifrey.UI.Modern.MainViews
                 //Validate jira is real
                 try
                 {
-                    ModelHelpers.Gallifrey.JiraConnection.GetJiraIssue(jiraRef);
+                    if (!ModelHelpers.Gallifrey.JiraConnection.DoesJiraExist(jiraRef))
+                    {
+                        await DialogCoordinator.Instance.ShowMessageAsync(ModelHelpers.DialogContext, "Invalid Jira", $"Unable To Locate That Jira.\n\nJira Ref Dropped: '{jiraRef}'");
+                        return;
+                    }
                 }
-                catch (NoResultsFoundException)
+                catch (Exception ex)
                 {
+                    ExceptionlessClient.Default.SubmitException(ex);
                     await DialogCoordinator.Instance.ShowMessageAsync(ModelHelpers.DialogContext, "Invalid Jira", $"Unable To Locate That Jira.\n\nJira Ref Dropped: '{jiraRef}'");
                     return;
                 }

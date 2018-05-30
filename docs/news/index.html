@@ -11,6 +11,7 @@ NOTE: This has to be HTML for the paginator to work
 {% for post in paginator.posts %}
 <div class="{% if forloop.last == false %}devide-bottom{% endif %}">
     <h3><a href="{{ post.url }}">{{ post.title }}</a></h3>
+    <h4>{% include postmeta.html %}</h4>
     {{ post.content }}
 </div>
 {% endfor %}

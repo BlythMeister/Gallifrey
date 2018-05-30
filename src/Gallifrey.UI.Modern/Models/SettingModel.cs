@@ -27,7 +27,7 @@ namespace Gallifrey.UI.Modern.Models
         //AppSettings
         public bool AlertWhenIdle
         {
-            get { return alertWhenIdle; }
+            get => alertWhenIdle;
             set
             {
                 alertWhenIdle = value;
@@ -36,7 +36,7 @@ namespace Gallifrey.UI.Modern.Models
         }
         public bool TrackIdle
         {
-            get { return trackIdle; }
+            get => trackIdle;
             set
             {
                 trackIdle = value;
@@ -45,7 +45,7 @@ namespace Gallifrey.UI.Modern.Models
         }
         public bool TrackLock
         {
-            get { return trackLock; }
+            get => trackLock;
             set
             {
                 trackLock = value;
@@ -83,7 +83,7 @@ namespace Gallifrey.UI.Modern.Models
         public string DefaultComment { get; set; }
         public bool TrackingOnly
         {
-            get { return trackingOnly; }
+            get => trackingOnly;
             set
             {
                 trackingOnly = value;
@@ -102,7 +102,7 @@ namespace Gallifrey.UI.Modern.Models
         //Behaviour Properties
         public int? TargetHoursPerDay
         {
-            get { return targetHoursPerDay; }
+            get => targetHoursPerDay;
             set
             {
                 var newValue = value ?? 0;
@@ -112,12 +112,11 @@ namespace Gallifrey.UI.Modern.Models
 
         public int? TargetMinutesPerDay
         {
-            get { return targetMinutesPerDay; }
+            get => targetMinutesPerDay;
             set
             {
                 var newValue = value ?? 0;
-                bool hoursChanged;
-                HourMinuteHelper.UpdateMinutes(ref targetHoursPerDay, ref targetMinutesPerDay, newValue, 23, out hoursChanged);
+                HourMinuteHelper.UpdateMinutes(ref targetHoursPerDay, ref targetMinutesPerDay, newValue, 23, out var hoursChanged);
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TargetMinutesPerDay"));
                 if (hoursChanged)
                 {

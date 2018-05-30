@@ -24,7 +24,7 @@ namespace Gallifrey.Settings
         public Guid InstallationInstaceId { get; set; }
         public bool IsPremium { get; set; }
 
-        public Version LastChangeLogVersion { get { return new Version(Major, Minor, Build, Revision); } }
+        public Version LastChangeLogVersion => new Version(Major, Minor, Build, Revision);
 
         public void SetLastChangeLogVersion(Version currentVersion)
         {

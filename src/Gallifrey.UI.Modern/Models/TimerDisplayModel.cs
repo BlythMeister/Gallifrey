@@ -8,9 +8,9 @@ namespace Gallifrey.UI.Modern.Models
         public JiraTimer Timer { get; }
         public string Reference { get; }
         public string Description { get; }
-        public string ParentReference { get; private set; }
-        public string ParentDescription { get; private set; }
-        public bool HasParent { get; private set; }
+        public string ParentReference { get; }
+        public string ParentDescription { get; }
+        public bool HasParent { get; }
 
         public TimerDisplayModel(JiraTimer jiraTimer)
         {

@@ -1,10 +1,10 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace Gallifrey.Jira.Model
 {
+    [SuppressMessage("ReSharper", "InconsistentNaming")]
     public class TimeTracking
     {
-        public string originalEstimate { get; set; }
-        public string remainingEstimate { get; set; }
-        public double originalEstimateSeconds { get; set; }
         public double remainingEstimateSeconds { get; set; }
     }
 }

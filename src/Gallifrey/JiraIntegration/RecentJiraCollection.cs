@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Gallifrey.Comparers;
+﻿using Gallifrey.Comparers;
 using Gallifrey.Jira.Model;
 using Gallifrey.Serialization;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Gallifrey.JiraIntegration
 {
@@ -18,13 +18,18 @@ namespace Gallifrey.JiraIntegration
 
     public class RecentJiraCollection : IRecentJiraCollection
     {
-        private List<RecentJira> recentJiraList;
+        private readonly List<RecentJira> recentJiraList;
 
         internal RecentJiraCollection()
         {
-            recentJiraList = RecentJiraCollectionSerializer.DeSerialize();
+            recentJiraList = new List<RecentJira>();
         }
-        
+
+        internal void Initialise()
+        {
+            recentJiraList.AddRange(RecentJiraCollectionSerializer.DeSerialize());
+        }
+
         internal void SaveCache()
         {
             RecentJiraCollectionSerializer.Serialize(recentJiraList);
@@ -32,17 +37,33 @@ namespace Gallifrey.JiraIntegration
 
         public IEnumerable<RecentJira> GetRecentJiraCollection()
         {
-            return recentJiraList.OrderBy(x=>x.JiraReference, new JiraReferenceComparer());
+            return recentJiraList.OrderBy(x => x.JiraReference, new JiraReferenceComparer());
         }
 
         public void AddRecentJira(Issue jiraIssue)
         {
-            AddRecentJiras(new [] {jiraIssue});
+            AddRecentJiras(new[] { jiraIssue });
         }
 
         public void AddRecentJiras(IEnumerable<Issue> jiraIssues)
         {
-            recentJiraList = jiraIssues.Select(BuildRecentJira).Union(recentJiraList).ToList();
+            var newItems = jiraIssues.Select(BuildRecentJira);
+
+            foreach (var newItem in newItems)
+            {
+                var matched = false;
+                foreach (var existingItem in recentJiraList.Where(x => x.Equals(newItem)))
+                {
+                    existingItem.UpdateDetail(newItem);
+                    matched = true;
+                }
+
+                if (!matched)
+                {
+                    recentJiraList.Add(newItem);
+                }
+            }
+
             SaveCache();
         }
 

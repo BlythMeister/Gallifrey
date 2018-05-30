@@ -1,13 +1,12 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Gallifrey.Jira.Model
 {
+    [SuppressMessage("ReSharper", "InconsistentNaming")]
     public class WorkLog
     {
-        public string timeSpent { get; set; }
         public double timeSpentSeconds { get; set; }
-        public string comment { get; set; }
         public DateTime started { get; set; }
-        public User author { get; set; }
     }
 }
