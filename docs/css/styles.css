@@ -129,6 +129,28 @@ body {
     vertical-align: middle;
 }
 
+.far {
+    padding-top: 6px;
+    font-size: 18px;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 50%;
+    vertical-align: middle;
+}
+
+.fas {
+    padding-top: 6px;
+    font-size: 18px;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 50%;
+    vertical-align: middle;
+}
+
 .fab.fa-twitter {
     background: #1DA1F2;
     color: #FFFFFF;
