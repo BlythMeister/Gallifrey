@@ -142,7 +142,7 @@ namespace Gallifrey.Versions
 
         public string GetApplicationReference()
         {
-            var applicationReferencePath = new FileInfo(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Gallifrey", $"{AppName}.reference.appref-ms"));
+            var applicationReferencePath = new FileInfo(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Gallifrey", $"{AppName}.appref-ms"));
 
             // Only bother generating the .appref-ms file if we haven't done it before.
             var downloadReference = false;
