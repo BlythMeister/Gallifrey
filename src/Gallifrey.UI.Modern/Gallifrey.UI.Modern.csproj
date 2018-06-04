@@ -71,6 +71,7 @@
     </Compile>
     <Compile Include="Helpers\BooleanInvertConverter.cs" />
     <Compile Include="Helpers\CachedResourceDictionary.cs" />
+    <Compile Include="Helpers\ClipboardHelper.cs" />
     <Compile Include="Helpers\ExceptionlessHelper.cs" />
     <Compile Include="Helpers\BooleanVisibilityConverter.cs" />
     <Compile Include="Helpers\IdleTimeDetector.cs" />

@@ -50,7 +50,7 @@ namespace Gallifrey.UI.Modern.Flyouts
         {
             try
             {
-                Clipboard.SetText(modelHelpers.Gallifrey.Settings.UserHash);
+                await ClipboardHelper.SetClipboard(modelHelpers.Gallifrey.Settings.UserHash);
                 await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Copied Installation Hash", $"Your Installation Hash Of {modelHelpers.Gallifrey.Settings.UserHash} Has Been Copied To The Clipboard");
             }
             catch (Exception ex)

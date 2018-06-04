@@ -179,12 +179,9 @@ namespace Gallifrey.UI.Modern.Helpers
                 var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Programs), "Gallifrey", $"{Gallifrey.VersionControl.AppName}.appref-ms");
                 if (!File.Exists(path)) throw new Exception("Unable to locate start file");
                 System.Diagnostics.Process.Start(path);
-                Application.Current.Shutdown();
             }
-            else
-            {
-                Application.Current.Shutdown();
-            }
+
+            Application.Current.Shutdown();
         }
 
         public async void ShowGetPremiumMessage(string message = "")

@@ -13,7 +13,6 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Forms;
-using Clipboard = System.Windows.Clipboard;
 
 namespace Gallifrey.UI.Modern.MainViews
 {
@@ -85,14 +84,14 @@ namespace Gallifrey.UI.Modern.MainViews
                 }
                 else
                 {
-                    Clipboard.SetText(selectedTimer.JiraReference);
+                    await ClipboardHelper.SetClipboard(selectedTimer.JiraReference);
                 }
             }
         }
 
         private async void PasteButton()
         {
-            var pastedData = Clipboard.GetText().Trim();
+            var pastedData = await ClipboardHelper.GetClipboard();
             string jiraRef;
 
             if (Uri.TryCreate(pastedData, UriKind.Absolute, out var pastedUri) && Uri.TryCreate(ModelHelpers.Gallifrey.Settings.JiraConnectionSettings.JiraUrl, UriKind.Absolute, out var jiraUri) && pastedUri.Host == jiraUri.Host)

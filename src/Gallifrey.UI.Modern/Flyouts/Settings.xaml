@@ -25,8 +25,8 @@
                     </Grid.RowDefinitions>
 
                     <TextBlock Grid.Row="0" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="The Default Timers To Be Created On Empty Days (Comma/Space Seperated)">Default Timers</TextBlock>
-                    <TextBox Grid.Row="0" Grid.Column="1" Margin="5" VerticalAlignment="Center" Text="{Binding DefaultTimers, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                    
+                    <TextBox Grid.Row="0" Grid.Column="1" Margin="5" VerticalAlignment="Center" CharacterCasing="Upper" Text="{Binding DefaultTimers, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
                     <TextBlock Grid.Row="1" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="Number Of Days To Keep Timers For In The UI">Keep Timers For (Days)</TextBlock>
                     <controls:NumericUpDown Grid.Row="1" Grid.Column="1" Margin="5" VerticalAlignment="Center" Minimum="2" Maximum="150" Value="{Binding KeepTimersForDays, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" controls:TextBoxHelper.SelectAllOnFocus="True"/>
 
