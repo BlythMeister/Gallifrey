@@ -1,17 +1,13 @@
 <small>
-    <span class="date"><i class="fa fa-calendar">&nbsp;</i>{{ post.date | date: "%d %B %Y" }}</span>
+    <span class="date"><i class="far fa-calendar">&nbsp;</i>{{ post.date | date: "%d %B %Y" }}</span>
     <span> | </span>
-    <span class="edit"><i class="fa fa-pencil">&nbsp;</i><a href="https://github.com/BlythMeister/blyth.me.uk/edit/master/{{ post.path }}" target="_blank">Edit Post</a></span>
-    {% if post.comments %}
-    <span> | </span>
-    <span class="comments"><i class="fa fa-comment">&nbsp;</i><a href="{{ post.url }}#disqus_thread">View Comments</a></span>
-    {% endif %}
+    <span class="edit"><i class="fas fa-edit">&nbsp;</i><a href="https://github.com/BlythMeister/Gallifrey/edit/master/docs/{{ post.path }}" target="_blank"">Edit Post</a></span>
     {% if post.tags.size > 0 %}
     <br />    
     {% if post.tags.size > 1 %}
-    <span class="tags"><i class="fa fa-tags">&nbsp;</i>{{ post.tags | join: ', ' }}</span>
+    <span class="tags"><i class="fas fa-tags">&nbsp;</i>{{ post.tags | join: ', ' }}</span>
     {% else %}
-    <span class="tags"><i class="fa fa-tag">&nbsp;</i>{{ post.tags }}</span>
+    <span class="tags"><i class="fas fa-tag">&nbsp;</i>{{ post.tags }}</span>
     {% endif %}
     {% endif %}
 </small>

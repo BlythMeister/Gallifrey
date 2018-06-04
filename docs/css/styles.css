@@ -118,7 +118,7 @@ body {
     border-top: 1px solid grey;
 }
 
-.fa {
+.fab {
     padding-top: 6px;
     font-size: 18px;
     width: 30px;
@@ -129,22 +129,44 @@ body {
     vertical-align: middle;
 }
 
-.fa.fa-twitter {
+.far {
+    padding-top: 6px;
+    font-size: 18px;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 50%;
+    vertical-align: middle;
+}
+
+.fas {
+    padding-top: 6px;
+    font-size: 18px;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 50%;
+    vertical-align: middle;
+}
+
+.fab.fa-twitter {
     background: #1DA1F2;
     color: #FFFFFF;
 }
 
-.fa.fa-github {
+.fab.fa-github {
     background: #000000;
     color: #FFFFFF;
 }
 
-.fa.fa-envelope {
+.far.fa-envelope {
     background: #FF7F8C;
     color: #FFFFFF;
 }
 
-.fa.fa-rss {
+.fas.fa-rss {
     background: #FF6600;
     color: #FFFFFF;
 }
