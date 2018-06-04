@@ -1,4 +1,4 @@
 ECHO OFF
 cls
-.paket\paket.bootstrapper.exe --run restore
+.paket\paket.exe restore
 packages\FAKE\tools\FAKE.exe .build\build.fsx
