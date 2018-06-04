@@ -1,8 +1,11 @@
 using System;
 using System.Deployment.Application;
+using System.IO;
 using System.Net;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Linq;
 
 namespace Gallifrey.Versions
 {
@@ -18,6 +21,7 @@ namespace Gallifrey.Versions
         string AppName { get; }
         Task<UpdateResult> CheckForUpdates(bool manualCheck);
         void ManualReinstall();
+        string GetApplicationReference();
         event EventHandler UpdateStateChange;
     }
 
@@ -134,6 +138,55 @@ namespace Gallifrey.Versions
             var installUrl = ApplicationDeployment.CurrentDeployment.UpdateLocation.AbsoluteUri;
             DeploymentUtils.Uninstaller.UninstallMe();
             DeploymentUtils.Uninstaller.AutoInstall(installUrl);
+        }
+
+        public string GetApplicationReference()
+        {
+            var applicationReferencePath = new FileInfo(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Gallifrey", $"{AppName}.reference.appref-ms"));
+
+            // Only bother generating the .appref-ms file if we haven't done it before.
+            var downloadReference = false;
+            if (!applicationReferencePath.Exists)
+            {
+                downloadReference = true;
+            }
+            else if (applicationReferencePath.CreationTimeUtc < DateTime.UtcNow.AddDays(-7))
+            {
+                applicationReferencePath.Delete();
+                downloadReference = true;
+            }
+
+            if (downloadReference)
+            {
+                string applicationManifest;
+
+                // Download the application manifest.
+                using (var wc = new WebClient())
+                {
+                    applicationManifest = wc.DownloadString(ApplicationDeployment.CurrentDeployment.UpdateLocation.AbsoluteUri);
+                }
+
+                // Build the .appref-ms contents.
+                XNamespace asmv1 = "urn:schemas-microsoft-com:asm.v1";
+                XNamespace asmv2 = "urn:schemas-microsoft-com:asm.v2";
+                var doc = XDocument.Load(applicationManifest);
+                var assembly = doc.Element(asmv1 + "assembly");
+                var identity = assembly?.Element(asmv1 + "assemblyIdentity");
+                var deployment = assembly?.Element(asmv2 + "deployment");
+                var provider = deployment?.Element(asmv2 + "deploymentProvider");
+                var codebase = provider?.Attribute("codebase");
+                var name = identity?.Attribute("name");
+                var language = identity?.Attribute("language");
+                var publicKeyToken = identity?.Attribute("publicKeyToken");
+                var architecture = identity?.Attribute("processorArchitecture");
+
+                var applicationReference = $"{codebase?.Value}#{name?.Value}, Culture={language?.Value}, PublicKeyToken={publicKeyToken?.Value}, processorArchitecture={architecture?.Value}";
+
+                // Write the .appref-ms file (ensure that it's Unicode encoded).
+                File.WriteAllText(applicationReferencePath.FullName, applicationReference, Encoding.Unicode);
+            }
+
+            return applicationReferencePath.FullName;
         }
     }
 }
