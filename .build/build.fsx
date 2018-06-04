@@ -217,6 +217,7 @@ Target "Publish-ReleaseNotes" (fun _ ->
         let features = versionLog.Descendants(XName.Get("Feature", "https://releases.gallifreyapp.co.uk/ChangeLog")) |> Seq.map(fun x -> sprintf "* %s" x.Value) |> Seq.toList
         let bugs = versionLog.Descendants(XName.Get("Bug", "https://releases.gallifreyapp.co.uk/ChangeLog")) |> Seq.map(fun x -> sprintf "* %s" x.Value) |> Seq.toList
         let others = versionLog.Descendants(XName.Get("Other", "https://releases.gallifreyapp.co.uk/ChangeLog")) |> Seq.map(fun x -> sprintf "* %s" x.Value) |> Seq.toList
+        let versionName = versionLog.Attribute(XName.Get("Name", "https://releases.gallifreyapp.co.uk/ChangeLog"))
 
         let releaseNotes = [
                             if features |> List.isEmpty |> not then yield ["# Features"; ""]
@@ -232,20 +233,22 @@ Target "Publish-ReleaseNotes" (fun _ ->
                             ]
                             |> List.concat
 
+        let fullReleaseName = if versionName = null then releaseVersion else (sprintf "%s (%s)" releaseVersion versionName)
+
         if isStable then
             let currentDate = DateTime.UtcNow
             let releasesNewsFile = newsPostDir @@ sprintf "%s-release-%s.md" (currentDate.ToString("yyyy-MM-dd")) (releaseVersion.Replace(".", "-"))
 
             new StringBuilder()
             |> fun x -> x.AppendLine("---")
-            |> fun x -> x.AppendLine(sprintf "title: Released Version %s" releaseVersion)
+            |> fun x -> x.AppendLine(sprintf "title: Released Version %s" fullReleaseName)
             |> fun x -> x.AppendLine(sprintf "date: %s +0000" (currentDate.ToString("yyyy-MM-dd HH:mm")))
-            |> fun x -> x.AppendLine(sprintf "excerpt: We have now released version %s." releaseVersion)
+            |> fun x -> x.AppendLine(sprintf "excerpt: We have now released version %s." fullReleaseName)
             |> fun x -> x.AppendLine("tags: [release, breaking news]")
             |> fun x -> x.AppendLine("show: true")
             |> fun x -> x.AppendLine("---")
             |> fun x -> x.AppendLine("")
-            |> fun x -> x.AppendLine(sprintf "We have now released version %s." releaseVersion)
+            |> fun x -> x.AppendLine(sprintf "We have now released version %s." fullReleaseName)
             |> fun x -> x.AppendLine("")
             |> fun x -> x.AppendLine("This version contains the following changes:")
             |> fun x -> x.AppendLine("")
@@ -263,7 +266,7 @@ Target "Publish-ReleaseNotes" (fun _ ->
         pushTag currentDirectory "origin" releaseVersion
 
         createClientWithToken githubApiKey
-        |> createDraft "BlythMeister" "Gallifrey" releaseVersion (not(isStable)) releaseNotes
+        |> createDraft "BlythMeister" "Gallifrey" fullReleaseName (not(isStable)) releaseNotes
         |> fun x -> if isBeta then uploadFile (outputDir @@ "beta-setup.exe") x else x
         |> fun x -> if isStable then uploadFile (outputDir @@ "stable-setup.exe") x else x
         |> releaseDraft
