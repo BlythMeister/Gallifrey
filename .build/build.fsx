@@ -98,7 +98,7 @@ Target "AddKeys" (fun _ ->
     let exceptionlessKey = sprintf "public static string ExceptionlessApiKey => \"%s\";" exceptionlessApiKey
     let premiumEncryptionKey = sprintf "public static string PremiumEncryptionPassPhrase => \"%s\";" premimumEncryptionPassphrase
 
-    File.WriteAllText(keysFilePath, File.ReadAllText(keysFilePath).Replace("public static string PremiumEncryptionPassPhrase => string.Empty;", premiumEncryptionKey).Replace("public static string ExceptionlessApiKey => string.Empty;", exceptionlessKey))
+    File.WriteAllText(keysFilePath, File.ReadAllText(keysFilePath).Replace("public static string PremiumEncryptionPassPhrase => "";", premiumEncryptionKey).Replace("public static string ExceptionlessApiKey => "";", exceptionlessKey))
 )
 
 Target "Build" (fun _ ->
