@@ -77,7 +77,21 @@ namespace Gallifrey.UI.Modern.Helpers
                 await Application.Current.Dispatcher.Invoke(async () =>
                 {
                     modelHelpers.CloseAllFlyouts();
+
+                    var resetTopMostSetting = false;
+                    if (!modelHelpers.Gallifrey.Settings.UiSettings.TopMostOnFlyoutOpen)
+                    {
+                        modelHelpers.Gallifrey.Settings.UiSettings.TopMostOnFlyoutOpen = true;
+                        resetTopMostSetting = true;
+                    }
+
                     await modelHelpers.OpenFlyout(new Error(modelHelpers, e.Event));
+
+                    if (resetTopMostSetting)
+                    {
+                        modelHelpers.Gallifrey.Settings.UiSettings.TopMostOnFlyoutOpen = false;
+                    }
+
                     modelHelpers.CloseApp(true);
                 });
             }
