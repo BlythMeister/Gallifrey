@@ -158,18 +158,18 @@ namespace Gallifrey.Versions
 
             if (downloadReference)
             {
-                string applicationManifest;
+                XDocument doc;
 
                 // Download the application manifest.
                 using (var wc = new WebClient())
                 {
-                    applicationManifest = wc.DownloadString(ApplicationDeployment.CurrentDeployment.UpdateLocation.AbsoluteUri);
+                    var applicationManifest = wc.DownloadString(ApplicationDeployment.CurrentDeployment.UpdateLocation.AbsoluteUri);
+                    doc = XDocument.Parse(applicationManifest);
                 }
 
                 // Build the .appref-ms contents.
                 XNamespace asmv1 = "urn:schemas-microsoft-com:asm.v1";
                 XNamespace asmv2 = "urn:schemas-microsoft-com:asm.v2";
-                var doc = XDocument.Load(applicationManifest);
                 var assembly = doc.Element(asmv1 + "assembly");
                 var identity = assembly?.Element(asmv1 + "assemblyIdentity");
                 var deployment = assembly?.Element(asmv2 + "deployment");
