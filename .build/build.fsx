@@ -1,7 +1,7 @@
 #r @"../packages/FAKE/tools/FakeLib.dll"
 #r "System.Xml.Linq"
 
-#load "../paket-files/fsharp/FAKE/modules/Octokit/Octokit.fsx"
+#load "Octokit.fsx"
 
 open Fake
 open Fake.Git
@@ -266,9 +266,7 @@ Target "Publish-ReleaseNotes" (fun _ ->
         pushTag currentDirectory "origin" releaseVersion
 
         createClientWithToken githubApiKey
-        //Swap this when https://github.com/fsharp/FAKE/pull/1977 is merged so allow named releases
-        //|> createNamedDraft "BlythMeister" "Gallifrey" releaseVersion fullReleaseName (not(isStable)) releaseNotes
-        |> createDraft "BlythMeister" "Gallifrey" releaseVersion (not(isStable)) releaseNotes
+        |> createDraft "BlythMeister" "Gallifrey" releaseVersion fullReleaseName (not(isStable)) releaseNotes
         |> fun x -> if isBeta then uploadFile (outputDir @@ "beta-setup.exe") x else x
         |> fun x -> if isStable then uploadFile (outputDir @@ "stable-setup.exe") x else x
         |> releaseDraft

@@ -10,5 +10,3 @@ nuget Newtonsoft.Json
 nuget RestSharp
 nuget Octokit
 nuget ToastNotifications
-
-github fsharp/FAKE modules/Octokit/Octokit.fsx

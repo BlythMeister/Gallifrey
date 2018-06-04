@@ -27,6 +27,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{11E6F1E6
 		..\appveyor.yml = ..\appveyor.yml
 		..\build.cmd = ..\build.cmd
 		..\.build\build.fsx = ..\.build\build.fsx
+		..\.build\Octokit.fsx = ..\.build\Octokit.fsx
 	EndProjectSection
 EndProject
 Global
