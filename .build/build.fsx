@@ -266,8 +266,9 @@ Target "Publish-ReleaseNotes" (fun _ ->
         pushTag currentDirectory "origin" releaseVersion
 
         createClientWithToken githubApiKey
-        //|> createDraft "BlythMeister" "Gallifrey" version fullReleaseName (not(isStable)) releaseNotes
-        |> createDraft "BlythMeister" "Gallifrey" version (not(isStable)) releaseNotes
+        //Swap this when https://github.com/fsharp/FAKE/pull/1977 is merged so allow named releases
+        //|> createNamedDraft "BlythMeister" "Gallifrey" releaseVersion fullReleaseName (not(isStable)) releaseNotes
+        |> createDraft "BlythMeister" "Gallifrey" releaseVersion (not(isStable)) releaseNotes
         |> fun x -> if isBeta then uploadFile (outputDir @@ "beta-setup.exe") x else x
         |> fun x -> if isStable then uploadFile (outputDir @@ "stable-setup.exe") x else x
         |> releaseDraft
