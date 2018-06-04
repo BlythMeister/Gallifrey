@@ -235,7 +235,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             var comboBox = timeSelectorDialog.FindChild<ComboBox>("Items");
             comboBox.ItemsSource = items;
 
-            var message = timeSelectorDialog.FindChild<TextBlock>("Message");
+            var message = timeSelectorDialog.FindChild<TextBlock>("TimerSelectorMessage");
             message.Text = "Please Select Which Jira";
 
             await timeSelectorDialog.WaitUntilUnloadedAsync();
