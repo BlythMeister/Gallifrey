@@ -233,7 +233,7 @@ Target "Publish-ReleaseNotes" (fun _ ->
                             ]
                             |> List.concat
 
-        let fullReleaseName = if versionName = null then releaseVersion else (sprintf "%s (%s)" releaseVersion versionName)
+        let fullReleaseName = if versionName = null then releaseVersion else (sprintf "%s (%s)" releaseVersion versionName.Value)
 
         if isStable then
             let currentDate = DateTime.UtcNow
