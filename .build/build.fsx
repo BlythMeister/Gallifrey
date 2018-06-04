@@ -217,7 +217,7 @@ Target "Publish-ReleaseNotes" (fun _ ->
         let features = versionLog.Descendants(XName.Get("Feature", "https://releases.gallifreyapp.co.uk/ChangeLog")) |> Seq.map(fun x -> sprintf "* %s" x.Value) |> Seq.toList
         let bugs = versionLog.Descendants(XName.Get("Bug", "https://releases.gallifreyapp.co.uk/ChangeLog")) |> Seq.map(fun x -> sprintf "* %s" x.Value) |> Seq.toList
         let others = versionLog.Descendants(XName.Get("Other", "https://releases.gallifreyapp.co.uk/ChangeLog")) |> Seq.map(fun x -> sprintf "* %s" x.Value) |> Seq.toList
-        let versionName = versionLog.Attribute(XName.Get("Name", "https://releases.gallifreyapp.co.uk/ChangeLog"))
+        let versionName = versionLog.Attribute(XName.Get("Name"))
 
         let releaseNotes = [
                             if features |> List.isEmpty |> not then yield ["# Features"; ""]
