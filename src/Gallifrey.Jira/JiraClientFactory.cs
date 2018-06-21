@@ -4,16 +4,21 @@ namespace Gallifrey.Jira
 {
     public static class JiraClientFactory
     {
-        public static IJiraClient BuildJiraClient(string jiraUrl, string username, string password, bool useTempo)
+        public static IJiraClient BuildJiraClient(string jiraUrl, string username, string password, bool useTempo, string tempoToken)
         {
             if (string.IsNullOrWhiteSpace(jiraUrl) || string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
             {
                 throw new InvalidCredentialException("Required settings to create connection to jira are missing");
             }
 
+            if (useTempo && string.IsNullOrWhiteSpace(tempoToken))
+            {
+                throw new InvalidCredentialException("Required settings to create connection to tempo are missing");
+            }
+
             jiraUrl = jiraUrl.Replace("/secure/Dashboard.jspa", "");
 
-            var jira = ConnectUsingRest(jiraUrl, username, password, useTempo);
+            var jira = ConnectUsingRest(jiraUrl, username, password, useTempo, tempoToken);
             if (jira == null)
             {
                 jira = ConnectUsingSoap(jiraUrl, username, password);
@@ -26,11 +31,11 @@ namespace Gallifrey.Jira
             return jira;
         }
 
-        private static IJiraClient ConnectUsingRest(string jiraUrl, string username, string password, bool useTempo)
+        private static IJiraClient ConnectUsingRest(string jiraUrl, string username, string password, bool useTempo, string tempoToken)
         {
             try
             {
-                return new JiraRestClient(jiraUrl, username, password, useTempo);
+                return new JiraRestClient(jiraUrl, username, password, useTempo, tempoToken);
             }
             catch (System.Exception)
             {

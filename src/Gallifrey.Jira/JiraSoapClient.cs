@@ -14,14 +14,12 @@ namespace Gallifrey.Jira
     {
         private readonly string username;
         private readonly Atlassian.Jira.Jira client;
-        public bool HasTempo { get; }
 
         public JiraSoapClient(string baseUrl, string username, string password)
         {
             this.username = username;
             client = new Atlassian.Jira.Jira(baseUrl, username, password) { MaxIssuesPerRequest = 999 };
             client.GetAccessToken();
-            HasTempo = false;
         }
 
         public User GetCurrentUser()

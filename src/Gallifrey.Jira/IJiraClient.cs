@@ -7,7 +7,6 @@ namespace Gallifrey.Jira
 {
     public interface IJiraClient
     {
-        bool HasTempo { get; }
         User GetCurrentUser();
         Issue GetIssue(string issueRef);
         string GetJqlForFilter(string filterName);

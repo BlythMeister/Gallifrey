@@ -63,7 +63,6 @@ namespace Gallifrey.UI.Modern.Flyouts
                 }
                 catch (ExportException ex)
                 {
-                    ExceptionlessClient.Default.SubmitException(ex);
                     await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Unable To Locate Jira", ex.Message);
                     modelHelpers.CloseFlyout(this);
                     return;

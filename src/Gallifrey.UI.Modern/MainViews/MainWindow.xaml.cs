@@ -236,26 +236,27 @@ namespace Gallifrey.UI.Modern.MainViews
             while (!loggedIn)
             {
                 var jiraSettings = modelHelpers.Gallifrey.Settings.JiraConnectionSettings;
-                var url = await DialogCoordinator.Instance.ShowInputAsync(modelHelpers.DialogContext, "Jira URL", "Please Enter Your Jira Instance URL\nThis Is The URL You Go To When You Login Using A Browser\ne.g. https://MyCompany.atlassian.net", new MetroDialogSettings { DefaultText = jiraSettings.JiraUrl });
-                var details = await DialogCoordinator.Instance.ShowLoginAsync(modelHelpers.DialogContext, "UserName & Password", "Please Enter Your UserName/Email Address & Password You Use To Login To Jira", new LoginDialogSettings { EnablePasswordPreview = true, InitialUsername = jiraSettings.JiraUsername, InitialPassword = jiraSettings.JiraPassword });
-                var useTempo = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Tempo", "Do You Want To Use Tempo To Record Timesheets?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No" });
+                jiraSettings.JiraUrl = await DialogCoordinator.Instance.ShowInputAsync(modelHelpers.DialogContext, "Jira URL", "Please Enter Your Jira Instance URL\nThis Is The URL You Go To When You Login Using A Browser\ne.g. https://MyCompany.atlassian.net", new MetroDialogSettings { DefaultText = jiraSettings.JiraUrl });
 
-                jiraSettings.JiraUrl = url;
+                var details = await DialogCoordinator.Instance.ShowLoginAsync(modelHelpers.DialogContext, "UserName & Password", "Please Enter Your UserName/Email Address & Password You Use To Login To Jira", new LoginDialogSettings { EnablePasswordPreview = true, InitialUsername = jiraSettings.JiraUsername, InitialPassword = jiraSettings.JiraPassword });
                 jiraSettings.JiraUsername = details.Username;
                 jiraSettings.JiraPassword = details.Password;
-                jiraSettings.UseTempo = useTempo == MessageDialogResult.Affirmative;
+
+                var useTempoChoice = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Tempo", "Do You Want To Use Tempo To Record Timesheets?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No" });
+                jiraSettings.UseTempo = useTempoChoice == MessageDialogResult.Affirmative;
+
+                if (jiraSettings.UseTempo)
+                {
+                    jiraSettings.TempoToken = await DialogCoordinator.Instance.ShowInputAsync(modelHelpers.DialogContext, "Tempo Api Token", "Please Enter Your Tempo Api Token\nThis Can Be Found Under 'API Integration' In Your Tempo Settings", new MetroDialogSettings { DefaultText = jiraSettings.TempoToken });
+                }
+                else
+                {
+                    jiraSettings.TempoToken = string.Empty;
+                }
 
                 try
                 {
                     await progressDialogHelper.Do(() => modelHelpers.Gallifrey.SaveSettings(true, false), "Checking Jira Credentials", false, true);
-
-                    if (jiraSettings.UseTempo && !modelHelpers.Gallifrey.JiraConnection.HasTempo)
-                    {
-                        await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Missing Tempo", "We Were Unable To Locate A Tempo Endpoint\nGallifrey Will Fall Back To Standard Jira Endpoints");
-                        jiraSettings.UseTempo = false;
-                        //Even though we have changed jira settings, we are changing because tempo is not in use, so don't reconnect
-                        modelHelpers.Gallifrey.SaveSettings(false, false);
-                    }
 
                     loggedIn = true;
                 }

@@ -27,7 +27,6 @@ namespace Gallifrey.JiraIntegration
         void AssignToCurrentUser(string jiraRef);
         User CurrentUser { get; }
         bool IsConnected { get; }
-        bool HasTempo { get; }
         void TransitionIssue(string jiraRef, string transition);
         IEnumerable<Status> GetTransitions(string jiraRef);
         event EventHandler LoggedIn;
@@ -45,7 +44,6 @@ namespace Gallifrey.JiraIntegration
 
         public User CurrentUser { get; private set; }
         public bool IsConnected => jira != null;
-        public bool HasTempo => jira != null && jira.HasTempo;
         public event EventHandler LoggedIn;
 
         public JiraConnection(ITrackUsage trackUsage, IRecentJiraCollection recentJiraCollection)
@@ -71,13 +69,13 @@ namespace Gallifrey.JiraIntegration
             {
                 try
                 {
-                    jira = JiraClientFactory.BuildJiraClient(jiraConnectionSettings.JiraUrl, jiraConnectionSettings.JiraUsername, jiraConnectionSettings.JiraPassword, jiraConnectionSettings.UseTempo);
+                    jira = JiraClientFactory.BuildJiraClient(jiraConnectionSettings.JiraUrl, jiraConnectionSettings.JiraUsername, jiraConnectionSettings.JiraPassword, jiraConnectionSettings.UseTempo, jiraConnectionSettings.TempoToken);
 
                     CurrentUser = jira.GetCurrentUser();
                     LoggedIn?.Invoke(this, null);
 
                     TrackingType trackingType;
-                    if (jira.GetType() == typeof(JiraRestClient) && jira.HasTempo)
+                    if (jira.GetType() == typeof(JiraRestClient) && jiraConnectionSettings.UseTempo)
                     {
                         trackingType = jiraConnectionSettings.JiraUrl.Contains(".atlassian.net") ? TrackingType.JiraConnectCloudRestWithTempo : TrackingType.JiraConnectSelfhostRestWithTempo;
                     }

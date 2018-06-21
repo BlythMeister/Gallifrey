@@ -13,13 +13,27 @@ namespace Gallifrey.Rest
     {
         private readonly Func<string, List<string>> errorMessageSerializationFunction;
         private readonly RestClient client;
-        private readonly string base64BasicAuthText;
+        private readonly string authHeader;
 
-        public SimpleRestClient(string baseUrl, string username, string password, Func<string, List<string>> errorMessageSerializationFunction)
+        private SimpleRestClient(string baseUrl, string authHeader, Func<string, List<string>> errorMessageSerializationFunction)
         {
+            this.authHeader = authHeader;
             this.errorMessageSerializationFunction = errorMessageSerializationFunction;
-            base64BasicAuthText = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{username}:{password}"));
-            client = new RestClient { BaseUrl = new Uri(baseUrl), Timeout = (int)TimeSpan.FromMinutes(2).TotalMilliseconds };
+
+            client = new RestClient { BaseUrl = new Uri(baseUrl), Timeout = (int)TimeSpan.FromMinutes(2).TotalMilliseconds, AutomaticDecompression = true, };
+        }
+
+        public static SimpleRestClient WithBasicAuthenticaion(string baseUrl, string username, string password, Func<string, List<string>> errorMessageSerializationFunction)
+        {
+            var base64BasicAuthText = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{username}:{password}"));
+            var header = $"Basic {base64BasicAuthText}";
+            return new SimpleRestClient(baseUrl, header, errorMessageSerializationFunction);
+        }
+
+        public static SimpleRestClient WithBearerAuthentication(string baseUrl, string bearerToken, Func<string, List<string>> errorMessageSerializationFunction)
+        {
+            var header = $"Bearer {bearerToken}";
+            return new SimpleRestClient(baseUrl, header, errorMessageSerializationFunction);
         }
 
         public void Post(HttpStatusCode expectedStatus, string path, object data = null)
@@ -63,7 +77,7 @@ namespace Gallifrey.Rest
         private RestRequest CreateRequest(Method method, string path)
         {
             var request = new RestRequest { Method = method, Resource = path, RequestFormat = DataFormat.Json };
-            request.AddHeader("Authorization", "Basic " + base64BasicAuthText);
+            request.AddHeader("Authorization", authHeader);
             request.AddHeader("ContentType", "application/json");
             request.AddHeader("Accept", "application/json");
             return request;
@@ -77,11 +91,14 @@ namespace Gallifrey.Rest
             {
                 try
                 {
-                    var errorMessages = errorMessageSerializationFunction(response.Content);
-
-                    if (errorMessages.Any())
+                    if (errorMessageSerializationFunction != null)
                     {
-                        throw new ClientException($"Wrong status returned: {response.StatusDescription}. Message: {errorMessages.First()}");
+                        var errorMessages = errorMessageSerializationFunction(response.Content);
+
+                        if (errorMessages.Any())
+                        {
+                            throw new ClientException($"Wrong status returned: {response.StatusDescription}. Message: {errorMessages.First()}");
+                        }
                     }
 
                     throw new ClientException($"Wrong status returned: {response.StatusDescription}");

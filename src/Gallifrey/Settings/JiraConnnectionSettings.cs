@@ -6,6 +6,7 @@
         string JiraUsername { get; set; }
         string JiraPassword { get; set; }
         bool UseTempo { get; set; }
+        string TempoToken { get; set; }
     }
 
     public class JiraConnectionSettings : IJiraConnectionSettings
@@ -14,5 +15,6 @@
         public string JiraUsername { get; set; }
         public string JiraPassword { get; set; }
         public bool UseTempo { get; set; }
+        public string TempoToken { get; set; }
     }
 }
