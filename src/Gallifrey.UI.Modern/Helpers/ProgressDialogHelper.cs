@@ -104,7 +104,7 @@ namespace Gallifrey.UI.Modern.Helpers
             finally
             {
                 cancellationTokenSource.Cancel();
-                await controller.CloseAsync();
+                if (controller.IsOpen) await controller.CloseAsync();
             }
         }
     }
