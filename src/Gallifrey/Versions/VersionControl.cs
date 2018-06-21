@@ -96,9 +96,8 @@ namespace Gallifrey.Versions
 
             try
             {
-                var updateInfo = ApplicationDeployment.CurrentDeployment.CheckForDetailedUpdate(false);
 
-                if (updateInfo.UpdateAvailable && updateInfo.AvailableVersion > ApplicationDeployment.CurrentDeployment.CurrentVersion)
+                if (ApplicationDeployment.CurrentDeployment.CheckForUpdate(true))
                 {
                     return Task.Run(() => ApplicationDeployment.CurrentDeployment.Update()).ContinueWith(task =>
                     {

@@ -229,7 +229,7 @@ namespace Gallifrey.Jira
                 }
 
                 var tempoWorkLog = new TempoWorkLog { issue = issue, timeSpentSeconds = timeSpent.TotalSeconds, dateStarted = $"{logDate:s}.000", comment = comment, author = new TempoWorkLog.TempoWorkLogUser { key = myUser.key, name = myUser.name } };
-                jiraClient.Post(HttpStatusCode.OK, "worklogs", tempoWorkLog);
+                tempoClient.Post(HttpStatusCode.OK, "worklogs", tempoWorkLog);
             }
             else
             {
