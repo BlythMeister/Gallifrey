@@ -1,5 +1,6 @@
 ﻿using Exceptionless;
 using Gallifrey.AppTracking;
+using Gallifrey.Exceptions;
 using Gallifrey.Exceptions.JiraIntegration;
 using Gallifrey.ExtensionMethods;
 using Gallifrey.JiraTimers;
@@ -70,7 +71,8 @@ namespace Gallifrey.UI.Modern.MainViews
             NoInternetConnection,
             MissingConfig,
             ConnectionError,
-            Ok
+            Ok,
+            NewUser
         }
 
         private InitialiseResult Initialise()
@@ -100,6 +102,10 @@ namespace Gallifrey.UI.Modern.MainViews
             try
             {
                 modelHelpers.Gallifrey.Initialise();
+            }
+            catch (MissingConfigException)
+            {
+                return InitialiseResult.NewUser;
             }
             catch (MissingJiraConfigException)
             {
@@ -161,16 +167,16 @@ namespace Gallifrey.UI.Modern.MainViews
                     modelHelpers.CloseApp();
                 }
             }
-            else if (result.RetVal == InitialiseResult.MissingConfig)
+            else if (result.RetVal == InitialiseResult.NewUser)
             {
                 modelHelpers.Gallifrey.TrackEvent(TrackingType.SettingsMissing);
-                await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Welcome To Gallifrey", "You Current Have No Jira Settings In Gallifrey\nWe Therefore Think Your A New User, So Welcome!\n\nTo Get Started, We Need Your Jira Details");
+                await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Welcome To Gallifrey", "You Have No Settings In Gallifrey\n\nTo Get Started, We Need Your Jira Details");
 
                 await NewUserOnBoarding();
 
                 modelHelpers.RefreshModel();
             }
-            else if (result.RetVal == InitialiseResult.ConnectionError)
+            else if (result.RetVal == InitialiseResult.ConnectionError || result.RetVal == InitialiseResult.MissingConfig)
             {
                 modelHelpers.Gallifrey.TrackEvent(TrackingType.ConnectionError);
                 var userUpdate = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Login Failure", "We Were Unable To Authenticate To Jira, Please Confirm Login Details\nWould You Like To Update Your Details?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No" });

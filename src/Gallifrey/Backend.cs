@@ -1,6 +1,7 @@
 ﻿using Gallifrey.AppTracking;
 using Gallifrey.ChangeLog;
 using Gallifrey.Contributors;
+using Gallifrey.Exceptions;
 using Gallifrey.IdleTimers;
 using Gallifrey.InactiveMonitor;
 using Gallifrey.Jira.Model;
@@ -233,6 +234,11 @@ namespace Gallifrey
             idleTimerCollection.Initialise();
             jiraTimerCollection.Initialise();
             recentJiraCollection.Initialise();
+
+            if (settingsCollection.InternalSettings.LastChangeLogVersion == new Version(0, 0, 0, 0))
+            {
+                throw new MissingConfigException("New User");
+            }
 
             jiraConnection.ReConnect(settingsCollection.JiraConnectionSettings, settingsCollection.ExportSettings);
             cleanUpAndTrackingHeartbeat.Start();
