@@ -6,7 +6,6 @@
         Updated,
         NoUpdate,
         TooSoon,
-        Error,
         ReinstallNeeded,
         NoInternet
     }

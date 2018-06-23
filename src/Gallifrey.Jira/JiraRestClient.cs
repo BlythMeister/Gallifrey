@@ -13,47 +13,42 @@ namespace Gallifrey.Jira
 {
     public class JiraRestClient : IJiraClient
     {
-        private readonly ISimpleRestClient restClient;
+        private readonly ISimpleRestClient jiraClient;
+        private readonly ISimpleRestClient tempoClient;
         private readonly User myUser;
-        public bool HasTempo { get; }
 
-        public JiraRestClient(string baseUrl, string username, string password, bool useTempo)
+        public JiraRestClient(string baseUrl, string username, string password, bool useTempo, string tempoToken)
         {
-            var url = baseUrl + (baseUrl.EndsWith("/") ? "" : "/") + "rest/";
-            restClient = new SimpleRestClient(url, username, password, GetErrorMessages);
+            var url = baseUrl + (baseUrl.EndsWith("/") ? "" : "/") + "rest/api/2";
+            jiraClient = SimpleRestClient.WithBasicAuthenticaion(url, username, password, GetErrorMessages);
+
             myUser = GetCurrentUser();
             if (useTempo)
             {
-                try
-                {
-                    //NOTE THIS IS NOT THE RIGHT TYPE, BUT NOT EXPECTING VALID DATA ANYWAY
-                    restClient.Get<List<string>>(HttpStatusCode.OK, "tempo-timesheets/3/worklogs?dateFrom=1990-01-01&dateTo=1990-01-02");
-                    HasTempo = true;
-                }
-                catch (Exception)
-                {
-                    HasTempo = false;
-                }
+                tempoClient = SimpleRestClient.WithBearerAuthentication("https://api.tempo.io/rest-legacy/tempo-timesheets/3", tempoToken, null);
+
+                var queryDate = DateTime.UtcNow;
+                tempoClient.Get<List<TempoWorkLog>>(HttpStatusCode.OK, $"worklogs?dateFrom={queryDate:yyyy-MM-dd}&dateTo={queryDate:yyyy-MM-dd}&username={myUser.key}");
             }
             else
             {
-                HasTempo = false;
+                tempoClient = null;
             }
         }
 
         public User GetCurrentUser()
         {
-            return restClient.Get<User>(HttpStatusCode.OK, "api/2/myself");
+            return jiraClient.Get<User>(HttpStatusCode.OK, "myself");
         }
 
         public Issue GetIssue(string issueRef)
         {
-            return restClient.Get<Issue>(HttpStatusCode.OK, $"api/2/issue/{issueRef}");
+            return jiraClient.Get<Issue>(HttpStatusCode.OK, $"issue/{issueRef}");
         }
 
         public string GetJqlForFilter(string filterName)
         {
-            var filters = restClient.Get<List<Filter>>(HttpStatusCode.OK, "api/2/filter/favourite");
+            var filters = jiraClient.Get<List<Filter>>(HttpStatusCode.OK, "filter/favourite");
 
             var selectedFilter = filters.FirstOrDefault(f => f.name == filterName);
 
@@ -91,7 +86,7 @@ namespace Gallifrey.Jira
 
             while (moreToGet)
             {
-                var searchResult = restClient.Get<SearchResult>(HttpStatusCode.OK, $"api/2/search?jql={jql}&maxResults=999&startAt={startAt}&fields=summary,project,parent");
+                var searchResult = jiraClient.Get<SearchResult>(HttpStatusCode.OK, $"search?jql={jql}&maxResults=999&startAt={startAt}&fields=summary,project,parent");
 
                 returnIssues.AddRange(searchResult.issues);
 
@@ -110,23 +105,23 @@ namespace Gallifrey.Jira
 
         public IEnumerable<Project> GetProjects()
         {
-            return restClient.Get<List<Project>>(HttpStatusCode.OK, "api/2/project");
+            return jiraClient.Get<List<Project>>(HttpStatusCode.OK, "project");
         }
 
         public IEnumerable<Filter> GetFilters()
         {
-            return restClient.Get<List<Filter>>(HttpStatusCode.OK, "api/2/filter/favourite");
+            return jiraClient.Get<List<Filter>>(HttpStatusCode.OK, "filter/favourite");
         }
 
-        public IEnumerable<StandardWorkLog> GetWorkLoggedForDatesFilteredIssues(IEnumerable<DateTime> queryDates, IEnumerable<string> issueRefs)
+        public IEnumerable<StandardWorkLog> GetWorkLoggedForDatesFilteredIssues(List<DateTime> queryDates, List<string> issueRefs)
         {
             var workLogs = new List<StandardWorkLog>();
 
-            if (HasTempo)
+            if (tempoClient != null)
             {
                 foreach (var queryDate in queryDates)
                 {
-                    var logs = restClient.Get<List<TempoWorkLog>>(HttpStatusCode.OK, $"tempo-timesheets/3/worklogs?dateFrom={queryDate:yyyy-MM-dd}&dateTo={queryDate:yyyy-MM-dd}&username={myUser.key}");
+                    var logs = tempoClient.Get<List<TempoWorkLog>>(HttpStatusCode.OK, $"worklogs?dateFrom={queryDate:yyyy-MM-dd}&dateTo={queryDate:yyyy-MM-dd}&username={myUser.key}");
                     foreach (var tempoWorkLog in logs)
                     {
                         if (issueRefs == null || issueRefs.Any(x => string.Equals(x, tempoWorkLog.issue.key, StringComparison.InvariantCultureIgnoreCase)))
@@ -161,7 +156,7 @@ namespace Gallifrey.Jira
                             }
                             else
                             {
-                                logs = restClient.Get(HttpStatusCode.OK, $"api/2/issue/{issue.key}/worklog", customDeserialize: s => FilterWorklogsToUser(s, myUser));
+                                logs = jiraClient.Get(HttpStatusCode.OK, $"issue/{issue.key}/worklog", customDeserialize: s => FilterWorklogsToUser(s, myUser));
                                 workLogCache.Add(issue.key, logs);
                             }
 
@@ -188,7 +183,7 @@ namespace Gallifrey.Jira
 
         public Transitions GetIssueTransitions(string issueRef)
         {
-            return restClient.Get<Transitions>(HttpStatusCode.OK, $"api/2/issue/{issueRef}/transitions?expand=transitions.fields");
+            return jiraClient.Get<Transitions>(HttpStatusCode.OK, $"issue/{issueRef}/transitions?expand=transitions.fields");
         }
 
         public void TransitionIssue(string issueRef, string transitionName)
@@ -204,10 +199,10 @@ namespace Gallifrey.Jira
 
             var postData = new Dictionary<string, object>
             {
-                { "transition", new { id = transition.id } }
+                { "transition", new {transition.id } }
             };
 
-            restClient.Post(HttpStatusCode.NoContent, $"api/2/issue/{issueRef}/transitions", postData);
+            jiraClient.Post(HttpStatusCode.NoContent, $"issue/{issueRef}/transitions", postData);
         }
 
         public void AddWorkLog(string issueRef, WorkLogStrategy workLogStrategy, string comment, TimeSpan timeSpent, DateTime logDate, TimeSpan? remainingTime = null)
@@ -215,7 +210,7 @@ namespace Gallifrey.Jira
             if (logDate.Kind != DateTimeKind.Local) logDate = DateTime.SpecifyKind(logDate, DateTimeKind.Local);
             timeSpent = new TimeSpan(timeSpent.Hours, timeSpent.Minutes, 0);
 
-            if (HasTempo)
+            if (tempoClient != null)
             {
                 if (string.IsNullOrWhiteSpace(comment)) comment = "N/A";
                 var issue = new TempoWorkLog.TempoWorkLogIssue();
@@ -234,13 +229,13 @@ namespace Gallifrey.Jira
                 }
 
                 var tempoWorkLog = new TempoWorkLog { issue = issue, timeSpentSeconds = timeSpent.TotalSeconds, dateStarted = $"{logDate:s}.000", comment = comment, author = new TempoWorkLog.TempoWorkLogUser { key = myUser.key, name = myUser.name } };
-                restClient.Post(HttpStatusCode.OK, "tempo-timesheets/3/worklogs", tempoWorkLog);
+                tempoClient.Post(HttpStatusCode.OK, "worklogs", tempoWorkLog);
             }
             else
             {
                 var postData = new Dictionary<string, object>
                 {
-                    { "started", $"{logDate.ToString("yyyy-MM-ddTHH:mm:ss.fff")}{logDate.ToString("zzz").Replace(":", "")}"},
+                    { "started", $"{logDate:yyyy-MM-ddTHH:mm:ss.fff}{logDate.ToString("zzz").Replace(":", "")}"},
                     { "comment", comment },
                     { "timeSpent", $"{timeSpent.Hours}h {timeSpent.Minutes}m"},
                 };
@@ -265,7 +260,7 @@ namespace Gallifrey.Jira
                         break;
                 }
 
-                restClient.Post(HttpStatusCode.Created, $"api/2/issue/{issueRef}/worklog?adjustEstimate={adjustmentMethod}&newEstimate={newEstimate}&reduceBy=", postData);
+                jiraClient.Post(HttpStatusCode.Created, $"issue/{issueRef}/worklog?adjustEstimate={adjustmentMethod}&newEstimate={newEstimate}&reduceBy=", postData);
             }
         }
 
@@ -276,7 +271,7 @@ namespace Gallifrey.Jira
                 { "name", userName }
             };
 
-            restClient.Put(HttpStatusCode.NoContent, $"api/2/issue/{issueRef}/assignee", postData);
+            jiraClient.Put(HttpStatusCode.NoContent, $"issue/{issueRef}/assignee", postData);
         }
 
         public void AddComment(string issueRef, string comment)
@@ -286,7 +281,7 @@ namespace Gallifrey.Jira
                 { "body", comment }
             };
 
-            restClient.Post(HttpStatusCode.Created, $"api/2/issue/{issueRef}/comment", postData);
+            jiraClient.Post(HttpStatusCode.Created, $"issue/{issueRef}/comment", postData);
         }
 
         private static WorkLogs FilterWorklogsToUser(string rawJson, User user)

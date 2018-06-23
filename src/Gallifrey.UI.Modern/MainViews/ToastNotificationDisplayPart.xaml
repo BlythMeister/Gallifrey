@@ -1,0 +1,25 @@
+﻿<core:NotificationDisplayPart x:Class="Gallifrey.UI.Modern.MainViews.ToastNotificationDisplayPart"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:core="clr-namespace:ToastNotifications.Core;assembly=ToastNotifications"
+             mc:Ignorable="d"
+             d:DesignHeight="60" d:DesignWidth="400" Background="{DynamicResource AccentColorBrush}" MouseDown="ToastNotificationDisplayPart_OnMouseDown">
+    <Border BorderBrush="{DynamicResource FlyoutBackgroundBrush}" BorderThickness="2">
+        <Grid  Margin="5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+            <Border BorderBrush="{DynamicResource FlyoutBackgroundBrush}" BorderThickness="0,0,0,2" HorizontalAlignment="Stretch">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="../Icons/clock_blue.ico" Height="30" Width="30" Margin="0,0,5,0"/>
+                    <TextBlock Text="{Binding Title}" FontSize="18" Foreground="{DynamicResource IdealForegroundColorBrush}"/>
+                </StackPanel>
+            </Border>
+            <TextBlock Text="{Binding Message}" FontSize="16" Foreground="{DynamicResource IdealForegroundColorBrush}" Grid.Row="1" TextWrapping="Wrap" />
+
+    </Grid>
+    </Border>
+</core:NotificationDisplayPart>

@@ -1,4 +1,5 @@
 ﻿using Gallifrey.Serialization;
+using Newtonsoft.Json;
 using System;
 
 namespace Gallifrey.Settings
@@ -13,19 +14,19 @@ namespace Gallifrey.Settings
         string InstallationHash { get; }
         string UserHash { get; }
         string SiteHash { get; }
-        void SaveSettings();
     }
 
     public class SettingsCollection : ISettingsCollection
     {
-        public IAppSettings AppSettings { get; }
-        public IJiraConnectionSettings JiraConnectionSettings { get; }
-        public IUiSettings UiSettings { get; }
-        public IInternalSettings InternalSettings { get; }
-        public IExportSettings ExportSettings { get; }
-        public string InstallationHash => DataEncryption.GetSha256Hash($"{InternalSettings.InstallationInstaceId}-{JiraConnectionSettings.JiraUsername}");
-        public string UserHash => DataEncryption.GetSha256Hash($"{JiraConnectionSettings.JiraUsername.ToLower()}-{new Uri(JiraConnectionSettings.JiraUrl).Host.ToLower()}");
-        public string SiteHash => DataEncryption.GetSha256Hash(new Uri(JiraConnectionSettings.JiraUrl).Host.ToLower());
+        public IAppSettings AppSettings { get; private set; }
+        public IJiraConnectionSettings JiraConnectionSettings { get; private set; }
+        public IUiSettings UiSettings { get; private set; }
+        public IInternalSettings InternalSettings { get; private set; }
+        public IExportSettings ExportSettings { get; private set; }
+        [JsonIgnore] public string InstallationHash => DataEncryption.GetSha256Hash($"{InternalSettings.InstallationInstaceId}-{JiraConnectionSettings.JiraUsername}");
+        [JsonIgnore] public string UserHash => DataEncryption.GetSha256Hash($"{JiraConnectionSettings.JiraUsername.ToLower()}-{new Uri(JiraConnectionSettings.JiraUrl).Host.ToLower()}");
+        [JsonIgnore] public string SiteHash => DataEncryption.GetSha256Hash(new Uri(JiraConnectionSettings.JiraUrl).Host.ToLower());
+        private bool isIntialised;
 
         public SettingsCollection()
         {
@@ -34,19 +35,36 @@ namespace Gallifrey.Settings
             UiSettings = new UiSettings();
             InternalSettings = new InternalSettings();
             ExportSettings = new ExportSettings();
+            isIntialised = false;
         }
 
-        public SettingsCollection(IAppSettings appSettings, IJiraConnectionSettings jiraConnectionSettings, IUiSettings uiSettings, IInternalSettings internalSettings, IExportSettings exportSettings)
+        public SettingsCollection(ISettingsCollection settings)
         {
-            AppSettings = appSettings;
-            JiraConnectionSettings = jiraConnectionSettings;
-            UiSettings = uiSettings;
-            InternalSettings = internalSettings;
-            ExportSettings = exportSettings;
+            AppSettings = settings.AppSettings;
+            JiraConnectionSettings = settings.JiraConnectionSettings;
+            UiSettings = settings.UiSettings;
+            InternalSettings = settings.InternalSettings;
+            ExportSettings = settings.ExportSettings;
+
+            isIntialised = false;
+        }
+
+        public void Initialise()
+        {
+            var settings = SettingsCollectionSerializer.DeSerialize();
+
+            AppSettings = settings.AppSettings;
+            JiraConnectionSettings = settings.JiraConnectionSettings;
+            UiSettings = settings.UiSettings;
+            InternalSettings = settings.InternalSettings;
+            ExportSettings = settings.ExportSettings;
+
+            isIntialised = true;
         }
 
         public void SaveSettings()
         {
+            if (!isIntialised) return;
             SettingsCollectionSerializer.Serialize(this);
         }
     }

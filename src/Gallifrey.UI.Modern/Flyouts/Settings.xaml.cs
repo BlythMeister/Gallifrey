@@ -49,14 +49,6 @@ namespace Gallifrey.UI.Modern.Flyouts
 
             if (successfulSave)
             {
-                if (modelHelpers.Gallifrey.Settings.JiraConnectionSettings.UseTempo && !modelHelpers.Gallifrey.JiraConnection.HasTempo)
-                {
-                    await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Missing Tempo", "We Were Unable To Locate A Tempo Endpoint\nGallifrey Will Fall Back To Standard Jira Endpoints");
-                    modelHelpers.Gallifrey.Settings.JiraConnectionSettings.UseTempo = false;
-                    //Even though we have changed jira settings, we are changing because tempo is not in use, so don't reconnect
-                    modelHelpers.Gallifrey.SaveSettings(false, false);
-                }
-
                 modelHelpers.CloseFlyout(this);
                 var themeChanged = ThemeHelper.ChangeTheme(DataModel.Theme.Name, DataModel.Accent.Name);
 

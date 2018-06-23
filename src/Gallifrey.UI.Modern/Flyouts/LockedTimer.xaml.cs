@@ -1,13 +1,13 @@
-﻿using System;
-using System.Linq;
-using System.Windows;
-using System.Windows.Controls;
-using Gallifrey.ExtensionMethods;
+﻿using Gallifrey.ExtensionMethods;
 using Gallifrey.JiraTimers;
 using Gallifrey.UI.Modern.Helpers;
 using Gallifrey.UI.Modern.Models;
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
+using System;
+using System.Linq;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace Gallifrey.UI.Modern.Flyouts
 {
@@ -84,10 +84,10 @@ namespace Gallifrey.UI.Modern.Flyouts
                 }
             }
 
-            var dialog = (BaseMetroDialog)this.Resources["TimeLocation"];
+            var dialog = (BaseMetroDialog)Resources["TimeLocation"];
             await DialogCoordinator.Instance.ShowMetroDialogAsync(modelHelpers.DialogContext, dialog);
 
-            var message = dialog.FindChild<TextBlock>("Message");
+            var message = dialog.FindChild<TextBlock>("TimeLocateMessage");
             var runningTimerButton = dialog.FindChild<Button>("RunningTimerButton");
 
             if (runningTimer != null)
@@ -141,7 +141,7 @@ namespace Gallifrey.UI.Modern.Flyouts
 
         private async void AddToNewTimer(object sender, RoutedEventArgs e)
         {
-            var dialog = (BaseMetroDialog)this.Resources["TimeLocation"];
+            var dialog = (BaseMetroDialog)Resources["TimeLocation"];
             await DialogCoordinator.Instance.HideMetroDialogAsync(modelHelpers.DialogContext, dialog);
 
             ShowAddTimer();
@@ -149,7 +149,7 @@ namespace Gallifrey.UI.Modern.Flyouts
 
         private async void AddToRunningTimer(object sender, RoutedEventArgs e)
         {
-            var dialog = (BaseMetroDialog)this.Resources["TimeLocation"];
+            var dialog = (BaseMetroDialog)Resources["TimeLocation"];
             await DialogCoordinator.Instance.HideMetroDialogAsync(modelHelpers.DialogContext, dialog);
 
             var selected = DataModel.LockedTimers.Where(x => x.IsSelected).ToList();
@@ -182,7 +182,7 @@ namespace Gallifrey.UI.Modern.Flyouts
 
         private async void AddToExistingTimer(object sender, RoutedEventArgs e)
         {
-            var dialog = (BaseMetroDialog)this.Resources["TimeLocation"];
+            var dialog = (BaseMetroDialog)Resources["TimeLocation"];
             await DialogCoordinator.Instance.HideMetroDialogAsync(modelHelpers.DialogContext, dialog);
 
             var selected = DataModel.LockedTimers.Where(x => x.IsSelected).ToList();
@@ -191,13 +191,13 @@ namespace Gallifrey.UI.Modern.Flyouts
 
             var items = modelHelpers.Gallifrey.JiraTimerCollection.GetTimersForADate(lockedTimerDate).Select(x => new TimerDisplayModel(x)).ToList();
 
-            var timeSelectorDialog = (BaseMetroDialog)this.Resources["TimerSelector"];
+            var timeSelectorDialog = (BaseMetroDialog)Resources["TimerSelector"];
             await DialogCoordinator.Instance.ShowMetroDialogAsync(modelHelpers.DialogContext, timeSelectorDialog);
 
             var comboBox = timeSelectorDialog.FindChild<ComboBox>("Items");
             comboBox.ItemsSource = items;
 
-            var message = timeSelectorDialog.FindChild<TextBlock>("Message");
+            var message = timeSelectorDialog.FindChild<TextBlock>("TimerSelectorMessage");
             message.Text = "Please Select Which Timer";
 
             await timeSelectorDialog.WaitUntilUnloadedAsync();
@@ -224,18 +224,18 @@ namespace Gallifrey.UI.Modern.Flyouts
 
         private async void AddToRecentTimer(object sender, RoutedEventArgs e)
         {
-            var dialog = (BaseMetroDialog)this.Resources["TimeLocation"];
+            var dialog = (BaseMetroDialog)Resources["TimeLocation"];
             await DialogCoordinator.Instance.HideMetroDialogAsync(modelHelpers.DialogContext, dialog);
 
             var items = modelHelpers.Gallifrey.JiraTimerCollection.GetJiraReferencesForLastDays(999).Select(x => new TimerDisplayModel(x)).ToList();
 
-            var timeSelectorDialog = (BaseMetroDialog)this.Resources["TimerSelector"];
+            var timeSelectorDialog = (BaseMetroDialog)Resources["TimerSelector"];
             await DialogCoordinator.Instance.ShowMetroDialogAsync(modelHelpers.DialogContext, timeSelectorDialog);
 
             var comboBox = timeSelectorDialog.FindChild<ComboBox>("Items");
             comboBox.ItemsSource = items;
 
-            var message = timeSelectorDialog.FindChild<TextBlock>("Message");
+            var message = timeSelectorDialog.FindChild<TextBlock>("TimerSelectorMessage");
             message.Text = "Please Select Which Jira";
 
             await timeSelectorDialog.WaitUntilUnloadedAsync();
@@ -245,7 +245,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             if (selectedTimerSelectorModel != null)
             {
                 var lockedTimerDate = selected.First().DateForTimer;
-                var timersAlreadyExisting = modelHelpers.Gallifrey.JiraTimerCollection.GetTimersForADate(lockedTimerDate).FirstOrDefault(x=>x.JiraReference == selectedTimerSelectorModel.Reference);
+                var timersAlreadyExisting = modelHelpers.Gallifrey.JiraTimerCollection.GetTimersForADate(lockedTimerDate).FirstOrDefault(x => x.JiraReference == selectedTimerSelectorModel.Reference);
 
                 if (timersAlreadyExisting == null)
                 {
@@ -309,13 +309,13 @@ namespace Gallifrey.UI.Modern.Flyouts
         private async void CancelAddTimer(object sender, RoutedEventArgs e)
         {
             Focus();
-            var dialog = (BaseMetroDialog)this.Resources["TimeLocation"];
+            var dialog = (BaseMetroDialog)Resources["TimeLocation"];
             await DialogCoordinator.Instance.HideMetroDialogAsync(modelHelpers.DialogContext, dialog);
         }
 
         private async void ConfirmTimerSelector(object sender, RoutedEventArgs e)
         {
-            var dialog = (BaseMetroDialog)this.Resources["TimerSelector"];
+            var dialog = (BaseMetroDialog)Resources["TimerSelector"];
             var comboBox = dialog.FindChild<ComboBox>("Items");
 
             selectedTimerSelectorModel = (TimerDisplayModel)comboBox.SelectedItem;
@@ -325,7 +325,7 @@ namespace Gallifrey.UI.Modern.Flyouts
 
         private async void CancelTimerSelector(object sender, RoutedEventArgs e)
         {
-            var dialog = (BaseMetroDialog)this.Resources["TimerSelector"];
+            var dialog = (BaseMetroDialog)Resources["TimerSelector"];
 
             selectedTimerSelectorModel = null;
 

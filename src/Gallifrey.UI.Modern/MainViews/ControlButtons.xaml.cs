@@ -13,7 +13,6 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Forms;
-using Clipboard = System.Windows.Clipboard;
 
 namespace Gallifrey.UI.Modern.MainViews
 {
@@ -68,15 +67,15 @@ namespace Gallifrey.UI.Modern.MainViews
 
         }
 
-        private async void CopyButton(object sender, RoutedEventArgs e)
+        private async void CopyButton()
         {
-            var selectedTimers = ViewModel.GetSelectedTimerIds();
+            var selectedTimers = ViewModel.GetSelectedTimerIds().ToList();
 
-            if (selectedTimers.Count() > 1)
+            if (selectedTimers.Count > 1)
             {
                 await DialogCoordinator.Instance.ShowMessageAsync(ModelHelpers.DialogContext, "Too Many Timers Selected", "Please Select Only One Timer When Copying Reference");
             }
-            else if (selectedTimers != null && selectedTimers.Count() == 1)
+            else if (selectedTimers.Count == 1)
             {
                 var selectedTimer = ModelHelpers.Gallifrey.JiraTimerCollection.GetTimer(selectedTimers.First());
                 if (selectedTimer.LocalTimer)
@@ -85,31 +84,22 @@ namespace Gallifrey.UI.Modern.MainViews
                 }
                 else
                 {
-                    Clipboard.SetText(selectedTimer.JiraReference);
+                    await ClipboardHelper.SetClipboard(selectedTimer.JiraReference);
                 }
             }
         }
 
-        private async void PasteButton(object sender, RoutedEventArgs e)
+        private async void PasteButton()
         {
-            var pastedData = Clipboard.GetText();
-            string jiraRef = null;
-            try
-            {
-                var pastedUri = new Uri(pastedData);
-                var jiraUri = new Uri(ModelHelpers.Gallifrey.Settings.JiraConnectionSettings.JiraUrl);
-                if (pastedUri.Host == jiraUri.Host)
-                {
-                    var uriDrag = pastedUri.AbsolutePath;
-                    jiraRef = uriDrag.Substring(uriDrag.LastIndexOf("/") + 1);
-                }
-            }
-            catch (Exception)
-            {
-                //ignored
-            }
+            var pastedData = await ClipboardHelper.GetClipboard();
+            string jiraRef;
 
-            if (string.IsNullOrWhiteSpace(jiraRef))
+            if (Uri.TryCreate(pastedData, UriKind.Absolute, out var pastedUri) && Uri.TryCreate(ModelHelpers.Gallifrey.Settings.JiraConnectionSettings.JiraUrl, UriKind.Absolute, out var jiraUri) && pastedUri.Host == jiraUri.Host)
+            {
+                var uriDrag = pastedUri.AbsolutePath;
+                jiraRef = uriDrag.Substring(uriDrag.LastIndexOf("/", StringComparison.InvariantCultureIgnoreCase) + 1);
+            }
+            else
             {
                 jiraRef = pastedData;
             }
@@ -146,7 +136,7 @@ namespace Gallifrey.UI.Modern.MainViews
                     }
                     else
                     {
-                        var result = await DialogCoordinator.Instance.ShowMessageAsync(ModelHelpers.DialogContext, "Are You Sure?", $"Are You Sure You Want To Delete {timer.JiraReference}\n\n{timer.JiraName}\nFor: {timer.DateStarted.Date.ToString("ddd, dd MMM")}", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
+                        var result = await DialogCoordinator.Instance.ShowMessageAsync(ModelHelpers.DialogContext, "Are You Sure?", $"Are You Sure You Want To Delete {timer.JiraReference}\n\n{timer.JiraName}\nFor: {timer.DateStarted.Date:ddd, dd MMM}", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
 
                         if (result == MessageDialogResult.Affirmative)
                         {
@@ -276,7 +266,7 @@ namespace Gallifrey.UI.Modern.MainViews
         private void EmailButton(object sender, RoutedEventArgs e)
         {
             ModelHelpers.Gallifrey.TrackEvent(TrackingType.ContactClick);
-            Process.Start(new ProcessStartInfo("mailto:contact@gallifreyapp.co.uk?subject=Gallifrey App Contact"));
+            Process.Start(new ProcessStartInfo("mailto:support@gallifreyapp.co.uk?subject=Gallifrey App Contact"));
         }
 
         private void TwitterButton(object sender, RoutedEventArgs e)
@@ -309,8 +299,8 @@ namespace Gallifrey.UI.Modern.MainViews
             {
                 case RemoteButtonTrigger.Add: AddButton(this, null); break;
                 case RemoteButtonTrigger.AddToFill: AddToFillDay(); break;
-                case RemoteButtonTrigger.Copy: CopyButton(this, null); break;
-                case RemoteButtonTrigger.Paste: PasteButton(this, null); break;
+                case RemoteButtonTrigger.Copy: CopyButton(); break;
+                case RemoteButtonTrigger.Paste: PasteButton(); break;
                 case RemoteButtonTrigger.Delete: DeleteButton(this, null); break;
                 case RemoteButtonTrigger.Search: SearchButton(this, null); break;
                 case RemoteButtonTrigger.Edit: EditButton(this, null); break;

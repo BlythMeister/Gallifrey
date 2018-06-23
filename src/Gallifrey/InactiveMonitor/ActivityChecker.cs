@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Gallifrey.JiraTimers;
+using Gallifrey.Settings;
+using System;
 using System.Diagnostics;
 using System.Timers;
-using Gallifrey.JiraTimers;
-using Gallifrey.Settings;
 
 namespace Gallifrey.InactiveMonitor
 {
@@ -11,10 +11,11 @@ namespace Gallifrey.InactiveMonitor
         internal event EventHandler<int> NoActivityEvent;
         private readonly IJiraTimerCollection timerCollection;
         private readonly ISettingsCollection settingsCollection;
-        private readonly Timer hearbeat;
         private readonly ActivityStopwatch activityStopwatch;
         private readonly object lockObject;
-        
+
+        public TimeSpan Elapsed => activityStopwatch.Elapsed;
+
         internal ActivityChecker(IJiraTimerCollection timerCollection, ISettingsCollection settingsCollection)
         {
             activityStopwatch = new ActivityStopwatch();
@@ -22,7 +23,7 @@ namespace Gallifrey.InactiveMonitor
             this.settingsCollection = settingsCollection;
             lockObject = new object();
 
-            hearbeat = new Timer(500);
+            var hearbeat = new Timer(500);
             hearbeat.Elapsed += HearbeatOnElapsed;
             hearbeat.Start();
         }
@@ -58,7 +59,7 @@ namespace Gallifrey.InactiveMonitor
 
                     if (activityStopwatch.Elapsed >= TimeSpan.FromMilliseconds(settingsCollection.AppSettings.AlertTimeMilliseconds))
                     {
-                        NoActivityEvent?.Invoke(this, (int)activityStopwatch.Elapsed.TotalMilliseconds);
+                        NotifyNoActivity();
                     }
                 }
             }
@@ -76,8 +77,19 @@ namespace Gallifrey.InactiveMonitor
 
         public void Reset()
         {
-            NoActivityEvent?.Invoke(this, 0);
             activityStopwatch.Reset();
+            NotifyNoActivity();
+        }
+
+        public void SetValue(TimeSpan value)
+        {
+            activityStopwatch.StartWithSeed(value);
+            NotifyNoActivity();
+        }
+
+        private void NotifyNoActivity()
+        {
+            NoActivityEvent?.Invoke(this, (int)activityStopwatch.Elapsed.TotalMilliseconds);
         }
 
         private class ActivityStopwatch
@@ -85,7 +97,7 @@ namespace Gallifrey.InactiveMonitor
             private readonly Stopwatch timer;
             private TimeSpan manualAdjustmentValue;
 
-            public TimeSpan Elapsed => timer.Elapsed.Subtract(manualAdjustmentValue);
+            public TimeSpan Elapsed => timer.Elapsed.Add(manualAdjustmentValue);
             public bool IsRunning => timer.IsRunning;
             public bool IsPaused { get; private set; }
 
@@ -107,7 +119,7 @@ namespace Gallifrey.InactiveMonitor
                 timer.Stop();
                 if (manualAdjustTimeSpan.HasValue)
                 {
-                    manualAdjustmentValue = manualAdjustmentValue.Add(manualAdjustTimeSpan.Value);
+                    manualAdjustmentValue = manualAdjustmentValue.Add(manualAdjustTimeSpan.Value.Negate());
                 }
             }
 
@@ -121,6 +133,13 @@ namespace Gallifrey.InactiveMonitor
             {
                 Reset();
                 timer.Start();
+            }
+
+            public void StartWithSeed(TimeSpan value)
+            {
+                timer.Reset();
+                timer.Start();
+                manualAdjustmentValue = value;
             }
         }
     }

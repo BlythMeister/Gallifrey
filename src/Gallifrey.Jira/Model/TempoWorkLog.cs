@@ -1,5 +1,8 @@
-﻿namespace Gallifrey.Jira.Model
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Gallifrey.Jira.Model
 {
+    [SuppressMessage("ReSharper", "InconsistentNaming")]
     public class TempoWorkLog
     {
         public class TempoWorkLogIssue
@@ -12,7 +15,6 @@
         {
             public string key { get; set; }
             public string name { get; set; }
-            public string displayName { get; set; }
         }
 
         public TempoWorkLogIssue issue { get; set; }

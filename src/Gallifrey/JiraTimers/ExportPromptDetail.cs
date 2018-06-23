@@ -4,8 +4,8 @@ namespace Gallifrey.JiraTimers
 {
     public class ExportPromptDetail
     {
-        public Guid TimerId { get; private set; }
-        public TimeSpan ExportTime { get; private set; }
+        public Guid TimerId { get; }
+        public TimeSpan ExportTime { get; }
 
         public ExportPromptDetail(Guid timerId, TimeSpan exportTime)
         {

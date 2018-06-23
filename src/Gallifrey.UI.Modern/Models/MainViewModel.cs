@@ -1,3 +1,9 @@
+using Exceptionless;
+using Gallifrey.Comparers;
+using Gallifrey.ExtensionMethods;
+using Gallifrey.Jira.Model;
+using Gallifrey.UI.Modern.Helpers;
+using Gallifrey.Versions;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -5,11 +11,6 @@ using System.ComponentModel;
 using System.Linq;
 using System.Timers;
 using System.Windows;
-using Gallifrey.Comparers;
-using Gallifrey.ExtensionMethods;
-using Gallifrey.Jira.Model;
-using Gallifrey.UI.Modern.Helpers;
-using Gallifrey.Versions;
 
 namespace Gallifrey.UI.Modern.Models
 {
@@ -21,7 +22,7 @@ namespace Gallifrey.UI.Modern.Models
         public event PropertyChangedEventHandler PropertyChanged;
         public ObservableCollection<TimerDateModel> TimerDates { get; private set; }
         public string InactiveMinutes { get; private set; }
-        public TimeSpan TimeTimeActivity { get; private set; }
+        public TimeSpan TimeActivity { get; private set; }
 
         public MainViewModel(ModelHelpers modelHelpers)
         {
@@ -141,22 +142,33 @@ namespace Gallifrey.UI.Modern.Models
 
         public void SetNoActivityMilliseconds(int millisecondsSinceActivity)
         {
-            TimeTimeActivity = TimeSpan.FromMilliseconds(millisecondsSinceActivity);
-            TimeTimeActivity = TimeTimeActivity.Subtract(TimeSpan.FromMilliseconds(TimeTimeActivity.Milliseconds));
-            TimeTimeActivity = TimeTimeActivity.Subtract(TimeSpan.FromSeconds(TimeTimeActivity.Seconds));
+            TimeActivity = TimeSpan.FromMilliseconds(millisecondsSinceActivity);
+            TimeActivity = TimeActivity.Subtract(TimeSpan.FromMilliseconds(TimeActivity.Milliseconds));
+            TimeActivity = TimeActivity.Subtract(TimeSpan.FromSeconds(TimeActivity.Seconds));
 
-            if (TimeTimeActivity.TotalMinutes > 0)
+            if (TimeActivity.TotalMinutes > 0)
             {
-                var minutesPlural = TimeTimeActivity.TotalMinutes > 1 ? "s" : "";
-                InactiveMinutes = $"No Timer Running For {TimeTimeActivity.TotalMinutes} Minute{minutesPlural}";
+                var minutesPlural = TimeActivity.TotalMinutes > 1 ? "s" : "";
+                var newMessage = $"No Timer Running For {TimeActivity.TotalMinutes} Minute{minutesPlural}";
+
+                if (newMessage != InactiveMinutes)
+                {
+                    InactiveMinutes = newMessage;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("InactiveMinutes"));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasInactiveTime"));
+
+                    if (TimeActivity.TotalMinutes % TimeSpan.FromMilliseconds(ModelHelpers.Gallifrey.Settings.AppSettings.AlertTimeMilliseconds).TotalMinutes == 0)
+                    {
+                        ModelHelpers.ShowNotification(InactiveMinutes);
+                    }
+                }
             }
             else
             {
                 InactiveMinutes = string.Empty;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("InactiveMinutes"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasInactiveTime"));
             }
-
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("InactiveMinutes"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasInactiveTime"));
         }
 
         public IEnumerable<Guid> GetSelectedTimerIds()
@@ -256,29 +268,37 @@ namespace Gallifrey.UI.Modern.Models
 
                 foreach (var timer in dateTimers)
                 {
-                    if (!dateModel.Timers.Any(x => x.JiraTimer.UniqueId == timer.UniqueId))
+                    if (dateModel.Timers.All(x => x.JiraTimer.UniqueId != timer.UniqueId))
                     {
                         timer.PropertyChanged += (sender, args) => TimerChanged();
                         dateModel.AddTimerModel(new TimerModel(timer));
                     }
                 }
 
-                foreach (var removeTimer in dateModel.Timers.Where(timerModel => !dateTimers.Any(x => x.UniqueId == timerModel.JiraTimer.UniqueId)).ToList())
+                foreach (var removeTimer in dateModel.Timers.Where(timerModel => dateTimers.All(x => x.UniqueId != timerModel.JiraTimer.UniqueId)).ToList())
                 {
                     dateModel.RemoveTimerModel(removeTimer);
                 }
 
+                var nonExistentDefaultJiras = new List<string>();
                 foreach (var defaultJira in ModelHelpers.Gallifrey.Settings.AppSettings.DefaultTimers ?? new List<string>())
                 {
-                    if (!dateModel.Timers.Any(x => x.JiraTimer.JiraReference == defaultJira) && dateModel.TimerDate.Date <= DateTime.Now.Date)
+                    if (dateModel.Timers.All(x => x.JiraTimer.JiraReference != defaultJira.ToUpper()) && dateModel.TimerDate.Date <= DateTime.Now.Date)
                     {
                         try
                         {
                             var jira = jiraCache.FirstOrDefault(x => x.key == defaultJira);
                             if (jira == null && ModelHelpers.Gallifrey.JiraConnection.IsConnected)
                             {
-                                jira = ModelHelpers.Gallifrey.JiraConnection.GetJiraIssue(defaultJira);
-                                jiraCache.Add(jira);
+                                if (!ModelHelpers.Gallifrey.JiraConnection.DoesJiraExist(defaultJira))
+                                {
+                                    nonExistentDefaultJiras.Add(defaultJira);
+                                }
+                                else
+                                {
+                                    jira = ModelHelpers.Gallifrey.JiraConnection.GetJiraIssue(defaultJira);
+                                    jiraCache.Add(jira);
+                                }
                             }
 
                             if (jira != null)
@@ -289,11 +309,21 @@ namespace Gallifrey.UI.Modern.Models
                                 dateModel.AddTimerModel(new TimerModel(timer));
                             }
                         }
-                        catch (Exception)
+                        catch (Exception ex)
                         {
-                            // ignored
+                            ExceptionlessClient.Default.SubmitException(ex);
                         }
                     }
+                }
+
+                if (nonExistentDefaultJiras.Any())
+                {
+                    foreach (var nonExistentDefaultJira in nonExistentDefaultJiras)
+                    {
+                        ModelHelpers.Gallifrey.Settings.AppSettings.DefaultTimers.Remove(nonExistentDefaultJira);
+                    }
+
+                    ModelHelpers.Gallifrey.SaveSettings(false, false);
                 }
             }
 
@@ -500,5 +530,7 @@ namespace Gallifrey.UI.Modern.Models
         }
 
         #endregion
+
+
     }
 }

@@ -1,4 +1,5 @@
-﻿using MahApps.Metro.Controls.Dialogs;
+﻿using Exceptionless;
+using MahApps.Metro.Controls.Dialogs;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -43,7 +44,7 @@ namespace Gallifrey.UI.Modern.Helpers
             var controller = await DialogCoordinator.Instance.ShowProgressAsync(dialogContext, "Please Wait", message, canCancel);
             controller.SetIndeterminate();
 
-            var controllerCancel = Task.Factory.StartNew(() =>
+            var controllerCancel = Task.Run(() =>
             {
                 while (true)
                 {
@@ -63,7 +64,7 @@ namespace Gallifrey.UI.Modern.Helpers
 
             try
             {
-                var functionTask = Task.Factory.StartNew(() => function.Invoke(controller), cancellationTokenSource.Token);
+                var functionTask = Task.Run(() => function.Invoke(controller), cancellationTokenSource.Token);
 
                 ProgressResult<T> result;
                 if (await Task.WhenAny(functionTask, controllerCancel) == controllerCancel)
@@ -90,19 +91,20 @@ namespace Gallifrey.UI.Modern.Helpers
 
                 return result;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 if (throwErrors)
                 {
                     throw;
                 }
 
+                ExceptionlessClient.Default.SubmitException(ex);
                 return ProgressResult.GetErrored<T>();
             }
             finally
             {
                 cancellationTokenSource.Cancel();
-                await controller.CloseAsync();
+                if (controller.IsOpen) await controller.CloseAsync();
             }
         }
     }

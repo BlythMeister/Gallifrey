@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Gallifrey.Serialization;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Gallifrey.Serialization;
 
 namespace Gallifrey.IdleTimers
 {
@@ -9,7 +9,6 @@ namespace Gallifrey.IdleTimers
     {
         void RemoveTimer(Guid uniqueId);
         IEnumerable<IdleTimer> GetUnusedLockTimers();
-        void RemoveOldTimers();
         IdleTimer GetTimer(Guid uniqueId);
     }
 
@@ -19,7 +18,12 @@ namespace Gallifrey.IdleTimers
 
         internal IdleTimerCollection()
         {
-            lockTimerList = IdleTimerCollectionSerializer.DeSerialize();
+            lockTimerList = new List<IdleTimer>();
+        }
+
+        internal void Initialise()
+        {
+            lockTimerList.AddRange(IdleTimerCollectionSerializer.DeSerialize());
             lockTimerList.RemoveAll(x => x.IsRunning);
         }
 

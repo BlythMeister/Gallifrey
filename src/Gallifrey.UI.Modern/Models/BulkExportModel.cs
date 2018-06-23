@@ -1,10 +1,10 @@
-﻿using System;
-using System.ComponentModel;
-using Gallifrey.Jira.Enum;
+﻿using Gallifrey.Jira.Enum;
 using Gallifrey.Jira.Model;
 using Gallifrey.JiraTimers;
 using Gallifrey.Settings;
 using Gallifrey.UI.Modern.Helpers;
+using System;
+using System.ComponentModel;
 
 namespace Gallifrey.UI.Modern.Models
 {
@@ -38,11 +38,11 @@ namespace Gallifrey.UI.Modern.Models
         public TimeSpan ToExport => new TimeSpan(toExportHours, toExportMinutes, 0);
         public TimeSpan? Remaining => WorkLogStrategy == WorkLogStrategy.SetValue ? new TimeSpan(remainingHours, remainingMinutes, 0) : (TimeSpan?)null;
         public string TickOrCross => shouldExport ? "✓" : "X";
-        public string Header => $"{JiraRef} [{ExportDate.ToString("ddd, dd MMM")}] [{TickOrCross}]";
+        public string Header => $"{JiraRef} [{ExportDate:ddd, dd MMM}] [{TickOrCross}]";
 
         public WorkLogStrategy WorkLogStrategy
         {
-            get { return workLogStrategy; }
+            get => workLogStrategy;
             set
             {
                 workLogStrategy = value;
@@ -53,7 +53,7 @@ namespace Gallifrey.UI.Modern.Models
 
         public bool ChangeStatus
         {
-            get { return changeStatus; }
+            get => changeStatus;
             set
             {
                 changeStatus = value;
@@ -63,7 +63,7 @@ namespace Gallifrey.UI.Modern.Models
 
         public bool ShouldExport
         {
-            get { return shouldExport; }
+            get => shouldExport;
             set
             {
                 shouldExport = value;
@@ -74,10 +74,7 @@ namespace Gallifrey.UI.Modern.Models
 
         public int? ToExportHours
         {
-            get
-            {
-                return toExportHours;
-            }
+            get => toExportHours;
             set
             {
                 var newValue = value ?? 0;
@@ -95,15 +92,11 @@ namespace Gallifrey.UI.Modern.Models
 
         public int? ToExportMinutes
         {
-            get
-            {
-                return toExportMinutes;
-            }
+            get => toExportMinutes;
             set
             {
                 var newValue = value ?? 0;
-                bool hoursChanged;
-                HourMinuteHelper.UpdateMinutes(ref toExportHours, ref toExportMinutes, newValue, 23, out hoursChanged);
+                HourMinuteHelper.UpdateMinutes(ref toExportHours, ref toExportMinutes, newValue, 23, out var hoursChanged);
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ToExportMinutes"));
                 if (hoursChanged)
                 {
@@ -122,10 +115,7 @@ namespace Gallifrey.UI.Modern.Models
 
         public int? RemainingHours
         {
-            get
-            {
-                return remainingHours;
-            }
+            get => remainingHours;
             set
             {
                 var newValue = value ?? 0;
@@ -135,15 +125,11 @@ namespace Gallifrey.UI.Modern.Models
 
         public int? RemainingMinutes
         {
-            get
-            {
-                return remainingMinutes;
-            }
+            get => remainingMinutes;
             set
             {
                 var newValue = value ?? 0;
-                bool hoursChanged;
-                HourMinuteHelper.UpdateMinutes(ref remainingHours, ref remainingMinutes, newValue, 999, out hoursChanged);
+                HourMinuteHelper.UpdateMinutes(ref remainingHours, ref remainingMinutes, newValue, 999, out var hoursChanged);
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("RemainingMinutes"));
                 if (hoursChanged)
                 {

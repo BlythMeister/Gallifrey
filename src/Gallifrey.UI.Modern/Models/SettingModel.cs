@@ -20,6 +20,7 @@ namespace Gallifrey.UI.Modern.Models
         private int targetHoursPerDay;
         private int targetMinutesPerDay;
         private bool trackingOnly;
+        private bool useTempo;
         private bool alertWhenIdle;
         private bool trackLock;
         private bool trackIdle;
@@ -27,7 +28,7 @@ namespace Gallifrey.UI.Modern.Models
         //AppSettings
         public bool AlertWhenIdle
         {
-            get { return alertWhenIdle; }
+            get => alertWhenIdle;
             set
             {
                 alertWhenIdle = value;
@@ -36,7 +37,7 @@ namespace Gallifrey.UI.Modern.Models
         }
         public bool TrackIdle
         {
-            get { return trackIdle; }
+            get => trackIdle;
             set
             {
                 trackIdle = value;
@@ -45,7 +46,7 @@ namespace Gallifrey.UI.Modern.Models
         }
         public bool TrackLock
         {
-            get { return trackLock; }
+            get => trackLock;
             set
             {
                 trackLock = value;
@@ -72,7 +73,16 @@ namespace Gallifrey.UI.Modern.Models
         public string JiraUrl { get; set; }
         public string JiraUsername { get; set; }
         public string JiraPassword { get; set; }
-        public bool UseTempo { get; set; }
+        public bool UseTempo
+        {
+            get => useTempo;
+            set
+            {
+                useTempo = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("UseTempo"));
+            }
+        }
+        public string TempoToken { get; set; }
 
         //Export Settings
         public bool ExportAll { get; set; }
@@ -83,7 +93,7 @@ namespace Gallifrey.UI.Modern.Models
         public string DefaultComment { get; set; }
         public bool TrackingOnly
         {
-            get { return trackingOnly; }
+            get => trackingOnly;
             set
             {
                 trackingOnly = value;
@@ -102,7 +112,7 @@ namespace Gallifrey.UI.Modern.Models
         //Behaviour Properties
         public int? TargetHoursPerDay
         {
-            get { return targetHoursPerDay; }
+            get => targetHoursPerDay;
             set
             {
                 var newValue = value ?? 0;
@@ -112,12 +122,11 @@ namespace Gallifrey.UI.Modern.Models
 
         public int? TargetMinutesPerDay
         {
-            get { return targetMinutesPerDay; }
+            get => targetMinutesPerDay;
             set
             {
                 var newValue = value ?? 0;
-                bool hoursChanged;
-                HourMinuteHelper.UpdateMinutes(ref targetHoursPerDay, ref targetMinutesPerDay, newValue, 23, out hoursChanged);
+                HourMinuteHelper.UpdateMinutes(ref targetHoursPerDay, ref targetMinutesPerDay, newValue, 23, out var hoursChanged);
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TargetMinutesPerDay"));
                 if (hoursChanged)
                 {
@@ -165,6 +174,7 @@ namespace Gallifrey.UI.Modern.Models
             JiraUsername = settings.JiraConnectionSettings.JiraUsername;
             JiraPassword = settings.JiraConnectionSettings.JiraPassword;
             UseTempo = settings.JiraConnectionSettings.UseTempo;
+            TempoToken = settings.JiraConnectionSettings.TempoToken;
 
             //Export Settings
             TrackingOnly = settings.ExportSettings.TrackingOnly;
@@ -231,11 +241,16 @@ namespace Gallifrey.UI.Modern.Models
             if (settings.JiraConnectionSettings.JiraUrl != JiraUrl ||
                 settings.JiraConnectionSettings.JiraUsername != JiraUsername ||
                 settings.JiraConnectionSettings.JiraPassword != JiraPassword ||
-                settings.JiraConnectionSettings.UseTempo != UseTempo)
+                settings.JiraConnectionSettings.UseTempo != UseTempo ||
+                settings.JiraConnectionSettings.TempoToken != TempoToken)
             {
                 JiraSettingsChanged = true;
             }
             else if (string.IsNullOrWhiteSpace(JiraUrl) || string.IsNullOrWhiteSpace(JiraUsername) || string.IsNullOrWhiteSpace(JiraPassword))
+            {
+                JiraSettingsChanged = true;
+            }
+            else if (UseTempo && string.IsNullOrWhiteSpace(TempoToken))
             {
                 JiraSettingsChanged = true;
             }
@@ -244,6 +259,7 @@ namespace Gallifrey.UI.Modern.Models
             settings.JiraConnectionSettings.JiraUsername = JiraUsername;
             settings.JiraConnectionSettings.JiraPassword = JiraPassword;
             settings.JiraConnectionSettings.UseTempo = UseTempo;
+            settings.JiraConnectionSettings.TempoToken = TempoToken;
 
             //Export Settings
             settings.ExportSettings.ExportPrompt.OnAddIdle = ExportPrompts.First(x => x.Key == "Locked").IsChecked && !TrackingOnly;

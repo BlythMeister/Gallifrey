@@ -1,6 +1,6 @@
+using Gallifrey.UI.Modern.Helpers;
 using System;
 using System.ComponentModel;
-using Gallifrey.UI.Modern.Helpers;
 
 namespace Gallifrey.UI.Modern.Models
 {
@@ -33,7 +33,7 @@ namespace Gallifrey.UI.Modern.Models
         public bool HasModifiedJiraReference => (OriginalJiraReference != JiraReference) || (OriginalLocalTimerDescription != LocalTimerDescription);
         public bool HasModifiedRunDate => OriginalRunDate.Value.Date != RunDate.Value.Date;
         public bool HasModifiedTime => OriginalHours != Hours || OriginalMinutes != Minutes;
-        
+
 
         public EditTimerModel(IBackend gallifrey, Guid timerId)
         {
@@ -84,7 +84,7 @@ namespace Gallifrey.UI.Modern.Models
 
         public string JiraReference
         {
-            get { return jiraReference; }
+            get => jiraReference;
             set
             {
                 jiraReference = value;
@@ -96,7 +96,7 @@ namespace Gallifrey.UI.Modern.Models
 
         public string LocalTimerDescription
         {
-            get { return localTimerDescription; }
+            get => localTimerDescription;
             set
             {
                 localTimerDescription = value;
@@ -108,7 +108,7 @@ namespace Gallifrey.UI.Modern.Models
 
         public DateTime? RunDate
         {
-            get { return runDate; }
+            get => runDate;
             set
             {
                 runDate = value;
@@ -120,7 +120,7 @@ namespace Gallifrey.UI.Modern.Models
 
         public int? Hours
         {
-            get { return hours; }
+            get => hours;
             set
             {
                 var newValue = value ?? 0;
@@ -131,12 +131,11 @@ namespace Gallifrey.UI.Modern.Models
 
         public int? Minutes
         {
-            get { return minutes; }
+            get => minutes;
             set
             {
                 var newValue = value ?? 0;
-                bool hoursChanged;
-                HourMinuteHelper.UpdateMinutes(ref hours, ref minutes, newValue, 23, out hoursChanged);
+                HourMinuteHelper.UpdateMinutes(ref hours, ref minutes, newValue, 23, out var hoursChanged);
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Minutes"));
                 if (hoursChanged)
                 {
@@ -149,7 +148,7 @@ namespace Gallifrey.UI.Modern.Models
 
         public bool LocalTimer
         {
-            get { return localTimer; }
+            get => localTimer;
             set
             {
                 localTimer = value;
@@ -162,7 +161,7 @@ namespace Gallifrey.UI.Modern.Models
             IsDefaultOnButton = false;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("IsDefaultOnButton"));
         }
-        
+
         public void AdjustTime(TimeSpan timeAdjustmentAmount, bool addTime)
         {
             var currentTime = new TimeSpan(Hours ?? 0, Minutes ?? 0, 0);

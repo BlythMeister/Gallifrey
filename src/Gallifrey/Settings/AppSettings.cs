@@ -15,6 +15,7 @@ namespace Gallifrey.Settings
         IEnumerable<DayOfWeek> ExportDays { get; set; }
         DayOfWeek StartOfWeek { get; set; }
         Guid? TimerRunningOnShutdown { get; set; }
+        TimeSpan? NoTimerRunningOnShutdown { get; set; }
         TimeSpan GetTargetThisWeek();
         bool AutoUpdate { get; set; }
         bool UsageTracking { get; set; }
@@ -53,6 +54,10 @@ namespace Gallifrey.Settings
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
         public Guid? TimerRunningOnShutdown { get; set; }
 
+        [DefaultValue(null)]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
+        public TimeSpan? NoTimerRunningOnShutdown { get; set; }
+
         [DefaultValue(false)]
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
         public bool AutoUpdate { get; set; }
@@ -89,6 +94,7 @@ namespace Gallifrey.Settings
             ExportDays = new List<DayOfWeek>();
             StartOfWeek = DayOfWeek.Monday;
             TimerRunningOnShutdown = null;
+            NoTimerRunningOnShutdown = null;
             AutoUpdate = false;
             UsageTracking = true;
             TrackLockTime = true;

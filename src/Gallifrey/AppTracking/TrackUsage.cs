@@ -42,7 +42,7 @@ namespace Gallifrey.AppTracking
                 };
 
             }
-            catch (Exception)
+            catch (Exception) //Internal handled error
             {
                 webBrowser = null;
             }
@@ -66,7 +66,7 @@ namespace Gallifrey.AppTracking
                         await Task.Delay(500);
                     }
                 }
-                catch (Exception)
+                catch (Exception) //Internal handled error
                 {
                     SetupBrowser();
                 }

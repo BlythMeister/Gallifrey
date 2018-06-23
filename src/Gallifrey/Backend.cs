@@ -12,9 +12,7 @@ using Gallifrey.Settings;
 using Gallifrey.Versions;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
@@ -31,12 +29,12 @@ namespace Gallifrey
         IJiraConnection JiraConnection { get; }
         IVersionControl VersionControl { get; }
         List<WithThanksDefinition> WithThanksDefinitions { get; }
-        event EventHandler<int> NoActivityEvent;
-        event EventHandler<ExportPromptDetail> ExportPromptEvent;
         event EventHandler DailyTrackingEvent;
         event EventHandler BackendModifiedTimers;
         event EventHandler IsPremiumChanged;
         event EventHandler SettingsChanged;
+        event EventHandler<int> NoActivityEvent;
+        event EventHandler<ExportPromptDetail> ExportPromptEvent;
         void Initialise();
         void Close();
         void TrackEvent(TrackingType trackingType);
@@ -45,19 +43,25 @@ namespace Gallifrey
         Guid? StopLockTimer();
         IEnumerable<ChangeLogVersion> GetChangeLog(XDocument changeLogContent);
         void ResetInactiveAlert();
+        bool IsInitialised { get; }
     }
 
     public class Backend : IBackend
     {
+        public bool IsInitialised { get; private set; }
+
         private readonly JiraTimerCollection jiraTimerCollection;
         private readonly IdleTimerCollection idleTimerCollection;
         private readonly SettingsCollection settingsCollection;
+        private readonly RecentJiraCollection recentJiraCollection;
         private readonly ITrackUsage trackUsage;
         private readonly JiraConnection jiraConnection;
         private readonly VersionControl versionControl;
         private readonly WithThanksCreator withThanksCreator;
         private readonly PremiumChecker premiumChecker;
         private readonly Mutex exportedHeartbeatMutex;
+        private readonly Timer cleanUpAndTrackingHeartbeat;
+        private readonly Timer jiraExportHearbeat;
 
         public event EventHandler<int> NoActivityEvent;
         public event EventHandler<ExportPromptDetail> ExportPromptEvent;
@@ -73,40 +77,27 @@ namespace Gallifrey
 
         public Backend(InstanceType instanceType)
         {
-            settingsCollection = SettingsCollectionSerializer.DeSerialize();
+            settingsCollection = new SettingsCollection(SettingsCollectionSerializer.DeSerialize());
             versionControl = new VersionControl(instanceType);
             trackUsage = new TrackUsage(versionControl, settingsCollection, instanceType);
-            versionControl.UpdateCheckOccured += (sender, b) => trackUsage.TrackAppUsage(b ? TrackingType.UpdateCheckManual : TrackingType.UpdateCheck);
-
             jiraTimerCollection = new JiraTimerCollection(settingsCollection, trackUsage);
-            jiraTimerCollection.exportPrompt += OnExportPromptEvent;
-            jiraConnection = new JiraConnection(trackUsage);
+            recentJiraCollection = new RecentJiraCollection();
+            jiraConnection = new JiraConnection(trackUsage, recentJiraCollection);
             idleTimerCollection = new IdleTimerCollection();
             ActivityChecker = new ActivityChecker(jiraTimerCollection, settingsCollection);
             withThanksCreator = new WithThanksCreator();
             premiumChecker = new PremiumChecker();
 
+            versionControl.UpdateCheckOccured += (sender, b) => trackUsage.TrackAppUsage(b ? TrackingType.UpdateCheckManual : TrackingType.UpdateCheck);
+            jiraTimerCollection.ExportPrompt += OnExportPromptEvent;
             ActivityChecker.NoActivityEvent += OnNoActivityEvent;
-            var cleanUpAndTrackingHeartbeat = new Timer(TimeSpan.FromMinutes(15).TotalMilliseconds);
+
+            cleanUpAndTrackingHeartbeat = new Timer(TimeSpan.FromMinutes(15).TotalMilliseconds);
             cleanUpAndTrackingHeartbeat.Elapsed += CleanUpAndTrackingHearbeatOnElapsed;
-            cleanUpAndTrackingHeartbeat.Start();
 
             exportedHeartbeatMutex = new Mutex(false);
-            var jiraExportHearbeat = new Timer(TimeSpan.FromMinutes(10).TotalMilliseconds);
+            jiraExportHearbeat = new Timer(TimeSpan.FromMinutes(10).TotalMilliseconds);
             jiraExportHearbeat.Elapsed += JiraExportHearbeatHearbeatOnElapsed;
-            jiraExportHearbeat.Start();
-
-            if (Settings.AppSettings.TimerRunningOnShutdown.HasValue)
-            {
-                var timer = jiraTimerCollection.GetTimer(Settings.AppSettings.TimerRunningOnShutdown.Value);
-                if (timer != null && timer.DateStarted.Date == DateTime.Now.Date)
-                {
-                    JiraTimerCollection.StartTimer(Settings.AppSettings.TimerRunningOnShutdown.Value);
-                }
-
-                Settings.AppSettings.TimerRunningOnShutdown = null;
-                SaveSettings(false, false);
-            }
         }
 
         private void OnExportPromptEvent(object sender, ExportPromptDetail promptDetail)
@@ -154,7 +145,7 @@ namespace Gallifrey
                 }
 
                 var isPremium = premiumChecker.CheckIfPremium(settingsCollection);
-                if (isPremium != settingsCollection.InternalSettings.IsPremium)
+                if (!versionControl.IsAutomatedDeploy || isPremium != settingsCollection.InternalSettings.IsPremium)
                 {
                     settingsCollection.InternalSettings.SetIsPremium(isPremium);
                     settingsCollection.SaveSettings();
@@ -202,26 +193,26 @@ namespace Gallifrey
                 {
                     foreach (var timeExport in jirasExportedTo.Where(x => x.LoggedDate.Date == checkDate.Key.Date))
                     {
-                        if (!checkDate.Value.Any(x => x.JiraReference == timeExport.JiraRef))
+                        if (checkDate.Value.All(x => x.JiraReference != timeExport.JiraRef))
                         {
                             var issue = issueCache.FirstOrDefault(x => x.key == timeExport.JiraRef);
 
-                            if (issue == null)
+                            if (issue == null && jiraConnection.DoesJiraExist(timeExport.JiraRef))
                             {
                                 issue = jiraConnection.GetJiraIssue(timeExport.JiraRef);
                                 issueCache.Add(issue);
                             }
 
                             var timerReference = jiraTimerCollection.AddTimer(issue, checkDate.Key.Date, new TimeSpan(), false);
-                            jiraTimerCollection.RefreshFromJira(timerReference, issue, timeExport.TimeSpent);
                             BackendModifiedTimers?.Invoke(this, null);
+                            jiraTimerCollection.RefreshFromJira(timerReference, issue, timeExport.TimeSpent);
                         }
                     }
 
                     foreach (var timer in checkDate.Value.Where(x => !x.LocalTimer))
                     {
                         var issue = issueCache.FirstOrDefault(x => x.key == timer.JiraReference);
-                        if (issue == null)
+                        if (issue == null && jiraConnection.DoesJiraExist(timer.JiraReference))
                         {
                             issue = jiraConnection.GetJiraIssue(timer.JiraReference);
                             issueCache.Add(issue);
@@ -232,62 +223,66 @@ namespace Gallifrey
                     }
                 }
             }
-            catch
-            {
-                /*Surpress the error*/
-            }
+            catch { /*Surpress the error*/ }
 
             exportedHeartbeatMutex.ReleaseMutex();
         }
 
         public void Initialise()
         {
-            if (versionControl.IsAutomatedDeploy)
-            {
-                var processes = Process.GetProcesses();
-                if (processes.Count(process => process.ProcessName.Contains("Gallifrey") && !process.ProcessName.Contains("vshost")) > 1)
-                {
-                    throw new MultipleGallifreyRunningException();
-                }
-            }
-            else
-            {
-                if (!Debugger.IsAttached)
-                {
-                    throw new DebuggerException();
-                }
-            }
+            settingsCollection.Initialise();
+            idleTimerCollection.Initialise();
+            jiraTimerCollection.Initialise();
+            recentJiraCollection.Initialise();
 
-            try
+            if (settingsCollection.InternalSettings.LastChangeLogVersion == new Version(0, 0, 0, 0))
             {
-                using (var client = new WebClient())
-                {
-                    client.DownloadData("https://releases.gallifreyapp.co.uk");
-                }
-            }
-            catch
-            {
-                throw new NoInternetConnectionException();
+                throw new MissingConfigException("New User");
             }
 
             jiraConnection.ReConnect(settingsCollection.JiraConnectionSettings, settingsCollection.ExportSettings);
+            cleanUpAndTrackingHeartbeat.Start();
+            jiraExportHearbeat.Start();
+            BackendModifiedTimers?.Invoke(this, null);
 
-            Task.Factory.StartNew(() =>
+            if (Settings.AppSettings.TimerRunningOnShutdown.HasValue)
             {
-                CleanUpAndTrackingHearbeatOnElapsed(this, null);
-                JiraExportHearbeatHearbeatOnElapsed(this, null);
-            });
+                var timer = jiraTimerCollection.GetTimer(Settings.AppSettings.TimerRunningOnShutdown.Value);
+                if (timer != null && timer.DateStarted.Date == DateTime.Now.Date)
+                {
+                    JiraTimerCollection.StartTimer(Settings.AppSettings.TimerRunningOnShutdown.Value);
+                }
+
+                Settings.AppSettings.TimerRunningOnShutdown = null;
+                SaveSettings(false, false);
+            }
+
+            if (Settings.AppSettings.NoTimerRunningOnShutdown.HasValue)
+            {
+                ActivityChecker.SetValue(Settings.AppSettings.NoTimerRunningOnShutdown.Value);
+
+                Settings.AppSettings.NoTimerRunningOnShutdown = null;
+                SaveSettings(false, false);
+            }
+
+            CleanUpAndTrackingHearbeatOnElapsed(this, null);
+
+            IsInitialised = true;
+
+            Task.Run(() => { JiraExportHearbeatHearbeatOnElapsed(this, null); });
         }
 
         public void Close()
         {
             trackUsage.TrackAppUsage(TrackingType.AppClose);
+
             var runningTimer = jiraTimerCollection.GetRunningTimerId();
             if (runningTimer.HasValue)
             {
                 jiraTimerCollection.StopTimer(runningTimer.Value, false);
             }
             settingsCollection.AppSettings.TimerRunningOnShutdown = runningTimer;
+            settingsCollection.AppSettings.NoTimerRunningOnShutdown = ActivityChecker.Elapsed;
 
             idleTimerCollection.StopLockedTimers();
 

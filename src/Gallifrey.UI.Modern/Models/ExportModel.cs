@@ -1,10 +1,10 @@
-﻿using System;
-using System.ComponentModel;
-using Gallifrey.Jira.Enum;
+﻿using Gallifrey.Jira.Enum;
 using Gallifrey.Jira.Model;
 using Gallifrey.JiraTimers;
 using Gallifrey.Settings;
 using Gallifrey.UI.Modern.Helpers;
+using System;
+using System.ComponentModel;
 
 namespace Gallifrey.UI.Modern.Models
 {
@@ -41,7 +41,7 @@ namespace Gallifrey.UI.Modern.Models
 
         public WorkLogStrategy WorkLogStrategy
         {
-            get { return workLogStrategy; }
+            get => workLogStrategy;
             set
             {
                 workLogStrategy = value;
@@ -52,7 +52,7 @@ namespace Gallifrey.UI.Modern.Models
 
         public bool ChangeStatus
         {
-            get { return changeStatus; }
+            get => changeStatus;
             set
             {
                 changeStatus = value;
@@ -62,10 +62,7 @@ namespace Gallifrey.UI.Modern.Models
 
         public int? ToExportHours
         {
-            get
-            {
-                return toExportHours;
-            }
+            get => toExportHours;
             set
             {
                 var newValue = value ?? 0;
@@ -83,10 +80,7 @@ namespace Gallifrey.UI.Modern.Models
 
         public int? ToExportMinutes
         {
-            get
-            {
-                return toExportMinutes;
-            }
+            get => toExportMinutes;
             set
             {
                 var newValue = value ?? 0;
@@ -109,10 +103,7 @@ namespace Gallifrey.UI.Modern.Models
 
         public int? RemainingHours
         {
-            get
-            {
-                return remainingHours;
-            }
+            get => remainingHours;
             set
             {
                 var newValue = value ?? 0;
@@ -122,10 +113,7 @@ namespace Gallifrey.UI.Modern.Models
 
         public int? RemainingMinutes
         {
-            get
-            {
-                return remainingMinutes;
-            }
+            get => remainingMinutes;
             set
             {
                 var newValue = value ?? 0;

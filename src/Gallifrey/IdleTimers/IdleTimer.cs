@@ -1,5 +1,5 @@
-﻿using System;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using System;
 
 namespace Gallifrey.IdleTimers
 {
@@ -8,7 +8,7 @@ namespace Gallifrey.IdleTimers
         public DateTime DateStarted { get; }
         public DateTime? DateFinished { get; private set; }
         public TimeSpan IdleTimeValue { get; private set; }
-        public Guid UniqueId { get; private set; }
+        public Guid UniqueId { get; }
         public bool IsRunning => !DateFinished.HasValue;
 
         [JsonConstructor]

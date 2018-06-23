@@ -1,4 +1,5 @@
-﻿using Gallifrey.AppTracking;
+﻿using Exceptionless;
+using Gallifrey.AppTracking;
 using Gallifrey.UI.Modern.Helpers;
 using Gallifrey.UI.Modern.Models;
 using MahApps.Metro.Controls.Dialogs;
@@ -49,11 +50,12 @@ namespace Gallifrey.UI.Modern.Flyouts
         {
             try
             {
-                Clipboard.SetText(modelHelpers.Gallifrey.Settings.UserHash);
+                await ClipboardHelper.SetClipboard(modelHelpers.Gallifrey.Settings.UserHash);
                 await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Copied Installation Hash", $"Your Installation Hash Of {modelHelpers.Gallifrey.Settings.UserHash} Has Been Copied To The Clipboard");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                ExceptionlessClient.Default.SubmitException(ex);
                 await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Error Getting Hash", $"There Was An Error Putting Your Installation Hash Of {modelHelpers.Gallifrey.Settings.UserHash} Onto The Clipboard");
             }
         }

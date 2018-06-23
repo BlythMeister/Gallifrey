@@ -16,7 +16,7 @@
         {
             return new ProgressResult<T>(default(T), JiraHelperStatus.Errored);
         }
-        
+
         public enum JiraHelperStatus
         {
             Success,
@@ -33,7 +33,7 @@
             Status = status;
         }
 
-        public T RetVal { get; private set; }
-        public ProgressResult.JiraHelperStatus Status { get; private set; }
+        public T RetVal { get; }
+        public ProgressResult.JiraHelperStatus Status { get; }
     }
 }

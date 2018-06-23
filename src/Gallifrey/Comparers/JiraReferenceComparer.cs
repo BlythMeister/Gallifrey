@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Gallifrey.Comparers
 {
@@ -6,17 +7,13 @@ namespace Gallifrey.Comparers
     {
         public int Compare(string x, string y)
         {
-            var xParts = x.Split('-');
-            var yParts = y.Split('-');
+            var xParts = x?.Split('-');
+            var yParts = y?.Split('-');
 
-            int xNumber, yNumber;
+            int.TryParse(xParts?[1], out var xNumber);
+            int.TryParse(yParts?[1], out var yNumber);
 
-            int.TryParse(xParts[1], out xNumber);
-            int.TryParse(yParts[1], out yNumber);
-
-            return xParts[0] == yParts[0]
-                       ? xNumber.CompareTo(yNumber)
-                       : x.CompareTo(y);
+            return xParts?[0] == yParts?[0] ? xNumber.CompareTo(yNumber) : string.Compare(x, y, StringComparison.InvariantCulture);
         }
     }
 }

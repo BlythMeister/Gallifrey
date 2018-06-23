@@ -11,11 +11,12 @@ namespace Gallifrey.UI.Modern.Helpers
     public class ExceptionlessHelper
     {
         private readonly ModelHelpers modelHelpers;
+        private bool registered;
 
         public ExceptionlessHelper(ModelHelpers modelHelpers)
         {
             this.modelHelpers = modelHelpers;
-
+            registered = false;
             modelHelpers.Gallifrey.DailyTrackingEvent += GallifreyOnDailyTrackingEvent;
         }
 
@@ -43,6 +44,12 @@ namespace Gallifrey.UI.Modern.Helpers
             }
 
             ExceptionlessClient.Default.Unregister();
+
+            if (string.IsNullOrWhiteSpace(ConfigKeys.ExceptionlessApiKey))
+            {
+                return;
+            }
+
             ExceptionlessClient.Default.Configuration.ApiKey = ConfigKeys.ExceptionlessApiKey;
             ExceptionlessClient.Default.Configuration.DefaultTags.Add(modelHelpers.Gallifrey.VersionControl.VersionName.Replace("\n", " - "));
             ExceptionlessClient.Default.Configuration.SetUserIdentity(userInfo);
@@ -53,6 +60,7 @@ namespace Gallifrey.UI.Modern.Helpers
             if (modelHelpers.Gallifrey.VersionControl.IsAutomatedDeploy)
             {
                 ExceptionlessClient.Default.Register();
+                registered = true;
                 //Prevent the framework from auto closing the app and let exceptionless handle errors
                 Application.Current.Dispatcher.UnhandledException += (sender, args) => args.Handled = true;
             }
@@ -60,6 +68,8 @@ namespace Gallifrey.UI.Modern.Helpers
 
         private async void ExceptionlessSubmittingEvent(object sender, EventSubmittingEventArgs e)
         {
+            if (!registered) return;
+
             if (e.IsUnhandledError)
             {
                 e.Cancel = true;
@@ -67,7 +77,21 @@ namespace Gallifrey.UI.Modern.Helpers
                 await Application.Current.Dispatcher.Invoke(async () =>
                 {
                     modelHelpers.CloseAllFlyouts();
+
+                    var resetTopMostSetting = false;
+                    if (!modelHelpers.Gallifrey.Settings.UiSettings.TopMostOnFlyoutOpen)
+                    {
+                        modelHelpers.Gallifrey.Settings.UiSettings.TopMostOnFlyoutOpen = true;
+                        resetTopMostSetting = true;
+                    }
+
                     await modelHelpers.OpenFlyout(new Error(modelHelpers, e.Event));
+
+                    if (resetTopMostSetting)
+                    {
+                        modelHelpers.Gallifrey.Settings.UiSettings.TopMostOnFlyoutOpen = false;
+                    }
+
                     modelHelpers.CloseApp(true);
                 });
             }
@@ -75,6 +99,8 @@ namespace Gallifrey.UI.Modern.Helpers
 
         private void GallifreyOnDailyTrackingEvent(object sender, EventArgs eventArgs)
         {
+            if (!registered) return;
+
             try
             {
                 Application.Current.Dispatcher.Invoke(() =>
@@ -100,9 +126,9 @@ namespace Gallifrey.UI.Modern.Helpers
                     ExceptionlessClient.Default.SubmitFeatureUsage(featureName);
                 });
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //suppress errors if tracking fails
+                ExceptionlessClient.Default.SubmitException(ex);
             }
         }
     }

@@ -49,7 +49,8 @@ Gallifrey makes use of the following libraries:
 
 * Exceptionless (http://exceptionless.com/)
 * Atlassian .Net SDK (https://bitbucket.org/farmas/atlassian.net-sdk/wiki/Home)
-* MahApps.Metro (http://mahapps.com/)
+* MahApps.Metro & Icon Pack (http://mahapps.com/)
+* Toast Notifications (https://github.com/raflop/ToastNotifications)
 * Newtonsoft Json (http://www.newtonsoft.com/json)
 * RestSharp (http://restsharp.org/)
 
@@ -57,7 +58,6 @@ Gallifrey makes use of the following libraries:
 =========
 
 * App icon provided by Jack Cai (http://www.doublejdesign.co.uk)
-* Modern UI Icons (http://modernuiicons.com/)
 
 Licence
 =========

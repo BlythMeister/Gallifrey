@@ -1,31 +1,31 @@
-﻿using System;
+﻿using Gallifrey.Exceptions.Serialization;
+using Newtonsoft.Json;
+using System;
 using System.IO;
 using System.Threading;
-using Gallifrey.Exceptions.Serialization;
-using Newtonsoft.Json;
 
 namespace Gallifrey.Serialization
 {
     public class ItemSerializer<T> where T : new()
     {
         private readonly string savePath;
+        private readonly string serialisationErrorDirectory;
+        private readonly string encryptionPassPhrase;
         private string TempWritePath => savePath + ".temp";
         private string BackupPath => savePath + ".bak";
 
-        public ItemSerializer()
+        public ItemSerializer(string fileName)
         {
-        }
+            var saveDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Gallifrey");
 
-        public ItemSerializer(string fileName) : this(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Gallifrey"), fileName)
-        {
-        }
+            encryptionPassPhrase = $@"{Environment.UserDomainName}\{Environment.UserName}";
+            serialisationErrorDirectory = Path.Combine(saveDirectory, "Errors");
+            savePath = Path.Combine(saveDirectory, fileName);
 
-        public ItemSerializer(string directory, string fileName)
-        {
             try
             {
-                if (!Directory.Exists(directory)) Directory.CreateDirectory(directory);
-                savePath = Path.Combine(directory, fileName);
+                if (!Directory.Exists(saveDirectory)) Directory.CreateDirectory(saveDirectory);
+                if (!Directory.Exists(serialisationErrorDirectory)) Directory.CreateDirectory(serialisationErrorDirectory);
             }
             catch (Exception)
             {
@@ -53,7 +53,7 @@ namespace Gallifrey.Serialization
                         File.Copy(savePath, BackupPath, true);
                     }
                 }
-                File.WriteAllText(savePath, DataEncryption.Encrypt(JsonConvert.SerializeObject(obj)));
+                File.WriteAllText(savePath, DataEncryption.Encrypt(JsonConvert.SerializeObject(obj), encryptionPassPhrase));
             }
             catch (Exception ex)
             {
@@ -102,13 +102,14 @@ namespace Gallifrey.Serialization
         {
             try
             {
-                var text = DataEncryption.Decrypt(encryptedString);
+                var text = DataEncryption.Decrypt(encryptedString, encryptionPassPhrase);
                 return JsonConvert.DeserializeObject<T>(text);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 if (retryCount >= 3)
                 {
+                    File.WriteAllText(Path.Combine(serialisationErrorDirectory, $"{DateTime.UtcNow:yyyy-MM-dd_hh-mm-ss}_{Guid.NewGuid().ToString()}.log"), ex.ToString());
                     return new T();
                 }
 

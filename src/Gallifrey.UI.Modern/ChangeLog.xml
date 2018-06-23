@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Versions xmlns="https://releases.gallifreyapp.co.uk/ChangeLog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://releases.gallifreyapp.co.uk/schemas/ChangeLogSchema.xsd">
   <Version Number="3.0.0.0">
     <Features>
@@ -331,6 +331,25 @@
     <Others>
       <Other>External dependencies updated</Other>
       <Other>Automatic cloudflare cache purge on build</Other>
+    </Others>
+  </Version>
+  <Version Number="0.0.0.0" Name="RC9">
+    <Features>
+      <Feature>Added notification pop-up for update avaliable and when no timer running</Feature>
+      <Feature>No activity time is persisted through a restart</Feature>
+      <Feature>Handle Tempo API changes and require Tempo API key</Feature>
+      <Feature>Improved new user on-boarding process</Feature>
+    </Features>
+    <Bugs>
+      <Bug>Security update on encrypted data</Bug>
+      <Bug>Fix issue with application staying running on close</Bug>
+      <Bug>Added settings so machine proxy is followed</Bug>
+      <Bug>Additional error reporting added</Bug>
+      <Bug>Fix issue with 2 instances running</Bug>
+      <Bug>Fix issue with restarting the application</Bug>
+    </Bugs>
+    <Others>
+      <Other>Dependency update</Other>
     </Others>
   </Version>
   <!--

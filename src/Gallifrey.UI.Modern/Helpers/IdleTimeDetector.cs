@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 
 namespace Gallifrey.UI.Modern.Helpers
@@ -42,6 +43,7 @@ namespace Gallifrey.UI.Modern.Helpers
         public int SystemUptimeMilliseconds { get; internal set; }
     }
 
+    [SuppressMessage("ReSharper", "InconsistentNaming")]
     internal struct LASTINPUTINFO
     {
         public uint cbSize;

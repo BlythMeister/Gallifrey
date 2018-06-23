@@ -1,4 +1,5 @@
-﻿using Gallifrey.Exceptions.JiraIntegration;
+﻿using Exceptionless;
+using Gallifrey.Exceptions.JiraIntegration;
 using Gallifrey.Exceptions.JiraTimers;
 using Gallifrey.IdleTimers;
 using Gallifrey.Jira.Model;
@@ -67,37 +68,32 @@ namespace Gallifrey.UI.Modern.Flyouts
                 return;
             }
 
-            TimeSpan seedTime;
-            if (DataModel.TimeEditable)
-            {
-                seedTime = new TimeSpan(DataModel.StartHours ?? 0, DataModel.StartMinutes ?? 0, 0);
-            }
-            else
-            {
-                seedTime = new TimeSpan();
-            }
+            var seedTime = DataModel.TimeEditable ? new TimeSpan(DataModel.StartHours ?? 0, DataModel.StartMinutes ?? 0, 0) : new TimeSpan();
 
             Issue jiraIssue = null;
             var jiraRef = string.Empty;
 
             if (!DataModel.LocalTimer)
             {
-                try
-                {
-                    jiraRef = DataModel.JiraReference;
-                    var jiraDownloadResult = await progressDialogHelper.Do(() => modelHelpers.Gallifrey.JiraConnection.GetJiraIssue(jiraRef), "Searching For Jira Issue", true, true);
+                jiraRef = DataModel.JiraReference;
 
-                    if (jiraDownloadResult.Status == ProgressResult.JiraHelperStatus.Success)
+                void GetIssue()
+                {
+                    if (modelHelpers.Gallifrey.JiraConnection.DoesJiraExist(jiraRef))
                     {
-                        jiraIssue = jiraDownloadResult.RetVal;
-                    }
-                    else
-                    {
-                        Focus();
-                        return;
+                        jiraIssue = modelHelpers.Gallifrey.JiraConnection.GetJiraIssue(jiraRef);
                     }
                 }
-                catch (NoResultsFoundException)
+
+                var jiraDownloadResult = await progressDialogHelper.Do(GetIssue, "Searching For Jira Issue", true, false);
+
+                if (jiraDownloadResult.Status == ProgressResult.JiraHelperStatus.Cancelled)
+                {
+                    Focus();
+                    return;
+                }
+
+                if (jiraIssue == null)
                 {
                     await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Invalid Jira", $"Unable To Locate The Jira '{jiraRef}'");
                     Focus();
@@ -141,8 +137,9 @@ namespace Gallifrey.UI.Modern.Flyouts
                     {
                         await progressDialogHelper.Do(() => modelHelpers.Gallifrey.JiraConnection.AssignToCurrentUser(jiraRef), "Assigning Issue", false, true);
                     }
-                    catch (JiraConnectionException)
+                    catch (JiraConnectionException ex)
                     {
+                        ExceptionlessClient.Default.SubmitException(ex);
                         await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Assign Jira Error", "Unable To Locate Assign Jira To Current User");
                     }
                 }
@@ -157,7 +154,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                         {
                             var transitionsAvaliable = transitionResult.RetVal;
 
-                            var timeSelectorDialog = (BaseMetroDialog)this.Resources["TransitionSelector"];
+                            var timeSelectorDialog = (BaseMetroDialog)Resources["TransitionSelector"];
                             await DialogCoordinator.Instance.ShowMetroDialogAsync(modelHelpers.DialogContext, timeSelectorDialog);
 
                             var comboBox = timeSelectorDialog.FindChild<ComboBox>("Items");
@@ -169,8 +166,9 @@ namespace Gallifrey.UI.Modern.Flyouts
                             stillDoingThings = true;
                         }
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
+                        ExceptionlessClient.Default.SubmitException(ex);
                         await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Status Update Error", "Unable To Change The Status Of This Issue");
                     }
                 }
@@ -193,7 +191,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                 var addTimer = true;
                 if (!modelHelpers.Gallifrey.Settings.AppSettings.ExportDays.Contains(workingDate.DayOfWeek))
                 {
-                    var result = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Add For Non-Working Day?", $"The Date {workingDate.ToString("ddd, dd MMM")} Is Not A Working Day.\nWould You Still Like To Add A Timer For This Date?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
+                    var result = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Add For Non-Working Day?", $"The Date {workingDate:ddd, dd MMM} Is Not A Working Day.\nWould You Still Like To Add A Timer For This Date?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
 
                     if (result == MessageDialogResult.Negative)
                     {
@@ -206,7 +204,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                     var added = await AddSingleTimer(jiraIssue, seedTime, workingDate);
                     if (!added && workingDate < DataModel.EndDate.Value)
                     {
-                        var result = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Continue Adding?", $"The Timer For {workingDate.ToString("ddd, dd MMM")} Was Not Added.\nWould You Like To Carry On Adding For The Remaining Dates?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
+                        var result = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Continue Adding?", $"The Timer For {workingDate:ddd, dd MMM} Was Not Added.\nWould You Like To Carry On Adding For The Remaining Dates?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
 
                         if (result == MessageDialogResult.Negative)
                         {
@@ -225,14 +223,7 @@ namespace Gallifrey.UI.Modern.Flyouts
         {
             try
             {
-                if (DataModel.LocalTimer)
-                {
-                    NewTimerId = modelHelpers.Gallifrey.JiraTimerCollection.AddLocalTimer(DataModel.LocalTimerDescription, startDate, seedTime, DataModel.StartNow);
-                }
-                else
-                {
-                    NewTimerId = modelHelpers.Gallifrey.JiraTimerCollection.AddTimer(jiraIssue, startDate, seedTime, DataModel.StartNow);
-                }
+                NewTimerId = DataModel.LocalTimer ? modelHelpers.Gallifrey.JiraTimerCollection.AddLocalTimer(DataModel.LocalTimerDescription, startDate, seedTime, DataModel.StartNow) : modelHelpers.Gallifrey.JiraTimerCollection.AddTimer(jiraIssue, startDate, seedTime, DataModel.StartNow);
                 AddedTimer = true;
                 if (!DataModel.TimeEditable)
                 {
@@ -244,7 +235,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                 var doneSomething = false;
                 if (seedTime.TotalMinutes > 0 || !DataModel.TimeEditable)
                 {
-                    var result = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Duplicate Timer", $"The Timer Already Exists On {startDate.ToString("ddd, dd MMM")}, Would You Like To Add The Time?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
+                    var result = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Duplicate Timer", $"The Timer Already Exists On {startDate:ddd, dd MMM}, Would You Like To Add The Time?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
 
                     if (result == MessageDialogResult.Affirmative)
                     {
@@ -301,7 +292,7 @@ namespace Gallifrey.UI.Modern.Flyouts
 
             try
             {
-                var dialog = (BaseMetroDialog)this.Resources["TransitionSelector"];
+                var dialog = (BaseMetroDialog)Resources["TransitionSelector"];
                 var comboBox = dialog.FindChild<ComboBox>("Items");
 
                 selectedTransition = (string)comboBox.SelectedItem;
@@ -311,8 +302,9 @@ namespace Gallifrey.UI.Modern.Flyouts
 
                 await progressDialogHelper.Do(() => modelHelpers.Gallifrey.JiraConnection.TransitionIssue(jiraRef, selectedTransition), "Changing Status", false, true);
             }
-            catch (StateChangedException)
+            catch (StateChangedException ex)
             {
+                ExceptionlessClient.Default.SubmitException(ex);
                 if (string.IsNullOrWhiteSpace(selectedTransition))
                 {
                     await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Status Update Error", "Unable To Change The Status Of This Issue");
@@ -329,7 +321,7 @@ namespace Gallifrey.UI.Modern.Flyouts
 
         private async void CancelTransition(object sender, RoutedEventArgs e)
         {
-            var dialog = (BaseMetroDialog)this.Resources["TransitionSelector"];
+            var dialog = (BaseMetroDialog)Resources["TransitionSelector"];
             await DialogCoordinator.Instance.HideMetroDialogAsync(modelHelpers.DialogContext, dialog);
 
             modelHelpers.CloseFlyout(this);
