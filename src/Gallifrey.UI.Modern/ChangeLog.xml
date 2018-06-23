@@ -333,7 +333,7 @@
       <Other>Automatic cloudflare cache purge on build</Other>
     </Others>
   </Version>
-  <Version Number="0.0.0.0" Name="RC9">
+  <Version Number="3.9.0.0" Name="">
     <Features>
       <Feature>Added notification pop-up for update avaliable and when no timer running</Feature>
       <Feature>No activity time is persisted through a restart</Feature>

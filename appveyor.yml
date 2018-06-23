@@ -16,10 +16,10 @@ skip_commits:
     - .fake/*
     - .github/*
     - .paket/*
-    - docs/*  
+    - docs/*
     - '**/*.html'
     - '**/*.md'
-version: '3.8.0.{build}'
+version: '3.9.0.{build}'
 skip_tags: true
 image: Visual Studio 2017
 clone_folder: c:\project\gallifrey
