@@ -61,7 +61,7 @@ namespace Gallifrey.Serialization
                 {
                     throw new SerializerError("Error in serialization", ex);
                 }
-                Thread.Sleep(100);
+                Thread.Sleep(500);
                 Serialize(obj, retryCount + 1);
             }
             finally
