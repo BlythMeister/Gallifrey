@@ -188,6 +188,8 @@ namespace Gallifrey.UI.Modern.MainViews
                 }
 
                 await UserLoginFailure();
+                await MainWindow_OnLoaded();
+                return;
             }
 
             await PerformUpdate(UpdateType.StartUp);

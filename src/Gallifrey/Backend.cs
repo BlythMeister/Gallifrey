@@ -310,7 +310,7 @@ namespace Gallifrey
                 trackUsage.TrackAppUsage(TrackingType.OptOut);
             }
 
-            SettingsChanged?.Invoke(this, null);
+            if (IsInitialised) SettingsChanged?.Invoke(this, null);
         }
 
         public void StartLockTimer(TimeSpan? initalTimeSpan = null)

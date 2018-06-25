@@ -356,6 +356,7 @@
     <Features />
     <Bugs>
       <Bug>Fix issue with data file saving</Bug>
+      <Bug>Fix issue with login failure on start-up causing crash</Bug>
     </Bugs>
     <Others/>
   </Version>
