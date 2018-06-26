@@ -132,7 +132,7 @@
                 <iconPacks:PackIconMaterial Kind="CheckAll" Height="22" Width="22" HorizontalAlignment="Center" VerticalAlignment="Center" />
             </Button>
             <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,5"   Click="ExportButton" IsDefault="True" ToolTip="Export Checked Worklogs To Jira">
-                <iconPacks:PackIconMaterial Kind="UploadMultiple" Height="22" Width="22" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,2,0" />
+                <iconPacks:PackIconMaterial Kind="CloudUpload" Height="22" Width="22" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,2,0" />
             </Button>
         </StackPanel>
     </Grid>
