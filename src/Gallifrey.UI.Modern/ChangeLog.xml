@@ -371,7 +371,9 @@
     <Features>
       <Feature>Update Icons</Feature>
     </Features>
-    <Bugs/>
+    <Bugs>
+      <Bug>Fix font issues in settings</Bug>
+    </Bugs>
     <Others/>
   </Version>
   <!--
