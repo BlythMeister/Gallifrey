@@ -367,6 +367,13 @@
     </Bugs>
     <Others/>
   </Version>
+  <Version Number="0.0.0.0" Name="Alpha Pre-Release">
+    <Features>
+      <Feature>Update Icons</Feature>
+    </Features>
+    <Bugs/>
+    <Others/>
+  </Version>
   <!--
   Template for VNext if not present above
   <Version Number="0.0.0.0" Name="Pre-Release">

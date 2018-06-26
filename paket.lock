@@ -9,7 +9,7 @@ NUGET
     FAKE (4.64.13)
     MahApps.Metro (1.6.5)
       ControlzEx (>= 3.0.2.4 < 4.0)
-    MahApps.Metro.IconPacks.Modern (2.3)
+    MahApps.Metro.IconPacks.Material (2.3)
       ControlzEx (>= 3.0.2.4 < 4.0)
     Newtonsoft.Json (11.0.2)
     Octokit (0.30)
