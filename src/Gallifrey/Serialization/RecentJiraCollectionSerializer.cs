@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using Gallifrey.Comparers;
 using Gallifrey.JiraIntegration;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Gallifrey.Serialization
 {
@@ -24,7 +26,7 @@ namespace Gallifrey.Serialization
                 serializer = new ItemSerializer<List<RecentJira>>("RecentJira.dat");
             }
 
-            return serializer.DeSerialize();
+            return serializer.DeSerialize().Distinct(new DuplicateRecentJiraComparer()).ToList();
         }
     }
 }

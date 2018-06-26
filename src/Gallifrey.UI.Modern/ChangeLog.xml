@@ -360,6 +360,13 @@
     </Bugs>
     <Others/>
   </Version>
+  <Version Number="3.9.2.0" Name="">
+    <Features />
+    <Bugs>
+      <Bug>Fix issue duplicate timers</Bug>
+    </Bugs>
+    <Others/>
+  </Version>
   <!--
   Template for VNext if not present above
   <Version Number="0.0.0.0" Name="Pre-Release">

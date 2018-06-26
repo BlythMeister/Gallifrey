@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using Gallifrey.Comparers;
 using Gallifrey.JiraTimers;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Gallifrey.Serialization
 {
@@ -24,7 +26,7 @@ namespace Gallifrey.Serialization
                 serializer = new ItemSerializer<List<JiraTimer>>("TimerCollection.dat");
             }
 
-            return serializer.DeSerialize();
+            return serializer.DeSerialize().Distinct(new DuplicateTimerComparer()).ToList();
         }
     }
 }
