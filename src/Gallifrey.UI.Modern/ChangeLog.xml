@@ -352,6 +352,30 @@
       <Other>Dependency update</Other>
     </Others>
   </Version>
+  <Version Number="3.9.1.0" Name="">
+    <Features />
+    <Bugs>
+      <Bug>Fix issue with data file saving</Bug>
+      <Bug>Fix issue with login failure on start-up causing crash</Bug>
+    </Bugs>
+    <Others/>
+  </Version>
+  <Version Number="3.9.2.0" Name="">
+    <Features />
+    <Bugs>
+      <Bug>Fix issue duplicate timers</Bug>
+    </Bugs>
+    <Others/>
+  </Version>
+  <Version Number="0.0.0.0" Name="Alpha Pre-Release">
+    <Features>
+      <Feature>Update Icons</Feature>
+    </Features>
+    <Bugs>
+      <Bug>Fix font issues in settings</Bug>
+    </Bugs>
+    <Others/>
+  </Version>
   <!--
   Template for VNext if not present above
   <Version Number="0.0.0.0" Name="Pre-Release">

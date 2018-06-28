@@ -48,6 +48,8 @@
     <Compile Include="Backend.cs" />
     <Compile Include="ChangeLog\ChangeLogProvider.cs" />
     <Compile Include="ChangeLog\ChangeLogVersion.cs" />
+    <Compile Include="Comparers\DuplicateIdleTimerComparer.cs" />
+    <Compile Include="Comparers\DuplicateTimerComparer.cs" />
     <Compile Include="Contributors\WithThanksCreator.cs" />
     <Compile Include="Contributors\WithThanksDefinition.cs" />
     <Compile Include="DeploymentUtils\Uninstaller.cs" />
@@ -73,7 +75,7 @@
     <Compile Include="JiraIntegration\RecentJiraCollection.cs" />
     <Compile Include="JiraIntegration\JiraConnection.cs" />
     <Compile Include="JiraIntegration\RecentJira.cs" />
-    <Compile Include="Comparers\DuplicateRecentLogComparer.cs" />
+    <Compile Include="Comparers\DuplicateRecentJiraComparer.cs" />
     <Compile Include="Comparers\JiraReferenceComparer.cs" />
     <Compile Include="JiraTimers\ExportPromptDetail.cs" />
     <Compile Include="JiraTimers\JiraTimer.cs" />
