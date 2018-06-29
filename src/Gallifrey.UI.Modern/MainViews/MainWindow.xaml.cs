@@ -416,11 +416,14 @@ namespace Gallifrey.UI.Modern.MainViews
                             if (!Topmost)
                             {
                                 this.FlashWindow();
-                                WindowState = WindowState.Normal;
+                                Topmost = true;
                                 Activate();
                             }
 
-                            Topmost = true;
+                            if (WindowState == WindowState.Minimized)
+                            {
+                                WindowState = WindowState.Normal;
+                            }
                         }
                         else
                         {
