@@ -168,7 +168,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                     }
                     catch (Exception ex)
                     {
-                        ExceptionlessClient.Default.SubmitException(ex);
+                        ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Handled").Submit();
                         await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Status Update Error", "Unable To Change The Status Of This Issue");
                     }
                 }
@@ -240,7 +240,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                     }
                     catch (Exception ex)
                     {
-                        ExceptionlessClient.Default.SubmitException(ex);
+                        ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Handled").Submit();
                         throw new BulkExportException($"Unable To Locate Jira {timerToShow.JiraReference}!\nCannot Export Time\nPlease Verify/Correct Jira Reference");
                     }
                 }
@@ -259,7 +259,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             }
             catch (Exception ex)
             {
-                ExceptionlessClient.Default.SubmitException(ex);
+                ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Handled").Submit();
                 throw new BulkExportException("Unable To Get WorkLogs!\nCannot Export Time");
             }
 
@@ -307,12 +307,12 @@ namespace Gallifrey.UI.Modern.Flyouts
                 }
                 catch (WorkLogException ex)
                 {
-                    ExceptionlessClient.Default.SubmitException(ex);
+                    ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Handled").Submit();
                     throw new BulkExportException($"Error Logging Work To {exportModel.JiraRef}\n\nError Message From Jira: { ex.InnerException.Message }");
                 }
                 catch (CommentException ex)
                 {
-                    ExceptionlessClient.Default.SubmitException(ex);
+                    ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Handled").Submit();
                     throw new BulkExportException($"The Comment Was Not Added To Jira {exportModel.JiraRef}");
                 }
             }
@@ -342,7 +342,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             }
             catch (StateChangedException ex)
             {
-                ExceptionlessClient.Default.SubmitException(ex);
+                ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Handled").Submit();
                 if (string.IsNullOrWhiteSpace(selectedTransition))
                 {
                     await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Status Update Error", "Unable To Change The Status Of This Issue");

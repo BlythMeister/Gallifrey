@@ -98,7 +98,7 @@ namespace Gallifrey.UI.Modern.Helpers
                     throw;
                 }
 
-                ExceptionlessClient.Default.SubmitException(ex);
+                ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Handled").Submit();
                 return ProgressResult.GetErrored<T>();
             }
             finally

@@ -375,6 +375,7 @@
       <Bug>Fix font issues in settings</Bug>
       <Bug>Fix shortcut keys for right buttons</Bug>
       <Bug>Fix window resize on flyout opening</Bug>
+      <Bug>Improve handling of failed updates</Bug>
     </Bugs>
     <Others/>
   </Version>

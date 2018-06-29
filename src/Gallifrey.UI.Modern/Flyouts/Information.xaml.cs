@@ -55,7 +55,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             }
             catch (Exception ex)
             {
-                ExceptionlessClient.Default.SubmitException(ex);
+                ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Handled").Submit();
                 await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Error Getting Hash", $"There Was An Error Putting Your Installation Hash Of {modelHelpers.Gallifrey.Settings.UserHash} Onto The Clipboard");
             }
         }

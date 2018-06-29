@@ -580,7 +580,7 @@ namespace Gallifrey.UI.Modern.MainViews
                         }
                         catch (Exception ex)
                         {
-                            ExceptionlessClient.Default.SubmitException(ex);
+                            ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Handled").Submit();
                             await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Update Error", "There Was An Error Trying To Update Gallifrey, You May Need To Re-Download The App");
                         }
                         finally
@@ -592,11 +592,14 @@ namespace Gallifrey.UI.Modern.MainViews
             }
             catch (Exception ex)
             {
-                ExceptionlessClient.Default.SubmitException(ex);
-                if (updateType == UpdateType.Manual || updateType == UpdateType.StartUp)
+                if (updateType != UpdateType.Manual && updateType != UpdateType.StartUp)
                 {
-                    await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Update Error", "There Was An Error Trying To Update Gallifrey, If This Problem Persists Please Contact Support");
+                    Activate();
                 }
+
+                ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Handled").Submit();
+                await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Update Error", "There Was An Error Trying To Update Gallifrey, If This Problem Persists Please Contact Support");
+                modelHelpers.CloseApp(true);
             }
         }
 
