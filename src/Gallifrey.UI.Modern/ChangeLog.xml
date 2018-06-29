@@ -373,6 +373,7 @@
     </Features>
     <Bugs>
       <Bug>Fix font issues in settings</Bug>
+      <Bug>Fix shortcut keys for right buttons</Bug>
       <Bug>Fix window resize on flyout opening</Bug>
     </Bugs>
     <Others/>

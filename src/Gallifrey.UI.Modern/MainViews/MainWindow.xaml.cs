@@ -635,13 +635,6 @@ namespace Gallifrey.UI.Modern.MainViews
                     case Key.B: trigger = RemoteButtonTrigger.Save; break;
                     case Key.C: trigger = RemoteButtonTrigger.Copy; break;
                     case Key.V: trigger = RemoteButtonTrigger.Paste; break;
-                    default: return;
-                }
-            }
-            else if (Keyboard.IsKeyDown(Key.LeftAlt) || Keyboard.IsKeyDown(Key.RightAlt))
-            {
-                switch (key)
-                {
                     case Key.F1: trigger = RemoteButtonTrigger.Info; break;
                     case Key.F2: trigger = RemoteButtonTrigger.Twitter; break;
                     case Key.F3: trigger = RemoteButtonTrigger.Email; break;
