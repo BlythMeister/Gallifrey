@@ -34,6 +34,7 @@ namespace Gallifrey.UI.Modern.MainViews
         private MainViewModel ViewModel => (MainViewModel)DataContext;
         private bool machineLocked;
         private bool machineIdle;
+        private int failedUpdates = 0;
 
         public MainWindow(InstanceType instance)
         {
@@ -530,6 +531,10 @@ namespace Gallifrey.UI.Modern.MainViews
                     updateResult = await modelHelpers.Gallifrey.VersionControl.CheckForUpdates(true);
                     await controller.CloseAsync();
                 }
+                else if (failedUpdates >= 10)
+                {
+                    return;
+                }
                 else
                 {
                     updateResult = await modelHelpers.Gallifrey.VersionControl.CheckForUpdates(false);
@@ -589,17 +594,22 @@ namespace Gallifrey.UI.Modern.MainViews
                         }
                     }
                 }
+
+                failedUpdates = 0;
             }
             catch (Exception ex)
             {
-                if (updateType != UpdateType.Manual && updateType != UpdateType.StartUp)
-                {
-                    Activate();
-                }
-
                 ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Handled").Submit();
-                await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Update Error", "There Was An Error Trying To Update Gallifrey, If This Problem Persists Please Contact Support");
-                modelHelpers.CloseApp(true);
+                failedUpdates++;
+                if (updateType == UpdateType.Manual || updateType == UpdateType.StartUp)
+                {
+                    await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Update Error", "There Was An Error Trying To Update Gallifrey, If This Problem Persists Please Contact Support");
+                    modelHelpers.CloseApp(true);
+                }
+                else if (failedUpdates >= 3)
+                {
+                    modelHelpers.ShowNotification("Update Error Occured");
+                }
             }
         }
 
