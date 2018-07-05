@@ -367,9 +367,9 @@
     </Bugs>
     <Others/>
   </Version>
-  <Version Number="0.0.0.0" Name="Pre-Release">
+  <Version Number="3.10.0.0" Name="">
     <Features>
-      <Feature>Update Icons</Feature>
+      <Feature>Update Button Icons</Feature>
     </Features>
     <Bugs>
       <Bug>Fix font issues in settings</Bug>
