@@ -139,7 +139,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                     }
                     catch (JiraConnectionException ex)
                     {
-                        ExceptionlessClient.Default.SubmitException(ex);
+                        ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Handled").Submit();
                         await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Assign Jira Error", "Unable To Locate Assign Jira To Current User");
                     }
                 }
@@ -168,7 +168,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                     }
                     catch (Exception ex)
                     {
-                        ExceptionlessClient.Default.SubmitException(ex);
+                        ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Handled").Submit();
                         await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Status Update Error", "Unable To Change The Status Of This Issue");
                     }
                 }
@@ -304,7 +304,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             }
             catch (StateChangedException ex)
             {
-                ExceptionlessClient.Default.SubmitException(ex);
+                ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Handled").Submit();
                 if (string.IsNullOrWhiteSpace(selectedTransition))
                 {
                     await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Status Update Error", "Unable To Change The Status Of This Issue");

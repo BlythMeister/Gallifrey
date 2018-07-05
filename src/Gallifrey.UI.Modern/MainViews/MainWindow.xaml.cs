@@ -34,6 +34,7 @@ namespace Gallifrey.UI.Modern.MainViews
         private MainViewModel ViewModel => (MainViewModel)DataContext;
         private bool machineLocked;
         private bool machineIdle;
+        private int failedUpdates = 0;
 
         public MainWindow(InstanceType instance)
         {
@@ -416,11 +417,14 @@ namespace Gallifrey.UI.Modern.MainViews
                             if (!Topmost)
                             {
                                 this.FlashWindow();
-                                WindowState = WindowState.Normal;
+                                Topmost = true;
                                 Activate();
                             }
 
-                            Topmost = true;
+                            if (WindowState == WindowState.Minimized)
+                            {
+                                WindowState = WindowState.Normal;
+                            }
                         }
                         else
                         {
@@ -527,6 +531,10 @@ namespace Gallifrey.UI.Modern.MainViews
                     updateResult = await modelHelpers.Gallifrey.VersionControl.CheckForUpdates(true);
                     await controller.CloseAsync();
                 }
+                else if (failedUpdates >= 10)
+                {
+                    return;
+                }
                 else
                 {
                     updateResult = await modelHelpers.Gallifrey.VersionControl.CheckForUpdates(false);
@@ -577,7 +585,7 @@ namespace Gallifrey.UI.Modern.MainViews
                         }
                         catch (Exception ex)
                         {
-                            ExceptionlessClient.Default.SubmitException(ex);
+                            ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Handled").Submit();
                             await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Update Error", "There Was An Error Trying To Update Gallifrey, You May Need To Re-Download The App");
                         }
                         finally
@@ -586,13 +594,21 @@ namespace Gallifrey.UI.Modern.MainViews
                         }
                     }
                 }
+
+                failedUpdates = 0;
             }
             catch (Exception ex)
             {
-                ExceptionlessClient.Default.SubmitException(ex);
+                ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Handled").Submit();
+                failedUpdates++;
                 if (updateType == UpdateType.Manual || updateType == UpdateType.StartUp)
                 {
                     await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Update Error", "There Was An Error Trying To Update Gallifrey, If This Problem Persists Please Contact Support");
+                    modelHelpers.CloseApp(true);
+                }
+                else if (failedUpdates >= 3)
+                {
+                    modelHelpers.ShowNotification("Update Error Occured");
                 }
             }
         }
@@ -632,13 +648,6 @@ namespace Gallifrey.UI.Modern.MainViews
                     case Key.B: trigger = RemoteButtonTrigger.Save; break;
                     case Key.C: trigger = RemoteButtonTrigger.Copy; break;
                     case Key.V: trigger = RemoteButtonTrigger.Paste; break;
-                    default: return;
-                }
-            }
-            else if (Keyboard.IsKeyDown(Key.LeftAlt) || Keyboard.IsKeyDown(Key.RightAlt))
-            {
-                switch (key)
-                {
                     case Key.F1: trigger = RemoteButtonTrigger.Info; break;
                     case Key.F2: trigger = RemoteButtonTrigger.Twitter; break;
                     case Key.F3: trigger = RemoteButtonTrigger.Email; break;

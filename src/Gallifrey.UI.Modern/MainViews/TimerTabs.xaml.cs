@@ -137,7 +137,7 @@ namespace Gallifrey.UI.Modern.MainViews
                 }
                 catch (Exception ex)
                 {
-                    ExceptionlessClient.Default.SubmitException(ex);
+                    ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Handled").Submit();
                     await DialogCoordinator.Instance.ShowMessageAsync(ModelHelpers.DialogContext, "Invalid Jira", $"Unable To Locate That Jira.\n\nJira Ref Dropped: '{jiraRef}'");
                     return;
                 }
