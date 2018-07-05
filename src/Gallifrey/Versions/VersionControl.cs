@@ -2,6 +2,7 @@ using System;
 using System.Deployment.Application;
 using System.IO;
 using System.Net;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -118,7 +119,7 @@ namespace Gallifrey.Versions
                     return UpdateResult.NoUpdate;
                 });
             }
-            catch (TrustNotGrantedException)
+            catch (Exception e) when (e is TrustNotGrantedException || e is COMException)
             {
                 UpdateReinstallNeeded = true;
                 UpdateStateChange?.Invoke(this, null);
