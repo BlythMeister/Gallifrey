@@ -277,7 +277,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                 var updatedTimer = modelHelpers.Gallifrey.JiraTimerCollection.GetTimer(timerToShow.UniqueId);
                 if (!timerToShow.FullyExported)
                 {
-                    var model = new BulkExportModel(updatedTimer, modelHelpers.Gallifrey.Settings.ExportSettings);
+                    var model = new BulkExportModel(updatedTimer, jiraIssue, modelHelpers.Gallifrey.Settings.ExportSettings);
                     timersToShow.Add(model);
                 }
             }

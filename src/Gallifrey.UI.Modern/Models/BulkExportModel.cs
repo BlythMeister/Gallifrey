@@ -138,7 +138,7 @@ namespace Gallifrey.UI.Modern.Models
             }
         }
 
-        public BulkExportModel(JiraTimer timer, IExportSettings exportSettings)
+        public BulkExportModel(JiraTimer timer, Issue jiraIssue, IExportSettings exportSettings)
         {
             UpdateTimer(timer);
 
@@ -158,11 +158,6 @@ namespace Gallifrey.UI.Modern.Models
             }
 
             DefaultComment = exportSettings.EmptyExportComment;
-        }
-
-        public void UpdateTimer(JiraTimer timer, Issue jiraIssue)
-        {
-            UpdateTimer(timer);
 
             OriginalRemaining = jiraIssue.fields.timetracking != null ? TimeSpan.FromSeconds(jiraIssue.fields.timetracking.remainingEstimateSeconds) : new TimeSpan();
 
@@ -197,11 +192,11 @@ namespace Gallifrey.UI.Modern.Models
                 case WorkLogStrategy.Automatic:
                     var autoNewRemaining = OriginalRemaining.Subtract(ToExport);
                     if (autoNewRemaining.TotalSeconds < 0) autoNewRemaining = new TimeSpan();
-                    RemainingHours = autoNewRemaining.Hours;
+                    RemainingHours = autoNewRemaining.Hours + (autoNewRemaining.Days * 24);
                     RemainingMinutes = autoNewRemaining.Minutes;
                     break;
                 case WorkLogStrategy.LeaveRemaining:
-                    RemainingHours = OriginalRemaining.Hours;
+                    RemainingHours = OriginalRemaining.Hours + (OriginalRemaining.Days * 24);
                     RemainingMinutes = OriginalRemaining.Minutes;
                     break;
                 case WorkLogStrategy.SetValue:

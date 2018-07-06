@@ -191,11 +191,11 @@ namespace Gallifrey.UI.Modern.Models
                 case WorkLogStrategy.Automatic:
                     var autoNewRemaining = OriginalRemaining.Subtract(ToExport);
                     if (autoNewRemaining.TotalSeconds < 0) autoNewRemaining = new TimeSpan();
-                    RemainingHours = autoNewRemaining.Hours;
+                    RemainingHours = autoNewRemaining.Hours + (autoNewRemaining.Days * 24);
                     RemainingMinutes = autoNewRemaining.Minutes;
                     break;
                 case WorkLogStrategy.LeaveRemaining:
-                    RemainingHours = OriginalRemaining.Hours;
+                    RemainingHours = OriginalRemaining.Hours + (OriginalRemaining.Days * 24);
                     RemainingMinutes = OriginalRemaining.Minutes;
                     break;
                 case WorkLogStrategy.SetValue:
