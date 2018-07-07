@@ -387,6 +387,13 @@
     </Bugs>
     <Others/>
   </Version>
+  <Version Number="3.10.2.0" Name="">
+    <Features />
+    <Bugs />
+    <Others>
+      <Other>Update Exceptionless API Key</Other>
+    </Others>
+  </Version>
   <!--
   Template for VNext if not present above
   <Version Number="0.0.0.0" Name="Pre-Release">
