@@ -104,6 +104,8 @@ namespace Gallifrey.Versions
                     {
                         SetVersionName();
                         UpdateInstalled = true;
+                        UpdateReinstallNeeded = false;
+                        UpdateError = false;
                         UpdateStateChange?.Invoke(this, null);
                         return UpdateResult.Updated;
                     });
@@ -114,6 +116,8 @@ namespace Gallifrey.Versions
                     //If manual put a delay in here...the UI goes all weird if it's not
                     if (manualCheck)
                     {
+                        UpdateReinstallNeeded = false;
+                        UpdateError = false;
                         Task.Delay(TimeSpan.FromSeconds(2));
                     }
                     return UpdateResult.NoUpdate;

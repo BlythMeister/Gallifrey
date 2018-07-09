@@ -23,11 +23,12 @@ namespace Gallifrey.UI.Modern.Helpers
             }
         }
 
+        // ReSharper disable once RedundantAssignment
         public static void UpdateMinutes(ref int hourValue, ref int minuteValue, int newValue, int maxHours, out bool hoursChanged)
         {
             hoursChanged = false;
 
-           if (newValue < 0)
+            if (newValue < 0)
             {
                 if (hourValue == 0)
                 {

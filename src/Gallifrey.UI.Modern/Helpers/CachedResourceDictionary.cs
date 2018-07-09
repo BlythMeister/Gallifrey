@@ -6,13 +6,7 @@ namespace Gallifrey.UI.Modern.Helpers
 {
     public class CachedResourceDictionary : ResourceDictionary
     {
-        private static readonly Dictionary<Uri, WeakReference> Cache;
         private Uri source;
-
-        static CachedResourceDictionary()
-        {
-            Cache = new Dictionary<Uri, WeakReference>();
-        }
 
         public new Uri Source
         {
@@ -20,34 +14,44 @@ namespace Gallifrey.UI.Modern.Helpers
             set
             {
                 source = value;
-                if (!Cache.ContainsKey(source))
+
+                var (found, data) = ResourceDictionaryCache.Get(source);
+
+                if (found)
                 {
-                    AddToCache();
+                    MergedDictionaries.Add(data);
                 }
                 else
                 {
-                    WeakReference weakReference = Cache[source];
-                    if (weakReference != null && weakReference.IsAlive)
-                    {
-                        MergedDictionaries.Add((ResourceDictionary)weakReference.Target);
-                    }
-                    else
-                    {
-                        AddToCache();
-                    }
+                    ResourceDictionaryCache.Add(source, this);
+                    base.Source = source;
                 }
-
             }
+
+        }
+    }
+
+    internal static class ResourceDictionaryCache
+    {
+        private static readonly Dictionary<Uri, WeakReference> Cache;
+
+        static ResourceDictionaryCache()
+        {
+            Cache = new Dictionary<Uri, WeakReference>();
         }
 
-        private void AddToCache()
+        public static void Add(Uri key, ResourceDictionary data)
         {
-            base.Source = source;
-            if (Cache.ContainsKey(source))
+            if (Cache.ContainsKey(key))
             {
-                Cache.Remove(source);
+                Cache.Remove(key);
             }
-            Cache.Add(source, new WeakReference(this, false));
+            Cache.Add(key, new WeakReference(data, false));
+        }
+
+        public static (bool found, ResourceDictionary data) Get(Uri key)
+        {
+            return Cache.ContainsKey(key) && Cache[key].IsAlive ? (true, (ResourceDictionary)Cache[key].Target) : (false, null);
         }
     }
 }

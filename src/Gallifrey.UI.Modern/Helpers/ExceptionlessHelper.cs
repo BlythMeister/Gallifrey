@@ -37,6 +37,10 @@ namespace Gallifrey.UI.Modern.Helpers
                 {
                     userInfo.Name = modelHelpers.Gallifrey.Settings.JiraConnectionSettings.JiraUsername;
                 }
+
+                userInfo.Data.Add("Jira-DisplayName", modelHelpers.Gallifrey.JiraConnection.CurrentUser.displayName);
+                userInfo.Data.Add("Jira-Name", modelHelpers.Gallifrey.JiraConnection.CurrentUser.name);
+                userInfo.Data.Add("Jira-EmailAddress", modelHelpers.Gallifrey.JiraConnection.CurrentUser.emailAddress);
             }
             else
             {

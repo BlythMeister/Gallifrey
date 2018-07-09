@@ -211,6 +211,7 @@ namespace Gallifrey.UI.Modern.MainViews
             flyoutOpenCheck.Enabled = true;
             modelHelpers.Gallifrey.NoActivityEvent += GallifreyOnNoActivityEvent;
             modelHelpers.Gallifrey.ExportPromptEvent += GallifreyOnExportPromptEvent;
+            modelHelpers.Gallifrey.SettingsChanged += GallifreyOnSettingsChanged;
             SystemEvents.SessionSwitch += SessionSwitchHandler;
         }
 
@@ -339,6 +340,11 @@ namespace Gallifrey.UI.Modern.MainViews
                     this.FlashWindow();
                 }
             });
+        }
+
+        private void GallifreyOnSettingsChanged(object sender, EventArgs e)
+        {
+            exceptionlessHelper.RegisterExceptionless();
         }
 
         private void SessionSwitchHandler(object sender, SessionSwitchEventArgs e)

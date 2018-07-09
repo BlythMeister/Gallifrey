@@ -10,3 +10,4 @@ nuget Newtonsoft.Json
 nuget RestSharp
 nuget Octokit
 nuget ToastNotifications
+nuget System.ValueTuple

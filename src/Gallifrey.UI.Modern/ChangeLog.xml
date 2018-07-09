@@ -394,6 +394,15 @@
       <Other>Update Exceptionless API Key</Other>
     </Others>
   </Version>
+  <Version Number="3.10.3.0" Name="">
+    <Features />
+    <Bugs>
+      <Bug>Memory fixes</Bug>
+      <Bug>Update fixes</Bug>
+      <Bug>Exception tracking fixes</Bug>
+    </Bugs>
+    <Others />
+  </Version>
   <!--
   Template for VNext if not present above
   <Version Number="0.0.0.0" Name="Pre-Release">
