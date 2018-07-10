@@ -13,6 +13,7 @@ namespace Gallifrey.Serialization
         private readonly string encryptionPassPhrase;
         private string TempWritePath => savePath + ".temp";
         private string BackupPath => savePath + ".bak";
+        private string BackupPathPlus1 => savePath + ".bak+1";
 
         public ItemSerializer(string fileName)
         {
@@ -47,10 +48,18 @@ namespace Gallifrey.Serialization
             {
                 if (File.Exists(savePath))
                 {
-                    File.Copy(savePath, TempWritePath, true);
-                    if (!File.Exists(BackupPath) || (new FileInfo(BackupPath).LastAccessTime.Date != DateTime.Now.Date))
+                    if (!File.Exists(TempWritePath))
+                    {
+                        File.Copy(savePath, TempWritePath, true);
+                    }
+                    if (!File.Exists(BackupPath) || new FileInfo(BackupPath).LastWriteTimeUtc.Date < DateTime.UtcNow.Date)
                     {
                         File.Copy(savePath, BackupPath, true);
+                    }
+
+                    if (!File.Exists(BackupPathPlus1) || new FileInfo(BackupPathPlus1).LastWriteTimeUtc.Date < DateTime.UtcNow.Date.AddDays(-1))
+                    {
+                        File.Copy(savePath, BackupPathPlus1, true);
                     }
                 }
                 File.WriteAllText(savePath, DataEncryption.Encrypt(JsonConvert.SerializeObject(obj), encryptionPassPhrase));
@@ -59,6 +68,7 @@ namespace Gallifrey.Serialization
             {
                 if (retryCount >= 3)
                 {
+                    if (File.Exists(TempWritePath)) File.Copy(TempWritePath, savePath, true);
                     throw new SerializerError("Error in serialization", ex);
                 }
                 Thread.Sleep(500);
