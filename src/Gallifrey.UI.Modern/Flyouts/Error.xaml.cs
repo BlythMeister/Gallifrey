@@ -30,7 +30,7 @@ namespace Gallifrey.UI.Modern.Flyouts
 
             ExceptionlessClient.Default.SubmitEvent(DataModel.ExceptionlessEvent);
 
-            await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Thank You", "You're Helping Make Gallifrey Better!");
+            await modelHelpers.ShowMessageAsync("Thank You", "You're Helping Make Gallifrey Better!");
 
             modelHelpers.CloseFlyout(this);
         }

@@ -45,7 +45,7 @@ namespace Gallifrey.UI.Modern.MainViews
             exceptionlessHelper = new ExceptionlessHelper(modelHelpers);
             exceptionlessHelper.RegisterExceptionless();
 
-            progressDialogHelper = new ProgressDialogHelper(modelHelpers.DialogContext);
+            progressDialogHelper = new ProgressDialogHelper(modelHelpers);
 
             var viewModel = new MainViewModel(modelHelpers);
             DataContext = viewModel;
@@ -132,19 +132,19 @@ namespace Gallifrey.UI.Modern.MainViews
             var result = await progressDialogHelper.Do(Initialise, "Initialising Gallifrey", true, true);
             if (result.Status == ProgressResult.JiraHelperStatus.Cancelled)
             {
-                await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Gallifrey Not Initialised", "Gallifrey Initialisation Was Cancelled, The App Will Now Close");
+                await modelHelpers.ShowMessageAsync("Gallifrey Not Initialised", "Gallifrey Initialisation Was Cancelled, The App Will Now Close");
                 modelHelpers.CloseApp();
             }
 
             if (result.RetVal == InitialiseResult.DebuggerNotAttached)
             {
-                await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Debugger Not Running", "It Looks Like Your Running Without Auto-Update\nPlease Use The Installed Shortcut To Start Gallifrey Or Download Again From GallifreyApp.co.uk");
+                await modelHelpers.ShowMessageAsync("Debugger Not Running", "It Looks Like Your Running Without Auto-Update\nPlease Use The Installed Shortcut To Start Gallifrey Or Download Again From GallifreyApp.co.uk");
                 modelHelpers.CloseApp();
             }
             else if (result.RetVal == InitialiseResult.MultipleGallifreyRunning)
             {
                 modelHelpers.Gallifrey.TrackEvent(TrackingType.MultipleInstancesRunning);
-                var userChoice = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Multiple Instances", "You Can Only Have One Instance Of Gallifrey Running At A Time", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Check Again", NegativeButtonText = "Close Now" });
+                var userChoice = await modelHelpers.ShowMessageAsync("Multiple Instances", "You Can Only Have One Instance Of Gallifrey Running At A Time", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Check Again", NegativeButtonText = "Close Now" });
                 if (userChoice == MessageDialogResult.Affirmative)
                 {
                     await MainWindow_OnLoaded();
@@ -157,7 +157,7 @@ namespace Gallifrey.UI.Modern.MainViews
             else if (result.RetVal == InitialiseResult.NoInternetConnection)
             {
                 modelHelpers.Gallifrey.TrackEvent(TrackingType.NoInternet);
-                var userChoice = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "No Internet Connection", "Gallifrey Requires An Active Internet Connection To Work.", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Check Again", NegativeButtonText = "Close Now" });
+                var userChoice = await modelHelpers.ShowMessageAsync("No Internet Connection", "Gallifrey Requires An Active Internet Connection To Work.", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Check Again", NegativeButtonText = "Close Now" });
                 if (userChoice == MessageDialogResult.Affirmative)
                 {
                     await MainWindow_OnLoaded();
@@ -170,7 +170,7 @@ namespace Gallifrey.UI.Modern.MainViews
             else if (result.RetVal == InitialiseResult.NewUser)
             {
                 modelHelpers.Gallifrey.TrackEvent(TrackingType.SettingsMissing);
-                await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Welcome To Gallifrey", "You Have No Settings In Gallifrey\n\nTo Get Started, We Need Your Jira Details");
+                await modelHelpers.ShowMessageAsync("Welcome To Gallifrey", "You Have No Settings In Gallifrey\n\nTo Get Started, We Need Your Jira Details");
 
                 await NewUserOnBoarding();
 
@@ -179,11 +179,11 @@ namespace Gallifrey.UI.Modern.MainViews
             else if (result.RetVal == InitialiseResult.ConnectionError || result.RetVal == InitialiseResult.MissingConfig)
             {
                 modelHelpers.Gallifrey.TrackEvent(TrackingType.ConnectionError);
-                var userUpdate = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Login Failure", "We Were Unable To Authenticate To Jira, Please Confirm Login Details\nWould You Like To Update Your Details?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No" });
+                var userUpdate = await modelHelpers.ShowMessageAsync("Login Failure", "We Were Unable To Authenticate To Jira, Please Confirm Login Details\nWould You Like To Update Your Details?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No" });
 
                 if (userUpdate == MessageDialogResult.Negative)
                 {
-                    await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Come Back Soon", "Without A Correctly Configured Jira Connection Gallifrey Will Close, Please Come Back Soon!");
+                    await modelHelpers.ShowMessageAsync("Come Back Soon", "Without A Correctly Configured Jira Connection Gallifrey Will Close, Please Come Back Soon!");
                     modelHelpers.CloseApp();
                 }
 
@@ -218,18 +218,18 @@ namespace Gallifrey.UI.Modern.MainViews
         {
             await UserLoginFailure();
 
-            var viewSettings = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "More Settings", "Gallifrey Has A Vast Range Of Settings, Would You Like To See Them Now?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No" });
+            var viewSettings = await modelHelpers.ShowMessageAsync("More Settings", "Gallifrey Has A Vast Range Of Settings, Would You Like To See Them Now?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No" });
 
             if (viewSettings == MessageDialogResult.Affirmative)
             {
                 await modelHelpers.OpenFlyout(new Flyouts.Settings(modelHelpers));
                 if (!modelHelpers.Gallifrey.JiraConnection.IsConnected)
                 {
-                    var userUpdate = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Lost Jira Connection", "We Seem To Have Lost Jira Connection\nWould You Like To Update Your Details?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No" });
+                    var userUpdate = await modelHelpers.ShowMessageAsync("Lost Jira Connection", "We Seem To Have Lost Jira Connection\nWould You Like To Update Your Details?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No" });
 
                     if (userUpdate == MessageDialogResult.Negative)
                     {
-                        await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Come Back Soon", "Without A Correctly Configured Jira Connection Gallifrey Will Close, Please Come Back Soon!");
+                        await modelHelpers.ShowMessageAsync("Come Back Soon", "Without A Correctly Configured Jira Connection Gallifrey Will Close, Please Come Back Soon!");
                         modelHelpers.CloseApp();
                     }
 
@@ -245,18 +245,18 @@ namespace Gallifrey.UI.Modern.MainViews
             while (!loggedIn)
             {
                 var jiraSettings = modelHelpers.Gallifrey.Settings.JiraConnectionSettings;
-                jiraSettings.JiraUrl = await DialogCoordinator.Instance.ShowInputAsync(modelHelpers.DialogContext, "Jira URL", "Please Enter Your Jira Instance URL\nThis Is The URL You Go To When You Login Using A Browser\ne.g. https://MyCompany.atlassian.net", new MetroDialogSettings { DefaultText = jiraSettings.JiraUrl });
+                jiraSettings.JiraUrl = await modelHelpers.ShowInputAsync("Jira URL", "Please Enter Your Jira Instance URL\nThis Is The URL You Go To When You Login Using A Browser\ne.g. https://MyCompany.atlassian.net", new MetroDialogSettings { DefaultText = jiraSettings.JiraUrl });
 
-                var details = await DialogCoordinator.Instance.ShowLoginAsync(modelHelpers.DialogContext, "UserName & Password", "Please Enter Your UserName/Email Address & Password You Use To Login To Jira", new LoginDialogSettings { EnablePasswordPreview = true, InitialUsername = jiraSettings.JiraUsername, InitialPassword = jiraSettings.JiraPassword });
+                var details = await modelHelpers.ShowLoginAsync("UserName & Password", "Please Enter Your UserName/Email Address & Password You Use To Login To Jira", new LoginDialogSettings { EnablePasswordPreview = true, InitialUsername = jiraSettings.JiraUsername, InitialPassword = jiraSettings.JiraPassword });
                 jiraSettings.JiraUsername = details.Username;
                 jiraSettings.JiraPassword = details.Password;
 
-                var useTempoChoice = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Tempo", "Do You Want To Use Tempo To Record Timesheets?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No" });
+                var useTempoChoice = await modelHelpers.ShowMessageAsync("Tempo", "Do You Want To Use Tempo To Record Timesheets?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No" });
                 jiraSettings.UseTempo = useTempoChoice == MessageDialogResult.Affirmative;
 
                 if (jiraSettings.UseTempo)
                 {
-                    jiraSettings.TempoToken = await DialogCoordinator.Instance.ShowInputAsync(modelHelpers.DialogContext, "Tempo Api Token", "Please Enter Your Tempo Api Token\nThis Can Be Found Under 'API Integration' In Your Tempo Settings", new MetroDialogSettings { DefaultText = jiraSettings.TempoToken });
+                    jiraSettings.TempoToken = await modelHelpers.ShowInputAsync("Tempo Api Token", "Please Enter Your Tempo Api Token\nThis Can Be Found Under 'API Integration' In Your Tempo Settings", new MetroDialogSettings { DefaultText = jiraSettings.TempoToken });
                 }
                 else
                 {
@@ -271,19 +271,19 @@ namespace Gallifrey.UI.Modern.MainViews
                 }
                 catch (MissingJiraConfigException)
                 {
-                    var result = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Missing Information", "Some Of The Jira Information We Requested Was Missing, Try Again?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No" });
+                    var result = await modelHelpers.ShowMessageAsync("Missing Information", "Some Of The Jira Information We Requested Was Missing, Try Again?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No" });
                     if (result == MessageDialogResult.Negative)
                     {
-                        await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Come Back Soon", "Without A Correctly Configured Jira Connection Gallifrey Will Close, Please Come Back Soon!");
+                        await modelHelpers.ShowMessageAsync("Come Back Soon", "Without A Correctly Configured Jira Connection Gallifrey Will Close, Please Come Back Soon!");
                         modelHelpers.CloseApp();
                     }
                 }
                 catch (JiraConnectionException)
                 {
-                    var result = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Login Failure", "We Were Unable To Authenticate To Jira, Try Again?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No" });
+                    var result = await modelHelpers.ShowMessageAsync("Login Failure", "We Were Unable To Authenticate To Jira, Try Again?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No" });
                     if (result == MessageDialogResult.Negative)
                     {
-                        await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Come Back Soon", "Without A Correctly Configured Jira Connection Gallifrey Will Close, Please Come Back Soon!");
+                        await modelHelpers.ShowMessageAsync("Come Back Soon", "Without A Correctly Configured Jira Connection Gallifrey Will Close, Please Come Back Soon!");
                         modelHelpers.CloseApp();
                     }
                 }
@@ -307,7 +307,7 @@ namespace Gallifrey.UI.Modern.MainViews
                     message += $"You Have '{exportTime.FormatAsString(false)}' To Export For This Change";
                 }
 
-                var messageResult = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Do You Want To Export?", message, MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
+                var messageResult = await modelHelpers.ShowMessageAsync("Do You Want To Export?", message, MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
 
                 if (messageResult == MessageDialogResult.Affirmative)
                 {
@@ -417,7 +417,7 @@ namespace Gallifrey.UI.Modern.MainViews
                 {
                     if (modelHelpers.Gallifrey.Settings.UiSettings.TopMostOnFlyoutOpen)
                     {
-                        if (modelHelpers.FlyoutOpen)
+                        if (modelHelpers.FlyoutOpenOrDialogShowing)
                         {
                             if (!Topmost)
                             {
@@ -476,7 +476,7 @@ namespace Gallifrey.UI.Modern.MainViews
             }
             else
             {
-                if (modelHelpers.FlyoutOpen)
+                if (modelHelpers.FlyoutOpenOrDialogShowing)
                 {
                     modelHelpers.HideAllFlyouts();
                 }
@@ -534,7 +534,7 @@ namespace Gallifrey.UI.Modern.MainViews
                 UpdateResult updateResult;
                 if (updateType == UpdateType.Manual || updateType == UpdateType.StartUp)
                 {
-                    var controller = await DialogCoordinator.Instance.ShowProgressAsync(modelHelpers.DialogContext, "Please Wait", "Checking For Updates");
+                    var controller = await modelHelpers.ShowIndeterminateProgressAsync("Please Wait", "Checking For Updates");
                     controller.SetIndeterminate();
                     updateResult = await modelHelpers.Gallifrey.VersionControl.CheckForUpdates(true);
                     await controller.CloseAsync();
@@ -547,7 +547,7 @@ namespace Gallifrey.UI.Modern.MainViews
                 //Handle Update Result
                 if (updateResult == UpdateResult.Updated && (updateType == UpdateType.Manual || updateType == UpdateType.StartUp))
                 {
-                    var messageResult = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Update Found", "Restart Now To Install Update?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
+                    var messageResult = await modelHelpers.ShowMessageAsync("Update Found", "Restart Now To Install Update?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
 
                     if (messageResult == MessageDialogResult.Affirmative)
                     {
@@ -555,7 +555,7 @@ namespace Gallifrey.UI.Modern.MainViews
                         modelHelpers.CloseApp(true);
                     }
                 }
-                else if (updateResult == UpdateResult.Updated && modelHelpers.Gallifrey.Settings.AppSettings.AutoUpdate && !machineLocked && !modelHelpers.FlyoutOpen)
+                else if (updateResult == UpdateResult.Updated && modelHelpers.Gallifrey.Settings.AppSettings.AutoUpdate && !machineLocked && !modelHelpers.FlyoutOpenOrDialogShowing)
                 {
                     modelHelpers.Gallifrey.TrackEvent(TrackingType.AutoUpdateInstalled);
                     modelHelpers.CloseApp(true);
@@ -566,19 +566,19 @@ namespace Gallifrey.UI.Modern.MainViews
                 }
                 else if (updateResult == UpdateResult.NoInternet && updateType == UpdateType.Manual)
                 {
-                    await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Unable To Update", "Unable To Access https://releases.gallifreyapp.co.uk To Check For Updates");
+                    await modelHelpers.ShowMessageAsync("Unable To Update", "Unable To Access https://releases.gallifreyapp.co.uk To Check For Updates");
                 }
                 else if (updateResult == UpdateResult.NotDeployable && updateType == UpdateType.Manual)
                 {
-                    await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Unable To Update", "You Cannot Auto Update This Version Of Gallifrey");
+                    await modelHelpers.ShowMessageAsync("Unable To Update", "You Cannot Auto Update This Version Of Gallifrey");
                 }
                 else if ((updateResult == UpdateResult.NoUpdate || updateResult == UpdateResult.TooSoon) && updateType == UpdateType.Manual)
                 {
-                    await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "No Update Found", "There Are No Updates At This Time, Check Back Soon!");
+                    await modelHelpers.ShowMessageAsync("No Update Found", "There Are No Updates At This Time, Check Back Soon!");
                 }
                 else if (updateResult == UpdateResult.ReinstallNeeded && (updateType == UpdateType.Manual || updateType == UpdateType.StartUp))
                 {
-                    var messageResult = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Update Error", "To Update An Uninstall/Reinstall Is Required.\nThis Can Happen Automatically & No Timers Will Be Lost\nAll You Need To Do Is Press The \"Install\" Button When Prompted\n\nDo You Want To Update Now?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
+                    var messageResult = await modelHelpers.ShowMessageAsync("Update Error", "To Update An Uninstall/Reinstall Is Required.\nThis Can Happen Automatically & No Timers Will Be Lost\nAll You Need To Do Is Press The \"Install\" Button When Prompted\n\nDo You Want To Update Now?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
 
                     if (messageResult == MessageDialogResult.Affirmative)
                     {
@@ -590,7 +590,7 @@ namespace Gallifrey.UI.Modern.MainViews
                         catch (Exception ex)
                         {
                             ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Handled").Submit();
-                            await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Update Error", "There Was An Error Trying To Update Gallifrey, You May Need To Re-Download The App");
+                            await modelHelpers.ShowMessageAsync("Update Error", "There Was An Error Trying To Update Gallifrey, You May Need To Re-Download The App");
                         }
                         finally
                         {
@@ -604,7 +604,7 @@ namespace Gallifrey.UI.Modern.MainViews
                 ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Handled").Submit();
                 if (updateType == UpdateType.Manual || updateType == UpdateType.StartUp)
                 {
-                    await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Update Error", "There Was An Error Trying To Update Gallifrey, If This Problem Persists Please Contact Support");
+                    await modelHelpers.ShowMessageAsync("Update Error", "There Was An Error Trying To Update Gallifrey, If This Problem Persists Please Contact Support");
                     modelHelpers.CloseApp(true);
                 }
             }
@@ -626,7 +626,7 @@ namespace Gallifrey.UI.Modern.MainViews
 
         private void MainWindow_KeyDown(object sender, KeyEventArgs e)
         {
-            if (modelHelpers.FlyoutOpen) return;
+            if (modelHelpers.FlyoutOpenOrDialogShowing) return;
 
             var key = e.Key;
             RemoteButtonTrigger trigger;
@@ -680,7 +680,7 @@ namespace Gallifrey.UI.Modern.MainViews
 
         private void MainWindow_StateChange(object sender, EventArgs e)
         {
-            if (modelHelpers.Gallifrey.Settings.UiSettings.TopMostOnFlyoutOpen && modelHelpers.FlyoutOpen && WindowState == WindowState.Minimized)
+            if (modelHelpers.Gallifrey.Settings.UiSettings.TopMostOnFlyoutOpen && modelHelpers.FlyoutOpenOrDialogShowing && WindowState == WindowState.Minimized)
             {
                 WindowState = WindowState.Normal;
             }
