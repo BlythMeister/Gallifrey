@@ -62,7 +62,7 @@ namespace Gallifrey.Serialization
                         File.Copy(savePath, BackupPathPlus1, true);
                     }
                 }
-                File.WriteAllText(savePath, DataEncryption.Encrypt(JsonConvert.SerializeObject(obj), encryptionPassPhrase));
+                File.WriteAllText(savePath, DataEncryption.EncryptCaseInsensitive(JsonConvert.SerializeObject(obj), encryptionPassPhrase));
             }
             catch (Exception ex)
             {

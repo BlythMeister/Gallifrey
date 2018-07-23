@@ -8,11 +8,18 @@ namespace Gallifrey.Serialization
 {
     internal static class DataEncryption
     {
-        internal static string Encrypt(string plainText, string passPhrase)
+        internal static string EncryptCaseInsensitive(string plainText, string passPhrase)
+        {
+            var vector = GetSha256Hash(Guid.NewGuid().ToString()).Substring(0, 16).Replace("|", "~");
+            var encrypted = Encrypt(plainText, passPhrase.ToLower(), vector);
+            return $"V2|CI|{vector}|{encrypted}";
+        }
+
+        internal static string EncryptCaseSensitive(string plainText, string passPhrase)
         {
             var vector = GetSha256Hash(Guid.NewGuid().ToString()).Substring(0, 16).Replace("|", "~");
             var encrypted = Encrypt(plainText, passPhrase, vector);
-            return $"V1|{vector}|{encrypted}";
+            return $"V2|CS|{vector}|{encrypted}";
         }
 
         internal static string Decrypt(string cipherText, string passPhrase)
@@ -22,6 +29,16 @@ namespace Gallifrey.Serialization
             if (cipherParts.Length == 3 && cipherParts[0] == "V1")
             {
                 return Decrypt(cipherParts[2], passPhrase, cipherParts[1]);
+            }
+
+            if (cipherParts.Length == 4 && cipherParts[0] == "V2" && cipherParts[1] == "CI")
+            {
+                return Decrypt(cipherParts[3], passPhrase.ToLower(), cipherParts[2]);
+            }
+
+            if (cipherParts.Length == 4 && cipherParts[0] == "V2" && cipherParts[1] == "CS")
+            {
+                return Decrypt(cipherParts[3], passPhrase, cipherParts[2]);
             }
 
             //Legacy handling

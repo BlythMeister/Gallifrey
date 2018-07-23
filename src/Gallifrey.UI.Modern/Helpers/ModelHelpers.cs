@@ -19,20 +19,19 @@ namespace Gallifrey.UI.Modern.Helpers
         private readonly List<OpenFlyoutDetails> openFlyouts;
         private readonly Notifier toastNotifier;
         public IBackend Gallifrey { get; }
-        public bool FlyoutOpenOrDialogShowing => openFlyouts.Count(x => !x.IsHidden) > 0 || dialogContext.InUse;
+        public DialogContext DialogContext { get; }
+        public bool FlyoutOpenOrDialogShowing => openFlyouts.Count(x => !x.IsHidden) > 0 || DialogContext.InUse;
 
         public event EventHandler<Guid> SelectTimerEvent;
         public event EventHandler SelectRunningTimerEvent;
         public event EventHandler RefreshModelEvent;
         public event EventHandler<RemoteButtonTrigger> RemoteButtonTrigger;
 
-        private readonly DialogContext dialogContext;
-
         public ModelHelpers(IBackend gallifrey, FlyoutsControl flyoutsControl)
         {
             this.flyoutsControl = flyoutsControl;
             Gallifrey = gallifrey;
-            dialogContext = new DialogContext();
+            DialogContext = new DialogContext();
             openFlyouts = new List<OpenFlyoutDetails>();
             toastNotifier = new Notifier(cfg =>
             {
@@ -148,58 +147,53 @@ namespace Gallifrey.UI.Modern.Helpers
         {
             try
             {
-                dialogContext.InUse = true;
-                return await DialogCoordinator.Instance.ShowMessageAsync(dialogContext, title, message, style, settings);
+                DialogContext.InUse = true;
+                return await DialogCoordinator.Instance.ShowMessageAsync(DialogContext, title, message, style, settings);
             }
             finally
             {
-                dialogContext.InUse = false;
+                DialogContext.InUse = false;
             }
         }
 
         public async Task<ProgressDialogController> ShowIndeterminateProgressAsync(string title, string message, bool canCancel = false, MetroDialogSettings settings = null)
         {
-            try
-            {
-                dialogContext.InUse = true;
-                var progress = await DialogCoordinator.Instance.ShowProgressAsync(dialogContext, title, message, canCancel, settings);
-                progress.SetIndeterminate();
-                return progress;
-            }
-            finally
-            {
-                dialogContext.InUse = false;
-            }
+            DialogContext.InUse = true;
+            var progress = await DialogCoordinator.Instance.ShowProgressAsync(DialogContext, title, message, canCancel, settings);
+            progress.SetIndeterminate();
+            progress.Closed += (sender, args) => DialogContext.InUse = false;
+            progress.Canceled += (sender, args) => DialogContext.InUse = false;
+            return progress;
         }
 
         public async Task<string> ShowInputAsync(string title, string message, MetroDialogSettings settings = null)
         {
             try
             {
-                dialogContext.InUse = true;
-                return await DialogCoordinator.Instance.ShowInputAsync(dialogContext, title, message, settings);
+                DialogContext.InUse = true;
+                return await DialogCoordinator.Instance.ShowInputAsync(DialogContext, title, message, settings);
             }
             finally
             {
-                dialogContext.InUse = false;
+                DialogContext.InUse = false;
             }
         }
 
         public async Task ShowDialogAsync(BaseMetroDialog dialog, MetroDialogSettings settings = null)
         {
-            dialogContext.InUse = true;
-            await DialogCoordinator.Instance.ShowMetroDialogAsync(dialogContext, dialog, settings);
+            DialogContext.InUse = true;
+            await DialogCoordinator.Instance.ShowMetroDialogAsync(DialogContext, dialog, settings);
         }
 
         public async Task HideDialogAsync(BaseMetroDialog dialog, MetroDialogSettings settings = null)
         {
             try
             {
-                await DialogCoordinator.Instance.HideMetroDialogAsync(dialogContext, dialog, settings);
+                await DialogCoordinator.Instance.HideMetroDialogAsync(DialogContext, dialog, settings);
             }
             finally
             {
-                dialogContext.InUse = false;
+                DialogContext.InUse = false;
             }
         }
 
@@ -207,12 +201,12 @@ namespace Gallifrey.UI.Modern.Helpers
         {
             try
             {
-                dialogContext.InUse = true;
-                return await DialogCoordinator.Instance.ShowLoginAsync(dialogContext, title, message, settings);
+                DialogContext.InUse = true;
+                return await DialogCoordinator.Instance.ShowLoginAsync(DialogContext, title, message, settings);
             }
             finally
             {
-                dialogContext.InUse = false;
+                DialogContext.InUse = false;
             }
         }
 

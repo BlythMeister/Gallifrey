@@ -435,6 +435,7 @@
     <Features />
     <Bugs>
       <Bug>Prevent app auto restart when dialog open</Bug>
+      <Bug>Update settings encryption to be case insensitive</Bug>
     </Bugs>
     <Others />
   </Version>

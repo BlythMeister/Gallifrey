@@ -506,8 +506,7 @@ namespace Gallifrey.UI.Modern.MainViews
             {
                 if (modelHelpers.Gallifrey.VersionControl.IsAutomatedDeploy &&
                     !modelHelpers.Gallifrey.VersionControl.UpdateError &&
-                    !modelHelpers.Gallifrey.VersionControl.UpdateReinstallNeeded &&
-                    !modelHelpers.Gallifrey.VersionControl.UpdateInstalled)
+                    !modelHelpers.Gallifrey.VersionControl.UpdateReinstallNeeded)
                 {
                     await PerformUpdate(UpdateType.Auto);
                 }
