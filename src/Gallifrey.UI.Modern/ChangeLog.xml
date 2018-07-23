@@ -469,6 +469,26 @@
     </Bugs>
     <Others />
   </Version>
+  <Version Number="3.11.0.0" Name="Rollup-Update">
+    <Features>
+      <Feature>Pasting a Jira URL into the add or edit Jira reference converts from URL to plain reference</Feature>
+      <Feature>Reduce update check time</Feature>
+    </Features>
+    <Bugs>
+      <Bug>Fix issue with remaining time not showing on bulk export</Bug>
+      <Bug>Fix issue when remaining is over 24 hours</Bug>
+      <Bug>Memory fixes</Bug>
+      <Bug>Update fixes</Bug>
+      <Bug>Fix issues with saving settings</Bug>
+      <Bug>Prevent app auto restart when dialog open</Bug>
+      <Bug>Update settings encryption to be case insensitive</Bug>
+      <Bug>Add additional information to error tracking</Bug>
+      <Bug>Fix tracking version number</Bug>
+    </Bugs>
+    <Others>
+      <Other>Update Exceptionless API Key</Other>
+    </Others>
+  </Version>
   <!--
   Template for VNext if not present above
   <Version Number="0.0.0.0" Name="Pre-Release">

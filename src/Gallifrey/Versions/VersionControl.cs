@@ -77,7 +77,7 @@ namespace Gallifrey.Versions
                 return Task.Run(() => UpdateResult.NotDeployable);
             }
 
-            if (lastUpdateCheck >= DateTime.UtcNow.AddMinutes(-5) && !manualCheck)
+            if (lastUpdateCheck >= DateTime.UtcNow.AddMinutes(-3) && !manualCheck)
             {
                 return Task.Run(() => UpdateResult.TooSoon);
             }
