@@ -2,7 +2,6 @@ using System;
 using System.Deployment.Application;
 using System.IO;
 using System.Net;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -36,9 +35,10 @@ namespace Gallifrey.Versions
         public string AppName { get; }
         public bool UpdateInstalled { get; private set; }
         public bool UpdateReinstallNeeded { get; private set; }
-        public bool UpdateError { get; private set; }
+        public bool UpdateError => updateErrorCount >= 3;
 
         private DateTime lastUpdateCheck;
+        private int updateErrorCount;
 
         public bool IsAutomatedDeploy => ApplicationDeployment.IsNetworkDeployed;
         public Version DeployedVersion => UpdateInstalled ? ApplicationDeployment.CurrentDeployment.UpdatedVersion : ApplicationDeployment.CurrentDeployment.CurrentVersion;
@@ -48,6 +48,7 @@ namespace Gallifrey.Versions
         {
             InstanceType = instanceType;
             lastUpdateCheck = DateTime.MinValue;
+            updateErrorCount = 0;
 
             SetVersionName();
 
@@ -105,8 +106,8 @@ namespace Gallifrey.Versions
                         SetVersionName();
                         UpdateInstalled = true;
                         UpdateReinstallNeeded = false;
-                        UpdateError = false;
                         UpdateStateChange?.Invoke(this, null);
+                        updateErrorCount = 0;
                         return UpdateResult.Updated;
                     });
                 }
@@ -117,22 +118,23 @@ namespace Gallifrey.Versions
                     if (manualCheck)
                     {
                         UpdateReinstallNeeded = false;
-                        UpdateError = false;
+                        updateErrorCount = 0;
                         Task.Delay(TimeSpan.FromSeconds(2));
                     }
                     return UpdateResult.NoUpdate;
                 });
             }
-            catch (Exception e) when (e is TrustNotGrantedException || e is COMException)
+            catch (TrustNotGrantedException)
             {
                 UpdateReinstallNeeded = true;
                 UpdateStateChange?.Invoke(this, null);
+                updateErrorCount = updateErrorCount + 1;
                 return Task.Run(() => UpdateResult.ReinstallNeeded);
             }
             catch (Exception)
             {
-                UpdateError = true;
                 UpdateStateChange?.Invoke(this, null);
+                updateErrorCount = updateErrorCount + 1;
                 throw;
             }
         }

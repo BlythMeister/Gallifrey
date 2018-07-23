@@ -34,7 +34,6 @@ namespace Gallifrey.UI.Modern.MainViews
         private MainViewModel ViewModel => (MainViewModel)DataContext;
         private bool machineLocked;
         private bool machineIdle;
-        private int failedUpdates = 0;
 
         public MainWindow(InstanceType instance)
         {
@@ -505,7 +504,10 @@ namespace Gallifrey.UI.Modern.MainViews
         {
             Dispatcher.Invoke(async () =>
             {
-                if (modelHelpers.Gallifrey.VersionControl.IsAutomatedDeploy)
+                if (modelHelpers.Gallifrey.VersionControl.IsAutomatedDeploy &&
+                    !modelHelpers.Gallifrey.VersionControl.UpdateError &&
+                    !modelHelpers.Gallifrey.VersionControl.UpdateReinstallNeeded &&
+                    !modelHelpers.Gallifrey.VersionControl.UpdateInstalled)
                 {
                     await PerformUpdate(UpdateType.Auto);
                 }
@@ -536,10 +538,6 @@ namespace Gallifrey.UI.Modern.MainViews
                     controller.SetIndeterminate();
                     updateResult = await modelHelpers.Gallifrey.VersionControl.CheckForUpdates(true);
                     await controller.CloseAsync();
-                }
-                else if (failedUpdates >= 10)
-                {
-                    return;
                 }
                 else
                 {
@@ -600,21 +598,14 @@ namespace Gallifrey.UI.Modern.MainViews
                         }
                     }
                 }
-
-                failedUpdates = 0;
             }
             catch (Exception ex)
             {
                 ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Handled").Submit();
-                failedUpdates++;
                 if (updateType == UpdateType.Manual || updateType == UpdateType.StartUp)
                 {
                     await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Update Error", "There Was An Error Trying To Update Gallifrey, If This Problem Persists Please Contact Support");
                     modelHelpers.CloseApp(true);
-                }
-                else if (failedUpdates >= 3)
-                {
-                    modelHelpers.ShowNotification("Update Error Occured");
                 }
             }
         }
