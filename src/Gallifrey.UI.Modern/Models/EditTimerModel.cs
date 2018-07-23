@@ -15,6 +15,7 @@ namespace Gallifrey.UI.Modern.Models
         private DateTime? runDate;
         private int hours;
         private int minutes;
+        private readonly string jiraUrl;
 
         public event PropertyChangedEventHandler PropertyChanged;
         public DateTime MinDate { get; set; }
@@ -39,6 +40,8 @@ namespace Gallifrey.UI.Modern.Models
         {
             var dateToday = DateTime.Now;
             var timer = gallifrey.JiraTimerCollection.GetTimer(timerId);
+
+            jiraUrl = gallifrey.Settings.JiraConnectionSettings.JiraUrl;
 
             if (gallifrey.Settings.AppSettings.KeepTimersForDays > 0)
             {
@@ -88,6 +91,13 @@ namespace Gallifrey.UI.Modern.Models
             set
             {
                 jiraReference = value;
+
+                if (Uri.TryCreate(jiraReference, UriKind.Absolute, out var pastedUri) && Uri.TryCreate(jiraUrl, UriKind.Absolute, out var jiraUri) && pastedUri.Host == jiraUri.Host)
+                {
+                    var uriDrag = pastedUri.AbsolutePath;
+                    jiraReference = uriDrag.Substring(uriDrag.LastIndexOf("/", StringComparison.InvariantCultureIgnoreCase) + 1);
+                }
+
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("DateEditable"));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("JiraReferenceEditable"));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasModifiedJiraReference"));

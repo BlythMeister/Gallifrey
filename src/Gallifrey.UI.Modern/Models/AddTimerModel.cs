@@ -18,9 +18,11 @@ namespace Gallifrey.UI.Modern.Models
         private bool startNow;
         private bool assignToMe;
         private bool changeStatus;
+        private string jiraReference;
+        private readonly string jiraUrl;
 
         public event PropertyChangedEventHandler PropertyChanged;
-        public string JiraReference { get; set; }
+
         public string LocalTimerDescription { get; set; }
         public bool JiraReferenceEditable { get; set; }
         public DateTime MinDate { get; set; }
@@ -117,12 +119,31 @@ namespace Gallifrey.UI.Modern.Models
             }
         }
 
+        public string JiraReference
+        {
+            get => jiraReference;
+            set
+            {
+                jiraReference = value;
+
+                if (Uri.TryCreate(jiraReference, UriKind.Absolute, out var pastedUri) && Uri.TryCreate(jiraUrl, UriKind.Absolute, out var jiraUri) && pastedUri.Host == jiraUri.Host)
+                {
+                    var uriDrag = pastedUri.AbsolutePath;
+                    jiraReference = uriDrag.Substring(uriDrag.LastIndexOf("/", StringComparison.InvariantCultureIgnoreCase) + 1);
+                }
+
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("JiraReference"));
+            }
+        }
+
         public AddTimerModel(IBackend gallifrey, string jiraRef, DateTime? startDate, bool? enableDateChange, List<IdleTimer> idleTimers, bool? startNow)
         {
             var dateToday = DateTime.Now;
 
             JiraReference = jiraRef;
             JiraReferenceEditable = string.IsNullOrWhiteSpace(jiraRef);
+
+            jiraUrl = gallifrey.Settings.JiraConnectionSettings.JiraUrl;
 
             if (gallifrey.Settings.AppSettings.KeepTimersForDays > 0)
             {

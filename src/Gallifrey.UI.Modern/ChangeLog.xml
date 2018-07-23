@@ -461,7 +461,9 @@
     <Others />
   </Version>
   <Version Number="3.10.12.0" Name="">
-    <Features />
+    <Features>
+      <Feature>Pasting a Jira URL into the add or edit Jira reference converts from URL to plain reference</Feature>
+    </Features>
     <Bugs>
       <Bug>Update tracking message format</Bug>
     </Bugs>
