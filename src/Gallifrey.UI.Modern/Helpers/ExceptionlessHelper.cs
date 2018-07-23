@@ -65,6 +65,7 @@ namespace Gallifrey.UI.Modern.Helpers
             {
                 ExceptionlessClient.Default.Register();
                 registered = true;
+                ExceptionlessClient.Default.SubmitFeatureUsage("Exceptionless Registered");
                 //Prevent the framework from auto closing the app and let exceptionless handle errors
                 Application.Current.Dispatcher.UnhandledException += (sender, args) => args.Handled = true;
             }

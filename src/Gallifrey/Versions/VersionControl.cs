@@ -19,6 +19,7 @@ namespace Gallifrey.Versions
         string VersionName { get; }
         bool IsFirstRun { get; }
         string AppName { get; }
+        Version DeployedVersion { get; }
         Task<UpdateResult> CheckForUpdates(bool manualCheck);
         void ManualReinstall();
         string GetApplicationReference();
@@ -41,7 +42,7 @@ namespace Gallifrey.Versions
         private int updateErrorCount;
 
         public bool IsAutomatedDeploy => ApplicationDeployment.IsNetworkDeployed;
-        public Version DeployedVersion => UpdateInstalled ? ApplicationDeployment.CurrentDeployment.UpdatedVersion : ApplicationDeployment.CurrentDeployment.CurrentVersion;
+        public Version DeployedVersion => ApplicationDeployment.CurrentDeployment.CurrentVersion;
         public bool IsFirstRun => ApplicationDeployment.CurrentDeployment.IsFirstRun;
 
         public VersionControl(InstanceType instanceType)
