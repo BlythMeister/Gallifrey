@@ -99,6 +99,10 @@ namespace Gallifrey.UI.Modern.Helpers
                     modelHelpers.CloseApp(true);
                 });
             }
+            else
+            {
+                e.Event.SetUserDescription(new UserDescription(modelHelpers.Gallifrey.JiraConnection.CurrentUser.emailAddress, "Handled Error"));
+            }
         }
 
         private void GallifreyOnDailyTrackingEvent(object sender, EventArgs eventArgs)

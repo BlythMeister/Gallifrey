@@ -24,21 +24,27 @@ namespace Gallifrey.Serialization
 
         internal static string Decrypt(string cipherText, string passPhrase)
         {
-            var cipherParts = cipherText.Split(new[] { '|' }, 3);
+            var cipherParts = cipherText.Split(new[] { '|' }, 2);
 
-            if (cipherParts.Length == 3 && cipherParts[0] == "V1")
+            if (cipherParts[0] == "V1")
             {
+                cipherParts = cipherText.Split(new[] { '|' }, 3);
                 return Decrypt(cipherParts[2], passPhrase, cipherParts[1]);
             }
 
-            if (cipherParts.Length == 4 && cipherParts[0] == "V2" && cipherParts[1] == "CI")
+            if (cipherParts[0] == "V2")
             {
-                return Decrypt(cipherParts[3], passPhrase.ToLower(), cipherParts[2]);
-            }
+                cipherParts = cipherText.Split(new[] { '|' }, 4);
 
-            if (cipherParts.Length == 4 && cipherParts[0] == "V2" && cipherParts[1] == "CS")
-            {
-                return Decrypt(cipherParts[3], passPhrase, cipherParts[2]);
+                if (cipherParts[1] == "CI")
+                {
+                    return Decrypt(cipherParts[3], passPhrase.ToLower(), cipherParts[2]);
+                }
+
+                if (cipherParts[1] == "CS")
+                {
+                    return Decrypt(cipherParts[3], passPhrase, cipherParts[2]);
+                }
             }
 
             //Legacy handling
