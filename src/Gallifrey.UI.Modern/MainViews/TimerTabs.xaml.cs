@@ -36,7 +36,7 @@ namespace Gallifrey.UI.Modern.MainViews
                 if (timerIds.Count > 1)
                 {
                     var timer = ModelHelpers.Gallifrey.JiraTimerCollection.GetTimer(timerId);
-                    await ModelHelpers.ShowMessageAsync("Multiple Timers Selected", $"You Have 2 Timers Selected, Can Only Start 1.\nWill Start Timer: {timer.JiraReference}\n\n{timer.JiraName}");
+                    await DialogCoordinator.Instance.ShowMessageAsync(ModelHelpers.DialogContext, "Multiple Timers Selected", $"You Have 2 Timers Selected, Can Only Start 1.\nWill Start Timer: {timer.JiraReference}\n\n{timer.JiraName}");
                 }
 
                 var runningTimerId = ModelHelpers.Gallifrey.JiraTimerCollection.GetRunningTimerId();
@@ -131,14 +131,14 @@ namespace Gallifrey.UI.Modern.MainViews
                 {
                     if (!ModelHelpers.Gallifrey.JiraConnection.DoesJiraExist(jiraRef))
                     {
-                        await ModelHelpers.ShowMessageAsync("Invalid Jira", $"Unable To Locate That Jira.\n\nJira Ref Dropped: '{jiraRef}'");
+                        await DialogCoordinator.Instance.ShowMessageAsync(ModelHelpers.DialogContext, "Invalid Jira", $"Unable To Locate That Jira.\n\nJira Ref Dropped: '{jiraRef}'");
                         return;
                     }
                 }
                 catch (Exception ex)
                 {
                     ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Handled").Submit();
-                    await ModelHelpers.ShowMessageAsync("Invalid Jira", $"Unable To Locate That Jira.\n\nJira Ref Dropped: '{jiraRef}'");
+                    await DialogCoordinator.Instance.ShowMessageAsync(ModelHelpers.DialogContext, "Invalid Jira", $"Unable To Locate That Jira.\n\nJira Ref Dropped: '{jiraRef}'");
                     return;
                 }
 

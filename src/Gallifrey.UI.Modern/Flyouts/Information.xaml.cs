@@ -41,7 +41,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             }
             else
             {
-                await modelHelpers.ShowMessageAsync("No Change Log", "There Is No Change Log To Show");
+                await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "No Change Log", "There Is No Change Log To Show");
             }
             await modelHelpers.OpenFlyout(this);
         }
@@ -51,12 +51,12 @@ namespace Gallifrey.UI.Modern.Flyouts
             try
             {
                 await ClipboardHelper.SetClipboard(modelHelpers.Gallifrey.Settings.UserHash);
-                await modelHelpers.ShowMessageAsync("Copied Installation Hash", $"Your Installation Hash Of {modelHelpers.Gallifrey.Settings.UserHash} Has Been Copied To The Clipboard");
+                await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Copied Installation Hash", $"Your Installation Hash Of {modelHelpers.Gallifrey.Settings.UserHash} Has Been Copied To The Clipboard");
             }
             catch (Exception ex)
             {
                 ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Handled").Submit();
-                await modelHelpers.ShowMessageAsync("Error Getting Hash", $"There Was An Error Putting Your Installation Hash Of {modelHelpers.Gallifrey.Settings.UserHash} Onto The Clipboard");
+                await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Error Getting Hash", $"There Was An Error Putting Your Installation Hash Of {modelHelpers.Gallifrey.Settings.UserHash} Onto The Clipboard");
             }
         }
     }

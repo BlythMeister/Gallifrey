@@ -17,7 +17,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             this.modelHelpers = modelHelpers;
             InitializeComponent();
 
-            progressDialogHelper = new ProgressDialogHelper(modelHelpers);
+            progressDialogHelper = new ProgressDialogHelper(modelHelpers.DialogContext);
             DataContext = new SettingModel(modelHelpers.Gallifrey.Settings, modelHelpers.Gallifrey.VersionControl);
         }
 
@@ -57,12 +57,12 @@ namespace Gallifrey.UI.Modern.Flyouts
                     //This is a really ugly solution!!
                     //The overides of system colours do not update automatically which is not good.
                     //This message will hopefully make people restart...
-                    await modelHelpers.ShowMessageAsync("Restart Needed", "When Changing Theme, Some Colours Will Not Change Automatically\nIt Is Recommended To Restart The App");
+                    await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Restart Needed", "When Changing Theme, Some Colours Will Not Change Automatically\nIt Is Recommended To Restart The App");
                 }
             }
             else
             {
-                await modelHelpers.ShowMessageAsync("Invalid Jira Configuration", "You Cannot Save With Invalid Jira Configuration.\nTo Save You Have To Have A Valid Connection To Jira");
+                await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Invalid Jira Configuration", "You Cannot Save With Invalid Jira Configuration.\nTo Save You Have To Have A Valid Connection To Jira");
                 Focus();
             }
         }

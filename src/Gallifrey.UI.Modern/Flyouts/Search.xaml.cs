@@ -28,7 +28,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             this.openFromEdit = openFromEdit;
             this.selectedDateTab = selectedDateTab ?? DateTime.Now.Date;
             InitializeComponent();
-            progressDialogHelper = new ProgressDialogHelper(modelHelpers);
+            progressDialogHelper = new ProgressDialogHelper(modelHelpers.DialogContext);
 
             LoadSearch();
         }
@@ -79,7 +79,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                     modelHelpers.CloseFlyout(this);
                     break;
                 case ProgressResult.JiraHelperStatus.Errored:
-                    await modelHelpers.ShowMessageAsync("Error", "There Was An Error Loading Default Search Results");
+                    await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Error", "There Was An Error Loading Default Search Results");
                     modelHelpers.CloseFlyout(this);
                     break;
                 case ProgressResult.JiraHelperStatus.Success:
@@ -119,7 +119,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                 }
                 else
                 {
-                    await modelHelpers.ShowMessageAsync("Missing Search", "Please Choose Enter Search Term Or Choose A Filter");
+                    await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Missing Search", "Please Choose Enter Search Term Or Choose A Filter");
                     Focus();
                     DataModel.ClearSearchResults();
                     return;
@@ -141,7 +141,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                         }
                         else
                         {
-                            await modelHelpers.ShowMessageAsync("No Results", "Your Search Returned No Results");
+                            await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "No Results", "Your Search Returned No Results");
                             Focus();
                             DataModel.ClearSearchResults();
                         }
@@ -151,7 +151,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             catch (Exception ex)
             {
                 ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Handled").Submit();
-                await modelHelpers.ShowMessageAsync("No Results", "There Was An Error Getting Search Results");
+                await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "No Results", "There Was An Error Getting Search Results");
                 Focus();
                 DataModel.ClearSearchResults();
             }
@@ -161,7 +161,7 @@ namespace Gallifrey.UI.Modern.Flyouts
         {
             if (DataModel.SelectedSearchResult == null)
             {
-                await modelHelpers.ShowMessageAsync("No Selected Item", "You Need To Select An Item To Add A Timer For It");
+                await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "No Selected Item", "You Need To Select An Item To Add A Timer For It");
                 Focus();
                 return;
             }
