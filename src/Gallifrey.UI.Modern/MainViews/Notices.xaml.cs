@@ -46,7 +46,7 @@ namespace Gallifrey.UI.Modern.MainViews
             }
             else
             {
-                await DialogCoordinator.Instance.ShowMessageAsync(ModelHelpers.DialogContext, "Nothing To Export", "No Un-Exported Timers Avaliable To Export");
+                await ModelHelpers.ShowMessageAsync("Nothing To Export", "No Un-Exported Timers Avaliable To Export");
             }
 
             ModelHelpers.RefreshModel();
@@ -63,7 +63,7 @@ namespace Gallifrey.UI.Modern.MainViews
             catch (Exception ex)
             {
                 ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Handled").Submit();
-                await DialogCoordinator.Instance.ShowMessageAsync(ModelHelpers.DialogContext, "Update Error", "There Was An Error Trying To Update Gallifrey, If This Problem Persists Please Contact Support");
+                await ModelHelpers.ShowMessageAsync("Update Error", "There Was An Error Trying To Update Gallifrey, If This Problem Persists Please Contact Support");
             }
         }
 
@@ -78,7 +78,7 @@ namespace Gallifrey.UI.Modern.MainViews
             catch (Exception ex)
             {
                 ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Handled").Submit();
-                await DialogCoordinator.Instance.ShowMessageAsync(ModelHelpers.DialogContext, "Reinstall Error", "There Was An Error Trying To Reinstall Gallifrey, You May Need To Re-Download The App");
+                await ModelHelpers.ShowMessageAsync("Reinstall Error", "There Was An Error Trying To Reinstall Gallifrey, You May Need To Re-Download The App");
             }
             finally
             {

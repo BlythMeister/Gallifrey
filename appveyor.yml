@@ -19,7 +19,7 @@ skip_commits:
     - docs/*
     - '**/*.html'
     - '**/*.md'
-version: '3.10.7.{build}'
+version: '3.10.8.{build}'
 skip_tags: true
 image: Visual Studio 2017
 clone_folder: c:\project\gallifrey

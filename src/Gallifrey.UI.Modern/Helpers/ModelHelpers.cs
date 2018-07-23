@@ -19,20 +19,20 @@ namespace Gallifrey.UI.Modern.Helpers
         private readonly List<OpenFlyoutDetails> openFlyouts;
         private readonly Notifier toastNotifier;
         public IBackend Gallifrey { get; }
-        public DialogContext DialogContext { get; }
-        public bool FlyoutOpen => openFlyouts.Count(x => !x.IsHidden) > 0;
-
+        public bool FlyoutOpenOrDialogShowing => openFlyouts.Count(x => !x.IsHidden) > 0 || dialogContext.InUse;
 
         public event EventHandler<Guid> SelectTimerEvent;
         public event EventHandler SelectRunningTimerEvent;
         public event EventHandler RefreshModelEvent;
         public event EventHandler<RemoteButtonTrigger> RemoteButtonTrigger;
 
+        private readonly DialogContext dialogContext;
+
         public ModelHelpers(IBackend gallifrey, FlyoutsControl flyoutsControl)
         {
             this.flyoutsControl = flyoutsControl;
             Gallifrey = gallifrey;
-            DialogContext = new DialogContext();
+            dialogContext = new DialogContext();
             openFlyouts = new List<OpenFlyoutDetails>();
             toastNotifier = new Notifier(cfg =>
             {
@@ -142,6 +142,122 @@ namespace Gallifrey.UI.Modern.Helpers
 
         #endregion
 
+        #region Dialogs
+
+        public async Task<MessageDialogResult> ShowMessageAsync(string title, string message, MessageDialogStyle style = MessageDialogStyle.Affirmative, MetroDialogSettings settings = null)
+        {
+            try
+            {
+                dialogContext.InUse = true;
+                return await DialogCoordinator.Instance.ShowMessageAsync(dialogContext, title, message, style, settings);
+            }
+            finally
+            {
+                dialogContext.InUse = false;
+            }
+        }
+
+        public async Task<ProgressDialogController> ShowIndeterminateProgressAsync(string title, string message, bool canCancel = false, MetroDialogSettings settings = null)
+        {
+            try
+            {
+                dialogContext.InUse = true;
+                var progress = await DialogCoordinator.Instance.ShowProgressAsync(dialogContext, title, message, canCancel, settings);
+                progress.SetIndeterminate();
+                return progress;
+            }
+            finally
+            {
+                dialogContext.InUse = false;
+            }
+        }
+
+        public async Task<string> ShowInputAsync(string title, string message, MetroDialogSettings settings = null)
+        {
+            try
+            {
+                dialogContext.InUse = true;
+                return await DialogCoordinator.Instance.ShowInputAsync(dialogContext, title, message, settings);
+            }
+            finally
+            {
+                dialogContext.InUse = false;
+            }
+        }
+
+        public async Task ShowDialogAsync(BaseMetroDialog dialog, MetroDialogSettings settings = null)
+        {
+            dialogContext.InUse = true;
+            await DialogCoordinator.Instance.ShowMetroDialogAsync(dialogContext, dialog, settings);
+        }
+
+        public async Task HideDialogAsync(BaseMetroDialog dialog, MetroDialogSettings settings = null)
+        {
+            try
+            {
+                await DialogCoordinator.Instance.HideMetroDialogAsync(dialogContext, dialog, settings);
+            }
+            finally
+            {
+                dialogContext.InUse = false;
+            }
+        }
+
+        public async Task<LoginDialogData> ShowLoginAsync(string title, string message, LoginDialogSettings settings = null)
+        {
+            try
+            {
+                dialogContext.InUse = true;
+                return await DialogCoordinator.Instance.ShowLoginAsync(dialogContext, title, message, settings);
+            }
+            finally
+            {
+                dialogContext.InUse = false;
+            }
+        }
+
+        public async void ShowGetPremiumMessage(string message = "")
+        {
+            var premiumMessage = "To Get Premium Please Contribute Or Donate To Gallifrey.\n\nPremium Features Include:";
+            premiumMessage += "\n  • Ability To Opt-Out Of Tracking";
+            premiumMessage += "\n  • Bulk Export More Than 5 Timers";
+            premiumMessage += "\n  • Use More Than 2 Local Timers";
+            premiumMessage += "\n  • Start Now/Assign To Me/Change Status On Add";
+            premiumMessage += "\n\nThink You Should Have Premium?\nPlease Contact Us By Email Or Twitter";
+
+            if (!string.IsNullOrWhiteSpace(message))
+            {
+                premiumMessage = $"{message}\n\n{premiumMessage}";
+            }
+
+            //Could be a custom dialog if can work out how.
+            var messageResult = await ShowMessageAsync("Get Premium", premiumMessage, MessageDialogStyle.AffirmativeAndNegativeAndDoubleAuxiliary, new MetroDialogSettings { AffirmativeButtonText = "Cancel", NegativeButtonText = "Donate", FirstAuxiliaryButtonText = "Contribute", SecondAuxiliaryButtonText = "Contact", DefaultButtonFocus = MessageDialogResult.Affirmative, DialogMessageFontSize = 14 });
+
+            switch (messageResult)
+            {
+                case MessageDialogResult.SecondAuxiliary:
+                    TriggerRemoteButtonPress(Models.RemoteButtonTrigger.Info);
+                    break;
+                case MessageDialogResult.FirstAuxiliary:
+                    TriggerRemoteButtonPress(Models.RemoteButtonTrigger.GitHub);
+                    break;
+                case MessageDialogResult.Negative:
+                    TriggerRemoteButtonPress(Models.RemoteButtonTrigger.PayPal);
+                    break;
+            }
+        }
+
+        public void ShowNotification(string message)
+        {
+            var instanceType = Gallifrey.VersionControl.InstanceType;
+            var appName = Gallifrey.Settings.InternalSettings.IsPremium ? "Gallifrey Premium" : "Gallifrey";
+            var title = (instanceType == InstanceType.Stable ? $"{appName}" : $"{appName} ({instanceType})").ToUpper();
+
+            toastNotifier.Notify<ToastNotification>(() => new ToastNotification(title, message));
+        }
+
+        #endregion
+
         #region Fire Events
 
         public void SetSelectedTimer(Guid value)
@@ -179,46 +295,6 @@ namespace Gallifrey.UI.Modern.Helpers
             }
 
             Application.Current.Shutdown();
-        }
-
-        public async void ShowGetPremiumMessage(string message = "")
-        {
-            var premiumMessage = "To Get Premium Please Contribute Or Donate To Gallifrey.\n\nPremium Features Include:";
-            premiumMessage += "\n  • Ability To Opt-Out Of Tracking";
-            premiumMessage += "\n  • Bulk Export More Than 5 Timers";
-            premiumMessage += "\n  • Use More Than 2 Local Timers";
-            premiumMessage += "\n  • Start Now/Assign To Me/Change Status On Add";
-            premiumMessage += "\n\nThink You Should Have Premium?\nPlease Contact Us By Email Or Twitter";
-
-            if (!string.IsNullOrWhiteSpace(message))
-            {
-                premiumMessage = $"{message}\n\n{premiumMessage}";
-            }
-
-            //Could be a custom dialog if can work out how.
-            var messageResult = await DialogCoordinator.Instance.ShowMessageAsync(DialogContext, "Get Premium", premiumMessage, MessageDialogStyle.AffirmativeAndNegativeAndDoubleAuxiliary, new MetroDialogSettings { AffirmativeButtonText = "Cancel", NegativeButtonText = "Donate", FirstAuxiliaryButtonText = "Contribute", SecondAuxiliaryButtonText = "Contact", DefaultButtonFocus = MessageDialogResult.Affirmative, DialogMessageFontSize = 14 });
-
-            switch (messageResult)
-            {
-                case MessageDialogResult.SecondAuxiliary:
-                    TriggerRemoteButtonPress(Models.RemoteButtonTrigger.Info);
-                    break;
-                case MessageDialogResult.FirstAuxiliary:
-                    TriggerRemoteButtonPress(Models.RemoteButtonTrigger.GitHub);
-                    break;
-                case MessageDialogResult.Negative:
-                    TriggerRemoteButtonPress(Models.RemoteButtonTrigger.PayPal);
-                    break;
-            }
-        }
-
-        public void ShowNotification(string message)
-        {
-            var instanceType = Gallifrey.VersionControl.InstanceType;
-            var appName = Gallifrey.Settings.InternalSettings.IsPremium ? "Gallifrey Premium" : "Gallifrey";
-            var title = (instanceType == InstanceType.Stable ? $"{appName}" : $"{appName} ({instanceType})").ToUpper();
-
-            toastNotifier.Notify<ToastNotification>(() => new ToastNotification(title, message));
         }
     }
 }

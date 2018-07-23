@@ -431,6 +431,13 @@
     </Bugs>
     <Others />
   </Version>
+  <Version Number="3.10.8.0" Name="">
+    <Features />
+    <Bugs>
+      <Bug>Prevent app auto restart when dialog open</Bug>
+    </Bugs>
+    <Others />
+  </Version>
   <!--
   Template for VNext if not present above
   <Version Number="0.0.0.0" Name="Pre-Release">

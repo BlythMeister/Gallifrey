@@ -8,11 +8,12 @@ namespace Gallifrey.UI.Modern.Helpers
 {
     public class ProgressDialogHelper
     {
-        private readonly DialogContext dialogContext;
+        private readonly ModelHelpers modelHelpers;
 
-        public ProgressDialogHelper(DialogContext dialogContext)
+
+        public ProgressDialogHelper(ModelHelpers modelHelpers)
         {
-            this.dialogContext = dialogContext;
+            this.modelHelpers = modelHelpers;
         }
 
         public Task<ProgressResult<bool>> Do(Action action, string message, bool canCancel, bool throwErrors)
@@ -41,8 +42,7 @@ namespace Gallifrey.UI.Modern.Helpers
         public async Task<ProgressResult<T>> Do<T>(Func<ProgressDialogController, T> function, string message, bool canCancel, bool throwErrors)
         {
             var cancellationTokenSource = new CancellationTokenSource();
-            var controller = await DialogCoordinator.Instance.ShowProgressAsync(dialogContext, "Please Wait", message, canCancel);
-            controller.SetIndeterminate();
+            var controller = await modelHelpers.ShowIndeterminateProgressAsync("Please Wait", message, canCancel);
 
             var controllerCancel = Task.Run(() =>
             {
