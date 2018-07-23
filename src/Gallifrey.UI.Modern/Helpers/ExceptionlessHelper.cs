@@ -102,7 +102,10 @@ namespace Gallifrey.UI.Modern.Helpers
             }
             else
             {
-                e.Event.SetUserDescription(new UserDescription(modelHelpers.Gallifrey.JiraConnection.CurrentUser.emailAddress, "Handled Error"));
+                if (modelHelpers.Gallifrey.JiraConnection.IsConnected)
+                {
+                    e.Event.SetUserDescription(new UserDescription(modelHelpers.Gallifrey.JiraConnection.CurrentUser.emailAddress, "Handled Error"));
+                }
             }
         }
 
