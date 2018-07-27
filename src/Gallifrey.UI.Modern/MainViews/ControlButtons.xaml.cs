@@ -281,10 +281,10 @@ namespace Gallifrey.UI.Modern.MainViews
             Process.Start(new ProcessStartInfo("https://www.gallifreyapp.co.uk/donations"));
         }
 
-        private void GitterButton(object sender, RoutedEventArgs e)
+        private void SlackButton(object sender, RoutedEventArgs e)
         {
             ModelHelpers.Gallifrey.TrackEvent(TrackingType.ContactClick);
-            Process.Start(new ProcessStartInfo("https://gitter.im/BlythMeister/Gallifrey"));
+            Process.Start(new ProcessStartInfo("https://join.slack.com/t/gallifreyapp/shared_invite/enQtNDA2MDU3OTYwNDgyLTc3YjBjOTc2MDkxNWM3MWYxNDgwNTMyMWI5ZmRhYmZiZWRlOGVkMGQwZDFlOTJlN2I4ZGI5MmExZGY5ZmM2YjI"));
         }
 
         private void GitHubButton(object sender, RoutedEventArgs e)
@@ -311,7 +311,7 @@ namespace Gallifrey.UI.Modern.MainViews
                 case RemoteButtonTrigger.Info: InfoButton(this, null); break;
                 case RemoteButtonTrigger.Twitter: TwitterButton(this, null); break;
                 case RemoteButtonTrigger.Email: EmailButton(this, null); break;
-                case RemoteButtonTrigger.Gitter: GitterButton(this, null); break;
+                case RemoteButtonTrigger.Slack: SlackButton(this, null); break;
                 case RemoteButtonTrigger.GitHub: GitHubButton(this, null); break;
                 case RemoteButtonTrigger.PayPal: PayPalButton(this, null); break;
 

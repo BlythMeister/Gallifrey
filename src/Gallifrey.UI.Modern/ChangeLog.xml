@@ -489,6 +489,13 @@
       <Other>Update Exceptionless API Key</Other>
     </Others>
   </Version>
+  <Version Number="3.11.1.0" Name="">
+    <Features>
+      <Feature>Updated Gitter links to Slack</Feature>
+    </Features>
+    <Bugs />
+    <Others/>
+  </Version>
   <!--
   Template for VNext if not present above
   <Version Number="0.0.0.0" Name="Pre-Release">

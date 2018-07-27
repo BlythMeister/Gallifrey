@@ -1,7 +1,7 @@
 Gallifrey
 =========
 
-[![Gitter](https://img.shields.io/badge/Gitter-Join%20Chat-green.svg?style=flat)](https://gitter.im/BlythMeister/Gallifrey)
+[![Slack](https://img.shields.io/badge/slack-join-green.svg?logo=slack&style=flat)](https://join.slack.com/t/gallifreyapp/shared_invite/enQtNDA2MDU3OTYwNDgyLTc3YjBjOTc2MDkxNWM3MWYxNDgwNTMyMWI5ZmRhYmZiZWRlOGVkMGQwZDFlOTJlN2I4ZGI5MmExZGY5ZmM2YjI)
 [![Build status](https://ci.appveyor.com/api/projects/status/r7pncss5a8qg3jj0/branch/master?svg=true)](https://ci.appveyor.com/project/BlythMeister/gallifrey/branch/master)
 [![Release](https://img.shields.io/github/release/BlythMeister/Gallifrey.svg?style=flat)](https://github.com/BlythMeister/Gallifrey/releases/latest)
 [![Issues](https://img.shields.io/github/issues/BlythMeister/Gallifrey.svg?style=flat)](https://github.com/BlythMeister/Gallifrey/issues)
@@ -34,7 +34,7 @@ Support
 =========
 
 You can get app support via [twitter](https://twitter.com/GallifreyApp) or via [email](mailto:support@GallifreyApp.co.uk).
-There is also a Gitter chat room (https://gitter.im/BlythMeister/Gallifrey).
+There is also a [Slack workspace](https://join.slack.com/t/gallifreyapp/shared_invite/enQtNDA2MDU3OTYwNDgyLTc3YjBjOTc2MDkxNWM3MWYxNDgwNTMyMWI5ZmRhYmZiZWRlOGVkMGQwZDFlOTJlN2I4ZGI5MmExZGY5ZmM2YjI).
 We are using GitHub issues to maintain a backlog and track bugs, so feel free to raise issues there (https://github.com/BlythMeister/Gallifrey/issues)
 
 Contributions
