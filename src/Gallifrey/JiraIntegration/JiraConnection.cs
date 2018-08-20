@@ -347,7 +347,7 @@ namespace Gallifrey.JiraIntegration
                     {
                         projectQuery += " OR ";
                     }
-                    projectQuery += $"project = \"{firstProjectMatch.JiraProjectName}\"";
+                    projectQuery += $"project = \"{firstProjectMatch.JiraProjectCode}\"";
                 }
                 else
                 {
