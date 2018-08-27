@@ -171,8 +171,13 @@ body {
     color: #FFFFFF;
 }
 
-.far.fa-slack {
+.fab.fa-slack {
     background: #000000;
+    color: #FFFFFF;
+}
+
+fab.fa-product-hunt{
+    background: #DA552F;
     color: #FFFFFF;
 }
 
