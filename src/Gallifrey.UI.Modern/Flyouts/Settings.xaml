@@ -229,7 +229,7 @@
 
         <WrapPanel HorizontalAlignment="Center" DockPanel.Dock="Bottom" VerticalAlignment="Bottom" Height="Auto">
             <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="SaveSettings" IsDefault="True" ToolTip="Save Settings">
-                <iconPacks:PackIconMaterial Kind="ContentSave" Height="22" Width="22" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                <iconPacks:PackIconFontAwesome Kind="SaveSolid" Height="22" Width="22" HorizontalAlignment="Center" VerticalAlignment="Center" />
             </Button>
         </WrapPanel>
     </DockPanel>

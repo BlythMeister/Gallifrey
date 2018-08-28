@@ -5,7 +5,7 @@ nuget Atlassian.SDK @= 2.5.0
 nuget FAKE ~> 4
 nuget Exceptionless.Wpf
 nuget MahApps.Metro prerelease
-nuget MahApps.Metro.IconPacks.Material
+nuget MahApps.Metro.IconPacks.FontAwesome
 nuget Newtonsoft.Json
 nuget RestSharp
 nuget Octokit

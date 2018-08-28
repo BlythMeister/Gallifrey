@@ -16,7 +16,7 @@
                         Add A New Timer<LineBreak/>F1 or CTRL + A
                     </TextBlock>
                 </Button.ToolTip>
-                <iconPacks:PackIconMaterial Kind="PlusCircle" Height="22" Width="22" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                <iconPacks:PackIconFontAwesome Kind="PlusCircleSolid" Height="22" Width="22" HorizontalAlignment="Center" VerticalAlignment="Center" />
             </Button>
             <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="DeleteButton">
                 <Button.ToolTip>
@@ -24,7 +24,7 @@
                         Delete The Selected Timer(s)<LineBreak/>F2 or CTRL + D
                     </TextBlock>
                 </Button.ToolTip>
-                <iconPacks:PackIconMaterial Kind="Delete" Height="22" Width="22" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                <iconPacks:PackIconFontAwesome Kind="TrashAltSolid" Height="22" Width="22" HorizontalAlignment="Center" VerticalAlignment="Center" />
             </Button>
             <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="SearchButton">
                 <Button.ToolTip>
@@ -32,7 +32,7 @@
                        Search Jira<LineBreak/>F3 or CTRL + F
                     </TextBlock>
                 </Button.ToolTip>
-                <iconPacks:PackIconMaterial Kind="CloudSearch" Height="22" Width="22" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                <iconPacks:PackIconFontAwesome Kind="SearchSolid" Height="22" Width="22" HorizontalAlignment="Center" VerticalAlignment="Center" />
             </Button>
             <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="EditButton">
                 <Button.ToolTip>
@@ -40,7 +40,7 @@
                         Edit The Selected Timer(s)<LineBreak/>F4 or CTRL + E
                     </TextBlock>
                 </Button.ToolTip>
-                <iconPacks:PackIconMaterial Kind="Pencil" Height="22" Width="22" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                <iconPacks:PackIconFontAwesome Kind="PencilAltSolid" Height="22" Width="22" HorizontalAlignment="Center" VerticalAlignment="Center" />
 
             </Button>
             <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="ExportButton" Visibility="{Binding TrackingOnly, Converter={StaticResource BoolToVisInvert}}">
@@ -49,7 +49,7 @@
                         Export The Selected Timer(s)<LineBreak/>F5 or CTRL + U
                     </TextBlock>
                 </Button.ToolTip>
-                <iconPacks:PackIconMaterial Kind="CloudUpload" Height="22" Width="22" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                <iconPacks:PackIconFontAwesome Kind="UploadSolid" Height="22" Width="22" HorizontalAlignment="Center" VerticalAlignment="Center" />
             </Button>
             <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="SaveButton">
                 <Button.ToolTip>
@@ -57,7 +57,7 @@
                         Export Timers To CSV<LineBreak/>F6 or CTRL + B
                     </TextBlock>
                 </Button.ToolTip>
-                <iconPacks:PackIconMaterial Kind="FileDownload" Height="22" Width="22" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                <iconPacks:PackIconFontAwesome Kind="FileDownloadSolid" Height="22" Width="22" HorizontalAlignment="Center" VerticalAlignment="Center" />
             </Button>
             <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="LockTimerButton">
                 <Button.ToolTip>
@@ -65,7 +65,7 @@
                         Show Locked/Idle Timers<LineBreak/>F7 or CTRL + L
                     </TextBlock>
                 </Button.ToolTip>
-                <iconPacks:PackIconMaterial Kind="LockClock" Height="22" Width="22" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                <iconPacks:PackIconFontAwesome Kind="LockSolid" Height="22" Width="22" HorizontalAlignment="Center" VerticalAlignment="Center" />
             </Button>
             <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="SettingsButton">
                 <Button.ToolTip>
@@ -73,7 +73,7 @@
                         View/Edit Settings<LineBreak/>F8 or CTRL + S
                     </TextBlock>
                 </Button.ToolTip>
-                <iconPacks:PackIconMaterial Kind="Settings" Height="22" Width="22" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                <iconPacks:PackIconFontAwesome Kind="CogSolid" Height="22" Width="22" HorizontalAlignment="Center" VerticalAlignment="Center" />
             </Button>
         </WrapPanel>
 
@@ -84,7 +84,7 @@
                         Application Information<LineBreak/>CTRL + F1
                     </TextBlock>
                 </Button.ToolTip>
-                <iconPacks:PackIconMaterial Kind="InformationVariant" Height="22" Width="22" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                <iconPacks:PackIconFontAwesome Kind="InfoCircleSolid" Height="22" Width="22" HorizontalAlignment="Center" VerticalAlignment="Center" />
             </Button>
             <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="TwitterButton">
                 <Button.ToolTip>
@@ -92,7 +92,7 @@
                         Contact Us On Twitter<LineBreak/>CTRL + F2
                     </TextBlock>
                 </Button.ToolTip>
-                <iconPacks:PackIconMaterial Kind="Twitter" Height="22" Width="22" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                <iconPacks:PackIconFontAwesome Kind="TwitterBrands" Height="22" Width="22" HorizontalAlignment="Center" VerticalAlignment="Center" />
             </Button>
             <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="EmailButton">
                 <Button.ToolTip>
@@ -100,7 +100,7 @@
                         Contact Us By Email<LineBreak/>CTRL + F3
                     </TextBlock>
                 </Button.ToolTip>
-                <iconPacks:PackIconMaterial Kind="At" Height="22" Width="22" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                <iconPacks:PackIconFontAwesome Kind="AtSolid" Height="22" Width="22" HorizontalAlignment="Center" VerticalAlignment="Center" />
             </Button>
             <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="SlackButton">
                 <Button.ToolTip>
@@ -108,7 +108,7 @@
                         Chat With Users Or Ask For Help On Slack<LineBreak/>CTRL + F4
                     </TextBlock>
                 </Button.ToolTip>
-                <iconPacks:PackIconMaterial Kind="Message" Height="22" Width="22" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                <iconPacks:PackIconFontAwesome Kind="SlackBrands" Height="22" Width="22" HorizontalAlignment="Center" VerticalAlignment="Center" />
             </Button>
             <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="GitHubButton">
                 <Button.ToolTip>
@@ -116,7 +116,7 @@
                         View The Code On GitHub<LineBreak/>CTRL + F5
                     </TextBlock>
                 </Button.ToolTip>
-                <iconPacks:PackIconMaterial Kind="GithubCircle" Height="22" Width="22" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                <iconPacks:PackIconFontAwesome Kind="GithubBrands" Height="22" Width="22" HorizontalAlignment="Center" VerticalAlignment="Center" />
             </Button>
             <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="PayPalButton">
                 <Button.ToolTip>
@@ -124,7 +124,7 @@
                        Donate By PayPal<LineBreak/>CTRL + F6
                     </TextBlock>
                 </Button.ToolTip>
-                <iconPacks:PackIconMaterial Kind="Paypal" Height="22" Width="22" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                <iconPacks:PackIconFontAwesome Kind="PaypalBrands" Height="22" Width="22" HorizontalAlignment="Center" VerticalAlignment="Center" />
             </Button>
         </WrapPanel>
     </DockPanel>

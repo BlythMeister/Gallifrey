@@ -343,8 +343,8 @@
   <Choose>
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.6'">
       <ItemGroup>
-        <Reference Include="MahApps.Metro.IconPacks.Material">
-          <HintPath>..\..\packages\MahApps.Metro.IconPacks.Material\lib\net46\MahApps.Metro.IconPacks.Material.dll</HintPath>
+        <Reference Include="MahApps.Metro.IconPacks.FontAwesome">
+          <HintPath>..\..\packages\MahApps.Metro.IconPacks.FontAwesome\lib\net46\MahApps.Metro.IconPacks.FontAwesome.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>

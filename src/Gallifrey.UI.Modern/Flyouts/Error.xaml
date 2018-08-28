@@ -21,7 +21,7 @@
         <TextBlock Padding="5">Description</TextBlock>
         <TextBox Text="{Binding Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MaxLines="3" MinLines="3" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" TextWrapping="Wrap" controls:TextBoxHelper.Watermark="Optional"/>
         <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2" Click="SendReport" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" IsDefault="True" ToolTip="Submit Error Report">
-            <iconPacks:PackIconMaterial Kind="Send" Height="22" Width="22" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            <iconPacks:PackIconFontAwesome Kind="ShareSolid" Height="22" Width="22" HorizontalAlignment="Center" VerticalAlignment="Center" />
         </Button>
     </StackPanel>
 </controls:Flyout>
