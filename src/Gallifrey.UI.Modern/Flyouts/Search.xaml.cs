@@ -1,13 +1,13 @@
-﻿using Exceptionless;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows;
+using Exceptionless;
+using Gallifrey.Exceptions.JiraIntegration;
 using Gallifrey.Jira.Model;
 using Gallifrey.JiraIntegration;
 using Gallifrey.UI.Modern.Helpers;
 using Gallifrey.UI.Modern.Models;
-using MahApps.Metro.Controls.Dialogs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows;
 
 namespace Gallifrey.UI.Modern.Flyouts
 {
@@ -45,6 +45,10 @@ namespace Gallifrey.UI.Modern.Flyouts
                 {
                     recent = modelHelpers.Gallifrey.JiraTimerCollection.GetJiraReferencesForLastDays(50).ToList();
                 }
+                catch (NoResultsFoundException)
+                {
+                    //Do Nothing
+                }
                 catch (Exception ex)
                 {
                     ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Handled").Submit();
@@ -54,6 +58,11 @@ namespace Gallifrey.UI.Modern.Flyouts
                 {
                     filters = modelHelpers.Gallifrey.JiraConnection.GetJiraFilters().ToList();
                 }
+                catch (NoResultsFoundException)
+                {
+                    //Do Nothing
+                }
+
                 catch (Exception ex)
                 {
                     ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Handled").Submit();
@@ -63,6 +72,11 @@ namespace Gallifrey.UI.Modern.Flyouts
                 {
                     issues = modelHelpers.Gallifrey.JiraConnection.GetJiraCurrentUserOpenIssues().ToList();
                 }
+                catch (NoResultsFoundException)
+                {
+                    //Do Nothing
+                }
+
                 catch (Exception ex)
                 {
                     ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Handled").Submit();

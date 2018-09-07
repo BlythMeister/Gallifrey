@@ -3,9 +3,9 @@ NUGET
   remote: https://www.nuget.org/api/v2
     Atlassian.SDK (2.5)
     ControlzEx (3.0.2.4)
-    Exceptionless (4.3.2004)
-    Exceptionless.Wpf (4.3.2004)
-      Exceptionless (4.3.2004)
+    Exceptionless (4.3.2012)
+    Exceptionless.Wpf (4.3.2012)
+      Exceptionless (4.3.2012)
     FAKE (4.64.13)
     MahApps.Metro (1.6.5)
       ControlzEx (>= 3.0.2.4 < 4.0)

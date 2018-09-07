@@ -1,9 +1,3 @@
-using Exceptionless;
-using Gallifrey.Comparers;
-using Gallifrey.ExtensionMethods;
-using Gallifrey.Jira.Model;
-using Gallifrey.UI.Modern.Helpers;
-using Gallifrey.Versions;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -11,6 +5,12 @@ using System.ComponentModel;
 using System.Linq;
 using System.Timers;
 using System.Windows;
+using Exceptionless;
+using Gallifrey.Comparers;
+using Gallifrey.ExtensionMethods;
+using Gallifrey.Jira.Model;
+using Gallifrey.UI.Modern.Helpers;
+using Gallifrey.Versions;
 
 namespace Gallifrey.UI.Modern.Models
 {
@@ -280,7 +280,6 @@ namespace Gallifrey.UI.Modern.Models
                     dateModel.RemoveTimerModel(removeTimer);
                 }
 
-                var nonExistentDefaultJiras = new List<string>();
                 foreach (var defaultJira in ModelHelpers.Gallifrey.Settings.AppSettings.DefaultTimers ?? new List<string>())
                 {
                     if (dateModel.Timers.All(x => x.JiraTimer.JiraReference != defaultJira.ToUpper()) && dateModel.TimerDate.Date <= DateTime.Now.Date)
@@ -290,11 +289,7 @@ namespace Gallifrey.UI.Modern.Models
                             var jira = jiraCache.FirstOrDefault(x => x.key == defaultJira);
                             if (jira == null && ModelHelpers.Gallifrey.JiraConnection.IsConnected)
                             {
-                                if (!ModelHelpers.Gallifrey.JiraConnection.DoesJiraExist(defaultJira))
-                                {
-                                    nonExistentDefaultJiras.Add(defaultJira);
-                                }
-                                else
+                                if (ModelHelpers.Gallifrey.JiraConnection.DoesJiraExist(defaultJira))
                                 {
                                     jira = ModelHelpers.Gallifrey.JiraConnection.GetJiraIssue(defaultJira);
                                     jiraCache.Add(jira);
@@ -314,16 +309,6 @@ namespace Gallifrey.UI.Modern.Models
                             ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Handled").Submit();
                         }
                     }
-                }
-
-                if (nonExistentDefaultJiras.Any())
-                {
-                    foreach (var nonExistentDefaultJira in nonExistentDefaultJiras)
-                    {
-                        ModelHelpers.Gallifrey.Settings.AppSettings.DefaultTimers.Remove(nonExistentDefaultJira);
-                    }
-
-                    ModelHelpers.Gallifrey.SaveSettings(false, false);
                 }
             }
 

@@ -510,6 +510,15 @@
       <Other>Icon updates</Other>
     </Others>
   </Version>
+  <Version Number="3.11.4.0" Name="">
+    <Features/>
+    <Bugs>
+      <Bug>Fix default timers being removed when internet connection drops</Bug>
+    </Bugs>
+    <Others>
+      <Other>Dependency updates</Other>
+    </Others>
+  </Version>
   <!--
   Template for VNext if not present above
   <Version Number="0.0.0.0" Name="Pre-Release">
