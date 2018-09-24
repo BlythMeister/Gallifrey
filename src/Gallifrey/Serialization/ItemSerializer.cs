@@ -1,8 +1,8 @@
-﻿using Gallifrey.Exceptions.Serialization;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.IO;
 using System.Threading;
+using Gallifrey.Exceptions.Serialization;
+using Newtonsoft.Json;
 
 namespace Gallifrey.Serialization
 {
@@ -69,6 +69,7 @@ namespace Gallifrey.Serialization
                 if (retryCount >= 3)
                 {
                     if (File.Exists(TempWritePath)) File.Copy(TempWritePath, savePath, true);
+                    File.WriteAllText(Path.Combine(serialisationErrorDirectory, $"Serialize_{DateTime.UtcNow:yyyy-MM-dd_hh-mm-ss}_{Guid.NewGuid().ToString()}.log"), ex.ToString());
                     throw new SerializerError("Error in serialization", ex);
                 }
                 Thread.Sleep(500);
@@ -92,23 +93,55 @@ namespace Gallifrey.Serialization
 
         public T DeSerialize()
         {
-            if (savePath == null) throw new SerializerError("No Save Path");
-
-            if (!File.Exists(savePath))
-            {
-                return new T();
-            }
-
-            var text = File.ReadAllText(savePath);
-            return DeSerialize(text);
+            return DeSerializeFile(savePath, 0);
         }
 
         public T DeSerialize(string encryptedString)
         {
-            return DeSerialize(encryptedString, 0);
+            return DeSerializeText(encryptedString, 0);
         }
 
-        private T DeSerialize(string encryptedString, int retryCount)
+        private T DeSerializeFile(string fileToUse, int retryCount)
+        {
+            if (fileToUse == null) throw new SerializerError("No Save Path");
+
+            if (!File.Exists(fileToUse))
+            {
+                return new T();
+            }
+
+            try
+            {
+                var encryptedString = File.ReadAllText(fileToUse);
+                var text = DataEncryption.Decrypt(encryptedString, encryptionPassPhrase);
+                return JsonConvert.DeserializeObject<T>(text);
+            }
+            catch (Exception ex)
+            {
+                if (retryCount >= 3 && fileToUse == savePath)
+                {
+                    Thread.Sleep(100);
+                    return DeSerializeFile(BackupPath, 0);
+                }
+
+                if (retryCount >= 3 && fileToUse == BackupPath)
+                {
+                    Thread.Sleep(100);
+                    return DeSerializeFile(BackupPathPlus1, 0);
+                }
+
+                if (retryCount >= 3)
+                {
+                    File.WriteAllText(Path.Combine(serialisationErrorDirectory, $"DeSerializeFile_{DateTime.UtcNow:yyyy-MM-dd_hh-mm-ss}_{Guid.NewGuid().ToString()}.log"), ex.ToString());
+                    return new T();
+                }
+
+                Thread.Sleep(100);
+                return DeSerializeFile(fileToUse, retryCount + 1);
+            }
+        }
+
+        private T DeSerializeText(string encryptedString, int retryCount)
         {
             try
             {
@@ -119,12 +152,12 @@ namespace Gallifrey.Serialization
             {
                 if (retryCount >= 3)
                 {
-                    File.WriteAllText(Path.Combine(serialisationErrorDirectory, $"{DateTime.UtcNow:yyyy-MM-dd_hh-mm-ss}_{Guid.NewGuid().ToString()}.log"), ex.ToString());
+                    File.WriteAllText(Path.Combine(serialisationErrorDirectory, $"DeSerializeText_{DateTime.UtcNow:yyyy-MM-dd_hh-mm-ss}_{Guid.NewGuid().ToString()}.log"), ex.ToString());
                     return new T();
                 }
 
                 Thread.Sleep(100);
-                return DeSerialize(encryptedString, retryCount + 1);
+                return DeSerializeText(encryptedString, retryCount + 1);
             }
         }
     }
