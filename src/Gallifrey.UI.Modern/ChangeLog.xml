@@ -533,6 +533,13 @@
     <Bugs/>
     <Others />
   </Version>
+  <Version Number="3.11.7.0" Name="">
+    <Features />
+    <Bugs>
+      <Bug>Explicitly set leave remaining time when exporting to Tempo</Bug>
+    </Bugs>
+    <Others />
+  </Version>
   <!--
   Template for VNext if not present above
   <Version Number="0.0.0.0" Name="Pre-Release">

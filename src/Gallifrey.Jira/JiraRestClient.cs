@@ -1,13 +1,13 @@
-﻿using Gallifrey.Jira.Enum;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using Gallifrey.Jira.Enum;
 using Gallifrey.Jira.Model;
 using Gallifrey.Rest;
 using Gallifrey.Rest.Exception;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 
 namespace Gallifrey.Jira
 {
@@ -221,7 +221,8 @@ namespace Gallifrey.Jira
                         issue = new TempoWorkLog.TempoWorkLogIssue { key = issueRef, remainingEstimateSeconds = remaining };
                         break;
                     case WorkLogStrategy.LeaveRemaining:
-                        issue = new TempoWorkLog.TempoWorkLogIssue { key = issueRef };
+                        var remainingLeave = GetIssue(issueRef).fields.timetracking.remainingEstimateSeconds;
+                        issue = new TempoWorkLog.TempoWorkLogIssue { key = issueRef, remainingEstimateSeconds = remainingLeave };
                         break;
                     case WorkLogStrategy.SetValue:
                         issue = new TempoWorkLog.TempoWorkLogIssue { key = issueRef, remainingEstimateSeconds = remainingTime?.TotalSeconds ?? 0 };
