@@ -52,6 +52,7 @@ namespace Gallifrey.Versions
             InstanceType = instanceType;
             lastUpdateCheck = DateTime.MinValue;
             updateErrorCount = 0;
+            Interlocked.Exchange(ref updateCheckOngoing, -1);
 
             SetVersionName();
 
@@ -79,12 +80,7 @@ namespace Gallifrey.Versions
                 return Task.Run(() => UpdateResult.NotDeployable);
             }
 
-            if (lastUpdateCheck >= DateTime.UtcNow.AddMinutes(-3) && !manualCheck)
-            {
-                return Task.Run(() => UpdateResult.TooSoon);
-            }
-
-            if (Interlocked.Exchange(ref updateCheckOngoing, Thread.CurrentThread.ManagedThreadId) != -1)
+            if ((lastUpdateCheck >= DateTime.UtcNow.AddMinutes(-3) || Interlocked.Exchange(ref updateCheckOngoing, 1) != -1) && !manualCheck)
             {
                 return Task.Run(() => UpdateResult.TooSoon);
             }
