@@ -136,9 +136,11 @@ namespace Gallifrey.UI.Modern.MainViews
                 modelHelpers.CloseApp();
             }
 
+            var checkedUpdate = false;
             if (result.RetVal != InitialiseResult.DebuggerNotAttached && result.RetVal != InitialiseResult.MultipleGallifreyRunning && result.RetVal != InitialiseResult.NoInternetConnection)
             {
                 await PerformUpdate(UpdateType.StartUp);
+                checkedUpdate = true;
             }
 
             if (result.RetVal == InitialiseResult.DebuggerNotAttached)
@@ -197,7 +199,10 @@ namespace Gallifrey.UI.Modern.MainViews
                 return;
             }
 
-            await PerformUpdate(UpdateType.StartUp);
+            if(!checkedUpdate)
+            {
+                await PerformUpdate(UpdateType.StartUp);
+            }
 
             if (modelHelpers.Gallifrey.VersionControl.IsAutomatedDeploy && modelHelpers.Gallifrey.VersionControl.IsFirstRun)
             {
