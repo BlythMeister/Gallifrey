@@ -148,6 +148,7 @@ namespace Gallifrey.UI.Modern.MainViews
                 if (userChoice == MessageDialogResult.Affirmative)
                 {
                     await MainWindow_OnLoaded();
+                    return;
                 }
                 else
                 {
@@ -161,6 +162,7 @@ namespace Gallifrey.UI.Modern.MainViews
                 if (userChoice == MessageDialogResult.Affirmative)
                 {
                     await MainWindow_OnLoaded();
+                    return;
                 }
                 else
                 {
@@ -173,8 +175,8 @@ namespace Gallifrey.UI.Modern.MainViews
                 await modelHelpers.ShowMessageAsync("Welcome To Gallifrey", "You Have No Settings In Gallifrey\n\nTo Get Started, We Need Your Jira Details");
 
                 await NewUserOnBoarding();
-
-                modelHelpers.RefreshModel();
+                await MainWindow_OnLoaded();
+                return;
             }
             else if (result.RetVal == InitialiseResult.ConnectionError || result.RetVal == InitialiseResult.MissingConfig)
             {

@@ -554,6 +554,15 @@
     </Bugs>
     <Others />
   </Version>
+  <Version Number="0.0.0.0" Name="Pre-Release">
+    <Features />
+    <Bugs>
+      <Bug>Fix issue with new user on-boarding</Bug>
+    </Bugs>
+    <Others>
+      <Other>Dependency update</Other>
+    </Others>
+  </Version>
   <!--
   Template for VNext if not present above
   <Version Number="0.0.0.0" Name="Pre-Release">
