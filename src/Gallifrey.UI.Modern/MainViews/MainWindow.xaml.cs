@@ -136,6 +136,11 @@ namespace Gallifrey.UI.Modern.MainViews
                 modelHelpers.CloseApp();
             }
 
+            if (result.RetVal != InitialiseResult.DebuggerNotAttached && result.RetVal != InitialiseResult.MultipleGallifreyRunning && result.RetVal != InitialiseResult.NoInternetConnection)
+            {
+                await PerformUpdate(UpdateType.StartUp);
+            }
+
             if (result.RetVal == InitialiseResult.DebuggerNotAttached)
             {
                 await modelHelpers.ShowMessageAsync("Debugger Not Running", "It Looks Like Your Running Without Auto-Update\nPlease Use The Installed Shortcut To Start Gallifrey Or Download Again From GallifreyApp.co.uk");
@@ -535,7 +540,7 @@ namespace Gallifrey.UI.Modern.MainViews
         {
             try
             {
-                if (!modelHelpers.Gallifrey.IsInitialised)
+                if (!modelHelpers.Gallifrey.IsInitialised && updateType != UpdateType.StartUp)
                 {
                     return;
                 }
