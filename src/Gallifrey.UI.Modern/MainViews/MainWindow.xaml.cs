@@ -64,7 +64,7 @@ namespace Gallifrey.UI.Modern.MainViews
             flyoutOpenCheck.Elapsed += FlyoutOpenCheck;
         }
 
-        enum InitialiseResult
+        private enum InitialiseResult
         {
             MultipleGallifreyRunning,
             DebuggerNotAttached,
@@ -136,6 +136,13 @@ namespace Gallifrey.UI.Modern.MainViews
                 modelHelpers.CloseApp();
             }
 
+            var checkedUpdate = false;
+            if (result.RetVal != InitialiseResult.DebuggerNotAttached && result.RetVal != InitialiseResult.MultipleGallifreyRunning && result.RetVal != InitialiseResult.NoInternetConnection)
+            {
+                await PerformUpdate(UpdateType.StartUp);
+                checkedUpdate = true;
+            }
+
             if (result.RetVal == InitialiseResult.DebuggerNotAttached)
             {
                 await modelHelpers.ShowMessageAsync("Debugger Not Running", "It Looks Like Your Running Without Auto-Update\nPlease Use The Installed Shortcut To Start Gallifrey Or Download Again From GallifreyApp.co.uk");
@@ -148,11 +155,10 @@ namespace Gallifrey.UI.Modern.MainViews
                 if (userChoice == MessageDialogResult.Affirmative)
                 {
                     await MainWindow_OnLoaded();
+                    return;
                 }
-                else
-                {
-                    modelHelpers.CloseApp();
-                }
+
+                modelHelpers.CloseApp();
             }
             else if (result.RetVal == InitialiseResult.NoInternetConnection)
             {
@@ -161,11 +167,10 @@ namespace Gallifrey.UI.Modern.MainViews
                 if (userChoice == MessageDialogResult.Affirmative)
                 {
                     await MainWindow_OnLoaded();
+                    return;
                 }
-                else
-                {
-                    modelHelpers.CloseApp();
-                }
+
+                modelHelpers.CloseApp();
             }
             else if (result.RetVal == InitialiseResult.NewUser)
             {
@@ -173,8 +178,10 @@ namespace Gallifrey.UI.Modern.MainViews
                 await modelHelpers.ShowMessageAsync("Welcome To Gallifrey", "You Have No Settings In Gallifrey\n\nTo Get Started, We Need Your Jira Details");
 
                 await NewUserOnBoarding();
-
-                modelHelpers.RefreshModel();
+                modelHelpers.Gallifrey.Settings.InternalSettings.SetNewUser(false);
+                modelHelpers.Gallifrey.SaveSettings(false, false);
+                await MainWindow_OnLoaded();
+                return;
             }
             else if (result.RetVal == InitialiseResult.ConnectionError || result.RetVal == InitialiseResult.MissingConfig)
             {
@@ -192,7 +199,10 @@ namespace Gallifrey.UI.Modern.MainViews
                 return;
             }
 
-            await PerformUpdate(UpdateType.StartUp);
+            if(!checkedUpdate)
+            {
+                await PerformUpdate(UpdateType.StartUp);
+            }
 
             if (modelHelpers.Gallifrey.VersionControl.IsAutomatedDeploy && modelHelpers.Gallifrey.VersionControl.IsFirstRun)
             {
@@ -245,27 +255,38 @@ namespace Gallifrey.UI.Modern.MainViews
 
             while (!loggedIn)
             {
-                var jiraSettings = modelHelpers.Gallifrey.Settings.JiraConnectionSettings;
-                jiraSettings.JiraUrl = await modelHelpers.ShowInputAsync("Jira URL", "Please Enter Your Jira Instance URL\nThis Is The URL You Go To When You Login Using A Browser\ne.g. https://MyCompany.atlassian.net", new MetroDialogSettings { DefaultText = jiraSettings.JiraUrl });
-
-                var details = await modelHelpers.ShowLoginAsync("UserName & Password", "Please Enter Your UserName/Email Address & Password You Use To Login To Jira", new LoginDialogSettings { EnablePasswordPreview = true, InitialUsername = jiraSettings.JiraUsername, InitialPassword = jiraSettings.JiraPassword });
-                jiraSettings.JiraUsername = details.Username;
-                jiraSettings.JiraPassword = details.Password;
-
-                var useTempoChoice = await modelHelpers.ShowMessageAsync("Tempo", "Do You Want To Use Tempo To Record Timesheets?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No" });
-                jiraSettings.UseTempo = useTempoChoice == MessageDialogResult.Affirmative;
-
-                if (jiraSettings.UseTempo)
-                {
-                    jiraSettings.TempoToken = await modelHelpers.ShowInputAsync("Tempo Api Token", "Please Enter Your Tempo Api Token\nThis Can Be Found Under 'API Integration' In Your Tempo Settings", new MetroDialogSettings { DefaultText = jiraSettings.TempoToken });
-                }
-                else
-                {
-                    jiraSettings.TempoToken = string.Empty;
-                }
-
                 try
                 {
+                    var jiraSettings = modelHelpers.Gallifrey.Settings.JiraConnectionSettings;
+                    jiraSettings.JiraUrl = await modelHelpers.ShowInputAsync("Jira URL", "Please Enter Your Jira Instance URL\nThis Is The URL You Go To When You Login Using A Browser\ne.g. https://MyCompany.atlassian.net", new MetroDialogSettings { DefaultText = jiraSettings.JiraUrl });
+
+                    if (string.IsNullOrWhiteSpace(jiraSettings.JiraUrl))
+                    {
+                        throw new MissingJiraConfigException("Missing URL");
+                    }
+
+                    var details = await modelHelpers.ShowLoginAsync("UserName & Password", "Please Enter Your UserName/Email Address & Password You Use To Login To Jira", new LoginDialogSettings { EnablePasswordPreview = true, InitialUsername = jiraSettings.JiraUsername, InitialPassword = jiraSettings.JiraPassword });
+                    jiraSettings.JiraUsername = details.Username;
+                    jiraSettings.JiraPassword = details.Password;
+
+                    if (string.IsNullOrWhiteSpace(jiraSettings.JiraUsername) || string.IsNullOrWhiteSpace(jiraSettings.JiraPassword))
+                    {
+                        throw new MissingJiraConfigException("Missing user or password");
+                    }
+
+                    var useTempoChoice = await modelHelpers.ShowMessageAsync("Tempo", "Do You Want To Use Tempo To Record Timesheets?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No" });
+                    jiraSettings.UseTempo = useTempoChoice == MessageDialogResult.Affirmative;
+
+                    if (jiraSettings.UseTempo)
+                    {
+                        jiraSettings.TempoToken = await modelHelpers.ShowInputAsync("Tempo Api Token", "Please Enter Your Tempo Api Token\nThis Can Be Found Under 'API Integration' In Your Tempo Settings", new MetroDialogSettings { DefaultText = jiraSettings.TempoToken });
+                    }
+                    else
+                    {
+                        jiraSettings.TempoToken = string.Empty;
+                    }
+
+
                     await progressDialogHelper.Do(() => modelHelpers.Gallifrey.SaveSettings(true, false), "Checking Jira Credentials", false, true);
 
                     loggedIn = true;
@@ -525,7 +546,7 @@ namespace Gallifrey.UI.Modern.MainViews
         {
             try
             {
-                if (!modelHelpers.Gallifrey.IsInitialised)
+                if (!modelHelpers.Gallifrey.IsInitialised && updateType != UpdateType.StartUp)
                 {
                     return;
                 }

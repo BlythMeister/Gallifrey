@@ -1,4 +1,6 @@
 ﻿using System;
+using System.ComponentModel;
+using Newtonsoft.Json;
 
 namespace Gallifrey.Settings
 {
@@ -8,9 +10,11 @@ namespace Gallifrey.Settings
         DateTime LastHeartbeatTracked { get; }
         Guid InstallationInstaceId { get; }
         bool IsPremium { get; }
+        bool NewUser { get; }
         void SetLastChangeLogVersion(Version currentVersion);
         void SetLastHeartbeatTracked(DateTime lastHeartbeat);
         void SetIsPremium(bool isPremium);
+        void SetNewUser(bool newUser);
         bool ValidateInstallationId();
     }
 
@@ -22,7 +26,14 @@ namespace Gallifrey.Settings
         public int Revision { get; set; }
         public DateTime LastHeartbeatTracked { get; set; }
         public Guid InstallationInstaceId { get; set; }
+
+        [DefaultValue(false)]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
         public bool IsPremium { get; set; }
+
+        [DefaultValue(true)]
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
+        public bool NewUser { get; set; }
 
         public Version LastChangeLogVersion => new Version(Major, Minor, Build, Revision);
 
@@ -42,6 +53,11 @@ namespace Gallifrey.Settings
         public void SetIsPremium(bool isPremium)
         {
             IsPremium = isPremium;
+        }
+
+        public void SetNewUser(bool newUser)
+        {
+            NewUser = newUser;
         }
 
         public bool ValidateInstallationId()
