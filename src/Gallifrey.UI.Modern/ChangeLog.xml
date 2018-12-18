@@ -554,7 +554,7 @@
     </Bugs>
     <Others />
   </Version>
-  <Version Number="0.0.0.0" Name="Pre-Release">
+  <Version Number="3.13.0.0" Name="">
     <Features />
     <Bugs>
       <Bug>Fix issue with new user on-boarding</Bug>
