@@ -177,6 +177,7 @@ namespace Gallifrey.UI.Modern.MainViews
 
                 await NewUserOnBoarding();
                 modelHelpers.Gallifrey.Settings.InternalSettings.SetNewUser(false);
+                modelHelpers.Gallifrey.SaveSettings(false, false);
                 await MainWindow_OnLoaded();
                 return;
             }
