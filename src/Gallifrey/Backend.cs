@@ -235,7 +235,7 @@ namespace Gallifrey
             jiraTimerCollection.Initialise();
             recentJiraCollection.Initialise();
 
-            if (settingsCollection.InternalSettings.LastChangeLogVersion == new Version(0, 0, 0, 0))
+            if (settingsCollection.InternalSettings.LastChangeLogVersion == new Version(0, 0, 0, 0) && settingsCollection.InternalSettings.NewUser)
             {
                 throw new MissingConfigException("New User");
             }
