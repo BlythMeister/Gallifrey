@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Versions xmlns="https://releases.gallifreyapp.co.uk/ChangeLog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://releases.gallifreyapp.co.uk/schemas/ChangeLogSchema.xsd">
   <Version Number="3.0.0.0">
     <Features>
@@ -570,6 +570,13 @@
     </Bugs>
     <Others>
       <Other>Dependency update</Other>
+    </Others>
+  </Version>
+  <Version Number="3.14.1.0" Name="">
+    <Features />
+    <Bugs />
+    <Others>
+      <Other>Version number bump to fix release</Other>
     </Others>
   </Version>
   <!--
