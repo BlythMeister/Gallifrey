@@ -10,6 +10,7 @@ namespace Gallifrey.UI.Modern.Models
     public class InformationModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
+
         public string Contributors { get; set; }
         public string UserHash { get; set; }
         private readonly List<string> contributorList;

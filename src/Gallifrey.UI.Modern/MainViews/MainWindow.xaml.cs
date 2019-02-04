@@ -199,7 +199,7 @@ namespace Gallifrey.UI.Modern.MainViews
                 return;
             }
 
-            if(!checkedUpdate)
+            if (!checkedUpdate)
             {
                 await PerformUpdate(UpdateType.StartUp);
             }
@@ -286,7 +286,6 @@ namespace Gallifrey.UI.Modern.MainViews
                         jiraSettings.TempoToken = string.Empty;
                     }
 
-
                     await progressDialogHelper.Do(() => modelHelpers.Gallifrey.SaveSettings(true, false), "Checking Jira Credentials", false, true);
 
                     loggedIn = true;
@@ -344,7 +343,6 @@ namespace Gallifrey.UI.Modern.MainViews
                 }
             }
         }
-
 
         private void GallifreyOnNoActivityEvent(object sender, int millisecondsSinceActivity)
         {

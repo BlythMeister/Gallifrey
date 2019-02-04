@@ -48,6 +48,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                     case ProgressResult.JiraHelperStatus.Cancelled:
                         modelHelpers.CloseFlyout(this);
                         return;
+
                     case ProgressResult.JiraHelperStatus.Success:
                         timersToShow = jiraDownloadResult.RetVal;
                         break;
@@ -232,7 +233,6 @@ namespace Gallifrey.UI.Modern.Flyouts
                         {
                             throw new BulkExportException($"Unable To Locate Jira {timerToShow.JiraReference}!\nCannot Export Time\nPlease Verify/Correct Jira Reference");
                         }
-
                     }
                     catch (BulkExportException)
                     {

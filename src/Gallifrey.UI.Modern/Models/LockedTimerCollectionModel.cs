@@ -1,14 +1,15 @@
+using Gallifrey.IdleTimers;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using Gallifrey.IdleTimers;
 
 namespace Gallifrey.UI.Modern.Models
 {
     public class LockedTimerCollectionModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
+
         public ObservableCollection<LockedTimerModel> LockedTimers { get; set; }
 
         public LockedTimerCollectionModel(IEnumerable<IdleTimer> unexportedTimers)

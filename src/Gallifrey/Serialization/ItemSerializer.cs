@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Gallifrey.Exceptions.Serialization;
+using Newtonsoft.Json;
+using System;
 using System.IO;
 using System.Threading;
-using Gallifrey.Exceptions.Serialization;
-using Newtonsoft.Json;
 
 namespace Gallifrey.Serialization
 {

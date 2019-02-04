@@ -1,8 +1,8 @@
-﻿using System.Diagnostics;
-using System.Windows.Navigation;
-using Gallifrey.AppTracking;
+﻿using Gallifrey.AppTracking;
 using Gallifrey.UI.Modern.Helpers;
 using Gallifrey.UI.Modern.Models;
+using System.Diagnostics;
+using System.Windows.Navigation;
 
 namespace Gallifrey.UI.Modern.MainViews
 {

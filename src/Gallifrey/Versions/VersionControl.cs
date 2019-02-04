@@ -21,15 +21,20 @@ namespace Gallifrey.Versions
         bool IsFirstRun { get; }
         string AppName { get; }
         Version DeployedVersion { get; }
+
         Task<UpdateResult> CheckForUpdates(bool manualCheck);
+
         void ManualReinstall();
+
         string GetApplicationReference();
+
         event EventHandler UpdateStateChange;
     }
 
     public class VersionControl : IVersionControl
     {
         public event EventHandler UpdateStateChange;
+
         public event EventHandler<bool> UpdateCheckOccured;
 
         public InstanceType InstanceType { get; }
@@ -109,7 +114,6 @@ namespace Gallifrey.Versions
 
                 try
                 {
-
                     if (ApplicationDeployment.CurrentDeployment.CheckForUpdate(false))
                     {
                         return Task.Run(() => ApplicationDeployment.CurrentDeployment.Update()).ContinueWith(task =>

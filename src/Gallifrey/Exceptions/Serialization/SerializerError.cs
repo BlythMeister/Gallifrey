@@ -2,7 +2,7 @@
 
 namespace Gallifrey.Exceptions.Serialization
 {
-    class SerializerError : Exception
+    internal class SerializerError : Exception
     {
         public SerializerError(string message, Exception innerException)
             : base(message, innerException)

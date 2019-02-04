@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using Gallifrey.IdleTimers;
+﻿using Gallifrey.IdleTimers;
+using System.Collections.Generic;
 
 namespace Gallifrey.Comparers
 {

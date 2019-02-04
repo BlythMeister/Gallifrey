@@ -62,8 +62,6 @@ namespace Gallifrey.UI.Modern.Models
             }
         }
 
-
-
         public bool TimeEditable => IdleTimers == null || IdleTimers.Count == 0;
 
         public bool LocalTimer

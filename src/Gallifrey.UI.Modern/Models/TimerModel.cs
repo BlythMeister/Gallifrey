@@ -1,6 +1,6 @@
-﻿using System.ComponentModel;
-using Gallifrey.ExtensionMethods;
+﻿using Gallifrey.ExtensionMethods;
 using Gallifrey.JiraTimers;
+using System.ComponentModel;
 
 namespace Gallifrey.UI.Modern.Models
 {
@@ -42,21 +42,26 @@ namespace Gallifrey.UI.Modern.Models
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasTimeToExport"));
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ExportTime"));
                     break;
+
                 case "IsRunning":
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("IsRunning"));
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasTimeToExportAndNotRunning"));
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasTimeToExport"));
                     break;
+
                 case "TimeToExport":
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ExportTime"));
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasTimeToExport"));
                     break;
+
                 case "JiraName":
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Description"));
                     break;
+
                 case "JiraParentName":
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ParentDescription"));
                     break;
+
                 case "HasParent":
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasParent"));
                     break;

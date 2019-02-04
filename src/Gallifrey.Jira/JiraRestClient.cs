@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using Gallifrey.Jira.Enum;
+﻿using Gallifrey.Jira.Enum;
 using Gallifrey.Jira.Model;
 using Gallifrey.Rest;
 using Gallifrey.Rest.Exception;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
 
 namespace Gallifrey.Jira
 {
@@ -171,7 +171,6 @@ namespace Gallifrey.Jira
                                 {
                                     workLogs.Add(new StandardWorkLog(issue.key, queryDate.Date, workLog.timeSpentSeconds));
                                 }
-
                             }
                         }
                     }
@@ -220,10 +219,12 @@ namespace Gallifrey.Jira
                         var remaining = GetIssue(issueRef).fields.timetracking.remainingEstimateSeconds - timeSpent.TotalSeconds;
                         issue = new TempoWorkLog.TempoWorkLogIssue { key = issueRef, remainingEstimateSeconds = remaining };
                         break;
+
                     case WorkLogStrategy.LeaveRemaining:
                         var remainingLeave = GetIssue(issueRef).fields.timetracking.remainingEstimateSeconds;
                         issue = new TempoWorkLog.TempoWorkLogIssue { key = issueRef, remainingEstimateSeconds = remainingLeave };
                         break;
+
                     case WorkLogStrategy.SetValue:
                         issue = new TempoWorkLog.TempoWorkLogIssue { key = issueRef, remainingEstimateSeconds = remainingTime?.TotalSeconds ?? 0 };
                         break;
@@ -253,9 +254,11 @@ namespace Gallifrey.Jira
                     case WorkLogStrategy.Automatic:
                         adjustmentMethod = "auto";
                         break;
+
                     case WorkLogStrategy.LeaveRemaining:
                         adjustmentMethod = "leave";
                         break;
+
                     case WorkLogStrategy.SetValue:
                         adjustmentMethod = "new";
                         break;

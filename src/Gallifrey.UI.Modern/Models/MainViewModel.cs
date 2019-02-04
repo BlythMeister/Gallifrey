@@ -1,3 +1,9 @@
+using Exceptionless;
+using Gallifrey.Comparers;
+using Gallifrey.ExtensionMethods;
+using Gallifrey.Jira.Model;
+using Gallifrey.UI.Modern.Helpers;
+using Gallifrey.Versions;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -5,12 +11,6 @@ using System.ComponentModel;
 using System.Linq;
 using System.Timers;
 using System.Windows;
-using Exceptionless;
-using Gallifrey.Comparers;
-using Gallifrey.ExtensionMethods;
-using Gallifrey.Jira.Model;
-using Gallifrey.UI.Modern.Helpers;
-using Gallifrey.Versions;
 
 namespace Gallifrey.UI.Modern.Models
 {
@@ -19,7 +19,9 @@ namespace Gallifrey.UI.Modern.Models
         private readonly TargetBarValues targetBarValues;
 
         public ModelHelpers ModelHelpers { get; }
+
         public event PropertyChangedEventHandler PropertyChanged;
+
         public ObservableCollection<TimerDateModel> TimerDates { get; private set; }
         public string InactiveMinutes { get; private set; }
         public TimeSpan TimeActivity { get; private set; }
@@ -399,7 +401,7 @@ namespace Gallifrey.UI.Modern.Models
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TimerDates"));
         }
 
-        #endregion
+        #endregion Private Helpers
 
         #region Events
 
@@ -517,8 +519,6 @@ namespace Gallifrey.UI.Modern.Models
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TargetBarRemainingLabel"));
         }
 
-        #endregion
-
-
+        #endregion Events
     }
 }

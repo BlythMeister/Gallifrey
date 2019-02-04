@@ -63,8 +63,6 @@ namespace Gallifrey.UI.Modern.MainViews
             {
                 await ModelHelpers.ShowMessageAsync("No Extra Time", "You Have Already Hit The Target For This Date!");
             }
-
-
         }
 
         private async void CopyButton()

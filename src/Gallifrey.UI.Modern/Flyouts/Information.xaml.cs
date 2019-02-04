@@ -2,7 +2,6 @@
 using Gallifrey.AppTracking;
 using Gallifrey.UI.Modern.Helpers;
 using Gallifrey.UI.Modern.Models;
-using MahApps.Metro.Controls.Dialogs;
 using System;
 using System.Diagnostics;
 using System.Linq;

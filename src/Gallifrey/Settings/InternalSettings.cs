@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.ComponentModel;
-using Newtonsoft.Json;
 
 namespace Gallifrey.Settings
 {
@@ -11,10 +11,15 @@ namespace Gallifrey.Settings
         Guid InstallationInstaceId { get; }
         bool IsPremium { get; }
         bool NewUser { get; }
+
         void SetLastChangeLogVersion(Version currentVersion);
+
         void SetLastHeartbeatTracked(DateTime lastHeartbeat);
+
         void SetIsPremium(bool isPremium);
+
         void SetNewUser(bool newUser);
+
         bool ValidateInstallationId();
     }
 

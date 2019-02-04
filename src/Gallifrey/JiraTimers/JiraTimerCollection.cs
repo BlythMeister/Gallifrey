@@ -15,33 +15,61 @@ namespace Gallifrey.JiraTimers
     public interface IJiraTimerCollection
     {
         IEnumerable<DateTime> GetValidTimerDates();
+
         IEnumerable<JiraTimer> GetTimersForADate(DateTime timerDate);
+
         IEnumerable<JiraTimer> GetStoppedUnexportedTimers();
+
         IEnumerable<JiraTimer> GetAllLocalTimers();
+
         IEnumerable<JiraTimer> GetAllTimersWithTime();
+
         IEnumerable<RecentJira> GetJiraReferencesForLastDays(int days);
+
         Guid AddTimer(Issue jiraIssue, DateTime startDate, TimeSpan seedTime, bool startNow);
+
         Guid AddLocalTimer(string localTimerDescription, DateTime startDate, TimeSpan seedTime, bool startNow);
+
         void RemoveTimer(Guid uniqueId);
+
         void StartTimer(Guid uniqueId);
+
         void StopTimer(Guid uniqueId, bool automatedStop);
+
         Guid? GetRunningTimerId();
+
         JiraTimer GetTimer(Guid timerGuid);
+
         Guid RenameTimer(Guid timerGuid, Issue newIssue);
+
         Guid ChangeLocalTimerDescription(Guid editedTimerId, string localTimerDescription);
+
         Guid ChangeTimerDate(Guid timerGuid, DateTime newStartDate);
+
         Tuple<int, int> GetNumberExported();
+
         TimeSpan GetStoppedTotalExportableTime();
+
         TimeSpan GetTotalLocalTime();
+
         TimeSpan GetTotalExportableTime();
+
         TimeSpan GetTotalExportedTimeThisWeek(DayOfWeek startOfWeek);
+
         TimeSpan GetTotalTimeThisWeekNoSeconds(DayOfWeek startOfWeek);
+
         TimeSpan GetTotalTimeForDate(DateTime timerDate);
+
         TimeSpan GetTotalTimeForDateNoSeconds(DateTime timerDate);
+
         bool AdjustTime(Guid uniqueId, int hours, int minutes, bool addTime);
+
         void AddJiraExportedTime(Guid uniqueId, int hours, int minutes);
+
         void AddIdleTimer(Guid uniqueId, List<IdleTimer> idleTimer);
+
         void RefreshFromJira(Guid uniqueId, Issue jiraIssue, TimeSpan loggedTime);
+
         event EventHandler GeneralTimerModification;
     }
 
@@ -50,7 +78,9 @@ namespace Gallifrey.JiraTimers
         private readonly ISettingsCollection settingsCollection;
         private readonly ITrackUsage trackUsage;
         private readonly List<JiraTimer> timerList;
+
         internal event EventHandler<ExportPromptDetail> ExportPrompt;
+
         public event EventHandler GeneralTimerModification;
 
         internal JiraTimerCollection(ISettingsCollection settingsCollection, ITrackUsage trackUsage)

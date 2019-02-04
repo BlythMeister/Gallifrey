@@ -4,9 +4,9 @@
              xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
              IsModal="True" Theme="Adapt" Position="Right" Header="App Information" CloseButtonIsCancel="True">
-    <Grid Width="350" Margin="5,5,5,5" >
+    <Grid Width="350" Margin="5,5,5,5">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -15,7 +15,7 @@
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
@@ -30,7 +30,7 @@
         </Grid>
         <Grid Grid.Row="1">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
@@ -44,7 +44,7 @@
         </Grid>
         <Grid Grid.Row="2">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <TextBlock Grid.Row="0" FontSize="18" Margin="0,0,0,5" Text="Support" TextDecorations="Underline" />
@@ -52,7 +52,7 @@
         </Grid>
         <Grid Grid.Row="3">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <TextBlock Grid.Row="0" FontSize="18" Margin="0,0,0,5" Text="Donate" TextDecorations="Underline" />
@@ -60,24 +60,23 @@
         </Grid>
         <Grid Grid.Row="4">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <TextBlock Grid.Row="0" FontSize="18" Margin="0,0,0,5" Text="Source Code" TextDecorations="Underline" />
-            <TextBlock Grid.Row="1" TextWrapping="Wrap" Margin="0,0,0,5" VerticalAlignment="Center">All our code and websites are hosted on <Hyperlink NavigateUri="https://github.com/BlythMeister/Gallifrey" Foreground="{DynamicResource TextBrush}" RequestNavigate="Hyperlink_RequestNavigate">GitHub</Hyperlink><LineBreak/>You can download and fork to join the community</TextBlock>
+            <TextBlock Grid.Row="1" TextWrapping="Wrap" Margin="0,0,0,5" VerticalAlignment="Center">All our code and websites are hosted on <Hyperlink NavigateUri="https://github.com/BlythMeister/Gallifrey" Foreground="{DynamicResource TextBrush}" RequestNavigate="Hyperlink_RequestNavigate">GitHub</Hyperlink><LineBreak />You can download and fork to join the community</TextBlock>
         </Grid>
         <Grid Grid.Row="5">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <TextBlock Grid.Row="0" FontSize="18" Margin="0,0,0,5" Text="Installation Hash" TextDecorations="Underline" />
             <TextBlock Grid.Row="1" Text="Your installation has a hash of:"></TextBlock>
-            <TextBlock Grid.Row="2" TextWrapping="Wrap" Margin="0,0,0,5" VerticalAlignment="Center" Text="{Binding UserHash}" PreviewMouseDown="UserHashClick" TextDecorations="Underline" Cursor="Hand"/>
+            <TextBlock Grid.Row="2" TextWrapping="Wrap" Margin="0,0,0,5" VerticalAlignment="Center" Text="{Binding UserHash}" PreviewMouseDown="UserHashClick" TextDecorations="Underline" Cursor="Hand" />
             <TextBlock Grid.Row="3" Text="Click the installation hash to copy to the clipboard"></TextBlock>
         </Grid>
     </Grid>
 </controls:Flyout>
-

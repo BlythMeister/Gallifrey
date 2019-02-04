@@ -1,5 +1,5 @@
-﻿using System.Windows;
-using Gallifrey.Versions;
+﻿using Gallifrey.Versions;
+using System.Windows;
 
 namespace Gallifrey.UI.Modern.Alpha
 {

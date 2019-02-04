@@ -4,10 +4,11 @@ using System.Windows.Data;
 
 namespace Gallifrey.UI.Modern.Helpers
 {
-    class BooleanVisibilityConverter : IValueConverter
+    internal class BooleanVisibilityConverter : IValueConverter
     {
         //Use collapse or hidden
         public bool Collapse { get; set; }
+
         //invert to false = visible
         public bool Invert { get; set; }
 

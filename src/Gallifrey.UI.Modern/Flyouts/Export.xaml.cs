@@ -54,6 +54,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                         case ProgressResult.JiraHelperStatus.Cancelled:
                             modelHelpers.CloseFlyout(this);
                             return;
+
                         case ProgressResult.JiraHelperStatus.Success:
                             var returnVal = jiraDownloadResult.RetVal;
                             timerToShow = returnVal.Item1;

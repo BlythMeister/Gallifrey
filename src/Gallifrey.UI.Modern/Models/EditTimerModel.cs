@@ -18,6 +18,7 @@ namespace Gallifrey.UI.Modern.Models
         private readonly string jiraUrl;
 
         public event PropertyChangedEventHandler PropertyChanged;
+
         public DateTime MinDate { get; set; }
         public DateTime MaxDate { get; set; }
         public DateTime DisplayDate { get; set; }
@@ -34,7 +35,6 @@ namespace Gallifrey.UI.Modern.Models
         public bool HasModifiedJiraReference => (OriginalJiraReference != JiraReference) || (OriginalLocalTimerDescription != LocalTimerDescription);
         public bool HasModifiedRunDate => OriginalRunDate.Value.Date != RunDate.Value.Date;
         public bool HasModifiedTime => OriginalHours != Hours || OriginalMinutes != Minutes;
-
 
         public EditTimerModel(IBackend gallifrey, Guid timerId)
         {

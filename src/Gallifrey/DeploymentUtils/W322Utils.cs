@@ -8,13 +8,15 @@ namespace Gallifrey.DeploymentUtils
 {
     public class Win32Utils
     {
-
         [DllImport("user32.Dll")]
         private static extern int EnumWindows(EnumWindowsCallbackDelegate callback, IntPtr lParam);
+
         [DllImport("User32.Dll")]
         private static extern void GetWindowText(int h, StringBuilder s, int nMaxCount);
+
         [DllImport("User32.Dll")]
         private static extern bool EnumChildWindows(IntPtr hwndParent, EnumWindowsCallbackDelegate lpEnumFunc, IntPtr lParam);
+
         [DllImport("User32.Dll")]
         [SuppressMessage("ReSharper", "InconsistentNaming")]
         private static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
@@ -90,10 +92,9 @@ namespace Gallifrey.DeploymentUtils
             }
 
             return IntPtr.Zero;
-
         }
 
-        static bool EnumProc(IntPtr hWnd, IntPtr lParam)
+        private static bool EnumProc(IntPtr hWnd, IntPtr lParam)
         {
             /* get a reference to the ArrayList */
             var gch = (GCHandle)lParam;

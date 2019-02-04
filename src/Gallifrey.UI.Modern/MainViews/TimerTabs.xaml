@@ -18,8 +18,8 @@
             <DataTemplate>
                 <ListView ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemsSource="{Binding Timers}" MouseDoubleClick="TimerList_MouseDoubleClick" BorderThickness="0" SelectionMode="Extended">
                     <ListView.Resources>
-                        <helpers:BooleanVisibilityConverter x:Key="BoolToVis" Collapse="True" Invert="False"/>
-                        <helpers:BooleanVisibilityConverter x:Key="BoolToVisInvert" Collapse="True" Invert="True"/>
+                        <helpers:BooleanVisibilityConverter x:Key="BoolToVis" Collapse="True" Invert="False" />
+                        <helpers:BooleanVisibilityConverter x:Key="BoolToVisInvert" Collapse="True" Invert="True" />
                     </ListView.Resources>
                     <ListView.ItemContainerStyle>
                         <Style TargetType="{x:Type ListViewItem}">
@@ -31,19 +31,19 @@
                             <Setter Property="IsSelected" Value="{Binding TimerIsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                             <Style.Resources>
                                 <Style TargetType="Border">
-                                    <Setter Property="CornerRadius" Value="5"/>
+                                    <Setter Property="CornerRadius" Value="5" />
                                 </Style>
-                                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="{DynamicResource Gray8}"/>
+                                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="{DynamicResource Gray8}" />
                                 <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="{DynamicResource BlackColor}" />
                                 <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="{DynamicResource Gray8}" />
                                 <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="{DynamicResource BlackColor}" />
                             </Style.Resources>
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsRunning}" Value="True" >
-                                    <Setter Property="BorderBrush" Value="{DynamicResource AccentColorBrush}"/>
+                                <DataTrigger Binding="{Binding IsRunning}" Value="True">
+                                    <Setter Property="BorderBrush" Value="{DynamicResource AccentColorBrush}" />
                                 </DataTrigger>
-                                <DataTrigger Binding="{Binding HasTimeToExportAndNotRunning}" Value="True" >
-                                    <Setter Property="BorderBrush" Value="{DynamicResource AccentColorBrush}"/>
+                                <DataTrigger Binding="{Binding HasTimeToExportAndNotRunning}" Value="True">
+                                    <Setter Property="BorderBrush" Value="{DynamicResource AccentColorBrush}" />
                                 </DataTrigger>
                                 <Trigger Property="IsMouseOver" Value="True">
                                     <Setter Property="Background" Value="{DynamicResource AccentColorBrush4}" />
@@ -55,28 +55,28 @@
                         <DataTemplate>
                             <Grid>
                                 <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto" />
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="Auto" />
                                 </Grid.RowDefinitions>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
 
                                 <TextBlock Grid.Row="0" Grid.Column="0" FontSize="25" Margin="3,0,0,0" Text="{Binding Reference}" FontWeight="Medium">
                                     <TextBlock.Style>
                                         <Style TargetType="TextBlock">
                                             <Style.Triggers>
-                                                <DataTrigger Binding="{Binding HighlightTitle}" Value="True" >
-                                                    <Setter Property="Foreground" Value="{DynamicResource AccentColorBrush}"/>
+                                                <DataTrigger Binding="{Binding HighlightTitle}" Value="True">
+                                                    <Setter Property="Foreground" Value="{DynamicResource AccentColorBrush}" />
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
                                     </TextBlock.Style>
                                 </TextBlock>
-                                <WrapPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Margin="3,0,0,0" Visibility="{Binding HasParent, Converter={StaticResource BoolToVis}}" >
+                                <WrapPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Margin="3,0,0,0" Visibility="{Binding HasParent, Converter={StaticResource BoolToVis}}">
                                     <TextBlock  FontSize="13" TextWrapping="Wrap" Text="{Binding ParentDescription}" />
                                     <TextBlock  FontSize="13" TextWrapping="Wrap" Text=" (" />
                                     <TextBlock  FontSize="13" TextWrapping="Wrap" Text="{Binding ParentReference}" />
@@ -85,7 +85,7 @@
                                 <TextBlock Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" FontSize="13" Margin="3,0,0,0" TextWrapping="Wrap" Text="{Binding Description}" />
 
                                 <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Margin="0,0,6,0" VerticalAlignment="Center" Visibility="{Binding HasTimeToExport, Converter={StaticResource BoolToVis}}">
-                                    <TextBlock FontSize="18" Margin="0,0,5,0" Text="{Binding ExportTime}" Foreground="{DynamicResource AccentColorBrush}" FontWeight="Medium"/>
+                                    <TextBlock FontSize="18" Margin="0,0,5,0" Text="{Binding ExportTime}" Foreground="{DynamicResource AccentColorBrush}" FontWeight="Medium" />
                                     <TextBlock FontSize="18" Text="To Export" Foreground="{DynamicResource AccentColorBrush}" FontWeight="Medium" />
                                 </StackPanel>
 
@@ -93,8 +93,8 @@
                                     <TextBlock.Style>
                                         <Style TargetType="TextBlock">
                                             <Style.Triggers>
-                                                <DataTrigger Binding="{Binding IsRunning}" Value="True" >
-                                                    <Setter Property="Foreground" Value="{DynamicResource AccentColorBrush}"/>
+                                                <DataTrigger Binding="{Binding IsRunning}" Value="True">
+                                                    <Setter Property="Foreground" Value="{DynamicResource AccentColorBrush}" />
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
@@ -102,11 +102,11 @@
                                 </TextBlock>
                                 <Grid.ContextMenu>
                                     <ContextMenu>
-                                        <MenuItem Header="Copy JIRA Reference" Click="ContextMenu_Copy"/>
-                                        <MenuItem Header="Delete Timer" Click="ContextMenu_Delete"/>
-                                        <MenuItem Header="Edit Timer" Click="ContextMenu_Edit"/>
-                                        <MenuItem Header="Export Timer" Click="ContextMenu_Export" Visibility="{Binding TrackingOnly, Converter={StaticResource BoolToVisInvert}}"/>
-                                        <MenuItem Header="Start/Stop Timer" Click="ContextMenu_StartStop"/>
+                                        <MenuItem Header="Copy JIRA Reference" Click="ContextMenu_Copy" />
+                                        <MenuItem Header="Delete Timer" Click="ContextMenu_Delete" />
+                                        <MenuItem Header="Edit Timer" Click="ContextMenu_Edit" />
+                                        <MenuItem Header="Export Timer" Click="ContextMenu_Export" Visibility="{Binding TrackingOnly, Converter={StaticResource BoolToVisInvert}}" />
+                                        <MenuItem Header="Start/Stop Timer" Click="ContextMenu_StartStop" />
                                     </ContextMenu>
                                 </Grid.ContextMenu>
                             </Grid>
@@ -117,8 +117,8 @@
         </TabControl.ContentTemplate>
         <TabControl.ContextMenu>
             <ContextMenu>
-                <MenuItem Header="Add New Timer" Click="ContextMenu_Add"/>
-                <MenuItem Header="Add Timer To Fill Export Target" Click="ContextMenu_AddToFill"/>
+                <MenuItem Header="Add New Timer" Click="ContextMenu_Add" />
+                <MenuItem Header="Add Timer To Fill Export Target" Click="ContextMenu_AddToFill" />
             </ContextMenu>
         </TabControl.ContextMenu>
     </controls:MetroAnimatedSingleRowTabControl>

@@ -358,14 +358,14 @@
       <Bug>Fix issue with data file saving</Bug>
       <Bug>Fix issue with login failure on start-up causing crash</Bug>
     </Bugs>
-    <Others/>
+    <Others />
   </Version>
   <Version Number="3.9.2.0" Name="">
     <Features />
     <Bugs>
       <Bug>Fix issue duplicate timers</Bug>
     </Bugs>
-    <Others/>
+    <Others />
   </Version>
   <Version Number="3.10.0.0" Name="">
     <Features>
@@ -377,7 +377,7 @@
       <Bug>Fix window resize on flyout opening</Bug>
       <Bug>Improve handling of failed updates</Bug>
     </Bugs>
-    <Others/>
+    <Others />
   </Version>
   <Version Number="3.10.1.0" Name="">
     <Features />
@@ -385,7 +385,7 @@
       <Bug>Fix issue with remaining time not showing on bulk export</Bug>
       <Bug>Fix issue when remaining is over 24 hours</Bug>
     </Bugs>
-    <Others/>
+    <Others />
   </Version>
   <Version Number="3.10.2.0" Name="">
     <Features />
@@ -494,24 +494,24 @@
       <Feature>Updated Gitter links to Slack</Feature>
     </Features>
     <Bugs />
-    <Others/>
+    <Others />
   </Version>
   <Version Number="3.11.2.0" Name="">
-    <Features/>
+    <Features />
     <Bugs>
       <Bug>Fix issue with Jira search</Bug>
     </Bugs>
-    <Others/>
+    <Others />
   </Version>
   <Version Number="3.11.3.0" Name="">
-    <Features/>
+    <Features />
     <Bugs />
     <Others>
       <Other>Icon updates</Other>
     </Others>
   </Version>
   <Version Number="3.11.4.0" Name="">
-    <Features/>
+    <Features />
     <Bugs>
       <Bug>Fix default timers being removed when internet connection drops</Bug>
     </Bugs>
@@ -520,7 +520,7 @@
     </Others>
   </Version>
   <Version Number="3.11.5.0" Name="">
-    <Features/>
+    <Features />
     <Bugs>
       <Bug>Prevent more than 1 concurrent update check</Bug>
     </Bugs>
@@ -530,7 +530,7 @@
     <Features>
       <Feature>Automatically try and use file backups if loading file fails</Feature>
     </Features>
-    <Bugs/>
+    <Bugs />
     <Others />
   </Version>
   <Version Number="3.11.7.0" Name="">
@@ -568,7 +568,7 @@
   <Version Number="0.0.0.0" Name="Pre-Release">
     <Features />
     <Bugs />
-    <Others/>
+    <Others />
   </Version>
   -->
 </Versions>

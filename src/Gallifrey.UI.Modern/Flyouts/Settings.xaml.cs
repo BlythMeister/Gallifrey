@@ -1,7 +1,6 @@
 ﻿using Gallifrey.Exceptions.JiraIntegration;
 using Gallifrey.UI.Modern.Helpers;
 using Gallifrey.UI.Modern.Models;
-using MahApps.Metro.Controls.Dialogs;
 using System.Windows;
 
 namespace Gallifrey.UI.Modern.Flyouts

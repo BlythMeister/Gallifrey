@@ -7,7 +7,6 @@ namespace Gallifrey.Exceptions.JiraTimers
         public IdleTimerRunningException(string message)
             : base(message)
         {
-
         }
     }
 }

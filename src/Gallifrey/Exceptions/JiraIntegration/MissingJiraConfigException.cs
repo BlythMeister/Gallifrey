@@ -7,7 +7,6 @@ namespace Gallifrey.Exceptions.JiraIntegration
         public MissingJiraConfigException(string message)
             : base(message)
         {
-
         }
     }
 }

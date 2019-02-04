@@ -1,10 +1,10 @@
+using Gallifrey.Comparers;
+using Gallifrey.Jira.Model;
+using Gallifrey.JiraIntegration;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using Gallifrey.Comparers;
-using Gallifrey.Jira.Model;
-using Gallifrey.JiraIntegration;
 
 namespace Gallifrey.UI.Modern.Models
 {

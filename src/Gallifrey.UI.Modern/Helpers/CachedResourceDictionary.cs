@@ -27,7 +27,6 @@ namespace Gallifrey.UI.Modern.Helpers
                     base.Source = source;
                 }
             }
-
         }
     }
 

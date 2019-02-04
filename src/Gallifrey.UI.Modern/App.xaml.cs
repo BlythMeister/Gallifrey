@@ -1,8 +1,6 @@
 ﻿using Gallifrey.UI.Modern.MainViews;
 using Gallifrey.Versions;
-using System.Collections;
 using System.Net;
-using System.Windows;
 
 namespace Gallifrey.UI.Modern
 {

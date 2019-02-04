@@ -23,8 +23,11 @@ namespace Gallifrey.UI.Modern.Helpers
         public bool FlyoutOpenOrDialogShowing => openFlyouts.Count(x => !x.IsHidden) > 0 || DialogContext.InUse;
 
         public event EventHandler<Guid> SelectTimerEvent;
+
         public event EventHandler SelectRunningTimerEvent;
+
         public event EventHandler RefreshModelEvent;
+
         public event EventHandler<RemoteButtonTrigger> RemoteButtonTrigger;
 
         public ModelHelpers(IBackend gallifrey, FlyoutsControl flyoutsControl)
@@ -60,6 +63,7 @@ namespace Gallifrey.UI.Modern.Helpers
                 HideFlyout(item.Flyout);
             }
         }
+
         public void CloseFlyout(Flyout flyout)
         {
             var actualType = flyout.GetType();
@@ -139,7 +143,7 @@ namespace Gallifrey.UI.Modern.Helpers
             }
         }
 
-        #endregion
+        #endregion Flyouts
 
         #region Dialogs
 
@@ -232,9 +236,11 @@ namespace Gallifrey.UI.Modern.Helpers
                 case MessageDialogResult.SecondAuxiliary:
                     TriggerRemoteButtonPress(Models.RemoteButtonTrigger.Info);
                     break;
+
                 case MessageDialogResult.FirstAuxiliary:
                     TriggerRemoteButtonPress(Models.RemoteButtonTrigger.GitHub);
                     break;
+
                 case MessageDialogResult.Negative:
                     TriggerRemoteButtonPress(Models.RemoteButtonTrigger.PayPal);
                     break;
@@ -250,7 +256,7 @@ namespace Gallifrey.UI.Modern.Helpers
             toastNotifier.Notify<ToastNotification>(() => new ToastNotification(title, message));
         }
 
-        #endregion
+        #endregion Dialogs
 
         #region Fire Events
 
@@ -279,7 +285,7 @@ namespace Gallifrey.UI.Modern.Helpers
             RemoteButtonTrigger?.Invoke(null, buttonTrigger);
         }
 
-        #endregion
+        #endregion Fire Events
 
         public void CloseApp(bool restart = false)
         {

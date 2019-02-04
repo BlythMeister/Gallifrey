@@ -40,13 +40,11 @@ namespace Gallifrey.AppTracking
                 {
                     ScriptErrorsSuppressed = true
                 };
-
             }
             catch (Exception) //Internal handled error
             {
                 webBrowser = null;
             }
-
         }
 
         public async void TrackAppUsage(TrackingType trackingType)

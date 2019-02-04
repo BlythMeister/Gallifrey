@@ -10,9 +10,13 @@ namespace Gallifrey.JiraIntegration
     public interface IRecentJiraCollection
     {
         IEnumerable<RecentJira> GetRecentJiraCollection();
+
         void AddRecentJira(Issue jiraIssue);
+
         void AddRecentJiras(IEnumerable<Issue> jiraIssues);
+
         void RemoveExpiredCache();
+
         void Remove(string jiraReference);
     }
 
@@ -95,5 +99,4 @@ namespace Gallifrey.JiraIntegration
             SaveCache();
         }
     }
-
 }

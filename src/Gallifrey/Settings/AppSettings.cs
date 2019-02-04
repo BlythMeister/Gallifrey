@@ -16,7 +16,9 @@ namespace Gallifrey.Settings
         DayOfWeek StartOfWeek { get; set; }
         Guid? TimerRunningOnShutdown { get; set; }
         TimeSpan? NoTimerRunningOnShutdown { get; set; }
+
         TimeSpan GetTargetThisWeek();
+
         bool AutoUpdate { get; set; }
         bool UsageTracking { get; set; }
         bool TrackLockTime { get; set; }

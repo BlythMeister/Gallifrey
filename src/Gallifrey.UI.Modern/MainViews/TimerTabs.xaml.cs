@@ -3,7 +3,6 @@ using Gallifrey.Exceptions.JiraTimers;
 using Gallifrey.UI.Modern.Flyouts;
 using Gallifrey.UI.Modern.Helpers;
 using Gallifrey.UI.Modern.Models;
-using MahApps.Metro.Controls.Dialogs;
 using System;
 using System.Linq;
 using System.Threading.Tasks;

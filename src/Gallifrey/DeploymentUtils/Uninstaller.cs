@@ -59,7 +59,6 @@ namespace Gallifrey.DeploymentUtils
 
         private static IntPtr FindUninstallerWindow(string displayName)
         {
-
             var w32 = new Win32Utils();
             var uninstallerWindow = IntPtr.Zero;
             while (uninstallerWindow == IntPtr.Zero)
@@ -69,7 +68,6 @@ namespace Gallifrey.DeploymentUtils
             }
 
             return uninstallerWindow;
-
         }
 
         private static string GetPublicKeyToken()
@@ -81,7 +79,6 @@ namespace Gallifrey.DeploymentUtils
                 pkt.Append($"{pk[i]:x}");
             return pkt.ToString();
         }
-
 
         private static string GetUninstallString(string publicKeyToken, out string displayName)
         {

@@ -48,7 +48,6 @@ namespace Gallifrey.UI.Modern.Helpers
                 return;
             }
 
-
             if ((bool)(e.OldValue))
             {
                 box.PasswordChanged -= HandlePasswordChanged;

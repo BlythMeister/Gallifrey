@@ -12,6 +12,7 @@ namespace Gallifrey.JiraTimers
     public class JiraTimer : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
+
         public Guid UniqueId { get; }
         public string JiraReference { get; private set; }
         public string JiraProjectName { get; private set; }
@@ -59,13 +60,11 @@ namespace Gallifrey.JiraTimers
         public JiraTimer(Issue jiraIssue, DateTime dateStarted, TimeSpan currentTime) :
             this(jiraIssue.key, jiraIssue.fields.project.key, jiraIssue.fields.summary, dateStarted, currentTime, new TimeSpan(), Guid.NewGuid(), jiraIssue.fields.parent == null ? string.Empty : jiraIssue.fields.parent.key, jiraIssue.fields.parent == null ? string.Empty : jiraIssue.fields.parent.fields.summary, null, false)
         {
-
         }
 
         public JiraTimer(JiraTimer previousTimer, DateTime dateStarted, bool resetTimes) :
             this(previousTimer.JiraReference, previousTimer.JiraProjectName, previousTimer.JiraName, dateStarted, resetTimes ? new TimeSpan() : previousTimer.CurrentTime, resetTimes ? new TimeSpan() : previousTimer.ExportedTime, Guid.NewGuid(), previousTimer.JiraParentReference, previousTimer.JiraParentName, null, previousTimer.LocalTimer)
         {
-
         }
 
         private void RunningWatcherElapsed(object sender, ElapsedEventArgs e)

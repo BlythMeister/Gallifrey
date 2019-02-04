@@ -16,19 +16,32 @@ namespace Gallifrey.JiraIntegration
     public interface IJiraConnection
     {
         bool DoesJiraExist(string jiraRef);
+
         Issue GetJiraIssue(string jiraRef);
+
         IEnumerable<string> GetJiraFilters();
+
         IEnumerable<Issue> GetJiraIssuesFromFilter(string filterName);
+
         IEnumerable<Issue> GetJiraIssuesFromSearchText(string searchText);
+
         IEnumerable<Issue> GetJiraIssuesFromSearchTextLimitedToKeys(string searchText, IEnumerable<string> jiraKeys);
+
         void LogTime(string jiraRef, DateTime exportTimeStamp, TimeSpan exportTime, WorkLogStrategy strategy, bool addStandardComment, string comment = "", TimeSpan? remainingTime = null);
+
         IEnumerable<Issue> GetJiraCurrentUserOpenIssues();
+
         IEnumerable<StandardWorkLog> GetWorkLoggedForDatesFilteredIssues(IEnumerable<DateTime> queryDates, IEnumerable<string> issueRefs);
+
         void AssignToCurrentUser(string jiraRef);
+
         User CurrentUser { get; }
         bool IsConnected { get; }
+
         void TransitionIssue(string jiraRef, string transition);
+
         IEnumerable<Status> GetTransitions(string jiraRef);
+
         event EventHandler LoggedIn;
     }
 
@@ -44,6 +57,7 @@ namespace Gallifrey.JiraIntegration
 
         public User CurrentUser { get; private set; }
         public bool IsConnected => jira != null;
+
         public event EventHandler LoggedIn;
 
         public JiraConnection(ITrackUsage trackUsage, IRecentJiraCollection recentJiraCollection)
@@ -89,7 +103,6 @@ namespace Gallifrey.JiraIntegration
                     }
 
                     trackUsage.TrackAppUsage(trackingType);
-
                 }
                 catch (InvalidCredentialException)
                 {
@@ -242,7 +255,6 @@ namespace Gallifrey.JiraIntegration
                     var projects = jira.GetProjects();
                     jiraProjectCache.Clear();
                     jiraProjectCache.AddRange(projects.Select(project => new JiraProject(project.key, project.name)));
-
                 }
                 catch (Exception) { lastCacheUpdate = DateTime.MinValue; }
             }
@@ -275,7 +287,6 @@ namespace Gallifrey.JiraIntegration
             {
                 throw new JiraConnectionException("Unable to assign issue.", ex);
             }
-
         }
 
         public void LogTime(string jiraRef, DateTime exportTimeStamp, TimeSpan exportTime, WorkLogStrategy strategy, bool addStandardComment, string comment = "", TimeSpan? remainingTime = null)

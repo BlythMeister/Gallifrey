@@ -185,7 +185,6 @@ namespace Gallifrey.UI.Modern.Flyouts
         {
             var workingDate = DataModel.StartDate.Value;
 
-
             while (workingDate <= DataModel.EndDate.Value)
             {
                 var addTimer = true;

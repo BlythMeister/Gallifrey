@@ -10,7 +10,6 @@ namespace Gallifrey.UI.Modern.Helpers
     {
         private readonly ModelHelpers modelHelpers;
 
-
         public ProgressDialogHelper(ModelHelpers modelHelpers)
         {
             this.modelHelpers = modelHelpers;

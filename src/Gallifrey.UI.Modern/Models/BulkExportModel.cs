@@ -18,6 +18,7 @@ namespace Gallifrey.UI.Modern.Models
         private int remainingMinutes;
         private TimeSpan toExportMaxTime;
         private bool changeStatus;
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         public JiraTimer Timer { get; set; }
@@ -149,9 +150,11 @@ namespace Gallifrey.UI.Modern.Models
                 case DefaultRemaining.Auto:
                     WorkLogStrategy = WorkLogStrategy.Automatic;
                     break;
+
                 case DefaultRemaining.Leave:
                     WorkLogStrategy = WorkLogStrategy.LeaveRemaining;
                     break;
+
                 case DefaultRemaining.Set:
                     WorkLogStrategy = WorkLogStrategy.SetValue;
                     break;
@@ -171,7 +174,6 @@ namespace Gallifrey.UI.Modern.Models
             toExportMaxTime = new TimeSpan(timer.TimeToExport.Hours, timer.TimeToExport.Minutes, 0);
             ToExportHours = toExportMaxTime.Hours;
             ToExportMinutes = toExportMaxTime.Minutes;
-
 
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ToExportHours"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ToExportMinutes"));
@@ -195,10 +197,12 @@ namespace Gallifrey.UI.Modern.Models
                     RemainingHours = autoNewRemaining.Hours + (autoNewRemaining.Days * 24);
                     RemainingMinutes = autoNewRemaining.Minutes;
                     break;
+
                 case WorkLogStrategy.LeaveRemaining:
                     RemainingHours = OriginalRemaining.Hours + (OriginalRemaining.Days * 24);
                     RemainingMinutes = OriginalRemaining.Minutes;
                     break;
+
                 case WorkLogStrategy.SetValue:
                     RemainingHours = 0;
                     RemainingMinutes = 0;

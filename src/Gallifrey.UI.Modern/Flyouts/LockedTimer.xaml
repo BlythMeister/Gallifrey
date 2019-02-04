@@ -21,9 +21,9 @@
                     <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                     <Style.Resources>
                         <Style TargetType="Border">
-                            <Setter Property="CornerRadius" Value="5"/>
+                            <Setter Property="CornerRadius" Value="5" />
                         </Style>
-                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="{DynamicResource AccentColor3}"/>
+                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="{DynamicResource AccentColor3}" />
                         <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="{DynamicResource BlackColor}" />
                         <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="{DynamicResource Gray10}" />
                         <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="{DynamicResource BlackColor}" />
@@ -31,7 +31,7 @@
                     <Style.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter Property="Background" Value="{DynamicResource AccentColorBrush4}" />
-                            <Setter Property="BorderBrush" Value="{DynamicResource GrayBrush7}"/>
+                            <Setter Property="BorderBrush" Value="{DynamicResource GrayBrush7}" />
                         </Trigger>
                     </Style.Triggers>
                 </Style>
@@ -40,12 +40,12 @@
                 <DataTemplate>
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
                         <TextBlock Grid.Row="0" Grid.Column="0" Text="Date: " />
                         <TextBlock Grid.Row="1" Grid.Column="0" Text="Duration: " />
@@ -75,22 +75,22 @@
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
-                    <TextBlock Grid.Row="0" Margin="0 5 0 0" FontSize="{DynamicResource DialogMessageFontSize}" Text="" TextWrapping="Wrap" x:Name="TimeLocateMessage"/>
+                    <TextBlock Grid.Row="0" Margin="0 5 0 0" FontSize="{DynamicResource DialogMessageFontSize}" Text="" TextWrapping="Wrap" x:Name="TimeLocateMessage" />
 
                     <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Height="85">
                         <Button Height="45" MinWidth="70" Margin="0 0 5 0" Click="AddToNewTimer">
-                            <TextBlock>New<LineBreak/>Timer</TextBlock>
+                            <TextBlock>New<LineBreak />Timer</TextBlock>
                         </Button>
                         <Button Height="45" MinWidth="70" Margin="5 0 5 0" Click="AddToRunningTimer" x:Name="RunningTimerButton">
-                            <TextBlock>Running<LineBreak/>Timer</TextBlock>
+                            <TextBlock>Running<LineBreak />Timer</TextBlock>
                         </Button>
                         <Button Height="45" MinWidth="70" Margin="5 0 5 0" Click="AddToExistingTimer">
-                            <TextBlock>Existing<LineBreak/>Timer</TextBlock>
+                            <TextBlock>Existing<LineBreak />Timer</TextBlock>
                         </Button>
                         <Button Height="45" MinWidth="70" Margin="5 0 5 0" Click="AddToRecentTimer">
-                            <TextBlock>Recent<LineBreak/>Timer</TextBlock>
+                            <TextBlock>Recent<LineBreak />Timer</TextBlock>
                         </Button>
-                        <Button Height="45" MinWidth="70" Content="Cancel" Margin="5 0 5 0" Click="CancelAddTimer"/>
+                        <Button Height="45" MinWidth="70" Content="Cancel" Margin="5 0 5 0" Click="CancelAddTimer" />
                     </StackPanel>
                 </Grid>
             </dialogs:CustomDialog>
@@ -109,11 +109,10 @@
 
                     <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Height="85">
                         <Button Height="35" MinWidth="80" Style="{DynamicResource AccentedDialogSquareButton}" Content="OK" Margin="0 0 5 0" Click="ConfirmTimerSelector" />
-                        <Button Height="35" MinWidth="80" Content="Cancel" Margin="5 0 5 0" Click="CancelTimerSelector"/>
+                        <Button Height="35" MinWidth="80" Content="Cancel" Margin="5 0 5 0" Click="CancelTimerSelector" />
                     </StackPanel>
                 </Grid>
             </dialogs:CustomDialog>
         </ResourceDictionary>
     </controls:Flyout.Resources>
 </controls:Flyout>
-

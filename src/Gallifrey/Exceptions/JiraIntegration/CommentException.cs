@@ -7,7 +7,6 @@ namespace Gallifrey.Exceptions.JiraIntegration
         public CommentException(string message, Exception innerException)
             : base(message, innerException)
         {
-
         }
     }
 }

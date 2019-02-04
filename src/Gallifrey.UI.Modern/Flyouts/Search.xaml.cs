@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows;
-using Exceptionless;
+﻿using Exceptionless;
 using Gallifrey.Exceptions.JiraIntegration;
 using Gallifrey.Jira.Model;
 using Gallifrey.JiraIntegration;
 using Gallifrey.UI.Modern.Helpers;
 using Gallifrey.UI.Modern.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows;
 
 namespace Gallifrey.UI.Modern.Flyouts
 {
@@ -62,7 +62,6 @@ namespace Gallifrey.UI.Modern.Flyouts
                 {
                     //Do Nothing
                 }
-
                 catch (Exception ex)
                 {
                     ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Handled").Submit();
@@ -76,7 +75,6 @@ namespace Gallifrey.UI.Modern.Flyouts
                 {
                     //Do Nothing
                 }
-
                 catch (Exception ex)
                 {
                     ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Handled").Submit();
@@ -92,10 +90,12 @@ namespace Gallifrey.UI.Modern.Flyouts
                 case ProgressResult.JiraHelperStatus.Cancelled:
                     modelHelpers.CloseFlyout(this);
                     break;
+
                 case ProgressResult.JiraHelperStatus.Errored:
                     await modelHelpers.ShowMessageAsync("Error", "There Was An Error Loading Default Search Results");
                     modelHelpers.CloseFlyout(this);
                     break;
+
                 case ProgressResult.JiraHelperStatus.Success:
                     DataContext = result.RetVal;
                     break;
@@ -146,6 +146,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                     case ProgressResult.JiraHelperStatus.Cancelled:
                         DataModel.ClearSearchResults();
                         return;
+
                     case ProgressResult.JiraHelperStatus.Errored:
                         throw new Exception();
                     case ProgressResult.JiraHelperStatus.Success:

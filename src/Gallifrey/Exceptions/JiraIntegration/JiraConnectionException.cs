@@ -7,7 +7,6 @@ namespace Gallifrey.Exceptions.JiraIntegration
         public JiraConnectionException(string message, Exception innerException)
             : base(message, innerException)
         {
-
         }
     }
 }
