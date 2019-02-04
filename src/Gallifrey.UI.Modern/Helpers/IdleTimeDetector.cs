@@ -7,7 +7,7 @@ namespace Gallifrey.UI.Modern.Helpers
     public static class IdleTimeDetector
     {
         [DllImport("user32.dll")]
-        private static bool GetLastInputInfo(ref LASTINPUTINFO plii);
+        internal static extern bool GetLastInputInfo(ref LASTINPUTINFO plii);
 
         public static IdleTimeInfo GetIdleTimeInfo()
         {
