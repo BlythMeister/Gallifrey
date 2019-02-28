@@ -49,7 +49,7 @@ namespace Gallifrey.JiraIntegration
     {
         private readonly ITrackUsage trackUsage;
         private readonly IRecentJiraCollection recentJiraCollection;
-        private readonly List<JiraProject> jiraProjectCache;
+        private readonly List<string> jiraProjectCodeCache;
         private IJiraConnectionSettings jiraConnectionSettings;
         private IExportSettings exportSettings;
         private IJiraClient jira;
@@ -64,7 +64,7 @@ namespace Gallifrey.JiraIntegration
         {
             this.trackUsage = trackUsage;
             this.recentJiraCollection = recentJiraCollection;
-            jiraProjectCache = new List<JiraProject>();
+            jiraProjectCodeCache = new List<string>();
             lastCacheUpdate = DateTime.MinValue;
         }
 
@@ -253,8 +253,8 @@ namespace Gallifrey.JiraIntegration
                     lastCacheUpdate = DateTime.UtcNow;
                     CheckAndConnectJira();
                     var projects = jira.GetProjects();
-                    jiraProjectCache.Clear();
-                    jiraProjectCache.AddRange(projects.Select(project => new JiraProject(project.key, project.name)));
+                    jiraProjectCodeCache.Clear();
+                    jiraProjectCodeCache.AddRange(projects.Select(project => project.key));
                 }
                 catch (Exception) { lastCacheUpdate = DateTime.MinValue; }
             }
@@ -351,14 +351,14 @@ namespace Gallifrey.JiraIntegration
             var nonProjectText = string.Empty;
             foreach (var keyword in searchText.Split(' '))
             {
-                var firstProjectMatch = jiraProjectCache.FirstOrDefault(x => x.JiraProjectCode == keyword);
+                var firstProjectMatch = jiraProjectCodeCache.FirstOrDefault(x => x == keyword);
                 if (firstProjectMatch != null)
                 {
                     if (!string.IsNullOrWhiteSpace(projectQuery))
                     {
                         projectQuery += " OR ";
                     }
-                    projectQuery += $"project = \"{firstProjectMatch.JiraProjectCode}\"";
+                    projectQuery += $"project = \"{firstProjectMatch}\"";
                 }
                 else
                 {
