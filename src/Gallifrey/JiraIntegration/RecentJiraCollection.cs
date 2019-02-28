@@ -36,7 +36,14 @@ namespace Gallifrey.JiraIntegration
 
         internal void SaveCache()
         {
-            RecentJiraCollectionSerializer.Serialize(recentJiraList);
+            try
+            {
+                RecentJiraCollectionSerializer.Serialize(recentJiraList);
+            }
+            catch (Exception)
+            {
+                //ignore save errors
+            }
         }
 
         public IEnumerable<RecentJira> GetRecentJiraCollection()

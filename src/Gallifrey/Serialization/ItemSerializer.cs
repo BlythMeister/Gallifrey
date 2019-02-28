@@ -14,9 +14,11 @@ namespace Gallifrey.Serialization
         private string TempWritePath => savePath + ".temp";
         private string BackupPath => savePath + ".bak";
         private string BackupPathPlus1 => savePath + ".bak+1";
+        private readonly Mutex singleThreadMutex;
 
         public ItemSerializer(string fileName)
         {
+            singleThreadMutex = new Mutex(false, fileName);
             var saveDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Gallifrey");
 
             encryptionPassPhrase = $@"{Environment.UserDomainName}\{Environment.UserName}";
@@ -44,6 +46,8 @@ namespace Gallifrey.Serialization
         {
             if (savePath == null) throw new SerializerError("No Save Path");
 
+            singleThreadMutex.WaitOne();
+
             try
             {
                 if (File.Exists(savePath))
@@ -52,6 +56,7 @@ namespace Gallifrey.Serialization
                     {
                         File.Copy(savePath, TempWritePath, true);
                     }
+
                     if (!File.Exists(BackupPath) || new FileInfo(BackupPath).LastWriteTimeUtc.Date < DateTime.UtcNow.Date)
                     {
                         File.Copy(savePath, BackupPath, true);
@@ -88,6 +93,8 @@ namespace Gallifrey.Serialization
                 {
                     //ignored
                 }
+
+                singleThreadMutex.ReleaseMutex();
             }
         }
 
@@ -110,6 +117,8 @@ namespace Gallifrey.Serialization
                 return new T();
             }
 
+            singleThreadMutex.WaitOne();
+
             try
             {
                 var encryptedString = File.ReadAllText(fileToUse);
@@ -120,13 +129,13 @@ namespace Gallifrey.Serialization
             {
                 if (retryCount >= 3 && fileToUse == savePath)
                 {
-                    Thread.Sleep(100);
+                    Thread.Sleep(200);
                     return DeSerializeFile(BackupPath, 0);
                 }
 
                 if (retryCount >= 3 && fileToUse == BackupPath)
                 {
-                    Thread.Sleep(100);
+                    Thread.Sleep(200);
                     return DeSerializeFile(BackupPathPlus1, 0);
                 }
 
@@ -136,8 +145,12 @@ namespace Gallifrey.Serialization
                     return new T();
                 }
 
-                Thread.Sleep(100);
+                Thread.Sleep(200);
                 return DeSerializeFile(fileToUse, retryCount + 1);
+            }
+            finally
+            {
+                singleThreadMutex.ReleaseMutex();
             }
         }
 
