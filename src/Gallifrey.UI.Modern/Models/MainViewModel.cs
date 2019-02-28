@@ -282,15 +282,15 @@ namespace Gallifrey.UI.Modern.Models
                     dateModel.RemoveTimerModel(removeTimer);
                 }
 
-                if (dateModel.TimerDate <= DateTime.Now.Date)
+                if (timerDate.Date <= DateTime.Now.Date)
                 {
                     foreach (var defaultJira in ModelHelpers.Gallifrey.Settings.AppSettings.DefaultTimers ?? new List<string>())
                     {
-                        if (!dateModel.Timers.Any(x => string.Equals(x.JiraTimer.JiraReference, defaultJira, StringComparison.CurrentCultureIgnoreCase)))
+                        if (!dateModel.Timers.Any(x => string.Equals(x.JiraTimer.JiraReference, defaultJira, StringComparison.InvariantCultureIgnoreCase)))
                         {
                             try
                             {
-                                var jira = jiraCache.FirstOrDefault(x => x.key == defaultJira);
+                                var jira = jiraCache.FirstOrDefault(x => string.Equals(x.key, defaultJira, StringComparison.InvariantCultureIgnoreCase));
                                 if (jira == null && ModelHelpers.Gallifrey.JiraConnection.IsConnected)
                                 {
                                     if (ModelHelpers.Gallifrey.JiraConnection.DoesJiraExist(defaultJira))

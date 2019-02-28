@@ -144,7 +144,7 @@ namespace Gallifrey.JiraTimers
 
         private void AddTimer(JiraTimer newTimer)
         {
-            var timerSearch = timerList.FirstOrDefault(timer => timer.JiraReference == newTimer.JiraReference && timer.DateStarted.Date == newTimer.DateStarted.Date);
+            var timerSearch = timerList.FirstOrDefault(timer => string.Equals(timer.JiraReference, newTimer.JiraReference, StringComparison.InvariantCulture) && timer.DateStarted.Date == newTimer.DateStarted.Date));
 
             if (timerSearch != null)
             {
