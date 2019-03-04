@@ -51,7 +51,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                 }
                 catch (Exception ex)
                 {
-                    ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Handled").Submit();
+                    ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Hidden").Submit();
                 }
 
                 try
@@ -64,7 +64,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                 }
                 catch (Exception ex)
                 {
-                    ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Handled").Submit();
+                    ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Hidden").Submit();
                 }
 
                 try
@@ -77,7 +77,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                 }
                 catch (Exception ex)
                 {
-                    ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Handled").Submit();
+                    ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Hidden").Submit();
                 }
 
                 return new SearchModel(filters, recent, issues, openFromEdit);
@@ -163,9 +163,8 @@ namespace Gallifrey.UI.Modern.Flyouts
                         break;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Handled").Submit();
                 await modelHelpers.ShowMessageAsync("No Results", "There Was An Error Getting Search Results");
                 Focus();
                 DataModel.ClearSearchResults();

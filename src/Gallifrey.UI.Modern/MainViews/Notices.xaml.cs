@@ -1,5 +1,4 @@
-﻿using Exceptionless;
-using Gallifrey.AppTracking;
+﻿using Gallifrey.AppTracking;
 using Gallifrey.IdleTimers;
 using Gallifrey.UI.Modern.Flyouts;
 using Gallifrey.UI.Modern.Helpers;
@@ -59,9 +58,8 @@ namespace Gallifrey.UI.Modern.MainViews
                 ModelHelpers.Gallifrey.TrackEvent(TrackingType.ManualUpdateRestart);
                 ModelHelpers.CloseApp(true);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Handled").Submit();
                 await ModelHelpers.ShowMessageAsync("Update Error", "There Was An Error Trying To Update Gallifrey, If This Problem Persists Please Contact Support");
             }
         }
@@ -74,9 +72,8 @@ namespace Gallifrey.UI.Modern.MainViews
                 ModelHelpers.Gallifrey.VersionControl.ManualReinstall();
                 await Task.Delay(TimeSpan.FromSeconds(2));
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Handled").Submit();
                 await ModelHelpers.ShowMessageAsync("Reinstall Error", "There Was An Error Trying To Reinstall Gallifrey, You May Need To Re-Download The App");
             }
             finally

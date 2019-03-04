@@ -590,6 +590,14 @@
       <Other>Dependency update</Other>
     </Others>
   </Version>
+  <Version Number="3.14.3.0" Name="">
+    <Features />
+    <Bugs>
+      <Bug>Fix issue with default timers (3rd try)</Bug>
+      <Bug>Improve handled error handling</Bug>
+    </Bugs>
+    <Others />
+  </Version>
   <!--
   Template for VNext if not present above
   <Version Number="0.0.0.0" Name="Pre-Release">

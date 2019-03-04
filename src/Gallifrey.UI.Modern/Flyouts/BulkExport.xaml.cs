@@ -167,9 +167,8 @@ namespace Gallifrey.UI.Modern.Flyouts
                         var messageBox = timeSelectorDialog.FindChild<TextBlock>("Message");
                         messageBox.Text = $"Please Select The Status Update You Would Like To Perform To {timer.JiraRef}";
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
-                        ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Handled").Submit();
                         await modelHelpers.ShowMessageAsync("Status Update Error", "Unable To Change The Status Of This Issue");
                     }
                 }
@@ -238,9 +237,8 @@ namespace Gallifrey.UI.Modern.Flyouts
                     {
                         throw;
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
-                        ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Handled").Submit();
                         throw new BulkExportException($"Unable To Locate Jira {timerToShow.JiraReference}!\nCannot Export Time\nPlease Verify/Correct Jira Reference");
                     }
                 }
@@ -259,7 +257,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             }
             catch (Exception ex)
             {
-                ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Handled").Submit();
+                ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Hidden").Submit();
                 throw new BulkExportException("Unable To Get WorkLogs!\nCannot Export Time");
             }
 
@@ -307,12 +305,10 @@ namespace Gallifrey.UI.Modern.Flyouts
                 }
                 catch (WorkLogException ex)
                 {
-                    ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Handled").Submit();
                     throw new BulkExportException($"Error Logging Work To {exportModel.JiraRef}\n\nError Message From Jira: { ex.InnerException.Message }");
                 }
-                catch (CommentException ex)
+                catch (CommentException)
                 {
-                    ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Handled").Submit();
                     throw new BulkExportException($"The Comment Was Not Added To Jira {exportModel.JiraRef}");
                 }
             }
@@ -340,9 +336,8 @@ namespace Gallifrey.UI.Modern.Flyouts
 
                 modelHelpers.Gallifrey.JiraConnection.TransitionIssue(currentChangeStatusJiraRef, selectedTransition);
             }
-            catch (StateChangedException ex)
+            catch (StateChangedException)
             {
-                ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Handled").Submit();
                 if (string.IsNullOrWhiteSpace(selectedTransition))
                 {
                     await modelHelpers.ShowMessageAsync("Status Update Error", "Unable To Change The Status Of This Issue");

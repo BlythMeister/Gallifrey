@@ -40,7 +40,7 @@ namespace Gallifrey.JiraTimers
             JiraName = jiraName;
             JiraParentReference = jiraParentReference;
             JiraParentName = jiraParentName;
-            DateStarted = dateStarted;
+            DateStarted = dateStarted.Date;
             CurrentTime = currentTime;
             ExportedTime = exportedTime;
             UniqueId = uniqueId;

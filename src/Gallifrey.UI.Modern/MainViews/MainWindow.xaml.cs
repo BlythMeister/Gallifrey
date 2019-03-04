@@ -606,9 +606,8 @@ namespace Gallifrey.UI.Modern.MainViews
                             modelHelpers.Gallifrey.VersionControl.ManualReinstall();
                             await Task.Delay(TimeSpan.FromSeconds(2));
                         }
-                        catch (Exception ex)
+                        catch (Exception)
                         {
-                            ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Handled").Submit();
                             await modelHelpers.ShowMessageAsync("Update Error", "There Was An Error Trying To Update Gallifrey, You May Need To Re-Download The App");
                         }
                         finally
@@ -620,11 +619,14 @@ namespace Gallifrey.UI.Modern.MainViews
             }
             catch (Exception ex)
             {
-                ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Handled").Submit();
                 if (updateType == UpdateType.Manual || updateType == UpdateType.StartUp)
                 {
                     await modelHelpers.ShowMessageAsync("Update Error", "There Was An Error Trying To Update Gallifrey, If This Problem Persists Please Contact Support");
                     modelHelpers.CloseApp(true);
+                }
+                else
+                {
+                    ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Hidden").Submit();
                 }
             }
         }

@@ -1,5 +1,4 @@
-﻿using Exceptionless;
-using Gallifrey.Exceptions.JiraIntegration;
+﻿using Gallifrey.Exceptions.JiraIntegration;
 using Gallifrey.Exceptions.JiraTimers;
 using Gallifrey.IdleTimers;
 using Gallifrey.Jira.Model;
@@ -137,9 +136,8 @@ namespace Gallifrey.UI.Modern.Flyouts
                     {
                         await progressDialogHelper.Do(() => modelHelpers.Gallifrey.JiraConnection.AssignToCurrentUser(jiraRef), "Assigning Issue", false, true);
                     }
-                    catch (JiraConnectionException ex)
+                    catch (JiraConnectionException)
                     {
-                        ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Handled").Submit();
                         await modelHelpers.ShowMessageAsync("Assign Jira Error", "Unable To Locate Assign Jira To Current User");
                     }
                 }
@@ -166,9 +164,8 @@ namespace Gallifrey.UI.Modern.Flyouts
                             stillDoingThings = true;
                         }
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
-                        ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Handled").Submit();
                         await modelHelpers.ShowMessageAsync("Status Update Error", "Unable To Change The Status Of This Issue");
                     }
                 }
@@ -301,9 +298,8 @@ namespace Gallifrey.UI.Modern.Flyouts
 
                 await progressDialogHelper.Do(() => modelHelpers.Gallifrey.JiraConnection.TransitionIssue(jiraRef, selectedTransition), "Changing Status", false, true);
             }
-            catch (StateChangedException ex)
+            catch (StateChangedException)
             {
-                ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Handled").Submit();
                 if (string.IsNullOrWhiteSpace(selectedTransition))
                 {
                     await modelHelpers.ShowMessageAsync("Status Update Error", "Unable To Change The Status Of This Issue");

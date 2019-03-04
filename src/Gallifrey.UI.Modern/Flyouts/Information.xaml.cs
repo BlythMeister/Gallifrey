@@ -1,5 +1,4 @@
-﻿using Exceptionless;
-using Gallifrey.AppTracking;
+﻿using Gallifrey.AppTracking;
 using Gallifrey.UI.Modern.Helpers;
 using Gallifrey.UI.Modern.Models;
 using System;
@@ -52,9 +51,8 @@ namespace Gallifrey.UI.Modern.Flyouts
                 await ClipboardHelper.SetClipboard(modelHelpers.Gallifrey.Settings.UserHash);
                 await modelHelpers.ShowMessageAsync("Copied Installation Hash", $"Your Installation Hash Of {modelHelpers.Gallifrey.Settings.UserHash} Has Been Copied To The Clipboard");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Handled").Submit();
                 await modelHelpers.ShowMessageAsync("Error Getting Hash", $"There Was An Error Putting Your Installation Hash Of {modelHelpers.Gallifrey.Settings.UserHash} Onto The Clipboard");
             }
         }
