@@ -7,15 +7,16 @@ namespace Gallifrey.Comparers
     {
         public bool Equals(JiraTimer x, JiraTimer y)
         {
-            if (x == null && y != null) return false;
-            if (y == null && x != null) return false;
+            if (x == null && y == null) return true;
+            if (x == null) return false;
+            if (y == null) return false;
 
-            return x?.UniqueId == y?.UniqueId;
+            return x.UniqueId == y.UniqueId;
         }
 
         public int GetHashCode(JiraTimer x)
         {
-            return x.GetHashCode();
+            return x.UniqueId.GetHashCode();
         }
     }
 }

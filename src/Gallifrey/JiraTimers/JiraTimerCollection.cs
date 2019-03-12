@@ -92,7 +92,10 @@ namespace Gallifrey.JiraTimers
 
         internal void Initialise()
         {
-            timerList.AddRange(JiraTimerCollectionSerializer.DeSerialize());
+            var timers = JiraTimerCollectionSerializer.DeSerialize();
+            timers.AddRange(timerList);
+            timerList.Clear();
+            timerList.AddRange(timers.Distinct(new DuplicateTimerComparer()));
         }
 
         internal void SaveTimers()
