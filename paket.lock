@@ -6,7 +6,7 @@ NUGET
     Exceptionless (4.3.2022)
     Exceptionless.Wpf (4.3.2022)
       Exceptionless (4.3.2022)
-    FAKE (4.64.16)
+    FAKE (4.64.17)
     MahApps.Metro (1.6.5)
       ControlzEx (>= 3.0.2.4 < 4.0)
     MahApps.Metro.IconPacks.FontAwesome (2.3)

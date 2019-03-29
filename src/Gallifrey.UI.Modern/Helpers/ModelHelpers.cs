@@ -38,7 +38,7 @@ namespace Gallifrey.UI.Modern.Helpers
             openFlyouts = new List<OpenFlyoutDetails>();
             toastNotifier = new Notifier(cfg =>
             {
-                cfg.LifetimeSupervisor = new TimeAndCountBasedLifetimeSupervisor(TimeSpan.FromSeconds(10), MaximumNotificationCount.FromCount(15));
+                cfg.LifetimeSupervisor = new TimeAndCountBasedLifetimeSupervisor(TimeSpan.FromSeconds(10), MaximumNotificationCount.FromCount(5));
                 cfg.PositionProvider = new PrimaryScreenPositionProvider(Corner.BottomRight, 10, 40);
                 cfg.Dispatcher = Application.Current.Dispatcher;
                 cfg.DisplayOptions.TopMost = true;

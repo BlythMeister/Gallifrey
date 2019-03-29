@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Versions xmlns="https://releases.gallifreyapp.co.uk/ChangeLog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://releases.gallifreyapp.co.uk/schemas/ChangeLogSchema.xsd">
   <Version Number="3.0.0.0">
     <Features>
@@ -609,8 +609,10 @@
     <Features>
       <Features>Update to use the Tempo v3 API as the old ones have been deprecated</Features>
     </Features>
-    <Bugs/>
-    <Others />
+    <Bugs />
+    <Others>
+      <Other>Dependency update</Other>
+    </Others>
   </Version>
   <!--
   Template for VNext if not present above

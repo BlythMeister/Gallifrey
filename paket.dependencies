@@ -10,4 +10,5 @@ nuget Newtonsoft.Json
 nuget Octokit
 nuget RestSharp
 nuget System.ValueTuple
-nuget ToastNotifications
+nuget ToastNotifications @= 2.5
+
