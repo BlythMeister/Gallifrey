@@ -51,6 +51,8 @@
     <Compile Include="Model\Issue.cs" />
     <Compile Include="Model\Project.cs" />
     <Compile Include="Model\StandardWorkLog.cs" />
+    <Compile Include="Model\TempoWorkLogSearch.cs" />
+    <Compile Include="Model\TempoWorkLogUpload.cs" />
     <Compile Include="Model\TimeTracking.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Model\SearchResult.cs" />

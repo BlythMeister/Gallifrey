@@ -25,10 +25,10 @@ namespace Gallifrey.Jira
             myUser = GetCurrentUser();
             if (useTempo)
             {
-                tempoClient = SimpleRestClient.WithBearerAuthentication("https://api.tempo.io/rest-legacy/tempo-timesheets/3", tempoToken, null);
+                tempoClient = SimpleRestClient.WithBearerAuthentication("https://api.tempo.io/core/3", tempoToken, null);
 
                 var queryDate = DateTime.UtcNow;
-                tempoClient.Get<List<TempoWorkLog>>(HttpStatusCode.OK, $"worklogs?dateFrom={queryDate:yyyy-MM-dd}&dateTo={queryDate:yyyy-MM-dd}&username={myUser.key}");
+                tempoClient.Get<TempoWorkLogSearch>(HttpStatusCode.OK, $"worklogs/user/{myUser.accountId}?from={queryDate:yyyy-MM-dd}&to={queryDate:yyyy-MM-dd}");
             }
             else
             {
@@ -121,8 +121,9 @@ namespace Gallifrey.Jira
             {
                 foreach (var queryDate in queryDates)
                 {
-                    var logs = tempoClient.Get<List<TempoWorkLog>>(HttpStatusCode.OK, $"worklogs?dateFrom={queryDate:yyyy-MM-dd}&dateTo={queryDate:yyyy-MM-dd}&username={myUser.key}");
-                    foreach (var tempoWorkLog in logs)
+                    var logs = tempoClient.Get<TempoWorkLogSearch>(HttpStatusCode.OK, $"worklogs/user/{myUser.accountId}?from={queryDate:yyyy-MM-dd}&to={queryDate:yyyy-MM-dd}&limit=200");
+
+                    foreach (var tempoWorkLog in logs.results)
                     {
                         if (issueRefs == null || issueRefs.Any(x => string.Equals(x, tempoWorkLog.issue.key, StringComparison.InvariantCultureIgnoreCase)))
                         {
@@ -212,25 +213,23 @@ namespace Gallifrey.Jira
             if (tempoClient != null)
             {
                 if (string.IsNullOrWhiteSpace(comment)) comment = "N/A";
-                var issue = new TempoWorkLog.TempoWorkLogIssue();
+                var remaining = 0d;
                 switch (workLogStrategy)
                 {
                     case WorkLogStrategy.Automatic:
-                        var remaining = GetIssue(issueRef).fields.timetracking.remainingEstimateSeconds - timeSpent.TotalSeconds;
-                        issue = new TempoWorkLog.TempoWorkLogIssue { key = issueRef, remainingEstimateSeconds = remaining };
+                        remaining = GetIssue(issueRef).fields.timetracking.remainingEstimateSeconds - timeSpent.TotalSeconds;
                         break;
 
                     case WorkLogStrategy.LeaveRemaining:
-                        var remainingLeave = GetIssue(issueRef).fields.timetracking.remainingEstimateSeconds;
-                        issue = new TempoWorkLog.TempoWorkLogIssue { key = issueRef, remainingEstimateSeconds = remainingLeave };
+                        remaining = GetIssue(issueRef).fields.timetracking.remainingEstimateSeconds;
                         break;
 
                     case WorkLogStrategy.SetValue:
-                        issue = new TempoWorkLog.TempoWorkLogIssue { key = issueRef, remainingEstimateSeconds = remainingTime?.TotalSeconds ?? 0 };
+                        remaining = remainingTime?.TotalSeconds ?? 0;
                         break;
                 }
 
-                var tempoWorkLog = new TempoWorkLog { issue = issue, timeSpentSeconds = timeSpent.TotalSeconds, dateStarted = $"{logDate:s}.000", comment = comment, author = new TempoWorkLog.TempoWorkLogUser { key = myUser.key, name = myUser.name } };
+                var tempoWorkLog = new TempoWorkLogUpload { issueKey = issueRef, timeSpentSeconds = timeSpent.TotalSeconds, startDate = $"{logDate:yyyy-MM-dd}", startTime = $"{logDate:hh:mm:ss}", description = comment, authorAccountId = myUser.accountId, remainingEstimateSeconds = remaining };
                 tempoClient.Post(HttpStatusCode.OK, "worklogs", tempoWorkLog);
             }
             else
