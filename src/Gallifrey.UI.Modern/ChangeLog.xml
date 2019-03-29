@@ -606,13 +606,18 @@
     <Others />
   </Version>
   <Version Number="3.15.0.0" Name="">
-    <Features>
-      <Features>Update to use the Tempo v3 API as the old ones have been deprecated</Features>
-    </Features>
+    <Features />
     <Bugs />
     <Others>
       <Other>Dependency update</Other>
     </Others>
+  </Version>
+  <Version Number="3.15.1.0" Name="">
+    <Features>
+      <Feature>Update to use the Tempo v3 API as the old ones have been deprecated</Feature>
+    </Features>
+    <Bugs />
+    <Others />
   </Version>
   <!--
   Template for VNext if not present above
