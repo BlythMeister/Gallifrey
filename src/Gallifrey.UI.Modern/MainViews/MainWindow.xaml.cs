@@ -186,17 +186,24 @@ namespace Gallifrey.UI.Modern.MainViews
             else if (result.RetVal == InitialiseResult.ConnectionError || result.RetVal == InitialiseResult.MissingConfig)
             {
                 modelHelpers.Gallifrey.TrackEvent(TrackingType.ConnectionError);
-                var userUpdate = await modelHelpers.ShowMessageAsync("Login Failure", "We Were Unable To Authenticate To Jira, Please Confirm Login Details\nWould You Like To Update Your Details?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No" });
+                var userUpdate = await modelHelpers.ShowMessageAsync("Login Failure", "We Were Unable To Authenticate To Jira, Please Confirm Login Details\nWould You Like To Update Your Details Or Retry Login?", MessageDialogStyle.AffirmativeAndNegativeAndSingleAuxiliary, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", FirstAuxiliaryButtonText = "Retry" });
 
-                if (userUpdate == MessageDialogResult.Negative)
+                switch (userUpdate)
                 {
-                    await modelHelpers.ShowMessageAsync("Come Back Soon", "Without A Correctly Configured Jira Connection Gallifrey Will Close, Please Come Back Soon!");
-                    modelHelpers.CloseApp();
-                }
+                    case MessageDialogResult.Negative:
+                        await modelHelpers.ShowMessageAsync("Come Back Soon", "Without A Correctly Configured Jira Connection Gallifrey Will Close, Please Come Back Soon!");
+                        modelHelpers.CloseApp();
+                        break;
 
-                await UserLoginFailure();
-                await MainWindow_OnLoaded();
-                return;
+                    case MessageDialogResult.FirstAuxiliary:
+                        await MainWindow_OnLoaded();
+                        return;
+
+                    default:
+                        await UserLoginFailure();
+                        await MainWindow_OnLoaded();
+                        return;
+                }
             }
 
             if (!checkedUpdate)

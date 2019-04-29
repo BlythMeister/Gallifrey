@@ -619,6 +619,13 @@
     <Bugs />
     <Others />
   </Version>
+  <Version Number="3.15.2.0" Name="">
+    <Features />
+    <Bugs>
+      <Bug>Add ability to retry Jira login if login failed without need to go through login dialogs</Bug>
+    </Bugs>
+    <Others />
+  </Version>
   <!--
   Template for VNext if not present above
   <Version Number="0.0.0.0" Name="Pre-Release">
