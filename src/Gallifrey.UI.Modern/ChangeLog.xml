@@ -626,6 +626,13 @@
     </Bugs>
     <Others />
   </Version>
+  <Version Number="0.0.0.0" Name="Pre-Release">
+    <Features>
+      <Feature>Save all failed web request to Jira/Tempo to local machine for error tracking purposes</Feature>
+    </Features>
+    <Bugs />
+    <Others />
+  </Version>
   <!--
   Template for VNext if not present above
   <Version Number="0.0.0.0" Name="Pre-Release">
