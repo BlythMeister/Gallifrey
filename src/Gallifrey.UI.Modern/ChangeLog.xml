@@ -629,6 +629,7 @@
   <Version Number="0.0.0.0" Name="Pre-Release">
     <Features>
       <Feature>Save all failed web request to Jira/Tempo to local machine for error tracking purposes</Feature>
+      <Feature>Support Atlassian API tokens.  Username/Password will be switched off on Jira Cloud instances on 3rd June 2019</Feature>
     </Features>
     <Bugs />
     <Others />
