@@ -70,7 +70,6 @@
       <DependentUpon>BulkExport.xaml</DependentUpon>
     </Compile>
     <Compile Include="Helpers\BooleanInvertConverter.cs" />
-    <Compile Include="Helpers\CachedResourceDictionary.cs" />
     <Compile Include="Helpers\ClipboardHelper.cs" />
     <Compile Include="Helpers\ExceptionlessHelper.cs" />
     <Compile Include="Helpers\BooleanVisibilityConverter.cs" />
@@ -343,8 +342,19 @@
   <Choose>
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.6'">
       <ItemGroup>
-        <Reference Include="MahApps.Metro.IconPacks.Material">
-          <HintPath>..\..\packages\MahApps.Metro.IconPacks.Material\lib\net46\MahApps.Metro.IconPacks.Material.dll</HintPath>
+        <Reference Include="MahApps.Metro.IconPacks.FontAwesome">
+          <HintPath>..\..\packages\MahApps.Metro.IconPacks.FontAwesome\lib\net46\MahApps.Metro.IconPacks.FontAwesome.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
+  <Choose>
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.6'">
+      <ItemGroup>
+        <Reference Include="System.ValueTuple">
+          <HintPath>..\..\packages\System.ValueTuple\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>

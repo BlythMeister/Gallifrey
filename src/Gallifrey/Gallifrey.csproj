@@ -71,7 +71,6 @@
     <Compile Include="Versions\PremiumChecker.cs" />
     <Compile Include="Serialization\ItemSerializer.cs" />
     <Compile Include="Versions\InstanceType.cs" />
-    <Compile Include="JiraIntegration\JiraProject.cs" />
     <Compile Include="JiraIntegration\RecentJiraCollection.cs" />
     <Compile Include="JiraIntegration\JiraConnection.cs" />
     <Compile Include="JiraIntegration\RecentJira.cs" />

@@ -37,6 +37,10 @@ namespace Gallifrey.UI.Modern.Helpers
                 {
                     userInfo.Name = modelHelpers.Gallifrey.Settings.JiraConnectionSettings.JiraUsername;
                 }
+
+                userInfo.Data.Add("Jira-DisplayName", modelHelpers.Gallifrey.JiraConnection.CurrentUser.displayName);
+                userInfo.Data.Add("Jira-Name", modelHelpers.Gallifrey.JiraConnection.CurrentUser.name);
+                userInfo.Data.Add("Jira-EmailAddress", modelHelpers.Gallifrey.JiraConnection.CurrentUser.emailAddress);
             }
             else
             {
@@ -64,6 +68,31 @@ namespace Gallifrey.UI.Modern.Helpers
                 //Prevent the framework from auto closing the app and let exceptionless handle errors
                 Application.Current.Dispatcher.UnhandledException += (sender, args) => args.Handled = true;
             }
+        }
+
+        public void TrackFeature(string feature)
+        {
+            var featureName = $"Gallifrey v{modelHelpers.Gallifrey.Settings.InternalSettings.LastChangeLogVersion}";
+            if (modelHelpers.Gallifrey.Settings.InternalSettings.IsPremium)
+            {
+                featureName = $"Gallifrey Premium v{modelHelpers.Gallifrey.Settings.InternalSettings.LastChangeLogVersion}";
+            }
+
+            if (modelHelpers.Gallifrey.VersionControl.IsAutomatedDeploy)
+            {
+                if (modelHelpers.Gallifrey.VersionControl.InstanceType != InstanceType.Stable)
+                {
+                    featureName = $"{featureName} ({modelHelpers.Gallifrey.VersionControl.InstanceType})";
+                }
+            }
+            else
+            {
+                featureName = $"{featureName} (Debug)";
+            }
+
+            featureName = $"{featureName} - {feature}";
+
+            ExceptionlessClient.Default.SubmitFeatureUsage(featureName);
         }
 
         private async void ExceptionlessSubmittingEvent(object sender, EventSubmittingEventArgs e)
@@ -95,6 +124,14 @@ namespace Gallifrey.UI.Modern.Helpers
                     modelHelpers.CloseApp(true);
                 });
             }
+            else if (e.Event.IsError() && modelHelpers.Gallifrey.JiraConnection.IsConnected)
+            {
+                e.Event.SetUserDescription(new UserDescription(modelHelpers.Gallifrey.JiraConnection.CurrentUser.emailAddress, "Handled Error"));
+            }
+            else if (modelHelpers.Gallifrey.JiraConnection.IsConnected)
+            {
+                e.Event.SetUserDescription(new UserDescription(modelHelpers.Gallifrey.JiraConnection.CurrentUser.emailAddress, ""));
+            }
         }
 
         private void GallifreyOnDailyTrackingEvent(object sender, EventArgs eventArgs)
@@ -105,30 +142,12 @@ namespace Gallifrey.UI.Modern.Helpers
             {
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    var featureName = $"Gallifrey v{modelHelpers.Gallifrey.Settings.InternalSettings.LastChangeLogVersion}";
-                    if (modelHelpers.Gallifrey.Settings.InternalSettings.IsPremium)
-                    {
-                        featureName = $"Gallifrey Premium v{modelHelpers.Gallifrey.Settings.InternalSettings.LastChangeLogVersion}";
-                    }
-
-                    if (modelHelpers.Gallifrey.VersionControl.IsAutomatedDeploy)
-                    {
-                        if (modelHelpers.Gallifrey.VersionControl.InstanceType != InstanceType.Stable)
-                        {
-                            featureName += $" ({modelHelpers.Gallifrey.VersionControl.InstanceType})";
-                        }
-                    }
-                    else
-                    {
-                        featureName += " (Debug)";
-                    }
-
-                    ExceptionlessClient.Default.SubmitFeatureUsage(featureName);
+                    TrackFeature("Daily Event");
                 });
             }
             catch (Exception ex)
             {
-                ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Handled").Submit();
+                ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Hidden").Submit();
             }
         }
     }

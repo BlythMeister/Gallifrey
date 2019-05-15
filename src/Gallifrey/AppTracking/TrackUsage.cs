@@ -40,13 +40,11 @@ namespace Gallifrey.AppTracking
                 {
                     ScriptErrorsSuppressed = true
                 };
-
             }
             catch (Exception) //Internal handled error
             {
                 webBrowser = null;
             }
-
         }
 
         public async void TrackAppUsage(TrackingType trackingType)
@@ -81,7 +79,7 @@ namespace Gallifrey.AppTracking
                 prem = "Gallifrey_Premium";
             }
 
-            return $"https://releases.gallifreyapp.co.uk/tracking/{trackingType}.html?utm_source={prem}&utm_medium={instanceType}&utm_campaign={settingsCollection.InternalSettings.LastChangeLogVersion}&uid={settingsCollection.InstallationHash}";
+            return $"https://releases.gallifreyapp.co.uk/tracking/{trackingType}.html?utm_source={prem}&utm_medium={instanceType}&utm_campaign={versionControl.DeployedVersion}&uid={settingsCollection.InstallationHash}";
         }
     }
 }

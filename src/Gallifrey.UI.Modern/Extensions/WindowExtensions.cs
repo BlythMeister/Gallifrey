@@ -12,6 +12,7 @@ namespace Gallifrey.UI.Modern.Extensions
 
         // ReSharper disable InconsistentNaming
         private const uint FLASHW_STOP = 0; //Stop flashing. The system restores the window to its original state.
+
         private const uint FLASHW_CAPTION = 1; //Flash the window caption.
         private const uint FLASHW_TRAY = 2; //Flash the taskbar button.
         private const uint FLASHW_ALL = 3; //Flash both the window caption and taskbar button.
@@ -34,7 +35,7 @@ namespace Gallifrey.UI.Modern.Extensions
         [return: MarshalAs(UnmanagedType.Bool)]
         private static extern bool FlashWindowEx(ref FLASHWINFO pwfi);
 
-        #endregion
+        #endregion Window Flashing API Stuff
 
         public static void FlashWindow(this Window win, uint count = uint.MaxValue)
         {

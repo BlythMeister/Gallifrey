@@ -61,10 +61,8 @@ namespace Gallifrey.UI.Modern.MainViews
             }
             else
             {
-                await DialogCoordinator.Instance.ShowMessageAsync(ModelHelpers.DialogContext, "No Extra Time", "You Have Already Hit The Target For This Date!");
+                await ModelHelpers.ShowMessageAsync("No Extra Time", "You Have Already Hit The Target For This Date!");
             }
-
-
         }
 
         private async void CopyButton()
@@ -73,14 +71,14 @@ namespace Gallifrey.UI.Modern.MainViews
 
             if (selectedTimers.Count > 1)
             {
-                await DialogCoordinator.Instance.ShowMessageAsync(ModelHelpers.DialogContext, "Too Many Timers Selected", "Please Select Only One Timer When Copying Reference");
+                await ModelHelpers.ShowMessageAsync("Too Many Timers Selected", "Please Select Only One Timer When Copying Reference");
             }
             else if (selectedTimers.Count == 1)
             {
                 var selectedTimer = ModelHelpers.Gallifrey.JiraTimerCollection.GetTimer(selectedTimers.First());
                 if (selectedTimer.LocalTimer)
                 {
-                    await DialogCoordinator.Instance.ShowMessageAsync(ModelHelpers.DialogContext, "Not Avaliable", "A Local Timer Does Not Have A Copyable Reference");
+                    await ModelHelpers.ShowMessageAsync("Not Avaliable", "A Local Timer Does Not Have A Copyable Reference");
                 }
                 else
                 {
@@ -116,7 +114,7 @@ namespace Gallifrey.UI.Modern.MainViews
             }
             else
             {
-                await DialogCoordinator.Instance.ShowMessageAsync(ModelHelpers.DialogContext, "Invalid Jira", $"Unable To Locate That Jira.\n\nJira Ref Pasted: '{jiraRef}'");
+                await ModelHelpers.ShowMessageAsync("Invalid Jira", $"Unable To Locate That Jira.\n\nJira Ref Pasted: '{jiraRef}'");
             }
         }
 
@@ -132,11 +130,11 @@ namespace Gallifrey.UI.Modern.MainViews
                 {
                     if (ModelHelpers.Gallifrey.Settings.AppSettings.DefaultTimers != null && ModelHelpers.Gallifrey.Settings.AppSettings.DefaultTimers.Any(x => x == timer.JiraReference) && timer.DateStarted.Date <= DateTime.Now.Date)
                     {
-                        await DialogCoordinator.Instance.ShowMessageAsync(ModelHelpers.DialogContext, "Default Timer", $"The Timer {timer.JiraReference} Is A Default Time And Cannot Be Deleted.");
+                        await ModelHelpers.ShowMessageAsync("Default Timer", $"The Timer {timer.JiraReference} Is A Default Time And Cannot Be Deleted.");
                     }
                     else
                     {
-                        var result = await DialogCoordinator.Instance.ShowMessageAsync(ModelHelpers.DialogContext, "Are You Sure?", $"Are You Sure You Want To Delete {timer.JiraReference}\n\n{timer.JiraName}\nFor: {timer.DateStarted.Date:ddd, dd MMM}", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
+                        var result = await ModelHelpers.ShowMessageAsync("Are You Sure?", $"Are You Sure You Want To Delete {timer.JiraReference}\n\n{timer.JiraName}\nFor: {timer.DateStarted.Date:ddd, dd MMM}", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
 
                         if (result == MessageDialogResult.Affirmative)
                         {
@@ -228,7 +226,7 @@ namespace Gallifrey.UI.Modern.MainViews
             await ModelHelpers.OpenFlyout(new Flyouts.Settings(ModelHelpers));
             if (!ModelHelpers.Gallifrey.JiraConnection.IsConnected)
             {
-                await DialogCoordinator.Instance.ShowMessageAsync(ModelHelpers.DialogContext, "Connection Required", "You Must Have A Working Jira Connection To Use Gallifrey");
+                await ModelHelpers.ShowMessageAsync("Connection Required", "You Must Have A Working Jira Connection To Use Gallifrey");
                 ModelHelpers.CloseApp();
             }
             ModelHelpers.RefreshModel();
@@ -281,10 +279,10 @@ namespace Gallifrey.UI.Modern.MainViews
             Process.Start(new ProcessStartInfo("https://www.gallifreyapp.co.uk/donations"));
         }
 
-        private void GitterButton(object sender, RoutedEventArgs e)
+        private void SlackButton(object sender, RoutedEventArgs e)
         {
             ModelHelpers.Gallifrey.TrackEvent(TrackingType.ContactClick);
-            Process.Start(new ProcessStartInfo("https://gitter.im/BlythMeister/Gallifrey"));
+            Process.Start(new ProcessStartInfo("https://join.slack.com/t/gallifreyapp/shared_invite/enQtNDA2MDU3OTYwNDgyLTc3YjBjOTc2MDkxNWM3MWYxNDgwNTMyMWI5ZmRhYmZiZWRlOGVkMGQwZDFlOTJlN2I4ZGI5MmExZGY5ZmM2YjI"));
         }
 
         private void GitHubButton(object sender, RoutedEventArgs e)
@@ -311,7 +309,7 @@ namespace Gallifrey.UI.Modern.MainViews
                 case RemoteButtonTrigger.Info: InfoButton(this, null); break;
                 case RemoteButtonTrigger.Twitter: TwitterButton(this, null); break;
                 case RemoteButtonTrigger.Email: EmailButton(this, null); break;
-                case RemoteButtonTrigger.Gitter: GitterButton(this, null); break;
+                case RemoteButtonTrigger.Slack: SlackButton(this, null); break;
                 case RemoteButtonTrigger.GitHub: GitHubButton(this, null); break;
                 case RemoteButtonTrigger.PayPal: PayPalButton(this, null); break;
 

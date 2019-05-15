@@ -1,9 +1,7 @@
-﻿using Exceptionless;
-using Gallifrey.Exceptions.JiraTimers;
+﻿using Gallifrey.Exceptions.JiraTimers;
 using Gallifrey.UI.Modern.Flyouts;
 using Gallifrey.UI.Modern.Helpers;
 using Gallifrey.UI.Modern.Models;
-using MahApps.Metro.Controls.Dialogs;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -36,7 +34,7 @@ namespace Gallifrey.UI.Modern.MainViews
                 if (timerIds.Count > 1)
                 {
                     var timer = ModelHelpers.Gallifrey.JiraTimerCollection.GetTimer(timerId);
-                    await DialogCoordinator.Instance.ShowMessageAsync(ModelHelpers.DialogContext, "Multiple Timers Selected", $"You Have 2 Timers Selected, Can Only Start 1.\nWill Start Timer: {timer.JiraReference}\n\n{timer.JiraName}");
+                    await ModelHelpers.ShowMessageAsync("Multiple Timers Selected", $"You Have 2 Timers Selected, Can Only Start 1.\nWill Start Timer: {timer.JiraReference}\n\n{timer.JiraName}");
                 }
 
                 var runningTimerId = ModelHelpers.Gallifrey.JiraTimerCollection.GetRunningTimerId();
@@ -131,14 +129,13 @@ namespace Gallifrey.UI.Modern.MainViews
                 {
                     if (!ModelHelpers.Gallifrey.JiraConnection.DoesJiraExist(jiraRef))
                     {
-                        await DialogCoordinator.Instance.ShowMessageAsync(ModelHelpers.DialogContext, "Invalid Jira", $"Unable To Locate That Jira.\n\nJira Ref Dropped: '{jiraRef}'");
+                        await ModelHelpers.ShowMessageAsync("Invalid Jira", $"Unable To Locate That Jira.\n\nJira Ref Dropped: '{jiraRef}'");
                         return;
                     }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Handled").Submit();
-                    await DialogCoordinator.Instance.ShowMessageAsync(ModelHelpers.DialogContext, "Invalid Jira", $"Unable To Locate That Jira.\n\nJira Ref Dropped: '{jiraRef}'");
+                    await ModelHelpers.ShowMessageAsync("Invalid Jira", $"Unable To Locate That Jira.\n\nJira Ref Dropped: '{jiraRef}'");
                     return;
                 }
 

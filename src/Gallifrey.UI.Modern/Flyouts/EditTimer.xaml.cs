@@ -22,7 +22,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             this.modelHelpers = modelHelpers;
             InitializeComponent();
 
-            progressDialogHelper = new ProgressDialogHelper(modelHelpers.DialogContext);
+            progressDialogHelper = new ProgressDialogHelper(modelHelpers);
 
             EditedTimerId = selected;
             DataContext = new EditTimerModel(modelHelpers.Gallifrey, EditedTimerId);
@@ -34,14 +34,14 @@ namespace Gallifrey.UI.Modern.Flyouts
             {
                 if (!DataModel.RunDate.HasValue)
                 {
-                    await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Missing Date", "You Must Enter A Start Date");
+                    await modelHelpers.ShowMessageAsync("Missing Date", "You Must Enter A Start Date");
                     Focus();
                     return;
                 }
 
                 if (DataModel.RunDate.Value.Date < DataModel.MinDate.Date || DataModel.RunDate.Value.Date > DataModel.MaxDate.Date)
                 {
-                    await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Invalid Date", $"You Must Enter A Start Date Between {DataModel.MinDate.ToShortDateString()} And {DataModel.MaxDate.ToShortDateString()}");
+                    await modelHelpers.ShowMessageAsync("Invalid Date", $"You Must Enter A Start Date Between {DataModel.MinDate.ToShortDateString()} And {DataModel.MaxDate.ToShortDateString()}");
                     Focus();
                     return;
                 }
@@ -85,7 +85,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                     }
                     catch (DuplicateTimerException)
                     {
-                        await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Something Went Wrong", "An Error Occured Trying To Edit That Timer, Please Try Again");
+                        await modelHelpers.ShowMessageAsync("Something Went Wrong", "An Error Occured Trying To Edit That Timer, Please Try Again");
                         Focus();
                         return;
                     }
@@ -113,12 +113,12 @@ namespace Gallifrey.UI.Modern.Flyouts
 
                     if (jiraIssue == null)
                     {
-                        await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Invalid Jira", $"Unable To Locate The Jira '{jiraRef}'");
+                        await modelHelpers.ShowMessageAsync("Invalid Jira", $"Unable To Locate The Jira '{jiraRef}'");
                         Focus();
                         return;
                     }
 
-                    var result = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Correct Jira?", $"Jira found!\n\nRef: {jiraIssue.key}\nName: {jiraIssue.fields.summary}\n\nIs that correct?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
+                    var result = await modelHelpers.ShowMessageAsync("Correct Jira?", $"Jira found!\n\nRef: {jiraIssue.key}\nName: {jiraIssue.fields.summary}\n\nIs that correct?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
 
                     if (result == MessageDialogResult.Negative)
                     {
@@ -160,7 +160,7 @@ namespace Gallifrey.UI.Modern.Flyouts
         {
             DataModel.SetNotDefaultButton();
 
-            var result = await DialogCoordinator.Instance.ShowInputAsync(modelHelpers.DialogContext, "Enter Time Adjustment", "Enter The Number Of Minutes or Time To Subtract\nThis Can Be '90' or '1:30' for 1 Hour & 30 Minutes");
+            var result = await modelHelpers.ShowInputAsync("Enter Time Adjustment", "Enter The Number Of Minutes or Time To Subtract\nThis Can Be '90' or '1:30' for 1 Hour & 30 Minutes");
 
             if (result != null)
             {
@@ -173,7 +173,7 @@ namespace Gallifrey.UI.Modern.Flyouts
         {
             DataModel.SetNotDefaultButton();
 
-            var result = await DialogCoordinator.Instance.ShowInputAsync(modelHelpers.DialogContext, "Enter Time Adjustment", "Enter The Number Of Minutes Or Time To Add\nThis Can Be '90' or '1:30' for 1 Hour & 30 Minutes");
+            var result = await modelHelpers.ShowInputAsync("Enter Time Adjustment", "Enter The Number Of Minutes Or Time To Add\nThis Can Be '90' or '1:30' for 1 Hour & 30 Minutes");
 
             if (result != null)
             {
@@ -189,7 +189,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             {
                 if (!TimeSpan.TryParse(enteredValue, out adjustmentTimespan))
                 {
-                    await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Invalid Time Entry", $"The Value '{enteredValue}' was not a valid time representation (e.g. '1:30').");
+                    await modelHelpers.ShowMessageAsync("Invalid Time Entry", $"The Value '{enteredValue}' was not a valid time representation (e.g. '1:30').");
                     Focus();
                     return;
                 }
@@ -198,7 +198,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             {
                 if (!int.TryParse(enteredValue, out var minutesAdjustment))
                 {
-                    await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Invalid Time Entry", $"The Value '{enteredValue}' was not a number of minutes.");
+                    await modelHelpers.ShowMessageAsync("Invalid Time Entry", $"The Value '{enteredValue}' was not a number of minutes.");
                     Focus();
                     return;
                 }
@@ -211,7 +211,7 @@ namespace Gallifrey.UI.Modern.Flyouts
 
         private async Task<bool> MergeTimers(DuplicateTimerException ex)
         {
-            var duplicateTimerMerge = await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Timer Already Exists", "This Timer Already Exists On That With That Name On That Date, Would You Like To Merge Them?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
+            var duplicateTimerMerge = await modelHelpers.ShowMessageAsync("Timer Already Exists", "This Timer Already Exists On That With That Name On That Date, Would You Like To Merge Them?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", DefaultButtonFocus = MessageDialogResult.Affirmative });
 
             if (duplicateTimerMerge == MessageDialogResult.Negative)
             {

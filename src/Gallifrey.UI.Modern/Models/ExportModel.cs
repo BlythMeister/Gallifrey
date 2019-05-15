@@ -16,6 +16,7 @@ namespace Gallifrey.UI.Modern.Models
         private int remainingHours;
         private int remainingMinutes;
         private bool changeStatus;
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         public TimeSpan ToExportMaxTime { get; private set; }
@@ -137,9 +138,11 @@ namespace Gallifrey.UI.Modern.Models
                 case DefaultRemaining.Auto:
                     WorkLogStrategy = WorkLogStrategy.Automatic;
                     break;
+
                 case DefaultRemaining.Leave:
                     WorkLogStrategy = WorkLogStrategy.LeaveRemaining;
                     break;
+
                 case DefaultRemaining.Set:
                     WorkLogStrategy = WorkLogStrategy.SetValue;
                     break;
@@ -191,13 +194,15 @@ namespace Gallifrey.UI.Modern.Models
                 case WorkLogStrategy.Automatic:
                     var autoNewRemaining = OriginalRemaining.Subtract(ToExport);
                     if (autoNewRemaining.TotalSeconds < 0) autoNewRemaining = new TimeSpan();
-                    RemainingHours = autoNewRemaining.Hours;
+                    RemainingHours = autoNewRemaining.Hours + (autoNewRemaining.Days * 24);
                     RemainingMinutes = autoNewRemaining.Minutes;
                     break;
+
                 case WorkLogStrategy.LeaveRemaining:
-                    RemainingHours = OriginalRemaining.Hours;
+                    RemainingHours = OriginalRemaining.Hours + (OriginalRemaining.Days * 24);
                     RemainingMinutes = OriginalRemaining.Minutes;
                     break;
+
                 case WorkLogStrategy.SetValue:
                     RemainingHours = 0;
                     RemainingMinutes = 0;

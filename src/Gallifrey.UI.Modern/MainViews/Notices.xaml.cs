@@ -1,10 +1,8 @@
-﻿using Exceptionless;
-using Gallifrey.AppTracking;
+﻿using Gallifrey.AppTracking;
 using Gallifrey.IdleTimers;
 using Gallifrey.UI.Modern.Flyouts;
 using Gallifrey.UI.Modern.Helpers;
 using Gallifrey.UI.Modern.Models;
-using MahApps.Metro.Controls.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -46,7 +44,7 @@ namespace Gallifrey.UI.Modern.MainViews
             }
             else
             {
-                await DialogCoordinator.Instance.ShowMessageAsync(ModelHelpers.DialogContext, "Nothing To Export", "No Un-Exported Timers Avaliable To Export");
+                await ModelHelpers.ShowMessageAsync("Nothing To Export", "No Un-Exported Timers Avaliable To Export");
             }
 
             ModelHelpers.RefreshModel();
@@ -60,10 +58,9 @@ namespace Gallifrey.UI.Modern.MainViews
                 ModelHelpers.Gallifrey.TrackEvent(TrackingType.ManualUpdateRestart);
                 ModelHelpers.CloseApp(true);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Handled").Submit();
-                await DialogCoordinator.Instance.ShowMessageAsync(ModelHelpers.DialogContext, "Update Error", "There Was An Error Trying To Update Gallifrey, If This Problem Persists Please Contact Support");
+                await ModelHelpers.ShowMessageAsync("Update Error", "There Was An Error Trying To Update Gallifrey, If This Problem Persists Please Contact Support");
             }
         }
 
@@ -75,10 +72,9 @@ namespace Gallifrey.UI.Modern.MainViews
                 ModelHelpers.Gallifrey.VersionControl.ManualReinstall();
                 await Task.Delay(TimeSpan.FromSeconds(2));
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Handled").Submit();
-                await DialogCoordinator.Instance.ShowMessageAsync(ModelHelpers.DialogContext, "Reinstall Error", "There Was An Error Trying To Reinstall Gallifrey, You May Need To Re-Download The App");
+                await ModelHelpers.ShowMessageAsync("Reinstall Error", "There Was An Error Trying To Reinstall Gallifrey, You May Need To Re-Download The App");
             }
             finally
             {

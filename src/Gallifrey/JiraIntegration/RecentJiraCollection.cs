@@ -10,9 +10,13 @@ namespace Gallifrey.JiraIntegration
     public interface IRecentJiraCollection
     {
         IEnumerable<RecentJira> GetRecentJiraCollection();
+
         void AddRecentJira(Issue jiraIssue);
+
         void AddRecentJiras(IEnumerable<Issue> jiraIssues);
+
         void RemoveExpiredCache();
+
         void Remove(string jiraReference);
     }
 
@@ -32,7 +36,14 @@ namespace Gallifrey.JiraIntegration
 
         internal void SaveCache()
         {
-            RecentJiraCollectionSerializer.Serialize(recentJiraList);
+            try
+            {
+                RecentJiraCollectionSerializer.Serialize(recentJiraList);
+            }
+            catch (Exception)
+            {
+                //ignore save errors
+            }
         }
 
         public IEnumerable<RecentJira> GetRecentJiraCollection()
@@ -95,5 +106,4 @@ namespace Gallifrey.JiraIntegration
             SaveCache();
         }
     }
-
 }

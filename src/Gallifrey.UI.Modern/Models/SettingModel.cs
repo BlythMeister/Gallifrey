@@ -35,6 +35,7 @@ namespace Gallifrey.UI.Modern.Models
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("AlertWhenIdle"));
             }
         }
+
         public bool TrackIdle
         {
             get => trackIdle;
@@ -44,6 +45,7 @@ namespace Gallifrey.UI.Modern.Models
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TrackIdle"));
             }
         }
+
         public bool TrackLock
         {
             get => trackLock;
@@ -53,6 +55,7 @@ namespace Gallifrey.UI.Modern.Models
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TrackLock"));
             }
         }
+
         public int? AlertMinutes { get; set; }
         public int? TrackIdleThresholdMinutes { get; set; }
         public int? TrackLockThresholdMinutes { get; set; }
@@ -65,14 +68,17 @@ namespace Gallifrey.UI.Modern.Models
 
         //UI Settings
         public AccentThemeModel Theme { get; set; }
+
         public AccentThemeModel Accent { get; set; }
         public bool StartOnBoot { get; set; }
         public bool TopMostOnFlyoutOpen { get; set; }
 
         //Jira Settings
         public string JiraUrl { get; set; }
+
         public string JiraUsername { get; set; }
         public string JiraPassword { get; set; }
+
         public bool UseTempo
         {
             get => useTempo;
@@ -82,15 +88,18 @@ namespace Gallifrey.UI.Modern.Models
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("UseTempo"));
             }
         }
+
         public string TempoToken { get; set; }
 
         //Export Settings
         public bool ExportAll { get; set; }
+
         public List<ExportPrompt> ExportPrompts { get; set; }
         public List<RemainingAdjustmentValue> RemainingAdjustmentValues { get; set; }
         public RemainingAdjustmentValue SelectedRemainingAdjustmentValue { get; set; }
         public string CommentPrefix { get; set; }
         public string DefaultComment { get; set; }
+
         public bool TrackingOnly
         {
             get => trackingOnly;
@@ -103,10 +112,12 @@ namespace Gallifrey.UI.Modern.Models
 
         //Static Data
         public List<AccentThemeModel> AvaliableThemes { get; set; }
+
         public List<AccentThemeModel> AvaliableAccents { get; set; }
 
         //Data Change Flags
         public bool JiraSettingsChanged { get; set; }
+
         public bool TrackingOptOut { get; set; }
 
         //Behaviour Properties

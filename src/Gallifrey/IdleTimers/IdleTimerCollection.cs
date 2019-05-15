@@ -8,7 +8,9 @@ namespace Gallifrey.IdleTimers
     public interface IIdleTimerCollection
     {
         void RemoveTimer(Guid uniqueId);
+
         IEnumerable<IdleTimer> GetUnusedLockTimers();
+
         IdleTimer GetTimer(Guid uniqueId);
     }
 

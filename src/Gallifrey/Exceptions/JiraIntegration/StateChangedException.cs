@@ -7,7 +7,6 @@ namespace Gallifrey.Exceptions.JiraIntegration
         public StateChangedException(string message, Exception innerException)
             : base(message, innerException)
         {
-
         }
     }
 }

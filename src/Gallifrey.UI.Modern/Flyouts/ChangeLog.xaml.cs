@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
-using Gallifrey.ChangeLog;
+﻿using Gallifrey.ChangeLog;
 using Gallifrey.UI.Modern.Models;
+using System.Collections.Generic;
 
 namespace Gallifrey.UI.Modern.Flyouts
 {

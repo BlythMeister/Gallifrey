@@ -5,13 +5,11 @@ namespace Gallifrey.Rest.Exception
         public ClientException(string message)
             : base(message)
         {
-
         }
 
         public ClientException(string message, System.Exception innerException)
             : base(message, innerException)
         {
-
         }
     }
 }

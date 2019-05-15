@@ -9,17 +9,16 @@
     <Border BorderBrush="{DynamicResource FlyoutBackgroundBrush}" BorderThickness="2">
         <Grid  Margin="5">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
             <Border BorderBrush="{DynamicResource FlyoutBackgroundBrush}" BorderThickness="0,0,0,2" HorizontalAlignment="Stretch">
                 <StackPanel Orientation="Horizontal">
-                    <Image Source="../Icons/clock_blue.ico" Height="30" Width="30" Margin="0,0,5,0"/>
-                    <TextBlock Text="{Binding Title}" FontSize="18" Foreground="{DynamicResource IdealForegroundColorBrush}"/>
+                    <Image Source="../Icons/clock_blue.ico" Height="30" Width="30" Margin="0,0,5,0" />
+                    <TextBlock Text="{Binding Title}" FontSize="18" Foreground="{DynamicResource IdealForegroundColorBrush}" />
                 </StackPanel>
             </Border>
             <TextBlock Text="{Binding Message}" FontSize="16" Foreground="{DynamicResource IdealForegroundColorBrush}" Grid.Row="1" TextWrapping="Wrap" />
-
     </Grid>
     </Border>
 </core:NotificationDisplayPart>

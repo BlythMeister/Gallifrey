@@ -1,6 +1,6 @@
+using Gallifrey.ChangeLog;
 using System.Collections.Generic;
 using System.Linq;
-using Gallifrey.ChangeLog;
 
 namespace Gallifrey.UI.Modern.Models
 {

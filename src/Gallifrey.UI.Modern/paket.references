@@ -1,4 +1,6 @@
 Exceptionless.Wpf
 MahApps.Metro
-MahApps.Metro.IconPacks.Material
+MahApps.Metro.IconPacks.FontAwesome
+System.ValueTuple
 ToastNotifications
+

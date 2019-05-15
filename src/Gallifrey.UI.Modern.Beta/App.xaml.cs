@@ -1,5 +1,5 @@
-﻿using System.Windows;
-using Gallifrey.Versions;
+﻿using Gallifrey.Versions;
+using System.Windows;
 
 namespace Gallifrey.UI.Modern.Beta
 {
@@ -10,7 +10,7 @@ namespace Gallifrey.UI.Modern.Beta
     {
         protected override void OnStartup(StartupEventArgs e)
         {
-            Modern.App.Run(InstanceType.Beta, Resources);
+            Modern.App.Run(InstanceType.Beta);
         }
     }
 }

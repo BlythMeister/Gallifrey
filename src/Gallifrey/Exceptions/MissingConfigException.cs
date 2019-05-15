@@ -7,7 +7,6 @@ namespace Gallifrey.Exceptions
         public MissingConfigException(string message)
             : base(message)
         {
-
         }
     }
 }

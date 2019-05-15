@@ -14,8 +14,8 @@
         </Grid.RowDefinitions>
         <Grid.Resources>
             <helpers:EnumMatchToBooleanConverter x:Key="EnumConverter" />
-            <helpers:BooleanVisibilityConverter x:Key="BoolToVis" Collapse="True" Invert="False"/>
-            <helpers:BooleanVisibilityConverter x:Key="BoolToVisInvert" Collapse="True" Invert="True"/>
+            <helpers:BooleanVisibilityConverter x:Key="BoolToVis" Collapse="True" Invert="False" />
+            <helpers:BooleanVisibilityConverter x:Key="BoolToVisInvert" Collapse="True" Invert="True" />
         </Grid.Resources>
         <controls:MetroAnimatedSingleRowTabControl Grid.Row="0" TabStripPlacement="Left" ItemsSource="{Binding BulkExports}" Margin="5,0,0,0">
             <TabControl.ItemContainerStyle>
@@ -31,28 +31,28 @@
                         <StackPanel Orientation="Vertical">
                             <Grid Width="400" Margin="5,5,5,5">
                                 <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto" />
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="Auto" />
                                 </Grid.RowDefinitions>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
 
-                                <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Text="Jira Parent Reference" Margin="0,0,5,0" Visibility="{Binding HasParent, Converter={StaticResource BoolToVis}}"/>
-                                <TextBox Grid.Row="0" Grid.Column="1" Margin="0,5" Text="{Binding JiraParentRef, Mode=OneWay}" IsEnabled="False" Visibility="{Binding HasParent, Converter={StaticResource BoolToVis}}"/>
+                                <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Text="Jira Parent Reference" Margin="0,0,5,0" Visibility="{Binding HasParent, Converter={StaticResource BoolToVis}}" />
+                                <TextBox Grid.Row="0" Grid.Column="1" Margin="0,5" Text="{Binding JiraParentRef, Mode=OneWay}" IsEnabled="False" Visibility="{Binding HasParent, Converter={StaticResource BoolToVis}}" />
 
                                 <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Text="Jira Parent Name"  Visibility="{Binding HasParent, Converter={StaticResource BoolToVis}}" />
                                 <TextBox Grid.Row="1" Grid.Column="1" Margin="0,5" Text="{Binding JiraParentDesc, Mode=OneWay}" IsEnabled="False" TextWrapping="Wrap" MaxLines="2"  Visibility="{Binding HasParent, Converter={StaticResource BoolToVis}}" />
 
                                 <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,5,0">Jira Reference</TextBlock>
-                                <TextBox Grid.Row="2" Grid.Column="1" Margin="0,5" Text="{Binding JiraRef, Mode=OneWay}" IsEnabled="False"/>
+                                <TextBox Grid.Row="2" Grid.Column="1" Margin="0,5" Text="{Binding JiraRef, Mode=OneWay}" IsEnabled="False" />
 
                                 <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center">Jira Name</TextBlock>
-                                <TextBox Grid.Row="3" Grid.Column="1" Margin="0,5" Text="{Binding JiraDesc, Mode=OneWay}" IsEnabled="False" TextWrapping="Wrap" MaxLines="2"/>
+                                <TextBox Grid.Row="3" Grid.Column="1" Margin="0,5" Text="{Binding JiraDesc, Mode=OneWay}" IsEnabled="False" TextWrapping="Wrap" MaxLines="2" />
 
                                 <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center">Export?</TextBlock>
                                 <controls:ToggleSwitchButton Grid.Row="4" Grid.Column="1" Margin="0,5" Style="{DynamicResource MahApps.Metro.Styles.ToggleSwitchButton.Win10}" HorizontalAlignment="Left" IsChecked="{Binding ShouldExport, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Click="ExportSingleClick" />
@@ -69,8 +69,8 @@
                                     <RowDefinition Height="Auto" />
                                 </Grid.RowDefinitions>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
 
                                 <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Padding="2">Already Exported</TextBlock>
@@ -90,9 +90,9 @@
                                 </WrapPanel>
 
                                 <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Padding="2">Export Date</TextBlock>
-                                <DatePicker Grid.Row="2" Grid.Column="1" Margin="0,5" IsTodayHighlighted="False" DisplayDate="" SelectedDate="{Binding ExportDate, Mode=OneWay}" IsEnabled="False"/>
+                                <DatePicker Grid.Row="2" Grid.Column="1" Margin="0,5" IsTodayHighlighted="False" DisplayDate="" SelectedDate="{Binding ExportDate, Mode=OneWay}" IsEnabled="False" />
 
-                                <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Padding="2" TextWrapping="Wrap">Remaining Estimate<LineBreak/>Action</TextBlock>
+                                <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Padding="2" TextWrapping="Wrap">Remaining Estimate<LineBreak />Action</TextBlock>
                                 <WrapPanel Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Margin="0,5" Orientation="Vertical">
                                     <RadioButton GroupName="Export" Content="Adjust Automatically" IsChecked="{Binding Path=WorkLogStrategy, Mode=TwoWay, Converter={StaticResource EnumConverter}, ConverterParameter={x:Static gallifreyJira:WorkLogStrategy.Automatic}}" />
                                     <RadioButton Margin="0,3,0,0" GroupName="Export" Content="Leave Remaining" IsChecked="{Binding Path=WorkLogStrategy, Mode=TwoWay, Converter={StaticResource EnumConverter}, ConverterParameter={x:Static gallifreyJira:WorkLogStrategy.LeaveRemaining}}" />
@@ -114,13 +114,13 @@
                                 </WrapPanel>
 
                                 <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center">Worklog Comment</TextBlock>
-                                <TextBox Grid.Row="5" Grid.Column="1" Margin="0,5" Text="{Binding Comment, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" AcceptsReturn="True" controls:TextBoxHelper.IsSpellCheckContextMenuEnabled="True" Height="45" VerticalScrollBarVisibility="Auto" controls:TextBoxHelper.Watermark="{Binding DefaultComment}"/>
+                                <TextBox Grid.Row="5" Grid.Column="1" Margin="0,5" Text="{Binding Comment, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" AcceptsReturn="True" controls:TextBoxHelper.IsSpellCheckContextMenuEnabled="True" Height="45" VerticalScrollBarVisibility="Auto" controls:TextBoxHelper.Watermark="{Binding DefaultComment}" />
 
                                 <TextBlock Grid.Row="6" Grid.Column="0" VerticalAlignment="Center">Add As Jira<LineBreak />Comment?</TextBlock>
                                 <controls:ToggleSwitchButton Grid.Row="6" Grid.Column="1" Margin="0,5" Style="{DynamicResource MahApps.Metro.Styles.ToggleSwitchButton.Win10}" HorizontalAlignment="Left" IsChecked="{Binding StandardComment, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                                 <TextBlock Grid.Row="7" Grid.Column="0" VerticalAlignment="Center">Change Status?</TextBlock>
-                                <controls:ToggleSwitchButton Grid.Row="7" Grid.Column="1" Margin="0,5" Style="{DynamicResource MahApps.Metro.Styles.ToggleSwitchButton.Win10}" HorizontalAlignment="Left" IsChecked="{Binding ChangeStatus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Click="ChangeStatusClick"/>
+                                <controls:ToggleSwitchButton Grid.Row="7" Grid.Column="1" Margin="0,5" Style="{DynamicResource MahApps.Metro.Styles.ToggleSwitchButton.Win10}" HorizontalAlignment="Left" IsChecked="{Binding ChangeStatus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Click="ChangeStatusClick" />
                             </Grid>
                         </StackPanel>
                     </ScrollViewer>
@@ -129,10 +129,10 @@
         </controls:MetroAnimatedSingleRowTabControl>
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
             <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,5" Click="ExportAllButton" ToolTip="Check All For Export">
-                <iconPacks:PackIconMaterial Kind="CheckAll" Height="22" Width="22" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                <iconPacks:PackIconFontAwesome Kind="CheckDoubleSolid" Height="22" Width="22" HorizontalAlignment="Center" VerticalAlignment="Center" />
             </Button>
             <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,5"   Click="ExportButton" IsDefault="True" ToolTip="Export Checked Worklogs To Jira">
-                <iconPacks:PackIconMaterial Kind="CloudUpload" Height="22" Width="22" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,2,0" />
+                <iconPacks:PackIconFontAwesome Kind="UploadSolid" Height="22" Width="22" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,2,0" />
             </Button>
         </StackPanel>
     </Grid>
@@ -154,7 +154,7 @@
 
                     <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Height="85">
                         <Button Height="35" MinWidth="80" Style="{DynamicResource AccentedDialogSquareButton}" Content="OK" Margin="0 0 5 0" Click="TransitionSelected" />
-                        <Button Height="35" MinWidth="80" Content="Cancel" Margin="5 0 5 0" Click="CancelTransition"/>
+                        <Button Height="35" MinWidth="80" Content="Cancel" Margin="5 0 5 0" Click="CancelTransition" />
                     </StackPanel>
                 </Grid>
             </dialogs:CustomDialog>

@@ -29,7 +29,7 @@ namespace Gallifrey.UI.Modern.Flyouts
         {
             this.modelHelpers = modelHelpers;
             InitializeComponent();
-            progressDialogHelper = new ProgressDialogHelper(modelHelpers.DialogContext);
+            progressDialogHelper = new ProgressDialogHelper(modelHelpers);
             DataContext = new BulkExportContainerModel();
             SetupContext(timers);
         }
@@ -48,6 +48,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                     case ProgressResult.JiraHelperStatus.Cancelled:
                         modelHelpers.CloseFlyout(this);
                         return;
+
                     case ProgressResult.JiraHelperStatus.Success:
                         timersToShow = jiraDownloadResult.RetVal;
                         break;
@@ -55,14 +56,14 @@ namespace Gallifrey.UI.Modern.Flyouts
             }
             catch (BulkExportException ex)
             {
-                await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Unable To Locate Jira", ex.Message);
+                await modelHelpers.ShowMessageAsync("Unable To Locate Jira", ex.Message);
                 modelHelpers.CloseFlyout(this);
                 return;
             }
 
             if (!timersToShow.Any())
             {
-                await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Nothing To Export", "There Is No Time To Export");
+                await modelHelpers.ShowMessageAsync("Nothing To Export", "There Is No Time To Export");
                 modelHelpers.CloseFlyout(this);
             }
             else if (timersToShow.Count == 1)
@@ -116,7 +117,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             {
                 if (exportModel.Timer.TimeToExport < exportModel.ToExport)
                 {
-                    await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, $"Invalid Export Timer - {exportModel.JiraRef}", $"You Cannot Export More Than The Timer States Un-Exported\nThis Value Is {exportModel.ToExport:hh\\:mm}!");
+                    await modelHelpers.ShowMessageAsync($"Invalid Export Timer - {exportModel.JiraRef}", $"You Cannot Export More Than The Timer States Un-Exported\nThis Value Is {exportModel.ToExport:hh\\:mm}!");
                     return;
                 }
             }
@@ -128,7 +129,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             }
             catch (BulkExportException ex)
             {
-                await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Error Exporting", $"{ex.Message}");
+                await modelHelpers.ShowMessageAsync("Error Exporting", $"{ex.Message}");
                 foreach (var timer in timersToExport.Where(x => !x.Timer.FullyExported))
                 {
                     timer.Timer.ClearLastJiraCheck();
@@ -158,7 +159,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                         var transitionsAvaliable = modelHelpers.Gallifrey.JiraConnection.GetTransitions(timer.JiraRef);
 
                         var timeSelectorDialog = (BaseMetroDialog)Resources["TransitionSelector"];
-                        await DialogCoordinator.Instance.ShowMetroDialogAsync(modelHelpers.DialogContext, timeSelectorDialog);
+                        await modelHelpers.ShowDialogAsync(timeSelectorDialog);
 
                         var comboBox = timeSelectorDialog.FindChild<ComboBox>("Items");
                         comboBox.ItemsSource = transitionsAvaliable.Select(x => x.name).ToList();
@@ -166,10 +167,9 @@ namespace Gallifrey.UI.Modern.Flyouts
                         var messageBox = timeSelectorDialog.FindChild<TextBlock>("Message");
                         messageBox.Text = $"Please Select The Status Update You Would Like To Perform To {timer.JiraRef}";
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
-                        ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Handled").Submit();
-                        await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Status Update Error", "Unable To Change The Status Of This Issue");
+                        await modelHelpers.ShowMessageAsync("Status Update Error", "Unable To Change The Status Of This Issue");
                     }
                 }
                 lastChangeStatusSent = true;
@@ -232,15 +232,13 @@ namespace Gallifrey.UI.Modern.Flyouts
                         {
                             throw new BulkExportException($"Unable To Locate Jira {timerToShow.JiraReference}!\nCannot Export Time\nPlease Verify/Correct Jira Reference");
                         }
-
                     }
                     catch (BulkExportException)
                     {
                         throw;
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
-                        ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Handled").Submit();
                         throw new BulkExportException($"Unable To Locate Jira {timerToShow.JiraReference}!\nCannot Export Time\nPlease Verify/Correct Jira Reference");
                     }
                 }
@@ -259,7 +257,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             }
             catch (Exception ex)
             {
-                ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Handled").Submit();
+                ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Hidden").Submit();
                 throw new BulkExportException("Unable To Get WorkLogs!\nCannot Export Time");
             }
 
@@ -277,7 +275,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                 var updatedTimer = modelHelpers.Gallifrey.JiraTimerCollection.GetTimer(timerToShow.UniqueId);
                 if (!timerToShow.FullyExported)
                 {
-                    var model = new BulkExportModel(updatedTimer, modelHelpers.Gallifrey.Settings.ExportSettings);
+                    var model = new BulkExportModel(updatedTimer, jiraIssue, modelHelpers.Gallifrey.Settings.ExportSettings);
                     timersToShow.Add(model);
                 }
             }
@@ -307,12 +305,10 @@ namespace Gallifrey.UI.Modern.Flyouts
                 }
                 catch (WorkLogException ex)
                 {
-                    ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Handled").Submit();
                     throw new BulkExportException($"Error Logging Work To {exportModel.JiraRef}\n\nError Message From Jira: { ex.InnerException.Message }");
                 }
-                catch (CommentException ex)
+                catch (CommentException)
                 {
-                    ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Handled").Submit();
                     throw new BulkExportException($"The Comment Was Not Added To Jira {exportModel.JiraRef}");
                 }
             }
@@ -336,20 +332,19 @@ namespace Gallifrey.UI.Modern.Flyouts
 
                 selectedTransition = (string)comboBox.SelectedItem;
 
-                await DialogCoordinator.Instance.HideMetroDialogAsync(modelHelpers.DialogContext, dialog);
+                await modelHelpers.HideDialogAsync(dialog);
 
                 modelHelpers.Gallifrey.JiraConnection.TransitionIssue(currentChangeStatusJiraRef, selectedTransition);
             }
-            catch (StateChangedException ex)
+            catch (StateChangedException)
             {
-                ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Handled").Submit();
                 if (string.IsNullOrWhiteSpace(selectedTransition))
                 {
-                    await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Status Update Error", "Unable To Change The Status Of This Issue");
+                    await modelHelpers.ShowMessageAsync("Status Update Error", "Unable To Change The Status Of This Issue");
                 }
                 else
                 {
-                    await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Status Update Error", $"Unable To Change The Status Of This Issue To {selectedTransition}");
+                    await modelHelpers.ShowMessageAsync("Status Update Error", $"Unable To Change The Status Of This Issue To {selectedTransition}");
                 }
             }
 
@@ -363,7 +358,7 @@ namespace Gallifrey.UI.Modern.Flyouts
         private async void CancelTransition(object sender, RoutedEventArgs e)
         {
             var dialog = (BaseMetroDialog)Resources["TransitionSelector"];
-            await DialogCoordinator.Instance.HideMetroDialogAsync(modelHelpers.DialogContext, dialog);
+            await modelHelpers.HideDialogAsync(dialog);
 
             currentChangeStatusJiraRef = string.Empty;
             if (lastChangeStatusSent)

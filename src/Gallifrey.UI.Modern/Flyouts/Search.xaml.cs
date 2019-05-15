@@ -1,9 +1,9 @@
 ﻿using Exceptionless;
+using Gallifrey.Exceptions.JiraIntegration;
 using Gallifrey.Jira.Model;
 using Gallifrey.JiraIntegration;
 using Gallifrey.UI.Modern.Helpers;
 using Gallifrey.UI.Modern.Models;
-using MahApps.Metro.Controls.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,7 +28,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             this.openFromEdit = openFromEdit;
             this.selectedDateTab = selectedDateTab ?? DateTime.Now.Date;
             InitializeComponent();
-            progressDialogHelper = new ProgressDialogHelper(modelHelpers.DialogContext);
+            progressDialogHelper = new ProgressDialogHelper(modelHelpers);
 
             LoadSearch();
         }
@@ -45,27 +45,39 @@ namespace Gallifrey.UI.Modern.Flyouts
                 {
                     recent = modelHelpers.Gallifrey.JiraTimerCollection.GetJiraReferencesForLastDays(50).ToList();
                 }
+                catch (NoResultsFoundException)
+                {
+                    //Do Nothing
+                }
                 catch (Exception ex)
                 {
-                    ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Handled").Submit();
+                    ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Hidden").Submit();
                 }
 
                 try
                 {
                     filters = modelHelpers.Gallifrey.JiraConnection.GetJiraFilters().ToList();
                 }
+                catch (NoResultsFoundException)
+                {
+                    //Do Nothing
+                }
                 catch (Exception ex)
                 {
-                    ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Handled").Submit();
+                    ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Hidden").Submit();
                 }
 
                 try
                 {
                     issues = modelHelpers.Gallifrey.JiraConnection.GetJiraCurrentUserOpenIssues().ToList();
                 }
+                catch (NoResultsFoundException)
+                {
+                    //Do Nothing
+                }
                 catch (Exception ex)
                 {
-                    ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Handled").Submit();
+                    ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Hidden").Submit();
                 }
 
                 return new SearchModel(filters, recent, issues, openFromEdit);
@@ -78,10 +90,12 @@ namespace Gallifrey.UI.Modern.Flyouts
                 case ProgressResult.JiraHelperStatus.Cancelled:
                     modelHelpers.CloseFlyout(this);
                     break;
+
                 case ProgressResult.JiraHelperStatus.Errored:
-                    await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Error", "There Was An Error Loading Default Search Results");
+                    await modelHelpers.ShowMessageAsync("Error", "There Was An Error Loading Default Search Results");
                     modelHelpers.CloseFlyout(this);
                     break;
+
                 case ProgressResult.JiraHelperStatus.Success:
                     DataContext = result.RetVal;
                     break;
@@ -119,7 +133,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                 }
                 else
                 {
-                    await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "Missing Search", "Please Choose Enter Search Term Or Choose A Filter");
+                    await modelHelpers.ShowMessageAsync("Missing Search", "Please Choose Enter Search Term Or Choose A Filter");
                     Focus();
                     DataModel.ClearSearchResults();
                     return;
@@ -132,6 +146,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                     case ProgressResult.JiraHelperStatus.Cancelled:
                         DataModel.ClearSearchResults();
                         return;
+
                     case ProgressResult.JiraHelperStatus.Errored:
                         throw new Exception();
                     case ProgressResult.JiraHelperStatus.Success:
@@ -141,17 +156,16 @@ namespace Gallifrey.UI.Modern.Flyouts
                         }
                         else
                         {
-                            await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "No Results", "Your Search Returned No Results");
+                            await modelHelpers.ShowMessageAsync("No Results", "Your Search Returned No Results");
                             Focus();
                             DataModel.ClearSearchResults();
                         }
                         break;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Handled").Submit();
-                await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "No Results", "There Was An Error Getting Search Results");
+                await modelHelpers.ShowMessageAsync("No Results", "There Was An Error Getting Search Results");
                 Focus();
                 DataModel.ClearSearchResults();
             }
@@ -161,7 +175,7 @@ namespace Gallifrey.UI.Modern.Flyouts
         {
             if (DataModel.SelectedSearchResult == null)
             {
-                await DialogCoordinator.Instance.ShowMessageAsync(modelHelpers.DialogContext, "No Selected Item", "You Need To Select An Item To Add A Timer For It");
+                await modelHelpers.ShowMessageAsync("No Selected Item", "You Need To Select An Item To Add A Timer For It");
                 Focus();
                 return;
             }

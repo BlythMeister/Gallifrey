@@ -8,7 +8,7 @@ environment:
   cloudflare_email:
     secure: 7MMGMp4bOy0b/HWDC5vBEbDm/S7GPCZCcy6zAPOjhVo=
   exceptionless_api_key:
-    secure: rpRT6VBsFjNaJqx+0c06VQrzCIfecio50+4ujXHQtDCWZLPP/V+KDMl7p2YW0eHR
+    secure: owf/eHBH82XG+SWozC/GXMy+rD4zRHPlbjjFY0lH9ZKb2cKlWGPiXobT/uQKdDGd
   premium_passphrase:
     secure: TG8hldByFABNxwe4pz8aCGECcXnrtx7ReyrT+5Q9doUDBgzH8bAAOvaZIP1PHZFUhp7HxDgtsbaYfcsjsK35FfxFpTXJGz7lH6iF5ng8iCE=
 skip_commits:
@@ -19,7 +19,7 @@ skip_commits:
     - docs/*
     - '**/*.html'
     - '**/*.md'
-version: '3.9.2.{build}'
+version: '3.15.2.{build}'
 skip_tags: true
 image: Visual Studio 2017
 clone_folder: c:\project\gallifrey

@@ -19,7 +19,9 @@ namespace Gallifrey.UI.Modern.Models
         private readonly TargetBarValues targetBarValues;
 
         public ModelHelpers ModelHelpers { get; }
+
         public event PropertyChangedEventHandler PropertyChanged;
+
         public ObservableCollection<TimerDateModel> TimerDates { get; private set; }
         public string InactiveMinutes { get; private set; }
         public TimeSpan TimeActivity { get; private set; }
@@ -280,50 +282,39 @@ namespace Gallifrey.UI.Modern.Models
                     dateModel.RemoveTimerModel(removeTimer);
                 }
 
-                var nonExistentDefaultJiras = new List<string>();
-                foreach (var defaultJira in ModelHelpers.Gallifrey.Settings.AppSettings.DefaultTimers ?? new List<string>())
+                if (dateModel.TimerDate.Date <= DateTime.Now.Date)
                 {
-                    if (dateModel.Timers.All(x => x.JiraTimer.JiraReference != defaultJira.ToUpper()) && dateModel.TimerDate.Date <= DateTime.Now.Date)
+                    var defaultTimers = (ModelHelpers.Gallifrey.Settings.AppSettings.DefaultTimers ?? new List<string>()).Select(x => x.ToUpper().Trim()).Distinct();
+                    foreach (var defaultJira in defaultTimers)
                     {
-                        try
+                        if (!dateModel.Timers.Any(x => string.Equals(x.JiraTimer.JiraReference, defaultJira, StringComparison.InvariantCultureIgnoreCase)))
                         {
-                            var jira = jiraCache.FirstOrDefault(x => x.key == defaultJira);
-                            if (jira == null && ModelHelpers.Gallifrey.JiraConnection.IsConnected)
+                            try
                             {
-                                if (!ModelHelpers.Gallifrey.JiraConnection.DoesJiraExist(defaultJira))
+                                var jira = jiraCache.FirstOrDefault(x => string.Equals(x.key, defaultJira, StringComparison.InvariantCultureIgnoreCase));
+                                if (jira == null && ModelHelpers.Gallifrey.JiraConnection.IsConnected)
                                 {
-                                    nonExistentDefaultJiras.Add(defaultJira);
+                                    if (ModelHelpers.Gallifrey.JiraConnection.DoesJiraExist(defaultJira))
+                                    {
+                                        jira = ModelHelpers.Gallifrey.JiraConnection.GetJiraIssue(defaultJira);
+                                        jiraCache.Add(jira);
+                                    }
                                 }
-                                else
+
+                                if (jira != null && string.Equals(jira.key, defaultJira, StringComparison.InvariantCultureIgnoreCase))
                                 {
-                                    jira = ModelHelpers.Gallifrey.JiraConnection.GetJiraIssue(defaultJira);
-                                    jiraCache.Add(jira);
+                                    var timerId = ModelHelpers.Gallifrey.JiraTimerCollection.AddTimer(jira, dateModel.TimerDate.Date, TimeSpan.Zero, false);
+                                    var timer = ModelHelpers.Gallifrey.JiraTimerCollection.GetTimer(timerId);
+                                    timer.PropertyChanged += (sender, args) => TimerChanged();
+                                    dateModel.AddTimerModel(new TimerModel(timer));
                                 }
                             }
-
-                            if (jira != null)
+                            catch (Exception ex)
                             {
-                                var timerId = ModelHelpers.Gallifrey.JiraTimerCollection.AddTimer(jira, timerDate.Date, TimeSpan.Zero, false);
-                                var timer = ModelHelpers.Gallifrey.JiraTimerCollection.GetTimer(timerId);
-                                timer.PropertyChanged += (sender, args) => TimerChanged();
-                                dateModel.AddTimerModel(new TimerModel(timer));
+                                ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Hidden").Submit();
                             }
                         }
-                        catch (Exception ex)
-                        {
-                            ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Handled").Submit();
-                        }
                     }
-                }
-
-                if (nonExistentDefaultJiras.Any())
-                {
-                    foreach (var nonExistentDefaultJira in nonExistentDefaultJiras)
-                    {
-                        ModelHelpers.Gallifrey.Settings.AppSettings.DefaultTimers.Remove(nonExistentDefaultJira);
-                    }
-
-                    ModelHelpers.Gallifrey.SaveSettings(false, false);
                 }
             }
 
@@ -411,7 +402,7 @@ namespace Gallifrey.UI.Modern.Models
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TimerDates"));
         }
 
-        #endregion
+        #endregion Private Helpers
 
         #region Events
 
@@ -529,8 +520,6 @@ namespace Gallifrey.UI.Modern.Models
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TargetBarRemainingLabel"));
         }
 
-        #endregion
-
-
+        #endregion Events
     }
 }

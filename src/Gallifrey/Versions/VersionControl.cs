@@ -2,8 +2,8 @@ using System;
 using System.Deployment.Application;
 using System.IO;
 using System.Net;
-using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
@@ -20,15 +20,21 @@ namespace Gallifrey.Versions
         string VersionName { get; }
         bool IsFirstRun { get; }
         string AppName { get; }
+        Version DeployedVersion { get; }
+
         Task<UpdateResult> CheckForUpdates(bool manualCheck);
+
         void ManualReinstall();
+
         string GetApplicationReference();
+
         event EventHandler UpdateStateChange;
     }
 
     public class VersionControl : IVersionControl
     {
         public event EventHandler UpdateStateChange;
+
         public event EventHandler<bool> UpdateCheckOccured;
 
         public InstanceType InstanceType { get; }
@@ -36,18 +42,22 @@ namespace Gallifrey.Versions
         public string AppName { get; }
         public bool UpdateInstalled { get; private set; }
         public bool UpdateReinstallNeeded { get; private set; }
-        public bool UpdateError { get; private set; }
+        public bool UpdateError => updateErrorCount >= 3;
 
         private DateTime lastUpdateCheck;
+        private int updateErrorCount;
+        private long updateCheckOngoing;
 
         public bool IsAutomatedDeploy => ApplicationDeployment.IsNetworkDeployed;
-        public Version DeployedVersion => UpdateInstalled ? ApplicationDeployment.CurrentDeployment.UpdatedVersion : ApplicationDeployment.CurrentDeployment.CurrentVersion;
+        public Version DeployedVersion => ApplicationDeployment.CurrentDeployment.CurrentVersion;
         public bool IsFirstRun => ApplicationDeployment.CurrentDeployment.IsFirstRun;
 
         public VersionControl(InstanceType instanceType)
         {
             InstanceType = instanceType;
             lastUpdateCheck = DateTime.MinValue;
+            updateErrorCount = 0;
+            Interlocked.Exchange(ref updateCheckOngoing, -1);
 
             SetVersionName();
 
@@ -75,61 +85,78 @@ namespace Gallifrey.Versions
                 return Task.Run(() => UpdateResult.NotDeployable);
             }
 
-            if (lastUpdateCheck >= DateTime.UtcNow.AddMinutes(-5) && !manualCheck)
+            if (lastUpdateCheck >= DateTime.UtcNow.AddMinutes(-3) && !manualCheck)
+            {
+                return Task.Run(() => UpdateResult.TooSoon);
+            }
+
+            if (Interlocked.Exchange(ref updateCheckOngoing, 1) != -1 && !manualCheck)
             {
                 return Task.Run(() => UpdateResult.TooSoon);
             }
 
             try
             {
-                using (var client = new WebClient())
+                try
                 {
-                    client.DownloadData("https://releases.gallifreyapp.co.uk");
-                }
-            }
-            catch
-            {
-                return Task.Run(() => UpdateResult.NoInternet);
-            }
-
-            UpdateCheckOccured?.Invoke(this, manualCheck);
-            lastUpdateCheck = DateTime.UtcNow;
-
-            try
-            {
-
-                if (ApplicationDeployment.CurrentDeployment.CheckForUpdate(false))
-                {
-                    return Task.Run(() => ApplicationDeployment.CurrentDeployment.Update()).ContinueWith(task =>
+                    using (var client = new WebClient())
                     {
-                        SetVersionName();
-                        UpdateInstalled = true;
-                        UpdateStateChange?.Invoke(this, null);
-                        return UpdateResult.Updated;
+                        client.DownloadData("https://releases.gallifreyapp.co.uk");
+                    }
+                }
+                catch
+                {
+                    return Task.Run(() => UpdateResult.NoInternet);
+                }
+
+                UpdateCheckOccured?.Invoke(this, manualCheck);
+                lastUpdateCheck = DateTime.UtcNow;
+
+                try
+                {
+                    if (ApplicationDeployment.CurrentDeployment.CheckForUpdate(false))
+                    {
+                        return Task.Run(() => ApplicationDeployment.CurrentDeployment.Update()).ContinueWith(task =>
+                        {
+                            SetVersionName();
+                            UpdateInstalled = true;
+                            UpdateReinstallNeeded = false;
+                            UpdateStateChange?.Invoke(this, null);
+                            updateErrorCount = 0;
+                            return UpdateResult.Updated;
+                        });
+                    }
+
+                    return Task.Run(() =>
+                    {
+                        //If manual put a delay in here...the UI goes all weird if it's not
+                        if (manualCheck)
+                        {
+                            UpdateReinstallNeeded = false;
+                            updateErrorCount = 0;
+                            Task.Delay(TimeSpan.FromSeconds(2));
+                        }
+
+                        return UpdateResult.NoUpdate;
                     });
                 }
-
-                return Task.Run(() =>
+                catch (TrustNotGrantedException)
                 {
-                    //If manual put a delay in here...the UI goes all weird if it's not
-                    if (manualCheck)
-                    {
-                        Task.Delay(TimeSpan.FromSeconds(2));
-                    }
-                    return UpdateResult.NoUpdate;
-                });
+                    UpdateReinstallNeeded = true;
+                    UpdateStateChange?.Invoke(this, null);
+                    updateErrorCount = updateErrorCount + 1;
+                    return Task.Run(() => UpdateResult.ReinstallNeeded);
+                }
+                catch (Exception)
+                {
+                    UpdateStateChange?.Invoke(this, null);
+                    updateErrorCount = updateErrorCount + 1;
+                    throw;
+                }
             }
-            catch (Exception e) when (e is TrustNotGrantedException || e is COMException)
+            finally
             {
-                UpdateReinstallNeeded = true;
-                UpdateStateChange?.Invoke(this, null);
-                return Task.Run(() => UpdateResult.ReinstallNeeded);
-            }
-            catch (Exception)
-            {
-                UpdateError = true;
-                UpdateStateChange?.Invoke(this, null);
-                throw;
+                Interlocked.Exchange(ref updateCheckOngoing, -1);
             }
         }
 

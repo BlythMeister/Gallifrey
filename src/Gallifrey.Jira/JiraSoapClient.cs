@@ -176,8 +176,6 @@ namespace Gallifrey.Jira
                 }
             }
 
-
-
             return workLogs;
         }
 
@@ -213,12 +211,15 @@ namespace Gallifrey.Jira
                 case WorkLogStrategy.Automatic:
                     strategy = WorklogStrategy.AutoAdjustRemainingEstimate;
                     break;
+
                 case WorkLogStrategy.LeaveRemaining:
                     strategy = WorklogStrategy.RetainRemainingEstimate;
                     break;
+
                 case WorkLogStrategy.SetValue:
                     strategy = WorklogStrategy.NewRemainingEstimate;
                     break;
+
                 default:
                     strategy = WorklogStrategy.RetainRemainingEstimate;
                     break;

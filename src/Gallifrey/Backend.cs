@@ -29,20 +29,35 @@ namespace Gallifrey
         IJiraConnection JiraConnection { get; }
         IVersionControl VersionControl { get; }
         List<WithThanksDefinition> WithThanksDefinitions { get; }
+
         event EventHandler DailyTrackingEvent;
+
         event EventHandler BackendModifiedTimers;
+
         event EventHandler IsPremiumChanged;
+
         event EventHandler SettingsChanged;
+
         event EventHandler<int> NoActivityEvent;
+
         event EventHandler<ExportPromptDetail> ExportPromptEvent;
+
         void Initialise();
+
         void Close();
+
         void TrackEvent(TrackingType trackingType);
+
         void SaveSettings(bool jiraSettingsChanged, bool trackingOptOut);
+
         void StartLockTimer(TimeSpan? idleTime = null);
+
         Guid? StopLockTimer();
+
         IEnumerable<ChangeLogVersion> GetChangeLog(XDocument changeLogContent);
+
         void ResetInactiveAlert();
+
         bool IsInitialised { get; }
     }
 
@@ -64,10 +79,15 @@ namespace Gallifrey
         private readonly Timer jiraExportHearbeat;
 
         public event EventHandler<int> NoActivityEvent;
+
         public event EventHandler<ExportPromptDetail> ExportPromptEvent;
+
         public event EventHandler DailyTrackingEvent;
+
         public event EventHandler BackendModifiedTimers;
+
         public event EventHandler IsPremiumChanged;
+
         public event EventHandler SettingsChanged;
 
         internal ActivityChecker ActivityChecker;
@@ -235,7 +255,7 @@ namespace Gallifrey
             jiraTimerCollection.Initialise();
             recentJiraCollection.Initialise();
 
-            if (settingsCollection.InternalSettings.LastChangeLogVersion == new Version(0, 0, 0, 0))
+            if (settingsCollection.InternalSettings.LastChangeLogVersion == new Version(0, 0, 0, 0) && settingsCollection.InternalSettings.NewUser)
             {
                 throw new MissingConfigException("New User");
             }

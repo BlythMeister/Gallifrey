@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using Gallifrey.IdleTimers;
+﻿using Gallifrey.IdleTimers;
+using System.Collections.Generic;
 
 namespace Gallifrey.Comparers
 {
@@ -7,15 +7,16 @@ namespace Gallifrey.Comparers
     {
         public bool Equals(IdleTimer x, IdleTimer y)
         {
-            if (x == null && y != null) return false;
-            if (y == null && x != null) return false;
+            if (x == null && y == null) return true;
+            if (x == null) return false;
+            if (y == null) return false;
 
-            return x?.UniqueId == y?.UniqueId;
+            return x.UniqueId == y.UniqueId;
         }
 
         public int GetHashCode(IdleTimer x)
         {
-            return x.GetHashCode();
+            return x.UniqueId.GetHashCode();
         }
     }
 }

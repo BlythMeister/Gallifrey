@@ -1,5 +1,5 @@
-﻿using System.Windows;
-using MahApps.Metro;
+﻿using MahApps.Metro;
+using System.Windows;
 
 namespace Gallifrey.UI.Modern.Helpers
 {
@@ -16,6 +16,8 @@ namespace Gallifrey.UI.Modern.Helpers
         public static ThemeChangeDetail ChangeTheme(string themeName, string accentName)
         {
             var theme = ThemeManager.DetectAppStyle(Application.Current);
+            if (theme == null) return ThemeChangeDetail.None;
+
             var appTheme = theme.Item1;
             var accent = theme.Item2;
 
