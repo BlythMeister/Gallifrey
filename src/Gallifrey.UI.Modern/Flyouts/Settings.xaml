@@ -203,26 +203,31 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
                     <Grid.Resources>
                         <helpers:BooleanVisibilityConverter x:Key="BoolToVis" Collapse="True" Invert="False" />
                     </Grid.Resources>
 
-                    <TextBlock Grid.Row="0" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="The URL To Connect To Jira">Jiran URL</TextBlock>
+                    <TextBlock Grid.Row="0" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="The URL To Connect To Jira">Jira URL</TextBlock>
                     <TextBox Grid.Row="0" Grid.Column="1" Margin="5" VerticalAlignment="Center" Text="{Binding JiraUrl, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
-                    <TextBlock Grid.Row="1" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="Your Jira Username">Jira Username</TextBlock>
+                    <TextBlock Grid.Row="1" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="Your Jira Username">Jira Username/Email</TextBlock>
                     <TextBox Grid.Row="1" Grid.Column="1" Margin="5" VerticalAlignment="Center" Text="{Binding JiraUsername, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
-                    <TextBlock Grid.Row="2" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="Your Jira Password">Jira Password</TextBlock>
+                    <TextBlock Grid.Row="2" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="Your Jira Password">Jira Password/API Token</TextBlock>
                     <PasswordBox Grid.Row="2" Grid.Column="1" Margin="5" VerticalAlignment="Center" helpers:PasswordBoxHelper.BindPassword="true" helpers:PasswordBoxHelper.BoundPassword="{Binding JiraPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                     <TextBlock Grid.Row="3" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="Use Tempo If The Jira Instance Has It">Use Tempo</TextBlock>
                     <controls:ToggleSwitchButton Grid.Row="3" Grid.Column="1" Margin="5" Style="{DynamicResource MahApps.Metro.Styles.ToggleSwitchButton.Win10}" HorizontalAlignment="Left" VerticalAlignment="Center" IsChecked="{Binding UseTempo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
-                    <TextBlock Grid.Row="4" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="Your Tempo API Token Found Under 'API Intergration'" Visibility="{Binding UseTempo, Converter={StaticResource BoolToVis}}">Tempo Token</TextBlock>
+                    <TextBlock Grid.Row="4" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="Your Tempo API Token Found Under 'API Intergration'" Visibility="{Binding UseTempo, Converter={StaticResource BoolToVis}}">Tempo API Token</TextBlock>
                     <TextBox Grid.Row="4" Grid.Column="1" Margin="5" VerticalAlignment="Center" Text="{Binding TempoToken, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding UseTempo, Converter={StaticResource BoolToVis}}" />
+
+                    <TextBlock Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Left" TextWrapping="Wrap">NOTE: On Jira Cloud Instances You Should Generate An API Key From Your Atlassian ID Profile (Under Security Settings) And Use This As Your Password.</TextBlock>
+                    <TextBlock Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Left" TextWrapping="Wrap" Visibility="{Binding UseTempo, Converter={StaticResource BoolToVis}}">The Tempo API Token Can Be Found In Your Tempo Settings Under API Integration.  This Page States Its For Temporary Access, But This Token Does NOT Expire</TextBlock>
                 </Grid>
             </TabItem>
         </controls:MetroAnimatedSingleRowTabControl>

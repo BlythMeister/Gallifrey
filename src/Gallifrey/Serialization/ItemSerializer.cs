@@ -22,7 +22,7 @@ namespace Gallifrey.Serialization
             var saveDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Gallifrey");
 
             encryptionPassPhrase = $@"{Environment.UserDomainName}\{Environment.UserName}";
-            serialisationErrorDirectory = Path.Combine(saveDirectory, "Errors");
+            serialisationErrorDirectory = Path.Combine(saveDirectory, "SerializationErrors");
             savePath = Path.Combine(saveDirectory, fileName);
 
             try

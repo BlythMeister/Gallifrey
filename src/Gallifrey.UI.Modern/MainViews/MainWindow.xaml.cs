@@ -272,7 +272,7 @@ namespace Gallifrey.UI.Modern.MainViews
                         throw new MissingJiraConfigException("Missing URL");
                     }
 
-                    var details = await modelHelpers.ShowLoginAsync("UserName & Password", "Please Enter Your UserName/Email Address & Password You Use To Login To Jira", new LoginDialogSettings { EnablePasswordPreview = true, InitialUsername = jiraSettings.JiraUsername, InitialPassword = jiraSettings.JiraPassword });
+                    var details = await modelHelpers.ShowLoginAsync("Jira Authentication", "Please Enter Your Username/Email Address & Password You Use To Login To Jira.\nOn Jira Cloud Instances You Should Generate An API Key From Your Atlassian ID Profile (Under Security Settings) And Use This As Your Password.", new LoginDialogSettings { EnablePasswordPreview = true, InitialUsername = jiraSettings.JiraUsername, InitialPassword = jiraSettings.JiraPassword });
                     jiraSettings.JiraUsername = details.Username;
                     jiraSettings.JiraPassword = details.Password;
 
@@ -286,7 +286,7 @@ namespace Gallifrey.UI.Modern.MainViews
 
                     if (jiraSettings.UseTempo)
                     {
-                        jiraSettings.TempoToken = await modelHelpers.ShowInputAsync("Tempo Api Token", "Please Enter Your Tempo Api Token\nThis Can Be Found Under 'API Integration' In Your Tempo Settings", new MetroDialogSettings { DefaultText = jiraSettings.TempoToken });
+                        jiraSettings.TempoToken = await modelHelpers.ShowInputAsync("Tempo Authentication", "Please Enter Your Tempo Api Token\nThe Tempo API Token Can Be Found In Your Tempo Settings Under API Integration.  This Page States Its For Temporary Access, But This Token Does NOT Expire", new MetroDialogSettings { DefaultText = jiraSettings.TempoToken });
                     }
                     else
                     {

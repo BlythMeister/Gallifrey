@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using RestSharp;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -14,11 +15,15 @@ namespace Gallifrey.Rest
         private readonly Func<string, List<string>> errorMessageSerializationFunction;
         private readonly RestClient client;
         private readonly string authHeader;
+        private readonly string errorResponseDirectory;
 
         private SimpleRestClient(string baseUrl, string authHeader, Func<string, List<string>> errorMessageSerializationFunction)
         {
             this.authHeader = authHeader;
             this.errorMessageSerializationFunction = errorMessageSerializationFunction;
+            errorResponseDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Gallifrey", "WebErrors");
+
+            if (!Directory.Exists(errorResponseDirectory)) Directory.CreateDirectory(errorResponseDirectory);
 
             client = new RestClient { BaseUrl = new Uri(baseUrl), Timeout = (int)TimeSpan.FromMinutes(2).TotalMilliseconds, AutomaticDecompression = true, };
         }
@@ -60,26 +65,51 @@ namespace Gallifrey.Rest
 
         private IRestResponse Execute(Method method, HttpStatusCode expectedStatus, string path, object data = null)
         {
-            var request = CreateRequest(method, path);
+            var requestGuid = Guid.NewGuid();
+            var errorSaveDirectory = Path.Combine(errorResponseDirectory, DateTime.Now.ToString("yy-MM-dd"), requestGuid.ToString());
+            var request = CreateRequest(method, path, requestGuid);
             if (data != null)
             {
                 request.AddHeader("ContentType", "application/json");
                 request.AddJsonBody(data);
             }
 
-            var response = client.Execute(request);
+            IRestResponse response;
+            try
+            {
+                response = client.Execute(request);
+            }
+            catch (System.Exception e) when (errorResponseDirectory != null)
+            {
+                Directory.CreateDirectory(errorSaveDirectory);
+                File.WriteAllText(Path.Combine(errorSaveDirectory, "request.txt"), request.AsString(client));
+                File.WriteAllText(Path.Combine(errorSaveDirectory, "error.txt"), e.ToString());
+                throw;
+            }
 
-            AssertStatus(response, expectedStatus);
+            try
+            {
+                AssertStatus(response, expectedStatus);
+            }
+            catch (System.Exception e)
+            {
+                Directory.CreateDirectory(errorSaveDirectory);
+                File.WriteAllText(Path.Combine(errorSaveDirectory, "request.txt"), request.AsString(client));
+                File.WriteAllText(Path.Combine(errorSaveDirectory, "response.txt"), response.AsString());
+                File.WriteAllText(Path.Combine(errorSaveDirectory, "error.txt"), e.ToString());
+                throw;
+            }
 
             return response;
         }
 
-        private RestRequest CreateRequest(Method method, string path)
+        private RestRequest CreateRequest(Method method, string path, Guid requestGuid)
         {
             var request = new RestRequest { Method = method, Resource = path, RequestFormat = DataFormat.Json };
             request.AddHeader("Authorization", authHeader);
             request.AddHeader("ContentType", "application/json");
             request.AddHeader("Accept", "application/json");
+            request.AddHeader("TrackingGuid", requestGuid.ToString());
             return request;
         }
 
