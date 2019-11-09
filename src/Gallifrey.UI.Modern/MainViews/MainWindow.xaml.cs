@@ -186,7 +186,7 @@ namespace Gallifrey.UI.Modern.MainViews
             else if (result.RetVal == InitialiseResult.ConnectionError || result.RetVal == InitialiseResult.MissingConfig)
             {
                 modelHelpers.Gallifrey.TrackEvent(TrackingType.ConnectionError);
-                var userUpdate = await modelHelpers.ShowMessageAsync("Login Failure", "We Were Unable To Authenticate To Jira, Please Confirm Login Details\nWould You Like To Update Your Details Or Retry Login?", MessageDialogStyle.AffirmativeAndNegativeAndSingleAuxiliary, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No", FirstAuxiliaryButtonText = "Retry" });
+                var userUpdate = await modelHelpers.ShowMessageAsync("Login Failure", "We Were Unable To Authenticate To Jira, Please Confirm Login Details", MessageDialogStyle.AffirmativeAndNegativeAndSingleAuxiliary, new MetroDialogSettings { AffirmativeButtonText = "Update Details", NegativeButtonText = "Cancel", FirstAuxiliaryButtonText = "Retry" });
 
                 switch (userUpdate)
                 {

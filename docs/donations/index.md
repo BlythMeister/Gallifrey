@@ -22,82 +22,14 @@ If you would would be interested in a support licence, please <a href="mailto:in
 
 There is a minimum donation required in order to gain access to premium features.
 
-The smallest donation to get premium access is **£4.00 (GBP)** for a single user access. - This access is non transferable and will be linked to the initial email address the donation comes from
+The smallest donation to get premium access is **£3.00 (GBP)** for a single user access. - This access is non transferable and will be linked to the initial email address the donation comes from
 
-If you are looking to unlock premium for your company or team then a yearly donation of **£50.00 (GBP)**.  To discuss this further, please reach out to me by <a href="mailto:info@GallifreyApp.co.uk" target="_blank">email</a>
+If you are looking to unlock premium for your company or team then a yearly donation of **£30.00 (GBP)**.  To discuss this further, please reach out to me by <a href="mailto:info@GallifreyApp.co.uk" target="_blank">email</a>
 
 This is not a support licence for garenteed support, if you require this please contact by <a href="mailto:info@GallifreyApp.co.uk" target="_blank">email</a>
 
 When donating any amount, please include your installation hash (found at the bottom of the information screen) as your donation message so we can unlock premium for you.
 
-## Suggested Donations
+## Donation Links
 
-### £££ - Choose your donation amount
-
-<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top" style="vertical-align:middle;">
-<img alt="you decide" src="{{ site.url }}/images/donations/youdecide.png"/>
-<input type="hidden" name="cmd" value="_s-xclick">
-<input type="hidden" name="hosted_button_id" value="8RWB7ASGLW29S">
-<input type="image" src="https://www.paypalobjects.com/en_GB/i/btn/btn_donate_SM.gif" border="0" name="submit" alt="PayPal – The safer, easier way to pay online!">
-<img alt="" border="0" src="https://www.paypalobjects.com/en_GB/i/scr/pixel.gif" width="1" height="1">
-</form>
-
-### £4.00 (GBP) - Single User Premium Access Minimum
-
-<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top" style="vertical-align:middle;">
-<img alt="premium" src="{{ site.url }}/images/donations/premium.png"/>
-<input type="hidden" name="cmd" value="_s-xclick">
-<input type="hidden" name="hosted_button_id" value="8BZ4YEJH5HULY">
-<input type="image" src="https://www.paypalobjects.com/en_GB/i/btn/btn_donate_SM.gif" border="0" name="submit" alt="PayPal – The safer, easier way to pay online!">
-<img alt="" border="0" src="https://www.paypalobjects.com/en_GB/i/scr/pixel.gif" width="1" height="1">
-</form>
-
-### £8.00 (GBP) - Coffee & Cake
-
-<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top" style="vertical-align:middle;">
-<img alt="coffee and cake" src="{{ site.url }}/images/donations/coffeeCake.png"/>
-<input type="hidden" name="cmd" value="_s-xclick">
-<input type="hidden" name="hosted_button_id" value="SMFNAFP8SW3QY">
-<input type="image" src="https://www.paypalobjects.com/en_GB/i/btn/btn_donate_SM.gif" border="0" name="submit" alt="PayPal – The safer, easier way to pay online!">
-<img alt="" border="0" src="https://www.paypalobjects.com/en_GB/i/scr/pixel.gif" width="1" height="1">
-</form>
-
-### £15.00 (GBP) - Buy me lunch
-
-<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top" style="vertical-align:middle;">
-<img alt="lunch" src="{{ site.url }}/images/donations/lunch.png"/>
-<input type="hidden" name="cmd" value="_s-xclick">
-<input type="hidden" name="hosted_button_id" value="SZSAUBM2H3876">
-<input type="image" src="https://www.paypalobjects.com/en_GB/i/btn/btn_donate_SM.gif" border="0" name="submit" alt="PayPal – The safer, easier way to pay online!">
-<img alt="" border="0" src="https://www.paypalobjects.com/en_GB/i/scr/pixel.gif" width="1" height="1">
-</form>
-
-### £30.00 (GBP) - Buy me a meal
-
-<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top" style="vertical-align:middle;">
-<img alt="takeaway" src="{{ site.url }}/images/donations/takeaway.png"/>
-<input type="hidden" name="cmd" value="_s-xclick">
-<input type="hidden" name="hosted_button_id" value="4T84MVAN8ZS9N">
-<input type="image" src="https://www.paypalobjects.com/en_GB/i/btn/btn_donate_SM.gif" border="0" name="submit" alt="PayPal – The safer, easier way to pay online!">
-<img alt="" border="0" src="https://www.paypalobjects.com/en_GB/i/scr/pixel.gif" width="1" height="1">
-</form>
-
-### £50.00 (GBP) - Buy me a night out
-
-<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top" style="vertical-align:middle;">
-<img alt="beer" src="{{ site.url }}/images/donations/beer.png"/>
-<input type="hidden" name="cmd" value="_s-xclick">
-<input type="hidden" name="hosted_button_id" value="8XDTDQAADCYGN">
-<input type="image" src="https://www.paypalobjects.com/en_GB/i/btn/btn_donate_SM.gif" border="0" name="submit" alt="PayPal – The safer, easier way to pay online!">
-<img alt="" border="0" src="https://www.paypalobjects.com/en_GB/i/scr/pixel.gif" width="1" height="1">
-</form>
-
-### £100.00 (GBP) - Get your name in the app
-
-<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top" style="vertical-align:middle;">
-<img alt="my name is ???" src="{{ site.url }}/images/donations/myName.png"/>
-<input type="hidden" name="cmd" value="_s-xclick">
-<input type="hidden" name="hosted_button_id" value="RMBHZM34BRXDA">
-<input type="image" src="https://www.paypalobjects.com/en_GB/i/btn/btn_donate_SM.gif" border="0" name="submit" alt="PayPal – The safer, easier way to pay online!">
-<img alt="" border="0" src="https://www.paypalobjects.com/en_GB/i/scr/pixel.gif" width="1" height="1">
-</form>
+All donation links can be found on my [personal blog](https://www.blyth.me.uk/donations)
