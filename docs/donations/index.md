@@ -28,8 +28,12 @@ If you are looking to unlock premium for your company or team then a yearly dona
 
 This is not a support licence for garenteed support, if you require this please contact by <a href="mailto:info@GallifreyApp.co.uk" target="_blank">email</a>
 
-When donating any amount, please include your installation hash (found at the bottom of the information screen) as your donation message so we can unlock premium for you.
-
 ## Donation Links
 
 All donation links can be found on my [personal blog](https://www.blyth.me.uk/donations)
+
+When donating any amount, please include your installation hash (found at the bottom of the information screen) as your donation message so we can unlock premium for you.
+
+If it is not clear that your donation is for Gallifrey, we will be unable to unlock the premium features for you.
+
+If you forget to include your installation hash, you can still get the premium features by sending a <a href="mailto:info@GallifreyApp.co.uk" target="_blank">email</a>.
