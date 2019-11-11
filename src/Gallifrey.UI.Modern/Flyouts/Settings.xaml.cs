@@ -53,10 +53,8 @@ namespace Gallifrey.UI.Modern.Flyouts
 
                 if (themeChanged == ThemeChangeDetail.Theme || themeChanged == ThemeChangeDetail.Both)
                 {
-                    //This is a really ugly solution!!
-                    //The overides of system colours do not update automatically which is not good.
-                    //This message will hopefully make people restart...
-                    await modelHelpers.ShowMessageAsync("Restart Needed", "When Changing Theme, Some Colours Will Not Change Automatically\nIt Is Recommended To Restart The App");
+                    await modelHelpers.ShowMessageAsync("Restart Needed", "When Changing Theme, Some Colours Will Not Change Automatically");
+                    modelHelpers.CloseApp(true);
                 }
             }
             else
