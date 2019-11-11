@@ -53,7 +53,7 @@ namespace Gallifrey.UI.Modern.Flyouts
 
                 if (themeChanged == ThemeChangeDetail.Theme || themeChanged == ThemeChangeDetail.Both)
                 {
-                    await modelHelpers.ShowMessageAsync("Restart Needed", "When Changing Theme, Some Colours Will Not Change Automatically");
+                    await modelHelpers.ShowMessageAsync("Restart Needed", "Due To The Changing Of The Theme, Gallifrey Will Restart");
                     modelHelpers.CloseApp(true);
                 }
             }
