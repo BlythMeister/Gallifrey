@@ -92,7 +92,7 @@ namespace Gallifrey.Jira
 
                 if (searchResult.total > returnIssues.Count)
                 {
-                    startAt = startAt + searchResult.maxResults;
+                    startAt += searchResult.maxResults;
                 }
                 else
                 {

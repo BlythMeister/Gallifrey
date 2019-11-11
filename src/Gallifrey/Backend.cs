@@ -183,7 +183,7 @@ namespace Gallifrey
             try
             {
                 var keepTimersForDays = settingsCollection.AppSettings.KeepTimersForDays;
-                if (keepTimersForDays > 0) keepTimersForDays = keepTimersForDays * -1;
+                if (keepTimersForDays > 0) keepTimersForDays *= -1;
                 var workingDate = DateTime.Now.AddDays(keepTimersForDays + 1);
                 var doCheck = false;
 
