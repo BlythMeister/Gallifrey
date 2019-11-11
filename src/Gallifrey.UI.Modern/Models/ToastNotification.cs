@@ -7,14 +7,11 @@ namespace Gallifrey.UI.Modern.Models
     {
         public override NotificationDisplayPart DisplayPart { get; }
         public string Title { get; }
-        public string Message { get; }
 
-        public ToastNotification(string title, string message)
+        public ToastNotification(string title, string message) : base(message, new MessageOptions { FreezeOnMouseEnter = false })
         {
             DisplayPart = new ToastNotificationDisplayPart(this);
             Title = title;
-            Message = message;
-            CanClose = true;
         }
     }
 }

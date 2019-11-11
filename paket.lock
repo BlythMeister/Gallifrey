@@ -15,4 +15,4 @@ NUGET
     Octokit (0.36)
     RestSharp (106.6.10)
     System.ValueTuple (4.5)
-    ToastNotifications (2.5)
+    ToastNotifications (2.5.1)

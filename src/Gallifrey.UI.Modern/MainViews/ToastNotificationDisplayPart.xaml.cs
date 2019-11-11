@@ -9,11 +9,12 @@ namespace Gallifrey.UI.Modern.MainViews
         {
             InitializeComponent();
             DataContext = notification;
+            Notification = notification;
         }
 
         private void ToastNotificationDisplayPart_OnMouseDown(object sender, MouseButtonEventArgs e)
         {
-            ((ToastNotification)DataContext).Close();
+            Notification.Close();
         }
     }
 }
