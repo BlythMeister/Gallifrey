@@ -645,8 +645,11 @@
     <Features />
     <Bugs>
       <Bug>Improve handling of new timer tabs being added</Bug>
+      <Bug>Fix Jira assignment</Bug>
     </Bugs>
-    <Others />
+    <Others>
+      <Other>Remove support for Jira SOAP endpoints</Other>
+    </Others>
   </Version>
   <!--
   Template for VNext if not present above
