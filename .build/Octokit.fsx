@@ -1,5 +1,5 @@
 #nowarn "211"
-#r @"../packages/Octokit/lib/net45/Octokit.dll"
+#r @"../packages/Octokit/lib/net46/Octokit.dll"
 #r "System.Net.Http"
 
 open Octokit
