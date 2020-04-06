@@ -267,11 +267,11 @@ namespace Gallifrey.Jira
             }
         }
 
-        public void AssignIssue(string issueRef, string userName)
+        public void AssignIssue(string issueRef, User user)
         {
             var postData = new Dictionary<string, object>
             {
-                { "name", userName }
+                { "accountId", user.accountId }
             };
 
             jiraClient.Put(HttpStatusCode.NoContent, $"issue/{issueRef}/assignee", postData);

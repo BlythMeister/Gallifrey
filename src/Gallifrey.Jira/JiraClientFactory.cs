@@ -18,44 +18,13 @@ namespace Gallifrey.Jira
 
             jiraUrl = jiraUrl.Replace("/secure/Dashboard.jspa", "");
 
-            var jira = ConnectUsingRest(jiraUrl, username, password, useTempo, tempoToken);
-            if (jira == null)
-            {
-                jira = ConnectUsingSoap(jiraUrl, username, password);
-                if (jira == null)
-                {
-                    throw new System.Exception("Unable to connect to jira");
-                }
-            }
-
-            return jira;
-        }
-
-        private static IJiraClient ConnectUsingRest(string jiraUrl, string username, string password, bool useTempo, string tempoToken)
-        {
             try
             {
                 return new JiraRestClient(jiraUrl, username, password, useTempo, tempoToken);
             }
             catch (System.Exception e)
             {
-                if (e != null)
-                {
-                    return null;
-                }
-                return null;
-            }
-        }
-
-        private static IJiraClient ConnectUsingSoap(string jiraUrl, string username, string password)
-        {
-            try
-            {
-                return new JiraSoapClient(jiraUrl, username, password);
-            }
-            catch (System.Exception)
-            {
-                return null;
+                throw new System.Exception("Unable to connect to jira", e);
             }
         }
     }

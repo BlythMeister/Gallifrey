@@ -44,7 +44,6 @@
     <Compile Include="IJiraClient.cs" />
     <Compile Include="JiraClientFactory.cs" />
     <Compile Include="JiraRestClient.cs" />
-    <Compile Include="JiraSoapClient.cs" />
     <Compile Include="Model\Error.cs" />
     <Compile Include="Model\Fields.cs" />
     <Compile Include="Model\Filter.cs" />
@@ -80,17 +79,6 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.6'">
-      <ItemGroup>
-        <Reference Include="Atlassian.Jira">
-          <HintPath>..\..\packages\Atlassian.SDK\lib\Atlassian.Jira.dll</HintPath>
-          <Private>True</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
   <Choose>
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.6'">
       <ItemGroup>

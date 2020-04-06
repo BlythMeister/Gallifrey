@@ -29,7 +29,7 @@ namespace Gallifrey.Jira
 
         void AddWorkLog(string issueRef, WorkLogStrategy workLogStrategy, string comment, TimeSpan timeSpent, DateTime logDate, TimeSpan? remainingTime = null);
 
-        void AssignIssue(string issueRef, string userName);
+        void AssignIssue(string issueRef, User user);
 
         void AddComment(string issueRef, string comment);
     }
