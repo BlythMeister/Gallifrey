@@ -281,7 +281,7 @@ namespace Gallifrey.JiraIntegration
             try
             {
                 CheckAndConnectJira();
-                jira.AssignIssue(jiraRef, CurrentUser.name);
+                jira.AssignIssue(jiraRef, CurrentUser);
             }
             catch (Exception ex)
             {
