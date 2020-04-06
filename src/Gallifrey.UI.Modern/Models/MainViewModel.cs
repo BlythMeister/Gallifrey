@@ -264,6 +264,7 @@ namespace Gallifrey.UI.Modern.Models
                 {
                     dateModel = new TimerDateModel(timerDate, ModelHelpers.Gallifrey.JiraTimerCollection);
                     TimerDates.Add(dateModel);
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TimerDates"));
                 }
 
                 var dateTimers = ModelHelpers.Gallifrey.JiraTimerCollection.GetTimersForADate(timerDate).ToList();
@@ -323,6 +324,7 @@ namespace Gallifrey.UI.Modern.Models
             if (orderedCollection.Count != TimerDates.Count)
             {
                 TimerDates = new ObservableCollection<TimerDateModel>(orderedCollection);
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TimerDates"));
             }
             else
             {
@@ -334,11 +336,11 @@ namespace Gallifrey.UI.Modern.Models
                     if (main.TimerDate != ordered.TimerDate)
                     {
                         TimerDates = new ObservableCollection<TimerDateModel>(orderedCollection);
+                        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TimerDates"));
                         break;
                     }
                 }
             }
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TimerDates"));
 
             SetTrackingOnlyInModel();
             targetBarValues.Update();

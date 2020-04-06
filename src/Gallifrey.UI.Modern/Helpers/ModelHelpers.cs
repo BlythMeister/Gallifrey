@@ -253,7 +253,7 @@ namespace Gallifrey.UI.Modern.Helpers
             var appName = Gallifrey.Settings.InternalSettings.IsPremium ? "Gallifrey Premium" : "Gallifrey";
             var title = (instanceType == InstanceType.Stable ? $"{appName}" : $"{appName} ({instanceType})").ToUpper();
 
-            toastNotifier.Notify<ToastNotification>(() => new ToastNotification(title, message));
+            toastNotifier.Notify(() => new ToastNotification(title, message));
         }
 
         #endregion Dialogs

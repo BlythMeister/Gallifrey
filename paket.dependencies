@@ -1,14 +1,13 @@
 framework: auto-detect
 source https://www.nuget.org/api/v2
 
-nuget Atlassian.SDK @= 2.5.0
 nuget Exceptionless.Wpf
 nuget FAKE ~> 4
-nuget MahApps.Metro
+nuget MahApps.Metro ~> 1
 nuget MahApps.Metro.IconPacks.FontAwesome
 nuget Newtonsoft.Json
 nuget Octokit
 nuget RestSharp
 nuget System.ValueTuple
-nuget ToastNotifications @= 2.5
+nuget ToastNotifications
 

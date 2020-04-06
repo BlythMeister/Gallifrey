@@ -641,6 +641,16 @@
     </Bugs>
     <Others />
   </Version>
+  <Version Number="0.0.0.0" Name="Pre-Release">
+    <Features />
+    <Bugs>
+      <Bug>Improve handling of new timer tabs being added</Bug>
+      <Bug>Fix Jira assignment</Bug>
+    </Bugs>
+    <Others>
+      <Other>Remove support for Jira SOAP endpoints</Other>
+    </Others>
+  </Version>
   <!--
   Template for VNext if not present above
   <Version Number="0.0.0.0" Name="Pre-Release">
