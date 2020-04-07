@@ -11,9 +11,12 @@ namespace Gallifrey.Serialization
         private readonly string savePath;
         private readonly string serialisationErrorDirectory;
         private readonly string encryptionPassPhrase;
-        private string TempWritePath => savePath + ".temp";
+        private string TempWritePath => savePath + ".temp.bak";
         private string BackupPath => savePath + ".bak";
-        private string BackupPathPlus1 => savePath + ".bak+1";
+        private string BackupPathPlus1 => savePath + ".bak.1";
+        private string BackupPathPlus2 => savePath + ".bak.2";
+        private string BackupPathPlus3 => savePath + ".bak.3";
+        private string BackupPathPlus4 => savePath + ".bak.4";
         private readonly Mutex singleThreadMutex;
 
         public ItemSerializer(string fileName)
@@ -63,6 +66,21 @@ namespace Gallifrey.Serialization
                     }
 
                     if (!File.Exists(BackupPathPlus1) || new FileInfo(BackupPathPlus1).LastWriteTimeUtc.Date < DateTime.UtcNow.Date.AddDays(-1))
+                    {
+                        File.Copy(savePath, BackupPathPlus1, true);
+                    }
+
+                    if (!File.Exists(BackupPathPlus2) || new FileInfo(BackupPathPlus2).LastWriteTimeUtc.Date < DateTime.UtcNow.Date.AddDays(-2))
+                    {
+                        File.Copy(savePath, BackupPathPlus1, true);
+                    }
+
+                    if (!File.Exists(BackupPathPlus3) || new FileInfo(BackupPathPlus3).LastWriteTimeUtc.Date < DateTime.UtcNow.Date.AddDays(-3))
+                    {
+                        File.Copy(savePath, BackupPathPlus1, true);
+                    }
+
+                    if (!File.Exists(BackupPathPlus4) || new FileInfo(BackupPathPlus4).LastWriteTimeUtc.Date < DateTime.UtcNow.Date.AddDays(-4))
                     {
                         File.Copy(savePath, BackupPathPlus1, true);
                     }
@@ -137,6 +155,24 @@ namespace Gallifrey.Serialization
                 {
                     Thread.Sleep(200);
                     return DeSerializeFile(BackupPathPlus1, 0);
+                }
+
+                if (retryCount >= 3 && fileToUse == BackupPathPlus1)
+                {
+                    Thread.Sleep(200);
+                    return DeSerializeFile(BackupPathPlus2, 0);
+                }
+
+                if (retryCount >= 3 && fileToUse == BackupPathPlus2)
+                {
+                    Thread.Sleep(200);
+                    return DeSerializeFile(BackupPathPlus3, 0);
+                }
+
+                if (retryCount >= 3 && fileToUse == BackupPathPlus3)
+                {
+                    Thread.Sleep(200);
+                    return DeSerializeFile(BackupPathPlus4, 0);
                 }
 
                 if (retryCount >= 3)
