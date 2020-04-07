@@ -128,10 +128,10 @@
             </TabControl.ContentTemplate>
         </controls:MetroAnimatedSingleRowTabControl>
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Style="{DynamicResource MahApps.Styles.Button.Circle}" Width="40" Height="40" Margin="2,5" Click="ExportAllButton" ToolTip="Check All For Export">
+            <Button Style="{DynamicResource MahApps.Styles.Button.Circle}" Width="40" Height="40" Margin="5" Click="ExportAllButton" ToolTip="Check All For Export">
                 <iconPacks:PackIconFontAwesome Kind="CheckDoubleSolid" Height="22" Width="22" HorizontalAlignment="Center" VerticalAlignment="Center" />
             </Button>
-            <Button Style="{DynamicResource MahApps.Styles.Button.Circle}" Width="40" Height="40" Margin="2,5"   Click="ExportButton" IsDefault="True" ToolTip="Export Checked Worklogs To Jira">
+            <Button Style="{DynamicResource MahApps.Styles.Button.Circle}" Width="40" Height="40" Margin="5"   Click="ExportButton" IsDefault="True" ToolTip="Export Checked Worklogs To Jira">
                 <iconPacks:PackIconFontAwesome Kind="UploadSolid" Height="22" Width="22" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,2,0" />
             </Button>
         </StackPanel>

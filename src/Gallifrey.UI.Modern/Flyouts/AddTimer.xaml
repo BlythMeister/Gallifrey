@@ -93,10 +93,10 @@
         <controls:ToggleSwitch OnContent="" OffContent="" HorizontalAlignment="Left"  Grid.Row="6" Grid.Column="1" Margin="0,5" IsOn="{Binding ChangeStatus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding LocalTimer, Converter={StaticResource BoolInvert}}" Toggled="ChangeStatusClick" />
 
         <StackPanel Orientation="Horizontal" Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center">
-            <Button Style="{DynamicResource MahApps.Styles.Button.Circle}" Width="40" Height="40" Margin="2,5" Click="SearchButton" ToolTip="Search Jira">
+            <Button Style="{DynamicResource MahApps.Styles.Button.Circle}" Width="40" Height="40" Margin="5" Click="SearchButton" ToolTip="Search Jira">
                 <iconPacks:PackIconFontAwesome Kind="SearchSolid" Height="22" Width="22" HorizontalAlignment="Center" VerticalAlignment="Center" />
             </Button>
-            <Button Style="{DynamicResource MahApps.Styles.Button.Circle}" Width="40" Height="40" Margin="2,5" Click="AddButton" IsDefault="True" ToolTip="Add Timer">
+            <Button Style="{DynamicResource MahApps.Styles.Button.Circle}" Width="40" Height="40" Margin="5" Click="AddButton" IsDefault="True" ToolTip="Add Timer">
                 <iconPacks:PackIconFontAwesome Kind="PlusCircleSolid" Height="22" Width="22" HorizontalAlignment="Center" VerticalAlignment="Center" />
             </Button>
         </StackPanel>

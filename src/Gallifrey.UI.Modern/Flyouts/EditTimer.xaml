@@ -62,16 +62,16 @@
         </WrapPanel>
 
         <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center">
-            <Button Style="{DynamicResource MahApps.Styles.Button.Circle}" Width="40" Height="40" Margin="2,5" Click="SearchButton" ToolTip="Search Jira">
+            <Button Style="{DynamicResource MahApps.Styles.Button.Circle}" Width="40" Height="40" Margin="5" Click="SearchButton" ToolTip="Search Jira">
                 <iconPacks:PackIconFontAwesome Kind="SearchSolid" Height="22" Width="22" HorizontalAlignment="Center" VerticalAlignment="Center" />
             </Button>
-            <Button Style="{DynamicResource MahApps.Styles.Button.Circle}" Width="40" Height="40" Margin="2,5" Click="AddTime" ToolTip="Add X Minutes">
+            <Button Style="{DynamicResource MahApps.Styles.Button.Circle}" Width="40" Height="40" Margin="5" Click="AddTime" ToolTip="Add X Minutes">
                 <iconPacks:PackIconFontAwesome Kind="PlusSolid" Height="22" Width="22" HorizontalAlignment="Center" VerticalAlignment="Center" />
             </Button>
-            <Button Style="{DynamicResource MahApps.Styles.Button.Circle}" Width="40" Height="40" Margin="2,5" Click="SubtractTime" ToolTip="Subtract X Minutes">
+            <Button Style="{DynamicResource MahApps.Styles.Button.Circle}" Width="40" Height="40" Margin="5" Click="SubtractTime" ToolTip="Subtract X Minutes">
                 <iconPacks:PackIconFontAwesome Kind="MinusSolid" Height="22" Width="22" HorizontalAlignment="Center" VerticalAlignment="Center" />
             </Button>
-            <Button Style="{DynamicResource MahApps.Styles.Button.Circle}" Width="40" Height="40" Margin="2,5" Click="SaveButton" IsDefault="{Binding IsDefaultOnButton, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ToolTip="Save Timer Changes">
+            <Button Style="{DynamicResource MahApps.Styles.Button.Circle}" Width="40" Height="40" Margin="5" Click="SaveButton" IsDefault="{Binding IsDefaultOnButton, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ToolTip="Save Timer Changes">
                 <iconPacks:PackIconFontAwesome Kind="SaveSolid" Height="22" Width="22" HorizontalAlignment="Center" VerticalAlignment="Center" />
             </Button>
         </StackPanel>

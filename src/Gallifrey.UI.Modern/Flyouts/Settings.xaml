@@ -220,7 +220,7 @@
         </controls:MetroAnimatedSingleRowTabControl>
 
         <WrapPanel HorizontalAlignment="Center" DockPanel.Dock="Bottom" VerticalAlignment="Bottom" Height="Auto">
-            <Button Style="{DynamicResource MahApps.Styles.Button.Circle}" Width="40" Height="40" Margin="2,5" Click="SaveSettings" IsDefault="True" ToolTip="Save Settings">
+            <Button Style="{DynamicResource MahApps.Styles.Button.Circle}" Width="40" Height="40" Margin="5" Click="SaveSettings" IsDefault="True" ToolTip="Save Settings">
                 <iconPacks:PackIconFontAwesome Kind="SaveSolid" Height="22" Width="22" HorizontalAlignment="Center" VerticalAlignment="Center" />
             </Button>
         </WrapPanel>
