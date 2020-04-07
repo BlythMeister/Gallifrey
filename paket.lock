@@ -1,4 +1,4 @@
-RESTRICTION: == net46
+RESTRICTION: == net47
 NUGET
   remote: https://www.nuget.org/api/v2
     ControlzEx (3.0.2.4)

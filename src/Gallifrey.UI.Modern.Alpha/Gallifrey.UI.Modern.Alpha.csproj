@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Gallifrey.UI.Modern.Alpha</RootNamespace>
     <AssemblyName>Gallifrey.UI.Modern.Alpha</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
@@ -219,15 +219,15 @@
   </Target>
   -->
   <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.6'">
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.7'">
       <ItemGroup>
         <Reference Include="ControlzEx">
-          <HintPath>..\..\packages\ControlzEx\lib\net45\ControlzEx.dll</HintPath>
+          <HintPath>..\..\packages\ControlzEx\lib\net462\ControlzEx.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
         <Reference Include="System.Windows.Interactivity">
-          <HintPath>..\..\packages\ControlzEx\lib\net45\System.Windows.Interactivity.dll</HintPath>
+          <HintPath>..\..\packages\ControlzEx\lib\net462\System.Windows.Interactivity.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
@@ -235,7 +235,7 @@
     </When>
   </Choose>
   <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.6'">
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.7'">
       <ItemGroup>
         <Reference Include="Microsoft.VisualBasic">
           <Paket>True</Paket>
@@ -264,7 +264,7 @@
     </When>
   </Choose>
   <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.6'">
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.7'">
       <ItemGroup>
         <Reference Include="Exceptionless.Wpf">
           <HintPath>..\..\packages\Exceptionless.Wpf\lib\net45\Exceptionless.Wpf.dll</HintPath>
@@ -275,10 +275,10 @@
     </When>
   </Choose>
   <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.6'">
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.7'">
       <ItemGroup>
         <Reference Include="MahApps.Metro">
-          <HintPath>..\..\packages\MahApps.Metro\lib\net46\MahApps.Metro.dll</HintPath>
+          <HintPath>..\..\packages\MahApps.Metro\lib\net47\MahApps.Metro.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
@@ -286,15 +286,15 @@
     </When>
   </Choose>
   <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.6'">
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.7'">
       <ItemGroup>
         <Reference Include="MahApps.Metro.IconPacks.Core">
-          <HintPath>..\..\packages\MahApps.Metro.IconPacks.FontAwesome\lib\net46\MahApps.Metro.IconPacks.Core.dll</HintPath>
+          <HintPath>..\..\packages\MahApps.Metro.IconPacks.FontAwesome\lib\net47\MahApps.Metro.IconPacks.Core.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
         <Reference Include="MahApps.Metro.IconPacks.FontAwesome">
-          <HintPath>..\..\packages\MahApps.Metro.IconPacks.FontAwesome\lib\net46\MahApps.Metro.IconPacks.FontAwesome.dll</HintPath>
+          <HintPath>..\..\packages\MahApps.Metro.IconPacks.FontAwesome\lib\net47\MahApps.Metro.IconPacks.FontAwesome.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
