@@ -41,4 +41,4 @@ We are committed that Gallifrey will remain free for all users forever.  Whilst 
 
 * Windows 7 or higher
 * Jira instance (cloud or self-hosted) any version.
-* .net Framework 4.6 or higher
+* .net Framework 4.7 or higher
