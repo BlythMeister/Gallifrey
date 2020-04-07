@@ -37,14 +37,14 @@
             </TextBlock.Style>
         </TextBlock>
 
-        <Grid Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Margin="0,5">
+        <Grid Grid.Row="0" Grid.Column="1" VerticalAlignment="Center">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <TextBox Grid.Column="0" Text="{Binding JiraReference, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" CharacterCasing="Upper" IsEnabled="{Binding JiraReferenceEditable}" Visibility="{Binding LocalTimer, Converter={StaticResource BoolToVisInverted}}" />
-            <TextBox Grid.Column="0" Text="{Binding LocalTimerDescription, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding LocalTimer, Converter={StaticResource BoolToVis}}" />
+            <TextBox Grid.Column="0" Margin="0,5" Text="{Binding JiraReference, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" CharacterCasing="Upper" IsEnabled="{Binding JiraReferenceEditable}" Visibility="{Binding LocalTimer, Converter={StaticResource BoolToVisInverted}}" />
+            <TextBox Grid.Column="0" Margin="0,5" Text="{Binding LocalTimerDescription, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding LocalTimer, Converter={StaticResource BoolToVis}}" />
 
             <controls:ToggleSwitch OnContent="" OffContent="" HorizontalAlignment="Left"  Grid.Column="1" Margin="5,0,-100,0" IsOn="{Binding LocalTimer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding JiraReferenceEditable}" />
             <TextBlock Grid.Column="2" VerticalAlignment="Center">Local Timer?</TextBlock>
