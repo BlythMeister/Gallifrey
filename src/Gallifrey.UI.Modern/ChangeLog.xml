@@ -652,7 +652,9 @@
     </Others>
   </Version>
   <Version Number="0.0.0.0" Name="Pre-Release">
-    <Features />
+    <Features>
+      <Feature>Add ability to right click and view in Jira</Feature>
+    </Features>
     <Bugs />
     <Others>
       <Other>Update app to .net 4.7.0 from .net 4.6.0</Other>

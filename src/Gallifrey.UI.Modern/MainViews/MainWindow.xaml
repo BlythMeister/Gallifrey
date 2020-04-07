@@ -9,7 +9,7 @@
         Icon="/Icons/clock_blue.ico" IconScalingMode="ScaleDownLargerFrame" IconEdgeMode="Aliased" IconBitmapScalingMode="HighQuality" Title="{Binding AppTitle}" TitleCharacterCasing="Upper"
         WindowTitleBrush="{DynamicResource MahApps.Brushes.Accent}" NonActiveWindowTitleBrush="{DynamicResource MahApps.Brushes.Accent}" BorderBrush="{DynamicResource MahApps.Brushes.Accent}" BorderThickness="2"
         LeftWindowCommandsOverlayBehavior="HiddenTitleBar" RightWindowCommandsOverlayBehavior="HiddenTitleBar" WindowButtonCommandsOverlayBehavior="HiddenTitleBar" IconOverlayBehavior="HiddenTitleBar" IsWindowDraggable="True"
-        KeepBorderOnMaximize="False" WindowTransitionsEnabled="True" TryToBeFlickerFree="True" TitleAlignment="Left"
+        KeepBorderOnMaximize="False" WindowTransitionsEnabled="True" TryToBeFlickerFree="True" TitleAlignment="Left" ShowDialogsOverTitleBar="True"
         Loaded="MainWindow_OnLoaded" KeyDown="MainWindow_KeyDown" Activated="MainWindow_Activated" StateChanged="MainWindow_StateChange"
         dialogs:DialogParticipation.Register="{Binding RelativeSource={RelativeSource Self}, Path=DataContext.ModelHelpers.DialogContext}">
 

@@ -118,6 +118,30 @@ namespace Gallifrey.UI.Modern.MainViews
             }
         }
 
+        private async void ViewButton()
+        {
+            var selectedTimers = ViewModel.GetSelectedTimerIds().ToList();
+
+            if (selectedTimers.Count > 1)
+            {
+                await ModelHelpers.ShowMessageAsync("Too Many Timers Selected", "Please Select Only One Timer When Showing In Jira");
+            }
+            else if (selectedTimers.Count == 1)
+            {
+                var selectedTimer = ModelHelpers.Gallifrey.JiraTimerCollection.GetTimer(selectedTimers.First());
+                if (selectedTimer.LocalTimer)
+                {
+                    await ModelHelpers.ShowMessageAsync("Not Avaliable", "A Local Timer Does Not Exist In Jira");
+                }
+                else
+                {
+                    var jiraRef = selectedTimer.JiraReference;
+                    Uri.TryCreate(ModelHelpers.Gallifrey.Settings.JiraConnectionSettings.JiraUrl, UriKind.Absolute, out var jiraUri);
+                    Process.Start(new ProcessStartInfo($"{jiraUri.AbsoluteUri}browse/{jiraRef}"));
+                }
+            }
+        }
+
         private async void DeleteButton(object sender, RoutedEventArgs e)
         {
             var selectedTimerIds = ViewModel.GetSelectedTimerIds().ToList();
@@ -299,6 +323,7 @@ namespace Gallifrey.UI.Modern.MainViews
                 case RemoteButtonTrigger.AddToFill: AddToFillDay(); break;
                 case RemoteButtonTrigger.Copy: CopyButton(); break;
                 case RemoteButtonTrigger.Paste: PasteButton(); break;
+                case RemoteButtonTrigger.View: ViewButton(); break;
                 case RemoteButtonTrigger.Delete: DeleteButton(this, null); break;
                 case RemoteButtonTrigger.Search: SearchButton(this, null); break;
                 case RemoteButtonTrigger.Edit: EditButton(this, null); break;

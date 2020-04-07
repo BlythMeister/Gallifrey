@@ -102,7 +102,8 @@
                                 </TextBlock>
                                 <Grid.ContextMenu>
                                     <ContextMenu>
-                                        <MenuItem Header="Copy JIRA Reference" Click="ContextMenu_Copy" />
+                                        <MenuItem Header="Copy Jira Reference" Click="ContextMenu_Copy" />
+                                        <MenuItem Header="View On Jira" Click="ContextMenu_View" />
                                         <MenuItem Header="Delete Timer" Click="ContextMenu_Delete" />
                                         <MenuItem Header="Edit Timer" Click="ContextMenu_Edit" />
                                         <MenuItem Header="Export Timer" Click="ContextMenu_Export" Visibility="{Binding TrackingOnly, Converter={StaticResource BoolToVisInvert}}" />
