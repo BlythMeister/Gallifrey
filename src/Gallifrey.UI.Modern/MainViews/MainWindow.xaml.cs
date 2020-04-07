@@ -52,7 +52,7 @@ namespace Gallifrey.UI.Modern.MainViews
 
             Height = gallifrey.Settings.UiSettings.Height;
             Width = gallifrey.Settings.UiSettings.Width;
-            ThemeHelper.ChangeTheme(gallifrey.Settings.UiSettings.Theme, gallifrey.Settings.UiSettings.Accent);
+            ThemeHelper.ChangeTheme(gallifrey.Settings.UiSettings.Theme);
 
             updateHeartbeat = new Timer(TimeSpan.FromMinutes(1).TotalMilliseconds);
             updateHeartbeat.Elapsed += AutoUpdateCheck;

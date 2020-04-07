@@ -19,7 +19,7 @@
             <TabControl.ItemContainerStyle>
                 <Style TargetType="TabItem">
                     <Setter Property="Header" Value="{Binding VersionNumber}" />
-                    <Setter Property="controls:ControlsHelper.HeaderFontSize" Value="17" />
+                    <Setter Property="controls:HeaderedControlHelper.HeaderFontSize" Value="17" />
                     <Setter Property="HorizontalAlignment" Value="Right" />
                     <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 </Style>
@@ -51,7 +51,7 @@
                                             <DataTemplate>
                                                 <BulletDecorator Width="Auto">
                                                     <BulletDecorator.Bullet>
-                                                        <Ellipse Fill="{DynamicResource AccentColorBrush4}" Stroke="{DynamicResource AccentColorBrush}" StrokeThickness="1" Width="8" Height="8" />
+                                                        <Ellipse Fill="{DynamicResource MahApps.Brushes.Accent4}" Stroke="{DynamicResource MahApps.Brushes.Accent}" StrokeThickness="1" Width="8" Height="8" />
                                                     </BulletDecorator.Bullet>
                                                     <TextBlock Text="{Binding}" Margin="3,0,0,0" TextWrapping="Wrap" />
                                                 </BulletDecorator>
@@ -66,7 +66,7 @@
                                             <DataTemplate>
                                                 <BulletDecorator Width="Auto">
                                                     <BulletDecorator.Bullet>
-                                                        <Ellipse Fill="{DynamicResource AccentColorBrush4}" Stroke="{DynamicResource AccentColorBrush}" StrokeThickness="1" Width="8" Height="8" />
+                                                        <Ellipse Fill="{DynamicResource MahApps.Brushes.Accent4}" Stroke="{DynamicResource MahApps.Brushes.Accent}" StrokeThickness="1" Width="8" Height="8" />
                                                     </BulletDecorator.Bullet>
                                                     <TextBlock Text="{Binding}" Margin="3,0,0,0" TextWrapping="Wrap" />
                                                 </BulletDecorator>
@@ -81,7 +81,7 @@
                                             <DataTemplate>
                                                 <BulletDecorator Width="Auto">
                                                     <BulletDecorator.Bullet>
-                                                        <Ellipse Fill="{DynamicResource AccentColorBrush4}" Stroke="{DynamicResource AccentColorBrush}" StrokeThickness="1" Width="8" Height="8" />
+                                                        <Ellipse Fill="{DynamicResource MahApps.Brushes.Accent4}" Stroke="{DynamicResource MahApps.Brushes.Accent}" StrokeThickness="1" Width="8" Height="8" />
                                                     </BulletDecorator.Bullet>
                                                     <TextBlock Text="{Binding}" Margin="3,0,0,0" TextWrapping="Wrap" />
                                                 </BulletDecorator>
@@ -95,7 +95,7 @@
                 </DataTemplate>
             </TabControl.ContentTemplate>
         </controls:MetroAnimatedSingleRowTabControl>
-        <StackPanel Margin="0,5,0,0" Grid.Row="1" Background="{DynamicResource AccentColorBrush}" HorizontalAlignment="Stretch">
+        <StackPanel Margin="0,5,0,0" Grid.Row="1" Background="{DynamicResource MahApps.Brushes.Accent}" HorizontalAlignment="Stretch">
             <TextBlock TextWrapping="WrapWithOverflow" Margin="5" TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center">
                     To Maintain &amp; Develop Gallifrey Takes A Large Amount Of Time.<LineBreak />
                     Gallifrey Is 100% Free To Use Forever! (No Limits Or Trial Period)<LineBreak />

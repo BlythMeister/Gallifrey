@@ -8,7 +8,6 @@ namespace Gallifrey.Settings
         int Height { get; set; }
         int Width { get; set; }
         string Theme { get; set; }
-        string Accent { get; set; }
         bool TopMostOnFlyoutOpen { get; set; }
     }
 
@@ -22,13 +21,9 @@ namespace Gallifrey.Settings
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
         public int Width { get; set; }
 
-        [DefaultValue("Light")]
+        [DefaultValue("Light.Blue")]
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
         public string Theme { get; set; }
-
-        [DefaultValue("Blue")]
-        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
-        public string Accent { get; set; }
 
         [DefaultValue(false)]
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
@@ -36,8 +31,7 @@ namespace Gallifrey.Settings
 
         public UiSettings()
         {
-            Theme = "Light";
-            Accent = "Blue";
+            Theme = "Light.Blue";
             TopMostOnFlyoutOpen = false;
         }
     }

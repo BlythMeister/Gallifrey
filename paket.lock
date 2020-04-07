@@ -1,14 +1,16 @@
 RESTRICTION: == net47
 NUGET
   remote: https://www.nuget.org/api/v2
-    ControlzEx (3.0.2.4)
+    ControlzEx (4.2.2)
+      Microsoft.Xaml.Behaviors.Wpf (>= 1.1.19)
     Exceptionless (4.3.2027)
     Exceptionless.Wpf (4.3.2027)
       Exceptionless (4.3.2027)
     FAKE (4.64.18)
-    MahApps.Metro (1.6.5)
-      ControlzEx (>= 3.0.2.4 < 4.0)
+    MahApps.Metro (2.0.0-alpha0748)
+      ControlzEx (>= 4.2.2 < 5.0)
     MahApps.Metro.IconPacks.FontAwesome (3.7)
+    Microsoft.Xaml.Behaviors.Wpf (1.1.19)
     Newtonsoft.Json (12.0.3)
     Octokit (0.46)
     RestSharp (106.10.1)

@@ -90,12 +90,12 @@
             <TextBox Grid.Row="9" Grid.Column="1" Margin="0,5" Text="{Binding Comment, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" AcceptsReturn="True" controls:TextBoxHelper.IsSpellCheckContextMenuEnabled="True" Height="50" VerticalScrollBarVisibility="Auto" controls:TextBoxHelper.Watermark="{Binding DefaultComment}" />
 
             <TextBlock Grid.Row="10" Grid.Column="0" VerticalAlignment="Center">Add As Jira<LineBreak />Comment?</TextBlock>
-            <controls:ToggleSwitchButton Grid.Row="10" Grid.Column="1" Margin="0,5" Style="{DynamicResource MahApps.Metro.Styles.ToggleSwitchButton.Win10}" HorizontalAlignment="Left" IsChecked="{Binding StandardComment, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <controls:ToggleSwitch OnContent="" OffContent="" Grid.Row="10" Grid.Column="1" Margin="0,5" HorizontalAlignment="Left" IsOn="{Binding StandardComment, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
             <TextBlock Grid.Row="11" Grid.Column="0" VerticalAlignment="Center">Change Status?</TextBlock>
-            <controls:ToggleSwitchButton Grid.Row="11" Grid.Column="1" Margin="0,5" Style="{DynamicResource MahApps.Metro.Styles.ToggleSwitchButton.Win10}" HorizontalAlignment="Left" IsChecked="{Binding ChangeStatus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Click="ChangeStatusClick" />
+            <controls:ToggleSwitch OnContent="" OffContent="" Grid.Row="11" Grid.Column="1" Margin="0,5" HorizontalAlignment="Left" IsOn="{Binding ChangeStatus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Toggled="ChangeStatusClick" />
 
-            <Button Grid.Row="12" Grid.Column="0" Grid.ColumnSpan="2" Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="ExportButton" IsDefault="True" ToolTip="Export Worklog To Jira">
+            <Button Grid.Row="12" Grid.Column="0" Grid.ColumnSpan="2" Style="{DynamicResource MahApps.Styles.Button.Circle}" Width="40" Height="40" Margin="2,5" Click="ExportButton" IsDefault="True" ToolTip="Export Worklog To Jira">
                 <iconPacks:PackIconFontAwesome Kind="UploadSolid" Height="22" Width="22" HorizontalAlignment="Center" VerticalAlignment="Center" />
             </Button>
         </Grid>
@@ -113,11 +113,11 @@
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
-                    <TextBlock Grid.Row="0" Margin="0 5 0 0" FontSize="{DynamicResource DialogMessageFontSize}" TextWrapping="Wrap" x:Name="Message" Text="Please Select The Status Update You Would Like To Perform" />
-                    <ComboBox Grid.Row="1" Margin="0 5 0 0" FontSize="{DynamicResource DialogMessageFontSize}" controls:ControlsHelper.FocusBorderBrush="{DynamicResource AccentColorBrush}" x:Name="Items" />
+                    <TextBlock Grid.Row="0" Margin="0 5 0 0" FontSize="{DynamicResource MahApps.Font.Size.Dialog.Message}" TextWrapping="Wrap" x:Name="Message" Text="Please Select The Status Update You Would Like To Perform" />
+                    <ComboBox Grid.Row="1" Margin="0 5 0 0" FontSize="{DynamicResource MahApps.Font.Size.Dialog.Message}" controls:ControlsHelper.FocusBorderBrush="{DynamicResource MahApps.Brushes.Accent}" x:Name="Items" />
 
                     <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Height="85">
-                        <Button Height="35" MinWidth="80" Style="{DynamicResource AccentedDialogSquareButton}" Content="OK" Margin="0 0 5 0" Click="TransitionSelected" />
+                        <Button Height="35" MinWidth="80" Style="{DynamicResource MahApps.Styles.Button.AccentedSquare}" Content="OK" Margin="0 0 5 0" Click="TransitionSelected" />
                         <Button Height="35" MinWidth="80" Content="Cancel" Margin="5 0 5 0" Click="CancelTransition" />
                     </StackPanel>
                 </Grid>

@@ -2,12 +2,12 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-    <DockPanel HorizontalAlignment="Stretch" Background="{DynamicResource AccentColorBrush}">
-        <TextBlock Foreground="{DynamicResource IdealForegroundColorBrush}" Margin="5,0,0,0" VerticalAlignment="Center">
-                Contact Us By <Hyperlink NavigateUri="https://twitter.com/GallifreyApp" Foreground="{DynamicResource IdealForegroundColorBrush}" RequestNavigate="Hyperlink_RequestNavigate">Twitter</Hyperlink>, <Hyperlink NavigateUri="https://join.slack.com/t/gallifreyapp/shared_invite/enQtNDA2MDU3OTYwNDgyLTc3YjBjOTc2MDkxNWM3MWYxNDgwNTMyMWI5ZmRhYmZiZWRlOGVkMGQwZDFlOTJlN2I4ZGI5MmExZGY5ZmM2YjI" Foreground="{DynamicResource IdealForegroundColorBrush}" RequestNavigate="Hyperlink_RequestNavigate">Slack</Hyperlink> Or <Hyperlink NavigateUri="mailto:support@gallifreyapp.co.uk?subject=Gallifrey App Contact" Foreground="{DynamicResource IdealForegroundColorBrush}" RequestNavigate="Hyperlink_RequestNavigate">E-Mail</Hyperlink>. Raise Or Fix A Bug On <Hyperlink NavigateUri="https://github.com/BlythMeister/Gallifrey" Foreground="{DynamicResource IdealForegroundColorBrush}" RequestNavigate="Hyperlink_RequestNavigate">GitHub</Hyperlink>.
+    <DockPanel HorizontalAlignment="Stretch" Background="{DynamicResource MahApps.Brushes.Accent}">
+        <TextBlock Foreground="{DynamicResource MahApps.Brushes.IdealForeground}" Margin="5,0,0,0" VerticalAlignment="Center">
+                Contact Us By <Hyperlink NavigateUri="https://twitter.com/GallifreyApp" Foreground="{DynamicResource MahApps.Brushes.IdealForeground}" RequestNavigate="Hyperlink_RequestNavigate">Twitter</Hyperlink>, <Hyperlink NavigateUri="https://join.slack.com/t/gallifreyapp/shared_invite/enQtNDA2MDU3OTYwNDgyLTc3YjBjOTc2MDkxNWM3MWYxNDgwNTMyMWI5ZmRhYmZiZWRlOGVkMGQwZDFlOTJlN2I4ZGI5MmExZGY5ZmM2YjI" Foreground="{DynamicResource MahApps.Brushes.IdealForeground}" RequestNavigate="Hyperlink_RequestNavigate">Slack</Hyperlink> Or <Hyperlink NavigateUri="mailto:support@gallifreyapp.co.uk?subject=Gallifrey App Contact" Foreground="{DynamicResource MahApps.Brushes.IdealForeground}" RequestNavigate="Hyperlink_RequestNavigate">E-Mail</Hyperlink>. Raise Or Fix A Bug On <Hyperlink NavigateUri="https://github.com/BlythMeister/Gallifrey" Foreground="{DynamicResource MahApps.Brushes.IdealForeground}" RequestNavigate="Hyperlink_RequestNavigate">GitHub</Hyperlink>.
         </TextBlock>
-        <TextBlock HorizontalAlignment="Right" Margin="0,0,5,0" Foreground="{DynamicResource IdealForegroundColorBrush}" VerticalAlignment="Center">
-            Please Help Support Gallifrey By <Hyperlink NavigateUri="https://www.gallifreyapp.co.uk/donations" Foreground="{DynamicResource IdealForegroundColorBrush}" RequestNavigate="Hyperlink_RequestNavigate">Donating</Hyperlink>
+        <TextBlock HorizontalAlignment="Right" Margin="0,0,5,0" Foreground="{DynamicResource MahApps.Brushes.IdealForeground}" VerticalAlignment="Center">
+            Please Help Support Gallifrey By <Hyperlink NavigateUri="https://www.gallifreyapp.co.uk/donations" Foreground="{DynamicResource MahApps.Brushes.IdealForeground}" RequestNavigate="Hyperlink_RequestNavigate">Donating</Hyperlink>
         </TextBlock>
     </DockPanel>
 </UserControl>

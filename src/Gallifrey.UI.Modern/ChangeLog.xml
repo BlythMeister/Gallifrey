@@ -656,6 +656,7 @@
     <Bugs />
     <Others>
       <Other>Update app to .net 4.7.0 from .net 4.6.0</Other>
+      <Other>Update to version 2 of MahApps</Other>
     </Others>
   </Version>
   <!--

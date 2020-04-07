@@ -49,9 +49,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             if (successfulSave)
             {
                 modelHelpers.CloseFlyout(this);
-                var themeChanged = ThemeHelper.ChangeTheme(DataModel.Theme.Name, DataModel.Accent.Name);
-
-                if (themeChanged == ThemeChangeDetail.Theme || themeChanged == ThemeChangeDetail.Both)
+                if (ThemeHelper.ChangeTheme(DataModel.Theme.Name))
                 {
                     await modelHelpers.ShowMessageAsync("Restart Needed", "Due To The Changing Of The Theme, Gallifrey Will Restart");
                     modelHelpers.CloseApp(true);

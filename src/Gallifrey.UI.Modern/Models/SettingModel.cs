@@ -69,7 +69,6 @@ namespace Gallifrey.UI.Modern.Models
         //UI Settings
         public AccentThemeModel Theme { get; set; }
 
-        public AccentThemeModel Accent { get; set; }
         public bool StartOnBoot { get; set; }
         public bool TopMostOnFlyoutOpen { get; set; }
 
@@ -113,8 +112,6 @@ namespace Gallifrey.UI.Modern.Models
         //Static Data
         public List<AccentThemeModel> AvaliableThemes { get; set; }
 
-        public List<AccentThemeModel> AvaliableAccents { get; set; }
-
         //Data Change Flags
         public bool JiraSettingsChanged { get; set; }
 
@@ -149,8 +146,7 @@ namespace Gallifrey.UI.Modern.Models
         public SettingModel(ISettingsCollection settings, IVersionControl versionControl)
         {
             //Static Data
-            AvaliableThemes = ThemeManager.AppThemes.Select(x => new AccentThemeModel { Name = x.Name.Replace("Base", ""), Colour = x.Resources["WhiteColorBrush"] as Brush, BorderColour = x.Resources["BlackColorBrush"] as Brush }).ToList();
-            AvaliableAccents = ThemeManager.Accents.Select(x => new AccentThemeModel { Name = x.Name, Colour = x.Resources["AccentColorBrush"] as Brush, BorderColour = x.Resources["AccentColorBrush"] as Brush }).ToList();
+            AvaliableThemes = ThemeManager.Themes.Select(x => new AccentThemeModel { Name = x.Name, Colour = x.ShowcaseBrush as Brush }).OrderBy(x => x.DisplayName).ToList();
 
             //AppSettings
             AlertWhenIdle = settings.AppSettings.AlertWhenNotRunning;
@@ -176,7 +172,6 @@ namespace Gallifrey.UI.Modern.Models
 
             //UI Settings
             Theme = AvaliableThemes.FirstOrDefault(x => x.Name == settings.UiSettings.Theme) ?? AvaliableThemes.First();
-            Accent = AvaliableAccents.FirstOrDefault(x => x.Name == settings.UiSettings.Accent) ?? AvaliableAccents.First();
             StartOnBoot = versionControl.IsAutomatedDeploy && registryKey.GetValue(versionControl.AppName) != null;
             TopMostOnFlyoutOpen = settings.UiSettings.TopMostOnFlyoutOpen;
 
@@ -233,7 +228,6 @@ namespace Gallifrey.UI.Modern.Models
 
             //UI Settings
             settings.UiSettings.Theme = Theme.Name;
-            settings.UiSettings.Accent = Accent.Name;
             if (versionControl.IsAutomatedDeploy)
             {
                 if (StartOnBoot)
