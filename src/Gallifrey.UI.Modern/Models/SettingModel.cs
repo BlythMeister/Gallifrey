@@ -171,7 +171,7 @@ namespace Gallifrey.UI.Modern.Models
             }
 
             //UI Settings
-            Theme = AvaliableThemes.FirstOrDefault(x => x.Name == settings.UiSettings.Theme) ?? AvaliableThemes.First();
+            Theme = AvaliableThemes.FirstOrDefault(x => x.Name == settings.UiSettings.Theme) ?? AvaliableThemes.FirstOrDefault(x => x.Name == ThemeManager.DetectTheme().Name);
             StartOnBoot = versionControl.IsAutomatedDeploy && registryKey.GetValue(versionControl.AppName) != null;
             TopMostOnFlyoutOpen = settings.UiSettings.TopMostOnFlyoutOpen;
 
