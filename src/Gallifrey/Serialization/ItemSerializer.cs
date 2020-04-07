@@ -9,28 +9,32 @@ namespace Gallifrey.Serialization
     public class ItemSerializer<T> where T : new()
     {
         private readonly string savePath;
+        private readonly string backupPath;
         private readonly string serialisationErrorDirectory;
         private readonly string encryptionPassPhrase;
-        private string TempWritePath => savePath + ".temp.bak";
-        private string BackupPath => savePath + ".bak";
-        private string BackupPathPlus1 => savePath + ".bak.1";
-        private string BackupPathPlus2 => savePath + ".bak.2";
-        private string BackupPathPlus3 => savePath + ".bak.3";
-        private string BackupPathPlus4 => savePath + ".bak.4";
+        private string TempWritePath => backupPath + ".temp.bak";
+        private string BackupPath => backupPath + ".bak";
+        private string BackupPathPlus1 => backupPath + ".1.bak";
+        private string BackupPathPlus2 => backupPath + ".2.bak";
+        private string BackupPathPlus3 => backupPath + ".3.bak";
+        private string BackupPathPlus4 => backupPath + ".4.bak";
         private readonly Mutex singleThreadMutex;
 
         public ItemSerializer(string fileName)
         {
             singleThreadMutex = new Mutex(false, fileName);
             var saveDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Gallifrey");
+            var backupDirectory = Path.Combine(saveDirectory, "Backup");
 
             encryptionPassPhrase = $@"{Environment.UserDomainName}\{Environment.UserName}";
             serialisationErrorDirectory = Path.Combine(saveDirectory, "SerializationErrors");
             savePath = Path.Combine(saveDirectory, fileName);
+            backupPath = Path.Combine(backupDirectory, fileName);
 
             try
             {
                 if (!Directory.Exists(saveDirectory)) Directory.CreateDirectory(saveDirectory);
+                if (!Directory.Exists(backupDirectory)) Directory.CreateDirectory(backupDirectory);
                 if (!Directory.Exists(serialisationErrorDirectory)) Directory.CreateDirectory(serialisationErrorDirectory);
             }
             catch (Exception)
@@ -72,17 +76,17 @@ namespace Gallifrey.Serialization
 
                     if (!File.Exists(BackupPathPlus2) || new FileInfo(BackupPathPlus2).LastWriteTimeUtc.Date < DateTime.UtcNow.Date.AddDays(-2))
                     {
-                        File.Copy(savePath, BackupPathPlus1, true);
+                        File.Copy(savePath, BackupPathPlus2, true);
                     }
 
                     if (!File.Exists(BackupPathPlus3) || new FileInfo(BackupPathPlus3).LastWriteTimeUtc.Date < DateTime.UtcNow.Date.AddDays(-3))
                     {
-                        File.Copy(savePath, BackupPathPlus1, true);
+                        File.Copy(savePath, BackupPathPlus3, true);
                     }
 
                     if (!File.Exists(BackupPathPlus4) || new FileInfo(BackupPathPlus4).LastWriteTimeUtc.Date < DateTime.UtcNow.Date.AddDays(-4))
                     {
-                        File.Copy(savePath, BackupPathPlus1, true);
+                        File.Copy(savePath, BackupPathPlus4, true);
                     }
                 }
                 File.WriteAllText(savePath, DataEncryption.EncryptCaseInsensitive(JsonConvert.SerializeObject(obj), encryptionPassPhrase));
