@@ -1,6 +1,7 @@
 using Gallifrey.Serialization;
 using Gallifrey.Settings;
 using System;
+using System.Diagnostics;
 using System.Linq;
 
 namespace Gallifrey.Versions
@@ -9,6 +10,11 @@ namespace Gallifrey.Versions
     {
         public bool CheckIfPremium(ISettingsCollection settingsCollection)
         {
+            if (Debugger.IsAttached)
+            {
+                return true;
+            }
+
             if (string.IsNullOrWhiteSpace(ConfigKeys.PremiumEncryptionPassPhrase))
             {
                 return false;
