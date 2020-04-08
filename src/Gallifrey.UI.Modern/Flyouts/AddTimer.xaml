@@ -84,13 +84,13 @@
         </WrapPanel>
 
         <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Padding="2">Start Now?</TextBlock>
-        <controls:ToggleSwitch OnContent="" OffContent="" HorizontalAlignment="Left"  Grid.Row="4" Grid.Column="1" Margin="0,5" IsOn="{Binding StartNow, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding StartNowEditable}" Toggled="StartNowClick" />
+        <controls:ToggleSwitch OnContent="" OffContent="" HorizontalAlignment="Left"  Grid.Row="4" Grid.Column="1" IsOn="{Binding StartNow, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding StartNowEditable}" Toggled="StartNowClick" />
 
         <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Padding="2">Assign To Me?</TextBlock>
-        <controls:ToggleSwitch OnContent="" OffContent="" HorizontalAlignment="Left"  Grid.Row="5" Grid.Column="1" Margin="0,5" IsOn="{Binding AssignToMe, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding LocalTimer, Converter={StaticResource BoolInvert}}" Toggled="AssignToMeClick" />
+        <controls:ToggleSwitch OnContent="" OffContent="" HorizontalAlignment="Left"  Grid.Row="5" Grid.Column="1" IsOn="{Binding AssignToMe, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding LocalTimer, Converter={StaticResource BoolInvert}}" Toggled="AssignToMeClick" />
 
         <TextBlock Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" Padding="2">Change Status?</TextBlock>
-        <controls:ToggleSwitch OnContent="" OffContent="" HorizontalAlignment="Left"  Grid.Row="6" Grid.Column="1" Margin="0,5" IsOn="{Binding ChangeStatus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding LocalTimer, Converter={StaticResource BoolInvert}}" Toggled="ChangeStatusClick" />
+        <controls:ToggleSwitch OnContent="" OffContent="" HorizontalAlignment="Left"  Grid.Row="6" Grid.Column="1" IsOn="{Binding ChangeStatus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding LocalTimer, Converter={StaticResource BoolInvert}}" Toggled="ChangeStatusClick" />
 
         <StackPanel Orientation="Horizontal" Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center">
             <Button Style="{DynamicResource MahApps.Styles.Button.Circle}" Width="40" Height="40" Margin="5" Click="SearchButton" ToolTip="Search Jira">

@@ -117,10 +117,10 @@
                                 <TextBox Grid.Row="5" Grid.Column="1" Margin="0,5" Text="{Binding Comment, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" AcceptsReturn="True" controls:TextBoxHelper.IsSpellCheckContextMenuEnabled="True" Height="45" VerticalScrollBarVisibility="Auto" controls:TextBoxHelper.Watermark="{Binding DefaultComment}" />
 
                                 <TextBlock Grid.Row="6" Grid.Column="0" VerticalAlignment="Center">Add As Jira<LineBreak />Comment?</TextBlock>
-                                <controls:ToggleSwitch OnContent="" OffContent="" Grid.Row="6" Grid.Column="1" Margin="0,5" HorizontalAlignment="Left" IsOn="{Binding StandardComment, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                <controls:ToggleSwitch OnContent="" OffContent="" Grid.Row="6" Grid.Column="1" HorizontalAlignment="Left" IsOn="{Binding StandardComment, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                                 <TextBlock Grid.Row="7" Grid.Column="0" VerticalAlignment="Center">Change Status?</TextBlock>
-                                <controls:ToggleSwitch OnContent="" OffContent="" Grid.Row="7" Grid.Column="1" Margin="0,5" HorizontalAlignment="Left" IsOn="{Binding ChangeStatus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Toggled="ChangeStatusClick" />
+                                <controls:ToggleSwitch OnContent="" OffContent="" Grid.Row="7" Grid.Column="1"  HorizontalAlignment="Left" IsOn="{Binding ChangeStatus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Toggled="ChangeStatusClick" />
                             </Grid>
                         </StackPanel>
                     </ScrollViewer>

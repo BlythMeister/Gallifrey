@@ -24,9 +24,9 @@
                 <helpers:BooleanVisibilityConverter x:Key="BoolToVis" Collapse="True" Invert="False" />
             </controls:WindowCommands.Resources>
 
-            <Button Click="GetPremium" Content="GET PREMIUM" Visibility="{Binding IsPremium, Converter={StaticResource BoolToVisInvert}}" FontFamily="{DynamicResource MahApps.Fonts.Family.Window.Title}" FontSize="{DynamicResource MahApps.Font.Size.Window.Title}" />
-            <Button Click="GetBeta" Content="BECOME BETA TESTER" Visibility="{Binding IsStable, Converter={StaticResource BoolToVis}}" FontFamily="{DynamicResource MahApps.Fonts.Family.Window.Title}" FontSize="{DynamicResource MahApps.Font.Size.Window.Title}" />
-            <Button Click="ManualUpdateCheck" Content="{Binding VersionName}" Name="UpdateCheckButton" FontFamily="{DynamicResource MahApps.Fonts.Family.Window.Title}" FontSize="{DynamicResource MahApps.Font.Size.Window.Title}" />
+            <Button Style="{DynamicResource MahApps.Styles.Button.MetroWindow.Base}" Padding="5,0" Click="GetPremium" Content="GET PREMIUM" Visibility="{Binding IsPremium, Converter={StaticResource BoolToVisInvert}}" FontFamily="{DynamicResource MahApps.Fonts.Family.Window.Title}" FontSize="{DynamicResource MahApps.Font.Size.Window.Title}" />
+            <Button Style="{DynamicResource MahApps.Styles.Button.MetroWindow.Base}" Padding="5,0" Click="GetBeta" Content="BECOME BETA TESTER" Visibility="{Binding IsStable, Converter={StaticResource BoolToVis}}" FontFamily="{DynamicResource MahApps.Fonts.Family.Window.Title}" FontSize="{DynamicResource MahApps.Font.Size.Window.Title}" />
+            <Button Style="{DynamicResource MahApps.Styles.Button.MetroWindow.Base}" Padding="5,0" Click="ManualUpdateCheck" Content="{Binding VersionName}" Name="UpdateCheckButton" FontFamily="{DynamicResource MahApps.Fonts.Family.Window.Title}" FontSize="{DynamicResource MahApps.Font.Size.Window.Title}" />
         </controls:WindowCommands>
     </controls:MetroWindow.RightWindowCommands>
 
