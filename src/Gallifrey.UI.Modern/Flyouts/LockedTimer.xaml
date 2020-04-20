@@ -78,16 +78,16 @@
                     <TextBlock Grid.Row="0" Margin="0 5 0 0" FontSize="{DynamicResource MahApps.Font.Size.Dialog.Message}" Text="" TextWrapping="Wrap" x:Name="TimeLocateMessage" />
 
                     <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Height="85">
-                        <Button Height="45" MinWidth="70" Margin="0 0 5 0" Click="AddToNewTimer">
+                        <Button Height="45" MinWidth="70" Style="{DynamicResource MahApps.Styles.Button.Dialogs}" Margin="0 0 5 0" Click="AddToNewTimer">
                             <TextBlock>New<LineBreak />Timer</TextBlock>
                         </Button>
-                        <Button Height="45" MinWidth="70" Margin="5 0 5 0" Click="AddToRunningTimer" x:Name="RunningTimerButton">
+                        <Button Height="45" MinWidth="70" Style="{DynamicResource MahApps.Styles.Button.Dialogs}" Margin="5 0 5 0" Click="AddToRunningTimer" x:Name="RunningTimerButton">
                             <TextBlock>Running<LineBreak />Timer</TextBlock>
                         </Button>
-                        <Button Height="45" MinWidth="70" Margin="5 0 5 0" Click="AddToExistingTimer">
+                        <Button Height="45" MinWidth="70" Style="{DynamicResource MahApps.Styles.Button.Dialogs}" Margin="5 0 5 0" Click="AddToExistingTimer">
                             <TextBlock>Existing<LineBreak />Timer</TextBlock>
                         </Button>
-                        <Button Height="45" MinWidth="70" Margin="5 0 5 0" Click="AddToRecentTimer">
+                        <Button Height="45" MinWidth="70" Style="{DynamicResource MahApps.Styles.Button.Dialogs}" Margin="5 0 5 0" Click="AddToRecentTimer">
                             <TextBlock>Recent<LineBreak />Timer</TextBlock>
                         </Button>
                         <Button Height="45" MinWidth="70" Content="Cancel" Margin="5 0 5 0" Click="CancelAddTimer" />
@@ -108,8 +108,8 @@
                     <ComboBox Grid.Row="1" Margin="0 5 0 0" FontSize="{DynamicResource MahApps.Font.Size.Dialog.Message}" controls:ControlsHelper.FocusBorderBrush="{DynamicResource MahApps.Brushes.Accent}" x:Name="Items" />
 
                     <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Height="85">
-                        <Button Height="35" MinWidth="80" Style="{DynamicResource MahApps.Styles.Button.AccentedSquare}" Content="OK" Margin="0 0 5 0" Click="ConfirmTimerSelector" />
-                        <Button Height="35" MinWidth="80" Content="Cancel" Margin="5 0 5 0" Click="CancelTimerSelector" />
+                        <Button Height="35" MinWidth="80" Style="{DynamicResource MahApps.Styles.Button.MetroAccentedSquare}" Content="OK" Margin="0 0 5 0" Click="ConfirmTimerSelector" />
+                        <Button Height="35" MinWidth="80" Style="{DynamicResource MahApps.Styles.Button.Dialogs}" Margin="5 0 5 0" Content="Cancel" Click="CancelTimerSelector" />
                     </StackPanel>
                 </Grid>
             </dialogs:CustomDialog>
