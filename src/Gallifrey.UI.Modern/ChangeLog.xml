@@ -655,7 +655,9 @@
     <Features>
       <Feature>Add ability to right click and view in Jira</Feature>
     </Features>
-    <Bugs />
+    <Bugs>
+      <Bug>Fix backup and data folders</Bug>
+    </Bugs>
     <Others>
       <Other>Update app to .net 4.7.0 from .net 4.6.0</Other>
       <Other>Update to version 2 of MahApps</Other>
