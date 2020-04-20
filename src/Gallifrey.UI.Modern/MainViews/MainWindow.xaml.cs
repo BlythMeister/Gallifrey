@@ -132,7 +132,7 @@ namespace Gallifrey.UI.Modern.MainViews
             var result = await progressDialogHelper.Do(Initialise, "Initialising Gallifrey", true, true);
             if (result.Status == ProgressResult.JiraHelperStatus.Cancelled)
             {
-                await modelHelpers.ShowMessageAsync("Gallifrey Not Initialised", "Gallifrey Initialisation Was Cancelled, The App Will Now Close");
+                await modelHelpers.ShowMessageAsync("Gallifrey Not Initialised", "Gallifrey Initialisation Was Cancelled", MessageDialogStyle.Affirmative, new MetroDialogSettings { AffirmativeButtonText = "Close Gallifrey" });
                 modelHelpers.CloseApp();
             }
 
@@ -145,19 +145,13 @@ namespace Gallifrey.UI.Modern.MainViews
 
             if (result.RetVal == InitialiseResult.DebuggerNotAttached)
             {
-                await modelHelpers.ShowMessageAsync("Debugger Not Running", "It Looks Like Your Running Without Auto-Update\nPlease Use The Installed Shortcut To Start Gallifrey Or Download Again From GallifreyApp.co.uk");
+                await modelHelpers.ShowMessageAsync("Debugger Not Running", "It Looks Like Your Running Without Auto-Update\nPlease Use The Installed Shortcut To Start Gallifrey Or Download Again From GallifreyApp.co.uk", MessageDialogStyle.Affirmative, new MetroDialogSettings { AffirmativeButtonText = "Close Gallifrey" });
                 modelHelpers.CloseApp();
             }
             else if (result.RetVal == InitialiseResult.MultipleGallifreyRunning)
             {
                 modelHelpers.Gallifrey.TrackEvent(TrackingType.MultipleInstancesRunning);
-                var userChoice = await modelHelpers.ShowMessageAsync("Multiple Instances", "You Can Only Have One Instance Of Gallifrey Running At A Time", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Check Again", NegativeButtonText = "Close Now" });
-                if (userChoice == MessageDialogResult.Affirmative)
-                {
-                    await MainWindow_OnLoaded();
-                    return;
-                }
-
+                var userChoice = await modelHelpers.ShowMessageAsync("Multiple Instances", "You Can Only Have One Instance Of Gallifrey Running At A Time", MessageDialogStyle.Affirmative, new MetroDialogSettings { AffirmativeButtonText = "Close Gallifrey" });
                 modelHelpers.CloseApp();
             }
             else if (result.RetVal == InitialiseResult.NoInternetConnection)
