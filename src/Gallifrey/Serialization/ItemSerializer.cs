@@ -12,27 +12,23 @@ namespace Gallifrey.Serialization
         private readonly string backupPath;
         private readonly string serialisationErrorDirectory;
         private readonly string encryptionPassPhrase;
-        private string TempWritePath => backupPath + ".temp.bak";
-        private string BackupPath => backupPath + ".bak";
-        private string BackupPathPlus1 => backupPath + ".1.bak";
-        private string BackupPathPlus2 => backupPath + ".2.bak";
-        private string BackupPathPlus3 => backupPath + ".3.bak";
-        private string BackupPathPlus4 => backupPath + ".4.bak";
         private readonly Mutex singleThreadMutex;
 
         public ItemSerializer(string fileName)
         {
             singleThreadMutex = new Mutex(false, fileName);
-            var saveDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Gallifrey");
-            var backupDirectory = Path.Combine(saveDirectory, "Backup");
+            var baseDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Gallifrey");
+            var saveDirectory = Path.Combine(baseDirectory, "Data");
+            var backupDirectory = Path.Combine(baseDirectory, "Backup");
 
             encryptionPassPhrase = $@"{Environment.UserDomainName}\{Environment.UserName}";
-            serialisationErrorDirectory = Path.Combine(saveDirectory, "SerializationErrors");
+            serialisationErrorDirectory = Path.Combine(baseDirectory, "SerializationErrors");
             savePath = Path.Combine(saveDirectory, fileName);
             backupPath = Path.Combine(backupDirectory, fileName);
 
             try
             {
+                if (!Directory.Exists(baseDirectory)) Directory.CreateDirectory(baseDirectory);
                 if (!Directory.Exists(saveDirectory)) Directory.CreateDirectory(saveDirectory);
                 if (!Directory.Exists(backupDirectory)) Directory.CreateDirectory(backupDirectory);
                 if (!Directory.Exists(serialisationErrorDirectory)) Directory.CreateDirectory(serialisationErrorDirectory);
@@ -41,6 +37,15 @@ namespace Gallifrey.Serialization
             {
                 savePath = null;
                 // this will be evaluated later
+            }
+
+            if (savePath != null)
+            {
+                var legacySavePath = Path.Combine(baseDirectory, fileName);
+                if (File.Exists(legacySavePath))
+                {
+                    File.Move(legacySavePath, savePath);
+                }
             }
         }
 
@@ -54,39 +59,39 @@ namespace Gallifrey.Serialization
             if (savePath == null) throw new SerializerError("No Save Path");
 
             singleThreadMutex.WaitOne();
+            var tempWritePath = $"{backupPath}.temp.bak";
+            var mainBackupPath = $"{backupPath}.bak";
 
             try
             {
                 if (File.Exists(savePath))
                 {
-                    if (!File.Exists(TempWritePath))
+                    if (!File.Exists(tempWritePath))
                     {
-                        File.Copy(savePath, TempWritePath, true);
+                        File.Copy(savePath, tempWritePath, true);
                     }
 
-                    if (!File.Exists(BackupPath) || new FileInfo(BackupPath).LastWriteTimeUtc.Date < DateTime.UtcNow.Date)
+                    if (!File.Exists(mainBackupPath))
                     {
-                        File.Copy(savePath, BackupPath, true);
+                        File.Copy(savePath, mainBackupPath, true);
                     }
-
-                    if (!File.Exists(BackupPathPlus1) || new FileInfo(BackupPathPlus1).LastWriteTimeUtc.Date < DateTime.UtcNow.Date.AddDays(-1))
+                    else if (File.GetLastWriteTimeUtc(mainBackupPath) < DateTime.UtcNow.AddHours(-1))
                     {
-                        File.Copy(savePath, BackupPathPlus1, true);
-                    }
-
-                    if (!File.Exists(BackupPathPlus2) || new FileInfo(BackupPathPlus2).LastWriteTimeUtc.Date < DateTime.UtcNow.Date.AddDays(-2))
-                    {
-                        File.Copy(savePath, BackupPathPlus2, true);
-                    }
-
-                    if (!File.Exists(BackupPathPlus3) || new FileInfo(BackupPathPlus3).LastWriteTimeUtc.Date < DateTime.UtcNow.Date.AddDays(-3))
-                    {
-                        File.Copy(savePath, BackupPathPlus3, true);
-                    }
-
-                    if (!File.Exists(BackupPathPlus4) || new FileInfo(BackupPathPlus4).LastWriteTimeUtc.Date < DateTime.UtcNow.Date.AddDays(-4))
-                    {
-                        File.Copy(savePath, BackupPathPlus4, true);
+                        var rollingBackupPath = $"{backupPath}.24.bak";
+                        if (File.Exists(rollingBackupPath))
+                        {
+                            File.Delete(rollingBackupPath);
+                        }
+                        for (var i = 23; i > 0; i--)
+                        {
+                            rollingBackupPath = $"{backupPath}.{i}.bak";
+                            if (File.Exists(rollingBackupPath))
+                            {
+                                File.Move(rollingBackupPath, $"{backupPath}.{i + 1}.bak");
+                            }
+                        }
+                        File.Move(mainBackupPath, $"{backupPath}.1.bak");
+                        File.Copy(savePath, mainBackupPath, true);
                     }
                 }
                 File.WriteAllText(savePath, DataEncryption.EncryptCaseInsensitive(JsonConvert.SerializeObject(obj), encryptionPassPhrase));
@@ -95,7 +100,7 @@ namespace Gallifrey.Serialization
             {
                 if (retryCount >= 3)
                 {
-                    if (File.Exists(TempWritePath)) File.Copy(TempWritePath, savePath, true);
+                    if (File.Exists(tempWritePath)) File.Copy(tempWritePath, savePath, true);
                     File.WriteAllText(Path.Combine(serialisationErrorDirectory, $"Serialize_{DateTime.UtcNow:yyyy-MM-dd_hh-mm-ss}_{Guid.NewGuid().ToString()}.log"), ex.ToString());
                     throw new SerializerError("Error in serialization", ex);
                 }
@@ -106,9 +111,9 @@ namespace Gallifrey.Serialization
             {
                 try
                 {
-                    if (File.Exists(TempWritePath))
+                    if (File.Exists(tempWritePath))
                     {
-                        File.Delete(TempWritePath);
+                        File.Delete(tempWritePath);
                     }
                 }
                 catch (Exception)
@@ -122,15 +127,15 @@ namespace Gallifrey.Serialization
 
         public T DeSerialize()
         {
-            return DeSerializeFile(savePath, 0);
+            return DeSerializeFile(savePath);
         }
 
         public T DeSerialize(string encryptedString)
         {
-            return DeSerializeText(encryptedString, 0);
+            return DeSerializeText(encryptedString);
         }
 
-        private T DeSerializeFile(string fileToUse, int retryCount)
+        private T DeSerializeFile(string fileToUse, int retryCount = 0, int backupNumber = 0)
         {
             if (fileToUse == null) throw new SerializerError("No Save Path");
 
@@ -149,34 +154,19 @@ namespace Gallifrey.Serialization
             }
             catch (Exception ex)
             {
-                if (retryCount >= 3 && fileToUse == savePath)
+                if (retryCount >= 3)
                 {
                     Thread.Sleep(200);
-                    return DeSerializeFile(BackupPath, 0);
-                }
-
-                if (retryCount >= 3 && fileToUse == BackupPath)
-                {
-                    Thread.Sleep(200);
-                    return DeSerializeFile(BackupPathPlus1, 0);
-                }
-
-                if (retryCount >= 3 && fileToUse == BackupPathPlus1)
-                {
-                    Thread.Sleep(200);
-                    return DeSerializeFile(BackupPathPlus2, 0);
-                }
-
-                if (retryCount >= 3 && fileToUse == BackupPathPlus2)
-                {
-                    Thread.Sleep(200);
-                    return DeSerializeFile(BackupPathPlus3, 0);
-                }
-
-                if (retryCount >= 3 && fileToUse == BackupPathPlus3)
-                {
-                    Thread.Sleep(200);
-                    return DeSerializeFile(BackupPathPlus4, 0);
+                    var nextFile = backupNumber == 0 ? $"{backupPath}.bak" : $"{backupPath}.{backupNumber}.bak";
+                    if (File.Exists(nextFile))
+                    {
+                        return DeSerializeFile(nextFile, backupNumber: backupNumber + 1);
+                    }
+                    else
+                    {
+                        File.WriteAllText(Path.Combine(serialisationErrorDirectory, $"DeSerializeFile_{DateTime.UtcNow:yyyy-MM-dd_hh-mm-ss}_{Guid.NewGuid().ToString()}.log"), ex.ToString());
+                        return new T();
+                    }
                 }
 
                 if (retryCount >= 3)
@@ -194,7 +184,7 @@ namespace Gallifrey.Serialization
             }
         }
 
-        private T DeSerializeText(string encryptedString, int retryCount)
+        private T DeSerializeText(string encryptedString, int retryCount = 0)
         {
             try
             {
