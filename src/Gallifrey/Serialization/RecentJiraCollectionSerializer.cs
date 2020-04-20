@@ -11,6 +11,11 @@ namespace Gallifrey.Serialization
 
         internal static void Serialize(List<RecentJira> recentJiraCollection)
         {
+            if (recentJiraCollection == null)
+            {
+                return;
+            }
+
             if (serializer == null)
             {
                 serializer = new ItemSerializer<List<RecentJira>>("RecentJira.dat");

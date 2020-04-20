@@ -11,6 +11,11 @@ namespace Gallifrey.Serialization
 
         internal static void Serialize(List<IdleTimer> idleTimeCollection)
         {
+            if (idleTimeCollection == null)
+            {
+                return;
+            }
+
             if (serializer == null)
             {
                 serializer = new ItemSerializer<List<IdleTimer>>("IdleTimerCollection.dat");

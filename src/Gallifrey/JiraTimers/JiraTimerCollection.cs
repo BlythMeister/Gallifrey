@@ -78,6 +78,7 @@ namespace Gallifrey.JiraTimers
         private readonly ISettingsCollection settingsCollection;
         private readonly ITrackUsage trackUsage;
         private readonly List<JiraTimer> timerList;
+        private bool isIntialised;
 
         internal event EventHandler<ExportPromptDetail> ExportPrompt;
 
@@ -88,6 +89,7 @@ namespace Gallifrey.JiraTimers
             this.settingsCollection = settingsCollection;
             this.trackUsage = trackUsage;
             timerList = new List<JiraTimer>();
+            isIntialised = false;
         }
 
         internal void Initialise()
@@ -96,10 +98,12 @@ namespace Gallifrey.JiraTimers
             timers.AddRange(timerList);
             timerList.Clear();
             timerList.AddRange(timers.Distinct(new DuplicateTimerComparer()));
+            isIntialised = true;
         }
 
         internal void SaveTimers()
         {
+            if (!isIntialised) return;
             JiraTimerCollectionSerializer.Serialize(timerList);
             GeneralTimerModification?.Invoke(this, null);
         }

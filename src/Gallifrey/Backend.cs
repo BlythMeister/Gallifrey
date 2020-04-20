@@ -304,7 +304,7 @@ namespace Gallifrey
             settingsCollection.AppSettings.TimerRunningOnShutdown = runningTimer;
             settingsCollection.AppSettings.NoTimerRunningOnShutdown = ActivityChecker.Elapsed;
 
-            idleTimerCollection.StopLockedTimers();
+            idleTimerCollection.StopIdleTimers();
 
             jiraTimerCollection.SaveTimers();
             idleTimerCollection.SaveTimers();
@@ -350,7 +350,7 @@ namespace Gallifrey
                 }
             }
 
-            idleTimerCollection.NewLockTimer(initalTimeSpan.GetValueOrDefault(new TimeSpan()));
+            idleTimerCollection.NewIdleTimer(initalTimeSpan.GetValueOrDefault(new TimeSpan()));
         }
 
         public Guid? StopLockTimer()
@@ -366,7 +366,7 @@ namespace Gallifrey
                 }
                 runningTimerWhenIdle = null;
             }
-            return idleTimerCollection.StopLockedTimers();
+            return idleTimerCollection.StopIdleTimers();
         }
 
         public IEnumerable<ChangeLogVersion> GetChangeLog(XDocument changeLogContent)

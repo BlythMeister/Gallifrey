@@ -23,19 +23,24 @@ namespace Gallifrey.JiraIntegration
     public class RecentJiraCollection : IRecentJiraCollection
     {
         private readonly List<RecentJira> recentJiraList;
+        private bool isIntialised;
 
         internal RecentJiraCollection()
         {
             recentJiraList = new List<RecentJira>();
+            isIntialised = false;
         }
 
         internal void Initialise()
         {
             recentJiraList.AddRange(RecentJiraCollectionSerializer.DeSerialize());
+            isIntialised = true;
         }
 
         internal void SaveCache()
         {
+            if (!isIntialised) return;
+
             try
             {
                 RecentJiraCollectionSerializer.Serialize(recentJiraList);

@@ -34,6 +34,7 @@ namespace Gallifrey.UI.Modern.MainViews
         private MainViewModel ViewModel => (MainViewModel)DataContext;
         private bool machineLocked;
         private bool machineIdle;
+        private bool forceClosed;
 
         public MainWindow(InstanceType instance)
         {
@@ -133,6 +134,7 @@ namespace Gallifrey.UI.Modern.MainViews
             if (result.Status == ProgressResult.JiraHelperStatus.Cancelled)
             {
                 await modelHelpers.ShowMessageAsync("Gallifrey Not Initialised", "Gallifrey Initialisation Was Cancelled", MessageDialogStyle.Affirmative, new MetroDialogSettings { AffirmativeButtonText = "Close Gallifrey" });
+                forceClosed = true;
                 modelHelpers.CloseApp();
             }
 
@@ -146,12 +148,14 @@ namespace Gallifrey.UI.Modern.MainViews
             if (result.RetVal == InitialiseResult.DebuggerNotAttached)
             {
                 await modelHelpers.ShowMessageAsync("Debugger Not Running", "It Looks Like Your Running Without Auto-Update\nPlease Use The Installed Shortcut To Start Gallifrey Or Download Again From GallifreyApp.co.uk", MessageDialogStyle.Affirmative, new MetroDialogSettings { AffirmativeButtonText = "Close Gallifrey" });
+                forceClosed = true;
                 modelHelpers.CloseApp();
             }
             else if (result.RetVal == InitialiseResult.MultipleGallifreyRunning)
             {
                 modelHelpers.Gallifrey.TrackEvent(TrackingType.MultipleInstancesRunning);
                 var userChoice = await modelHelpers.ShowMessageAsync("Multiple Instances", "You Can Only Have One Instance Of Gallifrey Running At A Time", MessageDialogStyle.Affirmative, new MetroDialogSettings { AffirmativeButtonText = "Close Gallifrey" });
+                forceClosed = true;
                 modelHelpers.CloseApp();
             }
             else if (result.RetVal == InitialiseResult.NoInternetConnection)
@@ -164,6 +168,7 @@ namespace Gallifrey.UI.Modern.MainViews
                     return;
                 }
 
+                forceClosed = true;
                 modelHelpers.CloseApp();
             }
             else if (result.RetVal == InitialiseResult.NewUser)
@@ -640,10 +645,13 @@ namespace Gallifrey.UI.Modern.MainViews
         protected override void OnClosed(EventArgs e)
         {
             base.OnClosed(e);
-            flyoutOpenCheck.Stop();
-            modelHelpers.Gallifrey.Settings.UiSettings.Height = (int)Height;
-            modelHelpers.Gallifrey.Settings.UiSettings.Width = (int)Width;
-            modelHelpers.Gallifrey.Close();
+            if (!forceClosed)
+            {
+                flyoutOpenCheck.Stop();
+                modelHelpers.Gallifrey.Settings.UiSettings.Height = (int)Height;
+                modelHelpers.Gallifrey.Settings.UiSettings.Width = (int)Width;
+                modelHelpers.Gallifrey.Close();
+            }
         }
 
         private void MainWindow_KeyDown(object sender, KeyEventArgs e)

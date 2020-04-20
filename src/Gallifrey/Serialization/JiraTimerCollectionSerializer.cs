@@ -11,6 +11,11 @@ namespace Gallifrey.Serialization
 
         internal static void Serialize(List<JiraTimer> timerCollection)
         {
+            if (timerCollection == null)
+            {
+                return;
+            }
+
             if (serializer == null)
             {
                 serializer = new ItemSerializer<List<JiraTimer>>("TimerCollection.dat");
