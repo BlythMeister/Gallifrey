@@ -53,6 +53,7 @@ namespace Gallifrey.UI.Modern.MainViews
 
         private async void InstallUpdate(object sender, MouseButtonEventArgs e)
         {
+            var progress = await ModelHelpers.ShowIndeterminateProgressAsync("Installing", "Restarting Gallifrey With Updates");
             try
             {
                 ModelHelpers.Gallifrey.TrackEvent(TrackingType.ManualUpdateRestart);
@@ -60,12 +61,14 @@ namespace Gallifrey.UI.Modern.MainViews
             }
             catch (Exception)
             {
+                await progress.CloseAsync();
                 await ModelHelpers.ShowMessageAsync("Update Error", "There Was An Error Trying To Update Gallifrey, If This Problem Persists Please Contact Support");
             }
         }
 
         private async void ReinstallUpdate(object sender, MouseButtonEventArgs e)
         {
+            var progress = await ModelHelpers.ShowIndeterminateProgressAsync("Reinstalling", "Reinstalling Gallifrey With Updates");
             try
             {
                 ModelHelpers.Gallifrey.TrackEvent(TrackingType.ManualUpdateRestart);
@@ -74,6 +77,7 @@ namespace Gallifrey.UI.Modern.MainViews
             }
             catch (Exception)
             {
+                await progress.CloseAsync();
                 await ModelHelpers.ShowMessageAsync("Reinstall Error", "There Was An Error Trying To Reinstall Gallifrey, You May Need To Re-Download The App");
             }
             finally
