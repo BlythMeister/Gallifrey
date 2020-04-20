@@ -127,15 +127,10 @@ namespace Gallifrey.Serialization
 
         public T DeSerialize()
         {
-            return DeSerializeFile(savePath);
+            return DeSerialize(savePath, 0, 0);
         }
 
-        public T DeSerialize(string encryptedString)
-        {
-            return DeSerializeText(encryptedString);
-        }
-
-        private T DeSerializeFile(string fileToUse, int retryCount = 0, int backupNumber = 0)
+        private T DeSerialize(string fileToUse, int retryCount, int backupNumber)
         {
             if (fileToUse == null) throw new SerializerError("No Save Path");
 
@@ -156,51 +151,17 @@ namespace Gallifrey.Serialization
             {
                 if (retryCount >= 3)
                 {
-                    Thread.Sleep(200);
+                    File.WriteAllText(Path.Combine(serialisationErrorDirectory, $"DeSerializeFile_{DateTime.UtcNow:yyyy-MM-dd_hh-mm-ss}_{Guid.NewGuid()}.log"), ex.ToString());
                     var nextFile = backupNumber == 0 ? $"{backupPath}.bak" : $"{backupPath}.{backupNumber}.bak";
-                    if (File.Exists(nextFile))
-                    {
-                        return DeSerializeFile(nextFile, backupNumber: backupNumber + 1);
-                    }
-                    else
-                    {
-                        File.WriteAllText(Path.Combine(serialisationErrorDirectory, $"DeSerializeFile_{DateTime.UtcNow:yyyy-MM-dd_hh-mm-ss}_{Guid.NewGuid().ToString()}.log"), ex.ToString());
-                        return new T();
-                    }
-                }
-
-                if (retryCount >= 3)
-                {
-                    File.WriteAllText(Path.Combine(serialisationErrorDirectory, $"DeSerializeFile_{DateTime.UtcNow:yyyy-MM-dd_hh-mm-ss}_{Guid.NewGuid().ToString()}.log"), ex.ToString());
-                    return new T();
+                    return DeSerialize(nextFile, 0, backupNumber + 1);
                 }
 
                 Thread.Sleep(200);
-                return DeSerializeFile(fileToUse, retryCount + 1);
+                return DeSerialize(fileToUse, retryCount + 1, backupNumber);
             }
             finally
             {
                 singleThreadMutex.ReleaseMutex();
-            }
-        }
-
-        private T DeSerializeText(string encryptedString, int retryCount = 0)
-        {
-            try
-            {
-                var text = DataEncryption.Decrypt(encryptedString, encryptionPassPhrase);
-                return JsonConvert.DeserializeObject<T>(text);
-            }
-            catch (Exception ex)
-            {
-                if (retryCount >= 3)
-                {
-                    File.WriteAllText(Path.Combine(serialisationErrorDirectory, $"DeSerializeText_{DateTime.UtcNow:yyyy-MM-dd_hh-mm-ss}_{Guid.NewGuid().ToString()}.log"), ex.ToString());
-                    return new T();
-                }
-
-                Thread.Sleep(100);
-                return DeSerializeText(encryptedString, retryCount + 1);
             }
         }
     }
