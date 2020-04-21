@@ -32,7 +32,7 @@ namespace Gallifrey.UI.Modern.Models
             set
             {
                 alertWhenIdle = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("AlertWhenIdle"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(AlertWhenIdle)));
             }
         }
 
@@ -42,7 +42,7 @@ namespace Gallifrey.UI.Modern.Models
             set
             {
                 trackIdle = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TrackIdle"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TrackIdle)));
             }
         }
 
@@ -52,7 +52,7 @@ namespace Gallifrey.UI.Modern.Models
             set
             {
                 trackLock = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TrackLock"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TrackLock)));
             }
         }
 
@@ -84,7 +84,7 @@ namespace Gallifrey.UI.Modern.Models
             set
             {
                 useTempo = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("UseTempo"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(UseTempo)));
             }
         }
 
@@ -105,7 +105,7 @@ namespace Gallifrey.UI.Modern.Models
             set
             {
                 trackingOnly = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TrackingOnly"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TrackingOnly)));
             }
         }
 
@@ -135,10 +135,10 @@ namespace Gallifrey.UI.Modern.Models
             {
                 var newValue = value ?? 0;
                 HourMinuteHelper.UpdateMinutes(ref targetHoursPerDay, ref targetMinutesPerDay, newValue, 23, out var hoursChanged);
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TargetMinutesPerDay"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TargetMinutesPerDay)));
                 if (hoursChanged)
                 {
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TargetHoursPerDay"));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TargetHoursPerDay)));
                 }
             }
         }
@@ -325,7 +325,7 @@ namespace Gallifrey.UI.Modern.Models
         public void EnableTracking()
         {
             AllowTracking = true;
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("AllowTracking"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(AllowTracking)));
         }
     }
 }

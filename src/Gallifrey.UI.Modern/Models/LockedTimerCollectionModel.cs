@@ -25,7 +25,7 @@ namespace Gallifrey.UI.Modern.Models
             {
                 firstTimer.IsSelected = true;
             }
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LockedTimers"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(LockedTimers)));
         }
     }
 }

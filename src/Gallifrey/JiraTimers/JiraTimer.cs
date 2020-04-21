@@ -71,8 +71,8 @@ namespace Gallifrey.JiraTimers
         {
             if (currentRunningTime.IsRunning)
             {
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ExactCurrentTime"));
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TimeToExport"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ExactCurrentTime)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TimeToExport)));
             }
         }
 
@@ -102,7 +102,7 @@ namespace Gallifrey.JiraTimers
             currentRunningTime.Start();
             IsRunning = true;
 
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("IsRunning"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsRunning)));
         }
 
         public TimeSpan StopTimer()
@@ -114,7 +114,7 @@ namespace Gallifrey.JiraTimers
             CurrentTime = CurrentTime.Add(elapsed);
             currentRunningTime.Reset();
 
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("IsRunning"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsRunning)));
 
             return elapsed;
         }
@@ -127,7 +127,7 @@ namespace Gallifrey.JiraTimers
             }
 
             CurrentTime = CurrentTime.Add(idleTimer.IdleTimeValue);
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ExactCurrentTime"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ExactCurrentTime)));
         }
 
         public bool HasExportedTime()
@@ -158,7 +158,7 @@ namespace Gallifrey.JiraTimers
                 StartTimer();
             }
 
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ExactCurrentTime"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ExactCurrentTime)));
             return returnValue;
         }
 
@@ -173,16 +173,16 @@ namespace Gallifrey.JiraTimers
 
             LastJiraTimeCheck = DateTime.UtcNow;
 
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ExactCurrentTime"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TimeToExport"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LastJiraTimeCheck"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ExactCurrentTime)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TimeToExport)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(LastJiraTimeCheck)));
         }
 
         public void AddJiraExportedTime(TimeSpan loggedTime)
         {
             ExportedTime = ExportedTime.Add(loggedTime);
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ExactCurrentTime"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TimeToExport"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ExactCurrentTime)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TimeToExport)));
         }
 
         public void RefreshFromJira(Issue jiraIssue)
@@ -207,20 +207,20 @@ namespace Gallifrey.JiraTimers
 
             LastJiraTimeCheck = DateTime.UtcNow;
 
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("JiraReference"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("JiraProjectName"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("JiraName"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("JiraParentReference"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("JiraParentName"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasParent"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LastJiraTimeCheck"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(JiraReference)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(JiraProjectName)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(JiraName)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(JiraParentReference)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(JiraParentName)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HasParent)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(LastJiraTimeCheck)));
         }
 
         public void UpdateLocalTimerDescription(string localTimerDescription)
         {
             if (!LocalTimer) return;
             JiraName = localTimerDescription;
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("JiraName"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(JiraName)));
         }
 
         public void ClearLastJiraCheck()

@@ -37,24 +37,24 @@ namespace Gallifrey.UI.Modern.Models
         {
             SearchResults = new ObservableCollection<JiraIssueDisplayModel>(jiraIssues.Select(x => new JiraIssueDisplayModel(x)));
             IsSearching = false;
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("IsSearching"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("SearchResults"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsSearching)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SearchResults)));
         }
 
         public void ClearSearchResults()
         {
             SearchResults = new ObservableCollection<JiraIssueDisplayModel>();
             IsSearching = false;
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("IsSearching"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("SearchResults"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsSearching)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SearchResults)));
         }
 
         public void SetIsSearching()
         {
             SearchResults = new ObservableCollection<JiraIssueDisplayModel>();
             IsSearching = true;
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("IsSearching"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("SearchResults"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsSearching)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SearchResults)));
         }
     }
 }

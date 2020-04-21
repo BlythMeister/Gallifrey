@@ -36,34 +36,34 @@ namespace Gallifrey.UI.Modern.Models
             switch (propertyChangedEventArgs.PropertyName)
             {
                 case "ExactCurrentTime":
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("CurrentTime"));
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("IsRunning"));
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasTimeToExportAndNotRunning"));
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasTimeToExport"));
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ExportTime"));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CurrentTime)));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsRunning)));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HasTimeToExportAndNotRunning)));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HasTimeToExport)));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ExportTime)));
                     break;
 
                 case "IsRunning":
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("IsRunning"));
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasTimeToExportAndNotRunning"));
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasTimeToExport"));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsRunning)));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HasTimeToExportAndNotRunning)));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HasTimeToExport)));
                     break;
 
                 case "TimeToExport":
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ExportTime"));
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasTimeToExport"));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ExportTime)));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HasTimeToExport)));
                     break;
 
                 case "JiraName":
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Description"));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Description)));
                     break;
 
                 case "JiraParentName":
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ParentDescription"));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ParentDescription)));
                     break;
 
                 case "HasParent":
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasParent"));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HasParent)));
                     break;
             }
         }
@@ -73,7 +73,7 @@ namespace Gallifrey.UI.Modern.Models
             if (TimerIsSelected != isSelected)
             {
                 TimerIsSelected = isSelected;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TimerIsSelected"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TimerIsSelected)));
             }
         }
 
@@ -82,9 +82,9 @@ namespace Gallifrey.UI.Modern.Models
             if (TrackingOnly != trackingOnly)
             {
                 TrackingOnly = trackingOnly;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TrackingOnly"));
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasTimeToExport"));
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HighlightTitle"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TrackingOnly)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HasTimeToExport)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HighlightTitle)));
             }
         }
     }

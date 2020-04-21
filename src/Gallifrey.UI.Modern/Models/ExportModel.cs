@@ -47,7 +47,7 @@ namespace Gallifrey.UI.Modern.Models
             {
                 workLogStrategy = value;
                 SetRemaining();
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ShowRemaining"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ShowRemaining)));
             }
         }
 
@@ -57,7 +57,7 @@ namespace Gallifrey.UI.Modern.Models
             set
             {
                 changeStatus = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ChangeStatus"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ChangeStatus)));
             }
         }
 
@@ -73,8 +73,8 @@ namespace Gallifrey.UI.Modern.Models
                 {
                     toExportHours = ToExportMaxTime.Hours;
                     toExportMinutes = ToExportMaxTime.Minutes;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ToExportHours"));
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ToExportMinutes"));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ToExportHours)));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ToExportMinutes)));
                 }
             }
         }
@@ -86,18 +86,18 @@ namespace Gallifrey.UI.Modern.Models
             {
                 var newValue = value ?? 0;
                 HourMinuteHelper.UpdateMinutes(ref toExportHours, ref toExportMinutes, newValue, 23, out bool hoursChanged);
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ToExportMinutes"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ToExportMinutes)));
                 if (hoursChanged)
                 {
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ToExportHours"));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ToExportHours)));
                 }
 
                 if (ToExport > ToExportMaxTime)
                 {
                     toExportHours = ToExportMaxTime.Hours;
                     toExportMinutes = ToExportMaxTime.Minutes;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ToExportHours"));
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ToExportMinutes"));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ToExportHours)));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ToExportMinutes)));
                 }
             }
         }
@@ -119,10 +119,10 @@ namespace Gallifrey.UI.Modern.Models
             {
                 var newValue = value ?? 0;
                 HourMinuteHelper.UpdateMinutes(ref remainingHours, ref remainingMinutes, newValue, 999, out bool hoursChanged);
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("RemainingMinutes"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(RemainingMinutes)));
                 if (hoursChanged)
                 {
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("RemainingHours"));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(RemainingHours)));
                 }
             }
         }
@@ -176,15 +176,15 @@ namespace Gallifrey.UI.Modern.Models
             ToExportHours = ToExportMaxTime.Hours;
             ToExportMinutes = ToExportMaxTime.Minutes;
 
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasParent"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("JiraParentRef"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("JiraParentDesc"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("JiraRef"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("JiraDesc"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ExportedHours"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ExportedMinutes"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ToExportHours"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ToExportMinutes"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HasParent)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(JiraParentRef)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(JiraParentDesc)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(JiraRef)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(JiraDesc)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ExportedHours)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ExportedMinutes)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ToExportHours)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ToExportMinutes)));
         }
 
         private void SetRemaining()
@@ -209,8 +209,8 @@ namespace Gallifrey.UI.Modern.Models
                     break;
             }
 
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("RemainingHours"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("RemainingMinutes"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(RemainingHours)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(RemainingMinutes)));
         }
     }
 }

@@ -52,7 +52,7 @@ namespace Gallifrey.UI.Modern.Models
             }
             Contributors = contributorList[position];
 
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Contributors"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Contributors)));
         }
     }
 }
