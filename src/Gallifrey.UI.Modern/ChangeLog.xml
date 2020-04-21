@@ -651,7 +651,7 @@
       <Other>Remove support for Jira SOAP endpoints</Other>
     </Others>
   </Version>
-  <Version Number="0.0.0.0" Name="Pre-Release">
+  <Version Number="3.18.0.0" Name="">
     <Features>
       <Feature>Add ability to right click and view in Jira</Feature>
     </Features>
