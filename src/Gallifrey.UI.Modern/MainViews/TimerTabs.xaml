@@ -8,7 +8,7 @@
         <TabControl.ItemContainerStyle>
             <Style TargetType="TabItem">
                 <Setter Property="Header" Value="{Binding Header}" />
-                <Setter Property="controls:ControlsHelper.HeaderFontSize" Value="17" />
+                <Setter Property="controls:HeaderedControlHelper.HeaderFontSize" Value="17" />
                 <Setter Property="HorizontalAlignment" Value="Right" />
                 <Setter Property="IsSelected" Value="{Binding DateIsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 <EventSetter Event="MouseDown" Handler="TabHeaderRightClick" />
@@ -25,7 +25,7 @@
                         <Style TargetType="{x:Type ListViewItem}">
                             <Setter Property="Margin" Value="3" />
                             <Setter Property="Padding" Value="4" />
-                            <Setter Property="BorderBrush" Value="{DynamicResource GrayBrush2}" />
+                            <Setter Property="BorderBrush" Value="{DynamicResource MahApps.Brushes.Gray2}" />
                             <Setter Property="BorderThickness" Value="2" />
                             <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                             <Setter Property="IsSelected" Value="{Binding TimerIsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
@@ -33,20 +33,20 @@
                                 <Style TargetType="Border">
                                     <Setter Property="CornerRadius" Value="5" />
                                 </Style>
-                                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="{DynamicResource Gray8}" />
-                                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="{DynamicResource BlackColor}" />
-                                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="{DynamicResource Gray8}" />
-                                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="{DynamicResource BlackColor}" />
+                                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="{DynamicResource MahApps.Colors.Gray8}" />
+                                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="{DynamicResource MahApps.Colors.MahApps.Colors.ThemeForeground}" />
+                                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="{DynamicResource MahApps.Colors.Gray8}" />
+                                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="{DynamicResource MahApps.Colors.MahApps.Colors.ThemeForeground}" />
                             </Style.Resources>
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding IsRunning}" Value="True">
-                                    <Setter Property="BorderBrush" Value="{DynamicResource AccentColorBrush}" />
+                                    <Setter Property="BorderBrush" Value="{DynamicResource MahApps.Brushes.Accent}" />
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding HasTimeToExportAndNotRunning}" Value="True">
-                                    <Setter Property="BorderBrush" Value="{DynamicResource AccentColorBrush}" />
+                                    <Setter Property="BorderBrush" Value="{DynamicResource MahApps.Brushes.Accent}" />
                                 </DataTrigger>
                                 <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Background" Value="{DynamicResource AccentColorBrush4}" />
+                                    <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent4}" />
                                 </Trigger>
                             </Style.Triggers>
                         </Style>
@@ -70,7 +70,7 @@
                                         <Style TargetType="TextBlock">
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding HighlightTitle}" Value="True">
-                                                    <Setter Property="Foreground" Value="{DynamicResource AccentColorBrush}" />
+                                                    <Setter Property="Foreground" Value="{DynamicResource MahApps.Brushes.Accent}" />
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
@@ -85,8 +85,8 @@
                                 <TextBlock Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" FontSize="13" Margin="3,0,0,0" TextWrapping="Wrap" Text="{Binding Description}" />
 
                                 <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Margin="0,0,6,0" VerticalAlignment="Center" Visibility="{Binding HasTimeToExport, Converter={StaticResource BoolToVis}}">
-                                    <TextBlock FontSize="18" Margin="0,0,5,0" Text="{Binding ExportTime}" Foreground="{DynamicResource AccentColorBrush}" FontWeight="Medium" />
-                                    <TextBlock FontSize="18" Text="To Export" Foreground="{DynamicResource AccentColorBrush}" FontWeight="Medium" />
+                                    <TextBlock FontSize="18" Margin="0,0,5,0" Text="{Binding ExportTime}" Foreground="{DynamicResource MahApps.Brushes.Accent}" FontWeight="Medium" />
+                                    <TextBlock FontSize="18" Text="To Export" Foreground="{DynamicResource MahApps.Brushes.Accent}" FontWeight="Medium" />
                                 </StackPanel>
 
                                 <TextBlock Grid.Row="0" Grid.Column="2" FontSize="26" Margin="3,0,0,0" Text="{Binding CurrentTime}" FontWeight="Medium">
@@ -94,7 +94,7 @@
                                         <Style TargetType="TextBlock">
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding IsRunning}" Value="True">
-                                                    <Setter Property="Foreground" Value="{DynamicResource AccentColorBrush}" />
+                                                    <Setter Property="Foreground" Value="{DynamicResource MahApps.Brushes.Accent}" />
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
@@ -102,7 +102,8 @@
                                 </TextBlock>
                                 <Grid.ContextMenu>
                                     <ContextMenu>
-                                        <MenuItem Header="Copy JIRA Reference" Click="ContextMenu_Copy" />
+                                        <MenuItem Header="Copy Jira Reference" Click="ContextMenu_Copy" />
+                                        <MenuItem Header="View On Jira" Click="ContextMenu_View" />
                                         <MenuItem Header="Delete Timer" Click="ContextMenu_Delete" />
                                         <MenuItem Header="Edit Timer" Click="ContextMenu_Edit" />
                                         <MenuItem Header="Export Timer" Click="ContextMenu_Export" Visibility="{Binding TrackingOnly, Converter={StaticResource BoolToVisInvert}}" />

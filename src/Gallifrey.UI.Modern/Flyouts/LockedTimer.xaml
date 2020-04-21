@@ -15,7 +15,7 @@
                 <Style TargetType="{x:Type ListViewItem}">
                     <Setter Property="Margin" Value="3" />
                     <Setter Property="Padding" Value="4" />
-                    <Setter Property="BorderBrush" Value="{DynamicResource GrayBrush2}" />
+                    <Setter Property="BorderBrush" Value="{DynamicResource MahApps.Brushes.Gray2}" />
                     <Setter Property="BorderThickness" Value="2" />
                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                     <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
@@ -23,15 +23,15 @@
                         <Style TargetType="Border">
                             <Setter Property="CornerRadius" Value="5" />
                         </Style>
-                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="{DynamicResource AccentColor3}" />
-                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="{DynamicResource BlackColor}" />
-                        <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="{DynamicResource Gray10}" />
-                        <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="{DynamicResource BlackColor}" />
+                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="{DynamicResource MahApps.Colors.Accent3}" />
+                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="{DynamicResource MahApps.Colors.ThemeForeground}" />
+                        <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="{DynamicResource MahApps.Colors.Gray10}" />
+                        <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="{DynamicResource MahApps.Colors.ThemeForeground}" />
                     </Style.Resources>
                     <Style.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="{DynamicResource AccentColorBrush4}" />
-                            <Setter Property="BorderBrush" Value="{DynamicResource GrayBrush7}" />
+                            <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent4}" />
+                            <Setter Property="BorderBrush" Value="{DynamicResource MahApps.Brushes.Gray7}" />
                         </Trigger>
                     </Style.Triggers>
                 </Style>
@@ -56,10 +56,10 @@
             </ListView.ItemTemplate>
         </ListView>
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom">
-            <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="AddButton" ToolTip="Add Selected Lock/Idle Timers">
+            <Button Style="{DynamicResource MahApps.Styles.Button.Circle}" Width="40" Height="40" Margin="5" Click="AddButton" ToolTip="Add Selected Lock/Idle Timers">
                 <iconPacks:PackIconFontAwesome Kind="PlusCircleSolid" Height="22" Width="22" HorizontalAlignment="Center" VerticalAlignment="Center" />
             </Button>
-            <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="DeleteButton" ToolTip="Delete Selected Lock/Idle Timers">
+            <Button Style="{DynamicResource MahApps.Styles.Button.Circle}" Width="40" Height="40" Margin="5" Click="DeleteButton" ToolTip="Delete Selected Lock/Idle Timers">
                 <iconPacks:PackIconFontAwesome Kind="TrashAltSolid" Height="22" Width="22" HorizontalAlignment="Center" VerticalAlignment="Center" />
             </Button>
         </StackPanel>
@@ -75,22 +75,22 @@
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
-                    <TextBlock Grid.Row="0" Margin="0 5 0 0" FontSize="{DynamicResource DialogMessageFontSize}" Text="" TextWrapping="Wrap" x:Name="TimeLocateMessage" />
+                    <TextBlock Grid.Row="0" Margin="0 5 0 0" FontSize="{DynamicResource MahApps.Font.Size.Dialog.Message}" Text="" TextWrapping="Wrap" x:Name="TimeLocateMessage" />
 
                     <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Height="85">
-                        <Button Height="45" MinWidth="70" Margin="0 0 5 0" Click="AddToNewTimer">
+                        <Button Height="45" MinWidth="70" Style="{DynamicResource MahApps.Styles.Button.Dialogs}" Margin="0 0 5 0" Click="AddToNewTimer">
                             <TextBlock>New<LineBreak />Timer</TextBlock>
                         </Button>
-                        <Button Height="45" MinWidth="70" Margin="5 0 5 0" Click="AddToRunningTimer" x:Name="RunningTimerButton">
+                        <Button Height="45" MinWidth="70" Style="{DynamicResource MahApps.Styles.Button.Dialogs}" Margin="5 0 5 0" Click="AddToRunningTimer" x:Name="RunningTimerButton">
                             <TextBlock>Running<LineBreak />Timer</TextBlock>
                         </Button>
-                        <Button Height="45" MinWidth="70" Margin="5 0 5 0" Click="AddToExistingTimer">
+                        <Button Height="45" MinWidth="70" Style="{DynamicResource MahApps.Styles.Button.Dialogs}" Margin="5 0 5 0" Click="AddToExistingTimer">
                             <TextBlock>Existing<LineBreak />Timer</TextBlock>
                         </Button>
-                        <Button Height="45" MinWidth="70" Margin="5 0 5 0" Click="AddToRecentTimer">
+                        <Button Height="45" MinWidth="70" Style="{DynamicResource MahApps.Styles.Button.Dialogs}" Margin="5 0 5 0" Click="AddToRecentTimer">
                             <TextBlock>Recent<LineBreak />Timer</TextBlock>
                         </Button>
-                        <Button Height="45" MinWidth="70" Content="Cancel" Margin="5 0 5 0" Click="CancelAddTimer" />
+                        <Button Height="45" MinWidth="70" Style="{DynamicResource MahApps.Styles.Button.Dialogs}" Margin="5 0 5 0" Content="Cancel" Click="CancelAddTimer" />
                     </StackPanel>
                 </Grid>
             </dialogs:CustomDialog>
@@ -104,12 +104,12 @@
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
-                    <TextBlock Grid.Row="0" Margin="0 5 0 0" FontSize="{DynamicResource DialogMessageFontSize}" TextWrapping="Wrap" x:Name="TimerSelectorMessage" />
-                    <ComboBox Grid.Row="1" Margin="0 5 0 0" FontSize="{DynamicResource DialogMessageFontSize}" controls:ControlsHelper.FocusBorderBrush="{DynamicResource AccentColorBrush}" x:Name="Items" />
+                    <TextBlock Grid.Row="0" Margin="0 5 0 0" FontSize="{DynamicResource MahApps.Font.Size.Dialog.Message}" TextWrapping="Wrap" x:Name="TimerSelectorMessage" />
+                    <ComboBox Grid.Row="1" Margin="0 5 0 0" FontSize="{DynamicResource MahApps.Font.Size.Dialog.Message}" controls:ControlsHelper.FocusBorderBrush="{DynamicResource MahApps.Brushes.Accent}" x:Name="Items" />
 
                     <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Height="85">
-                        <Button Height="35" MinWidth="80" Style="{DynamicResource AccentedDialogSquareButton}" Content="OK" Margin="0 0 5 0" Click="ConfirmTimerSelector" />
-                        <Button Height="35" MinWidth="80" Content="Cancel" Margin="5 0 5 0" Click="CancelTimerSelector" />
+                        <Button Height="35" MinWidth="80" Style="{DynamicResource MahApps.Styles.Button.MetroAccentedSquare}" Margin="0 0 5 0" Content="OK" Click="ConfirmTimerSelector" />
+                        <Button Height="35" MinWidth="80" Style="{DynamicResource MahApps.Styles.Button.Dialogs}" Margin="5 0 5 0" Content="Cancel" Click="CancelTimerSelector" />
                     </StackPanel>
                 </Grid>
             </dialogs:CustomDialog>

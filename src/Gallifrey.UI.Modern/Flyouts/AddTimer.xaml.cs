@@ -150,13 +150,13 @@ namespace Gallifrey.UI.Modern.Flyouts
 
                         if (transitionResult.Status == ProgressResult.JiraHelperStatus.Success)
                         {
-                            var transitionsAvaliable = transitionResult.RetVal;
+                            var transitionsAvailable = transitionResult.RetVal;
 
                             var timeSelectorDialog = (BaseMetroDialog)Resources["TransitionSelector"];
                             await modelHelpers.ShowDialogAsync(timeSelectorDialog);
 
                             var comboBox = timeSelectorDialog.FindChild<ComboBox>("Items");
-                            comboBox.ItemsSource = transitionsAvaliable.Select(x => x.name).ToList();
+                            comboBox.ItemsSource = transitionsAvailable.Select(x => x.name).ToList();
 
                             var messageBox = timeSelectorDialog.FindChild<TextBlock>("Message");
                             messageBox.Text = $"Please Select The Status Update You Would Like To Perform To {DataModel.JiraReference}";
@@ -180,6 +180,12 @@ namespace Gallifrey.UI.Modern.Flyouts
 
         private async Task<bool> AddPeriodTimer(Issue jiraIssue, TimeSpan seedTime)
         {
+            if (!DataModel.StartDate.HasValue || !DataModel.EndDate.HasValue)
+            {
+                await modelHelpers.ShowMessageAsync("Missing Start/End Date", "The Start Or End Date Is Not Valid, Please Reselect");
+                return false;
+            }
+
             var workingDate = DataModel.StartDate.Value;
 
             while (workingDate <= DataModel.EndDate.Value)

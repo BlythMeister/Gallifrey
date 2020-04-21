@@ -8,7 +8,7 @@ namespace Gallifrey.Settings
     {
         Version LastChangeLogVersion { get; }
         DateTime LastHeartbeatTracked { get; }
-        Guid InstallationInstaceId { get; }
+        Guid InstallationInstanceId { get; }
         bool IsPremium { get; }
         bool NewUser { get; }
 
@@ -30,7 +30,7 @@ namespace Gallifrey.Settings
         public int Build { get; set; }
         public int Revision { get; set; }
         public DateTime LastHeartbeatTracked { get; set; }
-        public Guid InstallationInstaceId { get; set; }
+        public Guid InstallationInstanceId { get; set; }
 
         [DefaultValue(false)]
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
@@ -69,10 +69,10 @@ namespace Gallifrey.Settings
         {
             var setInstallationId = false;
 
-            if (InstallationInstaceId == Guid.Empty)
+            if (InstallationInstanceId == Guid.Empty)
             {
                 setInstallationId = true;
-                InstallationInstaceId = Guid.NewGuid();
+                InstallationInstanceId = Guid.NewGuid();
             }
 
             return setInstallationId;

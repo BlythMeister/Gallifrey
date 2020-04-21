@@ -8,6 +8,11 @@ namespace Gallifrey.Serialization
 
         internal static void Serialize(SettingsCollection settingsCollection)
         {
+            if (settingsCollection == null)
+            {
+                return;
+            }
+
             if (serializer == null)
             {
                 serializer = new ItemSerializer<SettingsCollection>("Settings.dat");

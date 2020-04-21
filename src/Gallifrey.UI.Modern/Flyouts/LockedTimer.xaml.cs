@@ -22,7 +22,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             this.modelHelpers = modelHelpers;
             InitializeComponent();
 
-            var idleTimers = modelHelpers.Gallifrey.IdleTimerCollection.GetUnusedLockTimers().ToList();
+            var idleTimers = modelHelpers.Gallifrey.IdleTimerCollection.GetUnusedIdleTimers().ToList();
 
             DataContext = new LockedTimerCollectionModel(idleTimers);
         }
@@ -51,7 +51,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             if (selected.Count != selectedTimers.Count)
             {
                 await modelHelpers.ShowMessageAsync("Out Of Date", "The Timer Window Is Out Of Date And Needs To Be Refreshed");
-                DataModel.RefreshLockedTimers(modelHelpers.Gallifrey.IdleTimerCollection.GetUnusedLockTimers());
+                DataModel.RefreshLockedTimers(modelHelpers.Gallifrey.IdleTimerCollection.GetUnusedIdleTimers());
                 Focus();
                 return;
             }
@@ -127,13 +127,13 @@ namespace Gallifrey.UI.Modern.Flyouts
                     modelHelpers.Gallifrey.IdleTimerCollection.RemoveTimer(lockedTimerModel.UniqueId);
                 }
 
-                if (!modelHelpers.Gallifrey.IdleTimerCollection.GetUnusedLockTimers().Any())
+                if (!modelHelpers.Gallifrey.IdleTimerCollection.GetUnusedIdleTimers().Any())
                 {
                     modelHelpers.CloseFlyout(this);
                     return;
                 }
 
-                DataModel.RefreshLockedTimers(modelHelpers.Gallifrey.IdleTimerCollection.GetUnusedLockTimers());
+                DataModel.RefreshLockedTimers(modelHelpers.Gallifrey.IdleTimerCollection.GetUnusedIdleTimers());
             }
 
             Focus();
@@ -170,9 +170,9 @@ namespace Gallifrey.UI.Modern.Flyouts
                 modelHelpers.Gallifrey.IdleTimerCollection.RemoveTimer(lockedTimerModel.UniqueId);
             }
 
-            if (modelHelpers.Gallifrey.IdleTimerCollection.GetUnusedLockTimers().Any())
+            if (modelHelpers.Gallifrey.IdleTimerCollection.GetUnusedIdleTimers().Any())
             {
-                DataModel.RefreshLockedTimers(modelHelpers.Gallifrey.IdleTimerCollection.GetUnusedLockTimers());
+                DataModel.RefreshLockedTimers(modelHelpers.Gallifrey.IdleTimerCollection.GetUnusedIdleTimers());
             }
             else
             {
@@ -212,9 +212,9 @@ namespace Gallifrey.UI.Modern.Flyouts
                 }
             }
 
-            if (modelHelpers.Gallifrey.IdleTimerCollection.GetUnusedLockTimers().Any())
+            if (modelHelpers.Gallifrey.IdleTimerCollection.GetUnusedIdleTimers().Any())
             {
-                DataModel.RefreshLockedTimers(modelHelpers.Gallifrey.IdleTimerCollection.GetUnusedLockTimers());
+                DataModel.RefreshLockedTimers(modelHelpers.Gallifrey.IdleTimerCollection.GetUnusedIdleTimers());
             }
             else
             {
@@ -261,9 +261,9 @@ namespace Gallifrey.UI.Modern.Flyouts
                         modelHelpers.Gallifrey.IdleTimerCollection.RemoveTimer(lockedTimerModel.UniqueId);
                     }
 
-                    if (modelHelpers.Gallifrey.IdleTimerCollection.GetUnusedLockTimers().Any())
+                    if (modelHelpers.Gallifrey.IdleTimerCollection.GetUnusedIdleTimers().Any())
                     {
-                        DataModel.RefreshLockedTimers(modelHelpers.Gallifrey.IdleTimerCollection.GetUnusedLockTimers());
+                        DataModel.RefreshLockedTimers(modelHelpers.Gallifrey.IdleTimerCollection.GetUnusedIdleTimers());
                     }
                     else
                     {
@@ -289,10 +289,10 @@ namespace Gallifrey.UI.Modern.Flyouts
                     modelHelpers.Gallifrey.IdleTimerCollection.RemoveTimer(lockedTimerModel.UniqueId);
                 }
 
-                if (modelHelpers.Gallifrey.IdleTimerCollection.GetUnusedLockTimers().Any())
+                if (modelHelpers.Gallifrey.IdleTimerCollection.GetUnusedIdleTimers().Any())
                 {
                     await modelHelpers.OpenFlyout(this);
-                    DataModel.RefreshLockedTimers(modelHelpers.Gallifrey.IdleTimerCollection.GetUnusedLockTimers());
+                    DataModel.RefreshLockedTimers(modelHelpers.Gallifrey.IdleTimerCollection.GetUnusedIdleTimers());
                 }
                 else
                 {
@@ -334,7 +334,7 @@ namespace Gallifrey.UI.Modern.Flyouts
 
         private void LockedTimer_OpenChange(object sender, RoutedEventArgs e)
         {
-            DataModel.RefreshLockedTimers(modelHelpers.Gallifrey.IdleTimerCollection.GetUnusedLockTimers());
+            DataModel.RefreshLockedTimers(modelHelpers.Gallifrey.IdleTimerCollection.GetUnusedIdleTimers());
         }
     }
 }

@@ -29,7 +29,7 @@ namespace Gallifrey.AppTracking
 
         private bool IsTrackingEnabled(TrackingType trackingType)
         {
-            return versionControl.IsAutomatedDeploy && (settingsCollection.AppSettings.UsageTracking || trackingType == TrackingType.DailyHearbeat);
+            return versionControl.IsAutomatedDeploy && (settingsCollection.AppSettings.UsageTracking || trackingType == TrackingType.DailyHeartbeat);
         }
 
         private void SetupBrowser()
@@ -73,13 +73,13 @@ namespace Gallifrey.AppTracking
 
         private string GetNavigateUrl(TrackingType trackingType)
         {
-            var prem = "Gallifrey";
+            var source = "Gallifrey";
             if (settingsCollection.InternalSettings.IsPremium)
             {
-                prem = "Gallifrey_Premium";
+                source = "Gallifrey_Premium";
             }
 
-            return $"https://releases.gallifreyapp.co.uk/tracking/{trackingType}.html?utm_source={prem}&utm_medium={instanceType}&utm_campaign={versionControl.DeployedVersion}&uid={settingsCollection.InstallationHash}";
+            return $"https://releases.gallifreyapp.co.uk/tracking/{trackingType}.html?utm_source={source}&utm_medium={instanceType}&utm_campaign={versionControl.DeployedVersion}&uid={settingsCollection.InstallationHash}";
         }
     }
 }

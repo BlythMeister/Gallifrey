@@ -31,15 +31,15 @@ namespace Gallifrey.UI.Modern.Models
             timerModel.PropertyChanged += TimerModelOnPropertyChanged;
             Timers.Add(timerModel);
             Timers = new ObservableCollection<TimerModel>(Timers.OrderBy(x => x.JiraTimer.JiraReference, new JiraReferenceComparer()));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Timers"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Header"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Timers)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Header)));
         }
 
         public void RemoveTimerModel(TimerModel timerModel)
         {
             Timers.Remove(timerModel);
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Timers"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Header"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Timers)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Header)));
         }
 
         private void TimerModelOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
@@ -47,7 +47,7 @@ namespace Gallifrey.UI.Modern.Models
             switch (propertyChangedEventArgs.PropertyName)
             {
                 case "CurrentTime":
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Header"));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Header)));
                     break;
             }
         }
@@ -57,7 +57,7 @@ namespace Gallifrey.UI.Modern.Models
             if (DateIsSelected != isSelected)
             {
                 DateIsSelected = isSelected;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("DateIsSelected"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DateIsSelected)));
             }
         }
 
@@ -66,7 +66,7 @@ namespace Gallifrey.UI.Modern.Models
             if (TrackingOnly != trackingOnly)
             {
                 TrackingOnly = trackingOnly;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TrackingOnly"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TrackingOnly)));
             }
         }
     }

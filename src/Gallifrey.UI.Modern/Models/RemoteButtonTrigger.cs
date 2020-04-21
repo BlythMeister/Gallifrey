@@ -18,6 +18,7 @@ namespace Gallifrey.UI.Modern.Models
         PayPal,
         Slack,
         AddToFill,
-        Save
+        Save,
+        View
     }
 }

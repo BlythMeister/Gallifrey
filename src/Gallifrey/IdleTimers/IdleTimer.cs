@@ -17,6 +17,7 @@ namespace Gallifrey.IdleTimers
             DateStarted = dateStarted;
             DateFinished = dateFinished;
             IdleTimeValue = idleTimeValue;
+            // ReSharper disable once CompareOfFloatsByEqualityOperator
             if (IdleTimeValue.TotalSeconds == 0)
             {
                 SetIdleTimeValueFromDates();
@@ -24,11 +25,11 @@ namespace Gallifrey.IdleTimers
             UniqueId = uniqueId;
         }
 
-        public IdleTimer(TimeSpan initalTimeSpan)
+        public IdleTimer(TimeSpan initialTimeSpan)
         {
-            DateStarted = DateTime.Now.Subtract(initalTimeSpan);
+            DateStarted = DateTime.Now.Subtract(initialTimeSpan);
             DateFinished = null;
-            IdleTimeValue = initalTimeSpan;
+            IdleTimeValue = initialTimeSpan;
             UniqueId = Guid.NewGuid();
         }
 

@@ -74,7 +74,7 @@ namespace Gallifrey.JiraIntegration
             jiraConnectionSettings = newJiraConnectionSettings;
             jira = null;
             CheckAndConnectJira();
-            Task.Run(() => UpdateJiraProjectCache());
+            Task.Run(UpdateJiraProjectCache);
         }
 
         private void CheckAndConnectJira()
@@ -89,17 +89,13 @@ namespace Gallifrey.JiraIntegration
                     LoggedIn?.Invoke(this, null);
 
                     TrackingType trackingType;
-                    if (jira.GetType() == typeof(JiraRestClient) && jiraConnectionSettings.UseTempo)
+                    if (jiraConnectionSettings.UseTempo)
                     {
                         trackingType = jiraConnectionSettings.JiraUrl.Contains(".atlassian.net") ? TrackingType.JiraConnectCloudRestWithTempo : TrackingType.JiraConnectSelfhostRestWithTempo;
                     }
-                    else if (jira.GetType() == typeof(JiraRestClient))
-                    {
-                        trackingType = jiraConnectionSettings.JiraUrl.Contains(".atlassian.net") ? TrackingType.JiraConnectCloudRest : TrackingType.JiraConnectSelfhostRest;
-                    }
                     else
                     {
-                        trackingType = jiraConnectionSettings.JiraUrl.Contains(".atlassian.net") ? TrackingType.JiraConnectCloudSoap : TrackingType.JiraConnectSelfhostSoap;
+                        trackingType = jiraConnectionSettings.JiraUrl.Contains(".atlassian.net") ? TrackingType.JiraConnectCloudRest : TrackingType.JiraConnectSelfhostRest;
                     }
 
                     trackUsage.TrackAppUsage(trackingType);

@@ -1,5 +1,6 @@
 using Gallifrey.ChangeLog;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace Gallifrey.UI.Modern.Models
@@ -29,6 +30,7 @@ namespace Gallifrey.UI.Modern.Models
             }
         }
 
+        [SuppressMessage("ReSharper", "UnusedMember.Global")]
         public class ChangeVersion
         {
             public string VersionNumber { get; set; }

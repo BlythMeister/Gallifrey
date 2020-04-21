@@ -24,12 +24,12 @@ namespace Gallifrey.InactiveMonitor
             this.settingsCollection = settingsCollection;
             lockObject = new object();
 
-            var hearbeat = new Timer(500);
-            hearbeat.Elapsed += HearbeatOnElapsed;
-            hearbeat.Start();
+            var heartbeat = new Timer(500);
+            heartbeat.Elapsed += HeartbeatOnElapsed;
+            heartbeat.Start();
         }
 
-        private void HearbeatOnElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
+        private void HeartbeatOnElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
         {
             lock (lockObject)
             {

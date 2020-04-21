@@ -38,7 +38,7 @@ namespace Gallifrey.UI.Modern.Models
             set
             {
                 startNow = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("StartNow"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(StartNow)));
             }
         }
 
@@ -48,7 +48,7 @@ namespace Gallifrey.UI.Modern.Models
             set
             {
                 assignToMe = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("AssignToMe"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(AssignToMe)));
             }
         }
 
@@ -58,7 +58,7 @@ namespace Gallifrey.UI.Modern.Models
             set
             {
                 changeStatus = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ChangeStatus"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ChangeStatus)));
             }
         }
 
@@ -70,7 +70,7 @@ namespace Gallifrey.UI.Modern.Models
             set
             {
                 localTimer = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LocalTimer"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(LocalTimer)));
             }
         }
 
@@ -80,7 +80,7 @@ namespace Gallifrey.UI.Modern.Models
             set
             {
                 datePeriod = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("DatePeriod"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DatePeriod)));
                 SetStartNowEnabled();
             }
         }
@@ -91,11 +91,11 @@ namespace Gallifrey.UI.Modern.Models
             set
             {
                 startDate = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("StartDate"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(StartDate)));
                 if (EndDate < startDate)
                 {
                     EndDate = startDate;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("EndDate"));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(EndDate)));
                 }
 
                 SetStartNowEnabled();
@@ -112,7 +112,7 @@ namespace Gallifrey.UI.Modern.Models
                 {
                     endDate = startDate;
                 }
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("EndDate"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(EndDate)));
                 SetStartNowEnabled();
             }
         }
@@ -130,7 +130,7 @@ namespace Gallifrey.UI.Modern.Models
                     jiraReference = uriDrag.Substring(uriDrag.LastIndexOf("/", StringComparison.InvariantCultureIgnoreCase) + 1);
                 }
 
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("JiraReference"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(JiraReference)));
             }
         }
 
@@ -199,10 +199,10 @@ namespace Gallifrey.UI.Modern.Models
             {
                 var newValue = value ?? 0;
                 HourMinuteHelper.UpdateMinutes(ref startHours, ref startMinutes, newValue, 23, out var hoursChanged);
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("StartMinutes"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(StartMinutes)));
                 if (hoursChanged)
                 {
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("StartHours"));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(StartHours)));
                 }
             }
         }
@@ -230,8 +230,8 @@ namespace Gallifrey.UI.Modern.Models
                 StartNowEditable = false;
             }
 
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("StartNow"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("StartNowEditable"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(StartNow)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(StartNowEditable)));
         }
 
         public void SetJiraReference(string jiraRef)
@@ -239,8 +239,8 @@ namespace Gallifrey.UI.Modern.Models
             JiraReference = jiraRef;
             JiraReferenceEditable = false;
 
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("JiraReference"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("JiraReferenceEditable"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(JiraReference)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(JiraReferenceEditable)));
         }
     }
 }

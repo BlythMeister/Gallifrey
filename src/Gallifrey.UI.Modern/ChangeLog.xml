@@ -59,7 +59,7 @@
       <Bug>Auto update check now doesn't run when a flyout is open</Bug>
       <Bug>Keyboard shortcuts only active when flyout not open</Bug>
       <Bug>Hide version number and window controls when flyout open</Bug>
-      <Bug>Attemping to fix memory leak when running Gallifrey for long periods</Bug>
+      <Bug>Attempting to fix memory leak when running Gallifrey for long periods</Bug>
       <Bug>Fixed error when search loaded</Bug>
     </Bugs>
     <Others />
@@ -136,7 +136,7 @@
       <Bug>Update to context menu to only show timer menu when right click on a timer</Bug>
       <Bug>Fix slow startup from refreshing project cache</Bug>
       <Bug>Fix timer adjustment buttons ignoring maximum time value on edit</Bug>
-      <Bug>Seperate local time from Jira timers in unexported time summary</Bug>
+      <Bug>Separate local time from Jira timers in unexported time summary</Bug>
     </Bugs>
     <Others>
       <Other>Move to MahApps Icon pack</Other>
@@ -249,7 +249,7 @@
       <Feature>Improve the target bar to include exported and unexported time</Feature>
     </Features>
     <Bugs>
-      <Bug>Fixes to auto-reinstaller logic</Bug>
+      <Bug>Fixes to auto-reinstall logic</Bug>
       <Bug>Fixes to the time calculations in notices and bottom bar</Bug>
       <Bug>Fixes for HTTPS migration</Bug>
     </Bugs>
@@ -330,12 +330,12 @@
     </Bugs>
     <Others>
       <Other>External dependencies updated</Other>
-      <Other>Automatic cloudflare cache purge on build</Other>
+      <Other>Automatic CloudFlare cache purge on build</Other>
     </Others>
   </Version>
   <Version Number="3.9.0.0" Name="">
     <Features>
-      <Feature>Added notification pop-up for update avaliable and when no timer running</Feature>
+      <Feature>Added notification pop-up for update Available and when no timer running</Feature>
       <Feature>No activity time is persisted through a restart</Feature>
       <Feature>Handle Tempo API changes and require Tempo API key</Feature>
       <Feature>Improved new user on-boarding process</Feature>
@@ -649,6 +649,19 @@
     </Bugs>
     <Others>
       <Other>Remove support for Jira SOAP endpoints</Other>
+    </Others>
+  </Version>
+  <Version Number="0.0.0.0" Name="Pre-Release">
+    <Features>
+      <Feature>Add ability to right click and view in Jira</Feature>
+    </Features>
+    <Bugs>
+      <Bug>Fix backup and data folders</Bug>
+      <Bug>Timer model is refreshed when screen locked/unlocked</Bug>
+    </Bugs>
+    <Others>
+      <Other>Update app to .net 4.7.0 from .net 4.6.0</Other>
+      <Other>Update to version 2 of MahApps</Other>
     </Others>
   </Version>
   <!--

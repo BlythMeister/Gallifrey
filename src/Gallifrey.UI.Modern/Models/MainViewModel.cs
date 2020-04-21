@@ -8,12 +8,14 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Timers;
 using System.Windows;
 
 namespace Gallifrey.UI.Modern.Models
 {
+    [SuppressMessage("ReSharper", "UnusedMember.Global")]
     public class MainViewModel : INotifyPropertyChanged
     {
         private readonly TargetBarValues targetBarValues;
@@ -156,9 +158,10 @@ namespace Gallifrey.UI.Modern.Models
                 if (newMessage != InactiveMinutes)
                 {
                     InactiveMinutes = newMessage;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("InactiveMinutes"));
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasInactiveTime"));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(InactiveMinutes)));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HasInactiveTime)));
 
+                    // ReSharper disable once CompareOfFloatsByEqualityOperator
                     if (TimeActivity.TotalMinutes % TimeSpan.FromMilliseconds(ModelHelpers.Gallifrey.Settings.AppSettings.AlertTimeMilliseconds).TotalMinutes == 0)
                     {
                         ModelHelpers.ShowNotification(InactiveMinutes);
@@ -168,8 +171,8 @@ namespace Gallifrey.UI.Modern.Models
             else
             {
                 InactiveMinutes = string.Empty;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("InactiveMinutes"));
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasInactiveTime"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(InactiveMinutes)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HasInactiveTime)));
             }
         }
 
@@ -212,9 +215,9 @@ namespace Gallifrey.UI.Modern.Models
                 var target = targetTime.TotalMinutes;
                 var exported = ExportedTime.TotalMinutes;
                 var unexported = UnexportedTime.TotalMinutes;
-                var remainign = RemainingTime.TotalMinutes;
+                var remaining = RemainingTime.TotalMinutes;
 
-                RemainingWidth = remainign / target * 100;
+                RemainingWidth = remaining / target * 100;
                 ExportedWidth = exported / target * 100;
                 UnexportedWidth = unexported / target * 100;
 
@@ -264,7 +267,7 @@ namespace Gallifrey.UI.Modern.Models
                 {
                     dateModel = new TimerDateModel(timerDate, ModelHelpers.Gallifrey.JiraTimerCollection);
                     TimerDates.Add(dateModel);
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TimerDates"));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TimerDates)));
                 }
 
                 var dateTimers = ModelHelpers.Gallifrey.JiraTimerCollection.GetTimersForADate(timerDate).ToList();
@@ -324,7 +327,7 @@ namespace Gallifrey.UI.Modern.Models
             if (orderedCollection.Count != TimerDates.Count)
             {
                 TimerDates = new ObservableCollection<TimerDateModel>(orderedCollection);
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TimerDates"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TimerDates)));
             }
             else
             {
@@ -336,7 +339,7 @@ namespace Gallifrey.UI.Modern.Models
                     if (main.TimerDate != ordered.TimerDate)
                     {
                         TimerDates = new ObservableCollection<TimerDateModel>(orderedCollection);
-                        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TimerDates"));
+                        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TimerDates)));
                         break;
                     }
                 }
@@ -377,7 +380,7 @@ namespace Gallifrey.UI.Modern.Models
             }
             else
             {
-                var dates = ModelHelpers.Gallifrey.JiraTimerCollection.GetValidTimerDates();
+                var dates = ModelHelpers.Gallifrey.JiraTimerCollection.GetValidTimerDates().ToList();
                 if (dates.Any())
                 {
                     var date = dates.Max();
@@ -401,7 +404,7 @@ namespace Gallifrey.UI.Modern.Models
                     timerModel.SetTrackingOnly(TrackingOnly);
                 }
             }
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TimerDates"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TimerDates)));
         }
 
         #endregion Private Helpers
@@ -410,10 +413,10 @@ namespace Gallifrey.UI.Modern.Models
 
         private void NewVersionPresent()
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("VersionName"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasUpdate"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ReinstallNeeded"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("UpdateError"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(VersionName)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HasUpdate)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ReinstallNeeded)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(UpdateError)));
         }
 
         private void BackendModification()
@@ -423,8 +426,8 @@ namespace Gallifrey.UI.Modern.Models
 
         private void PremiumChanged()
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("AppTitle"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("IsPremium"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(AppTitle)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsPremium)));
         }
 
         private void UserLoggedIn()
@@ -435,50 +438,50 @@ namespace Gallifrey.UI.Modern.Models
 
         private void GeneralTimerModification()
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ExportedNumber"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TotalTimerCount"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ExportedNumber)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TotalTimerCount)));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("UnexportedTime"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Exported"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Exported)));
 
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TimeToExportMessage"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HaveTimeToExport"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TimeToExportMessage)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HaveTimeToExport)));
 
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TimerRunning"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("CurrentRunningTimerDescription"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HaveLocalTime"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LocalTimeMessage"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LocalTime"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ExportableTime"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TimerRunning)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CurrentRunningTimerDescription)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HaveLocalTime)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(LocalTimeMessage)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(LocalTime)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ExportableTime)));
 
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ExportTarget"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ExportTarget)));
 
             targetBarValues.Update();
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TargetBarExportedPercentage"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TargetBarUnexportedPercentage"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TargetBarRemainingPercentage"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TargetBarExportedLabel"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TargetBarUnexportedLabel"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TargetBarRemainingLabel"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TargetBarExportedPercentage)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TargetBarUnexportedPercentage)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TargetBarRemainingPercentage)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TargetBarExportedLabel)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TargetBarUnexportedLabel)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TargetBarRemainingLabel)));
         }
 
         private void SettingsChanged()
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ExportTarget"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TrackingOnly"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HaveTimeToExport"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ExportableTime"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TimeToExportMessage"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HaveLocalTime"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LocalTimeMessage"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LocalTime"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ExportTarget)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TrackingOnly)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HaveTimeToExport)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ExportableTime)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TimeToExportMessage)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HaveLocalTime)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(LocalTimeMessage)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(LocalTime)));
 
             targetBarValues.Update();
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TargetBarExportedPercentage"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TargetBarUnexportedPercentage"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TargetBarRemainingPercentage"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TargetBarExportedLabel"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TargetBarUnexportedLabel"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TargetBarRemainingLabel"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TargetBarExportedPercentage)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TargetBarUnexportedPercentage)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TargetBarRemainingPercentage)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TargetBarExportedLabel)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TargetBarUnexportedLabel)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TargetBarRemainingLabel)));
 
             SetTrackingOnlyInModel();
             RefreshModel();
@@ -486,40 +489,40 @@ namespace Gallifrey.UI.Modern.Models
 
         private void TimerChanged()
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TimeToExportMessage"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HaveTimeToExport"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TimeToExportMessage)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HaveTimeToExport)));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("UnexportedTime"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ExportableTime"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ExportableTime)));
 
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TimerRunning"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("CurrentRunningTimerDescription"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TimerRunning)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CurrentRunningTimerDescription)));
 
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ExportTarget"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ExportTarget)));
 
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HaveLocalTime"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LocalTimeMessage"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LocalTime"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HaveLocalTime)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(LocalTimeMessage)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(LocalTime)));
 
             targetBarValues.Update();
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TargetBarExportedPercentage"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TargetBarUnexportedPercentage"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TargetBarRemainingPercentage"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TargetBarExportedLabel"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TargetBarUnexportedLabel"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TargetBarRemainingLabel"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TargetBarExportedPercentage)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TargetBarUnexportedPercentage)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TargetBarRemainingPercentage)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TargetBarExportedLabel)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TargetBarUnexportedLabel)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TargetBarRemainingLabel)));
         }
 
         private void DailyEvent()
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ExportTarget"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ExportTarget)));
 
             targetBarValues.Update();
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TargetBarExportedPercentage"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TargetBarUnexportedPercentage"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TargetBarRemainingPercentage"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TargetBarExportedLabel"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TargetBarUnexportedLabel"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TargetBarRemainingLabel"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TargetBarExportedPercentage)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TargetBarUnexportedPercentage)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TargetBarRemainingPercentage)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TargetBarExportedLabel)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TargetBarUnexportedLabel)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TargetBarRemainingLabel)));
         }
 
         #endregion Events

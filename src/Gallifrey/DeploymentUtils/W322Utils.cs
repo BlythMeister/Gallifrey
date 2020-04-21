@@ -6,18 +6,19 @@ using System.Text;
 
 namespace Gallifrey.DeploymentUtils
 {
+    [SuppressMessage("ReSharper", "IdentifierTypo")]
     public class Win32Utils
     {
         [DllImport("user32.Dll")]
         private static extern int EnumWindows(EnumWindowsCallbackDelegate callback, IntPtr lParam);
 
-        [DllImport("User32.Dll")]
+        [DllImport("user32.Dll", CharSet = CharSet.Unicode)]
         private static extern void GetWindowText(int h, StringBuilder s, int nMaxCount);
 
-        [DllImport("User32.Dll")]
+        [DllImport("user32.Dll")]
         private static extern bool EnumChildWindows(IntPtr hwndParent, EnumWindowsCallbackDelegate lpEnumFunc, IntPtr lParam);
 
-        [DllImport("User32.Dll")]
+        [DllImport("user32.Dll")]
         [SuppressMessage("ReSharper", "InconsistentNaming")]
         private static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
 
@@ -43,7 +44,7 @@ namespace Gallifrey.DeploymentUtils
                 gch.Free();
             }
 
-            /* Iterate through the list and get the handle thats the best match */
+            /* Iterate through the list and get the handle that's the best match */
             foreach (IntPtr handle in windowHandles)
             {
                 var sb = new StringBuilder(1024);
@@ -77,7 +78,7 @@ namespace Gallifrey.DeploymentUtils
                 gch.Free();
             }
 
-            /* Iterate through the list and get the handle thats the best match */
+            /* Iterate through the list and get the handle that's the best match */
             foreach (IntPtr handle in windowHandles)
             {
                 var sb = new StringBuilder(1024);

@@ -84,8 +84,8 @@ namespace Gallifrey.Serialization
         internal static string GetSha256Hash(string text)
         {
             var bytes = Encoding.UTF8.GetBytes(text);
-            var hashstring = new SHA256Managed();
-            var hash = hashstring.ComputeHash(bytes);
+            var hashString = new SHA256Managed();
+            var hash = hashString.ComputeHash(bytes);
             return hash.Aggregate(string.Empty, (current, x) => current + $"{x:x2}");
         }
     }

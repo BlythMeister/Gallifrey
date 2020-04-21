@@ -52,8 +52,8 @@ namespace Gallifrey.UI.Modern.Flyouts
                 }
                 catch (DuplicateTimerException ex)
                 {
-                    var handlerd = await MergeTimers(ex);
-                    if (!handlerd)
+                    var handled = await MergeTimers(ex);
+                    if (!handled)
                     {
                         Focus();
                         return;
@@ -131,8 +131,8 @@ namespace Gallifrey.UI.Modern.Flyouts
                     }
                     catch (DuplicateTimerException ex)
                     {
-                        var handlerd = await MergeTimers(ex);
-                        if (!handlerd)
+                        var handled = await MergeTimers(ex);
+                        if (!handled)
                         {
                             Focus();
                             return;

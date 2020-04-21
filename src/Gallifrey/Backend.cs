@@ -76,7 +76,7 @@ namespace Gallifrey
         private readonly PremiumChecker premiumChecker;
         private readonly Mutex exportedHeartbeatMutex;
         private readonly Timer cleanUpAndTrackingHeartbeat;
-        private readonly Timer jiraExportHearbeat;
+        private readonly Timer jiraExportHeartbeat;
 
         public event EventHandler<int> NoActivityEvent;
 
@@ -113,11 +113,11 @@ namespace Gallifrey
             ActivityChecker.NoActivityEvent += OnNoActivityEvent;
 
             cleanUpAndTrackingHeartbeat = new Timer(TimeSpan.FromMinutes(15).TotalMilliseconds);
-            cleanUpAndTrackingHeartbeat.Elapsed += CleanUpAndTrackingHearbeatOnElapsed;
+            cleanUpAndTrackingHeartbeat.Elapsed += CleanUpAndTrackingHeartbeatOnElapsed;
 
             exportedHeartbeatMutex = new Mutex(false);
-            jiraExportHearbeat = new Timer(TimeSpan.FromMinutes(10).TotalMilliseconds);
-            jiraExportHearbeat.Elapsed += JiraExportHearbeatHearbeatOnElapsed;
+            jiraExportHeartbeat = new Timer(TimeSpan.FromMinutes(10).TotalMilliseconds);
+            jiraExportHeartbeat.Elapsed += JiraExportHeartbeatHeartbeatOnElapsed;
         }
 
         private void OnExportPromptEvent(object sender, ExportPromptDetail promptDetail)
@@ -133,7 +133,7 @@ namespace Gallifrey
             NoActivityEvent?.Invoke(sender, millisecondsSinceActivity);
         }
 
-        private void CleanUpAndTrackingHearbeatOnElapsed(object sender, ElapsedEventArgs e)
+        private void CleanUpAndTrackingHeartbeatOnElapsed(object sender, ElapsedEventArgs e)
         {
             try
             {
@@ -158,7 +158,7 @@ namespace Gallifrey
                     if (versionControl.IsAutomatedDeploy && jiraConnection.IsConnected)
                     {
                         DailyTrackingEvent?.Invoke(this, null);
-                        trackUsage.TrackAppUsage(TrackingType.DailyHearbeat);
+                        trackUsage.TrackAppUsage(TrackingType.DailyHeartbeat);
                         settingsCollection.InternalSettings.SetLastHeartbeatTracked(DateTime.UtcNow);
                         settingsCollection.SaveSettings();
                     }
@@ -172,10 +172,10 @@ namespace Gallifrey
                     IsPremiumChanged?.Invoke(this, null);
                 }
             }
-            catch { /*Surpress Errors, if this fails timers won't be removed*/}
+            catch { /*Suppress Errors, if this fails timers won't be removed*/}
         }
 
-        private void JiraExportHearbeatHearbeatOnElapsed(object sender, ElapsedEventArgs e)
+        private void JiraExportHeartbeatHeartbeatOnElapsed(object sender, ElapsedEventArgs e)
         {
             exportedHeartbeatMutex.WaitOne();
             var issueCache = new List<Issue>();
@@ -243,7 +243,7 @@ namespace Gallifrey
                     }
                 }
             }
-            catch { /*Surpress the error*/ }
+            catch { /*Suppress the error*/ }
 
             exportedHeartbeatMutex.ReleaseMutex();
         }
@@ -262,7 +262,7 @@ namespace Gallifrey
 
             jiraConnection.ReConnect(settingsCollection.JiraConnectionSettings, settingsCollection.ExportSettings);
             cleanUpAndTrackingHeartbeat.Start();
-            jiraExportHearbeat.Start();
+            jiraExportHeartbeat.Start();
             BackendModifiedTimers?.Invoke(this, null);
 
             if (Settings.AppSettings.TimerRunningOnShutdown.HasValue)
@@ -285,11 +285,11 @@ namespace Gallifrey
                 SaveSettings(false, false);
             }
 
-            CleanUpAndTrackingHearbeatOnElapsed(this, null);
+            CleanUpAndTrackingHeartbeatOnElapsed(this, null);
 
             IsInitialised = true;
 
-            Task.Run(() => { JiraExportHearbeatHearbeatOnElapsed(this, null); });
+            Task.Run(() => { JiraExportHeartbeatHeartbeatOnElapsed(this, null); });
         }
 
         public void Close()
@@ -304,7 +304,7 @@ namespace Gallifrey
             settingsCollection.AppSettings.TimerRunningOnShutdown = runningTimer;
             settingsCollection.AppSettings.NoTimerRunningOnShutdown = ActivityChecker.Elapsed;
 
-            idleTimerCollection.StopLockedTimers();
+            idleTimerCollection.StopIdleTimers();
 
             jiraTimerCollection.SaveTimers();
             idleTimerCollection.SaveTimers();
@@ -333,9 +333,9 @@ namespace Gallifrey
             if (IsInitialised) SettingsChanged?.Invoke(this, null);
         }
 
-        public void StartLockTimer(TimeSpan? initalTimeSpan = null)
+        public void StartLockTimer(TimeSpan? initialTimeSpan = null)
         {
-            ActivityChecker.PauseForLockTimer(initalTimeSpan);
+            ActivityChecker.PauseForLockTimer(initialTimeSpan);
 
             if (!runningTimerWhenIdle.HasValue)
             {
@@ -343,14 +343,14 @@ namespace Gallifrey
                 if (runningTimerWhenIdle.HasValue)
                 {
                     jiraTimerCollection.StopTimer(runningTimerWhenIdle.Value, true);
-                    if (initalTimeSpan.HasValue)
+                    if (initialTimeSpan.HasValue)
                     {
-                        jiraTimerCollection.AdjustTime(runningTimerWhenIdle.Value, initalTimeSpan.Value.Hours, initalTimeSpan.Value.Minutes, false);
+                        jiraTimerCollection.AdjustTime(runningTimerWhenIdle.Value, initialTimeSpan.Value.Hours, initialTimeSpan.Value.Minutes, false);
                     }
                 }
             }
 
-            idleTimerCollection.NewLockTimer(initalTimeSpan.GetValueOrDefault(new TimeSpan()));
+            idleTimerCollection.NewIdleTimer(initialTimeSpan.GetValueOrDefault(new TimeSpan()));
         }
 
         public Guid? StopLockTimer()
@@ -366,7 +366,7 @@ namespace Gallifrey
                 }
                 runningTimerWhenIdle = null;
             }
-            return idleTimerCollection.StopLockedTimers();
+            return idleTimerCollection.StopIdleTimers();
         }
 
         public IEnumerable<ChangeLogVersion> GetChangeLog(XDocument changeLogContent)

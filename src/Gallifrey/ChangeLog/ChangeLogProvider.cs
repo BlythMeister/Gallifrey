@@ -9,12 +9,6 @@ namespace Gallifrey.ChangeLog
     {
         private static readonly XNamespace ChangelogNamespace = "https://releases.gallifreyapp.co.uk/ChangeLog";
 
-        public static List<ChangeLogVersion> GetFullChangeLog(XDocument changeLogContent)
-        {
-            var changeLog = changeLogContent.Descendants(ChangelogNamespace + "Version").Select(x => BuildChangeLogItem(x, false));
-            return changeLog.OrderByDescending(detail => detail.Version).ToList();
-        }
-
         public static List<ChangeLogVersion> GetChangeLog(Version fromVersion, XDocument changeLogContent)
         {
             var changeLog = changeLogContent.Descendants(ChangelogNamespace + "Version").Select(x => BuildChangeLogItem(x, fromVersion));
@@ -23,14 +17,24 @@ namespace Gallifrey.ChangeLog
 
         private static ChangeLogVersion BuildChangeLogItem(XElement changeVersion, Version fromVersion)
         {
-            var version = new Version(changeVersion.Attribute("Number").Value);
+            var versionAttribute = changeVersion.Attribute("Number");
+            if (versionAttribute == null)
+            {
+                return null;
+            }
+            var version = new Version(versionAttribute.Value);
             var newVersion = version > fromVersion;
             return BuildChangeLogItem(changeVersion, newVersion);
         }
 
         private static ChangeLogVersion BuildChangeLogItem(XElement changeVersion, bool newVersion)
         {
-            var version = new Version(changeVersion.Attribute("Number").Value);
+            var versionAttribute = changeVersion.Attribute("Number");
+            if (versionAttribute == null)
+            {
+                return null;
+            }
+            var version = new Version(versionAttribute.Value);
 
             var nameAttr = changeVersion.Attribute("Name");
             var name = string.Empty;

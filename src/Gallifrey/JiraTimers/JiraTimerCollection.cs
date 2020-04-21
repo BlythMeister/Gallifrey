@@ -78,6 +78,7 @@ namespace Gallifrey.JiraTimers
         private readonly ISettingsCollection settingsCollection;
         private readonly ITrackUsage trackUsage;
         private readonly List<JiraTimer> timerList;
+        private bool isIntialised;
 
         internal event EventHandler<ExportPromptDetail> ExportPrompt;
 
@@ -88,6 +89,7 @@ namespace Gallifrey.JiraTimers
             this.settingsCollection = settingsCollection;
             this.trackUsage = trackUsage;
             timerList = new List<JiraTimer>();
+            isIntialised = false;
         }
 
         internal void Initialise()
@@ -96,10 +98,12 @@ namespace Gallifrey.JiraTimers
             timers.AddRange(timerList);
             timerList.Clear();
             timerList.AddRange(timers.Distinct(new DuplicateTimerComparer()));
+            isIntialised = true;
         }
 
         internal void SaveTimers()
         {
+            if (!isIntialised) return;
             JiraTimerCollectionSerializer.Serialize(timerList);
             GeneralTimerModification?.Invoke(this, null);
         }
@@ -215,19 +219,19 @@ namespace Gallifrey.JiraTimers
 
         public void StartTimer(Guid uniqueId)
         {
-            var timerForInteration = GetTimer(uniqueId);
-            if (timerForInteration.DateStarted.Date != DateTime.Now.Date)
+            var timerForInteraction = GetTimer(uniqueId);
+            if (timerForInteraction.DateStarted.Date != DateTime.Now.Date)
             {
-                if (timerForInteration.LocalTimer)
+                if (timerForInteraction.LocalTimer)
                 {
-                    uniqueId = AddLocalTimer(timerForInteration.JiraName, DateTime.Now, new TimeSpan(), false);
-                    timerForInteration = GetTimer(uniqueId);
+                    uniqueId = AddLocalTimer(timerForInteraction.JiraName, DateTime.Now, new TimeSpan(), false);
+                    timerForInteraction = GetTimer(uniqueId);
                 }
                 else
                 {
-                    timerForInteration = new JiraTimer(timerForInteration, DateTime.Now, true);
-                    AddTimer(timerForInteration);
-                    uniqueId = timerForInteration.UniqueId;
+                    timerForInteraction = new JiraTimer(timerForInteraction, DateTime.Now, true);
+                    AddTimer(timerForInteraction);
+                    uniqueId = timerForInteraction.UniqueId;
                 }
             }
 
@@ -237,18 +241,18 @@ namespace Gallifrey.JiraTimers
                 GetTimer(runningTimerId.Value).StopTimer();
             }
 
-            timerForInteration.StartTimer();
+            timerForInteraction.StartTimer();
 
             SaveTimers();
         }
 
         public void StopTimer(Guid uniqueId, bool automatedStop)
         {
-            var timerForInteration = GetTimer(uniqueId);
-            var stopTime = timerForInteration.StopTimer();
+            var timerForInteraction = GetTimer(uniqueId);
+            var stopTime = timerForInteraction.StopTimer();
 
             SaveTimers();
-            if (settingsCollection.ExportSettings.ExportPrompt != null && settingsCollection.ExportSettings.ExportPrompt.OnStop && !timerForInteration.FullyExported && !automatedStop && !timerForInteration.LocalTimer)
+            if (settingsCollection.ExportSettings.ExportPrompt != null && settingsCollection.ExportSettings.ExportPrompt.OnStop && !timerForInteraction.FullyExported && !automatedStop && !timerForInteraction.LocalTimer)
             {
                 ExportPrompt?.Invoke(this, new ExportPromptDetail(uniqueId, stopTime));
             }

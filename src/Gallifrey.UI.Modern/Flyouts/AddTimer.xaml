@@ -44,22 +44,22 @@
             </TextBlock.Style>
         </TextBlock>
 
-        <Grid Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Margin="0,5">
+        <Grid Grid.Row="0" Grid.Column="1" VerticalAlignment="Center">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <TextBox Grid.Column="0" Text="{Binding JiraReference, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" CharacterCasing="Upper" IsEnabled="{Binding JiraReferenceEditable}" Visibility="{Binding LocalTimer, Converter={StaticResource BoolToVisInverted}}" />
-            <TextBox Grid.Column="0" Text="{Binding LocalTimerDescription, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding LocalTimer, Converter={StaticResource BoolToVis}}" />
+            <TextBox Grid.Column="0" Margin="0,5" Text="{Binding JiraReference, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" CharacterCasing="Upper" IsEnabled="{Binding JiraReferenceEditable}" Visibility="{Binding LocalTimer, Converter={StaticResource BoolToVisInverted}}" />
+            <TextBox Grid.Column="0" Margin="0,5" Text="{Binding LocalTimerDescription, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding LocalTimer, Converter={StaticResource BoolToVis}}" />
 
-            <controls:ToggleSwitchButton Style="{DynamicResource MahApps.Metro.Styles.ToggleSwitchButton.Win10}" HorizontalAlignment="Left"  Grid.Column="1" Margin="5,0" IsChecked="{Binding LocalTimer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding JiraReferenceEditable}" />
+            <controls:ToggleSwitch OnContent="" OffContent="" ContentPadding="0" HorizontalAlignment="Left" Grid.Column="1" Margin="5,0,-100,0" IsOn="{Binding LocalTimer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding JiraReferenceEditable}" />
             <TextBlock Grid.Column="2" VerticalAlignment="Center">Local Timer?</TextBlock>
         </Grid>
 
         <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Padding="2" Visibility="{Binding DatePeriod, Converter={StaticResource BoolToVisInverted}}">Date</TextBlock>
         <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Padding="2" Visibility="{Binding DatePeriod, Converter={StaticResource BoolToVis}}">Start Date</TextBlock>
-        <Grid Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Margin="0,5">
+        <Grid Grid.Row="1" Grid.Column="1" VerticalAlignment="Center">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
@@ -68,7 +68,7 @@
 
             <DatePicker Grid.Column="0" Margin="0,5" IsTodayHighlighted="False" DisplayDate="{Binding DisplayDate}" DisplayDateStart="{Binding MinDate}" DisplayDateEnd="{Binding MaxDate}" SelectedDate="{Binding StartDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding DateEditable}" />
 
-            <controls:ToggleSwitchButton Style="{DynamicResource MahApps.Metro.Styles.ToggleSwitchButton.Win10}" HorizontalAlignment="Left"  Grid.Column="1" Margin="5,0" IsChecked="{Binding DatePeriod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding DateEditable}" />
+            <controls:ToggleSwitch OnContent="" OffContent="" HorizontalAlignment="Left"  Grid.Column="1" Margin="5,0,-100,0" IsOn="{Binding DatePeriod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding DateEditable}" />
             <TextBlock Grid.Column="2" VerticalAlignment="Center">Period?</TextBlock>
         </Grid>
 
@@ -84,19 +84,19 @@
         </WrapPanel>
 
         <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Padding="2">Start Now?</TextBlock>
-        <controls:ToggleSwitchButton Style="{DynamicResource MahApps.Metro.Styles.ToggleSwitchButton.Win10}" HorizontalAlignment="Left"  Grid.Row="4" Grid.Column="1" Margin="0,5" IsChecked="{Binding StartNow, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding StartNowEditable}" Click="StartNowClick" />
+        <controls:ToggleSwitch OnContent="" OffContent="" HorizontalAlignment="Left"  Grid.Row="4" Grid.Column="1" IsOn="{Binding StartNow, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding StartNowEditable}" Toggled="StartNowClick" />
 
         <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Padding="2">Assign To Me?</TextBlock>
-        <controls:ToggleSwitchButton Style="{DynamicResource MahApps.Metro.Styles.ToggleSwitchButton.Win10}" HorizontalAlignment="Left"  Grid.Row="5" Grid.Column="1" Margin="0,5" IsChecked="{Binding AssignToMe, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding LocalTimer, Converter={StaticResource BoolInvert}}" Click="AssignToMeClick" />
+        <controls:ToggleSwitch OnContent="" OffContent="" HorizontalAlignment="Left"  Grid.Row="5" Grid.Column="1" IsOn="{Binding AssignToMe, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding LocalTimer, Converter={StaticResource BoolInvert}}" Toggled="AssignToMeClick" />
 
         <TextBlock Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" Padding="2">Change Status?</TextBlock>
-        <controls:ToggleSwitchButton Style="{DynamicResource MahApps.Metro.Styles.ToggleSwitchButton.Win10}" HorizontalAlignment="Left"  Grid.Row="6" Grid.Column="1" Margin="0,5" IsChecked="{Binding ChangeStatus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding LocalTimer, Converter={StaticResource BoolInvert}}" Click="ChangeStatusClick" />
+        <controls:ToggleSwitch OnContent="" OffContent="" HorizontalAlignment="Left"  Grid.Row="6" Grid.Column="1" IsOn="{Binding ChangeStatus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding LocalTimer, Converter={StaticResource BoolInvert}}" Toggled="ChangeStatusClick" />
 
         <StackPanel Orientation="Horizontal" Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center">
-            <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="SearchButton" ToolTip="Search Jira">
+            <Button Style="{DynamicResource MahApps.Styles.Button.Circle}" Width="40" Height="40" Margin="5" Click="SearchButton" ToolTip="Search Jira">
                 <iconPacks:PackIconFontAwesome Kind="SearchSolid" Height="22" Width="22" HorizontalAlignment="Center" VerticalAlignment="Center" />
             </Button>
-            <Button Style="{DynamicResource MetroCircleButtonStyle}" Width="50" Height="50" Margin="2,0" Click="AddButton" IsDefault="True" ToolTip="Add Timer">
+            <Button Style="{DynamicResource MahApps.Styles.Button.Circle}" Width="40" Height="40" Margin="5" Click="AddButton" IsDefault="True" ToolTip="Add Timer">
                 <iconPacks:PackIconFontAwesome Kind="PlusCircleSolid" Height="22" Width="22" HorizontalAlignment="Center" VerticalAlignment="Center" />
             </Button>
         </StackPanel>
@@ -114,12 +114,12 @@
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
-                    <TextBlock Grid.Row="0" Margin="0 5 0 0" FontSize="{DynamicResource DialogMessageFontSize}" TextWrapping="Wrap" x:Name="Message" Text="Please Select The Status Update You Would Like To Perform" />
-                    <ComboBox Grid.Row="1" Margin="0 5 0 0" FontSize="{DynamicResource DialogMessageFontSize}" controls:ControlsHelper.FocusBorderBrush="{DynamicResource AccentColorBrush}" x:Name="Items" />
+                    <TextBlock Grid.Row="0" Margin="0 5 0 0" FontSize="{DynamicResource MahApps.Font.Size.Dialog.Message}" TextWrapping="Wrap" x:Name="Message" Text="Please Select The Status Update You Would Like To Perform" />
+                    <ComboBox Grid.Row="1" Margin="0 5 0 0" FontSize="{DynamicResource MahApps.Font.Size.Dialog.Message}" controls:ControlsHelper.FocusBorderBrush="{DynamicResource MahApps.Brushes.Accent}" x:Name="Items" />
 
                     <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Height="85">
-                        <Button Height="35" MinWidth="80" Style="{DynamicResource AccentedDialogSquareButton}" Content="OK" Margin="0 0 5 0" Click="TransitionSelected" />
-                        <Button Height="35" MinWidth="80" Content="Cancel" Margin="5 0 5 0" Click="CancelTransition" />
+                        <Button Height="35" MinWidth="80" Style="{DynamicResource MahApps.Styles.Button.Dialogs.Accent}" Content="OK" Margin="0 0 5 0" Click="TransitionSelected" />
+                        <Button Height="35" MinWidth="80" Style="{DynamicResource MahApps.Styles.Button.Dialogs}" Margin="5 0 5 0" Content="Cancel" Click="CancelTransition" />
                     </StackPanel>
                 </Grid>
             </dialogs:CustomDialog>

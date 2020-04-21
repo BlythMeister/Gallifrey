@@ -28,7 +28,7 @@ namespace Gallifrey.Rest
             client = new RestClient { BaseUrl = new Uri(baseUrl), Timeout = (int)TimeSpan.FromMinutes(2).TotalMilliseconds, AutomaticDecompression = true, };
         }
 
-        public static SimpleRestClient WithBasicAuthenticaion(string baseUrl, string username, string password, Func<string, List<string>> errorMessageSerializationFunction)
+        public static SimpleRestClient WithBasicAuthentication(string baseUrl, string username, string password, Func<string, List<string>> errorMessageSerializationFunction)
         {
             var base64BasicAuthText = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{username}:{password}"));
             var header = $"Basic {base64BasicAuthText}";

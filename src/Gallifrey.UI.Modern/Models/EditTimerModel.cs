@@ -33,7 +33,7 @@ namespace Gallifrey.UI.Modern.Models
         public bool DateEditable => !hasExportedTime && !HasModifiedJiraReference;
         public bool JiraReferenceEditable => !hasExportedTime && !HasModifiedRunDate && !jiraRefFromSearch;
         public bool HasModifiedJiraReference => (OriginalJiraReference != JiraReference) || (OriginalLocalTimerDescription != LocalTimerDescription);
-        public bool HasModifiedRunDate => OriginalRunDate.Value.Date != RunDate.Value.Date;
+        public bool HasModifiedRunDate => OriginalRunDate.HasValue && RunDate.HasValue && OriginalRunDate.Value.Date != RunDate.Value.Date;
         public bool HasModifiedTime => OriginalHours != Hours || OriginalMinutes != Minutes;
 
         public EditTimerModel(IBackend gallifrey, Guid timerId)
@@ -98,9 +98,9 @@ namespace Gallifrey.UI.Modern.Models
                     jiraReference = uriDrag.Substring(uriDrag.LastIndexOf("/", StringComparison.InvariantCultureIgnoreCase) + 1);
                 }
 
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("DateEditable"));
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("JiraReferenceEditable"));
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasModifiedJiraReference"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DateEditable)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(JiraReferenceEditable)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HasModifiedJiraReference)));
             }
         }
 
@@ -110,9 +110,9 @@ namespace Gallifrey.UI.Modern.Models
             set
             {
                 localTimerDescription = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("DateEditable"));
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("JiraReferenceEditable"));
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasModifiedJiraReference"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DateEditable)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(JiraReferenceEditable)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HasModifiedJiraReference)));
             }
         }
 
@@ -122,9 +122,9 @@ namespace Gallifrey.UI.Modern.Models
             set
             {
                 runDate = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("DateEditable"));
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("JiraReferenceEditable"));
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasModifiedRunDate"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DateEditable)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(JiraReferenceEditable)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HasModifiedRunDate)));
             }
         }
 
@@ -135,7 +135,7 @@ namespace Gallifrey.UI.Modern.Models
             {
                 var newValue = value ?? 0;
                 HourMinuteHelper.UpdateHours(ref hours, newValue, 23);
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasModifiedTime"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HasModifiedTime)));
             }
         }
 
@@ -146,13 +146,13 @@ namespace Gallifrey.UI.Modern.Models
             {
                 var newValue = value ?? 0;
                 HourMinuteHelper.UpdateMinutes(ref hours, ref minutes, newValue, 23, out var hoursChanged);
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Minutes"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Minutes)));
                 if (hoursChanged)
                 {
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Hours"));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Hours)));
                 }
 
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasModifiedTime"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HasModifiedTime)));
             }
         }
 
@@ -162,14 +162,14 @@ namespace Gallifrey.UI.Modern.Models
             set
             {
                 localTimer = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LocalTimer"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(LocalTimer)));
             }
         }
 
         public void SetNotDefaultButton()
         {
             IsDefaultOnButton = false;
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("IsDefaultOnButton"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsDefaultOnButton)));
         }
 
         public void AdjustTime(TimeSpan timeAdjustmentAmount, bool addTime)
@@ -194,9 +194,9 @@ namespace Gallifrey.UI.Modern.Models
                 Minutes = currentTime.Minutes;
             }
 
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Hours"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Minutes"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasModifiedTime"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Hours)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Minutes)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HasModifiedTime)));
         }
 
         public void SetJiraReference(string jiraRef)
@@ -205,8 +205,8 @@ namespace Gallifrey.UI.Modern.Models
             jiraRefFromSearch = true;
             LocalTimer = false;
 
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("JiraReference"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("JiraReferenceEditable"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(JiraReference)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(JiraReferenceEditable)));
         }
     }
 }

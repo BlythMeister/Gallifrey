@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:helpers="clr-namespace:Gallifrey.UI.Modern.Helpers">
 
-    <Border BorderBrush="{DynamicResource AccentColorBrush}" BorderThickness="0,2,0,0" HorizontalAlignment="Stretch">
+    <Border BorderBrush="{DynamicResource MahApps.Brushes.Accent}" BorderThickness="0,2,0,0" HorizontalAlignment="Stretch">
         <Grid HorizontalAlignment="Stretch">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto" />
@@ -47,18 +47,18 @@
                 <TextBlock Text="Export Target: " />
                 <TextBlock Text="{Binding ExportTarget, Mode=OneWay}" />
             </WrapPanel>
-            <Border Grid.Column="7" BorderBrush="{DynamicResource GrayHoverBrush}" BorderThickness="1" HorizontalAlignment="Stretch" Margin="10,3,5,3" VerticalAlignment="Center">
+            <Border Grid.Column="7" BorderBrush="{DynamicResource MahApps.Brushes.Gray.MouseOver}" BorderThickness="1" HorizontalAlignment="Stretch" Margin="10,3,5,3" VerticalAlignment="Center">
                 <Grid HorizontalAlignment="Stretch">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="{Binding TargetBarExportedPercentage, Mode=OneWay}" />
                         <ColumnDefinition Width="{Binding TargetBarUnexportedPercentage, Mode=OneWay}" />
                         <ColumnDefinition Width="{Binding TargetBarRemainingPercentage, Mode=OneWay}" />
                     </Grid.ColumnDefinitions>
-                    <Rectangle Grid.Column="0" Fill="{DynamicResource AccentColorBrush}" />
+                    <Rectangle Grid.Column="0" Fill="{DynamicResource MahApps.Brushes.Accent}" />
                     <TextBlock Grid.Column="0" HorizontalAlignment="Stretch" ToolTip="{Binding TargetBarExportedLabel, Mode=OneWay}" />
-                    <Rectangle Grid.Column="1" Fill="{DynamicResource AccentColorBrush3}" />
+                    <Rectangle Grid.Column="1" Fill="{DynamicResource MahApps.Brushes.Accent3}" />
                     <TextBlock Grid.Column="1" HorizontalAlignment="Stretch" ToolTip="{Binding TargetBarUnexportedLabel, Mode=OneWay}" />
-                    <Rectangle Grid.Column="2" Fill="{DynamicResource TextBrush}" />
+                    <Rectangle Grid.Column="2" Fill="{DynamicResource MahApps.Brushes.Text}" />
                     <TextBlock Grid.Column="2" HorizontalAlignment="Stretch" ToolTip="{Binding TargetBarRemainingLabel, Mode=OneWay}" />
                 </Grid>
             </Border>

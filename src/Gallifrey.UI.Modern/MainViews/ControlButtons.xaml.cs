@@ -78,7 +78,7 @@ namespace Gallifrey.UI.Modern.MainViews
                 var selectedTimer = ModelHelpers.Gallifrey.JiraTimerCollection.GetTimer(selectedTimers.First());
                 if (selectedTimer.LocalTimer)
                 {
-                    await ModelHelpers.ShowMessageAsync("Not Avaliable", "A Local Timer Does Not Have A Copyable Reference");
+                    await ModelHelpers.ShowMessageAsync("Not Available", "A Local Timer Does Not Have A Copyable Reference");
                 }
                 else
                 {
@@ -115,6 +115,30 @@ namespace Gallifrey.UI.Modern.MainViews
             else
             {
                 await ModelHelpers.ShowMessageAsync("Invalid Jira", $"Unable To Locate That Jira.\n\nJira Ref Pasted: '{jiraRef}'");
+            }
+        }
+
+        private async void ViewButton()
+        {
+            var selectedTimers = ViewModel.GetSelectedTimerIds().ToList();
+
+            if (selectedTimers.Count > 1)
+            {
+                await ModelHelpers.ShowMessageAsync("Too Many Timers Selected", "Please Select Only One Timer When Showing In Jira");
+            }
+            else if (selectedTimers.Count == 1)
+            {
+                var selectedTimer = ModelHelpers.Gallifrey.JiraTimerCollection.GetTimer(selectedTimers.First());
+                if (selectedTimer.LocalTimer)
+                {
+                    await ModelHelpers.ShowMessageAsync("Not Available", "A Local Timer Does Not Exist In Jira");
+                }
+                else
+                {
+                    var jiraRef = selectedTimer.JiraReference;
+                    Uri.TryCreate(ModelHelpers.Gallifrey.Settings.JiraConnectionSettings.JiraUrl, UriKind.Absolute, out var jiraUri);
+                    Process.Start(new ProcessStartInfo($"{jiraUri.AbsoluteUri}browse/{jiraRef}"));
+                }
             }
         }
 
@@ -237,7 +261,7 @@ namespace Gallifrey.UI.Modern.MainViews
             var saveFile = new SaveFileDialog
             {
                 DefaultExt = "csv",
-                Filter = "Comma Seperated File|*.csv"
+                Filter = @"Comma Separated File|*.csv"
             };
             saveFile.ShowDialog();
 
@@ -299,6 +323,7 @@ namespace Gallifrey.UI.Modern.MainViews
                 case RemoteButtonTrigger.AddToFill: AddToFillDay(); break;
                 case RemoteButtonTrigger.Copy: CopyButton(); break;
                 case RemoteButtonTrigger.Paste: PasteButton(); break;
+                case RemoteButtonTrigger.View: ViewButton(); break;
                 case RemoteButtonTrigger.Delete: DeleteButton(this, null); break;
                 case RemoteButtonTrigger.Search: SearchButton(this, null); break;
                 case RemoteButtonTrigger.Edit: EditButton(this, null); break;

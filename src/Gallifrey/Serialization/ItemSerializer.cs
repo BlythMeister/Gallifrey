@@ -9,31 +9,43 @@ namespace Gallifrey.Serialization
     public class ItemSerializer<T> where T : new()
     {
         private readonly string savePath;
-        private readonly string serialisationErrorDirectory;
+        private readonly string backupPath;
+        private readonly string errorDirectory;
         private readonly string encryptionPassPhrase;
-        private string TempWritePath => savePath + ".temp";
-        private string BackupPath => savePath + ".bak";
-        private string BackupPathPlus1 => savePath + ".bak+1";
         private readonly Mutex singleThreadMutex;
 
         public ItemSerializer(string fileName)
         {
             singleThreadMutex = new Mutex(false, fileName);
-            var saveDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Gallifrey");
+            var baseDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Gallifrey");
+            var saveDirectory = Path.Combine(baseDirectory, "Data");
+            var backupDirectory = Path.Combine(baseDirectory, "Backup");
 
             encryptionPassPhrase = $@"{Environment.UserDomainName}\{Environment.UserName}";
-            serialisationErrorDirectory = Path.Combine(saveDirectory, "SerializationErrors");
+            errorDirectory = Path.Combine(baseDirectory, "SerializationErrors");
             savePath = Path.Combine(saveDirectory, fileName);
+            backupPath = Path.Combine(backupDirectory, fileName);
 
             try
             {
+                if (!Directory.Exists(baseDirectory)) Directory.CreateDirectory(baseDirectory);
                 if (!Directory.Exists(saveDirectory)) Directory.CreateDirectory(saveDirectory);
-                if (!Directory.Exists(serialisationErrorDirectory)) Directory.CreateDirectory(serialisationErrorDirectory);
+                if (!Directory.Exists(backupDirectory)) Directory.CreateDirectory(backupDirectory);
+                if (!Directory.Exists(errorDirectory)) Directory.CreateDirectory(errorDirectory);
             }
             catch (Exception)
             {
                 savePath = null;
                 // this will be evaluated later
+            }
+
+            if (savePath != null)
+            {
+                var legacySavePath = Path.Combine(baseDirectory, fileName);
+                if (File.Exists(legacySavePath))
+                {
+                    File.Move(legacySavePath, savePath);
+                }
             }
         }
 
@@ -47,24 +59,39 @@ namespace Gallifrey.Serialization
             if (savePath == null) throw new SerializerError("No Save Path");
 
             singleThreadMutex.WaitOne();
+            var tempWritePath = $"{backupPath}.temp.bak";
+            var mainBackupPath = $"{backupPath}.bak";
 
             try
             {
                 if (File.Exists(savePath))
                 {
-                    if (!File.Exists(TempWritePath))
+                    if (!File.Exists(tempWritePath))
                     {
-                        File.Copy(savePath, TempWritePath, true);
+                        File.Copy(savePath, tempWritePath, true);
                     }
 
-                    if (!File.Exists(BackupPath) || new FileInfo(BackupPath).LastWriteTimeUtc.Date < DateTime.UtcNow.Date)
+                    if (!File.Exists(mainBackupPath))
                     {
-                        File.Copy(savePath, BackupPath, true);
+                        File.Copy(savePath, mainBackupPath, true);
                     }
-
-                    if (!File.Exists(BackupPathPlus1) || new FileInfo(BackupPathPlus1).LastWriteTimeUtc.Date < DateTime.UtcNow.Date.AddDays(-1))
+                    else if (File.GetLastWriteTimeUtc(mainBackupPath) < DateTime.UtcNow.AddHours(-1))
                     {
-                        File.Copy(savePath, BackupPathPlus1, true);
+                        var rollingBackupPath = $"{backupPath}.24.bak";
+                        if (File.Exists(rollingBackupPath))
+                        {
+                            File.Delete(rollingBackupPath);
+                        }
+                        for (var i = 23; i > 0; i--)
+                        {
+                            rollingBackupPath = $"{backupPath}.{i}.bak";
+                            if (File.Exists(rollingBackupPath))
+                            {
+                                File.Move(rollingBackupPath, $"{backupPath}.{i + 1}.bak");
+                            }
+                        }
+                        File.Move(mainBackupPath, $"{backupPath}.1.bak");
+                        File.Copy(savePath, mainBackupPath, true);
                     }
                 }
                 File.WriteAllText(savePath, DataEncryption.EncryptCaseInsensitive(JsonConvert.SerializeObject(obj), encryptionPassPhrase));
@@ -73,8 +100,8 @@ namespace Gallifrey.Serialization
             {
                 if (retryCount >= 3)
                 {
-                    if (File.Exists(TempWritePath)) File.Copy(TempWritePath, savePath, true);
-                    File.WriteAllText(Path.Combine(serialisationErrorDirectory, $"Serialize_{DateTime.UtcNow:yyyy-MM-dd_hh-mm-ss}_{Guid.NewGuid().ToString()}.log"), ex.ToString());
+                    if (File.Exists(tempWritePath)) File.Copy(tempWritePath, savePath, true);
+                    File.WriteAllText(Path.Combine(errorDirectory, $"Serialize_{DateTime.UtcNow:yyyy-MM-dd_hh-mm-ss}_{Guid.NewGuid().ToString()}.log"), ex.ToString());
                     throw new SerializerError("Error in serialization", ex);
                 }
                 Thread.Sleep(500);
@@ -84,9 +111,9 @@ namespace Gallifrey.Serialization
             {
                 try
                 {
-                    if (File.Exists(TempWritePath))
+                    if (File.Exists(tempWritePath))
                     {
-                        File.Delete(TempWritePath);
+                        File.Delete(tempWritePath);
                     }
                 }
                 catch (Exception)
@@ -100,15 +127,10 @@ namespace Gallifrey.Serialization
 
         public T DeSerialize()
         {
-            return DeSerializeFile(savePath, 0);
+            return DeSerialize(savePath, 0, 0);
         }
 
-        public T DeSerialize(string encryptedString)
-        {
-            return DeSerializeText(encryptedString, 0);
-        }
-
-        private T DeSerializeFile(string fileToUse, int retryCount)
+        private T DeSerialize(string fileToUse, int retryCount, int backupNumber)
         {
             if (fileToUse == null) throw new SerializerError("No Save Path");
 
@@ -127,50 +149,19 @@ namespace Gallifrey.Serialization
             }
             catch (Exception ex)
             {
-                if (retryCount >= 3 && fileToUse == savePath)
-                {
-                    Thread.Sleep(200);
-                    return DeSerializeFile(BackupPath, 0);
-                }
-
-                if (retryCount >= 3 && fileToUse == BackupPath)
-                {
-                    Thread.Sleep(200);
-                    return DeSerializeFile(BackupPathPlus1, 0);
-                }
-
                 if (retryCount >= 3)
                 {
-                    File.WriteAllText(Path.Combine(serialisationErrorDirectory, $"DeSerializeFile_{DateTime.UtcNow:yyyy-MM-dd_hh-mm-ss}_{Guid.NewGuid().ToString()}.log"), ex.ToString());
-                    return new T();
+                    File.WriteAllText(Path.Combine(errorDirectory, $"DeSerializeFile_{DateTime.UtcNow:yyyy-MM-dd_hh-mm-ss}_{Guid.NewGuid()}.log"), ex.ToString());
+                    var nextFile = backupNumber == 0 ? $"{backupPath}.bak" : $"{backupPath}.{backupNumber}.bak";
+                    return DeSerialize(nextFile, 0, backupNumber + 1);
                 }
 
                 Thread.Sleep(200);
-                return DeSerializeFile(fileToUse, retryCount + 1);
+                return DeSerialize(fileToUse, retryCount + 1, backupNumber);
             }
             finally
             {
                 singleThreadMutex.ReleaseMutex();
-            }
-        }
-
-        private T DeSerializeText(string encryptedString, int retryCount)
-        {
-            try
-            {
-                var text = DataEncryption.Decrypt(encryptedString, encryptionPassPhrase);
-                return JsonConvert.DeserializeObject<T>(text);
-            }
-            catch (Exception ex)
-            {
-                if (retryCount >= 3)
-                {
-                    File.WriteAllText(Path.Combine(serialisationErrorDirectory, $"DeSerializeText_{DateTime.UtcNow:yyyy-MM-dd_hh-mm-ss}_{Guid.NewGuid().ToString()}.log"), ex.ToString());
-                    return new T();
-                }
-
-                Thread.Sleep(100);
-                return DeSerializeText(encryptedString, retryCount + 1);
             }
         }
     }

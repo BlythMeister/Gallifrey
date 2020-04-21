@@ -23,11 +23,12 @@ namespace Gallifrey.Settings
         public IUiSettings UiSettings { get; private set; }
         public IInternalSettings InternalSettings { get; private set; }
         public IExportSettings ExportSettings { get; private set; }
-        [JsonIgnore] public string InstallationHash => DataEncryption.GetSha256Hash($"{InternalSettings.InstallationInstaceId}-{JiraConnectionSettings.JiraUsername}");
+        [JsonIgnore] public string InstallationHash => DataEncryption.GetSha256Hash($"{InternalSettings.InstallationInstanceId}-{JiraConnectionSettings.JiraUsername}-{new Uri(JiraConnectionSettings.JiraUrl).Host.ToLower()}");
         [JsonIgnore] public string UserHash => DataEncryption.GetSha256Hash($"{JiraConnectionSettings.JiraUsername.ToLower()}-{new Uri(JiraConnectionSettings.JiraUrl).Host.ToLower()}");
         [JsonIgnore] public string SiteHash => DataEncryption.GetSha256Hash(new Uri(JiraConnectionSettings.JiraUrl).Host.ToLower());
         private bool isIntialised;
 
+        // ReSharper disable once UnusedMember.Global
         public SettingsCollection()
         {
             AppSettings = new AppSettings();

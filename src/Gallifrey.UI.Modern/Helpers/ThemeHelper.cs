@@ -3,53 +3,28 @@ using System.Windows;
 
 namespace Gallifrey.UI.Modern.Helpers
 {
-    public enum ThemeChangeDetail
-    {
-        Both,
-        Accent,
-        Theme,
-        None
-    }
-
     public static class ThemeHelper
     {
-        public static ThemeChangeDetail ChangeTheme(string themeName, string accentName)
+        public static bool ChangeTheme(string themeName)
         {
-            var theme = ThemeManager.DetectAppStyle(Application.Current);
-            if (theme == null) return ThemeChangeDetail.None;
+            var theme = ThemeManager.DetectTheme(Application.Current);
+            if (theme == null) return false;
 
-            var appTheme = theme.Item1;
-            var accent = theme.Item2;
+            var appTheme = theme;
 
             if (!string.IsNullOrWhiteSpace(themeName))
             {
-                appTheme = ThemeManager.GetAppTheme($"Base{themeName}") ?? theme.Item1;
+                appTheme = ThemeManager.GetTheme(themeName) ?? theme;
             }
 
-            if (!string.IsNullOrWhiteSpace(accentName))
+            if (theme.Name != appTheme.Name)
             {
-                accent = ThemeManager.GetAccent(accentName) ?? theme.Item2;
-            }
-
-            if (theme.Item1 != appTheme || theme.Item2 != accent)
-            {
-                var changeDetail = ThemeChangeDetail.Both;
-                if (theme.Item1 == appTheme)
-                {
-                    changeDetail = ThemeChangeDetail.Accent;
-                }
-                if (theme.Item2 == accent)
-                {
-                    changeDetail = ThemeChangeDetail.Theme;
-                }
-
-                ThemeManager.ChangeAppStyle(Application.Current, accent, appTheme);
-
-                return changeDetail;
+                ThemeManager.ChangeTheme(Application.Current, appTheme);
+                return true;
             }
             else
             {
-                return ThemeChangeDetail.None;
+                return false;
             }
         }
     }
