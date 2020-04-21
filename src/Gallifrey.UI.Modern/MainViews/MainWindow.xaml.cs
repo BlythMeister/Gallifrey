@@ -407,6 +407,8 @@ namespace Gallifrey.UI.Modern.MainViews
                     StopLockTimer(modelHelpers.Gallifrey.Settings.AppSettings.LockTimeThresholdMilliseconds);
                     break;
             }
+
+            modelHelpers.RefreshModel();
         }
 
         private void IdleDetectionCheck(object sender, ElapsedEventArgs e)

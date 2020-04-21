@@ -657,6 +657,7 @@
     </Features>
     <Bugs>
       <Bug>Fix backup and data folders</Bug>
+      <Bug>Timer model is refreshed when screen locked/unlocked</Bug>
     </Bugs>
     <Others>
       <Other>Update app to .net 4.7.0 from .net 4.6.0</Other>
