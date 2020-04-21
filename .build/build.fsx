@@ -272,13 +272,16 @@ Target "Publish-ReleaseNotes" (fun _ ->
 
 Target "Publish-PurgeCloudflareCache" (fun _ ->
     printfn "Purging Cloudflare"
-    let client = new WebClient()
-    client.Headers.Add("X-Auth-Email", cloudflareEmail)
-    client.Headers.Add("X-Auth-Key", cloudflareApiKey)
-    client.Headers.Add("Content-Type", "application/json")
-    let result = client.UploadString(sprintf "https://api.cloudflare.com/client/v4/zones/%s/purge_cache" cloudflareZone, "DELETE", "{\"purge_everything\":true}")
-    client.Dispose()
-    printfn "Cloudflare response: %s" result
+    try
+        let client = new WebClient()
+        client.Headers.Add("X-Auth-Email", cloudflareEmail)
+        client.Headers.Add("X-Auth-Key", cloudflareApiKey)
+        client.Headers.Add("Content-Type", "application/json")
+        let result = client.UploadString(sprintf "https://api.cloudflare.com/client/v4/zones/%s/purge_cache" cloudflareZone, "POST", "{\"purge_everything\":true}")
+        client.Dispose()
+        printfn "Cloudflare Purge response: %s" result
+    with e ->
+        failwithf "Cloudflare Purge request failed: %s" e.Message
 )
 
 Target "Default" DoNothing
