@@ -38,12 +38,12 @@ namespace Gallifrey.IdleTimers
             IdleTimerCollectionSerializer.Serialize(idleTimerList);
         }
 
-        internal void NewIdleTimer(TimeSpan initalTimeSpan)
+        internal void NewIdleTimer(TimeSpan initialTimeSpan)
         {
             //Only allow 1 running timer at a time
             if (!idleTimerList.Any(x => x.IsRunning))
             {
-                idleTimerList.Add(new IdleTimer(initalTimeSpan));
+                idleTimerList.Add(new IdleTimer(initialTimeSpan));
             }
 
             SaveTimers();

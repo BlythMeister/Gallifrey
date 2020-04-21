@@ -11,7 +11,7 @@ namespace Gallifrey.UI.Modern.Helpers
 
         public static IdleTimeInfo GetIdleTimeInfo()
         {
-            var systemUptime = Environment.TickCount;
+            var systemUpTime = Environment.TickCount;
             var idleTicks = 0;
 
             var lastInputInfo = new LASTINPUTINFO();
@@ -22,14 +22,14 @@ namespace Gallifrey.UI.Modern.Helpers
             {
                 var lastInputTicks = (int)lastInputInfo.dwTime;
 
-                idleTicks = systemUptime - lastInputTicks;
+                idleTicks = systemUpTime - lastInputTicks;
             }
 
             return new IdleTimeInfo
             {
                 LastInputTime = DateTime.Now.AddMilliseconds(-1 * idleTicks),
                 IdleTime = new TimeSpan(0, 0, 0, 0, idleTicks),
-                SystemUptimeMilliseconds = systemUptime,
+                SystemUptimeMilliseconds = systemUpTime,
             };
         }
     }
@@ -44,6 +44,7 @@ namespace Gallifrey.UI.Modern.Helpers
     }
 
     [SuppressMessage("ReSharper", "InconsistentNaming")]
+    [SuppressMessage("ReSharper", "IdentifierTypo")]
     internal struct LASTINPUTINFO
     {
         public uint cbSize;

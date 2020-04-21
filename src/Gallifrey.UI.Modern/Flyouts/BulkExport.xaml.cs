@@ -142,7 +142,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                 return;
             }
 
-            var changeStatusExports = timersToExport.Where(x => x.ChangeStatus);
+            var changeStatusExports = timersToExport.Where(x => x.ChangeStatus).ToList();
             if (changeStatusExports.Any())
             {
                 await modelHelpers.OpenFlyout(this);
@@ -156,13 +156,13 @@ namespace Gallifrey.UI.Modern.Flyouts
                     currentChangeStatusJiraRef = timer.JiraRef;
                     try
                     {
-                        var transitionsAvaliable = modelHelpers.Gallifrey.JiraConnection.GetTransitions(timer.JiraRef);
+                        var transitionsAvailable = modelHelpers.Gallifrey.JiraConnection.GetTransitions(timer.JiraRef);
 
                         var timeSelectorDialog = (BaseMetroDialog)Resources["TransitionSelector"];
                         await modelHelpers.ShowDialogAsync(timeSelectorDialog);
 
                         var comboBox = timeSelectorDialog.FindChild<ComboBox>("Items");
-                        comboBox.ItemsSource = transitionsAvaliable.Select(x => x.name).ToList();
+                        comboBox.ItemsSource = transitionsAvailable.Select(x => x.name).ToList();
 
                         var messageBox = timeSelectorDialog.FindChild<TextBlock>("Message");
                         messageBox.Text = $"Please Select The Status Update You Would Like To Perform To {timer.JiraRef}";
@@ -250,10 +250,10 @@ namespace Gallifrey.UI.Modern.Flyouts
                 }
             }
 
-            IEnumerable<StandardWorkLog> logs;
+            List<StandardWorkLog> logs;
             try
             {
-                logs = modelHelpers.Gallifrey.JiraConnection.GetWorkLoggedForDatesFilteredIssues(dates.Distinct(), references.Distinct());
+                logs = modelHelpers.Gallifrey.JiraConnection.GetWorkLoggedForDatesFilteredIssues(dates.Distinct(), references.Distinct()).ToList();
             }
             catch (Exception ex)
             {
@@ -305,7 +305,12 @@ namespace Gallifrey.UI.Modern.Flyouts
                 }
                 catch (WorkLogException ex)
                 {
-                    throw new BulkExportException($"Error Logging Work To {exportModel.JiraRef}\n\nError Message From Jira: { ex.InnerException.Message }");
+                    if (ex.InnerException != null)
+                    {
+                        throw new BulkExportException($"Error Logging Work To {exportModel.JiraRef}\n\nError Message From Jira: { ex.InnerException.Message }");
+                    }
+
+                    throw new BulkExportException($"Error Logging Work To {exportModel.JiraRef}");
                 }
                 catch (CommentException)
                 {

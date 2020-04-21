@@ -6,12 +6,14 @@ using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Windows.Media;
 
 namespace Gallifrey.UI.Modern.Models
 {
+    [SuppressMessage("ReSharper", "UnusedMember.Global")]
     public class SettingModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
@@ -110,7 +112,7 @@ namespace Gallifrey.UI.Modern.Models
         }
 
         //Static Data
-        public List<AccentThemeModel> AvaliableThemes { get; set; }
+        public List<AccentThemeModel> AvailableThemes { get; set; }
 
         //Data Change Flags
         public bool JiraSettingsChanged { get; set; }
@@ -146,7 +148,7 @@ namespace Gallifrey.UI.Modern.Models
         public SettingModel(ISettingsCollection settings, IVersionControl versionControl)
         {
             //Static Data
-            AvaliableThemes = ThemeManager.Themes.Select(x => new AccentThemeModel { Name = x.Name, Colour = x.ShowcaseBrush as Brush }).OrderBy(x => x.DisplayName).ToList();
+            AvailableThemes = ThemeManager.Themes.Select(x => new AccentThemeModel { Name = x.Name, Colour = x.ShowcaseBrush as Brush }).OrderBy(x => x.DisplayName).ToList();
 
             //AppSettings
             AlertWhenIdle = settings.AppSettings.AlertWhenNotRunning;
@@ -171,7 +173,7 @@ namespace Gallifrey.UI.Modern.Models
             }
 
             //UI Settings
-            Theme = AvaliableThemes.FirstOrDefault(x => x.Name == settings.UiSettings.Theme) ?? AvaliableThemes.FirstOrDefault(x => x.Name == ThemeManager.DetectTheme().Name);
+            Theme = AvailableThemes.FirstOrDefault(x => x.Name == settings.UiSettings.Theme) ?? AvailableThemes.FirstOrDefault(x => x.Name == ThemeManager.DetectTheme().Name);
             StartOnBoot = versionControl.IsAutomatedDeploy && registryKey.GetValue(versionControl.AppName) != null;
             TopMostOnFlyoutOpen = settings.UiSettings.TopMostOnFlyoutOpen;
 

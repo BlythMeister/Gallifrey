@@ -1,8 +1,10 @@
 ﻿using Gallifrey.Jira.Model;
 using Gallifrey.JiraIntegration;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Gallifrey.UI.Modern.Models
 {
+    [SuppressMessage("ReSharper", "UnusedMember.Global")]
     public class JiraIssueDisplayModel
     {
         public string Reference { get; }

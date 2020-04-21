@@ -9,12 +9,12 @@
 
         public static ProgressResult<T> GetCancelled<T>()
         {
-            return new ProgressResult<T>(default(T), JiraHelperStatus.Cancelled);
+            return new ProgressResult<T>(default, JiraHelperStatus.Cancelled);
         }
 
         public static ProgressResult<T> GetErrored<T>()
         {
-            return new ProgressResult<T>(default(T), JiraHelperStatus.Errored);
+            return new ProgressResult<T>(default, JiraHelperStatus.Errored);
         }
 
         public enum JiraHelperStatus

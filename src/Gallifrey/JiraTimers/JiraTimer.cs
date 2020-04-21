@@ -165,10 +165,10 @@ namespace Gallifrey.JiraTimers
         public void SetJiraExportedTime(TimeSpan loggedTime)
         {
             ExportedTime = loggedTime;
-            var exportedvsActual = ExportedTime.Subtract(ExactCurrentTime);
-            if (exportedvsActual.TotalMinutes >= 1)
+            var exportedVsActual = ExportedTime.Subtract(ExactCurrentTime);
+            if (exportedVsActual.TotalMinutes >= 1)
             {
-                ManualAdjustment(exportedvsActual, true);
+                ManualAdjustment(exportedVsActual, true);
             }
 
             LastJiraTimeCheck = DateTime.UtcNow;

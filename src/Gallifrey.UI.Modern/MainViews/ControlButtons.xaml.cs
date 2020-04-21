@@ -78,7 +78,7 @@ namespace Gallifrey.UI.Modern.MainViews
                 var selectedTimer = ModelHelpers.Gallifrey.JiraTimerCollection.GetTimer(selectedTimers.First());
                 if (selectedTimer.LocalTimer)
                 {
-                    await ModelHelpers.ShowMessageAsync("Not Avaliable", "A Local Timer Does Not Have A Copyable Reference");
+                    await ModelHelpers.ShowMessageAsync("Not Available", "A Local Timer Does Not Have A Copyable Reference");
                 }
                 else
                 {
@@ -131,7 +131,7 @@ namespace Gallifrey.UI.Modern.MainViews
                 var selectedTimer = ModelHelpers.Gallifrey.JiraTimerCollection.GetTimer(selectedTimers.First());
                 if (selectedTimer.LocalTimer)
                 {
-                    await ModelHelpers.ShowMessageAsync("Not Avaliable", "A Local Timer Does Not Exist In Jira");
+                    await ModelHelpers.ShowMessageAsync("Not Available", "A Local Timer Does Not Exist In Jira");
                 }
                 else
                 {
@@ -261,7 +261,7 @@ namespace Gallifrey.UI.Modern.MainViews
             var saveFile = new SaveFileDialog
             {
                 DefaultExt = "csv",
-                Filter = "Comma Seperated File|*.csv"
+                Filter = @"Comma Separated File|*.csv"
             };
             saveFile.ShowDialog();
 

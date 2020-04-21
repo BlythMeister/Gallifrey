@@ -154,7 +154,7 @@ namespace Gallifrey.UI.Modern.MainViews
             else if (result.RetVal == InitialiseResult.MultipleGallifreyRunning)
             {
                 modelHelpers.Gallifrey.TrackEvent(TrackingType.MultipleInstancesRunning);
-                var userChoice = await modelHelpers.ShowMessageAsync("Multiple Instances", "You Can Only Have One Instance Of Gallifrey Running At A Time", MessageDialogStyle.Affirmative, new MetroDialogSettings { AffirmativeButtonText = "Close Gallifrey" });
+                await modelHelpers.ShowMessageAsync("Multiple Instances", "You Can Only Have One Instance Of Gallifrey Running At A Time", MessageDialogStyle.Affirmative, new MetroDialogSettings { AffirmativeButtonText = "Close Gallifrey" });
                 forceClosed = true;
                 modelHelpers.CloseApp();
             }
@@ -473,7 +473,7 @@ namespace Gallifrey.UI.Modern.MainViews
             }
             catch (TaskCanceledException)
             {
-                //Surpress Exception
+                //Suppress Exception
             }
         }
 

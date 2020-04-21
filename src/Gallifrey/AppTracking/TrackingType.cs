@@ -7,7 +7,7 @@
         UpdateCheck,
         UpdateCheckManual,
         AppClose,
-        DailyHearbeat,
+        DailyHeartbeat,
         OptOut,
         TimerAdded,
         TimerDeleted,

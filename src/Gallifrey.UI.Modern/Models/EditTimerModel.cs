@@ -33,7 +33,7 @@ namespace Gallifrey.UI.Modern.Models
         public bool DateEditable => !hasExportedTime && !HasModifiedJiraReference;
         public bool JiraReferenceEditable => !hasExportedTime && !HasModifiedRunDate && !jiraRefFromSearch;
         public bool HasModifiedJiraReference => (OriginalJiraReference != JiraReference) || (OriginalLocalTimerDescription != LocalTimerDescription);
-        public bool HasModifiedRunDate => OriginalRunDate.Value.Date != RunDate.Value.Date;
+        public bool HasModifiedRunDate => OriginalRunDate.HasValue && RunDate.HasValue && OriginalRunDate.Value.Date != RunDate.Value.Date;
         public bool HasModifiedTime => OriginalHours != Hours || OriginalMinutes != Minutes;
 
         public EditTimerModel(IBackend gallifrey, Guid timerId)

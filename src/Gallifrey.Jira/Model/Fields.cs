@@ -7,7 +7,6 @@ namespace Gallifrey.Jira.Model
     {
         public string summary { get; set; }
         public Project project { get; set; }
-        public Status status { get; set; }
         public Issue parent { get; set; }
         public TimeTracking timetracking { get; set; }
     }

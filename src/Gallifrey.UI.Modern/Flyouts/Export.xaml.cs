@@ -154,13 +154,13 @@ namespace Gallifrey.UI.Modern.Flyouts
                     {
                         try
                         {
-                            var transitionsAvaliable = modelHelpers.Gallifrey.JiraConnection.GetTransitions(DataModel.JiraRef);
+                            var transitionsAvailable = modelHelpers.Gallifrey.JiraConnection.GetTransitions(DataModel.JiraRef);
 
                             var timeSelectorDialog = (BaseMetroDialog)Resources["TransitionSelector"];
                             await modelHelpers.ShowDialogAsync(timeSelectorDialog);
 
                             var comboBox = timeSelectorDialog.FindChild<ComboBox>("Items");
-                            comboBox.ItemsSource = transitionsAvaliable.Select(x => x.name).ToList();
+                            comboBox.ItemsSource = transitionsAvailable.Select(x => x.name).ToList();
 
                             var messageBox = timeSelectorDialog.FindChild<TextBlock>("Message");
                             messageBox.Text = $"Please Select The Status Update You Would Like To Perform To {jiraRef}";

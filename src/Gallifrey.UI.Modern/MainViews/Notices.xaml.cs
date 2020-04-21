@@ -44,7 +44,7 @@ namespace Gallifrey.UI.Modern.MainViews
             }
             else
             {
-                await ModelHelpers.ShowMessageAsync("Nothing To Export", "No Un-Exported Timers Avaliable To Export");
+                await ModelHelpers.ShowMessageAsync("Nothing To Export", "No Un-Exported Timers Available To Export");
             }
 
             ModelHelpers.RefreshModel();

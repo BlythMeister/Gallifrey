@@ -8,12 +8,14 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Timers;
 using System.Windows;
 
 namespace Gallifrey.UI.Modern.Models
 {
+    [SuppressMessage("ReSharper", "UnusedMember.Global")]
     public class MainViewModel : INotifyPropertyChanged
     {
         private readonly TargetBarValues targetBarValues;
@@ -159,6 +161,7 @@ namespace Gallifrey.UI.Modern.Models
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(InactiveMinutes)));
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HasInactiveTime)));
 
+                    // ReSharper disable once CompareOfFloatsByEqualityOperator
                     if (TimeActivity.TotalMinutes % TimeSpan.FromMilliseconds(ModelHelpers.Gallifrey.Settings.AppSettings.AlertTimeMilliseconds).TotalMinutes == 0)
                     {
                         ModelHelpers.ShowNotification(InactiveMinutes);
@@ -212,9 +215,9 @@ namespace Gallifrey.UI.Modern.Models
                 var target = targetTime.TotalMinutes;
                 var exported = ExportedTime.TotalMinutes;
                 var unexported = UnexportedTime.TotalMinutes;
-                var remainign = RemainingTime.TotalMinutes;
+                var remaining = RemainingTime.TotalMinutes;
 
-                RemainingWidth = remainign / target * 100;
+                RemainingWidth = remaining / target * 100;
                 ExportedWidth = exported / target * 100;
                 UnexportedWidth = unexported / target * 100;
 
@@ -377,7 +380,7 @@ namespace Gallifrey.UI.Modern.Models
             }
             else
             {
-                var dates = ModelHelpers.Gallifrey.JiraTimerCollection.GetValidTimerDates();
+                var dates = ModelHelpers.Gallifrey.JiraTimerCollection.GetValidTimerDates().ToList();
                 if (dates.Any())
                 {
                     var date = dates.Max();

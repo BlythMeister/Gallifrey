@@ -20,7 +20,7 @@ namespace Gallifrey.Jira
         public JiraRestClient(string baseUrl, string username, string password, bool useTempo, string tempoToken)
         {
             var url = baseUrl + (baseUrl.EndsWith("/") ? "" : "/") + "rest/api/2";
-            jiraClient = SimpleRestClient.WithBasicAuthenticaion(url, username, password, GetErrorMessages);
+            jiraClient = SimpleRestClient.WithBasicAuthentication(url, username, password, GetErrorMessages);
 
             myUser = GetCurrentUser();
             if (useTempo)
@@ -123,7 +123,7 @@ namespace Gallifrey.Jira
                 {
                     var logs = tempoClient.Get<TempoWorkLogSearch>(HttpStatusCode.OK, $"worklogs/user/{myUser.accountId}?from={queryDate:yyyy-MM-dd}&to={queryDate:yyyy-MM-dd}&limit=200");
 
-                    foreach (var tempoWorkLog in logs.results)
+                    foreach (var tempoWorkLog in logs.results.Where(x => x.author.accountId.Equals(myUser.accountId, StringComparison.InvariantCultureIgnoreCase)))
                     {
                         if (issueRefs == null || issueRefs.Any(x => string.Equals(x, tempoWorkLog.issue.key, StringComparison.InvariantCultureIgnoreCase)))
                         {

@@ -113,8 +113,8 @@ namespace Gallifrey.UI.Modern.MainViews
         {
             var uriDrag = new Uri(url).AbsolutePath;
             var jiraRef = uriDrag.Substring(uriDrag.LastIndexOf("/", StringComparison.InvariantCultureIgnoreCase) + 1);
-            var todaysDate = DateTime.Now.Date;
-            var dayTimers = ModelHelpers.Gallifrey.JiraTimerCollection.GetTimersForADate(todaysDate).ToList();
+            var todayDate = DateTime.Now.Date;
+            var dayTimers = ModelHelpers.Gallifrey.JiraTimerCollection.GetTimersForADate(todayDate).ToList();
 
             if (dayTimers.Any(x => x.JiraReference == jiraRef))
             {
@@ -140,7 +140,7 @@ namespace Gallifrey.UI.Modern.MainViews
                 }
 
                 //show add form, we know it's a real jira & valid
-                var addTimer = new AddTimer(ModelHelpers, startDate: todaysDate, jiraRef: jiraRef, startNow: true);
+                var addTimer = new AddTimer(ModelHelpers, startDate: todayDate, jiraRef: jiraRef, startNow: true);
                 await ModelHelpers.OpenFlyout(addTimer);
                 if (addTimer.AddedTimer)
                 {

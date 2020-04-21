@@ -25,9 +25,9 @@ namespace Gallifrey.Versions
                 using (var wc = new System.Net.WebClient())
                 {
                     var webContents = wc.DownloadString("https://releases.gallifreyapp.co.uk/download/PremiumInstanceIds.dat");
-                    var descryptedContents = DataEncryption.Decrypt(webContents, ConfigKeys.PremiumEncryptionPassPhrase);
-                    var lines = descryptedContents.Split('\n');
-                    return lines.Select(GetPremiumHash).Any(premiumHash => premiumHash == settingsCollection.InstallationHash || premiumHash == $"user-{settingsCollection.UserHash}" || premiumHash == $"site-{settingsCollection.SiteHash}");
+                    var decryptedContents = DataEncryption.Decrypt(webContents, ConfigKeys.PremiumEncryptionPassPhrase);
+                    var lines = decryptedContents.Split('\n');
+                    return lines.Select(GetPremiumHash).Any(premiumHash => premiumHash == $"user-{settingsCollection.UserHash}" || premiumHash == $"site-{settingsCollection.SiteHash}");
                 }
             }
             catch (Exception)
@@ -38,8 +38,8 @@ namespace Gallifrey.Versions
 
         private string GetPremiumHash(string fileLine)
         {
-            var trimedLine = fileLine.Trim().ToLower();
-            return trimedLine.Contains(" ") ? trimedLine.Substring(0, trimedLine.IndexOf(" ", StringComparison.Ordinal)).Trim() : trimedLine;
+            var trimmedLine = fileLine.Trim().ToLower();
+            return trimmedLine.Contains(" ") ? trimmedLine.Substring(0, trimmedLine.IndexOf(" ", StringComparison.Ordinal)).Trim() : trimmedLine;
         }
     }
 }
