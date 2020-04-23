@@ -29,14 +29,14 @@
                             <Setter Property="BorderThickness" Value="2" />
                             <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                             <Setter Property="IsSelected" Value="{Binding TimerIsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <Setter Property="controls:ItemHelper.SelectedForegroundBrush" Value="{DynamicResource MahApps.Brushes.Gray8}" />
+                            <Setter Property="controls:ItemHelper.SelectedBackgroundBrush" Value="{DynamicResource MahApps.Brushes.ThemeForeground}" />
+                            <Setter Property="controls:ItemHelper.DisabledSelectedForegroundBrush" Value="{DynamicResource MahApps.Brushes.Gray8}" />
+                            <Setter Property="controls:ItemHelper.DisabledSelectedBackgroundBrush" Value="{DynamicResource MahApps.Brushes.ThemeForeground}" />
                             <Style.Resources>
                                 <Style TargetType="Border">
                                     <Setter Property="CornerRadius" Value="5" />
                                 </Style>
-                                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="{DynamicResource MahApps.Colors.Gray8}" />
-                                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="{DynamicResource MahApps.Colors.MahApps.Colors.ThemeForeground}" />
-                                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="{DynamicResource MahApps.Colors.Gray8}" />
-                                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="{DynamicResource MahApps.Colors.MahApps.Colors.ThemeForeground}" />
                             </Style.Resources>
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding IsRunning}" Value="True">
