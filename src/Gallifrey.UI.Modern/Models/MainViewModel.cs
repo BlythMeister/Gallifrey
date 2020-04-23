@@ -270,7 +270,7 @@ namespace Gallifrey.UI.Modern.Models
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TimerDates)));
                 }
 
-                var dateTimers = ModelHelpers.Gallifrey.JiraTimerCollection.GetTimersForADate(timerDate).ToList();
+                var dateTimers = ModelHelpers.Gallifrey.JiraTimerCollection.GetTimersForADate(timerDate.Date).ToList();
 
                 foreach (var timer in dateTimers)
                 {
@@ -291,7 +291,7 @@ namespace Gallifrey.UI.Modern.Models
                     var defaultTimers = (ModelHelpers.Gallifrey.Settings.AppSettings.DefaultTimers ?? new List<string>()).Select(x => x.ToUpper().Trim()).Distinct();
                     foreach (var defaultJira in defaultTimers)
                     {
-                        if (!dateModel.Timers.Any(x => string.Equals(x.JiraTimer.JiraReference, defaultJira, StringComparison.InvariantCultureIgnoreCase)))
+                        if (!dateModel.Timers.Any(x => string.Equals(x.JiraTimer.JiraReference, defaultJira, StringComparison.InvariantCultureIgnoreCase) && x.JiraTimer.DateStarted.Date == dateModel.TimerDate.Date))
                         {
                             try
                             {
@@ -309,8 +309,11 @@ namespace Gallifrey.UI.Modern.Models
                                 {
                                     var timerId = ModelHelpers.Gallifrey.JiraTimerCollection.AddTimer(jira, dateModel.TimerDate.Date, TimeSpan.Zero, false);
                                     var timer = ModelHelpers.Gallifrey.JiraTimerCollection.GetTimer(timerId);
-                                    timer.PropertyChanged += (sender, args) => TimerChanged();
-                                    dateModel.AddTimerModel(new TimerModel(timer));
+                                    if (timer != null)
+                                    {
+                                        timer.PropertyChanged += (sender, args) => TimerChanged();
+                                        dateModel.AddTimerModel(new TimerModel(timer));
+                                    }
                                 }
                             }
                             catch (Exception ex)
