@@ -664,10 +664,10 @@
       <Other>Update to version 2 of MahApps</Other>
     </Others>
   </Version>
-  <Version Number="0.0.0.0" Name="Pre-Release">
+  <Version Number="3.18.1.0" Name="">
     <Features />
     <Bugs>
-      <Bug>Fix issue with timer colours</Bug>
+      <Bug>Fix issue styling</Bug>
     </Bugs>
     <Others />
   </Version>
