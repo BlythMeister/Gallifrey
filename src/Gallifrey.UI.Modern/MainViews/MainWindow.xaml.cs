@@ -354,15 +354,22 @@ namespace Gallifrey.UI.Modern.MainViews
         {
             Dispatcher.Invoke(() =>
             {
-                ViewModel.SetNoActivityMilliseconds(millisecondsSinceActivity);
+                try
+                {
+                    ViewModel.SetNoActivityMilliseconds(millisecondsSinceActivity);
 
-                if (millisecondsSinceActivity == 0 || ViewModel.TimerRunning)
-                {
-                    this.StopFlashingWindow();
+                    if (millisecondsSinceActivity == 0 || ViewModel.TimerRunning)
+                    {
+                        this.StopFlashingWindow();
+                    }
+                    else
+                    {
+                        this.FlashWindow();
+                    }
                 }
-                else
+                catch (Exception)
                 {
-                    this.FlashWindow();
+                    //Ignored
                 }
             });
         }

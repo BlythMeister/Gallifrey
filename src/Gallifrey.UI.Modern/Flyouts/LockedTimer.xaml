@@ -12,28 +12,28 @@
         </Grid.RowDefinitions>
         <ListView Grid.Row="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled" BorderThickness="0"  ItemsSource="{Binding LockedTimers}">
             <ListView.ItemContainerStyle>
-                <Style TargetType="{x:Type ListViewItem}">
+                <Style TargetType="{x:Type ListViewItem}" BasedOn="{StaticResource MahApps.Styles.ListViewItem}">
                     <Setter Property="Margin" Value="3" />
                     <Setter Property="Padding" Value="4" />
                     <Setter Property="BorderBrush" Value="{DynamicResource MahApps.Brushes.Gray2}" />
                     <Setter Property="BorderThickness" Value="2" />
                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                     <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                    <Setter Property="controls:ItemHelper.SelectedForegroundBrush" Value="{DynamicResource MahApps.Brushes.Accent3}" />
-                    <Setter Property="controls:ItemHelper.SelectedBackgroundBrush" Value="{DynamicResource MahApps.Brushes.ThemeForeground}" />
-                    <Setter Property="controls:ItemHelper.DisabledSelectedForegroundBrush" Value="{DynamicResource MahApps.Brushes.Gray10}" />
-                    <Setter Property="controls:ItemHelper.DisabledSelectedBackgroundBrush" Value="{DynamicResource MahApps.Brushes.ThemeForeground}" />
+                    <Setter Property="controls:ItemHelper.ActiveSelectionBackgroundBrush" Value="{DynamicResource MahApps.Brushes.Accent4}" />
+                    <Setter Property="controls:ItemHelper.ActiveSelectionForegroundBrush" Value="{DynamicResource MahApps.Brushes.ThemeForeground}" />
+                    <Setter Property="controls:ItemHelper.SelectedBackgroundBrush" Value="{DynamicResource MahApps.Brushes.Accent4}" />
+                    <Setter Property="controls:ItemHelper.SelectedForegroundBrush" Value="{DynamicResource MahApps.Brushes.ThemeForeground}" />
+                    <Setter Property="controls:ItemHelper.DisabledBackgroundBrush" Value="{DynamicResource MahApps.Brushes.Gray5}" />
+                    <Setter Property="controls:ItemHelper.DisabledForegroundBrush" Value="{DynamicResource MahApps.Brushes.ThemeForeground}" />
+                    <Setter Property="controls:ItemHelper.DisabledSelectedBackgroundBrush" Value="{DynamicResource MahApps.Brushes.Gray5}" />
+                    <Setter Property="controls:ItemHelper.DisabledSelectedForegroundBrush" Value="{DynamicResource MahApps.Brushes.ThemeForeground}" />
+                    <Setter Property="controls:ItemHelper.HoverBackgroundBrush" Value="{DynamicResource MahApps.Brushes.Gray8}" />
+                    <Setter Property="controls:ItemHelper.HoverSelectedBackgroundBrush" Value="{DynamicResource MahApps.Brushes.Gray8}" />
                     <Style.Resources>
                         <Style TargetType="Border">
                             <Setter Property="CornerRadius" Value="5" />
                         </Style>
                     </Style.Resources>
-                    <Style.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent4}" />
-                            <Setter Property="BorderBrush" Value="{DynamicResource MahApps.Brushes.Gray7}" />
-                        </Trigger>
-                    </Style.Triggers>
                 </Style>
             </ListView.ItemContainerStyle>
             <ListView.ItemTemplate>

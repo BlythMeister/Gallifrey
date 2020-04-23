@@ -22,17 +22,23 @@
                         <helpers:BooleanVisibilityConverter x:Key="BoolToVisInvert" Collapse="True" Invert="True" />
                     </ListView.Resources>
                     <ListView.ItemContainerStyle>
-                        <Style TargetType="{x:Type ListViewItem}">
+                        <Style TargetType="{x:Type ListViewItem}" BasedOn="{StaticResource MahApps.Styles.ListViewItem}">
                             <Setter Property="Margin" Value="3" />
                             <Setter Property="Padding" Value="4" />
                             <Setter Property="BorderBrush" Value="{DynamicResource MahApps.Brushes.Gray2}" />
                             <Setter Property="BorderThickness" Value="2" />
                             <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                             <Setter Property="IsSelected" Value="{Binding TimerIsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                            <Setter Property="controls:ItemHelper.SelectedForegroundBrush" Value="{DynamicResource MahApps.Brushes.Gray8}" />
-                            <Setter Property="controls:ItemHelper.SelectedBackgroundBrush" Value="{DynamicResource MahApps.Brushes.ThemeForeground}" />
-                            <Setter Property="controls:ItemHelper.DisabledSelectedForegroundBrush" Value="{DynamicResource MahApps.Brushes.Gray8}" />
-                            <Setter Property="controls:ItemHelper.DisabledSelectedBackgroundBrush" Value="{DynamicResource MahApps.Brushes.ThemeForeground}" />
+                            <Setter Property="controls:ItemHelper.ActiveSelectionBackgroundBrush" Value="{DynamicResource MahApps.Brushes.Accent4}" />
+                            <Setter Property="controls:ItemHelper.ActiveSelectionForegroundBrush" Value="{DynamicResource MahApps.Brushes.ThemeForeground}" />
+                            <Setter Property="controls:ItemHelper.SelectedBackgroundBrush" Value="{DynamicResource MahApps.Brushes.Accent4}" />
+                            <Setter Property="controls:ItemHelper.SelectedForegroundBrush" Value="{DynamicResource MahApps.Brushes.ThemeForeground}" />
+                            <Setter Property="controls:ItemHelper.DisabledBackgroundBrush" Value="{DynamicResource MahApps.Brushes.Gray5}" />
+                            <Setter Property="controls:ItemHelper.DisabledForegroundBrush" Value="{DynamicResource MahApps.Brushes.ThemeForeground}" />
+                            <Setter Property="controls:ItemHelper.DisabledSelectedBackgroundBrush" Value="{DynamicResource MahApps.Brushes.Gray5}" />
+                            <Setter Property="controls:ItemHelper.DisabledSelectedForegroundBrush" Value="{DynamicResource MahApps.Brushes.ThemeForeground}" />
+                            <Setter Property="controls:ItemHelper.HoverBackgroundBrush" Value="{DynamicResource MahApps.Brushes.Gray8}" />
+                            <Setter Property="controls:ItemHelper.HoverSelectedBackgroundBrush" Value="{DynamicResource MahApps.Brushes.Gray8}" />
                             <Style.Resources>
                                 <Style TargetType="Border">
                                     <Setter Property="CornerRadius" Value="5" />
@@ -40,14 +46,11 @@
                             </Style.Resources>
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding IsRunning}" Value="True">
-                                    <Setter Property="BorderBrush" Value="{DynamicResource MahApps.Brushes.Accent}" />
+                                    <Setter Property="BorderBrush" Value="{DynamicResource MahApps.Brushes.Highlight}" />
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding HasTimeToExportAndNotRunning}" Value="True">
-                                    <Setter Property="BorderBrush" Value="{DynamicResource MahApps.Brushes.Accent}" />
+                                    <Setter Property="BorderBrush" Value="{DynamicResource MahApps.Brushes.Highlight}" />
                                 </DataTrigger>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent4}" />
-                                </Trigger>
                             </Style.Triggers>
                         </Style>
                     </ListView.ItemContainerStyle>
@@ -70,7 +73,7 @@
                                         <Style TargetType="TextBlock">
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding HighlightTitle}" Value="True">
-                                                    <Setter Property="Foreground" Value="{DynamicResource MahApps.Brushes.Accent}" />
+                                                    <Setter Property="Foreground" Value="{DynamicResource MahApps.Brushes.Highlight}" />
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
@@ -85,8 +88,8 @@
                                 <TextBlock Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" FontSize="13" Margin="3,0,0,0" TextWrapping="Wrap" Text="{Binding Description}" />
 
                                 <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Margin="0,0,6,0" VerticalAlignment="Center" Visibility="{Binding HasTimeToExport, Converter={StaticResource BoolToVis}}">
-                                    <TextBlock FontSize="18" Margin="0,0,5,0" Text="{Binding ExportTime}" Foreground="{DynamicResource MahApps.Brushes.Accent}" FontWeight="Medium" />
-                                    <TextBlock FontSize="18" Text="To Export" Foreground="{DynamicResource MahApps.Brushes.Accent}" FontWeight="Medium" />
+                                    <TextBlock FontSize="18" Margin="0,0,5,0" Text="{Binding ExportTime}" Foreground="{DynamicResource MahApps.Brushes.Highlight}" FontWeight="Medium" />
+                                    <TextBlock FontSize="18" Text="To Export" Foreground="{DynamicResource MahApps.Brushes.Highlight}" FontWeight="Medium" />
                                 </StackPanel>
 
                                 <TextBlock Grid.Row="0" Grid.Column="2" FontSize="26" Margin="3,0,0,0" Text="{Binding CurrentTime}" FontWeight="Medium">
@@ -94,7 +97,7 @@
                                         <Style TargetType="TextBlock">
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding IsRunning}" Value="True">
-                                                    <Setter Property="Foreground" Value="{DynamicResource MahApps.Brushes.Accent}" />
+                                                    <Setter Property="Foreground" Value="{DynamicResource MahApps.Brushes.Highlight}" />
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>

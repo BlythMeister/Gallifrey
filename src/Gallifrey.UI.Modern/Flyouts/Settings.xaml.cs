@@ -49,11 +49,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             if (successfulSave)
             {
                 modelHelpers.CloseFlyout(this);
-                if (ThemeHelper.ChangeTheme(DataModel.Theme.Name))
-                {
-                    await modelHelpers.ShowMessageAsync("Restart Needed", "Due To The Changing Of The Theme, Gallifrey Will Restart");
-                    modelHelpers.CloseApp(true);
-                }
+                ThemeHelper.ChangeTheme(DataModel.Theme.Name);
             }
             else
             {
