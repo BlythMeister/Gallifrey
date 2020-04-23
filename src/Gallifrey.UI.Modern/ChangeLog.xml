@@ -664,6 +664,13 @@
       <Other>Update to version 2 of MahApps</Other>
     </Others>
   </Version>
+  <Version Number="0.0.0.0" Name="Pre-Release">
+    <Features />
+    <Bugs>
+      <Bug>Fix issue with timer colours</Bug>
+    </Bugs>
+    <Others />
+  </Version>
   <!--
   Template for VNext if not present above
   <Version Number="0.0.0.0" Name="Pre-Release">
