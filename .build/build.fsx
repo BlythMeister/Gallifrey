@@ -291,10 +291,10 @@ Target "Default" DoNothing
     ==> "AddKeys"
     ==> "Build"
     ==> "Package"
-    =?> ("Publish-Artifacts", isAppVeyor)
-    =?> ("Publish-ReleaseRepo", isAppVeyor && not(isPR) && (isAlpha || isBeta || isStable))
+    =?> ("Publish-Artifacts", isAppVeyor && not(isPR))
+    =?> ("Publish-ReleaseRepo", isAppVeyor && not(isPR))
     =?> ("Publish-ReleaseNotes", isAppVeyor && not(isPR) && (isBeta || isStable))
-    =?> ("Publish-PurgeCloudflareCache", isAppVeyor)
+    =?> ("Publish-PurgeCloudflareCache", isAppVeyor && not(isPR))
     ==> "Default"
 
 RunParameterTargetOrDefault "target" "Default"
