@@ -1,7 +1,6 @@
 ﻿using Gallifrey.Settings;
 using Gallifrey.UI.Modern.Helpers;
 using Gallifrey.Versions;
-using MahApps.Metro;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -9,7 +8,6 @@ using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
-using System.Windows.Media;
 
 namespace Gallifrey.UI.Modern.Models
 {
@@ -148,7 +146,8 @@ namespace Gallifrey.UI.Modern.Models
         public SettingModel(ISettingsCollection settings, IVersionControl versionControl)
         {
             //Static Data
-            AvailableThemes = ThemeManager.Themes.Select(x => new AccentThemeModel { Name = x.Name, Colour = x.ShowcaseBrush as Brush }).OrderBy(x => x.DisplayName).ToList();
+            AvailableThemes = ThemeHelper.GetThemes();
+            var currentThemeName = ThemeHelper.GetCurrentName();
 
             //AppSettings
             AlertWhenIdle = settings.AppSettings.AlertWhenNotRunning;
@@ -173,7 +172,7 @@ namespace Gallifrey.UI.Modern.Models
             }
 
             //UI Settings
-            Theme = AvailableThemes.FirstOrDefault(x => x.Name == settings.UiSettings.Theme) ?? AvailableThemes.FirstOrDefault(x => x.Name == ThemeManager.DetectTheme().Name);
+            Theme = AvailableThemes.FirstOrDefault(x => x.Name == settings.UiSettings.Theme) ?? AvailableThemes.FirstOrDefault(x => x.Name == currentThemeName);
             StartOnBoot = versionControl.IsAutomatedDeploy && registryKey.GetValue(versionControl.AppName) != null;
             TopMostOnFlyoutOpen = settings.UiSettings.TopMostOnFlyoutOpen;
 

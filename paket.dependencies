@@ -1,10 +1,9 @@
-source https://www.nuget.org/api/v2
-framework: auto-detect
+source https://api.nuget.org/v3/index.json
 
 nuget Exceptionless.Wpf
 nuget FAKE ~> 4
-nuget MahApps.Metro prerelease
-nuget MahApps.Metro.IconPacks.FontAwesome prerelease
+nuget MahApps.Metro
+nuget MahApps.Metro.IconPacks.FontAwesome
 nuget Newtonsoft.Json
 nuget Octokit
 nuget RestSharp

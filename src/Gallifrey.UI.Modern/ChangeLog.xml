@@ -671,12 +671,15 @@
     </Bugs>
     <Others />
   </Version>
-  <Version Number="0.0.0.0" Name="Pre-Release">
+  <Version Number="3.19.0.0" Name="">
     <Features />
     <Bugs>
       <Bug>Fix issues reported to Exceptionless</Bug>
+      <Bug>Fix issue when jira URL is empty</Bug>
     </Bugs>
-    <Others />
+    <Others>
+      <Other>Update app to .net 4.8.0 from .net 4.7.0</Other>
+    </Others>
   </Version>
   <!--
   Template for VNext if not present above

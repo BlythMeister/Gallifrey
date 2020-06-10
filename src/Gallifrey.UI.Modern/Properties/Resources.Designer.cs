@@ -19,7 +19,7 @@ namespace Gallifrey.UI.Modern.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -61,14 +61,14 @@ namespace Gallifrey.UI.Modern.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
         ///&lt;Versions xmlns=&quot;https://releases.gallifreyapp.co.uk/ChangeLog&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xsi:noNamespaceSchemaLocation=&quot;https://releases.gallifreyapp.co.uk/schemas/ChangeLogSchema.xsd&quot;&gt;
-        ///  &lt;Version Number=&quot;3.0.0&quot;&gt;
+        ///  &lt;Version Number=&quot;3.0.0.0&quot;&gt;
         ///    &lt;Features&gt;
         ///      &lt;Feature&gt;Add/Edit/Delete Timers&lt;/Feature&gt;
         ///      &lt;Feature&gt;Manual Time Adjustment&lt;/Feature&gt;
         ///      &lt;Feature&gt;Search For Jira Within Gallifrey&lt;/Feature&gt;
-        ///      &lt;Feature&gt;Export With Comments And Adjust Remaining [rest of string was truncated]&quot;;.
+        ///      &lt;Feature&gt;Export With Comments And Adjust Remain [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string ChangeLog {
             get {

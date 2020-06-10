@@ -1,6 +1,5 @@
 ﻿using Gallifrey.Serialization;
 using Newtonsoft.Json;
-using System;
 
 namespace Gallifrey.Settings
 {
@@ -23,9 +22,9 @@ namespace Gallifrey.Settings
         public IUiSettings UiSettings { get; private set; }
         public IInternalSettings InternalSettings { get; private set; }
         public IExportSettings ExportSettings { get; private set; }
-        [JsonIgnore] public string InstallationHash => DataEncryption.GetSha256Hash($"{InternalSettings.InstallationInstanceId}-{JiraConnectionSettings.JiraUsername}-{new Uri(JiraConnectionSettings.JiraUrl).Host.ToLower()}");
-        [JsonIgnore] public string UserHash => DataEncryption.GetSha256Hash($"{JiraConnectionSettings.JiraUsername.ToLower()}-{new Uri(JiraConnectionSettings.JiraUrl).Host.ToLower()}");
-        [JsonIgnore] public string SiteHash => DataEncryption.GetSha256Hash(new Uri(JiraConnectionSettings.JiraUrl).Host.ToLower());
+        [JsonIgnore] public string InstallationHash => DataEncryption.GetSha256Hash($"{InternalSettings.InstallationInstanceId}-{JiraConnectionSettings.JiraUsername}-{JiraConnectionSettings.JiraHost}");
+        [JsonIgnore] public string UserHash => DataEncryption.GetSha256Hash($"{JiraConnectionSettings.JiraUsername.ToLower()}-{JiraConnectionSettings.JiraHost}");
+        [JsonIgnore] public string SiteHash => DataEncryption.GetSha256Hash(JiraConnectionSettings.JiraHost);
         private bool isIntialised;
 
         // ReSharper disable once UnusedMember.Global
