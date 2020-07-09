@@ -688,6 +688,13 @@
       <Other>Branding Update</Other>
     </Others>
   </Version>
+  <Version Number="3.20.1.0" Name="">
+    <Features />
+    <Bugs />
+    <Others>
+      <Other>Branding Update</Other>
+    </Others>
+  </Version>
   <!--
   Template for VNext if not present above
   <Version Number="0.0.0.0" Name="Pre-Release">
