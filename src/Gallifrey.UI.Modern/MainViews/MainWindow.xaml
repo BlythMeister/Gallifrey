@@ -6,7 +6,7 @@
         xmlns:helpers="clr-namespace:Gallifrey.UI.Modern.Helpers"
         xmlns:mainViews="clr-namespace:Gallifrey.UI.Modern.MainViews"
         Height="675" Width="800" MinHeight="675" MinWidth="800"
-        Icon="/Icons/clock_blue.ico" IconScalingMode="ScaleDownLargerFrame" IconEdgeMode="Aliased" IconBitmapScalingMode="HighQuality" Title="{Binding AppTitle}" TitleCharacterCasing="Upper"
+        Icon="/Icons/Circle_Icon.ico" IconScalingMode="ScaleDownLargerFrame" IconEdgeMode="Aliased" IconBitmapScalingMode="HighQuality" Title="{Binding AppTitle}" TitleCharacterCasing="Upper"
         WindowTitleBrush="{DynamicResource MahApps.Brushes.Accent}" NonActiveWindowTitleBrush="{DynamicResource MahApps.Brushes.Accent}" BorderBrush="{DynamicResource MahApps.Brushes.Accent}" BorderThickness="2"
         LeftWindowCommandsOverlayBehavior="HiddenTitleBar" RightWindowCommandsOverlayBehavior="HiddenTitleBar" WindowButtonCommandsOverlayBehavior="HiddenTitleBar" IconOverlayBehavior="HiddenTitleBar" IsWindowDraggable="True"
         KeepBorderOnMaximize="False" WindowTransitionsEnabled="True" TryToBeFlickerFree="True" TitleAlignment="Left" ShowDialogsOverTitleBar="True"

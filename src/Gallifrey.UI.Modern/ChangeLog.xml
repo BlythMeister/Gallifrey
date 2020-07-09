@@ -681,6 +681,13 @@
       <Other>Update app to .net 4.8.0 from .net 4.7.0</Other>
     </Others>
   </Version>
+  <Version Number="3.20.0.0" Name="Pre-Release">
+    <Features />
+    <Bugs />
+    <Others>
+      <Other>Branding Update</Other>
+    </Others>
+  </Version>
   <!--
   Template for VNext if not present above
   <Version Number="0.0.0.0" Name="Pre-Release">
