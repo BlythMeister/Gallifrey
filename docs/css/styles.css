@@ -80,9 +80,16 @@ body {
     }
 }
 
+.logo-container {
+    text-align: center;
+}
+
 .logo{
-    height: 117px;
-    width: 262.5px;
+    height: 100px;
+    width: 227px;
+    border-radius: 3%;
+    margin-bottom: 10px;
+    box-shadow: 0 0 10px grey;
 }
 
 .sidebar {
@@ -93,12 +100,12 @@ body {
     padding-bottom: 10px;
 }
 
-.sidebar .avatar {
-    height: 80px;
-    width: 80px;
-    border-radius: 50%;
+.sidebar .logo{
+    height: 88px;
+    width: 200px;
+    border-radius: 3%;
     margin-bottom: 10px;
-    box-shadow: 0 0 10px grey;
+    box-shadow: 0 0 10px grey;    
 }
 
 .sidebar .middleItem {
