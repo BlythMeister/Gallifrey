@@ -41,7 +41,7 @@ defaults:
       type: "pages"
     values:
       layout: "default"
-      image: /images/clockIcon.png
+      image: /images/icon.png
       twitter_image_small: true
   -
     scope:
@@ -49,7 +49,7 @@ defaults:
       type: "posts"
     values:
       layout: "post"
-      image: /images/clockIcon.png
+      image: /images/icon.png
       twitter_image_small: true
 
 #Gems
