@@ -48,11 +48,16 @@ Feel free to contribute, but please read the wiki (https://github.com/BlythMeist
 Gallifrey makes use of the following libraries:
 
 * Exceptionless (http://exceptionless.com/)
-* Atlassian .Net SDK (https://bitbucket.org/farmas/atlassian.net-sdk/wiki/Home)
 * MahApps.Metro & Icon Pack (http://mahapps.com/)
 * Toast Notifications (https://github.com/raflop/ToastNotifications)
 * Newtonsoft Json (http://www.newtonsoft.com/json)
 * RestSharp (http://restsharp.org/)
+
+For build & release
+
+* Paket (https://fsprojects.github.io/Paket/)
+* Fake (https://fake.build/)
+* Octokit (https://octokitnet.readthedocs.io/en/latest/)
 
 Licence
 =========
