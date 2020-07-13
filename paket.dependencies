@@ -7,5 +7,5 @@ nuget MahApps.Metro.IconPacks.FontAwesome
 nuget Newtonsoft.Json
 nuget Octokit
 nuget RestSharp
-nuget System.ValueTuple
 nuget ToastNotifications
+
