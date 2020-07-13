@@ -104,6 +104,10 @@ namespace Gallifrey.JiraIntegration
                 {
                     throw new MissingJiraConfigException("Required settings to create connection to jira are missing");
                 }
+                catch (ConnectionError ex) when (ex.ConnectionType == ConnectionError.Type.Tempo)
+                {
+                    throw new TempoConnectionException("Error creating instance of Tempo", ex);
+                }
                 catch (Exception ex)
                 {
                     throw new JiraConnectionException("Error creating instance of Jira", ex);
@@ -146,7 +150,7 @@ namespace Gallifrey.JiraIntegration
                 recentJiraCollection.AddRecentJira(issue);
                 return issue;
             }
-            catch (Exception ex)
+            catch (ConnectionError ex)
             {
                 recentJiraCollection.Remove(jiraRef);
                 throw new NoResultsFoundException($"Unable to locate Jira {jiraRef}", ex);

@@ -11,24 +11,39 @@ using System.Net;
 
 namespace Gallifrey.Jira
 {
-    public class JiraRestClient : IJiraClient
+    public class JiraClient : IJiraClient
     {
         private readonly ISimpleRestClient jiraClient;
         private readonly ISimpleRestClient tempoClient;
         private readonly User myUser;
 
-        public JiraRestClient(string baseUrl, string username, string password, bool useTempo, string tempoToken)
+        public JiraClient(string baseUrl, string username, string password, bool useTempo, string tempoToken)
         {
             var url = baseUrl + (baseUrl.EndsWith("/") ? "" : "/") + "rest/api/2";
             jiraClient = SimpleRestClient.WithBasicAuthentication(url, username, password, GetErrorMessages);
 
-            myUser = GetCurrentUser();
+            try
+            {
+                myUser = GetCurrentUser();
+            }
+            catch (Exception e)
+            {
+                throw new ConnectionError(ConnectionError.Type.Jira, "Error connecting to jira", e);
+            }
+
             if (useTempo)
             {
                 tempoClient = SimpleRestClient.WithBearerAuthentication("https://api.tempo.io/core/3", tempoToken, null);
 
-                var queryDate = DateTime.UtcNow;
-                tempoClient.Get<TempoWorkLogSearch>(HttpStatusCode.OK, $"worklogs/user/{myUser.accountId}?from={queryDate:yyyy-MM-dd}&to={queryDate:yyyy-MM-dd}");
+                try
+                {
+                    var queryDate = DateTime.UtcNow;
+                    tempoClient.Get<TempoWorkLogSearch>(HttpStatusCode.OK, $"worklogs/user/{myUser.accountId}?from={queryDate:yyyy-MM-dd}&to={queryDate:yyyy-MM-dd}");
+                }
+                catch (Exception e)
+                {
+                    throw new ConnectionError(ConnectionError.Type.Tempo, "Error connecting to tempo", e);
+                }
             }
             else
             {

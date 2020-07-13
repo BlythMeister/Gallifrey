@@ -55,6 +55,7 @@
     <Compile Include="DeploymentUtils\Uninstaller.cs" />
     <Compile Include="DeploymentUtils\W322Utils.cs" />
     <Compile Include="Exceptions\JiraIntegration\CommentException.cs" />
+    <Compile Include="Exceptions\JiraIntegration\TempoConnectionException.cs" />
     <Compile Include="Exceptions\MissingConfigException.cs" />
     <Compile Include="Exceptions\JiraTimers\IdleTimerRunningException.cs" />
     <Compile Include="Exceptions\Serialization\SerializerError.cs" />

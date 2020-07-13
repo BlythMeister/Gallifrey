@@ -45,6 +45,10 @@ namespace Gallifrey.UI.Modern.Flyouts
             {
                 successfulSave = false;
             }
+            catch (TempoConnectionException)
+            {
+                successfulSave = false;
+            }
 
             if (successfulSave)
             {
@@ -53,7 +57,15 @@ namespace Gallifrey.UI.Modern.Flyouts
             }
             else
             {
-                await modelHelpers.ShowMessageAsync("Invalid Jira Configuration", "You Cannot Save With Invalid Jira Configuration.\nTo Save You Have To Have A Valid Connection To Jira");
+                if (DataModel.UseTempo)
+                {
+                    await modelHelpers.ShowMessageAsync("Invalid Jira Or Tempo Configuration", "You Cannot Save With Invalid Jira Or Tempo Configuration.\nTo Save You Have To Have A Valid Connection To Jira And Tempo");
+                }
+                else
+                {
+                    await modelHelpers.ShowMessageAsync("Invalid Jira Configuration", "You Cannot Save With Invalid Jira Configuration.\nTo Save You Have To Have A Valid Connection To Jira");
+                }
+
                 Focus();
             }
         }

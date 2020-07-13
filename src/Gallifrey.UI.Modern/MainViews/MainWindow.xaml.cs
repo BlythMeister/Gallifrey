@@ -71,7 +71,8 @@ namespace Gallifrey.UI.Modern.MainViews
             DebuggerNotAttached,
             NoInternetConnection,
             MissingConfig,
-            ConnectionError,
+            JiraConnectionError,
+            TempoConnectionError,
             Ok,
             NewUser
         }
@@ -114,7 +115,11 @@ namespace Gallifrey.UI.Modern.MainViews
             }
             catch (JiraConnectionException)
             {
-                return InitialiseResult.ConnectionError;
+                return InitialiseResult.JiraConnectionError;
+            }
+            catch (TempoConnectionException)
+            {
+                return InitialiseResult.TempoConnectionError;
             }
 
             modelHelpers.RefreshModel();
@@ -182,10 +187,26 @@ namespace Gallifrey.UI.Modern.MainViews
                 await MainWindow_OnLoaded();
                 return;
             }
-            else if (result.RetVal == InitialiseResult.ConnectionError || result.RetVal == InitialiseResult.MissingConfig)
+            else if (result.RetVal == InitialiseResult.JiraConnectionError || result.RetVal == InitialiseResult.TempoConnectionError || result.RetVal == InitialiseResult.MissingConfig)
             {
                 modelHelpers.Gallifrey.TrackEvent(TrackingType.ConnectionError);
-                var userUpdate = await modelHelpers.ShowMessageAsync("Login Failure", "We Were Unable To Authenticate To Jira, Please Confirm Login Details", MessageDialogStyle.AffirmativeAndNegativeAndSingleAuxiliary, new MetroDialogSettings { AffirmativeButtonText = "Update Details", NegativeButtonText = "Cancel", FirstAuxiliaryButtonText = "Retry" });
+                var message = string.Empty;
+                switch (result.RetVal)
+                {
+                    case InitialiseResult.JiraConnectionError:
+                        message = "We Were Unable To Authenticate To Jira, Please Confirm Login Details";
+                        break;
+
+                    case InitialiseResult.TempoConnectionError:
+                        message = "We Were Unable To Authenticate To Tempo, Please Confirm Login Details";
+                        break;
+
+                    case InitialiseResult.MissingConfig:
+                        message = "There Are Missing Configuration Items For Jira/Tempo, Please Confirm Login Details";
+                        break;
+                }
+
+                var userUpdate = await modelHelpers.ShowMessageAsync("Login Failure", message, MessageDialogStyle.AffirmativeAndNegativeAndSingleAuxiliary, new MetroDialogSettings { AffirmativeButtonText = "Update Details", NegativeButtonText = "Cancel", FirstAuxiliaryButtonText = "Retry" });
 
                 switch (userUpdate)
                 {
@@ -199,7 +220,7 @@ namespace Gallifrey.UI.Modern.MainViews
                         return;
 
                     default:
-                        await UserLoginFailure();
+                        await UserLoginFailure(result.RetVal == InitialiseResult.TempoConnectionError);
                         await MainWindow_OnLoaded();
                         return;
                 }
@@ -242,7 +263,7 @@ namespace Gallifrey.UI.Modern.MainViews
                 await modelHelpers.OpenFlyout(new Flyouts.Settings(modelHelpers));
                 if (!modelHelpers.Gallifrey.JiraConnection.IsConnected)
                 {
-                    var userUpdate = await modelHelpers.ShowMessageAsync("Lost Jira Connection", "We Seem To Have Lost Jira Connection\nWould You Like To Update Your Details?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No" });
+                    var userUpdate = await modelHelpers.ShowMessageAsync("Lost Jira Connection", "We Seem To Have Lost Jira/Tempo Connection\nWould You Like To Update Your Details?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No" });
 
                     if (userUpdate == MessageDialogResult.Negative)
                     {
@@ -255,7 +276,7 @@ namespace Gallifrey.UI.Modern.MainViews
             }
         }
 
-        private async Task UserLoginFailure()
+        private async Task UserLoginFailure(bool tempoOnly = false)
         {
             var loggedIn = false;
 
@@ -264,20 +285,24 @@ namespace Gallifrey.UI.Modern.MainViews
                 try
                 {
                     var jiraSettings = modelHelpers.Gallifrey.Settings.JiraConnectionSettings;
-                    jiraSettings.JiraUrl = await modelHelpers.ShowInputAsync("Jira URL", "Please Enter Your Jira Instance URL\nThis Is The URL You Go To When You Login Using A Browser\ne.g. https://MyCompany.atlassian.net", new MetroDialogSettings { DefaultText = jiraSettings.JiraUrl });
 
-                    if (string.IsNullOrWhiteSpace(jiraSettings.JiraUrl))
+                    if (!tempoOnly)
                     {
-                        throw new MissingJiraConfigException("Missing URL");
-                    }
+                        jiraSettings.JiraUrl = await modelHelpers.ShowInputAsync("Jira URL", "Please Enter Your Jira Instance URL\nThis Is The URL You Go To When You Login Using A Browser\ne.g. https://MyCompany.atlassian.net", new MetroDialogSettings { DefaultText = jiraSettings.JiraUrl, AffirmativeButtonText = "Save", NegativeButtonText = "Cancel" });
 
-                    var details = await modelHelpers.ShowLoginAsync("Jira Authentication", "Please Enter Your Username/Email Address & Password You Use To Login To Jira.\nOn Jira Cloud Instances You Should Generate An API Key From Your Atlassian ID Profile (Under Security Settings) And Use This As Your Password.", new LoginDialogSettings { EnablePasswordPreview = true, InitialUsername = jiraSettings.JiraUsername, InitialPassword = jiraSettings.JiraPassword });
-                    jiraSettings.JiraUsername = details.Username;
-                    jiraSettings.JiraPassword = details.Password;
+                        if (string.IsNullOrWhiteSpace(jiraSettings.JiraUrl))
+                        {
+                            throw new MissingJiraConfigException("Missing URL");
+                        }
 
-                    if (string.IsNullOrWhiteSpace(jiraSettings.JiraUsername) || string.IsNullOrWhiteSpace(jiraSettings.JiraPassword))
-                    {
-                        throw new MissingJiraConfigException("Missing user or password");
+                        var jiraDetails = await modelHelpers.ShowLoginAsync("Jira Authentication", "Please Enter Your Username/Email Address & Password You Use To Login To Jira.\nOn Jira Cloud Instances You Should Generate An API Key From Your Atlassian ID Profile (Under Security Settings) And Use This As Your Password.", new LoginDialogSettings { EnablePasswordPreview = true, InitialUsername = jiraSettings.JiraUsername, InitialPassword = jiraSettings.JiraPassword, RememberCheckBoxVisibility = Visibility.Collapsed, UsernameWatermark = "", PasswordWatermark = "", AffirmativeButtonText = "Save", NegativeButtonVisibility = Visibility.Visible, NegativeButtonText = "Cancel" });
+                        jiraSettings.JiraUsername = jiraDetails.Username;
+                        jiraSettings.JiraPassword = jiraDetails.Password;
+
+                        if (string.IsNullOrWhiteSpace(jiraSettings.JiraUsername) || string.IsNullOrWhiteSpace(jiraSettings.JiraPassword))
+                        {
+                            throw new MissingJiraConfigException("Missing user or password");
+                        }
                     }
 
                     var useTempoChoice = await modelHelpers.ShowMessageAsync("Tempo", "Do You Want To Use Tempo To Record Timesheets?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No" });
@@ -285,7 +310,8 @@ namespace Gallifrey.UI.Modern.MainViews
 
                     if (jiraSettings.UseTempo)
                     {
-                        jiraSettings.TempoToken = await modelHelpers.ShowInputAsync("Tempo Authentication", "Please Enter Your Tempo Api Token\nThe Tempo API Token Can Be Found In Your Tempo Settings Under API Integration.  This Page States Its For Temporary Access, But This Token Does NOT Expire", new MetroDialogSettings { DefaultText = jiraSettings.TempoToken });
+                        var tempoDetails = await modelHelpers.ShowLoginAsync("Tempo Authentication", "Please Enter Your Tempo Api Token\nThe Tempo API Token Can Be Found In Your Tempo Settings Under API Integration.  Tokens Can Have A 5000 Day Expiration.  Only Worklog & Approval Scope Required, But Full Access Also Works.", new LoginDialogSettings { EnablePasswordPreview = true, InitialPassword = jiraSettings.TempoToken, ShouldHideUsername = true, RememberCheckBoxVisibility = Visibility.Collapsed, PasswordWatermark = "", AffirmativeButtonText = "Save", NegativeButtonVisibility = Visibility.Visible, NegativeButtonText = "Cancel" });
+                        jiraSettings.TempoToken = tempoDetails.Password;
                     }
                     else
                     {
@@ -298,10 +324,10 @@ namespace Gallifrey.UI.Modern.MainViews
                 }
                 catch (MissingJiraConfigException)
                 {
-                    var result = await modelHelpers.ShowMessageAsync("Missing Information", "Some Of The Jira Information We Requested Was Missing, Try Again?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No" });
+                    var result = await modelHelpers.ShowMessageAsync("Missing Information", "Some Of The Jira/Tempo Information We Requested Was Missing, Try Again?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No" });
                     if (result == MessageDialogResult.Negative)
                     {
-                        await modelHelpers.ShowMessageAsync("Come Back Soon", "Without A Correctly Configured Jira Connection Gallifrey Will Close, Please Come Back Soon!");
+                        await modelHelpers.ShowMessageAsync("Come Back Soon", "Without A Correctly Configured Jira/Tempo Connection Gallifrey Will Close, Please Come Back Soon!");
                         modelHelpers.CloseApp();
                     }
                 }
@@ -310,7 +336,16 @@ namespace Gallifrey.UI.Modern.MainViews
                     var result = await modelHelpers.ShowMessageAsync("Login Failure", "We Were Unable To Authenticate To Jira, Try Again?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No" });
                     if (result == MessageDialogResult.Negative)
                     {
-                        await modelHelpers.ShowMessageAsync("Come Back Soon", "Without A Correctly Configured Jira Connection Gallifrey Will Close, Please Come Back Soon!");
+                        await modelHelpers.ShowMessageAsync("Come Back Soon", "Without A Correctly Configured Jira/Tempo Connection Gallifrey Will Close, Please Come Back Soon!");
+                        modelHelpers.CloseApp();
+                    }
+                }
+                catch (TempoConnectionException)
+                {
+                    var result = await modelHelpers.ShowMessageAsync("Login Failure", "We Were Unable To Authenticate To Tempo, Try Again?", MessageDialogStyle.AffirmativeAndNegative, new MetroDialogSettings { AffirmativeButtonText = "Yes", NegativeButtonText = "No" });
+                    if (result == MessageDialogResult.Negative)
+                    {
+                        await modelHelpers.ShowMessageAsync("Come Back Soon", "Without A Correctly Configured Jira/Tempo Connection Gallifrey Will Close, Please Come Back Soon!");
                         modelHelpers.CloseApp();
                     }
                 }

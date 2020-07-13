@@ -40,10 +40,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConnectionError.cs" />
     <Compile Include="Enum\WorkLogStrategy.cs" />
     <Compile Include="IJiraClient.cs" />
     <Compile Include="JiraClientFactory.cs" />
-    <Compile Include="JiraRestClient.cs" />
+    <Compile Include="JiraClient.cs" />
     <Compile Include="Model\Error.cs" />
     <Compile Include="Model\Fields.cs" />
     <Compile Include="Model\Filter.cs" />

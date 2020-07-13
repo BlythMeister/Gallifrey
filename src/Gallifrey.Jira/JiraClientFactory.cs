@@ -20,7 +20,11 @@ namespace Gallifrey.Jira
 
             try
             {
-                return new JiraRestClient(jiraUrl, username, password, useTempo, tempoToken);
+                return new JiraClient(jiraUrl, username, password, useTempo, tempoToken);
+            }
+            catch (ConnectionError)
+            {
+                throw;
             }
             catch (System.Exception e)
             {
