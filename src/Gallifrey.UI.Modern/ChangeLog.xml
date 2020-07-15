@@ -702,6 +702,13 @@
     </Bugs>
     <Others />
   </Version>
+  <Version Number="3.20.3.0" Name="">
+    <Features />
+    <Bugs>
+      <Bug>Fix issue with automatic remaining adjustment on tempo when remaining would be negative</Bug>
+    </Bugs>
+    <Others />
+  </Version>
   <!--
   Template for VNext if not present above
   <Version Number="0.0.0.0" Name="Pre-Release">

@@ -233,6 +233,10 @@ namespace Gallifrey.Jira
                 {
                     case WorkLogStrategy.Automatic:
                         remaining = GetIssue(issueRef).fields.timetracking.remainingEstimateSeconds - timeSpent.TotalSeconds;
+                        if (remaining < 0)
+                        {
+                            remaining = 0;
+                        }
                         break;
 
                     case WorkLogStrategy.LeaveRemaining:
