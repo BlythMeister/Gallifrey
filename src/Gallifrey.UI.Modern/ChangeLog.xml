@@ -709,6 +709,13 @@
     </Bugs>
     <Others />
   </Version>
+  <Version Number="3.20.4.0" Name="">
+    <Features />
+    <Bugs>
+      <Bug>Fix the export time update being skipped if it run recently, meaning it's possible to over export time</Bug>
+    </Bugs>
+    <Others />
+  </Version>
   <!--
   Template for VNext if not present above
   <Version Number="0.0.0.0" Name="Pre-Release">

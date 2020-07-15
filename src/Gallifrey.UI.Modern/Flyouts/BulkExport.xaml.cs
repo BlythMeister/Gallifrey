@@ -243,11 +243,8 @@ namespace Gallifrey.UI.Modern.Flyouts
                     }
                 }
 
-                if (!timerToShow.LastJiraTimeCheck.HasValue || timerToShow.LastJiraTimeCheck < DateTime.UtcNow.AddMinutes(-5))
-                {
-                    dates.Add(timerToShow.DateStarted.Date);
-                    references.Add(timerToShow.JiraReference);
-                }
+                dates.Add(timerToShow.DateStarted.Date);
+                references.Add(timerToShow.JiraReference);
             }
 
             List<StandardWorkLog> logs;
