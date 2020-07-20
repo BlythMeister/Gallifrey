@@ -22,6 +22,11 @@ namespace Gallifrey.UI.Modern.Helpers
 
         public void RegisterExceptionless()
         {
+            if (!modelHelpers.Gallifrey.VersionControl.IsAutomatedDeploy || string.IsNullOrWhiteSpace(ConfigKeys.ExceptionlessApiKey))
+            {
+                return;
+            }
+
             var userInfo = new UserInfo(modelHelpers.Gallifrey.Settings.InstallationHash, "Unknown");
             if (modelHelpers.Gallifrey.JiraConnection.IsConnected)
             {
@@ -48,37 +53,34 @@ namespace Gallifrey.UI.Modern.Helpers
                 userInfo.Name = modelHelpers.Gallifrey.Settings.JiraConnectionSettings.JiraUsername;
             }
 
-            if (string.IsNullOrWhiteSpace(ConfigKeys.ExceptionlessApiKey))
-            {
-                return;
-            }
-
             CloseExceptionless();
 
             ExceptionlessClient.Default.Configuration.ApiKey = ConfigKeys.ExceptionlessApiKey;
             ExceptionlessClient.Default.Configuration.DefaultTags.Add(modelHelpers.Gallifrey.VersionControl.VersionName.Replace("\n", " - "));
+            ExceptionlessClient.Default.Configuration.SetVersion(modelHelpers.Gallifrey.VersionControl.DeployedVersion);
+            ExceptionlessClient.Default.Configuration.IncludeIpAddress = true;
+            ExceptionlessClient.Default.Configuration.IncludeUserName = true;
+            ExceptionlessClient.Default.Configuration.IncludeMachineName = true;
+            ExceptionlessClient.Default.Configuration.IncludePrivateInformation = false;
             ExceptionlessClient.Default.Configuration.SetUserIdentity(userInfo);
             ExceptionlessClient.Default.Configuration.UseSessions(true, TimeSpan.FromMinutes(30), true);
             ExceptionlessClient.Default.Configuration.Enabled = true;
+
             ExceptionlessClient.Default.SubmittingEvent += ExceptionlessSubmittingEvent;
 
-            if (modelHelpers.Gallifrey.VersionControl.IsAutomatedDeploy)
-            {
-                ExceptionlessClient.Default.Register();
-                registered = true;
-                ExceptionlessClient.Default.SubmitSessionStart();
-                //Prevent the framework from auto closing the app and let exceptionless handle errors
-                Application.Current.Dispatcher.UnhandledException += (sender, args) => args.Handled = true;
-            }
+            ExceptionlessClient.Default.Startup(ConfigKeys.ExceptionlessApiKey);
+
+            registered = true;
+            //Prevent the framework from auto closing the app and let exceptionless handle errors
+            Application.Current.Dispatcher.UnhandledException += (sender, args) => args.Handled = true;
         }
 
         public void CloseExceptionless()
         {
             if (registered)
             {
-                ExceptionlessClient.Default.SubmitSessionEnd();
+                ExceptionlessClient.Default.Shutdown();
                 registered = false;
-                ExceptionlessClient.Default.Unregister();
             }
         }
 
