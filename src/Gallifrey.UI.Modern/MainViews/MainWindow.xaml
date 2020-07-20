@@ -6,10 +6,9 @@
         xmlns:helpers="clr-namespace:Gallifrey.UI.Modern.Helpers"
         xmlns:mainViews="clr-namespace:Gallifrey.UI.Modern.MainViews"
         Height="675" Width="800" MinHeight="675" MinWidth="800"
-        Icon="/Icons/Circle_Icon.ico" IconScalingMode="ScaleDownLargerFrame" IconEdgeMode="Aliased" IconBitmapScalingMode="HighQuality" Title="{Binding AppTitle}" TitleCharacterCasing="Upper"
-        WindowTitleBrush="{DynamicResource MahApps.Brushes.Accent}" NonActiveWindowTitleBrush="{DynamicResource MahApps.Brushes.Accent}" BorderBrush="{DynamicResource MahApps.Brushes.Accent}" BorderThickness="2"
+        Icon="/Icons/Circle_Icon.ico" ShowIconOnTitleBar="False" Title="{Binding AppTitle}" TitleCharacterCasing="Upper"
         LeftWindowCommandsOverlayBehavior="HiddenTitleBar" RightWindowCommandsOverlayBehavior="HiddenTitleBar" WindowButtonCommandsOverlayBehavior="HiddenTitleBar" IconOverlayBehavior="HiddenTitleBar" IsWindowDraggable="True"
-        KeepBorderOnMaximize="False" WindowTransitionsEnabled="True" TryToBeFlickerFree="True" TitleAlignment="Left" ShowDialogsOverTitleBar="True"
+        KeepBorderOnMaximize="False" WindowTransitionsEnabled="True" TitleAlignment="Left" ShowDialogsOverTitleBar="True" ShowSystemMenu="False" ShowSystemMenuOnRightClick="False"
         Loaded="MainWindow_OnLoaded" KeyDown="MainWindow_KeyDown" Activated="MainWindow_Activated" StateChanged="MainWindow_StateChange"
         dialogs:DialogParticipation.Register="{Binding RelativeSource={RelativeSource Self}, Path=DataContext.ModelHelpers.DialogContext}">
 

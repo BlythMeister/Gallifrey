@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26730.12
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30309.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".paket", ".paket", "{C186DE09-6698-42DE-9D41-C4FBB02B81BA}"
 	ProjectSection(SolutionItems) = preProject
@@ -22,7 +22,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gallifrey.UI.Modern.Stable"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gallifrey.Rest", "Gallifrey.Rest\Gallifrey.Rest.csproj", "{8A31F054-4A64-4BFE-BE30-8846424C71F5}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{11E6F1E6-D0D8-4B96-A67A-58238CA8AA1A}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".build", ".build", "{11E6F1E6-D0D8-4B96-A67A-58238CA8AA1A}"
 	ProjectSection(SolutionItems) = preProject
 		..\appveyor.yml = ..\appveyor.yml
 		..\build.cmd = ..\build.cmd

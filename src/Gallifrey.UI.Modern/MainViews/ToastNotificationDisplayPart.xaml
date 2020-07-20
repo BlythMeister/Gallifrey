@@ -14,7 +14,7 @@
             </Grid.RowDefinitions>
             <Border BorderBrush="{DynamicResource MahApps.Brushes.Flyout.Background}" BorderThickness="0,0,0,2" HorizontalAlignment="Stretch">
                 <StackPanel Orientation="Horizontal">
-                    <Image Source="../Icons/clock_blue.ico" Height="30" Width="30" Margin="0,0,5,0" />
+                    <Image Source="../Icons/Circle_Icon.ico" Height="30" Width="30" Margin="0,0,5,0" />
                     <TextBlock Text="{Binding Title}" FontSize="18" Foreground="{DynamicResource MahApps.Brushes.IdealForeground}" />
                 </StackPanel>
             </Border>

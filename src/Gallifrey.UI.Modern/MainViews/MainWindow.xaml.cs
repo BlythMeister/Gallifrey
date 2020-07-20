@@ -688,6 +688,7 @@ namespace Gallifrey.UI.Modern.MainViews
 
         protected override void OnClosed(EventArgs e)
         {
+            exceptionlessHelper.CloseExceptionless();
             base.OnClosed(e);
             if (!forceClosed)
             {

@@ -48,17 +48,17 @@ namespace Gallifrey.UI.Modern.Helpers
                 userInfo.Name = modelHelpers.Gallifrey.Settings.JiraConnectionSettings.JiraUsername;
             }
 
-            ExceptionlessClient.Default.Unregister();
-
             if (string.IsNullOrWhiteSpace(ConfigKeys.ExceptionlessApiKey))
             {
                 return;
             }
 
+            CloseExceptionless();
+
             ExceptionlessClient.Default.Configuration.ApiKey = ConfigKeys.ExceptionlessApiKey;
             ExceptionlessClient.Default.Configuration.DefaultTags.Add(modelHelpers.Gallifrey.VersionControl.VersionName.Replace("\n", " - "));
             ExceptionlessClient.Default.Configuration.SetUserIdentity(userInfo);
-            ExceptionlessClient.Default.Configuration.SessionsEnabled = false;
+            ExceptionlessClient.Default.Configuration.UseSessions(true, TimeSpan.FromMinutes(30), true);
             ExceptionlessClient.Default.Configuration.Enabled = true;
             ExceptionlessClient.Default.SubmittingEvent += ExceptionlessSubmittingEvent;
 
@@ -66,8 +66,19 @@ namespace Gallifrey.UI.Modern.Helpers
             {
                 ExceptionlessClient.Default.Register();
                 registered = true;
+                ExceptionlessClient.Default.SubmitSessionStart();
                 //Prevent the framework from auto closing the app and let exceptionless handle errors
                 Application.Current.Dispatcher.UnhandledException += (sender, args) => args.Handled = true;
+            }
+        }
+
+        public void CloseExceptionless()
+        {
+            if (registered)
+            {
+                ExceptionlessClient.Default.SubmitSessionEnd();
+                registered = false;
+                ExceptionlessClient.Default.Unregister();
             }
         }
 
@@ -125,13 +136,9 @@ namespace Gallifrey.UI.Modern.Helpers
                     modelHelpers.CloseApp(true);
                 });
             }
-            else if (e.Event.IsError() && modelHelpers.Gallifrey.JiraConnection.IsConnected)
+            else
             {
-                e.Event.SetUserDescription(new UserDescription(modelHelpers.Gallifrey.JiraConnection.CurrentUser.emailAddress, "Handled Error"));
-            }
-            else if (modelHelpers.Gallifrey.JiraConnection.IsConnected)
-            {
-                e.Event.SetUserDescription(new UserDescription(modelHelpers.Gallifrey.JiraConnection.CurrentUser.emailAddress, ""));
+                e.Event.AddTags("Handled");
             }
         }
 
