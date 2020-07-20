@@ -136,7 +136,7 @@ namespace Gallifrey.UI.Modern.Helpers
                     modelHelpers.CloseApp(true);
                 });
             }
-            else
+            else if (e.Event.IsError() || e.Event.IsCritical())
             {
                 e.Event.AddTags("Handled");
             }
