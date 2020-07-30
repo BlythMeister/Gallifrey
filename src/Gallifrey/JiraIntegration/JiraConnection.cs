@@ -234,7 +234,7 @@ namespace Gallifrey.JiraIntegration
             try
             {
                 CheckAndConnectJira();
-                var issues = jira.GetIssuesFromJql("assignee in (currentUser()) AND status not in (Closed,Resolved)").ToList();
+                var issues = jira.GetIssuesFromJql("assignee in (currentUser()) AND resolved is EMPTY").ToList();
                 recentJiraCollection.AddRecentJiras(issues);
                 return issues.OrderBy(x => x.key, new JiraReferenceComparer());
             }
@@ -293,7 +293,11 @@ namespace Gallifrey.JiraIntegration
         {
             trackUsage.TrackAppUsage(TrackingType.ExportOccured);
 
-            if (string.IsNullOrWhiteSpace(comment)) comment = exportSettings.EmptyExportComment;
+            if (string.IsNullOrWhiteSpace(comment))
+            {
+                comment = exportSettings.EmptyExportComment;
+            }
+
             if (!string.IsNullOrWhiteSpace(exportSettings.ExportCommentPrefix))
             {
                 comment = $"{exportSettings.ExportCommentPrefix}: {comment}";

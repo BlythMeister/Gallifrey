@@ -743,6 +743,7 @@
     <Features />
     <Bugs>
       <Bug>Fix worklog loading for Jira</Bug>
+      <Bug>Fix default search</Bug>
     </Bugs>
     <Others />
   </Version>
