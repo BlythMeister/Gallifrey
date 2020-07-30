@@ -4,6 +4,7 @@ description: "Get the best assistant to help manage your 'wibbily wobbly timey w
 url: https://www.gallifreyapp.co.uk
 logo: /images/Logo.png
 lang: en_GB
+enableCsp: true
 
 GoogleAnalytics: UA-51628201-1
 
@@ -15,6 +16,7 @@ webmaster_verifications:
 #Social
 twitter:
     username: GallifreyApp
+    card: summary
 
 facebook:
    app_id: 1444417962337528

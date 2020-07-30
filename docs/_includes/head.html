@@ -2,7 +2,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-
+<meta name="enableCsp" content="{{ site.enableCsp }}">
+{% if site.enableCsp %}
 <!-- ReportURI -->
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' cdn.report-uri.com ajax.googleapis.com www.google-analytics.com cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' cdnjs.cloudflare.com; img-src 'self' www.paypalobjects.com ak1s.abmr.net akamai.mathtag.com *.akamaihd.net www.google-analytics.com; font-src data: cdnjs.cloudflare.com; connect-src blythmeister.report-uri.com api.github.com www.google-analytics.com; upgrade-insecure-requests; block-all-mixed-content">
 <script type="text/json" id="csp-report-uri">
@@ -12,7 +13,7 @@
 }
 </script>
 <script src="https://cdn.report-uri.com/libs/report-uri-js/1.0.1/report-uri-js.min.js" integrity="sha256-Cng8gUe98XCqh5hc8nAM3y5I1iQHBjzOl8X3/iAd4jE=" crossorigin="anonymous"></script>
-
+{% endif %}
 <!--BEGIN LINKS-->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE= sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu sha512-Dop/vW3iOtayerlYAqCgkVr2aTr2ErwwTYOvRFUpzl2VhCMJyjQF0Q9TjUXIo6JhuM/3i0vVEt2e/7QQmnHQqw==" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap-theme.min.css" integrity="sha256-8uHMIn1ru0GS5KO+zf7Zccf8Uw12IA5DrdEcmMuWLFM= sha384-6pzBo3FDv/PJ8r2KRkGHifhEocL+1X2rVCTTkUfGk7/0pbek5mMa1upzvWbrUbOZ sha512-iy8EXLW01a00b26BaqJWaCmk9fJ4PsMdgNRqV96KwMPSH+blO82OHzisF/zQbRIIi8m0PiO10dpS0QxrcXsisw==" crossorigin="anonymous">
@@ -29,12 +30,4 @@
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 
-{% capture seo %}
 {% seo %}
-{% endcapture %}
-
-{% if page.twitter_image_small or post.twitter_image_small %}
-    {{ seo | replace: "summary_large_image", "summary" }}
-{% else %}
-    {{ seo }}
-{% endif %}
