@@ -739,6 +739,13 @@
     </Bugs>
     <Others />
   </Version>
+  <Version Number="3.20.8.0" Name="">
+    <Features />
+    <Bugs>
+      <Bug>Fix worklog loading for Jira</Bug>
+    </Bugs>
+    <Others />
+  </Version>
   <!--
   Template for VNext if not present above
   <Version Number="0.0.0.0" Name="Pre-Release">

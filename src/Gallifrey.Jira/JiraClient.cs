@@ -203,7 +203,11 @@ namespace Gallifrey.Jira
 
         public void TransitionIssue(string issueRef, string transitionName)
         {
-            if (transitionName == null) throw new ArgumentNullException(nameof(transitionName));
+            if (transitionName == null)
+            {
+                throw new ArgumentNullException(nameof(transitionName));
+            }
+
             var transitions = GetIssueTransitions(issueRef);
             var transition = transitions.transitions.FirstOrDefault(t => t.name == transitionName);
 
@@ -222,12 +226,20 @@ namespace Gallifrey.Jira
 
         public void AddWorkLog(string issueRef, WorkLogStrategy workLogStrategy, string comment, TimeSpan timeSpent, DateTime logDate, TimeSpan? remainingTime = null)
         {
-            if (logDate.Kind != DateTimeKind.Local) logDate = DateTime.SpecifyKind(logDate, DateTimeKind.Local);
+            if (logDate.Kind != DateTimeKind.Local)
+            {
+                logDate = DateTime.SpecifyKind(logDate, DateTimeKind.Local);
+            }
+
             timeSpent = new TimeSpan(timeSpent.Hours, timeSpent.Minutes, 0);
 
             if (tempoClient != null)
             {
-                if (string.IsNullOrWhiteSpace(comment)) comment = "N/A";
+                if (string.IsNullOrWhiteSpace(comment))
+                {
+                    comment = "N/A";
+                }
+
                 var remaining = 0d;
                 switch (workLogStrategy)
                 {
@@ -311,10 +323,13 @@ namespace Gallifrey.Jira
             var jsonObject = JObject.Parse(rawJson);
             var filtered = jsonObject["worklogs"].Children().Where(x =>
             {
-                var logName = ((string)x["author"]["name"]).ToLower();
-                var userNameMatch = !string.IsNullOrWhiteSpace(user.name) && logName == user.name.ToLower();
-                var userKeyMatch = !string.IsNullOrWhiteSpace(user.key) && logName == user.key.ToLower();
-                return userNameMatch || userKeyMatch;
+                var accountId = x["author"]?["accountId"];
+                if (accountId == null)
+                {
+                    return false;
+                }
+                var accountIdString = (string)accountId;
+                return accountIdString != null && accountIdString.Equals(user.accountId, StringComparison.InvariantCultureIgnoreCase);
             });
             jsonObject["worklogs"] = new JArray(filtered);
             return jsonObject.ToObject<WorkLogs>();
