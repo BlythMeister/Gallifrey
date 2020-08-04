@@ -321,17 +321,47 @@ namespace Gallifrey.Jira
         private static WorkLogs FilterWorklogsToUser(string rawJson, User user)
         {
             var jsonObject = JObject.Parse(rawJson);
-            var filtered = jsonObject["worklogs"].Children().Where(x =>
+            var worklogs = jsonObject["worklogs"];
+            if (worklogs != null)
             {
-                var accountId = x["author"]?["accountId"];
-                if (accountId == null)
+                var filtered = worklogs.Children().Where(x =>
                 {
-                    return false;
-                }
-                var accountIdString = (string)accountId;
-                return accountIdString != null && accountIdString.Equals(user.accountId, StringComparison.InvariantCultureIgnoreCase);
-            });
-            jsonObject["worklogs"] = new JArray(filtered);
+                    var logAccountId = x["author"]?["accountId"];
+                    var logName = x["author"]?["name"];
+
+                    var matchingAccountId = false;
+                    var matchingUserName = false;
+                    var matchingUserKey = false;
+
+                    if (logAccountId != null)
+                    {
+                        var logAccountIdString = (string)logAccountId;
+                        if (!string.IsNullOrWhiteSpace(logAccountIdString) && !string.IsNullOrWhiteSpace(user.accountId))
+                        {
+                            matchingAccountId = logAccountIdString.Equals(user.accountId, StringComparison.InvariantCultureIgnoreCase);
+                        }
+                    }
+
+                    if (logName != null)
+                    {
+                        var logNameString = (string)logName;
+                        if (!string.IsNullOrWhiteSpace(logNameString) && !string.IsNullOrWhiteSpace(user.name))
+                        {
+                            matchingUserName = logNameString.Equals(user.name, StringComparison.InvariantCultureIgnoreCase);
+                        }
+
+                        if (!string.IsNullOrWhiteSpace(logNameString) && !string.IsNullOrWhiteSpace(user.key))
+                        {
+                            matchingUserKey = logNameString.Equals(user.key, StringComparison.InvariantCultureIgnoreCase);
+                        }
+                    }
+
+                    return matchingAccountId || matchingUserKey || matchingUserName;
+                });
+
+                jsonObject["worklogs"] = new JArray(filtered);
+            }
+
             return jsonObject.ToObject<WorkLogs>();
         }
 
