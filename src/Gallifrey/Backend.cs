@@ -111,10 +111,6 @@ namespace Gallifrey
             versionControl.UpdateCheckOccured += (sender, b) => trackUsage.TrackAppUsage(b ? TrackingType.UpdateCheckManual : TrackingType.UpdateCheck);
             jiraTimerCollection.ExportPrompt += OnExportPromptEvent;
             ActivityChecker.NoActivityEvent += OnNoActivityEvent;
-            jiraConnection.LoggedIn += (sender, args) =>
-            {
-                trackUsage.SetJiraCurrentUser(jiraConnection.CurrentUser);
-            };
 
             cleanUpAndTrackingHeartbeat = new Timer(TimeSpan.FromMinutes(15).TotalMilliseconds);
             cleanUpAndTrackingHeartbeat.Elapsed += CleanUpAndTrackingHeartbeatOnElapsed;

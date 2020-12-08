@@ -11,8 +11,6 @@ namespace Gallifrey.AppTracking
     public interface ITrackUsage
     {
         void TrackAppUsage(TrackingType trackingType);
-
-        void SetJiraCurrentUser(User user);
     }
 
     public class TrackUsage : ITrackUsage
@@ -21,7 +19,6 @@ namespace Gallifrey.AppTracking
         private readonly ISettingsCollection settingsCollection;
         private readonly InstanceType instanceType;
         private readonly SimpleTracker tracker;
-        private User user;
 
         public TrackUsage(IVersionControl versionControl, ISettingsCollection settingsCollection, InstanceType instanceType)
         {
@@ -53,11 +50,6 @@ namespace Gallifrey.AppTracking
             }
         }
 
-        public void SetJiraCurrentUser(User newUser)
-        {
-            user = newUser;
-        }
-
         private PageView GetPageView(TrackingType trackingType)
         {
             var source = "Gallifrey";
@@ -74,13 +66,7 @@ namespace Gallifrey.AppTracking
                 CampaignMedium = instanceType.ToString(),
                 CampaignName = versionControl.DeployedVersion.ToString(),
                 UserId = settingsCollection.InstallationHash,
-                UserLanguage = CultureInfo.InstalledUICulture.NativeName,
-                CustomDimension1 = user == null ? "" : user.displayName,
-                CustomDimension2 = user == null ? "" : user.name,
-                CustomDimension3 = user == null ? "" : user.emailAddress,
-                CustomDimension4 = user == null ? "" : user.accountId,
-                CustomDimension5 = settingsCollection.JiraConnectionSettings.JiraUrl,
-                CustomDimension6 = settingsCollection.JiraConnectionSettings.UseTempo.ToString()
+                UserLanguage = CultureInfo.InstalledUICulture.NativeName
             };
         }
     }
