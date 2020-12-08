@@ -1,7 +1,9 @@
 source https://api.nuget.org/v3/index.json
+framework auto-detect
 
 nuget Exceptionless.Wpf
 nuget FAKE ~> 4
+nuget GoogleAnalyticsTracker.Simple
 nuget MahApps.Metro
 nuget MahApps.Metro.IconPacks.FontAwesome
 nuget Newtonsoft.Json

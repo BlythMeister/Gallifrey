@@ -754,6 +754,15 @@
     </Bugs>
     <Others />
   </Version>
+  <Version Number="3.20.10.0">
+    <Features />
+    <Bugs>
+      <Bug>Fix issue with analytics tracking</Bug>
+    </Bugs>
+    <Others>
+      <Other>Dependencies update</Other>
+    </Others>
+  </Version>
   <!--
   Template for VNext if not present above
   <Version Number="0.0.0.0" Name="Pre-Release">

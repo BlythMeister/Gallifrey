@@ -1,8 +1,9 @@
 ﻿using Gallifrey.Settings;
 using Gallifrey.Versions;
+using GoogleAnalyticsTracker.Core.TrackerParameters;
+using GoogleAnalyticsTracker.Simple;
 using System;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+using System.Globalization;
 
 namespace Gallifrey.AppTracking
 {
@@ -16,14 +17,14 @@ namespace Gallifrey.AppTracking
         private readonly IVersionControl versionControl;
         private readonly ISettingsCollection settingsCollection;
         private readonly InstanceType instanceType;
-        private WebBrowser webBrowser;
+        private readonly SimpleTracker tracker;
 
         public TrackUsage(IVersionControl versionControl, ISettingsCollection settingsCollection, InstanceType instanceType)
         {
             this.versionControl = versionControl;
             this.settingsCollection = settingsCollection;
             this.instanceType = instanceType;
-            SetupBrowser();
+            tracker = new SimpleTracker("UA-51628201-7", new SimpleTrackerEnvironment(Environment.OSVersion.Platform.ToString(), Environment.OSVersion.Version.ToString(), Environment.OSVersion.VersionString));
             TrackAppUsage(TrackingType.AppLoad);
         }
 
@@ -32,46 +33,23 @@ namespace Gallifrey.AppTracking
             return versionControl.IsAutomatedDeploy && (settingsCollection.AppSettings.UsageTracking || trackingType == TrackingType.DailyHeartbeat);
         }
 
-        private void SetupBrowser()
-        {
-            try
-            {
-                webBrowser = new WebBrowser
-                {
-                    ScriptErrorsSuppressed = true
-                };
-            }
-            catch (Exception) //Internal handled error
-            {
-                webBrowser = null;
-            }
-        }
-
         public async void TrackAppUsage(TrackingType trackingType)
         {
             if (IsTrackingEnabled(trackingType))
             {
-                if (webBrowser == null)
-                {
-                    SetupBrowser();
-                }
-
                 try
                 {
-                    webBrowser.Navigate(GetNavigateUrl(trackingType));
-                    while (webBrowser.ReadyState != WebBrowserReadyState.Complete)
-                    {
-                        await Task.Delay(500);
-                    }
+                    var pageView = GetPageView(trackingType);
+                    await tracker.TrackAsync(pageView);
                 }
                 catch (Exception) //Internal handled error
                 {
-                    SetupBrowser();
+                    //Ignored
                 }
             }
         }
 
-        private string GetNavigateUrl(TrackingType trackingType)
+        private PageView GetPageView(TrackingType trackingType)
         {
             var source = "Gallifrey";
             if (settingsCollection.InternalSettings.IsPremium)
@@ -79,7 +57,16 @@ namespace Gallifrey.AppTracking
                 source = "Gallifrey_Premium";
             }
 
-            return $"https://releases.gallifreyapp.co.uk/tracking/{trackingType}.html?utm_source={source}&utm_medium={instanceType}&utm_campaign={versionControl.DeployedVersion}&uid={settingsCollection.InstallationHash}";
+            return new PageView
+            {
+                DocumentTitle = trackingType.ToString(),
+                DocumentLocationUrl = $"https://releases.gallifreyapp.co.uk/tracking/{trackingType}",
+                CampaignSource = source,
+                CampaignMedium = instanceType.ToString(),
+                CampaignName = versionControl.DeployedVersion.ToString(),
+                UserId = settingsCollection.InstallationHash,
+                UserLanguage = CultureInfo.InstalledUICulture.NativeName
+            };
         }
     }
 }

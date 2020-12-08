@@ -76,7 +76,10 @@ namespace Gallifrey.DeploymentUtils
             var pk = asi.ApplicationId.PublicKeyToken;
             var pkt = new StringBuilder();
             for (var i = 0; i < pk.GetLength(0); i++)
+            {
                 pkt.Append($"{pk[i]:x}");
+            }
+
             return pkt.ToString();
         }
 
@@ -86,18 +89,27 @@ namespace Gallifrey.DeploymentUtils
             var searchString = "PublicKeyToken=" + publicKeyToken;
             var uninstallKey = Registry.CurrentUser.OpenSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall");
             displayName = null;
-            if (uninstallKey == null) return string.Empty;
+            if (uninstallKey == null)
+            {
+                return string.Empty;
+            }
 
             foreach (var appKeyName in uninstallKey.GetSubKeyNames())
             {
                 var appKey = uninstallKey.OpenSubKey(appKeyName);
-                if (appKey == null) continue;
+                if (appKey == null)
+                {
+                    continue;
+                }
 
                 uninstallString = (string)appKey.GetValue("UninstallString");
                 displayName = (string)appKey.GetValue("DisplayName");
                 appKey.Close();
 
-                if (uninstallString.Contains(searchString)) break;
+                if (uninstallString.Contains(searchString))
+                {
+                    break;
+                }
             }
 
             uninstallKey.Close();

@@ -2,10 +2,10 @@ using System;
 using System.Deployment.Application;
 using System.IO;
 using System.Net;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Xml.Linq;
 
 namespace Gallifrey.Versions
@@ -49,7 +49,7 @@ namespace Gallifrey.Versions
         private long updateCheckOngoing;
 
         public bool IsAutomatedDeploy => ApplicationDeployment.IsNetworkDeployed;
-        public Version DeployedVersion => ApplicationDeployment.CurrentDeployment.CurrentVersion;
+        public Version DeployedVersion => IsAutomatedDeploy ? ApplicationDeployment.CurrentDeployment.CurrentVersion : Assembly.GetExecutingAssembly().GetName().Version;
         public bool IsFirstRun => ApplicationDeployment.CurrentDeployment.IsFirstRun;
 
         public VersionControl(InstanceType instanceType)
@@ -67,7 +67,6 @@ namespace Gallifrey.Versions
 
         private void SetVersionName()
         {
-            VersionName = IsAutomatedDeploy ? DeployedVersion.ToString() : Application.ProductVersion;
             var betaText = InstanceType == InstanceType.Stable ? "" : $" ({InstanceType})";
 
             if (!IsAutomatedDeploy)
@@ -75,7 +74,7 @@ namespace Gallifrey.Versions
                 betaText = " (Debug)";
             }
 
-            VersionName = $"v{VersionName}{betaText}";
+            VersionName = $"v{DeployedVersion}{betaText}";
         }
 
         public Task<UpdateResult> CheckForUpdates(bool manualCheck = false)
