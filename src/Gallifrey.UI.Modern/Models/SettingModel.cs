@@ -224,7 +224,10 @@ namespace Gallifrey.UI.Modern.Models
             if (settings.AppSettings.UsageTracking != AllowTracking)
             {
                 settings.AppSettings.UsageTracking = AllowTracking;
-                if (!AllowTracking) TrackingOptOut = true;
+                if (!AllowTracking)
+                {
+                    TrackingOptOut = true;
+                }
             }
 
             //UI Settings

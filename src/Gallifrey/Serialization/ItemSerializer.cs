@@ -28,10 +28,25 @@ namespace Gallifrey.Serialization
 
             try
             {
-                if (!Directory.Exists(baseDirectory)) Directory.CreateDirectory(baseDirectory);
-                if (!Directory.Exists(saveDirectory)) Directory.CreateDirectory(saveDirectory);
-                if (!Directory.Exists(backupDirectory)) Directory.CreateDirectory(backupDirectory);
-                if (!Directory.Exists(errorDirectory)) Directory.CreateDirectory(errorDirectory);
+                if (!Directory.Exists(baseDirectory))
+                {
+                    Directory.CreateDirectory(baseDirectory);
+                }
+
+                if (!Directory.Exists(saveDirectory))
+                {
+                    Directory.CreateDirectory(saveDirectory);
+                }
+
+                if (!Directory.Exists(backupDirectory))
+                {
+                    Directory.CreateDirectory(backupDirectory);
+                }
+
+                if (!Directory.Exists(errorDirectory))
+                {
+                    Directory.CreateDirectory(errorDirectory);
+                }
             }
             catch (Exception)
             {
@@ -56,7 +71,10 @@ namespace Gallifrey.Serialization
 
         private void Serialize(T obj, int retryCount)
         {
-            if (savePath == null) throw new SerializerError("No Save Path");
+            if (savePath == null)
+            {
+                throw new SerializerError("No Save Path");
+            }
 
             singleThreadMutex.WaitOne();
             var tempWritePath = $"{backupPath}.temp.bak";
@@ -100,7 +118,11 @@ namespace Gallifrey.Serialization
             {
                 if (retryCount >= 3)
                 {
-                    if (File.Exists(tempWritePath)) File.Copy(tempWritePath, savePath, true);
+                    if (File.Exists(tempWritePath))
+                    {
+                        File.Copy(tempWritePath, savePath, true);
+                    }
+
                     File.WriteAllText(Path.Combine(errorDirectory, $"Serialize_{DateTime.UtcNow:yyyy-MM-dd_hh-mm-ss}_{Guid.NewGuid().ToString()}.log"), ex.ToString());
                     throw new SerializerError("Error in serialization", ex);
                 }
@@ -132,7 +154,10 @@ namespace Gallifrey.Serialization
 
         private T DeSerialize(string fileToUse, int retryCount, int backupNumber)
         {
-            if (fileToUse == null) throw new SerializerError("No Save Path");
+            if (fileToUse == null)
+            {
+                throw new SerializerError("No Save Path");
+            }
 
             if (!File.Exists(fileToUse))
             {

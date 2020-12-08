@@ -34,7 +34,7 @@ namespace Gallifrey.Settings
                 {
                     return new Uri(JiraUrl).Host.ToLower();
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     return "";
                 }

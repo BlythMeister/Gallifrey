@@ -23,7 +23,10 @@ namespace Gallifrey.Rest
             this.errorMessageSerializationFunction = errorMessageSerializationFunction;
             errorResponseDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Gallifrey", "WebErrors");
 
-            if (!Directory.Exists(errorResponseDirectory)) Directory.CreateDirectory(errorResponseDirectory);
+            if (!Directory.Exists(errorResponseDirectory))
+            {
+                Directory.CreateDirectory(errorResponseDirectory);
+            }
 
             client = new RestClient { BaseUrl = new Uri(baseUrl), Timeout = (int)TimeSpan.FromMinutes(2).TotalMilliseconds, AutomaticDecompression = true, };
         }
@@ -116,7 +119,10 @@ namespace Gallifrey.Rest
         private void AssertStatus(IRestResponse response, HttpStatusCode status)
         {
             if (response.ErrorException != null)
+            {
                 throw new ClientException("Transport level error: " + response.ErrorMessage, response.ErrorException);
+            }
+
             if (response.StatusCode != status)
             {
                 try

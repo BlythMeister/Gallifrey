@@ -11,7 +11,10 @@ namespace Gallifrey.UI.Modern.Helpers
         public static bool ChangeTheme(string themeName)
         {
             var theme = ThemeManager.Current.DetectTheme(Application.Current);
-            if (theme == null) return false;
+            if (theme == null)
+            {
+                return false;
+            }
 
             var appTheme = theme;
 

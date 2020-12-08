@@ -34,7 +34,11 @@ namespace Gallifrey.IdleTimers
 
         internal void SaveTimers()
         {
-            if (!isIntialised) return;
+            if (!isIntialised)
+            {
+                return;
+            }
+
             IdleTimerCollectionSerializer.Serialize(idleTimerList);
         }
 

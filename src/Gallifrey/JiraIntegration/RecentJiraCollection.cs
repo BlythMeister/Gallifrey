@@ -39,7 +39,10 @@ namespace Gallifrey.JiraIntegration
 
         internal void SaveCache()
         {
-            if (!isIntialised) return;
+            if (!isIntialised)
+            {
+                return;
+            }
 
             try
             {

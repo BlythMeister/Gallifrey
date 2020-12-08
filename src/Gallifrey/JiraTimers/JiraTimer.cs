@@ -187,7 +187,10 @@ namespace Gallifrey.JiraTimers
 
         public void RefreshFromJira(Issue jiraIssue)
         {
-            if (jiraIssue == null) return;
+            if (jiraIssue == null)
+            {
+                return;
+            }
 
             LocalTimer = false;
 
@@ -218,7 +221,11 @@ namespace Gallifrey.JiraTimers
 
         public void UpdateLocalTimerDescription(string localTimerDescription)
         {
-            if (!LocalTimer) return;
+            if (!LocalTimer)
+            {
+                return;
+            }
+
             JiraName = localTimerDescription;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(JiraName)));
         }

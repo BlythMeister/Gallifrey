@@ -40,7 +40,10 @@ namespace Gallifrey.UI.Modern.Extensions
         public static void FlashWindow(this Window win, uint count = uint.MaxValue)
         {
             //Don't flash if the window is active
-            if (win.IsActive) return;
+            if (win.IsActive)
+            {
+                return;
+            }
 
             var h = new WindowInteropHelper(win);
 

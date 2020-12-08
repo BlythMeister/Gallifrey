@@ -137,7 +137,11 @@ namespace Gallifrey.UI.Modern.Models
             get
             {
                 var runningTimerId = ModelHelpers.Gallifrey.JiraTimerCollection.GetRunningTimerId();
-                if (!runningTimerId.HasValue) return string.Empty;
+                if (!runningTimerId.HasValue)
+                {
+                    return string.Empty;
+                }
+
                 var runningTimer = ModelHelpers.Gallifrey.JiraTimerCollection.GetTimer(runningTimerId.Value);
 
                 return $"Currently Running {runningTimer.JiraReference} ({runningTimer.JiraName})";

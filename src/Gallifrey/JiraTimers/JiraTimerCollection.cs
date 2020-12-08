@@ -103,7 +103,11 @@ namespace Gallifrey.JiraTimers
 
         internal void SaveTimers()
         {
-            if (!isIntialised) return;
+            if (!isIntialised)
+            {
+                return;
+            }
+
             JiraTimerCollectionSerializer.Serialize(timerList);
             GeneralTimerModification?.Invoke(this, null);
         }
@@ -140,7 +144,10 @@ namespace Gallifrey.JiraTimers
 
         public IEnumerable<RecentJira> GetJiraReferencesForLastDays(int days)
         {
-            if (days > 0) days = days * -1;
+            if (days > 0)
+            {
+                days = days * -1;
+            }
 
             return timerList
                 .Where(timer => timer.DateStarted.Date >= DateTime.Now.AddDays(days).Date)
@@ -267,7 +274,10 @@ namespace Gallifrey.JiraTimers
 
         public void RemoveTimersOlderThanDays(int keepTimersForDays)
         {
-            if (keepTimersForDays > 0) keepTimersForDays = keepTimersForDays * -1;
+            if (keepTimersForDays > 0)
+            {
+                keepTimersForDays = keepTimersForDays * -1;
+            }
 
             timerList.RemoveAll(timer => (timer.FullyExported || timer.LocalTimer) &&
                                          timer.DateStarted.Date != DateTime.Now.Date &&
@@ -284,7 +294,11 @@ namespace Gallifrey.JiraTimers
         public Guid RenameTimer(Guid timerGuid, Issue newIssue)
         {
             var currentTimer = GetTimer(timerGuid);
-            if (currentTimer.IsRunning) currentTimer.StopTimer();
+            if (currentTimer.IsRunning)
+            {
+                currentTimer.StopTimer();
+            }
+
             var newTimer = new JiraTimer(newIssue, currentTimer.DateStarted, currentTimer.ExactCurrentTime);
 
             var timerSearch = timerList.FirstOrDefault(timer => timer.JiraReference == newTimer.JiraReference && timer.DateStarted.Date == newTimer.DateStarted.Date);
@@ -318,7 +332,10 @@ namespace Gallifrey.JiraTimers
         public Guid ChangeTimerDate(Guid timerGuid, DateTime newStartDate)
         {
             var currentTimer = GetTimer(timerGuid);
-            if (currentTimer.IsRunning) currentTimer.StopTimer();
+            if (currentTimer.IsRunning)
+            {
+                currentTimer.StopTimer();
+            }
 
             JiraTimer newTimer;
             if (currentTimer.LocalTimer)
@@ -414,7 +431,11 @@ namespace Gallifrey.JiraTimers
             SaveTimers();
             if (settingsCollection.ExportSettings.ExportPrompt != null && settingsCollection.ExportSettings.ExportPrompt.OnManualAdjust && !timer.FullyExported && !timer.LocalTimer)
             {
-                if (!addTime) adjustment = adjustment.Negate();
+                if (!addTime)
+                {
+                    adjustment = adjustment.Negate();
+                }
+
                 ExportPrompt?.Invoke(this, new ExportPromptDetail(uniqueId, adjustment));
             }
 

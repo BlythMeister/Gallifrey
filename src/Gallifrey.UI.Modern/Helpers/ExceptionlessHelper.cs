@@ -111,7 +111,10 @@ namespace Gallifrey.UI.Modern.Helpers
 
         private async void ExceptionlessSubmittingEvent(object sender, EventSubmittingEventArgs e)
         {
-            if (!registered) return;
+            if (!registered)
+            {
+                return;
+            }
 
             if (e.IsUnhandledError)
             {
@@ -146,7 +149,10 @@ namespace Gallifrey.UI.Modern.Helpers
 
         private void GallifreyOnDailyTrackingEvent(object sender, EventArgs eventArgs)
         {
-            if (!registered) return;
+            if (!registered)
+            {
+                return;
+            }
 
             try
             {

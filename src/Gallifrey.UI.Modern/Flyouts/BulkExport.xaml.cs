@@ -199,7 +199,10 @@ namespace Gallifrey.UI.Modern.Flyouts
 
         private void ExportSingleClick(object sender, RoutedEventArgs e)
         {
-            if (modelHelpers.Gallifrey.Settings.InternalSettings.IsPremium || DataModel.BulkExports.Count(x => x.ShouldExport) <= NonPremiumMaxExport) return;
+            if (modelHelpers.Gallifrey.Settings.InternalSettings.IsPremium || DataModel.BulkExports.Count(x => x.ShouldExport) <= NonPremiumMaxExport)
+            {
+                return;
+            }
 
             modelHelpers.ShowGetPremiumMessage("Without Gallifrey Premium You Are Limited To A Maximum Of 5 Bulk Exports");
             var toggle = (ToggleSwitch)sender;

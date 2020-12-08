@@ -64,7 +64,11 @@ namespace Gallifrey.Settings
 
         public void SaveSettings()
         {
-            if (!isIntialised) return;
+            if (!isIntialised)
+            {
+                return;
+            }
+
             SettingsCollectionSerializer.Serialize(this);
         }
     }

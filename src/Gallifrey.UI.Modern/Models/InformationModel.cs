@@ -36,9 +36,20 @@ namespace Gallifrey.UI.Modern.Models
 
             returnString.AppendLine(withThanksDefinition.Name);
 
-            if (!string.IsNullOrWhiteSpace(withThanksDefinition.ThanksReason)) returnString.AppendLine($"Reason: {withThanksDefinition.ThanksReason}");
-            if (!string.IsNullOrWhiteSpace(withThanksDefinition.TwitterHandle)) returnString.AppendLine($"Twitter: {withThanksDefinition.TwitterHandle}");
-            if (!string.IsNullOrWhiteSpace(withThanksDefinition.GitHubHandle)) returnString.AppendLine($"GitHub: {withThanksDefinition.GitHubHandle}");
+            if (!string.IsNullOrWhiteSpace(withThanksDefinition.ThanksReason))
+            {
+                returnString.AppendLine($"Reason: {withThanksDefinition.ThanksReason}");
+            }
+
+            if (!string.IsNullOrWhiteSpace(withThanksDefinition.TwitterHandle))
+            {
+                returnString.AppendLine($"Twitter: {withThanksDefinition.TwitterHandle}");
+            }
+
+            if (!string.IsNullOrWhiteSpace(withThanksDefinition.GitHubHandle))
+            {
+                returnString.AppendLine($"GitHub: {withThanksDefinition.GitHubHandle}");
+            }
 
             return returnString.ToString();
         }

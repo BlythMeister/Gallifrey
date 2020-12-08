@@ -111,6 +111,10 @@ namespace Gallifrey
             versionControl.UpdateCheckOccured += (sender, b) => trackUsage.TrackAppUsage(b ? TrackingType.UpdateCheckManual : TrackingType.UpdateCheck);
             jiraTimerCollection.ExportPrompt += OnExportPromptEvent;
             ActivityChecker.NoActivityEvent += OnNoActivityEvent;
+            jiraConnection.LoggedIn += (sender, args) =>
+            {
+                trackUsage.SetJiraCurrentUser(jiraConnection.CurrentUser);
+            };
 
             cleanUpAndTrackingHeartbeat = new Timer(TimeSpan.FromMinutes(15).TotalMilliseconds);
             cleanUpAndTrackingHeartbeat.Elapsed += CleanUpAndTrackingHeartbeatOnElapsed;
@@ -183,7 +187,11 @@ namespace Gallifrey
             try
             {
                 var keepTimersForDays = settingsCollection.AppSettings.KeepTimersForDays;
-                if (keepTimersForDays > 0) keepTimersForDays *= -1;
+                if (keepTimersForDays > 0)
+                {
+                    keepTimersForDays *= -1;
+                }
+
                 var workingDate = DateTime.Now.AddDays(keepTimersForDays + 1);
                 var doCheck = false;
 
@@ -330,7 +338,10 @@ namespace Gallifrey
                 trackUsage.TrackAppUsage(TrackingType.OptOut);
             }
 
-            if (IsInitialised) SettingsChanged?.Invoke(this, null);
+            if (IsInitialised)
+            {
+                SettingsChanged?.Invoke(this, null);
+            }
         }
 
         public void StartLockTimer(TimeSpan? initialTimeSpan = null)

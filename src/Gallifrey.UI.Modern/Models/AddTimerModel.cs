@@ -154,7 +154,10 @@ namespace Gallifrey.UI.Modern.Models
                 MaxDate = dateToday.AddDays(300);
             }
 
-            if (!startDate.HasValue) startDate = dateToday;
+            if (!startDate.HasValue)
+            {
+                startDate = dateToday;
+            }
 
             if (startDate.Value < MinDate || startDate.Value > MaxDate)
             {

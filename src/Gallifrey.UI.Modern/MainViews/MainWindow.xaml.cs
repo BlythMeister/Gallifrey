@@ -522,10 +522,16 @@ namespace Gallifrey.UI.Modern.MainViews
         private async void StopLockTimer(int threshold)
         {
             var idleTimerId = modelHelpers.Gallifrey.StopLockTimer();
-            if (!idleTimerId.HasValue) return;
+            if (!idleTimerId.HasValue)
+            {
+                return;
+            }
 
             var idleTimer = modelHelpers.Gallifrey.IdleTimerCollection.GetTimer(idleTimerId.Value);
-            if (idleTimer == null) return;
+            if (idleTimer == null)
+            {
+                return;
+            }
 
             if (modelHelpers.Gallifrey.Settings.AppSettings.TargetLogPerDay == TimeSpan.Zero && idleTimer.IdleTimeValue > TimeSpan.FromHours(10))
             {
@@ -701,7 +707,10 @@ namespace Gallifrey.UI.Modern.MainViews
 
         private void MainWindow_KeyDown(object sender, KeyEventArgs e)
         {
-            if (modelHelpers.FlyoutOpenOrDialogShowing) return;
+            if (modelHelpers.FlyoutOpenOrDialogShowing)
+            {
+                return;
+            }
 
             var key = e.Key;
             RemoteButtonTrigger trigger;

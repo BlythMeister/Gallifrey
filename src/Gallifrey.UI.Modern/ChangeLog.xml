@@ -763,6 +763,13 @@
       <Other>Dependencies update</Other>
     </Others>
   </Version>
+  <Version Number="3.20.11.0">
+    <Features />
+    <Bugs>
+      <Bug>Follow-up fix for analytics tracking</Bug>
+    </Bugs>
+    <Others />
+  </Version>
   <!--
   Template for VNext if not present above
   <Version Number="0.0.0.0" Name="Pre-Release">
