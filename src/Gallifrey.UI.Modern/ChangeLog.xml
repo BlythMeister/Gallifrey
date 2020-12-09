@@ -777,6 +777,13 @@
     </Bugs>
     <Others />
   </Version>
+  <Version Number="3.20.13.0">
+    <Features />
+    <Bugs>
+      <Bug>Keep all timers on a day if 1 or more cannot be deleted</Bug>
+    </Bugs>
+    <Others />
+  </Version>
   <!--
   Template for VNext if not present above
   <Version Number="0.0.0.0" Name="Pre-Release">

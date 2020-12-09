@@ -279,9 +279,20 @@ namespace Gallifrey.JiraTimers
                 keepTimersForDays = keepTimersForDays * -1;
             }
 
-            timerList.RemoveAll(timer => (timer.FullyExported || timer.LocalTimer) &&
-                                         timer.DateStarted.Date != DateTime.Now.Date &&
-                                         timer.DateStarted.Date <= DateTime.Now.AddDays(keepTimersForDays).Date);
+            var possiblePurgeDates = timerList.Where(timer => timer.DateStarted.Date != DateTime.Now.Date && timer.DateStarted.Date <= DateTime.Now.AddDays(keepTimersForDays).Date)
+                                              .Select(x => x.DateStarted.Date)
+                                              .Distinct()
+                                              .ToList();
+
+            foreach (var possiblePurgeDate in possiblePurgeDates)
+            {
+                var dateTimers = timerList.Where(x => x.DateStarted.Date == possiblePurgeDate.Date).ToList();
+
+                if (dateTimers.All(timer => timer.FullyExported && !timer.LocalTimer))
+                {
+                    timerList.RemoveAll(x => x.DateStarted.Date == possiblePurgeDate.Date);
+                }
+            }
 
             SaveTimers();
         }
