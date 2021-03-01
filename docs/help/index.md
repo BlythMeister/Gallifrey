@@ -17,17 +17,6 @@ We are using GitHub issues to maintain a backlog and track bugs, so feel free to
 Windows SmartScreen messages is something we can do very little about (other than get a whole load more users!)
 Until that time, please see this page for more information: [SmartScreen Help]({{ site.url }}/help/smartscreen)
 
-## What do I get with premium?
-
-There are a few features which are limited without premium access, these are currently:
-
-* Ability To Opt-Out Of Tracking
-* Bulk Export More Than 5 Timers
-* Use More Than 2 Local Timers
-* Start Now/Assign To Me/Change Status On Add
-
-To get premium is easy, simply donate [here]({{ site.url }}/donations) and include your installation hash as a donation message
-
 ## Do I need Jira to use Gallifrey
 
 Yes, Gallifrey is a Jira extension you install on your machine.
