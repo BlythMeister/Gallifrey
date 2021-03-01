@@ -38,7 +38,6 @@ namespace Gallifrey.UI.Modern.Models
             backgroundRefresh.Start();
 
             modelHelpers.Gallifrey.VersionControl.UpdateStateChange += (sender, args) => NewVersionPresent();
-            modelHelpers.Gallifrey.IsPremiumChanged += (sender, args) => PremiumChanged();
             modelHelpers.Gallifrey.BackendModifiedTimers += (sender, args) => BackendModification();
             modelHelpers.Gallifrey.SettingsChanged += (sender, args) => SettingsChanged();
             modelHelpers.Gallifrey.JiraConnection.LoggedIn += (sender, args) => UserLoggedIn();
@@ -67,7 +66,6 @@ namespace Gallifrey.UI.Modern.Models
         public bool TimerRunning => !string.IsNullOrWhiteSpace(CurrentRunningTimerDescription);
         public bool HaveTimeToExport => !string.IsNullOrWhiteSpace(TimeToExportMessage);
         public bool HaveLocalTime => !string.IsNullOrWhiteSpace(LocalTimeMessage);
-        public bool IsPremium => ModelHelpers.Gallifrey.Settings.InternalSettings.IsPremium;
         public bool IsStable => ModelHelpers.Gallifrey.VersionControl.InstanceType == InstanceType.Stable;
         public bool TrackingOnly => ModelHelpers.Gallifrey.Settings.ExportSettings.TrackingOnly;
 
@@ -84,8 +82,7 @@ namespace Gallifrey.UI.Modern.Models
             get
             {
                 var instanceType = ModelHelpers.Gallifrey.VersionControl.InstanceType;
-                var appName = IsPremium ? "Gallifrey Premium" : "Gallifrey";
-                return instanceType == InstanceType.Stable ? $"{appName}" : $"{appName} ({instanceType})";
+                return instanceType == InstanceType.Stable ? "Gallifrey" : $"Gallifrey ({instanceType})";
             }
         }
 
@@ -429,12 +426,6 @@ namespace Gallifrey.UI.Modern.Models
         private void BackendModification()
         {
             Application.Current.Dispatcher.Invoke(RefreshModel);
-        }
-
-        private void PremiumChanged()
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(AppTitle)));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsPremium)));
         }
 
         private void UserLoggedIn()

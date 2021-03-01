@@ -29,7 +29,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             InitializeComponent();
             progressDialogHelper = new ProgressDialogHelper(modelHelpers);
 
-            if (!modelHelpers.Gallifrey.Settings.InternalSettings.IsPremium && startNow.HasValue && startNow.Value)
+            if (startNow.HasValue && startNow.Value)
             {
                 startNow = false;
             }
@@ -40,19 +40,6 @@ namespace Gallifrey.UI.Modern.Flyouts
 
         private async void AddButton(object sender, RoutedEventArgs e)
         {
-            if (!modelHelpers.Gallifrey.Settings.InternalSettings.IsPremium)
-            {
-                if (DataModel.LocalTimer)
-                {
-                    if (modelHelpers.Gallifrey.JiraTimerCollection.GetAllLocalTimers().Count() >= 2)
-                    {
-                        modelHelpers.ShowGetPremiumMessage("Without Gallifrey Premium You Are Limited To A Maximum Of 2 Local Timers");
-                        Focus();
-                        return;
-                    }
-                }
-            }
-
             if (!DataModel.StartDate.HasValue)
             {
                 await modelHelpers.ShowMessageAsync("Missing Date", "You Must Enter A Start Date");
@@ -327,45 +314,6 @@ namespace Gallifrey.UI.Modern.Flyouts
 
             modelHelpers.CloseFlyout(this);
             modelHelpers.RefreshModel();
-        }
-
-        private void StartNowClick(object sender, RoutedEventArgs e)
-        {
-            if (!modelHelpers.Gallifrey.Settings.InternalSettings.IsPremium)
-            {
-                if (DataModel.StartNow)
-                {
-                    modelHelpers.ShowGetPremiumMessage("Without Gallifrey Premium You Cannot Start Timer Now.");
-                    DataModel.StartNow = false;
-                    Focus();
-                }
-            }
-        }
-
-        private void AssignToMeClick(object sender, RoutedEventArgs e)
-        {
-            if (!modelHelpers.Gallifrey.Settings.InternalSettings.IsPremium)
-            {
-                if (DataModel.AssignToMe)
-                {
-                    modelHelpers.ShowGetPremiumMessage("Without Gallifrey Premium You Cannot Assign To Yourself.");
-                    DataModel.AssignToMe = false;
-                    Focus();
-                }
-            }
-        }
-
-        private void ChangeStatusClick(object sender, RoutedEventArgs e)
-        {
-            if (!modelHelpers.Gallifrey.Settings.InternalSettings.IsPremium)
-            {
-                if (DataModel.ChangeStatus)
-                {
-                    modelHelpers.ShowGetPremiumMessage("Without Gallifrey Premium You Cannot Change Jira Status.");
-                    DataModel.ChangeStatus = false;
-                    Focus();
-                }
-            }
         }
     }
 }

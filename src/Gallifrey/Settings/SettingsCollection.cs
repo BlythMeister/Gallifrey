@@ -12,7 +12,6 @@ namespace Gallifrey.Settings
         IExportSettings ExportSettings { get; }
         string InstallationHash { get; }
         string UserHash { get; }
-        string SiteHash { get; }
     }
 
     public class SettingsCollection : ISettingsCollection
@@ -24,7 +23,6 @@ namespace Gallifrey.Settings
         public IExportSettings ExportSettings { get; private set; }
         [JsonIgnore] public string InstallationHash => DataEncryption.GetSha256Hash($"{InternalSettings.InstallationInstanceId}-{JiraConnectionSettings.JiraUsername}-{JiraConnectionSettings.JiraHost}");
         [JsonIgnore] public string UserHash => DataEncryption.GetSha256Hash($"{JiraConnectionSettings.JiraUsername.ToLower()}-{JiraConnectionSettings.JiraHost}");
-        [JsonIgnore] public string SiteHash => DataEncryption.GetSha256Hash(JiraConnectionSettings.JiraHost);
         private bool isIntialised;
 
         // ReSharper disable once UnusedMember.Global

@@ -219,44 +219,10 @@ namespace Gallifrey.UI.Modern.Helpers
             }
         }
 
-        public async void ShowGetPremiumMessage(string message = "")
-        {
-            var premiumMessage = "To Get Premium Please Contribute Or Donate To Gallifrey.\n\nPremium Features Include:";
-            premiumMessage += "\n  • Ability To Opt-Out Of Tracking";
-            premiumMessage += "\n  • Bulk Export More Than 5 Timers";
-            premiumMessage += "\n  • Use More Than 2 Local Timers";
-            premiumMessage += "\n  • Start Now/Assign To Me/Change Status On Add";
-            premiumMessage += "\n\nThink You Should Have Premium?\nPlease Contact Us By Email Or Twitter";
-
-            if (!string.IsNullOrWhiteSpace(message))
-            {
-                premiumMessage = $"{message}\n\n{premiumMessage}";
-            }
-
-            //Could be a custom dialog if can work out how.
-            var messageResult = await ShowMessageAsync("Get Premium", premiumMessage, MessageDialogStyle.AffirmativeAndNegativeAndDoubleAuxiliary, new MetroDialogSettings { AffirmativeButtonText = "Cancel", NegativeButtonText = "Donate", FirstAuxiliaryButtonText = "Contribute", SecondAuxiliaryButtonText = "Contact", DefaultButtonFocus = MessageDialogResult.Affirmative, DialogMessageFontSize = 14 });
-
-            switch (messageResult)
-            {
-                case MessageDialogResult.SecondAuxiliary:
-                    TriggerRemoteButtonPress(Models.RemoteButtonTrigger.Info);
-                    break;
-
-                case MessageDialogResult.FirstAuxiliary:
-                    TriggerRemoteButtonPress(Models.RemoteButtonTrigger.GitHub);
-                    break;
-
-                case MessageDialogResult.Negative:
-                    TriggerRemoteButtonPress(Models.RemoteButtonTrigger.PayPal);
-                    break;
-            }
-        }
-
         public void ShowNotification(string message)
         {
             var instanceType = Gallifrey.VersionControl.InstanceType;
-            var appName = Gallifrey.Settings.InternalSettings.IsPremium ? "Gallifrey Premium" : "Gallifrey";
-            var title = (instanceType == InstanceType.Stable ? $"{appName}" : $"{appName} ({instanceType})").ToUpper();
+            var title = (instanceType == InstanceType.Stable ? "Gallifrey" : $"Gallifrey ({instanceType})").ToUpper();
 
             toastNotifier.Notify(() => new ToastNotification(title, message));
         }

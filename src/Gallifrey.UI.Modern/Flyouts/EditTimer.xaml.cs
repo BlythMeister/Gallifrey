@@ -4,7 +4,6 @@ using Gallifrey.UI.Modern.Helpers;
 using Gallifrey.UI.Modern.Models;
 using MahApps.Metro.Controls.Dialogs;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -64,21 +63,6 @@ namespace Gallifrey.UI.Modern.Flyouts
             {
                 if (DataModel.LocalTimer)
                 {
-                    var currentTimer = modelHelpers.Gallifrey.JiraTimerCollection.GetTimer(EditedTimerId);
-                    if (!currentTimer.LocalTimer)
-                    {
-                        if (!modelHelpers.Gallifrey.Settings.InternalSettings.IsPremium)
-                        {
-                            var localTimersCount = modelHelpers.Gallifrey.JiraTimerCollection.GetAllLocalTimers().Count();
-                            if (localTimersCount >= 2)
-                            {
-                                modelHelpers.ShowGetPremiumMessage("Without Gallifrey Premium You Are Limited To A Maximum Of 2 Local Timers");
-                                Focus();
-                                return;
-                            }
-                        }
-                    }
-
                     try
                     {
                         EditedTimerId = modelHelpers.Gallifrey.JiraTimerCollection.ChangeLocalTimerDescription(EditedTimerId, DataModel.LocalTimerDescription);

@@ -1,5 +1,4 @@
-﻿using Gallifrey.Jira.Model;
-using Gallifrey.Settings;
+﻿using Gallifrey.Settings;
 using Gallifrey.Versions;
 using GoogleAnalyticsTracker.Core.TrackerParameters;
 using GoogleAnalyticsTracker.Simple;
@@ -53,10 +52,6 @@ namespace Gallifrey.AppTracking
         private PageView GetPageView(TrackingType trackingType)
         {
             var source = "Gallifrey";
-            if (settingsCollection.InternalSettings.IsPremium)
-            {
-                source = "Gallifrey_Premium";
-            }
 
             return new PageView
             {

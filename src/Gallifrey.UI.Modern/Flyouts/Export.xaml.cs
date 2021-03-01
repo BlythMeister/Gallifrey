@@ -231,19 +231,6 @@ namespace Gallifrey.UI.Modern.Flyouts
             modelHelpers.CloseFlyout(this);
         }
 
-        private void ChangeStatusClick(object sender, RoutedEventArgs e)
-        {
-            if (!modelHelpers.Gallifrey.Settings.InternalSettings.IsPremium)
-            {
-                if (DataModel.ChangeStatus)
-                {
-                    modelHelpers.ShowGetPremiumMessage("Without Gallifrey Premium You Cannot Change Jira Status.");
-                    DataModel.ChangeStatus = false;
-                    Focus();
-                }
-            }
-        }
-
         private class ExportException : Exception
         {
             public ExportException(string message) : base(message)

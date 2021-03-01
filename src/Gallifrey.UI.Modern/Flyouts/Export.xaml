@@ -93,7 +93,7 @@
             <controls:ToggleSwitch OnContent="" OffContent="" Grid.Row="10" Grid.Column="1" HorizontalAlignment="Left" IsOn="{Binding StandardComment, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
             <TextBlock Grid.Row="11" Grid.Column="0" VerticalAlignment="Center">Change Status?</TextBlock>
-            <controls:ToggleSwitch OnContent="" OffContent="" Grid.Row="11" Grid.Column="1" HorizontalAlignment="Left" IsOn="{Binding ChangeStatus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Toggled="ChangeStatusClick" />
+            <controls:ToggleSwitch OnContent="" OffContent="" Grid.Row="11" Grid.Column="1" HorizontalAlignment="Left" IsOn="{Binding ChangeStatus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
             <Button Grid.Row="12" Grid.Column="0" Grid.ColumnSpan="2" Style="{DynamicResource MahApps.Styles.Button.Circle}" Width="40" Height="40" Margin="5" Click="ExportButton" IsDefault="True" ToolTip="Export Worklog To Jira">
                 <iconPacks:PackIconFontAwesome Kind="UploadSolid" Height="22" Width="22" HorizontalAlignment="Center" VerticalAlignment="Center" />

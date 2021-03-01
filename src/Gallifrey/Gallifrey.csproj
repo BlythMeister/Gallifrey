@@ -71,7 +71,6 @@
     <Compile Include="Exceptions\JiraTimers\DuplicateTimerException.cs" />
     <Compile Include="InactiveMonitor\ActivityChecker.cs" />
     <Compile Include="Settings\ConfigKeys.cs" />
-    <Compile Include="Versions\PremiumChecker.cs" />
     <Compile Include="Serialization\ItemSerializer.cs" />
     <Compile Include="Versions\InstanceType.cs" />
     <Compile Include="JiraIntegration\RecentJiraCollection.cs" />

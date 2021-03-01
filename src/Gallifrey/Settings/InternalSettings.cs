@@ -9,14 +9,11 @@ namespace Gallifrey.Settings
         Version LastChangeLogVersion { get; }
         DateTime LastHeartbeatTracked { get; }
         Guid InstallationInstanceId { get; }
-        bool IsPremium { get; }
         bool NewUser { get; }
 
         void SetLastChangeLogVersion(Version currentVersion);
 
         void SetLastHeartbeatTracked(DateTime lastHeartbeat);
-
-        void SetIsPremium(bool isPremium);
 
         void SetNewUser(bool newUser);
 
@@ -31,10 +28,6 @@ namespace Gallifrey.Settings
         public int Revision { get; set; }
         public DateTime LastHeartbeatTracked { get; set; }
         public Guid InstallationInstanceId { get; set; }
-
-        [DefaultValue(false)]
-        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
-        public bool IsPremium { get; set; }
 
         [DefaultValue(true)]
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Populate)]
@@ -53,11 +46,6 @@ namespace Gallifrey.Settings
         public void SetLastHeartbeatTracked(DateTime lastHeartbeat)
         {
             LastHeartbeatTracked = lastHeartbeat;
-        }
-
-        public void SetIsPremium(bool isPremium)
-        {
-            IsPremium = isPremium;
         }
 
         public void SetNewUser(bool newUser)

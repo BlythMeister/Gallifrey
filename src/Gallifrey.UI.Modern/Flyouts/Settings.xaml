@@ -33,7 +33,7 @@
                     <controls:ToggleSwitch OnContent="" OffContent="" Grid.Row="2" Grid.Column="1" Margin="5,0" HorizontalAlignment="Left" VerticalAlignment="Center" IsOn="{Binding AutoUpdate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                     <TextBlock Grid.Row="3" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="Allow Gallifrey To Track Your App Usage (Which Functions You Use - No Personal Data Is Captured)">Anonymous Usage Tracking</TextBlock>
-                    <controls:ToggleSwitch OnContent="" OffContent="" Grid.Row="3" Grid.Column="1" Margin="5,0" HorizontalAlignment="Left" VerticalAlignment="Center" IsOn="{Binding AllowTracking, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Toggled="AllowTrackingClick" />
+                    <controls:ToggleSwitch OnContent="" OffContent="" Grid.Row="3" Grid.Column="1" Margin="5,0" HorizontalAlignment="Left" VerticalAlignment="Center" IsOn="{Binding AllowTracking, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                     <TextBlock Grid.Row="4" Grid.Column="0" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Right" ToolTip="Start Gallifrey When Your Machine Starts">Start On Boot</TextBlock>
                     <controls:ToggleSwitch OnContent="" OffContent="" Grid.Row="4" Grid.Column="1" Margin="5,0" HorizontalAlignment="Left" VerticalAlignment="Center" IsOn="{Binding StartOnBoot, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />

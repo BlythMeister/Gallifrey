@@ -21,7 +21,6 @@ namespace Gallifrey.UI.Modern.Flyouts
         private readonly ModelHelpers modelHelpers;
         private BulkExportContainerModel DataModel => (BulkExportContainerModel)DataContext;
         private readonly ProgressDialogHelper progressDialogHelper;
-        private const int NonPremiumMaxExport = 5;
         private bool lastChangeStatusSent;
         private string currentChangeStatusJiraRef = string.Empty;
 
@@ -180,33 +179,10 @@ namespace Gallifrey.UI.Modern.Flyouts
 
         private void ExportAllButton(object sender, RoutedEventArgs e)
         {
-            if (modelHelpers.Gallifrey.Settings.InternalSettings.IsPremium || DataModel.BulkExports.Count <= NonPremiumMaxExport)
+            foreach (var bulkExportModel in DataModel.BulkExports)
             {
-                foreach (var bulkExportModel in DataModel.BulkExports)
-                {
-                    bulkExportModel.ShouldExport = true;
-                }
+                bulkExportModel.ShouldExport = true;
             }
-            else
-            {
-                modelHelpers.ShowGetPremiumMessage("Without Gallifrey Premium You Are Limited To A Maximum Of 5 Bulk Exports");
-                for (int i = 0; i < NonPremiumMaxExport; i++)
-                {
-                    DataModel.BulkExports[i].ShouldExport = true;
-                }
-            }
-        }
-
-        private void ExportSingleClick(object sender, RoutedEventArgs e)
-        {
-            if (modelHelpers.Gallifrey.Settings.InternalSettings.IsPremium || DataModel.BulkExports.Count(x => x.ShouldExport) <= NonPremiumMaxExport)
-            {
-                return;
-            }
-
-            modelHelpers.ShowGetPremiumMessage("Without Gallifrey Premium You Are Limited To A Maximum Of 5 Bulk Exports");
-            var toggle = (ToggleSwitch)sender;
-            toggle.IsOn = false;
         }
 
         private List<BulkExportModel> GetTimers(List<JiraTimer> timers)
@@ -369,24 +345,6 @@ namespace Gallifrey.UI.Modern.Flyouts
             if (lastChangeStatusSent)
             {
                 modelHelpers.CloseFlyout(this);
-            }
-        }
-
-        private void ChangeStatusClick(object sender, RoutedEventArgs e)
-        {
-            if (!modelHelpers.Gallifrey.Settings.InternalSettings.IsPremium)
-            {
-                var changeStatusTicked = DataModel.BulkExports.Where(x => x.ChangeStatus).ToList();
-
-                if (changeStatusTicked.Any())
-                {
-                    modelHelpers.ShowGetPremiumMessage("Without Gallifrey Premium You Cannot Change Jira Status.");
-                    foreach (var bulkExportModel in changeStatusTicked)
-                    {
-                        bulkExportModel.ChangeStatus = false;
-                    }
-                    Focus();
-                }
             }
         }
     }

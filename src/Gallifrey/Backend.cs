@@ -34,8 +34,6 @@ namespace Gallifrey
 
         event EventHandler BackendModifiedTimers;
 
-        event EventHandler IsPremiumChanged;
-
         event EventHandler SettingsChanged;
 
         event EventHandler<int> NoActivityEvent;
@@ -73,7 +71,6 @@ namespace Gallifrey
         private readonly JiraConnection jiraConnection;
         private readonly VersionControl versionControl;
         private readonly WithThanksCreator withThanksCreator;
-        private readonly PremiumChecker premiumChecker;
         private readonly Mutex exportedHeartbeatMutex;
         private readonly Timer cleanUpAndTrackingHeartbeat;
         private readonly Timer jiraExportHeartbeat;
@@ -85,8 +82,6 @@ namespace Gallifrey
         public event EventHandler DailyTrackingEvent;
 
         public event EventHandler BackendModifiedTimers;
-
-        public event EventHandler IsPremiumChanged;
 
         public event EventHandler SettingsChanged;
 
@@ -106,7 +101,6 @@ namespace Gallifrey
             idleTimerCollection = new IdleTimerCollection();
             ActivityChecker = new ActivityChecker(jiraTimerCollection, settingsCollection);
             withThanksCreator = new WithThanksCreator();
-            premiumChecker = new PremiumChecker();
 
             versionControl.UpdateCheckOccured += (sender, b) => trackUsage.TrackAppUsage(b ? TrackingType.UpdateCheckManual : TrackingType.UpdateCheck);
             jiraTimerCollection.ExportPrompt += OnExportPromptEvent;
@@ -162,14 +156,6 @@ namespace Gallifrey
                         settingsCollection.InternalSettings.SetLastHeartbeatTracked(DateTime.UtcNow);
                         settingsCollection.SaveSettings();
                     }
-                }
-
-                var isPremium = premiumChecker.CheckIfPremium(settingsCollection);
-                if (!versionControl.IsAutomatedDeploy || isPremium != settingsCollection.InternalSettings.IsPremium)
-                {
-                    settingsCollection.InternalSettings.SetIsPremium(isPremium);
-                    settingsCollection.SaveSettings();
-                    IsPremiumChanged?.Invoke(this, null);
                 }
             }
             catch { /*Suppress Errors, if this fails timers won't be removed*/}

@@ -571,11 +571,6 @@ namespace Gallifrey.UI.Modern.MainViews
             await PerformUpdate(UpdateType.Manual);
         }
 
-        private void GetPremium(object sender, RoutedEventArgs e)
-        {
-            modelHelpers.ShowGetPremiumMessage();
-        }
-
         private void AutoUpdateCheck(object sender, ElapsedEventArgs e)
         {
             Dispatcher.Invoke(async () =>

@@ -16,7 +16,6 @@ open Octokit
 let outputDir = currentDirectory @@ "Output"
 let newsPostDir = currentDirectory @@ "docs" @@ "_posts"
 let srcDir = currentDirectory @@ "src"
-let premiumDir = currentDirectory @@ ".premiumAccess"
 let isAppVeyor = buildServer = AppVeyor
 let changeLogPath = currentDirectory @@ "src" @@ "Gallifrey.UI.Modern" @@ "ChangeLog.xml"
 let keysFilePath = currentDirectory @@ "src" @@ "Gallifrey" @@ "Settings" @@ "ConfigKeys.cs"
@@ -39,7 +38,6 @@ let cloudflareApiKey = environVar "cloudflare_api_key"
 let cloudflareEmail = environVar "cloudflare_email"
 let cloudflareZone = environVar "cloudflare_zone"
 let exceptionlessApiKey = environVar "exceptionless_api_key"
-let premimumEncryptionPassphrase = environVar "premium_passphrase"
 
 printfn "Running On Branch: %s" branchName
 printfn "PR Number: %s" AppVeyorEnvironment.PullRequestNumber
@@ -96,9 +94,8 @@ Target "VersionUpdate" (fun _ ->
 
 Target "AddKeys" (fun _ ->
     let exceptionlessKey = sprintf "public static string ExceptionlessApiKey => \"%s\";" exceptionlessApiKey
-    let premiumEncryptionKey = sprintf "public static string PremiumEncryptionPassPhrase => \"%s\";" premimumEncryptionPassphrase
 
-    File.WriteAllText(keysFilePath, File.ReadAllText(keysFilePath).Replace("public static string PremiumEncryptionPassPhrase => \"\";", premiumEncryptionKey).Replace("public static string ExceptionlessApiKey => \"\";", exceptionlessKey))
+    File.WriteAllText(keysFilePath, File.ReadAllText(keysFilePath).Replace("public static string ExceptionlessApiKey => \"\";", exceptionlessKey))
 )
 
 Target "Build" (fun _ ->
@@ -182,13 +179,6 @@ Target "Publish-ReleaseRepo" (fun _ ->
         else
             printfn "Already have %s version %s published" releaseType versionNumber
 
-    let publishPremiumInstances() =
-        printfn "Publishing PremiumInstanceIds.dat"
-        File.Copy(premiumDir @@ "PremiumInstanceIds.dat", releasesRepo @@ "download" @@ "PremiumInstanceIds.dat", true)
-        StageAll releasesRepo
-        Commit.Commit releasesRepo "PremiumInstanceIds Update"
-        pushBranch releasesRepo "origin" "master"
-
     if isAlpha then
         publishRelease "Alpha"
 
@@ -197,7 +187,6 @@ Target "Publish-ReleaseRepo" (fun _ ->
 
     if isStable then
         publishRelease "Stable"
-        publishPremiumInstances()
 )
 
 Target "Publish-ReleaseNotes" (fun _ ->

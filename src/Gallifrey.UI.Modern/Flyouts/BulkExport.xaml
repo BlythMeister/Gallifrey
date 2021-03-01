@@ -55,7 +55,7 @@
                                 <TextBox Grid.Row="3" Grid.Column="1" Margin="0,5" Text="{Binding JiraDesc, Mode=OneWay}" IsEnabled="False" TextWrapping="Wrap" MaxLines="2" />
 
                                 <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center">Export?</TextBlock>
-                                <controls:ToggleSwitch OnContent="" OffContent="" Grid.Row="4" Grid.Column="1" Margin="0,5" HorizontalAlignment="Left" IsOn="{Binding ShouldExport, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Toggled="ExportSingleClick" />
+                                <controls:ToggleSwitch OnContent="" OffContent="" Grid.Row="4" Grid.Column="1" Margin="0,5" HorizontalAlignment="Left" IsOn="{Binding ShouldExport, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                             </Grid>
                             <Grid Width="400" Margin="5,5,5,5" Visibility="{Binding ShouldExport, Converter={StaticResource BoolToVis}}">
                                 <Grid.RowDefinitions>
@@ -120,7 +120,7 @@
                                 <controls:ToggleSwitch OnContent="" OffContent="" Grid.Row="6" Grid.Column="1" HorizontalAlignment="Left" IsOn="{Binding StandardComment, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                                 <TextBlock Grid.Row="7" Grid.Column="0" VerticalAlignment="Center">Change Status?</TextBlock>
-                                <controls:ToggleSwitch OnContent="" OffContent="" Grid.Row="7" Grid.Column="1"  HorizontalAlignment="Left" IsOn="{Binding ChangeStatus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Toggled="ChangeStatusClick" />
+                                <controls:ToggleSwitch OnContent="" OffContent="" Grid.Row="7" Grid.Column="1"  HorizontalAlignment="Left" IsOn="{Binding ChangeStatus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                             </Grid>
                         </StackPanel>
                     </ScrollViewer>
