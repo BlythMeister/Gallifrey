@@ -729,7 +729,7 @@ namespace Gallifrey.UI.Modern.MainViews
                     case Key.F3: trigger = RemoteButtonTrigger.Email; break;
                     case Key.F4: trigger = RemoteButtonTrigger.Slack; break;
                     case Key.F5: trigger = RemoteButtonTrigger.GitHub; break;
-                    case Key.F6: trigger = RemoteButtonTrigger.PayPal; break;
+                    case Key.F6: trigger = RemoteButtonTrigger.Donate; break;
                     default: return;
                 }
             }

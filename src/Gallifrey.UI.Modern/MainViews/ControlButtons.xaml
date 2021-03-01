@@ -117,13 +117,13 @@
                 </Button.ToolTip>
                 <iconPacks:PackIconFontAwesome Kind="GithubBrands" Height="22" Width="22" HorizontalAlignment="Center" VerticalAlignment="Center" />
             </Button>
-            <Button Style="{DynamicResource MahApps.Styles.Button.Circle}" Width="40" Height="40" Margin="5" Click="PayPalButton">
+            <Button Style="{DynamicResource MahApps.Styles.Button.Circle}" Width="40" Height="40" Margin="5" Click="DonateButton">
                 <Button.ToolTip>
                     <TextBlock>
-                       Donate By PayPal<LineBreak />CTRL + F6
+                       Donate<LineBreak />CTRL + F6
                     </TextBlock>
                 </Button.ToolTip>
-                <iconPacks:PackIconFontAwesome Kind="PaypalBrands" Height="22" Width="22" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                <iconPacks:PackIconFontAwesome Kind="MoneyBillWaveSolid" Height="22" Width="22" HorizontalAlignment="Center" VerticalAlignment="Center" />
             </Button>
         </WrapPanel>
     </DockPanel>

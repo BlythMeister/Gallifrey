@@ -297,9 +297,9 @@ namespace Gallifrey.UI.Modern.MainViews
             Process.Start(new ProcessStartInfo("https://twitter.com/GallifreyApp"));
         }
 
-        private void PayPalButton(object sender, RoutedEventArgs e)
+        private void DonateButton(object sender, RoutedEventArgs e)
         {
-            ModelHelpers.Gallifrey.TrackEvent(TrackingType.PayPalClick);
+            ModelHelpers.Gallifrey.TrackEvent(TrackingType.DonateClick);
             Process.Start(new ProcessStartInfo("https://www.gallifreyapp.co.uk/donations"));
         }
 
@@ -336,7 +336,7 @@ namespace Gallifrey.UI.Modern.MainViews
                 case RemoteButtonTrigger.Email: EmailButton(this, null); break;
                 case RemoteButtonTrigger.Slack: SlackButton(this, null); break;
                 case RemoteButtonTrigger.GitHub: GitHubButton(this, null); break;
-                case RemoteButtonTrigger.PayPal: PayPalButton(this, null); break;
+                case RemoteButtonTrigger.Donate: DonateButton(this, null); break;
 
                 default: return;
             }

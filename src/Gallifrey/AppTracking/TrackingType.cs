@@ -3,7 +3,7 @@
     public enum TrackingType
     {
         AppLoad,
-        ExportOccured,
+        ExportOccurred,
         UpdateCheck,
         UpdateCheckManual,
         AppClose,
@@ -11,7 +11,7 @@
         OptOut,
         TimerAdded,
         TimerDeleted,
-        PayPalClick,
+        DonateClick,
         GitHubClick,
         ContactClick,
         LockedTimerAdd,

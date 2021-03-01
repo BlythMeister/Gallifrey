@@ -19,9 +19,9 @@ namespace Gallifrey.UI.Modern.MainViews
         {
             var uri = e.Uri.AbsoluteUri;
 
-            if (uri.ToLower().Contains("paypal.com"))
+            if (uri.ToLower().Contains("gallifreyapp.co.uk/donations"))
             {
-                ModelHelpers.Gallifrey.TrackEvent(TrackingType.PayPalClick);
+                ModelHelpers.Gallifrey.TrackEvent(TrackingType.DonateClick);
             }
             else if (uri.ToLower().Contains("github.com"))
             {
