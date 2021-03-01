@@ -291,7 +291,7 @@ namespace Gallifrey.JiraIntegration
 
         public void LogTime(string jiraRef, DateTime exportTimeStamp, TimeSpan exportTime, WorkLogStrategy strategy, bool addStandardComment, string comment = "", TimeSpan? remainingTime = null)
         {
-            trackUsage.TrackAppUsage(TrackingType.ExportOccured);
+            trackUsage.TrackAppUsage(TrackingType.ExportOccurred);
 
             if (string.IsNullOrWhiteSpace(comment))
             {
