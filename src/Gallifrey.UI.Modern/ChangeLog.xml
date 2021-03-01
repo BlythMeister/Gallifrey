@@ -784,6 +784,13 @@
     </Bugs>
     <Others />
   </Version>
+  <Version Number="3.21.0.0">
+    <Features />
+    <Bugs/>
+    <Others>
+      <Other>Remove premium.  Everyone now gets the premium features</Other>
+    </Others>
+  </Version>
   <!--
   Template for VNext if not present above
   <Version Number="0.0.0.0" Name="Pre-Release">
