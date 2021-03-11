@@ -799,6 +799,13 @@
       <Other>Change PayPal to Donate</Other>
     </Others>
   </Version>
+  <Version Number="3.22.1.0">
+    <Features />
+    <Bugs />
+    <Others>
+      <Other>Bump version</Other>
+    </Others>
+  </Version>
   <!--
   Template for VNext if not present above
   <Version Number="0.0.0.0" Name="Pre-Release">
