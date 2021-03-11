@@ -813,6 +813,13 @@
       <Other>Downgrade dependency</Other>
     </Others>
   </Version>
+  <Version Number="3.22.3.0">
+    <Features />
+    <Bugs />
+    <Others>
+      <Other>Downgrade dependency</Other>
+    </Others>
+  </Version>
   <!--
   Template for VNext if not present above
   <Version Number="0.0.0.0" Name="Pre-Release">
