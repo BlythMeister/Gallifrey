@@ -827,6 +827,15 @@
       <Other>Revert release</Other>
     </Others>
   </Version>
+  <Version Number="3.22.5.0">
+    <Features />
+    <Bugs>
+    	<Bug>Fix issue when data files are empty because corrupted</Bug>
+    </Bugs>
+    <Others>
+      <Other>Dependency Update</Other>
+    </Others>
+  </Version>
   <!--
   Template for VNext if not present above
   <Version Number="0.0.0.0" Name="Pre-Release">

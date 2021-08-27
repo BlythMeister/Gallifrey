@@ -1,4 +1,4 @@
-environment:
+﻿environment:
   github_api_key:
     secure: cBjCd4Q0pww6q7jKVN/LDBSHTMzmB+77vLQ9j4yq/KneIQi74rl6TgB4+5X7sd9w
   cloudflare_api_key:
@@ -17,7 +17,7 @@ skip_commits:
     - docs/*
     - '**/*.html'
     - '**/*.md'
-version: '3.22.4.{build}'
+version: '3.22.5.{build}'
 skip_tags: true
 image: Visual Studio 2019
 clone_folder: c:\project\gallifrey
