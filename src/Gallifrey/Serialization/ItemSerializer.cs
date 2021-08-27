@@ -170,6 +170,10 @@ namespace Gallifrey.Serialization
             {
                 var encryptedString = File.ReadAllText(fileToUse);
                 var text = DataEncryption.Decrypt(encryptedString, encryptionPassPhrase);
+                if (string.IsNullOrWhiteSpace(text))
+                {
+                    throw new Exception("String in file is null or blank");
+                }
                 return JsonConvert.DeserializeObject<T>(text);
             }
             catch (Exception ex)
