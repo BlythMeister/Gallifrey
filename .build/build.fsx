@@ -33,11 +33,11 @@ let isBeta = (isStable || branchName = "release")
 let isAlpha = (isBeta || branchName = "develop")
 let mutable donePublish = false
 
-let githubApiKey = environVar "github_api_key"
-let cloudflareApiKey = environVar "cloudflare_api_key"
-let cloudflareEmail = environVar "cloudflare_email"
-let cloudflareZone = environVar "cloudflare_zone"
-let exceptionlessApiKey = environVar "exceptionless_api_key"
+let githubApiKey = environVar "BLYTHMEISTER_GITHUB_KEY"
+let cloudflareApiKey = environVar "BLYTHMEISTER_CLOUDFLARE_KEY"
+let cloudflareEmail = environVar "BLYTHMEISTER_CLOUDFLARE_EMAIL"
+let cloudflareZone = environVar "BLYTHMEISTER_CLOUDFLARE_ZONE"
+let exceptionlessApiKey = environVar "BLYTHMEISTER_EXCEPTIONLESS_KEY"
 
 printfn "Running On Branch: %s" branchName
 printfn "PR Number: %s" AppVeyorEnvironment.PullRequestNumber

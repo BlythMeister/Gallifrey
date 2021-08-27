@@ -1,15 +1,4 @@
-﻿environment:
-  github_api_key:
-    secure: cBjCd4Q0pww6q7jKVN/LDBSHTMzmB+77vLQ9j4yq/KneIQi74rl6TgB4+5X7sd9w
-  cloudflare_api_key:
-    secure: pxNm/jQTuCJiffMNb4eBa7UVnzERRQQ4txXX45khVAuNBsgNxXnwMDQ67lC2zrrt
-  cloudflare_zone:
-    secure: qN/S16EFstjHdpD+CqmQPi5nB+PNQ6appSFSPg+WFYwXZJ+gxsdmZRLluO4nnsjn
-  cloudflare_email:
-    secure: 7MMGMp4bOy0b/HWDC5vBEbDm/S7GPCZCcy6zAPOjhVo=
-  exceptionless_api_key:
-    secure: owf/eHBH82XG+SWozC/GXMy+rD4zRHPlbjjFY0lH9ZKb2cKlWGPiXobT/uQKdDGd
-skip_commits:
+﻿skip_commits:
   files:
     - .fake/*
     - .github/*
