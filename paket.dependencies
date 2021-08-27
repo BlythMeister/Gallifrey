@@ -1,7 +1,8 @@
-source https://api.nuget.org/v3/index.json
+﻿source https://api.nuget.org/v3/index.json
 framework auto-detect
 
 nuget Exceptionless.Wpf
+nuget ControlzEx ~> 4
 nuget FAKE ~> 4
 nuget GoogleAnalyticsTracker.Simple
 nuget MahApps.Metro
