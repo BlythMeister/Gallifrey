@@ -28,7 +28,7 @@ namespace Gallifrey.Rest
                 Directory.CreateDirectory(errorResponseDirectory);
             }
 
-            client = new RestClient { BaseUrl = new Uri(baseUrl), Timeout = (int)TimeSpan.FromMinutes(2).TotalMilliseconds, AutomaticDecompression = true, };
+            client = new RestClient(new RestClientOptions(baseUrl) { Timeout = (int)TimeSpan.FromMinutes(2).TotalMilliseconds, AutomaticDecompression = DecompressionMethods.GZip });
         }
 
         public static SimpleRestClient WithBasicAuthentication(string baseUrl, string username, string password, Func<string, List<string>> errorMessageSerializationFunction)
@@ -46,12 +46,12 @@ namespace Gallifrey.Rest
 
         public void Post(HttpStatusCode expectedStatus, string path, object data = null)
         {
-            Execute(Method.POST, expectedStatus, path, data);
+            Execute(Method.Post, expectedStatus, path, data);
         }
 
         public void Put(HttpStatusCode expectedStatus, string path, object data = null)
         {
-            Execute(Method.PUT, expectedStatus, path, data);
+            Execute(Method.Put, expectedStatus, path, data);
         }
 
         public T Get<T>(HttpStatusCode expectedStatus, string path, object data = null, Func<string, T> customDeserialize = null) where T : class
@@ -61,12 +61,12 @@ namespace Gallifrey.Rest
                 customDeserialize = JsonConvert.DeserializeObject<T>;
             }
 
-            var response = Execute(Method.GET, expectedStatus, path, data);
+            var response = Execute(Method.Get, expectedStatus, path, data);
 
             return customDeserialize(response.Content);
         }
 
-        private IRestResponse Execute(Method method, HttpStatusCode expectedStatus, string path, object data = null)
+        private RestResponse Execute(Method method, HttpStatusCode expectedStatus, string path, object data = null)
         {
             var requestGuid = Guid.NewGuid();
             var errorSaveDirectory = Path.Combine(errorResponseDirectory, DateTime.Now.ToString("yy-MM-dd"), requestGuid.ToString());
@@ -77,10 +77,10 @@ namespace Gallifrey.Rest
                 request.AddJsonBody(data);
             }
 
-            IRestResponse response;
+            RestResponse response;
             try
             {
-                response = client.Execute(request);
+                response = client.ExecuteAsync(request).Result;
             }
             catch (System.Exception e) when (errorResponseDirectory != null)
             {
@@ -116,7 +116,7 @@ namespace Gallifrey.Rest
             return request;
         }
 
-        private void AssertStatus(IRestResponse response, HttpStatusCode status)
+        private void AssertStatus(RestResponse response, HttpStatusCode status)
         {
             if (response.ErrorException != null)
             {

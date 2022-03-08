@@ -786,7 +786,7 @@
   </Version>
   <Version Number="3.21.0.0">
     <Features />
-    <Bugs/>
+    <Bugs />
     <Others>
       <Other>Remove premium.  Everyone now gets the premium features</Other>
     </Others>
@@ -831,7 +831,7 @@
   <Version Number="0.0.0.0" Name="Pre-Release">
     <Features />
     <Bugs>
-    	<Bug>Fix issue when data files are empty because corrupted</Bug>
+      <Bug>Fix issue when data files are empty because corrupted</Bug>
     </Bugs>
     <Others>
       <Other>Dependency Update</Other>

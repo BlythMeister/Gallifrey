@@ -6,7 +6,7 @@ namespace Gallifrey.Rest
 {
     public static class RestClientExtensions
     {
-        public static string AsString(this IRestRequest request, RestClient client)
+        public static string AsString(this RestRequest request, RestClient client)
         {
             var requestToLog = new
             {
@@ -24,7 +24,7 @@ namespace Gallifrey.Rest
             return JsonConvert.SerializeObject(requestToLog, Formatting.Indented);
         }
 
-        public static string AsString(this IRestResponse response)
+        public static string AsString(this RestResponse response)
         {
             var responseToLog = new
             {
