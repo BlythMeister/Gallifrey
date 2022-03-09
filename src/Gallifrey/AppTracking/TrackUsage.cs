@@ -56,15 +56,13 @@ namespace Gallifrey.AppTracking
 
         private PageView GetPageView(TrackingType trackingType)
         {
-            var source = "Gallifrey";
-
             return new PageView
             {
                 DocumentTitle = trackingType.ToString(),
                 DocumentLocationUrl = $"https://releases.gallifreyapp.co.uk/tracking/{trackingType}",
-                CampaignSource = source,
-                CampaignMedium = instanceType.ToString(),
-                CampaignName = versionControl.DeployedVersion.ToString(),
+                CampaignSource = instanceType.ToString(),
+                CampaignMedium = $"{versionControl.DeployedVersion.Major}.{versionControl.DeployedVersion.Minor}.{versionControl.DeployedVersion.Build}",
+                CampaignName = $"{versionControl.DeployedVersion.Major}.{versionControl.DeployedVersion.Minor}.{versionControl.DeployedVersion.Build}.{versionControl.DeployedVersion.Revision}",
                 UserId = settingsCollection.InstallationHash,
                 UserLanguage = CultureInfo.InstalledUICulture.NativeName
             };
