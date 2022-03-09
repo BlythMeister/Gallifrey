@@ -1,5 +1,4 @@
 ﻿source https://api.nuget.org/v3/index.json
-framework auto-detect
 
 nuget Exceptionless.Wpf
 nuget FAKE ~> 4
