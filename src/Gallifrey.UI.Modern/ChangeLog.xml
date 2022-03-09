@@ -836,7 +836,7 @@
       <Other>Dependency Update</Other>
     </Others>
   </Version>
-  <Version Number="0.0.0.0" Name="Pre-Release">
+  <Version Number="3.23.0.0">
     <Features />
     <Bugs>
       <Bug>Fix analytic information</Bug>
