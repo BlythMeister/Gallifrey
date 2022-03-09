@@ -838,10 +838,10 @@
   </Version>
   <Version Number="0.0.0.0" Name="Pre-Release">
     <Features />
-    <Bugs />
-    <Others>
-      <Other>Prepare next beta</Other>
-    </Others>
+    <Bugs>
+      <Bug>Fix analytic information</Bug>
+    </Bugs>
+    <Others />
   </Version>
   <!--
   Template for VNext if not present above
