@@ -4,6 +4,7 @@ using GoogleAnalyticsTracker.Core.TrackerParameters;
 using GoogleAnalyticsTracker.Simple;
 using System;
 using System.Globalization;
+using System.Timers;
 
 namespace Gallifrey.AppTracking
 {
@@ -18,6 +19,7 @@ namespace Gallifrey.AppTracking
         private readonly ISettingsCollection settingsCollection;
         private readonly InstanceType instanceType;
         private readonly SimpleTracker tracker;
+        private readonly Timer heartbeat;
 
         public TrackUsage(IVersionControl versionControl, ISettingsCollection settingsCollection, InstanceType instanceType)
         {
@@ -26,6 +28,9 @@ namespace Gallifrey.AppTracking
             this.instanceType = instanceType;
             tracker = new SimpleTracker("UA-51628201-7", new SimpleTrackerEnvironment(Environment.OSVersion.Platform.ToString(), Environment.OSVersion.Version.ToString(), Environment.OSVersion.VersionString));
             TrackAppUsage(TrackingType.AppLoad);
+            heartbeat = new Timer(TimeSpan.FromMinutes(1).TotalMilliseconds);
+            heartbeat.Elapsed += (sender, args) => TrackAppUsage(TrackingType.Heartbeat);
+            heartbeat.Enabled = true;
         }
 
         private bool IsTrackingEnabled(TrackingType trackingType)

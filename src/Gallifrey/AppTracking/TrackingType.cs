@@ -30,6 +30,7 @@
         MultipleInstancesRunning,
         SettingsMissing,
         NoInternet,
-        ConnectionError
+        ConnectionError,
+        Heartbeat
     }
 }
