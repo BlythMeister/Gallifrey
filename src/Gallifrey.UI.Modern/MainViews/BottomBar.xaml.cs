@@ -19,7 +19,7 @@ namespace Gallifrey.UI.Modern.MainViews
         {
             var uri = e.Uri.AbsoluteUri;
 
-            if (uri.ToLower().Contains("gallifreyapp.co.uk/donations"))
+            if (uri.ToLower().Contains("gallifrey.blyth.me.uk/donations"))
             {
                 ModelHelpers.Gallifrey.TrackEvent(TrackingType.DonateClick);
             }

@@ -850,6 +850,13 @@
       <Other>Update domain</Other>
     </Others>
   </Version>
+  <Version Number="3.24.1.0">
+    <Features />
+    <Bugs>
+      <Bug>Fix website link opening</Bug>
+    </Bugs>
+    <Others />
+  </Version>
   <!--
   Template for VNext if not present above
   <Version Number="0.0.0.0" Name="Pre-Release">
