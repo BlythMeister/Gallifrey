@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Versions xmlns="https://releases.gallifreyapp.co.uk/ChangeLog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://releases.gallifreyapp.co.uk/schemas/ChangeLogSchema.xsd">
+<Versions xmlns="https://gallifrey-releases.blyth.me.uk/ChangeLog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://gallifrey-releases.blyth.me.uk/schemas/ChangeLogSchema.xsd">
   <Version Number="3.0.0.0">
     <Features>
       <Feature>Add/Edit/Delete Timers</Feature>

@@ -288,7 +288,7 @@ namespace Gallifrey.UI.Modern.MainViews
         private void EmailButton(object sender, RoutedEventArgs e)
         {
             ModelHelpers.Gallifrey.TrackEvent(TrackingType.ContactClick);
-            Process.Start(new ProcessStartInfo("mailto:support@gallifreyapp.co.uk?subject=Gallifrey App Contact"));
+            Process.Start(new ProcessStartInfo("mailto:gallifrey@blyth.me.uk?subject=Gallifrey App Contact"));
         }
 
         private void TwitterButton(object sender, RoutedEventArgs e)
@@ -300,7 +300,7 @@ namespace Gallifrey.UI.Modern.MainViews
         private void DonateButton(object sender, RoutedEventArgs e)
         {
             ModelHelpers.Gallifrey.TrackEvent(TrackingType.DonateClick);
-            Process.Start(new ProcessStartInfo("https://www.gallifreyapp.co.uk/donations"));
+            Process.Start(new ProcessStartInfo("https://gallifrey.blyth.me.uk/donations"));
         }
 
         private void SlackButton(object sender, RoutedEventArgs e)

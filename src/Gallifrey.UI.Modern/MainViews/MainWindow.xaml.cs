@@ -93,7 +93,7 @@ namespace Gallifrey.UI.Modern.MainViews
             {
                 using (var client = new WebClient())
                 {
-                    client.DownloadData("https://releases.gallifreyapp.co.uk");
+                    client.DownloadData("https://gallifrey-releases.blyth.me.uk");
                 }
             }
             catch
@@ -152,7 +152,7 @@ namespace Gallifrey.UI.Modern.MainViews
 
             if (result.RetVal == InitialiseResult.DebuggerNotAttached)
             {
-                await modelHelpers.ShowMessageAsync("Debugger Not Running", "It Looks Like Your Running Without Auto-Update\nPlease Use The Installed Shortcut To Start Gallifrey Or Download Again From GallifreyApp.co.uk", MessageDialogStyle.Affirmative, new MetroDialogSettings { AffirmativeButtonText = "Close Gallifrey" });
+                await modelHelpers.ShowMessageAsync("Debugger Not Running", "It Looks Like Your Running Without Auto-Update\nPlease Use The Installed Shortcut To Start Gallifrey Or Download Again From gallifrey.blyth.me.uk", MessageDialogStyle.Affirmative, new MetroDialogSettings { AffirmativeButtonText = "Close Gallifrey" });
                 forceClosed = true;
                 modelHelpers.CloseApp();
             }
@@ -636,7 +636,7 @@ namespace Gallifrey.UI.Modern.MainViews
                 }
                 else if (updateResult == UpdateResult.NoInternet && updateType == UpdateType.Manual)
                 {
-                    await modelHelpers.ShowMessageAsync("Unable To Update", "Unable To Access https://releases.gallifreyapp.co.uk To Check For Updates");
+                    await modelHelpers.ShowMessageAsync("Unable To Update", "Unable To Access https://gallifrey-releases.blyth.me.uk To Check For Updates");
                 }
                 else if (updateResult == UpdateResult.NotDeployable && updateType == UpdateType.Manual)
                 {
@@ -684,7 +684,7 @@ namespace Gallifrey.UI.Modern.MainViews
 
         private void GetBeta(object sender, RoutedEventArgs e)
         {
-            Process.Start(new ProcessStartInfo("https://www.gallifreyapp.co.uk/downloads/beta"));
+            Process.Start(new ProcessStartInfo("https://gallifrey.blyth.me.uk/downloads/beta"));
         }
 
         protected override void OnClosed(EventArgs e)

@@ -4,7 +4,7 @@ description: Proving support on Twitter, Email and through GitHub we are here to
 ---
 # Support
 
-You can get app support via <a href="https://twitter.com/GallifreyApp" target="_blank">twitter</a> or via <a href="mailto:support@GallifreyApp.co.uk"  target="_blank">email</a>.
+You can get app support via <a href="https://twitter.com/GallifreyApp" target="_blank">twitter</a> or via <a href="mailto:gallifrey@blyth.me.uk"  target="_blank">email</a>.
 
 If you would like to chat to someone to get assistance, we have a public <a href="https://join.slack.com/t/gallifreyapp/shared_invite/enQtNDA2MDU3OTYwNDgyLTc3YjBjOTc2MDkxNWM3MWYxNDgwNTMyMWI5ZmRhYmZiZWRlOGVkMGQwZDFlOTJlN2I4ZGI5MmExZGY5ZmM2YjI" target="_blank">slack</a> workspace you can use.
 

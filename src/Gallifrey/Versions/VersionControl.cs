@@ -100,7 +100,7 @@ namespace Gallifrey.Versions
                 {
                     using (var client = new WebClient())
                     {
-                        client.DownloadData("https://releases.gallifreyapp.co.uk");
+                        client.DownloadData("https://gallifrey-releases.blyth.me.uk");
                     }
                 }
                 catch

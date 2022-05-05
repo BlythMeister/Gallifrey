@@ -68,7 +68,7 @@ Target "VersionUpdate" (fun _ ->
     let changeLog = XDocument.Load(changeLogPath)
 
     let versionLogs = changeLog
-                      |> fun changelog -> changelog.Descendants(XName.Get("Version", "https://releases.gallifreyapp.co.uk/ChangeLog"))
+                      |> fun changelog -> changelog.Descendants(XName.Get("Version", "https://gallifrey-releases.blyth.me.uk/ChangeLog"))
                       |> Seq.filter(fun x -> x.Attribute(XName.Get("Number")).Value = "0.0.0.0" || x.Attribute(XName.Get("Number")).Value = versionNumber)
 
     if versionLogs |> Seq.isEmpty then failwithf "No change log for version 0.0.0.0 or %s" versionNumber
@@ -143,7 +143,7 @@ Target "Publish-ReleaseRepo" (fun _ ->
     enableProcessTracing <- false
     directRunGitCommandAndFail currentDirectory (sprintf "remote set-url origin https://%s:x-oauth-basic@github.com/BlythMeister/Gallifrey.git" githubApiKey)
     directRunGitCommandAndFail releasesRepo (sprintf "remote set-url origin https://%s:x-oauth-basic@github.com/BlythMeister/Gallifrey.Releases.git" githubApiKey)
-    directRunGitCommandAndFail releasesRepo "config --global user.email \"publish@gallifreyapp.co.uk\""
+    directRunGitCommandAndFail releasesRepo "config --global user.email \"publish@gallifrey.blyth.me.uk\""
     directRunGitCommandAndFail releasesRepo "config --global user.name \"Gallifrey Auto Publish\""
     enableProcessTracing <- true
 
@@ -191,13 +191,13 @@ Target "Publish-ReleaseNotes" (fun _ ->
         let releaseVersion = if isStable then baseVersion else versionNumber
 
         let versionLog = XDocument.Load(changeLogPath)
-                            |> fun changelog -> changelog.Descendants(XName.Get("Version", "https://releases.gallifreyapp.co.uk/ChangeLog"))
+                            |> fun changelog -> changelog.Descendants(XName.Get("Version", "https://gallifrey-releases.blyth.me.uk/ChangeLog"))
                             |> Seq.filter(fun x -> x.Attribute(XName.Get("Number")).Value.StartsWith(releaseVersion))
                             |> Seq.head
 
-        let features = versionLog.Descendants(XName.Get("Feature", "https://releases.gallifreyapp.co.uk/ChangeLog")) |> Seq.map(fun x -> sprintf "* %s" x.Value) |> Seq.toList
-        let bugs = versionLog.Descendants(XName.Get("Bug", "https://releases.gallifreyapp.co.uk/ChangeLog")) |> Seq.map(fun x -> sprintf "* %s" x.Value) |> Seq.toList
-        let others = versionLog.Descendants(XName.Get("Other", "https://releases.gallifreyapp.co.uk/ChangeLog")) |> Seq.map(fun x -> sprintf "* %s" x.Value) |> Seq.toList
+        let features = versionLog.Descendants(XName.Get("Feature", "https://gallifrey-releases.blyth.me.uk/ChangeLog")) |> Seq.map(fun x -> sprintf "* %s" x.Value) |> Seq.toList
+        let bugs = versionLog.Descendants(XName.Get("Bug", "https://gallifrey-releases.blyth.me.uk/ChangeLog")) |> Seq.map(fun x -> sprintf "* %s" x.Value) |> Seq.toList
+        let others = versionLog.Descendants(XName.Get("Other", "https://gallifrey-releases.blyth.me.uk/ChangeLog")) |> Seq.map(fun x -> sprintf "* %s" x.Value) |> Seq.toList
         let versionName = versionLog.Attribute(XName.Get("Name"))
 
         let releaseNotes = [
@@ -235,7 +235,7 @@ Target "Publish-ReleaseNotes" (fun _ ->
             |> fun x -> x.AppendLine("")
             |> fun x -> x.AppendLine(String.Join("\n", releaseNotes).Replace("# ","#### "))
             |> fun x -> x.AppendLine("")
-            |> fun x -> x.AppendLine("To download the latest version of the app head to <https://www.gallifreyapp.co.uk/downloads/stable>")
+            |> fun x -> x.AppendLine("To download the latest version of the app head to <https://gallifrey.blyth.me.uk/downloads/stable>")
             |> fun x -> File.WriteAllText(releasesNewsFile, x.ToString())
 
             checkoutBranch currentDirectory branchName

@@ -21,19 +21,19 @@ Gallifrey has a beta and stable version of the app.
 
 **Installing on Windows 8+ will alert with SmartScreen, you should be able to "Run Anyway" until I can afford a proper certificate, there is no way around this!  After a couple of runs, the warning should stop**
 
-* [Stable Release](http://releases.gallifreyapp.co.uk/download/modern/stable/setup.exe)
-* [Beta Release](http://releases.gallifreyapp.co.uk/download/modern/beta/setup.exe)
+* [Stable Release](http://gallifrey-releases.blyth.me.uk/download/modern/stable/setup.exe)
+* [Beta Release](http://gallifrey-releases.blyth.me.uk/download/modern/beta/setup.exe)
 
 Donate
 =========
 
 Please help us keep this project up and running by donating.
-[Click Here to donate](http://www.gallifreyapp.co.uk/donations.html) 
+[Click Here to donate](http://gallifrey.blyth.me.uk/donations.html) 
 
 Support
 =========
 
-You can get app support via [twitter](https://twitter.com/GallifreyApp) or via [email](mailto:support@GallifreyApp.co.uk).
+You can get app support via [twitter](https://twitter.com/GallifreyApp) or via [email](mailto:gallifrey@blyth.me.uk).
 There is also a [Slack workspace](https://join.slack.com/t/gallifreyapp/shared_invite/enQtNDA2MDU3OTYwNDgyLTc3YjBjOTc2MDkxNWM3MWYxNDgwNTMyMWI5ZmRhYmZiZWRlOGVkMGQwZDFlOTJlN2I4ZGI5MmExZGY5ZmM2YjI).
 We are using GitHub issues to maintain a backlog and track bugs, so feel free to raise issues there (https://github.com/BlythMeister/Gallifrey/issues)
 
