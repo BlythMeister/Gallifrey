@@ -59,7 +59,7 @@ namespace Gallifrey.AppTracking
             return new PageView
             {
                 DocumentTitle = trackingType.ToString(),
-                DocumentLocationUrl = $"https://releases.gallifreyapp.co.uk/tracking/{trackingType}",
+                DocumentLocationUrl = $"https://gallifrey-releases.blyth.me.uk/tracking/{trackingType}",
                 CampaignSource = instanceType.ToString(),
                 CampaignMedium = $"{versionControl.DeployedVersion.Major}.{versionControl.DeployedVersion.Minor}.{versionControl.DeployedVersion.Build}",
                 CampaignName = $"{versionControl.DeployedVersion.Major}.{versionControl.DeployedVersion.Minor}.{versionControl.DeployedVersion.Build}.{versionControl.DeployedVersion.Revision}",

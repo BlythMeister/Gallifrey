@@ -4,7 +4,7 @@ https://keybase.io/blythmeister
 
 I hereby claim:
 
-  * I am an admin of https://www.gallifreyapp.co.uk
+  * I am an admin of https://gallifrey.blyth.me.uk
   * I am blythmeister (https://keybase.io/blythmeister) on keybase.
   * I have a public key ASBwvtTm8cs1SATrLmvuqsQcKo9NKAUSTG8veaNmHfwdswo
 
@@ -26,7 +26,7 @@ To do so, I am signing this object:
       "seqno": 2208562
     },
     "service": {
-      "hostname": "www.gallifreyapp.co.uk",
+      "hostname": "gallifrey.blyth.me.uk",
       "protocol": "https:"
     },
     "type": "web_service_binding",

@@ -26,8 +26,8 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>true</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <InstallUrl>https://releases.gallifreyapp.co.uk/download/modern/stable/</InstallUrl>
-    <UpdateUrl>https://releases.gallifreyapp.co.uk/download/modern/stable/</UpdateUrl>
+    <InstallUrl>https://gallifrey-releases.blyth.me.uk/download/modern/stable/</InstallUrl>
+    <UpdateUrl>https://gallifrey-releases.blyth.me.uk/download/modern/stable/</UpdateUrl>
     <SupportUrl>https://github.com/BlythMeister/Gallifrey</SupportUrl>
     <ErrorReportUrl>https://github.com/BlythMeister/Gallifrey</ErrorReportUrl>
     <ProductName>Gallifrey</ProductName>

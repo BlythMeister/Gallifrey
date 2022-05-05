@@ -7,7 +7,7 @@ namespace Gallifrey.ChangeLog
 {
     internal static class ChangeLogProvider
     {
-        private static readonly XNamespace ChangelogNamespace = "https://releases.gallifreyapp.co.uk/ChangeLog";
+        private static readonly XNamespace ChangelogNamespace = "https://gallifrey-releases.blyth.me.uk/ChangeLog";
 
         public static List<ChangeLogVersion> GetChangeLog(Version fromVersion, XDocument changeLogContent)
         {

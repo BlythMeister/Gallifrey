@@ -48,7 +48,7 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <TextBlock Grid.Row="0" FontSize="18" Margin="0,0,0,5" Text="Support" TextDecorations="Underline" />
-            <TextBlock Grid.Row="1" TextWrapping="Wrap" Margin="0,0,0,5" VerticalAlignment="Center">Contact Us By Email Or Social Networks!<LineBreak />Email: <Hyperlink NavigateUri="mailto:support@gallifreyapp.co.uk?subject=Gallifrey App Contact" Foreground="{DynamicResource MahApps.Brushes.Text}" RequestNavigate="Hyperlink_RequestNavigate">support@GallifreyApp.co.uk</Hyperlink><LineBreak />Twitter: <Hyperlink NavigateUri="https://twitter.com/GallifreyApp" Foreground="{DynamicResource MahApps.Brushes.Text}" RequestNavigate="Hyperlink_RequestNavigate">@GallifreyApp</Hyperlink></TextBlock>
+            <TextBlock Grid.Row="1" TextWrapping="Wrap" Margin="0,0,0,5" VerticalAlignment="Center">Contact Us By Email Or Social Networks!<LineBreak />Email: <Hyperlink NavigateUri="mailto:gallifrey@blyth.me.uk?subject=Gallifrey App Contact" Foreground="{DynamicResource MahApps.Brushes.Text}" RequestNavigate="Hyperlink_RequestNavigate">gallifrey@blyth.me.uk</Hyperlink><LineBreak />Twitter: <Hyperlink NavigateUri="https://twitter.com/GallifreyApp" Foreground="{DynamicResource MahApps.Brushes.Text}" RequestNavigate="Hyperlink_RequestNavigate">@GallifreyApp</Hyperlink></TextBlock>
         </Grid>
         <Grid Grid.Row="3">
             <Grid.RowDefinitions>
@@ -56,7 +56,7 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <TextBlock Grid.Row="0" FontSize="18" Margin="0,0,0,5" Text="Donate" TextDecorations="Underline" />
-            <TextBlock Grid.Row="1" TextWrapping="Wrap" Margin="0,0,0,5" VerticalAlignment="Center">Help us keep the project alive by <Hyperlink NavigateUri="https://www.gallifreyapp.co.uk/donations" Foreground="{DynamicResource MahApps.Brushes.Text}" RequestNavigate="Hyperlink_RequestNavigate">donating</Hyperlink>.</TextBlock>
+            <TextBlock Grid.Row="1" TextWrapping="Wrap" Margin="0,0,0,5" VerticalAlignment="Center">Help us keep the project alive by <Hyperlink NavigateUri="https://gallifrey.blyth.me.uk/donations" Foreground="{DynamicResource MahApps.Brushes.Text}" RequestNavigate="Hyperlink_RequestNavigate">donating</Hyperlink>.</TextBlock>
         </Grid>
         <Grid Grid.Row="4">
             <Grid.RowDefinitions>
