@@ -10,6 +10,8 @@ body {
     background: -webkit-radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(96,173,244,1) 100%);
     background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(96,173,244,1) 100%);
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#ffffff",endColorstr="#60adf4",GradientType=1);
+    /* W3C */
+    background-attachment: fixed;
 }
 
 .container-rounded {

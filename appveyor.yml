@@ -3,7 +3,7 @@
     - .fake/*
     - .github/*
     - .paket/*
-    - docs/*
+    - docs/**/*
     - '**/*.html'
     - '**/*.md'
 version: '3.24.1.{build}'
