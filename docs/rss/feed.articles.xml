@@ -17,6 +17,13 @@ layout: none
 				<link>{{ site.url }}{{ post.url }}</link>
 				<guid isPermaLink="true">{{ site.url }}{{ post.url }}</guid>
 				<content:encoded>{{ post.content | xml_escape }}</content:encoded>
+				{% assign post_image = post.image.path | default: post.image %}
+				{% if post_image %}
+					{% unless post_image contains "://" %}
+						{% assign post_image = post_image | absolute_url %}
+					{% endunless %}
+					<image:image xmlns:image="http://web.resource.org/rss/1.0/modules/image/">{{ post_image | xml_escape }}"< /image:image>
+				{% endif %}
 			</item>
 			{% endunless %}
 		{% endfor %}
