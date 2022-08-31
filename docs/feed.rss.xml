@@ -1,0 +1,30 @@
+---
+layout: none
+---
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/">
+	<channel>
+		<title>{{ site.title | xml_escape }}</title>
+		<description>{% if site.description %}{{ site.description | xml_escape }}{% endif %}</description>		
+		<link>{{ site.url }}</link>
+		<atom:link href="{{ site.url }}/feed.xml" rel="self" type="application/rss+xml" />
+		{% for post in site.posts %}
+			<item>
+				<title>{{ post.title | xml_escape }}</title>
+				<summary>{{ post.excerpt | xml_escape }}</summary>
+                                <description>{{ post.content | xml_escape }}</description>
+				<pubDate>{{ post.date | date: "%a, %d %b %Y %H:%M:%S %z" }}</pubDate>
+				<link>{{ site.url }}{{ post.url }}</link>
+				<guid isPermaLink="true">{{ site.url }}{{ post.url }}</guid>
+				{% assign post_image = post.image.path | default: post.image %}
+				{% if post_image %}
+					{% unless post_image contains "://" %}
+						{% assign post_image = post_image | absolute_url %}
+					{% endunless %}
+                                        <media:thumbnail url="{{ post_image | xml_escape }}" />
+                                        <media:content url="{{ post_image | xml_escape }}" type="image/jpeg"/>
+				{% endif %}
+			</item>
+		{% endfor %}
+	</channel>
+</rss>
