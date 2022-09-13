@@ -4,7 +4,6 @@ description: "Get the best assistant to help manage your 'wibbily wobbly timey w
 url: https://gallifrey.blyth.me.uk
 logo: /images/Logo.png
 lang: en_GB
-enableCsp: true
 
 GoogleAnalytics: G-8LE08MZL0W
 

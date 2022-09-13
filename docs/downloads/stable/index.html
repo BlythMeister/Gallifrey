@@ -2,20 +2,6 @@
 title: Stable Download
 description: Download the latest stable version
 ---
-<script language="javascript" type="text/javascript">  
-$(document).ready(function () {
-    $.getJSON("https://api.github.com/repos/BlythMeister/Gallifrey/releases/latest").done(function (json) {		
-		var downloadURL = "https://github.com/BlythMeister/Gallifrey/releases/latest";		
-		$.each(json.assets, function() {
-			if(this.name === "stable-setup.exe")
-			{
-				downloadURL = this.browser_download_url;
-			}
-		})                  
-        window.location.href = downloadURL;
-        $("a[id='downloadLink']").attr('href', downloadURL)
-    }); 
-});
-</script>
+<script src="{{ site.url }}/scripts/download-stable.js"></script>
 <h1 id="download-links">Stable Download</h1>
 <p>Your download should start automatically, if your browser prevents this, <a id="downloadLink" href="#">click here</a></p>
