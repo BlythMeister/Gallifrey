@@ -34,8 +34,7 @@ let isAlpha = (isBeta || branchName = "develop")
 let mutable donePublish = false
 
 let githubApiKey = environVar "BLYTHMEISTER_GITHUB_KEY"
-let cloudflareApiKey = environVar "BLYTHMEISTER_CLOUDFLARE_KEY"
-let cloudflareEmail = environVar "BLYTHMEISTER_CLOUDFLARE_EMAIL"
+let cloudflareApiToken = environVar "BLYTHMEISTER_CLOUDFLARE_TOKEN"
 let cloudflareZone = environVar "BLYTHMEISTER_CLOUDFLARE_ZONE"
 let exceptionlessApiKey = environVar "BLYTHMEISTER_EXCEPTIONLESS_KEY"
 
@@ -263,10 +262,9 @@ Target "Publish-PurgeCloudflareCache" (fun _ ->
     printfn "Purging Cloudflare"
     try
         let client = new WebClient()
-        client.Headers.Add("X-Auth-Email", cloudflareEmail)
-        client.Headers.Add("X-Auth-Key", cloudflareApiKey)
+        client.Headers.Add("Authorization", (sprintf "Bearer %s" cloudflareApiToken))
         client.Headers.Add("Content-Type", "application/json")
-        let result = client.UploadString(sprintf "https://api.cloudflare.com/client/v4/zones/%s/purge_cache" cloudflareZone, "POST", "{\"purge_everything\":true}")
+        let result = client.UploadString(sprintf "https://api.cloudflare.com/client/v4/zones/%s/purge_cache" cloudflareZone, "POST", "{\"files\":[\"https://gallifrey-releases.blyth.me.uk/download/modern/stable/Gallifrey.UI.Modern.Stable.application\",\"https://gallifrey-releases.blyth.me.uk/download/modern/beta/Gallifrey.UI.Modern.Beta.application\",\"https://gallifrey-releases.blyth.me.uk/download/modern/alpha/Gallifrey.UI.Modern.Alpha.application\"]}")
         client.Dispose()
         printfn "Cloudflare Purge response: %s" result
     with e ->
