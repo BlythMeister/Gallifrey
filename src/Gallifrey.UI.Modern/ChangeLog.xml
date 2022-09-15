@@ -857,7 +857,7 @@
     </Bugs>
     <Others />
   </Version>
-  <Version Number="0.0.0.0" Name="Pre-Release">
+  <Version Number="3.25.0.0">
     <Features />
     <Bugs>
       <Bug>Only check for active internet on update if error contacting update server</Bug>
