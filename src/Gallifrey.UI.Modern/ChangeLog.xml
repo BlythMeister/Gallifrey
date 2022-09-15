@@ -864,6 +864,7 @@
     </Bugs>
     <Others>
       <Other>Update check changed from 30 minutes to 1 hourly</Other>
+      <Other>Include user-agent in HTTP requests</Other>
     </Others>
   </Version>
   <!--

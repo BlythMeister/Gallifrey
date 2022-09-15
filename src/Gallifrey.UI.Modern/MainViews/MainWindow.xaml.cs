@@ -93,6 +93,7 @@ namespace Gallifrey.UI.Modern.MainViews
             {
                 using (var client = new WebClient())
                 {
+                    client.Headers.Add(HttpRequestHeader.UserAgent, $"Gallifrey-{modelHelpers.Gallifrey.VersionControl.VersionName}");
                     client.DownloadData("https://gallifrey-releases.blyth.me.uk");
                 }
             }

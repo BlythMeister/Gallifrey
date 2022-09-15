@@ -113,6 +113,7 @@ namespace Gallifrey.Rest
             request.AddHeader("ContentType", "application/json");
             request.AddHeader("Accept", "application/json");
             request.AddHeader("TrackingGuid", requestGuid.ToString());
+            request.AddHeader("User-Agent", "Gallifrey");
             return request;
         }
 

@@ -140,6 +140,7 @@ namespace Gallifrey.Versions
                     {
                         using (var client = new WebClient())
                         {
+                            client.Headers.Add(HttpRequestHeader.UserAgent, $"Gallifrey-{VersionName}");
                             client.DownloadData("https://gallifrey-releases.blyth.me.uk");
                         }
 
@@ -187,9 +188,10 @@ namespace Gallifrey.Versions
                 XDocument doc;
 
                 // Download the application manifest.
-                using (var wc = new WebClient())
+                using (var client = new WebClient())
                 {
-                    var applicationManifest = wc.DownloadString(ApplicationDeployment.CurrentDeployment.UpdateLocation.AbsoluteUri);
+                    client.Headers.Add(HttpRequestHeader.UserAgent, $"Gallifrey-{VersionName}");
+                    var applicationManifest = client.DownloadString(ApplicationDeployment.CurrentDeployment.UpdateLocation.AbsoluteUri);
                     doc = XDocument.Parse(applicationManifest);
                 }
 
