@@ -862,7 +862,9 @@
     <Bugs>
       <Bug>Only check for active internet on update if error contacting update server</Bug>
     </Bugs>
-    <Others />
+    <Others>
+      <Other>Update check changed from 30 minutes to 1 hourly</Other>
+    </Others>
   </Version>
   <!--
   Template for VNext if not present above

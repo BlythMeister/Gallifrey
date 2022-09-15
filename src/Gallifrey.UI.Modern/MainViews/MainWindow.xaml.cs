@@ -55,7 +55,7 @@ namespace Gallifrey.UI.Modern.MainViews
             Width = gallifrey.Settings.UiSettings.Width;
             ThemeHelper.ChangeTheme(gallifrey.Settings.UiSettings.Theme);
 
-            updateHeartbeat = new Timer(TimeSpan.FromMinutes(30).TotalMilliseconds);
+            updateHeartbeat = new Timer(TimeSpan.FromHours(1).TotalMilliseconds);
             updateHeartbeat.Elapsed += AutoUpdateCheck;
 
             idleDetectionHeartbeat = new Timer(TimeSpan.FromSeconds(30).TotalMilliseconds);
