@@ -96,18 +96,6 @@ namespace Gallifrey.Versions
 
             try
             {
-                try
-                {
-                    using (var client = new WebClient())
-                    {
-                        client.DownloadData("https://gallifrey-releases.blyth.me.uk");
-                    }
-                }
-                catch
-                {
-                    return Task.Run(() => UpdateResult.NoInternet);
-                }
-
                 UpdateCheckOccured?.Invoke(this, manualCheck);
                 lastUpdateCheck = DateTime.UtcNow;
 
@@ -143,14 +131,26 @@ namespace Gallifrey.Versions
                 {
                     UpdateReinstallNeeded = true;
                     UpdateStateChange?.Invoke(this, null);
-                    updateErrorCount = updateErrorCount + 1;
+                    updateErrorCount += 1;
                     return Task.Run(() => UpdateResult.ReinstallNeeded);
                 }
                 catch (Exception)
                 {
-                    UpdateStateChange?.Invoke(this, null);
-                    updateErrorCount = updateErrorCount + 1;
-                    throw;
+                    try
+                    {
+                        using (var client = new WebClient())
+                        {
+                            client.DownloadData("https://gallifrey-releases.blyth.me.uk");
+                        }
+
+                        UpdateStateChange?.Invoke(this, null);
+                        updateErrorCount += 1;
+                        throw;
+                    }
+                    catch
+                    {
+                        return Task.Run(() => UpdateResult.NoInternet);
+                    }
                 }
             }
             finally

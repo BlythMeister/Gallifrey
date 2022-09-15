@@ -17,7 +17,7 @@ namespace Gallifrey.ExtensionMethods
 
             if (value.Hours > 0)
             {
-                hours = hours + value.Hours;
+                hours += value.Hours;
             }
 
             if (hours > 0)

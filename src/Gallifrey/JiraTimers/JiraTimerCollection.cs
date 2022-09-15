@@ -146,7 +146,7 @@ namespace Gallifrey.JiraTimers
         {
             if (days > 0)
             {
-                days = days * -1;
+                days *= -1;
             }
 
             return timerList
@@ -276,7 +276,7 @@ namespace Gallifrey.JiraTimers
         {
             if (keepTimersForDays > 0)
             {
-                keepTimersForDays = keepTimersForDays * -1;
+                keepTimersForDays *= -1;
             }
 
             var possiblePurgeDates = timerList.Where(timer => timer.DateStarted.Date != DateTime.Now.Date && timer.DateStarted.Date <= DateTime.Now.AddDays(keepTimersForDays).Date)

@@ -130,7 +130,7 @@ namespace Gallifrey.Settings
                     }
                     else
                     {
-                        queryDay = queryDay + 1;
+                        queryDay += 1;
                     }
                 }
             }

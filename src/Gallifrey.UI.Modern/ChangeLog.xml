@@ -857,6 +857,13 @@
     </Bugs>
     <Others />
   </Version>
+  <Version Number="0.0.0.0" Name="Pre-Release">
+    <Features />
+    <Bugs>
+      <Bug>Only check for active internet on update if error contacting update server</Bug>
+    </Bugs>
+    <Others />
+  </Version>
   <!--
   Template for VNext if not present above
   <Version Number="0.0.0.0" Name="Pre-Release">
