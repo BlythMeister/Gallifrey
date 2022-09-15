@@ -34,6 +34,9 @@ let isAlpha = (isBeta || branchName = "develop")
 let mutable donePublish = false
 
 let githubApiKey = environVar "BLYTHMEISTER_GITHUB_KEY"
+let cloudflareApiKey = environVar "BLYTHMEISTER_CLOUDFLARE_KEY"
+let cloudflareEmail = environVar "BLYTHMEISTER_CLOUDFLARE_EMAIL"
+let cloudflareZone = environVar "BLYTHMEISTER_CLOUDFLARE_ZONE"
 let exceptionlessApiKey = environVar "BLYTHMEISTER_EXCEPTIONLESS_KEY"
 
 printfn "Running On Branch: %s" branchName
@@ -256,6 +259,20 @@ Target "Publish-ReleaseNotes" (fun _ ->
          printfn "No releases pushed, so skipping release notes"
 )
 
+Target "Publish-PurgeCloudflareCache" (fun _ ->
+    printfn "Purging Cloudflare"
+    try
+        let client = new WebClient()
+        client.Headers.Add("X-Auth-Email", cloudflareEmail)
+        client.Headers.Add("X-Auth-Key", cloudflareApiKey)
+        client.Headers.Add("Content-Type", "application/json")
+        let result = client.UploadString(sprintf "https://api.cloudflare.com/client/v4/zones/%s/purge_cache" cloudflareZone, "POST", "{\"purge_everything\":true}")
+        client.Dispose()
+        printfn "Cloudflare Purge response: %s" result
+    with e ->
+        failwithf "Cloudflare Purge request failed: %s" e.Message
+)
+
 Target "Default" DoNothing
 
 "Clean"
@@ -266,6 +283,7 @@ Target "Default" DoNothing
     =?> ("Publish-Artifacts", isAppVeyor && not(isPR))
     =?> ("Publish-ReleaseRepo", isAppVeyor && not(isPR))
     =?> ("Publish-ReleaseNotes", isAppVeyor && not(isPR) && (isBeta || isStable))
+    =?> ("Publish-PurgeCloudflareCache", isAppVeyor && not(isPR))
     ==> "Default"
 
 RunParameterTargetOrDefault "target" "Default"
