@@ -45,39 +45,27 @@ namespace Gallifrey.UI.Modern.Flyouts
                 {
                     recent = modelHelpers.Gallifrey.JiraTimerCollection.GetJiraReferencesForLastDays(50).ToList();
                 }
-                catch (NoResultsFoundException)
+                catch (Exception)
                 {
                     //Do Nothing
-                }
-                catch (Exception ex)
-                {
-                    ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Hidden").Submit();
                 }
 
                 try
                 {
                     filters = modelHelpers.Gallifrey.JiraConnection.GetJiraFilters().ToList();
                 }
-                catch (NoResultsFoundException)
+                catch (Exception)
                 {
                     //Do Nothing
-                }
-                catch (Exception ex)
-                {
-                    ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Hidden").Submit();
                 }
 
                 try
                 {
                     issues = modelHelpers.Gallifrey.JiraConnection.GetJiraCurrentUserOpenIssues().ToList();
                 }
-                catch (NoResultsFoundException)
+                catch (Exception)
                 {
                     //Do Nothing
-                }
-                catch (Exception ex)
-                {
-                    ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Hidden").Submit();
                 }
 
                 return new SearchModel(filters, recent, issues, openFromEdit);

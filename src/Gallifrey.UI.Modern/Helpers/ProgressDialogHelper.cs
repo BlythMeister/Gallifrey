@@ -90,14 +90,12 @@ namespace Gallifrey.UI.Modern.Helpers
 
                 return result;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 if (throwErrors)
                 {
                     throw;
                 }
-
-                ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Maybe-Hidden").Submit();
                 return ProgressResult.GetErrored<T>();
             }
             finally

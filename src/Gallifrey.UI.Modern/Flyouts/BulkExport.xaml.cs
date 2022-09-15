@@ -233,7 +233,6 @@ namespace Gallifrey.UI.Modern.Flyouts
             }
             catch (Exception ex)
             {
-                ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Hidden").Submit();
                 throw new BulkExportException("Unable To Get WorkLogs!\nCannot Export Time");
             }
 

@@ -678,7 +678,7 @@ namespace Gallifrey.UI.Modern.MainViews
                 }
                 else
                 {
-                    ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Hidden").Submit();
+                    ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Update").Submit();
                 }
             }
         }

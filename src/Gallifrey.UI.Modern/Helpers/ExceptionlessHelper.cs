@@ -159,7 +159,7 @@ namespace Gallifrey.UI.Modern.Helpers
             }
             catch (Exception ex)
             {
-                ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Hidden").Submit();
+                ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Events").Submit();
             }
         }
     }

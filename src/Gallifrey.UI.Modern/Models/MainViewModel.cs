@@ -317,9 +317,9 @@ namespace Gallifrey.UI.Modern.Models
                                     }
                                 }
                             }
-                            catch (Exception ex)
+                            catch (Exception)
                             {
-                                ExceptionlessClient.Default.CreateEvent().SetException(ex).AddTags("Hidden").Submit();
+                                // Do Nothing
                             }
                         }
                     }
