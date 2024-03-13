@@ -10,7 +10,6 @@ body {
     background: -webkit-radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(96,173,244,1) 100%);
     background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(96,173,244,1) 100%);
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#ffffff",endColorstr="#60adf4",GradientType=1);
-    /* W3C */
     background-attachment: fixed;
 }
 
@@ -60,7 +59,6 @@ body {
 }
 
 .footer {
-    margin-top: 15px;
     margin-bottom: 5px;
     border-top: 1px solid grey;
     padding-top: 10px;
@@ -73,6 +71,7 @@ body {
 .mainFrame {
     padding-top: 15px;
     padding-left: 20px;
+    padding-bottom: 15px;
     margin-bottom: 0;
 }
 
@@ -127,6 +126,7 @@ body {
 .sidebar .bottomItem {
     border-top: 1px solid grey;
     padding-top: 10px;
+    padding-bottom: 15px;
 }
 
 .sidebar .media-underline {
