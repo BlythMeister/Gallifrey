@@ -10,3 +10,4 @@ nuget Newtonsoft.Json
 nuget Octokit
 nuget RestSharp
 nuget ToastNotifications
+nuget Microsoft.VisualStudio.DesignTools.Extensibility

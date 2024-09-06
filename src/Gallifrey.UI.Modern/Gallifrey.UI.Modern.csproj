@@ -265,13 +265,6 @@
     <Resource Include="Icons\Circle_Icon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Choose>
-    <When Condition="1 == 1">
-      <PropertyGroup>
-        <__paket__NETStandard_Library_targets>netstandard2.0\NETStandard.Library</__paket__NETStandard_Library_targets>
-      </PropertyGroup>
-    </When>
-  </Choose>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
@@ -295,7 +288,7 @@
         </Reference>
       </ItemGroup>
     </When>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.6.2' Or $(TargetFrameworkVersion) == 'v4.6.3' Or $(TargetFrameworkVersion) == 'v4.7' Or $(TargetFrameworkVersion) == 'v4.7.1' Or $(TargetFrameworkVersion) == 'v4.7.2' Or $(TargetFrameworkVersion) == 'v4.8')">
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.6.2' Or $(TargetFrameworkVersion) == 'v4.6.3' Or $(TargetFrameworkVersion) == 'v4.7' Or $(TargetFrameworkVersion) == 'v4.7.1' Or $(TargetFrameworkVersion) == 'v4.7.2' Or $(TargetFrameworkVersion) == 'v4.8' Or $(TargetFrameworkVersion) == 'v4.8.1')">
       <ItemGroup>
         <Reference Include="System.Web">
           <Paket>True</Paket>
@@ -319,7 +312,7 @@
         </Reference>
       </ItemGroup>
     </When>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v3.1' Or $(TargetFrameworkVersion) == 'v5.0' Or $(TargetFrameworkVersion) == 'v6.0' Or $(TargetFrameworkVersion) == 'v7.0' Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.17763.0') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.18362.0') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.19041.0') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '8.0') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'android') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'ios') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'macos') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'tvos') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'watchos') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.17763.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.18362.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.19041.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '8.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'android') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'ios') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'macos') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'tvos') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'watchos') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.17763.0') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.18362.0') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.19041.0') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '8.0') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'Windows') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'android') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'ios') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'macos') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'tvos') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'watchos'))">
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v3.1' Or $(TargetFrameworkVersion) == 'v5.0' Or $(TargetFrameworkVersion) == 'v6.0' Or $(TargetFrameworkVersion) == 'v7.0' Or $(TargetFrameworkVersion) == 'v8.0' Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.17763.0') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.18362.0') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.19041.0') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '8.0') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'android') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'ios') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'macos') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'tvos') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'watchos') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.17763.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.18362.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.19041.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '8.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'android') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'ios') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'macos') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'tvos') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'watchos') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.17763.0') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.18362.0') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.19041.0') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '8.0') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'Windows') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'android') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'ios') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'macos') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'tvos') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'watchos') Or ($(TargetFrameworkVersion) == 'v8.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.17763.0') Or ($(TargetFrameworkVersion) == 'v8.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.18362.0') Or ($(TargetFrameworkVersion) == 'v8.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.19041.0') Or ($(TargetFrameworkVersion) == 'v8.0' And '$(TargetPlatformIdentifier)' == 'android') Or ($(TargetFrameworkVersion) == 'v8.0' And '$(TargetPlatformIdentifier)' == 'ios') Or ($(TargetFrameworkVersion) == 'v8.0' And '$(TargetPlatformIdentifier)' == 'macos') Or ($(TargetFrameworkVersion) == 'v8.0' And '$(TargetPlatformIdentifier)' == 'tvos') Or ($(TargetFrameworkVersion) == 'v8.0' And '$(TargetPlatformIdentifier)' == 'watchos'))">
       <ItemGroup>
         <Reference Include="ControlzEx">
           <HintPath>..\..\packages\ControlzEx\lib\netcoreapp3.1\ControlzEx.dll</HintPath>
@@ -330,7 +323,7 @@
     </When>
   </Choose>
   <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.5.2' Or $(TargetFrameworkVersion) == 'v4.5.3' Or $(TargetFrameworkVersion) == 'v4.6' Or $(TargetFrameworkVersion) == 'v4.6.1' Or $(TargetFrameworkVersion) == 'v4.6.2' Or $(TargetFrameworkVersion) == 'v4.6.3' Or $(TargetFrameworkVersion) == 'v4.7' Or $(TargetFrameworkVersion) == 'v4.7.1' Or $(TargetFrameworkVersion) == 'v4.7.2' Or $(TargetFrameworkVersion) == 'v4.8')">
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.6.2' Or $(TargetFrameworkVersion) == 'v4.6.3' Or $(TargetFrameworkVersion) == 'v4.7' Or $(TargetFrameworkVersion) == 'v4.7.1' Or $(TargetFrameworkVersion) == 'v4.7.2' Or $(TargetFrameworkVersion) == 'v4.8' Or $(TargetFrameworkVersion) == 'v4.8.1')">
       <ItemGroup>
         <Reference Include="Microsoft.VisualBasic">
           <Paket>True</Paket>
@@ -351,13 +344,13 @@
           <Paket>True</Paket>
         </Reference>
         <Reference Include="Exceptionless">
-          <HintPath>..\..\packages\Exceptionless\lib\net452\Exceptionless.dll</HintPath>
+          <HintPath>..\..\packages\Exceptionless\lib\net462\Exceptionless.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
       </ItemGroup>
     </When>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v3.1' Or $(TargetFrameworkVersion) == 'v5.0' Or $(TargetFrameworkVersion) == 'v6.0' Or $(TargetFrameworkVersion) == 'v7.0' Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.17763.0') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.18362.0') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.19041.0') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '8.0') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'android') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'ios') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'macos') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'tvos') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'watchos') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.17763.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.18362.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.19041.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '8.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'android') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'ios') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'macos') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'tvos') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'watchos') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.17763.0') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.18362.0') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.19041.0') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '8.0') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'Windows') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'android') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'ios') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'macos') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'tvos') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'watchos'))">
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETCoreApp' And (($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.17763.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.18362.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.19041.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '8.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows') Or ($(TargetFrameworkVersion) == 'v8.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.17763.0') Or ($(TargetFrameworkVersion) == 'v8.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.18362.0') Or ($(TargetFrameworkVersion) == 'v8.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.19041.0'))">
       <ItemGroup>
         <Reference Include="Exceptionless">
           <HintPath>..\..\packages\Exceptionless\lib\netstandard2.0\Exceptionless.dll</HintPath>
@@ -368,20 +361,38 @@
     </When>
   </Choose>
   <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.5.2' Or $(TargetFrameworkVersion) == 'v4.5.3' Or $(TargetFrameworkVersion) == 'v4.6' Or $(TargetFrameworkVersion) == 'v4.6.1' Or $(TargetFrameworkVersion) == 'v4.6.2' Or $(TargetFrameworkVersion) == 'v4.6.3' Or $(TargetFrameworkVersion) == 'v4.7' Or $(TargetFrameworkVersion) == 'v4.7.1' Or $(TargetFrameworkVersion) == 'v4.7.2' Or $(TargetFrameworkVersion) == 'v4.8')">
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.6.2' Or $(TargetFrameworkVersion) == 'v4.6.3' Or $(TargetFrameworkVersion) == 'v4.7' Or $(TargetFrameworkVersion) == 'v4.7.1' Or $(TargetFrameworkVersion) == 'v4.7.2' Or $(TargetFrameworkVersion) == 'v4.8' Or $(TargetFrameworkVersion) == 'v4.8.1')">
       <ItemGroup>
         <Reference Include="Exceptionless.Wpf">
-          <HintPath>..\..\packages\Exceptionless.Wpf\lib\net452\Exceptionless.Wpf.dll</HintPath>
+          <HintPath>..\..\packages\Exceptionless.Wpf\lib\net462\Exceptionless.Wpf.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
       </ItemGroup>
     </When>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v3.1' Or $(TargetFrameworkVersion) == 'v5.0' Or $(TargetFrameworkVersion) == 'v6.0' Or $(TargetFrameworkVersion) == 'v7.0' Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.17763.0') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.18362.0') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.19041.0') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '8.0') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'android') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'ios') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'macos') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'tvos') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'watchos') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.17763.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.18362.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.19041.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '8.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'android') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'ios') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'macos') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'tvos') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'watchos') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.17763.0') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.18362.0') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.19041.0') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '8.0') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'Windows') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'android') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'ios') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'macos') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'tvos') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'watchos'))">
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETCoreApp' And (($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.17763.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.18362.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.19041.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '8.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows'))">
       <ItemGroup>
         <Reference Include="Exceptionless.Wpf">
-          <HintPath>..\..\packages\Exceptionless.Wpf\lib\netcoreapp3.1\Exceptionless.Wpf.dll</HintPath>
+          <HintPath>..\..\packages\Exceptionless.Wpf\lib\net6.0-windows7.0\Exceptionless.Wpf.dll</HintPath>
           <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETCoreApp' And (($(TargetFrameworkVersion) == 'v8.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.17763.0') Or ($(TargetFrameworkVersion) == 'v8.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.18362.0') Or ($(TargetFrameworkVersion) == 'v8.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.19041.0'))">
+      <ItemGroup>
+        <Reference Include="Exceptionless.Wpf">
+          <HintPath>..\..\packages\Exceptionless.Wpf\lib\net8.0-windows7.0\Exceptionless.Wpf.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
+  <Choose>
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.6' Or $(TargetFrameworkVersion) == 'v4.6.1')">
+      <ItemGroup>
+        <Reference Include="System.Configuration">
           <Paket>True</Paket>
         </Reference>
       </ItemGroup>
@@ -391,6 +402,9 @@
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.5.2' Or $(TargetFrameworkVersion) == 'v4.5.3')">
       <ItemGroup>
         <Reference Include="System.ComponentModel.DataAnnotations">
+          <Paket>True</Paket>
+        </Reference>
+        <Reference Include="System.Configuration">
           <Paket>True</Paket>
         </Reference>
         <Reference Include="MahApps.Metro">
@@ -412,7 +426,7 @@
         </Reference>
       </ItemGroup>
     </When>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.7' Or $(TargetFrameworkVersion) == 'v4.7.1' Or $(TargetFrameworkVersion) == 'v4.7.2' Or $(TargetFrameworkVersion) == 'v4.8')">
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.7' Or $(TargetFrameworkVersion) == 'v4.7.1' Or $(TargetFrameworkVersion) == 'v4.7.2' Or $(TargetFrameworkVersion) == 'v4.8' Or $(TargetFrameworkVersion) == 'v4.8.1')">
       <ItemGroup>
         <Reference Include="System.ComponentModel.DataAnnotations">
           <Paket>True</Paket>
@@ -433,7 +447,7 @@
         </Reference>
       </ItemGroup>
     </When>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v3.1' Or $(TargetFrameworkVersion) == 'v5.0' Or $(TargetFrameworkVersion) == 'v6.0' Or $(TargetFrameworkVersion) == 'v7.0' Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.17763.0') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.18362.0') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.19041.0') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '8.0') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'android') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'ios') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'macos') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'tvos') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'watchos') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.17763.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.18362.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.19041.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '8.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'android') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'ios') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'macos') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'tvos') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'watchos') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.17763.0') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.18362.0') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.19041.0') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '8.0') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'Windows') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'android') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'ios') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'macos') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'tvos') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'watchos'))">
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v3.1' Or $(TargetFrameworkVersion) == 'v5.0' Or $(TargetFrameworkVersion) == 'v6.0' Or $(TargetFrameworkVersion) == 'v7.0' Or $(TargetFrameworkVersion) == 'v8.0' Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.17763.0') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.18362.0') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.19041.0') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '8.0') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'android') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'ios') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'macos') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'tvos') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'watchos') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.17763.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.18362.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.19041.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '8.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'android') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'ios') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'macos') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'tvos') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'watchos') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.17763.0') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.18362.0') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.19041.0') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '8.0') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'Windows') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'android') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'ios') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'macos') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'tvos') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'watchos') Or ($(TargetFrameworkVersion) == 'v8.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.17763.0') Or ($(TargetFrameworkVersion) == 'v8.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.18362.0') Or ($(TargetFrameworkVersion) == 'v8.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.19041.0') Or ($(TargetFrameworkVersion) == 'v8.0' And '$(TargetPlatformIdentifier)' == 'android') Or ($(TargetFrameworkVersion) == 'v8.0' And '$(TargetPlatformIdentifier)' == 'ios') Or ($(TargetFrameworkVersion) == 'v8.0' And '$(TargetPlatformIdentifier)' == 'macos') Or ($(TargetFrameworkVersion) == 'v8.0' And '$(TargetPlatformIdentifier)' == 'tvos') Or ($(TargetFrameworkVersion) == 'v8.0' And '$(TargetPlatformIdentifier)' == 'watchos'))">
       <ItemGroup>
         <Reference Include="MahApps.Metro">
           <HintPath>..\..\packages\MahApps.Metro\lib\netcoreapp3.1\MahApps.Metro.dll</HintPath>
@@ -444,85 +458,37 @@
     </When>
   </Choose>
   <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.5' Or $(TargetFrameworkVersion) == 'v4.5.1' Or $(TargetFrameworkVersion) == 'v4.5.2' Or $(TargetFrameworkVersion) == 'v4.5.3')">
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.6.2' Or $(TargetFrameworkVersion) == 'v4.6.3')">
       <ItemGroup>
         <Reference Include="MahApps.Metro.IconPacks.Core">
-          <HintPath>..\..\packages\MahApps.Metro.IconPacks.FontAwesome\lib\net45\MahApps.Metro.IconPacks.Core.dll</HintPath>
-          <Private>True</Private>
-          <Paket>True</Paket>
-        </Reference>
-        <Reference Include="MahApps.Metro.IconPacks.FontAwesome">
-          <HintPath>..\..\packages\MahApps.Metro.IconPacks.FontAwesome\lib\net45\MahApps.Metro.IconPacks.FontAwesome.dll</HintPath>
+          <HintPath>..\..\packages\MahApps.Metro.IconPacks.Core\lib\net462\MahApps.Metro.IconPacks.Core.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
       </ItemGroup>
     </When>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.6' Or $(TargetFrameworkVersion) == 'v4.6.1' Or $(TargetFrameworkVersion) == 'v4.6.2' Or $(TargetFrameworkVersion) == 'v4.6.3')">
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.7' Or $(TargetFrameworkVersion) == 'v4.7.1' Or $(TargetFrameworkVersion) == 'v4.7.2' Or $(TargetFrameworkVersion) == 'v4.8' Or $(TargetFrameworkVersion) == 'v4.8.1')">
       <ItemGroup>
         <Reference Include="MahApps.Metro.IconPacks.Core">
-          <HintPath>..\..\packages\MahApps.Metro.IconPacks.FontAwesome\lib\net46\MahApps.Metro.IconPacks.Core.dll</HintPath>
-          <Private>True</Private>
-          <Paket>True</Paket>
-        </Reference>
-        <Reference Include="MahApps.Metro.IconPacks.FontAwesome">
-          <HintPath>..\..\packages\MahApps.Metro.IconPacks.FontAwesome\lib\net46\MahApps.Metro.IconPacks.FontAwesome.dll</HintPath>
+          <HintPath>..\..\packages\MahApps.Metro.IconPacks.Core\lib\net47\MahApps.Metro.IconPacks.Core.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
       </ItemGroup>
     </When>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.7' Or $(TargetFrameworkVersion) == 'v4.7.1' Or $(TargetFrameworkVersion) == 'v4.7.2' Or $(TargetFrameworkVersion) == 'v4.8')">
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETCoreApp' And (($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.17763.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.18362.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.19041.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '8.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows'))">
       <ItemGroup>
         <Reference Include="MahApps.Metro.IconPacks.Core">
-          <HintPath>..\..\packages\MahApps.Metro.IconPacks.FontAwesome\lib\net47\MahApps.Metro.IconPacks.Core.dll</HintPath>
-          <Private>True</Private>
-          <Paket>True</Paket>
-        </Reference>
-        <Reference Include="MahApps.Metro.IconPacks.FontAwesome">
-          <HintPath>..\..\packages\MahApps.Metro.IconPacks.FontAwesome\lib\net47\MahApps.Metro.IconPacks.FontAwesome.dll</HintPath>
+          <HintPath>..\..\packages\MahApps.Metro.IconPacks.Core\lib\net6.0-windows7.0\MahApps.Metro.IconPacks.Core.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
       </ItemGroup>
     </When>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETCoreApp' And (($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.17763.0') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '8.0') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows'))">
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETCoreApp' And (($(TargetFrameworkVersion) == 'v8.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.17763.0') Or ($(TargetFrameworkVersion) == 'v8.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.18362.0') Or ($(TargetFrameworkVersion) == 'v8.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.19041.0'))">
       <ItemGroup>
         <Reference Include="MahApps.Metro.IconPacks.Core">
-          <HintPath>..\..\packages\MahApps.Metro.IconPacks.FontAwesome\lib\net5.0-windows7.0\MahApps.Metro.IconPacks.Core.dll</HintPath>
-          <Private>True</Private>
-          <Paket>True</Paket>
-        </Reference>
-        <Reference Include="MahApps.Metro.IconPacks.FontAwesome">
-          <HintPath>..\..\packages\MahApps.Metro.IconPacks.FontAwesome\lib\net5.0-windows7.0\MahApps.Metro.IconPacks.FontAwesome.dll</HintPath>
-          <Private>True</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETCoreApp' And $(TargetFrameworkVersion) == 'v3.0'">
-      <ItemGroup>
-        <Reference Include="MahApps.Metro.IconPacks.Core">
-          <HintPath>..\..\packages\MahApps.Metro.IconPacks.FontAwesome\lib\netcoreapp3.0\MahApps.Metro.IconPacks.Core.dll</HintPath>
-          <Private>True</Private>
-          <Paket>True</Paket>
-        </Reference>
-        <Reference Include="MahApps.Metro.IconPacks.FontAwesome">
-          <HintPath>..\..\packages\MahApps.Metro.IconPacks.FontAwesome\lib\netcoreapp3.0\MahApps.Metro.IconPacks.FontAwesome.dll</HintPath>
-          <Private>True</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v3.1' Or $(TargetFrameworkVersion) == 'v5.0' Or $(TargetFrameworkVersion) == 'v6.0' Or $(TargetFrameworkVersion) == 'v7.0' Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.18362.0') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.19041.0') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'android') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'ios') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'macos') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'tvos') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'watchos') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.17763.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.18362.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.19041.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '8.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'android') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'ios') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'macos') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'tvos') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'watchos') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.17763.0') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.18362.0') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.19041.0') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '8.0') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'Windows') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'android') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'ios') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'macos') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'tvos') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'watchos'))">
-      <ItemGroup>
-        <Reference Include="MahApps.Metro.IconPacks.Core">
-          <HintPath>..\..\packages\MahApps.Metro.IconPacks.FontAwesome\lib\netcoreapp3.1\MahApps.Metro.IconPacks.Core.dll</HintPath>
-          <Private>True</Private>
-          <Paket>True</Paket>
-        </Reference>
-        <Reference Include="MahApps.Metro.IconPacks.FontAwesome">
-          <HintPath>..\..\packages\MahApps.Metro.IconPacks.FontAwesome\lib\netcoreapp3.1\MahApps.Metro.IconPacks.FontAwesome.dll</HintPath>
+          <HintPath>..\..\packages\MahApps.Metro.IconPacks.Core\lib\net8.0-windows7.0\MahApps.Metro.IconPacks.Core.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
@@ -531,12 +497,7 @@
     <When Condition="$(TargetFrameworkIdentifier) == '.NETCore' And $(TargetFrameworkVersion) == 'v5.0'">
       <ItemGroup>
         <Reference Include="MahApps.Metro.IconPacks.Core">
-          <HintPath>..\..\packages\MahApps.Metro.IconPacks.FontAwesome\lib\uap10.0.16299\MahApps.Metro.IconPacks.Core.dll</HintPath>
-          <Private>True</Private>
-          <Paket>True</Paket>
-        </Reference>
-        <Reference Include="MahApps.Metro.IconPacks.FontAwesome">
-          <HintPath>..\..\packages\MahApps.Metro.IconPacks.FontAwesome\lib\uap10.0.16299\MahApps.Metro.IconPacks.FontAwesome.dll</HintPath>
+          <HintPath>..\..\packages\MahApps.Metro.IconPacks.Core\lib\uap10.0.18362\MahApps.Metro.IconPacks.Core.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
@@ -544,16 +505,63 @@
     </When>
   </Choose>
   <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.7.1' Or $(TargetFrameworkVersion) == 'v4.7.2' Or $(TargetFrameworkVersion) == 'v4.8')">
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.6.2' Or $(TargetFrameworkVersion) == 'v4.6.3')">
       <ItemGroup>
-        <Reference Include="Microsoft.Bcl.AsyncInterfaces">
-          <HintPath>..\..\packages\Microsoft.Bcl.AsyncInterfaces\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
+        <Reference Include="MahApps.Metro.IconPacks.FontAwesome">
+          <HintPath>..\..\packages\MahApps.Metro.IconPacks.FontAwesome\lib\net462\MahApps.Metro.IconPacks.FontAwesome.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
       </ItemGroup>
     </When>
-    <When Condition="($(TargetFrameworkIdentifier) == 'MonoAndroid' And ($(TargetFrameworkVersion) == 'v8.0' Or $(TargetFrameworkVersion) == 'v8.1' Or $(TargetFrameworkVersion) == 'v9.0')) Or ($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v2.0' Or $(TargetFrameworkVersion) == 'v2.1' Or $(TargetFrameworkVersion) == 'v2.2')) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And $(TargetFrameworkVersion) == 'v2.0') Or ($(TargetFrameworkIdentifier) == '.NETCore' And $(TargetFrameworkVersion) == 'v5.0') Or ($(TargetFrameworkIdentifier) == 'Xamarin.iOS') Or ($(TargetFrameworkIdentifier) == 'Xamarin.Mac')">
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.7' Or $(TargetFrameworkVersion) == 'v4.7.1' Or $(TargetFrameworkVersion) == 'v4.7.2' Or $(TargetFrameworkVersion) == 'v4.8' Or $(TargetFrameworkVersion) == 'v4.8.1')">
+      <ItemGroup>
+        <Reference Include="MahApps.Metro.IconPacks.FontAwesome">
+          <HintPath>..\..\packages\MahApps.Metro.IconPacks.FontAwesome\lib\net47\MahApps.Metro.IconPacks.FontAwesome.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETCoreApp' And (($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.17763.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.18362.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.19041.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '8.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows'))">
+      <ItemGroup>
+        <Reference Include="MahApps.Metro.IconPacks.FontAwesome">
+          <HintPath>..\..\packages\MahApps.Metro.IconPacks.FontAwesome\lib\net6.0-windows7.0\MahApps.Metro.IconPacks.FontAwesome.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETCoreApp' And (($(TargetFrameworkVersion) == 'v8.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.17763.0') Or ($(TargetFrameworkVersion) == 'v8.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.18362.0') Or ($(TargetFrameworkVersion) == 'v8.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.19041.0'))">
+      <ItemGroup>
+        <Reference Include="MahApps.Metro.IconPacks.FontAwesome">
+          <HintPath>..\..\packages\MahApps.Metro.IconPacks.FontAwesome\lib\net8.0-windows7.0\MahApps.Metro.IconPacks.FontAwesome.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETCore' And $(TargetFrameworkVersion) == 'v5.0'">
+      <ItemGroup>
+        <Reference Include="MahApps.Metro.IconPacks.FontAwesome">
+          <HintPath>..\..\packages\MahApps.Metro.IconPacks.FontAwesome\lib\uap10.0.18362\MahApps.Metro.IconPacks.FontAwesome.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
+  <Choose>
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.7.1' Or $(TargetFrameworkVersion) == 'v4.7.2' Or $(TargetFrameworkVersion) == 'v4.8' Or $(TargetFrameworkVersion) == 'v4.8.1')">
+      <ItemGroup>
+        <Reference Include="Microsoft.Bcl.AsyncInterfaces">
+          <HintPath>..\..\packages\Microsoft.Bcl.AsyncInterfaces\lib\net462\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+    <When Condition="($(TargetFrameworkIdentifier) == 'MonoAndroid' And ($(TargetFrameworkVersion) == 'v8.0' Or $(TargetFrameworkVersion) == 'v8.1' Or $(TargetFrameworkVersion) == 'v9.0')) Or ($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v2.0' Or $(TargetFrameworkVersion) == 'v2.1' Or $(TargetFrameworkVersion) == 'v2.2' Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'ios') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'macos'))) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And $(TargetFrameworkVersion) == 'v2.0') Or ($(TargetFrameworkIdentifier) == '.NETCore' And $(TargetFrameworkVersion) == 'v5.0') Or ($(TargetFrameworkIdentifier) == 'Xamarin.iOS') Or ($(TargetFrameworkIdentifier) == 'Xamarin.Mac')">
       <ItemGroup>
         <Reference Include="Microsoft.Bcl.AsyncInterfaces">
           <HintPath>..\..\packages\Microsoft.Bcl.AsyncInterfaces\lib\netstandard2.0\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
@@ -562,7 +570,7 @@
         </Reference>
       </ItemGroup>
     </When>
-    <When Condition="($(TargetFrameworkIdentifier) == 'MonoAndroid' And ($(TargetFrameworkVersion) == 'v10.0' Or $(TargetFrameworkVersion) == 'v11.0' Or $(TargetFrameworkVersion) == 'v12.0')) Or ($(TargetFrameworkIdentifier) == '.NETCoreApp' And $(TargetFrameworkVersion) == 'v3.0') Or ($(TargetFrameworkIdentifier) == '.NETStandard' And $(TargetFrameworkVersion) == 'v2.1')">
+    <When Condition="($(TargetFrameworkIdentifier) == 'MonoAndroid' And ($(TargetFrameworkVersion) == 'v10.0' Or $(TargetFrameworkVersion) == 'v11.0' Or $(TargetFrameworkVersion) == 'v12.0')) Or ($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v3.0' Or $(TargetFrameworkVersion) == 'v3.1' Or $(TargetFrameworkVersion) == 'v5.0' Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.17763.0') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.18362.0') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.19041.0') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '8.0') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'android') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'tvos') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'watchos'))) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And $(TargetFrameworkVersion) == 'v2.1')">
       <ItemGroup>
         <Reference Include="Microsoft.Bcl.AsyncInterfaces">
           <HintPath>..\..\packages\Microsoft.Bcl.AsyncInterfaces\lib\netstandard2.1\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
@@ -573,10 +581,19 @@
     </When>
   </Choose>
   <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v3.1' Or $(TargetFrameworkVersion) == 'v5.0' Or $(TargetFrameworkVersion) == 'v6.0' Or $(TargetFrameworkVersion) == 'v7.0' Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.17763.0') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.18362.0') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.19041.0') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '8.0') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'android') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'ios') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'macos') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'tvos') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'watchos') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.17763.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.18362.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.19041.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '8.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'android') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'ios') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'macos') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'tvos') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'watchos') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.17763.0') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.18362.0') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.19041.0') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '8.0') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'Windows') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'android') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'ios') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'macos') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'tvos') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'watchos'))">
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETCoreApp' And (($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.17763.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.18362.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.19041.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '8.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows'))">
       <ItemGroup>
-        <Reference Include="Microsoft.Extensions.PlatformAbstractions">
-          <HintPath>..\..\packages\Microsoft.Extensions.PlatformAbstractions\lib\netstandard1.3\Microsoft.Extensions.PlatformAbstractions.dll</HintPath>
+        <Reference Include="Microsoft.Extensions.Configuration.Abstractions">
+          <HintPath>..\..\packages\Microsoft.Extensions.Configuration.Abstractions\lib\net6.0\Microsoft.Extensions.Configuration.Abstractions.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETCoreApp' And (($(TargetFrameworkVersion) == 'v8.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.17763.0') Or ($(TargetFrameworkVersion) == 'v8.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.18362.0') Or ($(TargetFrameworkVersion) == 'v8.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.19041.0'))">
+      <ItemGroup>
+        <Reference Include="Microsoft.Extensions.Configuration.Abstractions">
+          <HintPath>..\..\packages\Microsoft.Extensions.Configuration.Abstractions\lib\net8.0\Microsoft.Extensions.Configuration.Abstractions.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
@@ -584,57 +601,70 @@
     </When>
   </Choose>
   <Choose>
-    <When Condition="($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1')) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.3' Or $(TargetFrameworkVersion) == 'v1.4' Or $(TargetFrameworkVersion) == 'v1.5' Or $(TargetFrameworkVersion) == 'v1.6'))">
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETCoreApp' And (($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.17763.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.18362.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.19041.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '8.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows'))">
       <ItemGroup>
-        <Reference Include="Microsoft.Win32.Primitives">
-          <HintPath>..\..\packages\Microsoft.Win32.Primitives\ref\netstandard1.3\Microsoft.Win32.Primitives.dll</HintPath>
-          <Private>False</Private>
+        <Reference Include="Microsoft.Extensions.Primitives">
+          <HintPath>..\..\packages\Microsoft.Extensions.Primitives\lib\net6.0\Microsoft.Extensions.Primitives.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETCoreApp' And (($(TargetFrameworkVersion) == 'v8.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.17763.0') Or ($(TargetFrameworkVersion) == 'v8.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.18362.0') Or ($(TargetFrameworkVersion) == 'v8.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.19041.0'))">
+      <ItemGroup>
+        <Reference Include="Microsoft.Extensions.Primitives">
+          <HintPath>..\..\packages\Microsoft.Extensions.Primitives\lib\net8.0\Microsoft.Extensions.Primitives.dll</HintPath>
+          <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
       </ItemGroup>
     </When>
   </Choose>
   <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.5' Or $(TargetFrameworkVersion) == 'v4.5.1' Or $(TargetFrameworkVersion) == 'v4.5.2' Or $(TargetFrameworkVersion) == 'v4.5.3' Or $(TargetFrameworkVersion) == 'v4.6' Or $(TargetFrameworkVersion) == 'v4.6.1' Or $(TargetFrameworkVersion) == 'v4.6.2' Or $(TargetFrameworkVersion) == 'v4.6.3' Or $(TargetFrameworkVersion) == 'v4.7' Or $(TargetFrameworkVersion) == 'v4.7.1' Or $(TargetFrameworkVersion) == 'v4.7.2' Or $(TargetFrameworkVersion) == 'v4.8')">
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.5' Or $(TargetFrameworkVersion) == 'v4.5.1' Or $(TargetFrameworkVersion) == 'v4.5.2' Or $(TargetFrameworkVersion) == 'v4.5.3' Or $(TargetFrameworkVersion) == 'v4.6' Or $(TargetFrameworkVersion) == 'v4.6.1' Or $(TargetFrameworkVersion) == 'v4.6.2' Or $(TargetFrameworkVersion) == 'v4.6.3' Or $(TargetFrameworkVersion) == 'v4.7' Or $(TargetFrameworkVersion) == 'v4.7.1' Or $(TargetFrameworkVersion) == 'v4.7.2' Or $(TargetFrameworkVersion) == 'v4.8' Or $(TargetFrameworkVersion) == 'v4.8.1')">
       <ItemGroup>
-        <Reference Include="System.XML">
+        <Reference Include="Microsoft.VisualStudio.DesignTools.Extensibility">
+          <HintPath>..\..\packages\Microsoft.VisualStudio.DesignTools.Extensibility\lib\net45\Microsoft.VisualStudio.DesignTools.Extensibility.dll</HintPath>
+          <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
+        <Reference Include="Microsoft.VisualStudio.DesignTools.Interaction">
+          <HintPath>..\..\packages\Microsoft.VisualStudio.DesignTools.Extensibility\lib\net45\Microsoft.VisualStudio.DesignTools.Interaction.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
+  <Choose>
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.6.2' Or $(TargetFrameworkVersion) == 'v4.6.3' Or $(TargetFrameworkVersion) == 'v4.7' Or $(TargetFrameworkVersion) == 'v4.7.1' Or $(TargetFrameworkVersion) == 'v4.7.2' Or $(TargetFrameworkVersion) == 'v4.8' Or $(TargetFrameworkVersion) == 'v4.8.1')">
+      <ItemGroup>
         <Reference Include="Microsoft.Xaml.Behaviors">
-          <HintPath>..\..\packages\Microsoft.Xaml.Behaviors.Wpf\lib\net45\Microsoft.Xaml.Behaviors.dll</HintPath>
+          <HintPath>..\..\packages\Microsoft.Xaml.Behaviors.Wpf\lib\net462\Microsoft.Xaml.Behaviors.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
         <Reference Include="Microsoft.Xaml.Behaviors.Design">
-          <HintPath>..\..\packages\Microsoft.Xaml.Behaviors.Wpf\lib\net45\Design\Microsoft.Xaml.Behaviors.Design.dll</HintPath>
+          <HintPath>..\..\packages\Microsoft.Xaml.Behaviors.Wpf\lib\net462\Design\Microsoft.Xaml.Behaviors.Design.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+        <Reference Include="Microsoft.Xaml.Behaviors.DesignTools">
+          <HintPath>..\..\packages\Microsoft.Xaml.Behaviors.Wpf\lib\net462\Design\Microsoft.Xaml.Behaviors.DesignTools.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
       </ItemGroup>
     </When>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETCoreApp' And (($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.17763.0') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '8.0') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows'))">
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETCoreApp' And (($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.17763.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.18362.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.19041.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '8.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows'))">
       <ItemGroup>
         <Reference Include="Microsoft.Xaml.Behaviors">
-          <HintPath>..\..\packages\Microsoft.Xaml.Behaviors.Wpf\lib\net5.0-windows7.0\Microsoft.Xaml.Behaviors.dll</HintPath>
+          <HintPath>..\..\packages\Microsoft.Xaml.Behaviors.Wpf\lib\net6.0-windows7.0\Microsoft.Xaml.Behaviors.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
         <Reference Include="Microsoft.Xaml.Behaviors.DesignTools">
-          <HintPath>..\..\packages\Microsoft.Xaml.Behaviors.Wpf\lib\net5.0-windows7.0\Design\Microsoft.Xaml.Behaviors.DesignTools.dll</HintPath>
-          <Private>True</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v3.1' Or $(TargetFrameworkVersion) == 'v5.0' Or $(TargetFrameworkVersion) == 'v6.0' Or $(TargetFrameworkVersion) == 'v7.0' Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.18362.0') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.19041.0') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'android') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'ios') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'macos') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'tvos') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'watchos') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.17763.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.18362.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.19041.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '8.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'android') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'ios') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'macos') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'tvos') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'watchos') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.17763.0') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.18362.0') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.19041.0') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '8.0') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'Windows') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'android') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'ios') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'macos') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'tvos') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'watchos'))">
-      <ItemGroup>
-        <Reference Include="Microsoft.Xaml.Behaviors">
-          <HintPath>..\..\packages\Microsoft.Xaml.Behaviors.Wpf\lib\netcoreapp3.1\Microsoft.Xaml.Behaviors.dll</HintPath>
-          <Private>True</Private>
-          <Paket>True</Paket>
-        </Reference>
-        <Reference Include="Microsoft.Xaml.Behaviors.DesignTools">
-          <HintPath>..\..\packages\Microsoft.Xaml.Behaviors.Wpf\lib\netcoreapp3.1\Design\Microsoft.Xaml.Behaviors.DesignTools.dll</HintPath>
+          <HintPath>..\..\packages\Microsoft.Xaml.Behaviors.Wpf\lib\net6.0-windows7.0\Design\Microsoft.Xaml.Behaviors.DesignTools.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
@@ -642,36 +672,7 @@
     </When>
   </Choose>
   <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.3' Or $(TargetFrameworkVersion) == 'v1.4' Or $(TargetFrameworkVersion) == 'v1.5')">
-      <ItemGroup>
-        <Reference Include="System.AppContext">
-          <HintPath>..\..\packages\System.AppContext\ref\netstandard1.3\System.AppContext.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1')) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And $(TargetFrameworkVersion) == 'v1.6')">
-      <ItemGroup>
-        <Reference Include="System.AppContext">
-          <HintPath>..\..\packages\System.AppContext\lib\netstandard1.6\System.AppContext.dll</HintPath>
-          <Private>True</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1')) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And $(TargetFrameworkVersion) == 'v1.6')">
-      <ItemGroup>
-        <Reference Include="System.AppContext">
-          <HintPath>..\..\packages\System.AppContext\ref\netstandard1.6\System.AppContext.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
-  <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.7.1' Or $(TargetFrameworkVersion) == 'v4.7.2' Or $(TargetFrameworkVersion) == 'v4.8')">
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.7.1' Or $(TargetFrameworkVersion) == 'v4.7.2' Or $(TargetFrameworkVersion) == 'v4.8' Or $(TargetFrameworkVersion) == 'v4.8.1')">
       <ItemGroup>
         <Reference Include="mscorlib">
           <Paket>True</Paket>
@@ -704,7 +705,7 @@
         </Reference>
       </ItemGroup>
     </When>
-    <When Condition="($(TargetFrameworkIdentifier) == 'MonoAndroid' And ($(TargetFrameworkVersion) == 'v10.0' Or $(TargetFrameworkVersion) == 'v11.0' Or $(TargetFrameworkVersion) == 'v12.0' Or $(TargetFrameworkVersion) == 'v8.0' Or $(TargetFrameworkVersion) == 'v8.1' Or $(TargetFrameworkVersion) == 'v9.0')) Or ($(TargetFrameworkIdentifier) == '.NETCoreApp' And $(TargetFrameworkVersion) == 'v3.0') Or ($(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v2.0' Or $(TargetFrameworkVersion) == 'v2.1')) Or ($(TargetFrameworkIdentifier) == '.NETCore' And $(TargetFrameworkVersion) == 'v5.0') Or ($(TargetFrameworkIdentifier) == 'Xamarin.iOS') Or ($(TargetFrameworkIdentifier) == 'Xamarin.Mac')">
+    <When Condition="($(TargetFrameworkIdentifier) == 'MonoAndroid' And ($(TargetFrameworkVersion) == 'v10.0' Or $(TargetFrameworkVersion) == 'v11.0' Or $(TargetFrameworkVersion) == 'v12.0' Or $(TargetFrameworkVersion) == 'v8.0' Or $(TargetFrameworkVersion) == 'v8.1' Or $(TargetFrameworkVersion) == 'v9.0')) Or ($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v3.0' Or $(TargetFrameworkVersion) == 'v3.1' Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'ios') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'macos'))) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v2.0' Or $(TargetFrameworkVersion) == 'v2.1')) Or ($(TargetFrameworkIdentifier) == '.NETCore' And $(TargetFrameworkVersion) == 'v5.0') Or ($(TargetFrameworkIdentifier) == 'Xamarin.iOS') Or ($(TargetFrameworkIdentifier) == 'Xamarin.Mac')">
       <ItemGroup>
         <Reference Include="System.Buffers">
           <HintPath>..\..\packages\System.Buffers\lib\netstandard2.0\System.Buffers.dll</HintPath>
@@ -713,7 +714,7 @@
         </Reference>
       </ItemGroup>
     </When>
-    <When Condition="($(TargetFrameworkIdentifier) == '.NETCoreApp' And $(TargetFrameworkVersion) == 'v3.0') Or ($(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v2.0' Or $(TargetFrameworkVersion) == 'v2.1'))">
+    <When Condition="($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v3.0' Or $(TargetFrameworkVersion) == 'v3.1')) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v2.0' Or $(TargetFrameworkVersion) == 'v2.1'))">
       <ItemGroup>
         <Reference Include="System.Buffers">
           <HintPath>..\..\packages\System.Buffers\ref\netstandard2.0\System.Buffers.dll</HintPath>
@@ -724,65 +725,16 @@
     </When>
   </Choose>
   <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1' Or $(TargetFrameworkVersion) == 'v1.2')">
-      <ItemGroup>
-        <Reference Include="System.Collections">
-          <HintPath>..\..\packages\System.Collections\ref\netstandard1.0\System.Collections.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1')) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.3' Or $(TargetFrameworkVersion) == 'v1.4' Or $(TargetFrameworkVersion) == 'v1.5' Or $(TargetFrameworkVersion) == 'v1.6'))">
-      <ItemGroup>
-        <Reference Include="System.Collections">
-          <HintPath>..\..\packages\System.Collections\ref\netstandard1.3\System.Collections.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
-  <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.1' Or $(TargetFrameworkVersion) == 'v1.2')">
-      <ItemGroup>
-        <Reference Include="System.Collections.Concurrent">
-          <HintPath>..\..\packages\System.Collections.Concurrent\ref\netstandard1.1\System.Collections.Concurrent.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1')) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.3' Or $(TargetFrameworkVersion) == 'v1.4' Or $(TargetFrameworkVersion) == 'v1.5' Or $(TargetFrameworkVersion) == 'v1.6'))">
-      <ItemGroup>
-        <Reference Include="System.Collections.Concurrent">
-          <HintPath>..\..\packages\System.Collections.Concurrent\lib\netstandard1.3\System.Collections.Concurrent.dll</HintPath>
-          <Private>True</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1')) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.3' Or $(TargetFrameworkVersion) == 'v1.4' Or $(TargetFrameworkVersion) == 'v1.5' Or $(TargetFrameworkVersion) == 'v1.6'))">
-      <ItemGroup>
-        <Reference Include="System.Collections.Concurrent">
-          <HintPath>..\..\packages\System.Collections.Concurrent\ref\netstandard1.3\System.Collections.Concurrent.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
-  <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.6.1' Or $(TargetFrameworkVersion) == 'v4.6.2' Or $(TargetFrameworkVersion) == 'v4.6.3' Or $(TargetFrameworkVersion) == 'v4.7' Or $(TargetFrameworkVersion) == 'v4.7.1' Or $(TargetFrameworkVersion) == 'v4.7.2' Or $(TargetFrameworkVersion) == 'v4.8')">
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.6.2' Or $(TargetFrameworkVersion) == 'v4.6.3' Or $(TargetFrameworkVersion) == 'v4.7' Or $(TargetFrameworkVersion) == 'v4.7.1' Or $(TargetFrameworkVersion) == 'v4.7.2' Or $(TargetFrameworkVersion) == 'v4.8' Or $(TargetFrameworkVersion) == 'v4.8.1')">
       <ItemGroup>
         <Reference Include="System.Collections.Immutable">
-          <HintPath>..\..\packages\System.Collections.Immutable\lib\net461\System.Collections.Immutable.dll</HintPath>
+          <HintPath>..\..\packages\System.Collections.Immutable\lib\net462\System.Collections.Immutable.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
       </ItemGroup>
     </When>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v6.0' Or $(TargetFrameworkVersion) == 'v7.0' Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.17763.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.18362.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.19041.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '8.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'android') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'ios') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'macos') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'tvos') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'watchos') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.17763.0') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.18362.0') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.19041.0') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '8.0') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'Windows') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'android') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'ios') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'macos') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'tvos') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'watchos'))">
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETCoreApp' And (($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.17763.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.18362.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.19041.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '8.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows'))">
       <ItemGroup>
         <Reference Include="System.Collections.Immutable">
           <HintPath>..\..\packages\System.Collections.Immutable\lib\net6.0\System.Collections.Immutable.dll</HintPath>
@@ -791,10 +743,10 @@
         </Reference>
       </ItemGroup>
     </When>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v3.1' Or $(TargetFrameworkVersion) == 'v5.0' Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.17763.0') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.18362.0') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.19041.0') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '8.0') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'android') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'ios') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'macos') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'tvos') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'watchos'))">
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETCoreApp' And (($(TargetFrameworkVersion) == 'v8.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.17763.0') Or ($(TargetFrameworkVersion) == 'v8.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.18362.0') Or ($(TargetFrameworkVersion) == 'v8.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.19041.0'))">
       <ItemGroup>
         <Reference Include="System.Collections.Immutable">
-          <HintPath>..\..\packages\System.Collections.Immutable\lib\netstandard2.0\System.Collections.Immutable.dll</HintPath>
+          <HintPath>..\..\packages\System.Collections.Immutable\lib\net8.0\System.Collections.Immutable.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
@@ -802,324 +754,7 @@
     </When>
   </Choose>
   <Choose>
-    <When Condition="($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1')) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.3' Or $(TargetFrameworkVersion) == 'v1.4' Or $(TargetFrameworkVersion) == 'v1.5' Or $(TargetFrameworkVersion) == 'v1.6'))">
-      <ItemGroup>
-        <Reference Include="System.Console">
-          <HintPath>..\..\packages\System.Console\ref\netstandard1.3\System.Console.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
-  <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1' Or $(TargetFrameworkVersion) == 'v1.2')">
-      <ItemGroup>
-        <Reference Include="System.Diagnostics.Debug">
-          <HintPath>..\..\packages\System.Diagnostics.Debug\ref\netstandard1.0\System.Diagnostics.Debug.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1')) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.3' Or $(TargetFrameworkVersion) == 'v1.4' Or $(TargetFrameworkVersion) == 'v1.5' Or $(TargetFrameworkVersion) == 'v1.6'))">
-      <ItemGroup>
-        <Reference Include="System.Diagnostics.Debug">
-          <HintPath>..\..\packages\System.Diagnostics.Debug\ref\netstandard1.3\System.Diagnostics.Debug.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
-  <Choose>
-    <When Condition="($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1')) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1' Or $(TargetFrameworkVersion) == 'v1.2' Or $(TargetFrameworkVersion) == 'v1.3' Or $(TargetFrameworkVersion) == 'v1.4' Or $(TargetFrameworkVersion) == 'v1.5' Or $(TargetFrameworkVersion) == 'v1.6'))">
-      <ItemGroup>
-        <Reference Include="System.Diagnostics.Tools">
-          <HintPath>..\..\packages\System.Diagnostics.Tools\ref\netstandard1.0\System.Diagnostics.Tools.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
-  <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETStandard' And $(TargetFrameworkVersion) == 'v1.1'">
-      <ItemGroup>
-        <Reference Include="System.Diagnostics.Tracing">
-          <HintPath>..\..\packages\System.Diagnostics.Tracing\ref\netstandard1.1\System.Diagnostics.Tracing.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETStandard' And $(TargetFrameworkVersion) == 'v1.2'">
-      <ItemGroup>
-        <Reference Include="System.Diagnostics.Tracing">
-          <HintPath>..\..\packages\System.Diagnostics.Tracing\ref\netstandard1.2\System.Diagnostics.Tracing.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.3' Or $(TargetFrameworkVersion) == 'v1.4')">
-      <ItemGroup>
-        <Reference Include="System.Diagnostics.Tracing">
-          <HintPath>..\..\packages\System.Diagnostics.Tracing\ref\netstandard1.3\System.Diagnostics.Tracing.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1')) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.5' Or $(TargetFrameworkVersion) == 'v1.6'))">
-      <ItemGroup>
-        <Reference Include="System.Diagnostics.Tracing">
-          <HintPath>..\..\packages\System.Diagnostics.Tracing\ref\netstandard1.5\System.Diagnostics.Tracing.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
-  <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1' Or $(TargetFrameworkVersion) == 'v1.2')">
-      <ItemGroup>
-        <Reference Include="System.Globalization">
-          <HintPath>..\..\packages\System.Globalization\ref\netstandard1.0\System.Globalization.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1')) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.3' Or $(TargetFrameworkVersion) == 'v1.4' Or $(TargetFrameworkVersion) == 'v1.5' Or $(TargetFrameworkVersion) == 'v1.6'))">
-      <ItemGroup>
-        <Reference Include="System.Globalization">
-          <HintPath>..\..\packages\System.Globalization\ref\netstandard1.3\System.Globalization.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
-  <Choose>
-    <When Condition="($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1')) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.3' Or $(TargetFrameworkVersion) == 'v1.4' Or $(TargetFrameworkVersion) == 'v1.5' Or $(TargetFrameworkVersion) == 'v1.6'))">
-      <ItemGroup>
-        <Reference Include="System.Globalization.Calendars">
-          <HintPath>..\..\packages\System.Globalization.Calendars\ref\netstandard1.3\System.Globalization.Calendars.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
-  <Choose>
-    <When Condition="($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1')) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.5' Or $(TargetFrameworkVersion) == 'v1.6'))">
-      <ItemGroup>
-        <Reference Include="System.Globalization.Extensions">
-          <HintPath>..\..\packages\System.Globalization.Extensions\ref\netstandard1.3\System.Globalization.Extensions.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
-  <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1' Or $(TargetFrameworkVersion) == 'v1.2')">
-      <ItemGroup>
-        <Reference Include="System.IO">
-          <HintPath>..\..\packages\System.IO\ref\netstandard1.0\System.IO.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.3' Or $(TargetFrameworkVersion) == 'v1.4')">
-      <ItemGroup>
-        <Reference Include="System.IO">
-          <HintPath>..\..\packages\System.IO\ref\netstandard1.3\System.IO.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1')) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.5' Or $(TargetFrameworkVersion) == 'v1.6'))">
-      <ItemGroup>
-        <Reference Include="System.IO">
-          <HintPath>..\..\packages\System.IO\ref\netstandard1.5\System.IO.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
-  <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == 'MonoAndroid' And ($(TargetFrameworkVersion) == 'v7.0' Or $(TargetFrameworkVersion) == 'v7.1')">
-      <ItemGroup>
-        <Reference Include="System.IO.Compression">
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="$(TargetFrameworkIdentifier) == 'MonoTouch'">
-      <ItemGroup>
-        <Reference Include="System.IO.Compression">
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.1' Or $(TargetFrameworkVersion) == 'v1.2')">
-      <ItemGroup>
-        <Reference Include="System.IO.Compression">
-          <HintPath>..\..\packages\System.IO.Compression\ref\netstandard1.1\System.IO.Compression.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1')) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.3' Or $(TargetFrameworkVersion) == 'v1.4' Or $(TargetFrameworkVersion) == 'v1.5' Or $(TargetFrameworkVersion) == 'v1.6'))">
-      <ItemGroup>
-        <Reference Include="System.IO.Compression">
-          <HintPath>..\..\packages\System.IO.Compression\ref\netstandard1.3\System.IO.Compression.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="$(TargetFrameworkIdentifier) == 'Xamarin.tvOS'">
-      <ItemGroup>
-        <Reference Include="System.IO.Compression">
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="$(TargetFrameworkIdentifier) == 'Xamarin.watchOS'">
-      <ItemGroup>
-        <Reference Include="System.IO.Compression">
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
-  <Choose>
-    <When Condition="($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1')) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.3' Or $(TargetFrameworkVersion) == 'v1.4' Or $(TargetFrameworkVersion) == 'v1.5' Or $(TargetFrameworkVersion) == 'v1.6')) Or ($(TargetFrameworkIdentifier) == '.NETCore' And $(TargetFrameworkVersion) == 'v5.0')">
-      <ItemGroup>
-        <Reference Include="System.IO.Compression.ZipFile">
-          <HintPath>..\..\packages\System.IO.Compression.ZipFile\lib\netstandard1.3\System.IO.Compression.ZipFile.dll</HintPath>
-          <Private>True</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1')) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.3' Or $(TargetFrameworkVersion) == 'v1.4' Or $(TargetFrameworkVersion) == 'v1.5' Or $(TargetFrameworkVersion) == 'v1.6'))">
-      <ItemGroup>
-        <Reference Include="System.IO.Compression.ZipFile">
-          <HintPath>..\..\packages\System.IO.Compression.ZipFile\ref\netstandard1.3\System.IO.Compression.ZipFile.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
-  <Choose>
-    <When Condition="($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1')) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.3' Or $(TargetFrameworkVersion) == 'v1.4' Or $(TargetFrameworkVersion) == 'v1.5' Or $(TargetFrameworkVersion) == 'v1.6'))">
-      <ItemGroup>
-        <Reference Include="System.IO.FileSystem">
-          <HintPath>..\..\packages\System.IO.FileSystem\ref\netstandard1.3\System.IO.FileSystem.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
-  <Choose>
-    <When Condition="($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1')) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.3' Or $(TargetFrameworkVersion) == 'v1.4' Or $(TargetFrameworkVersion) == 'v1.5' Or $(TargetFrameworkVersion) == 'v1.6')) Or ($(TargetFrameworkIdentifier) == '.NETCore' And $(TargetFrameworkVersion) == 'v5.0')">
-      <ItemGroup>
-        <Reference Include="System.IO.FileSystem.Primitives">
-          <HintPath>..\..\packages\System.IO.FileSystem.Primitives\lib\netstandard1.3\System.IO.FileSystem.Primitives.dll</HintPath>
-          <Private>True</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1')) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.3' Or $(TargetFrameworkVersion) == 'v1.4' Or $(TargetFrameworkVersion) == 'v1.5' Or $(TargetFrameworkVersion) == 'v1.6'))">
-      <ItemGroup>
-        <Reference Include="System.IO.FileSystem.Primitives">
-          <HintPath>..\..\packages\System.IO.FileSystem.Primitives\ref\netstandard1.3\System.IO.FileSystem.Primitives.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
-  <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1' Or $(TargetFrameworkVersion) == 'v1.2' Or $(TargetFrameworkVersion) == 'v1.3' Or $(TargetFrameworkVersion) == 'v1.4' Or $(TargetFrameworkVersion) == 'v1.5')">
-      <ItemGroup>
-        <Reference Include="System.Linq">
-          <HintPath>..\..\packages\System.Linq\ref\netstandard1.0\System.Linq.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1')) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And $(TargetFrameworkVersion) == 'v1.6')">
-      <ItemGroup>
-        <Reference Include="System.Linq">
-          <HintPath>..\..\packages\System.Linq\lib\netstandard1.6\System.Linq.dll</HintPath>
-          <Private>True</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1')) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And $(TargetFrameworkVersion) == 'v1.6')">
-      <ItemGroup>
-        <Reference Include="System.Linq">
-          <HintPath>..\..\packages\System.Linq\ref\netstandard1.6\System.Linq.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
-  <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1' Or $(TargetFrameworkVersion) == 'v1.2')">
-      <ItemGroup>
-        <Reference Include="System.Linq.Expressions">
-          <HintPath>..\..\packages\System.Linq.Expressions\ref\netstandard1.0\System.Linq.Expressions.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.3' Or $(TargetFrameworkVersion) == 'v1.4' Or $(TargetFrameworkVersion) == 'v1.5')">
-      <ItemGroup>
-        <Reference Include="System.Linq.Expressions">
-          <HintPath>..\..\packages\System.Linq.Expressions\ref\netstandard1.3\System.Linq.Expressions.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1')) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And $(TargetFrameworkVersion) == 'v1.6')">
-      <ItemGroup>
-        <Reference Include="System.Linq.Expressions">
-          <HintPath>..\..\packages\System.Linq.Expressions\lib\netstandard1.6\System.Linq.Expressions.dll</HintPath>
-          <Private>True</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1')) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And $(TargetFrameworkVersion) == 'v1.6')">
-      <ItemGroup>
-        <Reference Include="System.Linq.Expressions">
-          <HintPath>..\..\packages\System.Linq.Expressions\ref\netstandard1.6\System.Linq.Expressions.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
-  <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.6.1' Or $(TargetFrameworkVersion) == 'v4.6.2' Or $(TargetFrameworkVersion) == 'v4.6.3' Or $(TargetFrameworkVersion) == 'v4.7')">
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.6.2' Or $(TargetFrameworkVersion) == 'v4.6.3' Or $(TargetFrameworkVersion) == 'v4.7')">
       <ItemGroup>
         <Reference Include="mscorlib">
           <Paket>True</Paket>
@@ -1128,7 +763,7 @@
     </When>
   </Choose>
   <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.6.1' Or $(TargetFrameworkVersion) == 'v4.6.2' Or $(TargetFrameworkVersion) == 'v4.6.3' Or $(TargetFrameworkVersion) == 'v4.7' Or $(TargetFrameworkVersion) == 'v4.7.1' Or $(TargetFrameworkVersion) == 'v4.7.2' Or $(TargetFrameworkVersion) == 'v4.8')">
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.6.2' Or $(TargetFrameworkVersion) == 'v4.6.3' Or $(TargetFrameworkVersion) == 'v4.7' Or $(TargetFrameworkVersion) == 'v4.7.1' Or $(TargetFrameworkVersion) == 'v4.7.2' Or $(TargetFrameworkVersion) == 'v4.8' Or $(TargetFrameworkVersion) == 'v4.8.1')">
       <ItemGroup>
         <Reference Include="System.Memory">
           <HintPath>..\..\packages\System.Memory\lib\net461\System.Memory.dll</HintPath>
@@ -1148,95 +783,7 @@
     </When>
   </Choose>
   <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == 'MonoAndroid' And ($(TargetFrameworkVersion) == 'v7.0' Or $(TargetFrameworkVersion) == 'v7.1')">
-      <ItemGroup>
-        <Reference Include="System.Net.Http">
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="$(TargetFrameworkIdentifier) == 'MonoTouch'">
-      <ItemGroup>
-        <Reference Include="System.Net.Http">
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.1' Or $(TargetFrameworkVersion) == 'v1.2')">
-      <ItemGroup>
-        <Reference Include="System.Net.Http">
-          <HintPath>..\..\packages\System.Net.Http\ref\netstandard1.1\System.Net.Http.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1')) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.3' Or $(TargetFrameworkVersion) == 'v1.4' Or $(TargetFrameworkVersion) == 'v1.5' Or $(TargetFrameworkVersion) == 'v1.6'))">
-      <ItemGroup>
-        <Reference Include="System.Net.Http">
-          <HintPath>..\..\packages\System.Net.Http\ref\netstandard1.3\System.Net.Http.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="$(TargetFrameworkIdentifier) == 'Xamarin.tvOS'">
-      <ItemGroup>
-        <Reference Include="System.Net.Http">
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="$(TargetFrameworkIdentifier) == 'Xamarin.watchOS'">
-      <ItemGroup>
-        <Reference Include="System.Net.Http">
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
-  <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETStandard' And $(TargetFrameworkVersion) == 'v1.0'">
-      <ItemGroup>
-        <Reference Include="System.Net.Primitives">
-          <HintPath>..\..\packages\System.Net.Primitives\ref\netstandard1.0\System.Net.Primitives.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.1' Or $(TargetFrameworkVersion) == 'v1.2')">
-      <ItemGroup>
-        <Reference Include="System.Net.Primitives">
-          <HintPath>..\..\packages\System.Net.Primitives\ref\netstandard1.1\System.Net.Primitives.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1')) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.3' Or $(TargetFrameworkVersion) == 'v1.4' Or $(TargetFrameworkVersion) == 'v1.5' Or $(TargetFrameworkVersion) == 'v1.6'))">
-      <ItemGroup>
-        <Reference Include="System.Net.Primitives">
-          <HintPath>..\..\packages\System.Net.Primitives\ref\netstandard1.3\System.Net.Primitives.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
-  <Choose>
-    <When Condition="($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1')) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.3' Or $(TargetFrameworkVersion) == 'v1.4' Or $(TargetFrameworkVersion) == 'v1.5' Or $(TargetFrameworkVersion) == 'v1.6'))">
-      <ItemGroup>
-        <Reference Include="System.Net.Sockets">
-          <HintPath>..\..\packages\System.Net.Sockets\ref\netstandard1.3\System.Net.Sockets.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
-  <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.7.1' Or $(TargetFrameworkVersion) == 'v4.7.2' Or $(TargetFrameworkVersion) == 'v4.8')">
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.7.1' Or $(TargetFrameworkVersion) == 'v4.7.2' Or $(TargetFrameworkVersion) == 'v4.8' Or $(TargetFrameworkVersion) == 'v4.8.1')">
       <ItemGroup>
         <Reference Include="System.Numerics.Vectors">
           <HintPath>..\..\packages\System.Numerics.Vectors\lib\net46\System.Numerics.Vectors.dll</HintPath>
@@ -1245,7 +792,7 @@
         </Reference>
       </ItemGroup>
     </When>
-    <When Condition="($(TargetFrameworkIdentifier) == 'MonoAndroid' And ($(TargetFrameworkVersion) == 'v10.0' Or $(TargetFrameworkVersion) == 'v8.0')) Or ($(TargetFrameworkIdentifier) == '.NETCoreApp' And $(TargetFrameworkVersion) == 'v3.0') Or ($(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v2.0' Or $(TargetFrameworkVersion) == 'v2.1')) Or ($(TargetFrameworkIdentifier) == '.NETCore' And $(TargetFrameworkVersion) == 'v5.0')">
+    <When Condition="($(TargetFrameworkIdentifier) == 'MonoAndroid' And ($(TargetFrameworkVersion) == 'v10.0' Or $(TargetFrameworkVersion) == 'v8.0')) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v2.0' Or $(TargetFrameworkVersion) == 'v2.1')) Or ($(TargetFrameworkIdentifier) == '.NETCore' And $(TargetFrameworkVersion) == 'v5.0')">
       <ItemGroup>
         <Reference Include="System.Numerics.Vectors">
           <HintPath>..\..\packages\System.Numerics.Vectors\lib\netstandard2.0\System.Numerics.Vectors.dll</HintPath>
@@ -1254,109 +801,11 @@
         </Reference>
       </ItemGroup>
     </When>
-    <When Condition="($(TargetFrameworkIdentifier) == '.NETCoreApp' And $(TargetFrameworkVersion) == 'v3.0') Or ($(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v2.0' Or $(TargetFrameworkVersion) == 'v2.1'))">
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v2.0' Or $(TargetFrameworkVersion) == 'v2.1')">
       <ItemGroup>
         <Reference Include="System.Numerics.Vectors">
           <HintPath>..\..\packages\System.Numerics.Vectors\ref\netstandard2.0\System.Numerics.Vectors.dll</HintPath>
           <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
-  <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1' Or $(TargetFrameworkVersion) == 'v1.2')">
-      <ItemGroup>
-        <Reference Include="System.ObjectModel">
-          <HintPath>..\..\packages\System.ObjectModel\ref\netstandard1.0\System.ObjectModel.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1')) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.3' Or $(TargetFrameworkVersion) == 'v1.4' Or $(TargetFrameworkVersion) == 'v1.5' Or $(TargetFrameworkVersion) == 'v1.6'))">
-      <ItemGroup>
-        <Reference Include="System.ObjectModel">
-          <HintPath>..\..\packages\System.ObjectModel\lib\netstandard1.3\System.ObjectModel.dll</HintPath>
-          <Private>True</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1')) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.3' Or $(TargetFrameworkVersion) == 'v1.4' Or $(TargetFrameworkVersion) == 'v1.5' Or $(TargetFrameworkVersion) == 'v1.6'))">
-      <ItemGroup>
-        <Reference Include="System.ObjectModel">
-          <HintPath>..\..\packages\System.ObjectModel\ref\netstandard1.3\System.ObjectModel.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
-  <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1' Or $(TargetFrameworkVersion) == 'v1.2')">
-      <ItemGroup>
-        <Reference Include="System.Reflection">
-          <HintPath>..\..\packages\System.Reflection\ref\netstandard1.0\System.Reflection.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.3' Or $(TargetFrameworkVersion) == 'v1.4')">
-      <ItemGroup>
-        <Reference Include="System.Reflection">
-          <HintPath>..\..\packages\System.Reflection\ref\netstandard1.3\System.Reflection.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1')) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.5' Or $(TargetFrameworkVersion) == 'v1.6'))">
-      <ItemGroup>
-        <Reference Include="System.Reflection">
-          <HintPath>..\..\packages\System.Reflection\ref\netstandard1.5\System.Reflection.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
-  <Choose>
-    <When Condition="($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1')) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.3' Or $(TargetFrameworkVersion) == 'v1.4' Or $(TargetFrameworkVersion) == 'v1.5' Or $(TargetFrameworkVersion) == 'v1.6'))">
-      <ItemGroup>
-        <Reference Include="System.Reflection.Emit">
-          <HintPath>..\..\packages\System.Reflection.Emit\ref\netstandard1.1\System.Reflection.Emit.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1')) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.3' Or $(TargetFrameworkVersion) == 'v1.4' Or $(TargetFrameworkVersion) == 'v1.5' Or $(TargetFrameworkVersion) == 'v1.6'))">
-      <ItemGroup>
-        <Reference Include="System.Reflection.Emit">
-          <HintPath>..\..\packages\System.Reflection.Emit\lib\netstandard1.3\System.Reflection.Emit.dll</HintPath>
-          <Private>True</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
-  <Choose>
-    <When Condition="($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1')) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.3' Or $(TargetFrameworkVersion) == 'v1.4' Or $(TargetFrameworkVersion) == 'v1.5' Or $(TargetFrameworkVersion) == 'v1.6'))">
-      <ItemGroup>
-        <Reference Include="System.Reflection.Emit.ILGeneration">
-          <HintPath>..\..\packages\System.Reflection.Emit.ILGeneration\ref\netstandard1.0\System.Reflection.Emit.ILGeneration.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1')) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.3' Or $(TargetFrameworkVersion) == 'v1.4' Or $(TargetFrameworkVersion) == 'v1.5' Or $(TargetFrameworkVersion) == 'v1.6'))">
-      <ItemGroup>
-        <Reference Include="System.Reflection.Emit.ILGeneration">
-          <HintPath>..\..\packages\System.Reflection.Emit.ILGeneration\lib\netstandard1.3\System.Reflection.Emit.ILGeneration.dll</HintPath>
-          <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
       </ItemGroup>
@@ -1383,27 +832,16 @@
     </When>
   </Choose>
   <Choose>
-    <When Condition="($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1')) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1' Or $(TargetFrameworkVersion) == 'v1.2' Or $(TargetFrameworkVersion) == 'v1.3' Or $(TargetFrameworkVersion) == 'v1.4' Or $(TargetFrameworkVersion) == 'v1.5' Or $(TargetFrameworkVersion) == 'v1.6'))">
-      <ItemGroup>
-        <Reference Include="System.Reflection.Extensions">
-          <HintPath>..\..\packages\System.Reflection.Extensions\ref\netstandard1.0\System.Reflection.Extensions.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
-  <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.6.1' Or $(TargetFrameworkVersion) == 'v4.6.2' Or $(TargetFrameworkVersion) == 'v4.6.3' Or $(TargetFrameworkVersion) == 'v4.7' Or $(TargetFrameworkVersion) == 'v4.7.1' Or $(TargetFrameworkVersion) == 'v4.7.2' Or $(TargetFrameworkVersion) == 'v4.8')">
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.6.2' Or $(TargetFrameworkVersion) == 'v4.6.3' Or $(TargetFrameworkVersion) == 'v4.7' Or $(TargetFrameworkVersion) == 'v4.7.1' Or $(TargetFrameworkVersion) == 'v4.7.2' Or $(TargetFrameworkVersion) == 'v4.8' Or $(TargetFrameworkVersion) == 'v4.8.1')">
       <ItemGroup>
         <Reference Include="System.Reflection.Metadata">
-          <HintPath>..\..\packages\System.Reflection.Metadata\lib\net461\System.Reflection.Metadata.dll</HintPath>
+          <HintPath>..\..\packages\System.Reflection.Metadata\lib\net462\System.Reflection.Metadata.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
       </ItemGroup>
     </When>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v6.0' Or $(TargetFrameworkVersion) == 'v7.0' Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.17763.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.18362.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.19041.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '8.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'android') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'ios') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'macos') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'tvos') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'watchos') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.17763.0') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.18362.0') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.19041.0') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '8.0') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'Windows') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'android') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'ios') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'macos') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'tvos') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'watchos'))">
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETCoreApp' And (($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.17763.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.18362.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.19041.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '8.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows'))">
       <ItemGroup>
         <Reference Include="System.Reflection.Metadata">
           <HintPath>..\..\packages\System.Reflection.Metadata\lib\net6.0\System.Reflection.Metadata.dll</HintPath>
@@ -1412,10 +850,10 @@
         </Reference>
       </ItemGroup>
     </When>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v3.1' Or $(TargetFrameworkVersion) == 'v5.0' Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.17763.0') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.18362.0') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.19041.0') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '8.0') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'android') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'ios') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'macos') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'tvos') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'watchos'))">
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETCoreApp' And (($(TargetFrameworkVersion) == 'v8.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.17763.0') Or ($(TargetFrameworkVersion) == 'v8.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.18362.0') Or ($(TargetFrameworkVersion) == 'v8.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.19041.0'))">
       <ItemGroup>
         <Reference Include="System.Reflection.Metadata">
-          <HintPath>..\..\packages\System.Reflection.Metadata\lib\netstandard2.0\System.Reflection.Metadata.dll</HintPath>
+          <HintPath>..\..\packages\System.Reflection.Metadata\lib\net8.0\System.Reflection.Metadata.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
@@ -1423,132 +861,7 @@
     </When>
   </Choose>
   <Choose>
-    <When Condition="($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1')) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1' Or $(TargetFrameworkVersion) == 'v1.2' Or $(TargetFrameworkVersion) == 'v1.3' Or $(TargetFrameworkVersion) == 'v1.4' Or $(TargetFrameworkVersion) == 'v1.5' Or $(TargetFrameworkVersion) == 'v1.6'))">
-      <ItemGroup>
-        <Reference Include="System.Reflection.Primitives">
-          <HintPath>..\..\packages\System.Reflection.Primitives\ref\netstandard1.0\System.Reflection.Primitives.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
-  <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1')">
-      <ItemGroup>
-        <Reference Include="System.Reflection.TypeExtensions">
-          <HintPath>..\..\packages\System.Reflection.TypeExtensions\lib\netcoreapp1.0\System.Reflection.TypeExtensions.dll</HintPath>
-          <Private>True</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.3' Or $(TargetFrameworkVersion) == 'v1.4')">
-      <ItemGroup>
-        <Reference Include="System.Reflection.TypeExtensions">
-          <HintPath>..\..\packages\System.Reflection.TypeExtensions\lib\netstandard1.3\System.Reflection.TypeExtensions.dll</HintPath>
-          <Private>True</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.3' Or $(TargetFrameworkVersion) == 'v1.4')">
-      <ItemGroup>
-        <Reference Include="System.Reflection.TypeExtensions">
-          <HintPath>..\..\packages\System.Reflection.TypeExtensions\ref\netstandard1.3\System.Reflection.TypeExtensions.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.5' Or $(TargetFrameworkVersion) == 'v1.6')">
-      <ItemGroup>
-        <Reference Include="System.Reflection.TypeExtensions">
-          <HintPath>..\..\packages\System.Reflection.TypeExtensions\lib\netstandard1.5\System.Reflection.TypeExtensions.dll</HintPath>
-          <Private>True</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1')) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.5' Or $(TargetFrameworkVersion) == 'v1.6'))">
-      <ItemGroup>
-        <Reference Include="System.Reflection.TypeExtensions">
-          <HintPath>..\..\packages\System.Reflection.TypeExtensions\ref\netstandard1.5\System.Reflection.TypeExtensions.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETCoreApp' And $(TargetFrameworkVersion) == 'v3.1'">
-      <ItemGroup>
-        <Reference Include="System.Reflection.TypeExtensions">
-          <HintPath>..\..\packages\System.Reflection.TypeExtensions\lib\netstandard2.0\System.Reflection.TypeExtensions.dll</HintPath>
-          <Private>True</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETCoreApp' And $(TargetFrameworkVersion) == 'v3.1'">
-      <ItemGroup>
-        <Reference Include="System.Reflection.TypeExtensions">
-          <HintPath>..\..\packages\System.Reflection.TypeExtensions\ref\netstandard2.0\System.Reflection.TypeExtensions.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
-  <Choose>
-    <When Condition="($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1')) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1' Or $(TargetFrameworkVersion) == 'v1.2' Or $(TargetFrameworkVersion) == 'v1.3' Or $(TargetFrameworkVersion) == 'v1.4' Or $(TargetFrameworkVersion) == 'v1.5' Or $(TargetFrameworkVersion) == 'v1.6'))">
-      <ItemGroup>
-        <Reference Include="System.Resources.ResourceManager">
-          <HintPath>..\..\packages\System.Resources.ResourceManager\ref\netstandard1.0\System.Resources.ResourceManager.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
-  <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1')">
-      <ItemGroup>
-        <Reference Include="System.Runtime">
-          <HintPath>..\..\packages\System.Runtime\ref\netstandard1.0\System.Runtime.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETStandard' And $(TargetFrameworkVersion) == 'v1.2'">
-      <ItemGroup>
-        <Reference Include="System.Runtime">
-          <HintPath>..\..\packages\System.Runtime\ref\netstandard1.2\System.Runtime.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.3' Or $(TargetFrameworkVersion) == 'v1.4')">
-      <ItemGroup>
-        <Reference Include="System.Runtime">
-          <HintPath>..\..\packages\System.Runtime\ref\netstandard1.3\System.Runtime.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1')) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.5' Or $(TargetFrameworkVersion) == 'v1.6'))">
-      <ItemGroup>
-        <Reference Include="System.Runtime">
-          <HintPath>..\..\packages\System.Runtime\ref\netstandard1.5\System.Runtime.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
-  <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.6.1' Or $(TargetFrameworkVersion) == 'v4.6.2' Or $(TargetFrameworkVersion) == 'v4.6.3' Or $(TargetFrameworkVersion) == 'v4.7' Or $(TargetFrameworkVersion) == 'v4.7.1' Or $(TargetFrameworkVersion) == 'v4.7.2' Or $(TargetFrameworkVersion) == 'v4.8')">
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.6.2' Or $(TargetFrameworkVersion) == 'v4.6.3' Or $(TargetFrameworkVersion) == 'v4.7' Or $(TargetFrameworkVersion) == 'v4.7.1' Or $(TargetFrameworkVersion) == 'v4.7.2' Or $(TargetFrameworkVersion) == 'v4.8' Or $(TargetFrameworkVersion) == 'v4.8.1')">
       <ItemGroup>
         <Reference Include="System.Runtime.CompilerServices.Unsafe">
           <HintPath>..\..\packages\System.Runtime.CompilerServices.Unsafe\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
@@ -1557,7 +870,7 @@
         </Reference>
       </ItemGroup>
     </When>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v6.0' Or $(TargetFrameworkVersion) == 'v7.0' Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.17763.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.18362.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.19041.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '8.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'android') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'ios') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'macos') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'tvos') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'watchos') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.17763.0') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.18362.0') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.19041.0') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '8.0') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'Windows') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'android') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'ios') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'macos') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'tvos') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'watchos'))">
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETCoreApp' And (($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.17763.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.18362.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.19041.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '8.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows'))">
       <ItemGroup>
         <Reference Include="System.Runtime.CompilerServices.Unsafe">
           <HintPath>..\..\packages\System.Runtime.CompilerServices.Unsafe\lib\net6.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
@@ -1586,332 +899,16 @@
     </When>
   </Choose>
   <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1' Or $(TargetFrameworkVersion) == 'v1.2')">
-      <ItemGroup>
-        <Reference Include="System.Runtime.Extensions">
-          <HintPath>..\..\packages\System.Runtime.Extensions\ref\netstandard1.0\System.Runtime.Extensions.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.3' Or $(TargetFrameworkVersion) == 'v1.4')">
-      <ItemGroup>
-        <Reference Include="System.Runtime.Extensions">
-          <HintPath>..\..\packages\System.Runtime.Extensions\ref\netstandard1.3\System.Runtime.Extensions.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1')) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.5' Or $(TargetFrameworkVersion) == 'v1.6'))">
-      <ItemGroup>
-        <Reference Include="System.Runtime.Extensions">
-          <HintPath>..\..\packages\System.Runtime.Extensions\ref\netstandard1.5\System.Runtime.Extensions.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
-  <Choose>
-    <When Condition="($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1')) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.3' Or $(TargetFrameworkVersion) == 'v1.4' Or $(TargetFrameworkVersion) == 'v1.5' Or $(TargetFrameworkVersion) == 'v1.6'))">
-      <ItemGroup>
-        <Reference Include="System.Runtime.Handles">
-          <HintPath>..\..\packages\System.Runtime.Handles\ref\netstandard1.3\System.Runtime.Handles.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
-  <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETCoreApp' And $(TargetFrameworkVersion) == 'v1.1'">
-      <ItemGroup>
-        <Reference Include="System.Runtime.InteropServices">
-          <HintPath>..\..\packages\System.Runtime.InteropServices\ref\netcoreapp1.1\System.Runtime.InteropServices.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETStandard' And $(TargetFrameworkVersion) == 'v1.1'">
-      <ItemGroup>
-        <Reference Include="System.Runtime.InteropServices">
-          <HintPath>..\..\packages\System.Runtime.InteropServices\ref\netstandard1.1\System.Runtime.InteropServices.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETStandard' And $(TargetFrameworkVersion) == 'v1.2'">
-      <ItemGroup>
-        <Reference Include="System.Runtime.InteropServices">
-          <HintPath>..\..\packages\System.Runtime.InteropServices\ref\netstandard1.2\System.Runtime.InteropServices.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.3' Or $(TargetFrameworkVersion) == 'v1.4')">
-      <ItemGroup>
-        <Reference Include="System.Runtime.InteropServices">
-          <HintPath>..\..\packages\System.Runtime.InteropServices\ref\netstandard1.3\System.Runtime.InteropServices.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="($(TargetFrameworkIdentifier) == '.NETCoreApp' And $(TargetFrameworkVersion) == 'v1.0') Or ($(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.5' Or $(TargetFrameworkVersion) == 'v1.6'))">
-      <ItemGroup>
-        <Reference Include="System.Runtime.InteropServices">
-          <HintPath>..\..\packages\System.Runtime.InteropServices\ref\netstandard1.5\System.Runtime.InteropServices.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
-  <Choose>
-    <When Condition="($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1')) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.1' Or $(TargetFrameworkVersion) == 'v1.2' Or $(TargetFrameworkVersion) == 'v1.3' Or $(TargetFrameworkVersion) == 'v1.4' Or $(TargetFrameworkVersion) == 'v1.5' Or $(TargetFrameworkVersion) == 'v1.6'))">
-      <ItemGroup>
-        <Reference Include="System.Runtime.InteropServices.RuntimeInformation">
-          <HintPath>..\..\packages\System.Runtime.InteropServices.RuntimeInformation\lib\netstandard1.1\System.Runtime.InteropServices.RuntimeInformation.dll</HintPath>
-          <Private>True</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1')) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.1' Or $(TargetFrameworkVersion) == 'v1.2' Or $(TargetFrameworkVersion) == 'v1.3' Or $(TargetFrameworkVersion) == 'v1.4' Or $(TargetFrameworkVersion) == 'v1.5' Or $(TargetFrameworkVersion) == 'v1.6'))">
-      <ItemGroup>
-        <Reference Include="System.Runtime.InteropServices.RuntimeInformation">
-          <HintPath>..\..\packages\System.Runtime.InteropServices.RuntimeInformation\ref\netstandard1.1\System.Runtime.InteropServices.RuntimeInformation.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="($(TargetFrameworkIdentifier) == 'WindowsPhoneApp') Or ($(TargetFrameworkIdentifier) == '.NETCore' And $(TargetFrameworkVersion) == 'v5.0')">
-      <ItemGroup>
-        <Reference Include="System.Runtime.InteropServices.RuntimeInformation">
-          <HintPath>..\..\packages\System.Runtime.InteropServices.RuntimeInformation\lib\wpa81\System.Runtime.InteropServices.RuntimeInformation.dll</HintPath>
-          <Private>True</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
-  <Choose>
-    <When Condition="($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1')) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.1' Or $(TargetFrameworkVersion) == 'v1.2' Or $(TargetFrameworkVersion) == 'v1.3' Or $(TargetFrameworkVersion) == 'v1.4' Or $(TargetFrameworkVersion) == 'v1.5' Or $(TargetFrameworkVersion) == 'v1.6'))">
-      <ItemGroup>
-        <Reference Include="System.Runtime.Numerics">
-          <HintPath>..\..\packages\System.Runtime.Numerics\ref\netstandard1.1\System.Runtime.Numerics.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1')) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.3' Or $(TargetFrameworkVersion) == 'v1.4' Or $(TargetFrameworkVersion) == 'v1.5' Or $(TargetFrameworkVersion) == 'v1.6'))">
-      <ItemGroup>
-        <Reference Include="System.Runtime.Numerics">
-          <HintPath>..\..\packages\System.Runtime.Numerics\lib\netstandard1.3\System.Runtime.Numerics.dll</HintPath>
-          <Private>True</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
-  <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETStandard' And $(TargetFrameworkVersion) == 'v1.3'">
-      <ItemGroup>
-        <Reference Include="System.Security.Cryptography.Algorithms">
-          <HintPath>..\..\packages\System.Security.Cryptography.Algorithms\ref\netstandard1.3\System.Security.Cryptography.Algorithms.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.4' Or $(TargetFrameworkVersion) == 'v1.5')">
-      <ItemGroup>
-        <Reference Include="System.Security.Cryptography.Algorithms">
-          <HintPath>..\..\packages\System.Security.Cryptography.Algorithms\ref\netstandard1.4\System.Security.Cryptography.Algorithms.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1')) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And $(TargetFrameworkVersion) == 'v1.6')">
-      <ItemGroup>
-        <Reference Include="System.Security.Cryptography.Algorithms">
-          <HintPath>..\..\packages\System.Security.Cryptography.Algorithms\ref\netstandard1.6\System.Security.Cryptography.Algorithms.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
-  <Choose>
-    <When Condition="($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1')) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And $(TargetFrameworkVersion) == 'v1.6')">
-      <ItemGroup>
-        <Reference Include="System.Security.Cryptography.Cng">
-          <HintPath>..\..\packages\System.Security.Cryptography.Cng\lib\netstandard1.6\System.Security.Cryptography.Cng.dll</HintPath>
-          <Private>True</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1')) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And $(TargetFrameworkVersion) == 'v1.6')">
-      <ItemGroup>
-        <Reference Include="System.Security.Cryptography.Cng">
-          <HintPath>..\..\packages\System.Security.Cryptography.Cng\ref\netstandard1.6\System.Security.Cryptography.Cng.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
-  <Choose>
-    <When Condition="($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1')) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And $(TargetFrameworkVersion) == 'v1.6')">
-      <ItemGroup>
-        <Reference Include="System.Security.Cryptography.Csp">
-          <HintPath>..\..\packages\System.Security.Cryptography.Csp\ref\netstandard1.3\System.Security.Cryptography.Csp.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
-  <Choose>
-    <When Condition="($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1')) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.3' Or $(TargetFrameworkVersion) == 'v1.4' Or $(TargetFrameworkVersion) == 'v1.5' Or $(TargetFrameworkVersion) == 'v1.6'))">
-      <ItemGroup>
-        <Reference Include="System.Security.Cryptography.Encoding">
-          <HintPath>..\..\packages\System.Security.Cryptography.Encoding\ref\netstandard1.3\System.Security.Cryptography.Encoding.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
-  <Choose>
-    <When Condition="($(TargetFrameworkIdentifier) == 'MonoAndroid' And ($(TargetFrameworkVersion) == 'v7.0' Or $(TargetFrameworkVersion) == 'v7.1')) Or ($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1')) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And $(TargetFrameworkVersion) == 'v1.6')">
-      <ItemGroup>
-        <Reference Include="System.Security.Cryptography.OpenSsl">
-          <HintPath>..\..\packages\System.Security.Cryptography.OpenSsl\lib\netstandard1.6\System.Security.Cryptography.OpenSsl.dll</HintPath>
-          <Private>True</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1')) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And $(TargetFrameworkVersion) == 'v1.6')">
-      <ItemGroup>
-        <Reference Include="System.Security.Cryptography.OpenSsl">
-          <HintPath>..\..\packages\System.Security.Cryptography.OpenSsl\ref\netstandard1.6\System.Security.Cryptography.OpenSsl.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
-  <Choose>
-    <When Condition="($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1')) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.3' Or $(TargetFrameworkVersion) == 'v1.4' Or $(TargetFrameworkVersion) == 'v1.5' Or $(TargetFrameworkVersion) == 'v1.6')) Or ($(TargetFrameworkIdentifier) == '.NETCore' And $(TargetFrameworkVersion) == 'v5.0')">
-      <ItemGroup>
-        <Reference Include="System.Security.Cryptography.Primitives">
-          <HintPath>..\..\packages\System.Security.Cryptography.Primitives\lib\netstandard1.3\System.Security.Cryptography.Primitives.dll</HintPath>
-          <Private>True</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1')) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.3' Or $(TargetFrameworkVersion) == 'v1.4' Or $(TargetFrameworkVersion) == 'v1.5' Or $(TargetFrameworkVersion) == 'v1.6'))">
-      <ItemGroup>
-        <Reference Include="System.Security.Cryptography.Primitives">
-          <HintPath>..\..\packages\System.Security.Cryptography.Primitives\ref\netstandard1.3\System.Security.Cryptography.Primitives.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
-  <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETStandard' And $(TargetFrameworkVersion) == 'v1.3'">
-      <ItemGroup>
-        <Reference Include="System.Security.Cryptography.X509Certificates">
-          <HintPath>..\..\packages\System.Security.Cryptography.X509Certificates\ref\netstandard1.3\System.Security.Cryptography.X509Certificates.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1')) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.4' Or $(TargetFrameworkVersion) == 'v1.5' Or $(TargetFrameworkVersion) == 'v1.6'))">
-      <ItemGroup>
-        <Reference Include="System.Security.Cryptography.X509Certificates">
-          <HintPath>..\..\packages\System.Security.Cryptography.X509Certificates\ref\netstandard1.4\System.Security.Cryptography.X509Certificates.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
-  <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1' Or $(TargetFrameworkVersion) == 'v1.2')">
-      <ItemGroup>
-        <Reference Include="System.Text.Encoding">
-          <HintPath>..\..\packages\System.Text.Encoding\ref\netstandard1.0\System.Text.Encoding.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1')) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.3' Or $(TargetFrameworkVersion) == 'v1.4' Or $(TargetFrameworkVersion) == 'v1.5' Or $(TargetFrameworkVersion) == 'v1.6'))">
-      <ItemGroup>
-        <Reference Include="System.Text.Encoding">
-          <HintPath>..\..\packages\System.Text.Encoding\ref\netstandard1.3\System.Text.Encoding.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
-  <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1' Or $(TargetFrameworkVersion) == 'v1.2')">
-      <ItemGroup>
-        <Reference Include="System.Text.Encoding.Extensions">
-          <HintPath>..\..\packages\System.Text.Encoding.Extensions\ref\netstandard1.0\System.Text.Encoding.Extensions.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1')) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.3' Or $(TargetFrameworkVersion) == 'v1.4' Or $(TargetFrameworkVersion) == 'v1.5' Or $(TargetFrameworkVersion) == 'v1.6'))">
-      <ItemGroup>
-        <Reference Include="System.Text.Encoding.Extensions">
-          <HintPath>..\..\packages\System.Text.Encoding.Extensions\ref\netstandard1.3\System.Text.Encoding.Extensions.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
-  <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.7.1' Or $(TargetFrameworkVersion) == 'v4.7.2' Or $(TargetFrameworkVersion) == 'v4.8')">
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.7.1' Or $(TargetFrameworkVersion) == 'v4.7.2' Or $(TargetFrameworkVersion) == 'v4.8' Or $(TargetFrameworkVersion) == 'v4.8.1')">
       <ItemGroup>
         <Reference Include="System.Text.Encodings.Web">
-          <HintPath>..\..\packages\System.Text.Encodings.Web\lib\net461\System.Text.Encodings.Web.dll</HintPath>
+          <HintPath>..\..\packages\System.Text.Encodings.Web\lib\net462\System.Text.Encodings.Web.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
       </ItemGroup>
     </When>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v3.1' Or $(TargetFrameworkVersion) == 'v5.0' Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.17763.0') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.18362.0') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.19041.0') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '8.0') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'android') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'ios') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'macos') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'tvos') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'watchos'))">
-      <ItemGroup>
-        <Reference Include="System.Text.Encodings.Web">
-          <HintPath>..\..\packages\System.Text.Encodings.Web\lib\netcoreapp3.1\System.Text.Encodings.Web.dll</HintPath>
-          <Private>True</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="($(TargetFrameworkIdentifier) == 'MonoAndroid' And ($(TargetFrameworkVersion) == 'v10.0' Or $(TargetFrameworkVersion) == 'v11.0' Or $(TargetFrameworkVersion) == 'v12.0' Or $(TargetFrameworkVersion) == 'v8.0' Or $(TargetFrameworkVersion) == 'v8.1' Or $(TargetFrameworkVersion) == 'v9.0')) Or ($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v2.0' Or $(TargetFrameworkVersion) == 'v2.1' Or $(TargetFrameworkVersion) == 'v2.2' Or $(TargetFrameworkVersion) == 'v3.0')) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v2.0' Or $(TargetFrameworkVersion) == 'v2.1')) Or ($(TargetFrameworkIdentifier) == '.NETCore' And $(TargetFrameworkVersion) == 'v5.0') Or ($(TargetFrameworkIdentifier) == 'Xamarin.iOS') Or ($(TargetFrameworkIdentifier) == 'Xamarin.Mac')">
+    <When Condition="($(TargetFrameworkIdentifier) == 'MonoAndroid' And ($(TargetFrameworkVersion) == 'v10.0' Or $(TargetFrameworkVersion) == 'v11.0' Or $(TargetFrameworkVersion) == 'v12.0' Or $(TargetFrameworkVersion) == 'v8.0' Or $(TargetFrameworkVersion) == 'v8.1' Or $(TargetFrameworkVersion) == 'v9.0')) Or ($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v2.0' Or $(TargetFrameworkVersion) == 'v2.1' Or $(TargetFrameworkVersion) == 'v2.2' Or $(TargetFrameworkVersion) == 'v3.0' Or $(TargetFrameworkVersion) == 'v3.1' Or $(TargetFrameworkVersion) == 'v5.0' Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.17763.0') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.18362.0') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.19041.0') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '8.0') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'android') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'ios') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'macos') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'tvos') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'watchos'))) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v2.0' Or $(TargetFrameworkVersion) == 'v2.1')) Or ($(TargetFrameworkIdentifier) == '.NETCore' And $(TargetFrameworkVersion) == 'v5.0') Or ($(TargetFrameworkIdentifier) == 'Xamarin.iOS') Or ($(TargetFrameworkIdentifier) == 'Xamarin.Mac')">
       <ItemGroup>
         <Reference Include="System.Text.Encodings.Web">
           <HintPath>..\..\packages\System.Text.Encodings.Web\lib\netstandard2.0\System.Text.Encodings.Web.dll</HintPath>
@@ -1922,16 +919,16 @@
     </When>
   </Choose>
   <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.7.1' Or $(TargetFrameworkVersion) == 'v4.7.2' Or $(TargetFrameworkVersion) == 'v4.8')">
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.7.1' Or $(TargetFrameworkVersion) == 'v4.7.2' Or $(TargetFrameworkVersion) == 'v4.8' Or $(TargetFrameworkVersion) == 'v4.8.1')">
       <ItemGroup>
         <Reference Include="System.Text.Json">
-          <HintPath>..\..\packages\System.Text.Json\lib\net461\System.Text.Json.dll</HintPath>
+          <HintPath>..\..\packages\System.Text.Json\lib\net462\System.Text.Json.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
       </ItemGroup>
     </When>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v6.0' Or $(TargetFrameworkVersion) == 'v7.0' Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.17763.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.18362.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.19041.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '8.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'android') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'ios') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'macos') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'tvos') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'watchos') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.17763.0') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.18362.0') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.19041.0') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '8.0') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'Windows') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'android') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'ios') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'macos') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'tvos') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'watchos'))">
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v6.0' Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.17763.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.18362.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.19041.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '8.0') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'Windows') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'android') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'ios') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'macos') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'tvos') Or ($(TargetFrameworkVersion) == 'v6.0' And '$(TargetPlatformIdentifier)' == 'watchos'))">
       <ItemGroup>
         <Reference Include="System.Text.Json">
           <HintPath>..\..\packages\System.Text.Json\lib\net6.0\System.Text.Json.dll</HintPath>
@@ -1940,16 +937,25 @@
         </Reference>
       </ItemGroup>
     </When>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v3.1' Or $(TargetFrameworkVersion) == 'v5.0' Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.17763.0') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.18362.0') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.19041.0') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '8.0') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'android') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'ios') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'macos') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'tvos') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'watchos'))">
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v7.0' Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.17763.0') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.18362.0') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.19041.0') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '8.0') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'Windows') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'android') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'ios') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'macos') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'tvos') Or ($(TargetFrameworkVersion) == 'v7.0' And '$(TargetPlatformIdentifier)' == 'watchos'))">
       <ItemGroup>
         <Reference Include="System.Text.Json">
-          <HintPath>..\..\packages\System.Text.Json\lib\netcoreapp3.1\System.Text.Json.dll</HintPath>
+          <HintPath>..\..\packages\System.Text.Json\lib\net7.0\System.Text.Json.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
       </ItemGroup>
     </When>
-    <When Condition="($(TargetFrameworkIdentifier) == 'MonoAndroid' And ($(TargetFrameworkVersion) == 'v10.0' Or $(TargetFrameworkVersion) == 'v11.0' Or $(TargetFrameworkVersion) == 'v12.0' Or $(TargetFrameworkVersion) == 'v8.0' Or $(TargetFrameworkVersion) == 'v8.1' Or $(TargetFrameworkVersion) == 'v9.0')) Or ($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v2.0' Or $(TargetFrameworkVersion) == 'v2.1' Or $(TargetFrameworkVersion) == 'v2.2' Or $(TargetFrameworkVersion) == 'v3.0')) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v2.0' Or $(TargetFrameworkVersion) == 'v2.1')) Or ($(TargetFrameworkIdentifier) == '.NETCore' And $(TargetFrameworkVersion) == 'v5.0') Or ($(TargetFrameworkIdentifier) == 'Xamarin.iOS') Or ($(TargetFrameworkIdentifier) == 'Xamarin.Mac')">
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v8.0' Or ($(TargetFrameworkVersion) == 'v8.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.17763.0') Or ($(TargetFrameworkVersion) == 'v8.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.18362.0') Or ($(TargetFrameworkVersion) == 'v8.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.19041.0') Or ($(TargetFrameworkVersion) == 'v8.0' And '$(TargetPlatformIdentifier)' == 'android') Or ($(TargetFrameworkVersion) == 'v8.0' And '$(TargetPlatformIdentifier)' == 'ios') Or ($(TargetFrameworkVersion) == 'v8.0' And '$(TargetPlatformIdentifier)' == 'macos') Or ($(TargetFrameworkVersion) == 'v8.0' And '$(TargetPlatformIdentifier)' == 'tvos') Or ($(TargetFrameworkVersion) == 'v8.0' And '$(TargetPlatformIdentifier)' == 'watchos'))">
+      <ItemGroup>
+        <Reference Include="System.Text.Json">
+          <HintPath>..\..\packages\System.Text.Json\lib\net8.0\System.Text.Json.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+    <When Condition="($(TargetFrameworkIdentifier) == 'MonoAndroid' And ($(TargetFrameworkVersion) == 'v10.0' Or $(TargetFrameworkVersion) == 'v11.0' Or $(TargetFrameworkVersion) == 'v12.0' Or $(TargetFrameworkVersion) == 'v8.0' Or $(TargetFrameworkVersion) == 'v8.1' Or $(TargetFrameworkVersion) == 'v9.0')) Or ($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v2.0' Or $(TargetFrameworkVersion) == 'v2.1' Or $(TargetFrameworkVersion) == 'v2.2' Or $(TargetFrameworkVersion) == 'v3.0' Or $(TargetFrameworkVersion) == 'v3.1' Or $(TargetFrameworkVersion) == 'v5.0' Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.17763.0') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.18362.0') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '10.0.19041.0') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows' And '$(TargetPlatformVersion)' == '8.0') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'Windows') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'android') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'ios') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'macos') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'tvos') Or ($(TargetFrameworkVersion) == 'v5.0' And '$(TargetPlatformIdentifier)' == 'watchos'))) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v2.0' Or $(TargetFrameworkVersion) == 'v2.1')) Or ($(TargetFrameworkIdentifier) == '.NETCore' And $(TargetFrameworkVersion) == 'v5.0') Or ($(TargetFrameworkIdentifier) == 'Xamarin.iOS') Or ($(TargetFrameworkIdentifier) == 'Xamarin.Mac')">
       <ItemGroup>
         <Reference Include="System.Text.Json">
           <HintPath>..\..\packages\System.Text.Json\lib\netstandard2.0\System.Text.Json.dll</HintPath>
@@ -1959,8 +965,6 @@
       </ItemGroup>
     </When>
   </Choose>
-  <Import Project="..\..\packages\NETStandard.Library\build\$(__paket__NETStandard_Library_targets).targets" Condition="Exists('..\..\packages\NETStandard.Library\build\$(__paket__NETStandard_Library_targets).targets')" Label="Paket" />
-  <Import Project="..\..\packages\System.Text.Json\build\System.Text.Json.targets" Condition="Exists('..\..\packages\System.Text.Json\build\System.Text.Json.targets')" Label="Paket" />
   <ItemGroup>
     <Analyzer Include="..\..\packages\System.Text.Json\analyzers\dotnet\roslyn3.11\cs\System.Text.Json.SourceGeneration.dll">
       <Paket>True</Paket>
@@ -2046,105 +1050,51 @@
     <Analyzer Include="..\..\packages\System.Text.Json\analyzers\dotnet\roslyn4.0\cs\zh-Hant\System.Text.Json.SourceGeneration.resources.dll">
       <Paket>True</Paket>
     </Analyzer>
+    <Analyzer Include="..\..\packages\System.Text.Json\analyzers\dotnet\roslyn4.4\cs\System.Text.Json.SourceGeneration.dll">
+      <Paket>True</Paket>
+    </Analyzer>
+    <Analyzer Include="..\..\packages\System.Text.Json\analyzers\dotnet\roslyn4.4\cs\cs\System.Text.Json.SourceGeneration.resources.dll">
+      <Paket>True</Paket>
+    </Analyzer>
+    <Analyzer Include="..\..\packages\System.Text.Json\analyzers\dotnet\roslyn4.4\cs\de\System.Text.Json.SourceGeneration.resources.dll">
+      <Paket>True</Paket>
+    </Analyzer>
+    <Analyzer Include="..\..\packages\System.Text.Json\analyzers\dotnet\roslyn4.4\cs\es\System.Text.Json.SourceGeneration.resources.dll">
+      <Paket>True</Paket>
+    </Analyzer>
+    <Analyzer Include="..\..\packages\System.Text.Json\analyzers\dotnet\roslyn4.4\cs\fr\System.Text.Json.SourceGeneration.resources.dll">
+      <Paket>True</Paket>
+    </Analyzer>
+    <Analyzer Include="..\..\packages\System.Text.Json\analyzers\dotnet\roslyn4.4\cs\it\System.Text.Json.SourceGeneration.resources.dll">
+      <Paket>True</Paket>
+    </Analyzer>
+    <Analyzer Include="..\..\packages\System.Text.Json\analyzers\dotnet\roslyn4.4\cs\ja\System.Text.Json.SourceGeneration.resources.dll">
+      <Paket>True</Paket>
+    </Analyzer>
+    <Analyzer Include="..\..\packages\System.Text.Json\analyzers\dotnet\roslyn4.4\cs\ko\System.Text.Json.SourceGeneration.resources.dll">
+      <Paket>True</Paket>
+    </Analyzer>
+    <Analyzer Include="..\..\packages\System.Text.Json\analyzers\dotnet\roslyn4.4\cs\pl\System.Text.Json.SourceGeneration.resources.dll">
+      <Paket>True</Paket>
+    </Analyzer>
+    <Analyzer Include="..\..\packages\System.Text.Json\analyzers\dotnet\roslyn4.4\cs\pt-BR\System.Text.Json.SourceGeneration.resources.dll">
+      <Paket>True</Paket>
+    </Analyzer>
+    <Analyzer Include="..\..\packages\System.Text.Json\analyzers\dotnet\roslyn4.4\cs\ru\System.Text.Json.SourceGeneration.resources.dll">
+      <Paket>True</Paket>
+    </Analyzer>
+    <Analyzer Include="..\..\packages\System.Text.Json\analyzers\dotnet\roslyn4.4\cs\tr\System.Text.Json.SourceGeneration.resources.dll">
+      <Paket>True</Paket>
+    </Analyzer>
+    <Analyzer Include="..\..\packages\System.Text.Json\analyzers\dotnet\roslyn4.4\cs\zh-Hans\System.Text.Json.SourceGeneration.resources.dll">
+      <Paket>True</Paket>
+    </Analyzer>
+    <Analyzer Include="..\..\packages\System.Text.Json\analyzers\dotnet\roslyn4.4\cs\zh-Hant\System.Text.Json.SourceGeneration.resources.dll">
+      <Paket>True</Paket>
+    </Analyzer>
   </ItemGroup>
   <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETCoreApp' And $(TargetFrameworkVersion) == 'v1.1'">
-      <ItemGroup>
-        <Reference Include="System.Text.RegularExpressions">
-          <HintPath>..\..\packages\System.Text.RegularExpressions\ref\netcoreapp1.1\System.Text.RegularExpressions.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1' Or $(TargetFrameworkVersion) == 'v1.2')">
-      <ItemGroup>
-        <Reference Include="System.Text.RegularExpressions">
-          <HintPath>..\..\packages\System.Text.RegularExpressions\ref\netstandard1.0\System.Text.RegularExpressions.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.3' Or $(TargetFrameworkVersion) == 'v1.4' Or $(TargetFrameworkVersion) == 'v1.5')">
-      <ItemGroup>
-        <Reference Include="System.Text.RegularExpressions">
-          <HintPath>..\..\packages\System.Text.RegularExpressions\ref\netstandard1.3\System.Text.RegularExpressions.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1')) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And $(TargetFrameworkVersion) == 'v1.6')">
-      <ItemGroup>
-        <Reference Include="System.Text.RegularExpressions">
-          <HintPath>..\..\packages\System.Text.RegularExpressions\lib\netstandard1.6\System.Text.RegularExpressions.dll</HintPath>
-          <Private>True</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="($(TargetFrameworkIdentifier) == '.NETCoreApp' And $(TargetFrameworkVersion) == 'v1.0') Or ($(TargetFrameworkIdentifier) == '.NETStandard' And $(TargetFrameworkVersion) == 'v1.6')">
-      <ItemGroup>
-        <Reference Include="System.Text.RegularExpressions">
-          <HintPath>..\..\packages\System.Text.RegularExpressions\ref\netstandard1.6\System.Text.RegularExpressions.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
-  <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1' Or $(TargetFrameworkVersion) == 'v1.2')">
-      <ItemGroup>
-        <Reference Include="System.Threading">
-          <HintPath>..\..\packages\System.Threading\ref\netstandard1.0\System.Threading.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1')) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.3' Or $(TargetFrameworkVersion) == 'v1.4' Or $(TargetFrameworkVersion) == 'v1.5' Or $(TargetFrameworkVersion) == 'v1.6'))">
-      <ItemGroup>
-        <Reference Include="System.Threading">
-          <HintPath>..\..\packages\System.Threading\lib\netstandard1.3\System.Threading.dll</HintPath>
-          <Private>True</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1')) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.3' Or $(TargetFrameworkVersion) == 'v1.4' Or $(TargetFrameworkVersion) == 'v1.5' Or $(TargetFrameworkVersion) == 'v1.6'))">
-      <ItemGroup>
-        <Reference Include="System.Threading">
-          <HintPath>..\..\packages\System.Threading\ref\netstandard1.3\System.Threading.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
-  <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1' Or $(TargetFrameworkVersion) == 'v1.2')">
-      <ItemGroup>
-        <Reference Include="System.Threading.Tasks">
-          <HintPath>..\..\packages\System.Threading.Tasks\ref\netstandard1.0\System.Threading.Tasks.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1')) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.3' Or $(TargetFrameworkVersion) == 'v1.4' Or $(TargetFrameworkVersion) == 'v1.5' Or $(TargetFrameworkVersion) == 'v1.6'))">
-      <ItemGroup>
-        <Reference Include="System.Threading.Tasks">
-          <HintPath>..\..\packages\System.Threading.Tasks\ref\netstandard1.3\System.Threading.Tasks.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
-  <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.6.1' Or $(TargetFrameworkVersion) == 'v4.6.2' Or $(TargetFrameworkVersion) == 'v4.6.3' Or $(TargetFrameworkVersion) == 'v4.7' Or $(TargetFrameworkVersion) == 'v4.7.1' Or $(TargetFrameworkVersion) == 'v4.7.2' Or $(TargetFrameworkVersion) == 'v4.8')">
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.6.2' Or $(TargetFrameworkVersion) == 'v4.6.3' Or $(TargetFrameworkVersion) == 'v4.7' Or $(TargetFrameworkVersion) == 'v4.7.1' Or $(TargetFrameworkVersion) == 'v4.7.2' Or $(TargetFrameworkVersion) == 'v4.8' Or $(TargetFrameworkVersion) == 'v4.8.1')">
       <ItemGroup>
         <Reference Include="System.Threading.Tasks.Extensions">
           <HintPath>..\..\packages\System.Threading.Tasks.Extensions\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
@@ -2153,7 +1103,7 @@
         </Reference>
       </ItemGroup>
     </When>
-    <When Condition="($(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.5.2' Or $(TargetFrameworkVersion) == 'v4.5.3' Or $(TargetFrameworkVersion) == 'v4.6')) Or ($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1')) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.3' Or $(TargetFrameworkVersion) == 'v1.4' Or $(TargetFrameworkVersion) == 'v1.5' Or $(TargetFrameworkVersion) == 'v1.6'))">
+    <When Condition="($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1')) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.3' Or $(TargetFrameworkVersion) == 'v1.4' Or $(TargetFrameworkVersion) == 'v1.5' Or $(TargetFrameworkVersion) == 'v1.6'))">
       <ItemGroup>
         <Reference Include="System.Threading.Tasks.Extensions">
           <HintPath>..\..\packages\System.Threading.Tasks.Extensions\lib\netstandard1.0\System.Threading.Tasks.Extensions.dll</HintPath>
@@ -2173,18 +1123,7 @@
     </When>
   </Choose>
   <Choose>
-    <When Condition="($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1')) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.2' Or $(TargetFrameworkVersion) == 'v1.3' Or $(TargetFrameworkVersion) == 'v1.4' Or $(TargetFrameworkVersion) == 'v1.5' Or $(TargetFrameworkVersion) == 'v1.6'))">
-      <ItemGroup>
-        <Reference Include="System.Threading.Timer">
-          <HintPath>..\..\packages\System.Threading.Timer\ref\netstandard1.2\System.Threading.Timer.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
-  <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.7.1' Or $(TargetFrameworkVersion) == 'v4.7.2' Or $(TargetFrameworkVersion) == 'v4.8')">
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.7.1' Or $(TargetFrameworkVersion) == 'v4.7.2' Or $(TargetFrameworkVersion) == 'v4.8' Or $(TargetFrameworkVersion) == 'v4.8.1')">
       <ItemGroup>
         <Reference Include="System.ValueTuple">
           <HintPath>..\..\packages\System.ValueTuple\lib\net47\System.ValueTuple.dll</HintPath>
@@ -2195,65 +1134,7 @@
     </When>
   </Choose>
   <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1' Or $(TargetFrameworkVersion) == 'v1.2')">
-      <ItemGroup>
-        <Reference Include="System.Xml.ReaderWriter">
-          <HintPath>..\..\packages\System.Xml.ReaderWriter\ref\netstandard1.0\System.Xml.ReaderWriter.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1')) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.3' Or $(TargetFrameworkVersion) == 'v1.4' Or $(TargetFrameworkVersion) == 'v1.5' Or $(TargetFrameworkVersion) == 'v1.6'))">
-      <ItemGroup>
-        <Reference Include="System.Xml.ReaderWriter">
-          <HintPath>..\..\packages\System.Xml.ReaderWriter\lib\netstandard1.3\System.Xml.ReaderWriter.dll</HintPath>
-          <Private>True</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1')) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.3' Or $(TargetFrameworkVersion) == 'v1.4' Or $(TargetFrameworkVersion) == 'v1.5' Or $(TargetFrameworkVersion) == 'v1.6'))">
-      <ItemGroup>
-        <Reference Include="System.Xml.ReaderWriter">
-          <HintPath>..\..\packages\System.Xml.ReaderWriter\ref\netstandard1.3\System.Xml.ReaderWriter.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
-  <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1' Or $(TargetFrameworkVersion) == 'v1.2')">
-      <ItemGroup>
-        <Reference Include="System.Xml.XDocument">
-          <HintPath>..\..\packages\System.Xml.XDocument\ref\netstandard1.0\System.Xml.XDocument.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1')) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.3' Or $(TargetFrameworkVersion) == 'v1.4' Or $(TargetFrameworkVersion) == 'v1.5' Or $(TargetFrameworkVersion) == 'v1.6'))">
-      <ItemGroup>
-        <Reference Include="System.Xml.XDocument">
-          <HintPath>..\..\packages\System.Xml.XDocument\lib\netstandard1.3\System.Xml.XDocument.dll</HintPath>
-          <Private>True</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-    <When Condition="($(TargetFrameworkIdentifier) == '.NETCoreApp' And ($(TargetFrameworkVersion) == 'v1.0' Or $(TargetFrameworkVersion) == 'v1.1')) Or ($(TargetFrameworkIdentifier) == '.NETStandard' And ($(TargetFrameworkVersion) == 'v1.3' Or $(TargetFrameworkVersion) == 'v1.4' Or $(TargetFrameworkVersion) == 'v1.5' Or $(TargetFrameworkVersion) == 'v1.6'))">
-      <ItemGroup>
-        <Reference Include="System.Xml.XDocument">
-          <HintPath>..\..\packages\System.Xml.XDocument\ref\netstandard1.3\System.Xml.XDocument.dll</HintPath>
-          <Private>False</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
-  <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.0' Or $(TargetFrameworkVersion) == 'v4.0.3' Or $(TargetFrameworkVersion) == 'v4.5' Or $(TargetFrameworkVersion) == 'v4.5.1' Or $(TargetFrameworkVersion) == 'v4.5.2' Or $(TargetFrameworkVersion) == 'v4.5.3' Or $(TargetFrameworkVersion) == 'v4.6' Or $(TargetFrameworkVersion) == 'v4.6.1' Or $(TargetFrameworkVersion) == 'v4.6.2' Or $(TargetFrameworkVersion) == 'v4.6.3' Or $(TargetFrameworkVersion) == 'v4.7' Or $(TargetFrameworkVersion) == 'v4.7.1' Or $(TargetFrameworkVersion) == 'v4.7.2' Or $(TargetFrameworkVersion) == 'v4.8')">
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.0' Or $(TargetFrameworkVersion) == 'v4.0.3' Or $(TargetFrameworkVersion) == 'v4.5' Or $(TargetFrameworkVersion) == 'v4.5.1' Or $(TargetFrameworkVersion) == 'v4.5.2' Or $(TargetFrameworkVersion) == 'v4.5.3' Or $(TargetFrameworkVersion) == 'v4.6' Or $(TargetFrameworkVersion) == 'v4.6.1' Or $(TargetFrameworkVersion) == 'v4.6.2' Or $(TargetFrameworkVersion) == 'v4.6.3' Or $(TargetFrameworkVersion) == 'v4.7' Or $(TargetFrameworkVersion) == 'v4.7.1' Or $(TargetFrameworkVersion) == 'v4.7.2' Or $(TargetFrameworkVersion) == 'v4.8' Or $(TargetFrameworkVersion) == 'v4.8.1')">
       <ItemGroup>
         <Reference Include="ToastNotifications">
           <HintPath>..\..\packages\ToastNotifications\lib\net40\ToastNotifications.dll</HintPath>

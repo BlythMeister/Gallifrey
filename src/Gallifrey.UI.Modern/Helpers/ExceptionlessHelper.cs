@@ -79,7 +79,7 @@ namespace Gallifrey.UI.Modern.Helpers
         {
             if (registered)
             {
-                ExceptionlessClient.Default.Shutdown();
+                ExceptionlessClient.Default.ShutdownAsync().Wait();
                 registered = false;
             }
         }

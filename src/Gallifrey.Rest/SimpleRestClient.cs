@@ -28,7 +28,7 @@ namespace Gallifrey.Rest
                 Directory.CreateDirectory(errorResponseDirectory);
             }
 
-            client = new RestClient(new RestClientOptions(baseUrl) { Timeout = (int)TimeSpan.FromMinutes(2).TotalMilliseconds, AutomaticDecompression = DecompressionMethods.GZip });
+            client = new RestClient(new RestClientOptions(baseUrl) { Timeout = TimeSpan.FromMinutes(2), AutomaticDecompression = DecompressionMethods.GZip });
         }
 
         public static SimpleRestClient WithBasicAuthentication(string baseUrl, string username, string password, Func<string, List<string>> errorMessageSerializationFunction)

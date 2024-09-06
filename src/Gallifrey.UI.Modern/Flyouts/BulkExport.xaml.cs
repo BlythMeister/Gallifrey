@@ -231,7 +231,7 @@ namespace Gallifrey.UI.Modern.Flyouts
             {
                 logs = modelHelpers.Gallifrey.JiraConnection.GetWorkLoggedForDatesFilteredIssues(dates.Distinct(), references.Distinct()).ToList();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw new BulkExportException("Unable To Get WorkLogs!\nCannot Export Time");
             }

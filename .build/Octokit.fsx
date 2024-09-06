@@ -1,5 +1,5 @@
 #nowarn "211"
-#r @"../packages/Octokit/lib/net46/Octokit.dll"
+#r @"../packages/Octokit/lib/netstandard2.0/Octokit.dll"
 #r "System.Net.Http"
 
 open Octokit
@@ -30,10 +30,10 @@ type private HttpClientWithTimeout(timeout : TimeSpan) as this =
             | _ -> ())
 
     interface IHttpClient with
-        member __.Send(request : IRequest, ct : CancellationToken) =
+        member __.Send(request : IRequest, ct : CancellationToken, pp) =
             setter.Force()
             match request with :? Request as r -> r.Timeout <- timeout | _ -> ()
-            base.Send(request, ct)
+            base.Send(request, ct, pp)
 
 let private isRunningOnMono = System.Type.GetType ("Mono.Runtime") <> null
 
