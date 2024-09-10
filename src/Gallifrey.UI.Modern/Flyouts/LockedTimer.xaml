@@ -57,10 +57,10 @@
         </ListView>
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom">
             <Button Style="{DynamicResource MahApps.Styles.Button.Circle}" Width="40" Height="40" Margin="5" Click="AddButton" ToolTip="Add Selected Lock/Idle Timers">
-                <iconPacks:PackIconFontAwesome Kind="PlusCircleSolid" Height="22" Width="22" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                <iconPacks:PackIconFontAwesome Kind="PlusSolid" Height="22" Width="22" HorizontalAlignment="Center" VerticalAlignment="Center" />
             </Button>
             <Button Style="{DynamicResource MahApps.Styles.Button.Circle}" Width="40" Height="40" Margin="5" Click="DeleteButton" ToolTip="Delete Selected Lock/Idle Timers">
-                <iconPacks:PackIconFontAwesome Kind="TrashAltSolid" Height="22" Width="22" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                <iconPacks:PackIconFontAwesome Kind="TrashCanSolid" Height="22" Width="22" HorizontalAlignment="Center" VerticalAlignment="Center" />
             </Button>
         </StackPanel>
     </Grid>
