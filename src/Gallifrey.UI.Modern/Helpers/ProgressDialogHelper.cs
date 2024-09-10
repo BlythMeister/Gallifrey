@@ -1,5 +1,4 @@
-﻿using Exceptionless;
-using MahApps.Metro.Controls.Dialogs;
+﻿using MahApps.Metro.Controls.Dialogs;
 using System;
 using System.Threading;
 using System.Threading.Tasks;

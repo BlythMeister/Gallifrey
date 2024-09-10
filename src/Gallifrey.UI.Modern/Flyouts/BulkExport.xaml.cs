@@ -1,5 +1,4 @@
-﻿using Exceptionless;
-using Gallifrey.Comparers;
+﻿using Gallifrey.Comparers;
 using Gallifrey.Exceptions.JiraIntegration;
 using Gallifrey.Jira.Model;
 using Gallifrey.JiraTimers;

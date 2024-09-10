@@ -6,7 +6,6 @@ using Gallifrey.Versions;
 using System;
 using System.Collections.Generic;
 using System.Windows;
-using System.Windows.Documents;
 using Error = Gallifrey.UI.Modern.Flyouts.Error;
 
 namespace Gallifrey.UI.Modern.Helpers

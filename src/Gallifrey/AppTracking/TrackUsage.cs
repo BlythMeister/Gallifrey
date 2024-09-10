@@ -1,10 +1,6 @@
 ﻿using Gallifrey.Settings;
 using Gallifrey.Versions;
-using GoogleAnalyticsTracker.Core.TrackerParameters;
-using GoogleAnalyticsTracker.Simple;
 using System;
-using System.Globalization;
-using System.Timers;
 
 namespace Gallifrey.AppTracking
 {

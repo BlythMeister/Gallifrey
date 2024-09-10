@@ -1,4 +1,3 @@
-using Exceptionless;
 using Gallifrey.Comparers;
 using Gallifrey.ExtensionMethods;
 using Gallifrey.Jira.Model;

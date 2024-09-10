@@ -1,6 +1,4 @@
-﻿using Exceptionless;
-using Gallifrey.Exceptions.JiraIntegration;
-using Gallifrey.Jira.Model;
+﻿using Gallifrey.Jira.Model;
 using Gallifrey.JiraIntegration;
 using Gallifrey.UI.Modern.Helpers;
 using Gallifrey.UI.Modern.Models;
