@@ -264,7 +264,7 @@ Target "Publish-PurgeCloudflareCache" (fun _ ->
         let client = new WebClient()
         client.Headers.Add("Authorization", (sprintf "Bearer %s" cloudflareApiToken))
         client.Headers.Add("Content-Type", "application/json")
-        let result = client.UploadString(sprintf "https://api.cloudflare.com/client/v4/zones/%s/purge_cache" cloudflareZone, "POST", "{\"purge_everything\":true}")
+        let result = client.UploadString(sprintf "https://api.cloudflare.com/client/v4/zones/%s/purge_cache" cloudflareZone, "POST", "{\"files\":[\"https://gallifrey-releases.blyth.me.uk/download/modern/stable/Gallifrey.UI.Modern.Stable.application\",\"https://gallifrey-releases.blyth.me.uk/download/modern/beta/Gallifrey.UI.Modern.Beta.application\",\"https://gallifrey-releases.blyth.me.uk/download/modern/alpha/Gallifrey.UI.Modern.Alpha.application\"]}")
         client.Dispose()
         printfn "Cloudflare Purge response: %s" result
     with e ->
