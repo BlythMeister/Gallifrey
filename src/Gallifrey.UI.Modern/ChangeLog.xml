@@ -867,6 +867,18 @@
       <Other>Include user-agent in HTTP requests</Other>
     </Others>
   </Version>
+  <Version Number="0.0.0.0" Name="Pre-Release">
+    <Features />
+    <Bugs>
+      <Bug>Fixed app tracking to remove Google Analytics</Bug>
+      <Bug>Fixed donations link</Bug>
+    </Bugs>
+    <Others>
+      <Other>Removed Twitter button/text</Other>
+      <Other>Removed Slack button/text</Other>
+      <Other>Dependencies update</Other>
+    </Others>
+  </Version>
   <!--
   Template for VNext if not present above
   <Version Number="0.0.0.0" Name="Pre-Release">
