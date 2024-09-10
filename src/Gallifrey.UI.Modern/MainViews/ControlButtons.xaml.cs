@@ -291,22 +291,10 @@ namespace Gallifrey.UI.Modern.MainViews
             Process.Start(new ProcessStartInfo("mailto:gallifrey@blyth.me.uk?subject=Gallifrey App Contact"));
         }
 
-        private void TwitterButton(object sender, RoutedEventArgs e)
-        {
-            ModelHelpers.Gallifrey.TrackEvent(TrackingType.ContactClick);
-            Process.Start(new ProcessStartInfo("https://twitter.com/GallifreyApp"));
-        }
-
         private void DonateButton(object sender, RoutedEventArgs e)
         {
             ModelHelpers.Gallifrey.TrackEvent(TrackingType.DonateClick);
-            Process.Start(new ProcessStartInfo("https://gallifrey.blyth.me.uk/donations"));
-        }
-
-        private void SlackButton(object sender, RoutedEventArgs e)
-        {
-            ModelHelpers.Gallifrey.TrackEvent(TrackingType.ContactClick);
-            Process.Start(new ProcessStartInfo("https://join.slack.com/t/gallifreyapp/shared_invite/enQtNDA2MDU3OTYwNDgyLTc3YjBjOTc2MDkxNWM3MWYxNDgwNTMyMWI5ZmRhYmZiZWRlOGVkMGQwZDFlOTJlN2I4ZGI5MmExZGY5ZmM2YjI"));
+            Process.Start(new ProcessStartInfo("https://www.blyth.me.uk/donations"));
         }
 
         private void GitHubButton(object sender, RoutedEventArgs e)
@@ -332,9 +320,7 @@ namespace Gallifrey.UI.Modern.MainViews
                 case RemoteButtonTrigger.Settings: SettingsButton(this, null); break;
                 case RemoteButtonTrigger.Save: SaveButton(this, null); break;
                 case RemoteButtonTrigger.Info: InfoButton(this, null); break;
-                case RemoteButtonTrigger.Twitter: TwitterButton(this, null); break;
                 case RemoteButtonTrigger.Email: EmailButton(this, null); break;
-                case RemoteButtonTrigger.Slack: SlackButton(this, null); break;
                 case RemoteButtonTrigger.GitHub: GitHubButton(this, null); break;
                 case RemoteButtonTrigger.Donate: DonateButton(this, null); break;
 

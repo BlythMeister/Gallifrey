@@ -83,36 +83,20 @@
                         Application Information<LineBreak />CTRL + F1
                     </TextBlock>
                 </Button.ToolTip>
-                <iconPacks:PackIconFontAwesome Kind="InfoCircleSolid" Height="22" Width="22" HorizontalAlignment="Center" VerticalAlignment="Center" />
-            </Button>
-            <Button Style="{DynamicResource MahApps.Styles.Button.Circle}" Width="40" Height="40" Margin="5" Click="TwitterButton">
-                <Button.ToolTip>
-                    <TextBlock>
-                        Contact Us On Twitter<LineBreak />CTRL + F2
-                    </TextBlock>
-                </Button.ToolTip>
-                <iconPacks:PackIconFontAwesome Kind="TwitterBrands" Height="22" Width="22" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                <iconPacks:PackIconFontAwesome Kind="InfoSolid" Height="22" Width="22" HorizontalAlignment="Center" VerticalAlignment="Center" />
             </Button>
             <Button Style="{DynamicResource MahApps.Styles.Button.Circle}" Width="40" Height="40" Margin="5" Click="EmailButton">
                 <Button.ToolTip>
                     <TextBlock>
-                        Contact Us By Email<LineBreak />CTRL + F3
+                        Contact Us By Email<LineBreak />CTRL + F2
                     </TextBlock>
                 </Button.ToolTip>
                 <iconPacks:PackIconFontAwesome Kind="AtSolid" Height="22" Width="22" HorizontalAlignment="Center" VerticalAlignment="Center" />
             </Button>
-            <Button Style="{DynamicResource MahApps.Styles.Button.Circle}" Width="40" Height="40" Margin="5" Click="SlackButton">
-                <Button.ToolTip>
-                    <TextBlock>
-                        Chat With Users Or Ask For Help On Slack<LineBreak />CTRL + F4
-                    </TextBlock>
-                </Button.ToolTip>
-                <iconPacks:PackIconFontAwesome Kind="SlackBrands" Height="22" Width="22" HorizontalAlignment="Center" VerticalAlignment="Center" />
-            </Button>
             <Button Style="{DynamicResource MahApps.Styles.Button.Circle}" Width="40" Height="40" Margin="5" Click="GitHubButton">
                 <Button.ToolTip>
                     <TextBlock>
-                        View The Code On GitHub<LineBreak />CTRL + F5
+                        View The Code On GitHub<LineBreak />CTRL + F3
                     </TextBlock>
                 </Button.ToolTip>
                 <iconPacks:PackIconFontAwesome Kind="GithubBrands" Height="22" Width="22" HorizontalAlignment="Center" VerticalAlignment="Center" />
@@ -120,7 +104,7 @@
             <Button Style="{DynamicResource MahApps.Styles.Button.Circle}" Width="40" Height="40" Margin="5" Click="DonateButton">
                 <Button.ToolTip>
                     <TextBlock>
-                       Donate<LineBreak />CTRL + F6
+                       Donate<LineBreak />CTRL + F4
                     </TextBlock>
                 </Button.ToolTip>
                 <iconPacks:PackIconFontAwesome Kind="MoneyBillWaveSolid" Height="22" Width="22" HorizontalAlignment="Center" VerticalAlignment="Center" />

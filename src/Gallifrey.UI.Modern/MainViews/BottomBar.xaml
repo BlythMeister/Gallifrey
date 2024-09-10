@@ -4,10 +4,10 @@
 
     <DockPanel HorizontalAlignment="Stretch" Background="{DynamicResource MahApps.Brushes.Accent}">
         <TextBlock Foreground="{DynamicResource MahApps.Brushes.IdealForeground}" Margin="5,0,0,0" VerticalAlignment="Center">
-                Contact Us By <Hyperlink NavigateUri="https://twitter.com/GallifreyApp" Foreground="{DynamicResource MahApps.Brushes.IdealForeground}" RequestNavigate="Hyperlink_RequestNavigate">Twitter</Hyperlink>, <Hyperlink NavigateUri="https://join.slack.com/t/gallifreyapp/shared_invite/enQtNDA2MDU3OTYwNDgyLTc3YjBjOTc2MDkxNWM3MWYxNDgwNTMyMWI5ZmRhYmZiZWRlOGVkMGQwZDFlOTJlN2I4ZGI5MmExZGY5ZmM2YjI" Foreground="{DynamicResource MahApps.Brushes.IdealForeground}" RequestNavigate="Hyperlink_RequestNavigate">Slack</Hyperlink> Or <Hyperlink NavigateUri="mailto:gallifrey@blyth.me.uk?subject=Gallifrey App Contact" Foreground="{DynamicResource MahApps.Brushes.IdealForeground}" RequestNavigate="Hyperlink_RequestNavigate">E-Mail</Hyperlink>. Raise Or Fix A Bug On <Hyperlink NavigateUri="https://github.com/BlythMeister/Gallifrey" Foreground="{DynamicResource MahApps.Brushes.IdealForeground}" RequestNavigate="Hyperlink_RequestNavigate">GitHub</Hyperlink>.
+                Contact Us By <Hyperlink NavigateUri="mailto:gallifrey@blyth.me.uk?subject=Gallifrey App Contact" Foreground="{DynamicResource MahApps.Brushes.IdealForeground}" RequestNavigate="Hyperlink_RequestNavigate">E-Mail</Hyperlink> Or Raise A Bug On <Hyperlink NavigateUri="https://github.com/BlythMeister/Gallifrey" Foreground="{DynamicResource MahApps.Brushes.IdealForeground}" RequestNavigate="Hyperlink_RequestNavigate">GitHub</Hyperlink>.
         </TextBlock>
         <TextBlock HorizontalAlignment="Right" Margin="0,0,5,0" Foreground="{DynamicResource MahApps.Brushes.IdealForeground}" VerticalAlignment="Center">
-            Please Help Support Gallifrey By <Hyperlink NavigateUri="https://gallifrey.blyth.me.uk/donations" Foreground="{DynamicResource MahApps.Brushes.IdealForeground}" RequestNavigate="Hyperlink_RequestNavigate">Donating</Hyperlink>
+            Please Help Support Gallifrey By <Hyperlink NavigateUri="https://www.blyth.me.uk/donations" Foreground="{DynamicResource MahApps.Brushes.IdealForeground}" RequestNavigate="Hyperlink_RequestNavigate">Donating</Hyperlink>
         </TextBlock>
     </DockPanel>
 </UserControl>

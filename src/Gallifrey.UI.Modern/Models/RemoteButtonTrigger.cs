@@ -12,11 +12,9 @@ namespace Gallifrey.UI.Modern.Models
         LockTimer,
         Settings,
         Info,
-        Twitter,
         Email,
         GitHub,
         Donate,
-        Slack,
         AddToFill,
         Save,
         View
