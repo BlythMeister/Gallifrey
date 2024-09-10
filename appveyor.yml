@@ -8,7 +8,7 @@
     - '**/*.md'
 version: '3.26.0.{build}'
 skip_tags: true
-image: Visual Studio 2019
+image: Visual Studio 2022
 clone_folder: c:\project\gallifrey
 build_script:
 - cmd: build.cmd
