@@ -7,7 +7,7 @@
         UpdateCheck,
         UpdateCheckManual,
         AppClose,
-        DailyHeartbeat,
+        DailyCheckIn,
         OptOut,
         TimerAdded,
         TimerDeleted,
@@ -30,7 +30,6 @@
         MultipleInstancesRunning,
         SettingsMissing,
         NoInternet,
-        ConnectionError,
-        Heartbeat
+        ConnectionError
     }
 }

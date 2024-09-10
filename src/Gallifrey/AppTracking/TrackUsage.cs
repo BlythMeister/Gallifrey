@@ -11,61 +11,41 @@ namespace Gallifrey.AppTracking
     public interface ITrackUsage
     {
         void TrackAppUsage(TrackingType trackingType);
+
+        event EventHandler<TrackingType> TrackEvent;
     }
 
     public class TrackUsage : ITrackUsage
     {
+        public event EventHandler<TrackingType> TrackEvent;
+
         private readonly IVersionControl versionControl;
         private readonly ISettingsCollection settingsCollection;
-        private readonly InstanceType instanceType;
-        private readonly SimpleTracker tracker;
-        private readonly Timer heartbeat;
 
-        public TrackUsage(IVersionControl versionControl, ISettingsCollection settingsCollection, InstanceType instanceType)
+        public TrackUsage(IVersionControl versionControl, ISettingsCollection settingsCollection)
         {
             this.versionControl = versionControl;
             this.settingsCollection = settingsCollection;
-            this.instanceType = instanceType;
-            tracker = new SimpleTracker("UA-51628201-7", new SimpleTrackerEnvironment(Environment.OSVersion.Platform.ToString(), Environment.OSVersion.Version.ToString(), Environment.OSVersion.VersionString));
-            TrackAppUsage(TrackingType.AppLoad);
-            heartbeat = new Timer(TimeSpan.FromMinutes(1).TotalMilliseconds);
-            heartbeat.Elapsed += (sender, args) => TrackAppUsage(TrackingType.Heartbeat);
-            heartbeat.Enabled = true;
         }
 
         private bool IsTrackingEnabled(TrackingType trackingType)
         {
-            return versionControl.IsAutomatedDeploy && (settingsCollection.AppSettings.UsageTracking || trackingType == TrackingType.DailyHeartbeat);
+            return versionControl.IsAutomatedDeploy && (settingsCollection.AppSettings.UsageTracking || trackingType == TrackingType.DailyCheckIn);
         }
 
-        public async void TrackAppUsage(TrackingType trackingType)
+        public void TrackAppUsage(TrackingType trackingType)
         {
             if (IsTrackingEnabled(trackingType))
             {
                 try
                 {
-                    var pageView = GetPageView(trackingType);
-                    await tracker.TrackAsync(pageView);
+                    TrackEvent?.Invoke(this, trackingType);
                 }
                 catch (Exception) //Internal handled error
                 {
                     //Ignored
                 }
             }
-        }
-
-        private PageView GetPageView(TrackingType trackingType)
-        {
-            return new PageView
-            {
-                DocumentTitle = trackingType.ToString(),
-                DocumentLocationUrl = $"https://gallifrey-releases.blyth.me.uk/tracking/{trackingType}",
-                CampaignSource = instanceType.ToString(),
-                CampaignMedium = $"{versionControl.DeployedVersion.Major}.{versionControl.DeployedVersion.Minor}.{versionControl.DeployedVersion.Build}",
-                CampaignName = $"{versionControl.DeployedVersion.Major}.{versionControl.DeployedVersion.Minor}.{versionControl.DeployedVersion.Build}.{versionControl.DeployedVersion.Revision}",
-                UserId = settingsCollection.InstallationHash,
-                UserLanguage = CultureInfo.InstalledUICulture.NativeName
-            };
         }
     }
 }

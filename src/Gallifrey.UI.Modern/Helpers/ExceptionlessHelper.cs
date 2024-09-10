@@ -1,9 +1,12 @@
 ﻿using Exceptionless;
 using Exceptionless.Models.Data;
+using Gallifrey.AppTracking;
 using Gallifrey.Settings;
 using Gallifrey.Versions;
 using System;
+using System.Collections.Generic;
 using System.Windows;
+using System.Windows.Documents;
 using Error = Gallifrey.UI.Modern.Flyouts.Error;
 
 namespace Gallifrey.UI.Modern.Helpers
@@ -12,12 +15,14 @@ namespace Gallifrey.UI.Modern.Helpers
     {
         private readonly ModelHelpers modelHelpers;
         private bool registered;
+        private List<string> preRegisterFeatures;
 
         public ExceptionlessHelper(ModelHelpers modelHelpers)
         {
             this.modelHelpers = modelHelpers;
             registered = false;
-            modelHelpers.Gallifrey.DailyTrackingEvent += GallifreyOnDailyTrackingEvent;
+            preRegisterFeatures = new List<string>();
+            modelHelpers.Gallifrey.TrackingEvent += GallifreyOnTrackingEvent;
         }
 
         public void RegisterExceptionless()
@@ -73,6 +78,11 @@ namespace Gallifrey.UI.Modern.Helpers
             registered = true;
             //Prevent the framework from auto closing the app and let exceptionless handle errors
             Application.Current.Dispatcher.UnhandledException += (sender, args) => args.Handled = true;
+
+            foreach (var preRegisterFeature in preRegisterFeatures)
+            {
+                TrackFeature(preRegisterFeature);
+            }
         }
 
         public void CloseExceptionless()
@@ -84,9 +94,9 @@ namespace Gallifrey.UI.Modern.Helpers
             }
         }
 
-        public void TrackFeature(string feature)
+        private void TrackFeature(string feature)
         {
-            var featureName = $"Gallifrey v{modelHelpers.Gallifrey.Settings.InternalSettings.LastChangeLogVersion}";
+            var featureName = $"Gallifrey v{modelHelpers.Gallifrey.VersionControl.DeployedVersion}";
 
             if (modelHelpers.Gallifrey.VersionControl.IsAutomatedDeploy)
             {
@@ -143,10 +153,11 @@ namespace Gallifrey.UI.Modern.Helpers
             }
         }
 
-        private void GallifreyOnDailyTrackingEvent(object sender, EventArgs eventArgs)
+        private void GallifreyOnTrackingEvent(object sender, TrackingType e)
         {
             if (!registered)
             {
+                preRegisterFeatures.Add(e.ToString());
                 return;
             }
 
@@ -154,7 +165,7 @@ namespace Gallifrey.UI.Modern.Helpers
             {
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    TrackFeature("Daily Event");
+                    TrackFeature(e.ToString());
                 });
             }
             catch (Exception ex)

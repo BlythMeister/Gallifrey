@@ -243,7 +243,7 @@ namespace Gallifrey.UI.Modern.MainViews
             }
 
             exceptionlessHelper.RegisterExceptionless();
-            exceptionlessHelper.TrackFeature("Initialised");
+            modelHelpers.Gallifrey.TrackEvent(TrackingType.AppLoad);
             updateHeartbeat.Enabled = true;
             idleDetectionHeartbeat.Enabled = true;
             flyoutOpenCheck.Enabled = true;

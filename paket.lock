@@ -11,9 +11,6 @@ NUGET
     Exceptionless.Wpf (6.0.4)
       Exceptionless (>= 6.0.4) - restriction: || (>= net462) (>= net6.0-windows7.0) (>= net8.0-windows7.0)
     FAKE (4.64.18)
-    GoogleAnalyticsTracker.Core (7.0.1) - restriction: >= netstandard2.0
-    GoogleAnalyticsTracker.Simple (7.0.1)
-      GoogleAnalyticsTracker.Core (>= 7.0.1) - restriction: >= netstandard2.0
     MahApps.Metro (2.4.10)
       ControlzEx (>= 4.4 < 5.0) - restriction: && (>= netcoreapp3.0) (< netcoreapp3.1)
       ControlzEx (>= 4.4 < 6.0) - restriction: || (>= net452) (>= netcoreapp3.1)

@@ -30,11 +30,13 @@ namespace Gallifrey
         IVersionControl VersionControl { get; }
         List<WithThanksDefinition> WithThanksDefinitions { get; }
 
-        event EventHandler DailyTrackingEvent;
+        event EventHandler<TrackingType> TrackingEvent;
 
         event EventHandler BackendModifiedTimers;
 
         event EventHandler SettingsChanged;
+
+        event EventHandler DailyEvent;
 
         event EventHandler<int> NoActivityEvent;
 
@@ -79,11 +81,13 @@ namespace Gallifrey
 
         public event EventHandler<ExportPromptDetail> ExportPromptEvent;
 
-        public event EventHandler DailyTrackingEvent;
+        public event EventHandler<TrackingType> TrackingEvent;
 
         public event EventHandler BackendModifiedTimers;
 
         public event EventHandler SettingsChanged;
+
+        public event EventHandler DailyEvent;
 
         internal ActivityChecker ActivityChecker;
 
@@ -94,7 +98,7 @@ namespace Gallifrey
         {
             settingsCollection = new SettingsCollection(SettingsCollectionSerializer.DeSerialize());
             versionControl = new VersionControl(instanceType);
-            trackUsage = new TrackUsage(versionControl, settingsCollection, instanceType);
+            trackUsage = new TrackUsage(versionControl, settingsCollection);
             jiraTimerCollection = new JiraTimerCollection(settingsCollection, trackUsage);
             recentJiraCollection = new RecentJiraCollection();
             jiraConnection = new JiraConnection(trackUsage, recentJiraCollection);
@@ -105,6 +109,7 @@ namespace Gallifrey
             versionControl.UpdateCheckOccured += (sender, b) => trackUsage.TrackAppUsage(b ? TrackingType.UpdateCheckManual : TrackingType.UpdateCheck);
             jiraTimerCollection.ExportPrompt += OnExportPromptEvent;
             ActivityChecker.NoActivityEvent += OnNoActivityEvent;
+            trackUsage.TrackEvent += OnTrackingEvent;
 
             cleanUpAndTrackingHeartbeat = new Timer(TimeSpan.FromMinutes(15).TotalMilliseconds);
             cleanUpAndTrackingHeartbeat.Elapsed += CleanUpAndTrackingHeartbeatOnElapsed;
@@ -125,6 +130,11 @@ namespace Gallifrey
         private void OnNoActivityEvent(object sender, int millisecondsSinceActivity)
         {
             NoActivityEvent?.Invoke(sender, millisecondsSinceActivity);
+        }
+
+        private void OnTrackingEvent(object sender, TrackingType trackingType)
+        {
+            TrackingEvent?.Invoke(sender, trackingType);
         }
 
         private void CleanUpAndTrackingHeartbeatOnElapsed(object sender, ElapsedEventArgs e)
@@ -151,8 +161,8 @@ namespace Gallifrey
                 {
                     if (versionControl.IsAutomatedDeploy && jiraConnection.IsConnected)
                     {
-                        DailyTrackingEvent?.Invoke(this, null);
-                        trackUsage.TrackAppUsage(TrackingType.DailyHeartbeat);
+                        DailyEvent?.Invoke(this, null);
+                        TrackEvent(TrackingType.DailyCheckIn);
                         settingsCollection.InternalSettings.SetLastHeartbeatTracked(DateTime.UtcNow);
                         settingsCollection.SaveSettings();
                     }

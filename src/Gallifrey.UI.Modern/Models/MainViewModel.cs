@@ -42,7 +42,7 @@ namespace Gallifrey.UI.Modern.Models
             modelHelpers.Gallifrey.SettingsChanged += (sender, args) => SettingsChanged();
             modelHelpers.Gallifrey.JiraConnection.LoggedIn += (sender, args) => UserLoggedIn();
             modelHelpers.Gallifrey.JiraTimerCollection.GeneralTimerModification += (sender, args) => GeneralTimerModification();
-            modelHelpers.Gallifrey.DailyTrackingEvent += (sender, args) => DailyEvent();
+            modelHelpers.Gallifrey.DailyEvent += (sender, args) => DailyEvent();
             modelHelpers.RefreshModelEvent += (sender, args) => RefreshModel();
             modelHelpers.SelectRunningTimerEvent += (sender, args) => SelectRunningTimer();
             modelHelpers.SelectTimerEvent += (sender, timerId) => SetSelectedTimer(timerId);
