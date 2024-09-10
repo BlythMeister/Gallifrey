@@ -201,7 +201,15 @@ namespace Gallifrey.JiraIntegration
             {
                 CheckAndConnectJira();
                 trackUsage.TrackAppUsage(TrackingType.SearchText);
-                var issues = jira.GetIssuesFromJql(GetJql(searchText)).ToList();
+                List<Issue> issues;
+                try
+                {
+                    issues = jira.GetIssuesFromJql(GetJql(searchText, true)).ToList();
+                }
+                catch (Exception e)
+                {
+                    issues = jira.GetIssuesFromJql(GetJql(searchText, false)).ToList();
+                }
                 recentJiraCollection.AddRecentJiras(issues);
                 return issues.OrderBy(x => x.key, new JiraReferenceComparer());
             }
@@ -217,9 +225,19 @@ namespace Gallifrey.JiraIntegration
             {
                 CheckAndConnectJira();
                 trackUsage.TrackAppUsage(TrackingType.SearchText);
-                var searchTextJql = GetJql(searchText);
-                var keysJql = $"key in (\"{String.Join("\",\"", jiraKeys)}\")";
-                var issues = jira.GetIssuesFromJql($"({keysJql}) AND ({searchTextJql})").ToList();
+                List<Issue> issues;
+                var keysJql = $"key in (\"{string.Join("\",\"", jiraKeys)}\")";
+                try
+                {
+                    var searchTextJql = GetJql(searchText, true);
+                    issues = jira.GetIssuesFromJql($"({keysJql}) AND ({searchTextJql})").ToList();
+                }
+                catch (Exception e)
+                {
+                    var searchTextJql = GetJql(searchText, false);
+                    issues = jira.GetIssuesFromJql($"({keysJql}) AND ({searchTextJql})").ToList();
+                }
+
                 recentJiraCollection.AddRecentJiras(issues);
                 return issues.OrderBy(x => x.key, new JiraReferenceComparer());
             }
@@ -246,7 +264,7 @@ namespace Gallifrey.JiraIntegration
 
         private void UpdateJiraProjectCache()
         {
-            if (lastCacheUpdate < DateTime.UtcNow.AddMinutes(-30))
+            if (lastCacheUpdate < DateTime.UtcNow.AddHours(-2))
             {
                 try
                 {
@@ -349,20 +367,27 @@ namespace Gallifrey.JiraIntegration
             }
         }
 
-        private string GetJql(string searchText)
+        private string GetJql(string searchText, bool incProjects)
         {
             var projectQuery = string.Empty;
             var nonProjectText = string.Empty;
             foreach (var keyword in searchText.Split(' '))
             {
-                var firstProjectMatch = jiraProjectCodeCache.FirstOrDefault(x => x == keyword);
-                if (firstProjectMatch != null)
+                if (incProjects)
                 {
-                    if (!string.IsNullOrWhiteSpace(projectQuery))
+                    var firstProjectMatch = jiraProjectCodeCache.FirstOrDefault(x => x == keyword);
+                    if (firstProjectMatch != null)
                     {
-                        projectQuery += " OR ";
+                        if (!string.IsNullOrWhiteSpace(projectQuery))
+                        {
+                            projectQuery += " OR ";
+                        }
+                        projectQuery += $"project = \"{firstProjectMatch}\"";
                     }
-                    projectQuery += $"project = \"{firstProjectMatch}\"";
+                    else
+                    {
+                        nonProjectText += $" {keyword}";
+                    }
                 }
                 else
                 {

@@ -872,6 +872,7 @@
     <Bugs>
       <Bug>Fixed app tracking to remove Google Analytics</Bug>
       <Bug>Fixed donations link</Bug>
+      <Bug>Fixed search when project included has error loading</Bug>
     </Bugs>
     <Others>
       <Other>Removed Twitter button/text</Other>
