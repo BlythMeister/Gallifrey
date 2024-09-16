@@ -867,7 +867,7 @@
       <Other>Include user-agent in HTTP requests</Other>
     </Others>
   </Version>
-  <Version Number="0.0.0.0" Name="Pre-Release">
+  <Version Number="3.26.0.0">
     <Features />
     <Bugs>
       <Bug>Fixed app tracking to remove Google Analytics</Bug>
