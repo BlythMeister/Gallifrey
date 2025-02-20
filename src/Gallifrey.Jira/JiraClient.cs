@@ -146,7 +146,7 @@ namespace Gallifrey.Jira
                                                     {
                                                         return GetIssue(x.issue.id.ToString());
                                                     }
-                                                    catch (Exception e)
+                                                    catch (Exception)
                                                     {
                                                         return null;
                                                     }
@@ -278,7 +278,7 @@ namespace Gallifrey.Jira
                         break;
                 }
 
-                var tempoWorkLog = new TempoWorkLogUpload { issueId = issue,id, timeSpentSeconds = timeSpent.TotalSeconds, startDate = $"{logDate:yyyy-MM-dd}", startTime = $"{logDate:hh:mm:ss}", description = comment, authorAccountId = myUser.accountId, remainingEstimateSeconds = remaining };
+                var tempoWorkLog = new TempoWorkLogUpload { issueId = issue.id, timeSpentSeconds = timeSpent.TotalSeconds, startDate = $"{logDate:yyyy-MM-dd}", startTime = $"{logDate:hh:mm:ss}", description = comment, authorAccountId = myUser.accountId, remainingEstimateSeconds = remaining };
                 tempoClient.Post(HttpStatusCode.OK, "worklogs", tempoWorkLog);
             }
             else
