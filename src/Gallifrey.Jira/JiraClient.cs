@@ -257,11 +257,12 @@ namespace Gallifrey.Jira
                     comment = "N/A";
                 }
 
+                var issue = GetIssue(issueRef);
                 var remaining = 0d;
                 switch (workLogStrategy)
                 {
                     case WorkLogStrategy.Automatic:
-                        remaining = GetIssue(issueRef).fields.timetracking.remainingEstimateSeconds - timeSpent.TotalSeconds;
+                        remaining = issue.fields.timetracking.remainingEstimateSeconds - timeSpent.TotalSeconds;
                         if (remaining < 0)
                         {
                             remaining = 0;
@@ -269,7 +270,7 @@ namespace Gallifrey.Jira
                         break;
 
                     case WorkLogStrategy.LeaveRemaining:
-                        remaining = GetIssue(issueRef).fields.timetracking.remainingEstimateSeconds;
+                        remaining = issue.fields.timetracking.remainingEstimateSeconds;
                         break;
 
                     case WorkLogStrategy.SetValue:
@@ -277,7 +278,7 @@ namespace Gallifrey.Jira
                         break;
                 }
 
-                var tempoWorkLog = new TempoWorkLogUpload { issueKey = issueRef, timeSpentSeconds = timeSpent.TotalSeconds, startDate = $"{logDate:yyyy-MM-dd}", startTime = $"{logDate:hh:mm:ss}", description = comment, authorAccountId = myUser.accountId, remainingEstimateSeconds = remaining };
+                var tempoWorkLog = new TempoWorkLogUpload { issueId = issue,id, timeSpentSeconds = timeSpent.TotalSeconds, startDate = $"{logDate:yyyy-MM-dd}", startTime = $"{logDate:hh:mm:ss}", description = comment, authorAccountId = myUser.accountId, remainingEstimateSeconds = remaining };
                 tempoClient.Post(HttpStatusCode.OK, "worklogs", tempoWorkLog);
             }
             else
