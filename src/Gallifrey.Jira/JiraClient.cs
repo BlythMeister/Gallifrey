@@ -33,7 +33,7 @@ namespace Gallifrey.Jira
 
             if (useTempo)
             {
-                tempoClient = SimpleRestClient.WithBearerAuthentication("https://api.tempo.io/core/3", tempoToken, null);
+                tempoClient = SimpleRestClient.WithBearerAuthentication("https://api.tempo.io/4", tempoToken, null);
 
                 try
                 {
@@ -131,25 +131,42 @@ namespace Gallifrey.Jira
         public IEnumerable<StandardWorkLog> GetWorkLoggedForDatesFilteredIssues(List<DateTime> queryDates, List<string> issueRefs)
         {
             var workLogs = new List<StandardWorkLog>();
+            var issues = issueRefs?.Select(GetIssue).ToList() ?? new List<Issue>();
 
             if (tempoClient != null)
             {
                 foreach (var queryDate in queryDates)
                 {
-                    var logs = tempoClient.Get<TempoWorkLogSearch>(HttpStatusCode.OK, $"worklogs/user/{myUser.accountId}?from={queryDate:yyyy-MM-dd}&to={queryDate:yyyy-MM-dd}&limit=200");
+                    var logSearch = tempoClient.Get<TempoWorkLogSearch>(HttpStatusCode.OK, $"worklogs/user/{myUser.accountId}?from={queryDate:yyyy-MM-dd}&to={queryDate:yyyy-MM-dd}&limit=200");
+                    var logs = logSearch.results.Where(x => x.author.accountId.Equals(myUser.accountId, StringComparison.InvariantCultureIgnoreCase)).ToList();
+                    issues.AddRange(logs.Where(x => !issues.Any(i => i.id == x.issue.id))
+                                        .Select(x =>
+                                                {
+                                                    try
+                                                    {
+                                                        return GetIssue(x.issue.id.ToString());
+                                                    }
+                                                    catch (Exception e)
+                                                    {
+                                                        return null;
+                                                    }
+                                                })
+                                        .Where(x => x != null)
+                                        .Distinct());
 
-                    foreach (var tempoWorkLog in logs.results.Where(x => x.author.accountId.Equals(myUser.accountId, StringComparison.InvariantCultureIgnoreCase)))
+                    foreach (var tempoWorkLog in logs)
                     {
-                        if (issueRefs == null || issueRefs.Any(x => string.Equals(x, tempoWorkLog.issue.key, StringComparison.InvariantCultureIgnoreCase)))
+                        var issue = issues.FirstOrDefault(x => x.id == tempoWorkLog.issue.id);
+                        if (issue != null)
                         {
-                            var workLogReturn = workLogs.FirstOrDefault(x => x.JiraRef == tempoWorkLog.issue.key && x.LoggedDate.Date == queryDate.Date);
+                            var workLogReturn = workLogs.FirstOrDefault(x => x.JiraRef == issue.key && x.LoggedDate.Date == queryDate.Date);
                             if (workLogReturn != null)
                             {
                                 workLogReturn.AddTime(tempoWorkLog.timeSpentSeconds);
                             }
                             else
                             {
-                                workLogs.Add(new StandardWorkLog(tempoWorkLog.issue.key, queryDate.Date, tempoWorkLog.timeSpentSeconds));
+                                workLogs.Add(new StandardWorkLog(issue.key, queryDate.Date, tempoWorkLog.timeSpentSeconds));
                             }
                         }
                     }

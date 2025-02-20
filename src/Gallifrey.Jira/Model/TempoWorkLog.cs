@@ -7,7 +7,7 @@ namespace Gallifrey.Jira.Model
     {
         public class TempoWorkLogIssue
         {
-            public string key { get; set; }
+            public long id { get; set; }
         }
 
         public class TempoWorkLogUser
