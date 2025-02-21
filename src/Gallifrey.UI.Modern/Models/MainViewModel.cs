@@ -7,14 +7,12 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Timers;
 using System.Windows;
 
 namespace Gallifrey.UI.Modern.Models
 {
-    [SuppressMessage("ReSharper", "UnusedMember.Global")]
     public class MainViewModel : INotifyPropertyChanged
     {
         private readonly TargetBarValues targetBarValues;

@@ -155,7 +155,7 @@ namespace Gallifrey.UI.Modern.Models
         {
             UpdateTimer(timer, ToExportMaxTime);
 
-            OriginalRemaining = jiraIssue.fields.timetracking != null ? TimeSpan.FromSeconds(jiraIssue.fields.timetracking.remainingEstimateSeconds) : new TimeSpan();
+            OriginalRemaining = jiraIssue.fields.timetracking != null ? TimeSpan.FromSeconds(jiraIssue.fields.timetracking.remainingEstimateSeconds) : TimeSpan.Zero;
 
             SetRemaining();
         }
@@ -195,7 +195,7 @@ namespace Gallifrey.UI.Modern.Models
                     var autoNewRemaining = OriginalRemaining.Subtract(ToExport);
                     if (autoNewRemaining.TotalSeconds < 0)
                     {
-                        autoNewRemaining = new TimeSpan();
+                        autoNewRemaining = TimeSpan.Zero;
                     }
 
                     RemainingHours = autoNewRemaining.Hours + (autoNewRemaining.Days * 24);

@@ -10,13 +10,7 @@ namespace Gallifrey.Jira.Model
             public long id { get; set; }
         }
 
-        public class TempoWorkLogUser
-        {
-            public string accountId { get; set; }
-        }
-
         public TempoWorkLogIssue issue { get; set; }
         public double timeSpentSeconds { get; set; }
-        public TempoWorkLogUser author { get; set; }
     }
 }

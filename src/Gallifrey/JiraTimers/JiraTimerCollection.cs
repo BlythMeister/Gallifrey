@@ -231,7 +231,7 @@ namespace Gallifrey.JiraTimers
             {
                 if (timerForInteraction.LocalTimer)
                 {
-                    uniqueId = AddLocalTimer(timerForInteraction.JiraName, DateTime.Now, new TimeSpan(), false);
+                    uniqueId = AddLocalTimer(timerForInteraction.JiraName, DateTime.Now, TimeSpan.Zero, false);
                     timerForInteraction = GetTimer(uniqueId);
                 }
                 else
@@ -389,43 +389,43 @@ namespace Gallifrey.JiraTimers
 
         public TimeSpan GetStoppedTotalExportableTime()
         {
-            var unexportedTime = new TimeSpan();
+            var unexportedTime = TimeSpan.Zero;
             return timerList.Where(timer => !timer.LocalTimer && !timer.IsRunning && !timer.FullyExported).ToList().Aggregate(unexportedTime, (current, jiraTimer) => current.Add(new TimeSpan(jiraTimer.TimeToExport.Hours, jiraTimer.TimeToExport.Minutes, 0)));
         }
 
         public TimeSpan GetTotalLocalTime()
         {
-            var unexportedTime = new TimeSpan();
+            var unexportedTime = TimeSpan.Zero;
             return timerList.Where(timer => timer.LocalTimer && !timer.FullyExported).ToList().Aggregate(unexportedTime, (current, jiraTimer) => current.Add(new TimeSpan(jiraTimer.TimeToExport.Hours, jiraTimer.TimeToExport.Minutes, 0)));
         }
 
         public TimeSpan GetTotalExportableTime()
         {
-            var unexportedTime = new TimeSpan();
+            var unexportedTime = TimeSpan.Zero;
             return timerList.Where(timer => !timer.LocalTimer && !timer.FullyExported).ToList().Aggregate(unexportedTime, (current, jiraTimer) => current.Add(new TimeSpan(jiraTimer.TimeToExport.Hours, jiraTimer.TimeToExport.Minutes, 0)));
         }
 
         public TimeSpan GetTotalExportedTimeThisWeek(DayOfWeek startOfWeek)
         {
-            var exportedTime = new TimeSpan();
+            var exportedTime = TimeSpan.Zero;
             return timerList.Where(jiraTimer => jiraTimer.IsThisWeek(startOfWeek)).ToList().Aggregate(exportedTime, (current, jiraTimer) => current.Add(jiraTimer.ExportedTime));
         }
 
         public TimeSpan GetTotalTimeThisWeekNoSeconds(DayOfWeek startOfWeek)
         {
-            var time = new TimeSpan();
+            var time = TimeSpan.Zero;
             return timerList.Where(jiraTimer => jiraTimer.IsThisWeek(startOfWeek)).ToList().Aggregate(time, (current, jiraTimer) => current.Add(new TimeSpan(jiraTimer.ExactCurrentTime.Hours, jiraTimer.ExactCurrentTime.Minutes, 0)));
         }
 
         public TimeSpan GetTotalTimeForDate(DateTime timerDate)
         {
-            var time = new TimeSpan();
+            var time = TimeSpan.Zero;
             return timerList.Where(jiraTimer => jiraTimer.DateStarted.Date == timerDate.Date).ToList().Aggregate(time, (current, jiraTimer) => current.Add(new TimeSpan(jiraTimer.ExactCurrentTime.Hours, jiraTimer.ExactCurrentTime.Minutes, jiraTimer.ExactCurrentTime.Seconds)));
         }
 
         public TimeSpan GetTotalTimeForDateNoSeconds(DateTime timerDate)
         {
-            var unexportedTime = new TimeSpan();
+            var unexportedTime = TimeSpan.Zero;
             return timerList.Where(timer => timer.DateStarted.Date == timerDate.Date).ToList().Aggregate(unexportedTime, (current, jiraTimer) => current.Add(new TimeSpan(jiraTimer.ExactCurrentTime.Hours, jiraTimer.ExactCurrentTime.Minutes, 0)));
         }
 
@@ -471,7 +471,7 @@ namespace Gallifrey.JiraTimers
             SaveTimers();
             if (settingsCollection.ExportSettings.ExportPrompt != null && settingsCollection.ExportSettings.ExportPrompt.OnAddIdle && !timer.FullyExported && !timer.LocalTimer)
             {
-                var idleTime = new TimeSpan();
+                var idleTime = TimeSpan.Zero;
                 idleTime = idleTimers.Aggregate(idleTime, (current, idleTimer) => current.Add(idleTimer.IdleTimeValue));
                 ExportPrompt?.Invoke(this, new ExportPromptDetail(uniqueId, idleTime));
             }

@@ -137,8 +137,9 @@ namespace Gallifrey.Jira
             {
                 foreach (var queryDate in queryDates)
                 {
-                    var logSearch = tempoClient.Get<TempoWorkLogSearch>(HttpStatusCode.OK, $"worklogs/user/{myUser.accountId}?from={queryDate:yyyy-MM-dd}&to={queryDate:yyyy-MM-dd}&limit=200");
-                    var logs = logSearch.results.Where(x => x.author.accountId.Equals(myUser.accountId, StringComparison.InvariantCultureIgnoreCase)).ToList();
+                    var logs = tempoClient.Get<TempoWorkLogSearch>(HttpStatusCode.OK, $"worklogs/user/{myUser.accountId}?from={queryDate:yyyy-MM-dd}&to={queryDate:yyyy-MM-dd}&limit=200").results;
+
+                    // Make sure we have all the jira issues
                     issues.AddRange(logs.Where(x => !issues.Any(i => i.id == x.issue.id))
                                         .Select(x =>
                                                 {
@@ -157,7 +158,7 @@ namespace Gallifrey.Jira
                     foreach (var tempoWorkLog in logs)
                     {
                         var issue = issues.FirstOrDefault(x => x.id == tempoWorkLog.issue.id);
-                        if (issue != null)
+                        if (issue != null && (issueRefs == null || !issueRefs.Any() || issueRefs.Contains(issue.key, StringComparer.InvariantCultureIgnoreCase)))
                         {
                             var workLogReturn = workLogs.FirstOrDefault(x => x.JiraRef == issue.key && x.LoggedDate.Date == queryDate.Date);
                             if (workLogReturn != null)
@@ -180,12 +181,12 @@ namespace Gallifrey.Jira
                     var issuesExportedTo = GetIssuesFromJql($"worklogAuthor = currentUser() and worklogDate = {queryDate:yyyy-MM-dd}");
                     foreach (var issue in issuesExportedTo)
                     {
-                        if (issueRefs == null || issueRefs.Any(x => string.Equals(x, issue.key, StringComparison.InvariantCultureIgnoreCase)))
+                        if (issueRefs == null || !issueRefs.Any() || issueRefs.Contains(issue.key, StringComparer.InvariantCultureIgnoreCase))
                         {
                             WorkLogs logs;
-                            if (workLogCache.ContainsKey(issue.key))
+                            if (workLogCache.TryGetValue(issue.key, out var value))
                             {
-                                logs = workLogCache[issue.key];
+                                logs = value;
                             }
                             else
                             {
@@ -226,16 +227,11 @@ namespace Gallifrey.Jira
             }
 
             var transitions = GetIssueTransitions(issueRef);
-            var transition = transitions.transitions.FirstOrDefault(t => t.name == transitionName);
-
-            if (transition == null)
-            {
-                throw new ClientException($"Unable to locate transition '{transitionName}'");
-            }
+            var transition = transitions.transitions.FirstOrDefault(t => t.name == transitionName) ?? throw new ClientException($"Unable to locate transition '{transitionName}'");
 
             var postData = new Dictionary<string, object>
             {
-                { "transition", new {transition.id } }
+                { "transition", new { transition.id } }
             };
 
             jiraClient.Post(HttpStatusCode.NoContent, $"issue/{issueRef}/transitions", postData);

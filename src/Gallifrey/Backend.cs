@@ -223,7 +223,7 @@ namespace Gallifrey
                                 issueCache.Add(issue);
                             }
 
-                            var timerReference = jiraTimerCollection.AddTimer(issue, checkDate.Key.Date, new TimeSpan(), false);
+                            var timerReference = jiraTimerCollection.AddTimer(issue, checkDate.Key.Date, TimeSpan.Zero, false);
                             BackendModifiedTimers?.Invoke(this, null);
                             jiraTimerCollection.RefreshFromJira(timerReference, issue, timeExport.TimeSpent);
                         }
@@ -353,7 +353,7 @@ namespace Gallifrey
                 }
             }
 
-            idleTimerCollection.NewIdleTimer(initialTimeSpan.GetValueOrDefault(new TimeSpan()));
+            idleTimerCollection.NewIdleTimer(initialTimeSpan.GetValueOrDefault(TimeSpan.Zero));
         }
 
         public Guid? StopLockTimer()

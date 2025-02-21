@@ -108,7 +108,7 @@ namespace Gallifrey.Settings
 
         public TimeSpan GetTargetThisWeek()
         {
-            var target = new TimeSpan();
+            var target = TimeSpan.Zero;
             var moreDays = true;
             var queryDay = StartOfWeek;
             while (moreDays)
