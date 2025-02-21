@@ -891,7 +891,9 @@
     <Features>
       <Feature>Update to Tempo V4</Feature>
     </Features>
-    <Bugs />
+    <Bugs>
+      <Bug>Fix for when a default Jira doesn't exist</Bug>
+    </Bugs>
     <Others>
       <Other>Dependencies update</Other>
     </Others>

@@ -259,6 +259,8 @@ namespace Gallifrey.UI.Modern.Models
                 }
             }
 
+            var defaultTimers = (ModelHelpers.Gallifrey.Settings.AppSettings.DefaultTimers ?? new List<string>()).Select(x => x.ToUpper().Trim()).Distinct().ToList();
+
             foreach (var timerDate in validTimerDates.OrderBy(x => x.Date))
             {
                 var dateModel = TimerDates.FirstOrDefault(x => x.TimerDate.Date == timerDate.Date);
@@ -288,7 +290,7 @@ namespace Gallifrey.UI.Modern.Models
 
                 if (dateModel.TimerDate.Date <= DateTime.Now.Date)
                 {
-                    var defaultTimers = (ModelHelpers.Gallifrey.Settings.AppSettings.DefaultTimers ?? new List<string>()).Select(x => x.ToUpper().Trim()).Distinct();
+                    var nonExistentJira = new List<string>();
                     foreach (var defaultJira in defaultTimers)
                     {
                         if (!dateModel.Timers.Any(x => string.Equals(x.JiraTimer.JiraReference, defaultJira, StringComparison.InvariantCultureIgnoreCase) && x.JiraTimer.DateStarted.Date == dateModel.TimerDate.Date))
@@ -302,6 +304,10 @@ namespace Gallifrey.UI.Modern.Models
                                     {
                                         jira = ModelHelpers.Gallifrey.JiraConnection.GetJiraIssue(defaultJira);
                                         jiraCache.Add(jira);
+                                    }
+                                    else
+                                    {
+                                        nonExistentJira.Add(defaultJira);
                                     }
                                 }
 
@@ -322,6 +328,8 @@ namespace Gallifrey.UI.Modern.Models
                             }
                         }
                     }
+
+                    defaultTimers.RemoveAll(x => nonExistentJira.Contains(x));
                 }
             }
 
