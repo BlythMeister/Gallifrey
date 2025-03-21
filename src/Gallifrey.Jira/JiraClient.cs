@@ -20,7 +20,7 @@ namespace Gallifrey.Jira
         public JiraClient(string baseUrl, string username, string password, bool useTempo, string tempoToken)
         {
             var url = baseUrl + (baseUrl.EndsWith("/") ? "" : "/") + "rest/api/2";
-            jiraClient = SimpleRestClient.WithBasicAuthentication(url, username, password, GetErrorMessages);
+            jiraClient = SimpleRestClient.WithBasicAuthentication(url, username, password, GetJiraErrorMessages);
 
             try
             {
@@ -33,7 +33,7 @@ namespace Gallifrey.Jira
 
             if (useTempo)
             {
-                tempoClient = SimpleRestClient.WithBearerAuthentication("https://api.tempo.io/4", tempoToken, null);
+                tempoClient = SimpleRestClient.WithBearerAuthentication("https://api.tempo.io/4", tempoToken, GetTempoErrorMessages);
 
                 try
                 {
@@ -379,17 +379,26 @@ namespace Gallifrey.Jira
             return jsonObject.ToObject<WorkLogs>();
         }
 
-        private static List<string> GetErrorMessages(string jsonString)
+        private static List<string> GetJiraErrorMessages(string jsonString)
         {
-            var errors = JsonConvert.DeserializeObject<Error>(jsonString);
+            var errors = JsonConvert.DeserializeObject<JiraError>(jsonString);
             if (errors.errorMessages == null)
             {
                 return new List<string>();
             }
-            else
+
+            return errors.errorMessages;
+        }
+
+        private static List<string> GetTempoErrorMessages(string jsonString)
+        {
+            var errors = JsonConvert.DeserializeObject<TempoError>(jsonString);
+            if (errors.errors == null)
             {
-                return errors.errorMessages;
+                return new List<string>();
             }
+
+            return errors.errors.Select(x => x.message).ToList();
         }
     }
 }

@@ -48,12 +48,14 @@
     <Compile Include="IJiraClient.cs" />
     <Compile Include="JiraClientFactory.cs" />
     <Compile Include="JiraClient.cs" />
-    <Compile Include="Model\Error.cs" />
+    <Compile Include="Model\JiraError.cs" />
     <Compile Include="Model\Fields.cs" />
     <Compile Include="Model\Filter.cs" />
     <Compile Include="Model\Issue.cs" />
     <Compile Include="Model\Project.cs" />
     <Compile Include="Model\StandardWorkLog.cs" />
+    <Compile Include="Model\TempoError.cs" />
+    <Compile Include="Model\TempoErrorMessage.cs" />
     <Compile Include="Model\TempoWorkLogSearch.cs" />
     <Compile Include="Model\TempoWorkLogUpload.cs" />
     <Compile Include="Model\TimeTracking.cs" />

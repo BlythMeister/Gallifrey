@@ -4,8 +4,8 @@ using System.Diagnostics.CodeAnalysis;
 namespace Gallifrey.Jira.Model
 {
     [SuppressMessage("ReSharper", "InconsistentNaming")]
-    public class Error
+    public class TempoError
     {
-        public List<string> errorMessages { get; set; }
+        public List<TempoErrorMessage> errors { get; set; }
     }
 }
