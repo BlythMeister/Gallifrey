@@ -56,7 +56,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                 return;
             }
 
-            var selectedTime = new TimeSpan();
+            var selectedTime = TimeSpan.Zero;
             var lockedTimerDate = DateTime.MinValue;
             foreach (var lockedTimerModel in selected)
             {

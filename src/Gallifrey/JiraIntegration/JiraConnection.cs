@@ -206,7 +206,7 @@ namespace Gallifrey.JiraIntegration
                 {
                     issues = jira.GetIssuesFromJql(GetJql(searchText, true)).ToList();
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     issues = jira.GetIssuesFromJql(GetJql(searchText, false)).ToList();
                 }
@@ -232,7 +232,7 @@ namespace Gallifrey.JiraIntegration
                     var searchTextJql = GetJql(searchText, true);
                     issues = jira.GetIssuesFromJql($"({keysJql}) AND ({searchTextJql})").ToList();
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     var searchTextJql = GetJql(searchText, false);
                     issues = jira.GetIssuesFromJql($"({keysJql}) AND ({searchTextJql})").ToList();

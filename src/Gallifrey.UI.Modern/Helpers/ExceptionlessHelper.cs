@@ -14,7 +14,7 @@ namespace Gallifrey.UI.Modern.Helpers
     {
         private readonly ModelHelpers modelHelpers;
         private bool registered;
-        private List<string> preRegisterFeatures;
+        private readonly List<string> preRegisterFeatures;
 
         public ExceptionlessHelper(ModelHelpers modelHelpers)
         {

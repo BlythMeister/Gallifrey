@@ -33,7 +33,7 @@ namespace Gallifrey.Jira
 
             if (useTempo)
             {
-                tempoClient = SimpleRestClient.WithBearerAuthentication("https://api.tempo.io/core/3", tempoToken, null);
+                tempoClient = SimpleRestClient.WithBearerAuthentication("https://api.tempo.io/4", tempoToken, null);
 
                 try
                 {
@@ -131,25 +131,43 @@ namespace Gallifrey.Jira
         public IEnumerable<StandardWorkLog> GetWorkLoggedForDatesFilteredIssues(List<DateTime> queryDates, List<string> issueRefs)
         {
             var workLogs = new List<StandardWorkLog>();
+            var issues = issueRefs?.Select(GetIssue).ToList() ?? new List<Issue>();
 
             if (tempoClient != null)
             {
                 foreach (var queryDate in queryDates)
                 {
-                    var logs = tempoClient.Get<TempoWorkLogSearch>(HttpStatusCode.OK, $"worklogs/user/{myUser.accountId}?from={queryDate:yyyy-MM-dd}&to={queryDate:yyyy-MM-dd}&limit=200");
+                    var logs = tempoClient.Get<TempoWorkLogSearch>(HttpStatusCode.OK, $"worklogs/user/{myUser.accountId}?from={queryDate:yyyy-MM-dd}&to={queryDate:yyyy-MM-dd}&limit=200").results;
 
-                    foreach (var tempoWorkLog in logs.results.Where(x => x.author.accountId.Equals(myUser.accountId, StringComparison.InvariantCultureIgnoreCase)))
+                    // Make sure we have all the jira issues
+                    issues.AddRange(logs.Where(x => !issues.Any(i => i.id == x.issue.id))
+                                        .Select(x =>
+                                                {
+                                                    try
+                                                    {
+                                                        return GetIssue(x.issue.id.ToString());
+                                                    }
+                                                    catch (Exception)
+                                                    {
+                                                        return null;
+                                                    }
+                                                })
+                                        .Where(x => x != null)
+                                        .Distinct());
+
+                    foreach (var tempoWorkLog in logs)
                     {
-                        if (issueRefs == null || issueRefs.Any(x => string.Equals(x, tempoWorkLog.issue.key, StringComparison.InvariantCultureIgnoreCase)))
+                        var issue = issues.FirstOrDefault(x => x.id == tempoWorkLog.issue.id);
+                        if (issue != null && (issueRefs == null || !issueRefs.Any() || issueRefs.Contains(issue.key, StringComparer.InvariantCultureIgnoreCase)))
                         {
-                            var workLogReturn = workLogs.FirstOrDefault(x => x.JiraRef == tempoWorkLog.issue.key && x.LoggedDate.Date == queryDate.Date);
+                            var workLogReturn = workLogs.FirstOrDefault(x => x.JiraRef == issue.key && x.LoggedDate.Date == queryDate.Date);
                             if (workLogReturn != null)
                             {
                                 workLogReturn.AddTime(tempoWorkLog.timeSpentSeconds);
                             }
                             else
                             {
-                                workLogs.Add(new StandardWorkLog(tempoWorkLog.issue.key, queryDate.Date, tempoWorkLog.timeSpentSeconds));
+                                workLogs.Add(new StandardWorkLog(issue.key, queryDate.Date, tempoWorkLog.timeSpentSeconds));
                             }
                         }
                     }
@@ -163,12 +181,12 @@ namespace Gallifrey.Jira
                     var issuesExportedTo = GetIssuesFromJql($"worklogAuthor = currentUser() and worklogDate = {queryDate:yyyy-MM-dd}");
                     foreach (var issue in issuesExportedTo)
                     {
-                        if (issueRefs == null || issueRefs.Any(x => string.Equals(x, issue.key, StringComparison.InvariantCultureIgnoreCase)))
+                        if (issueRefs == null || !issueRefs.Any() || issueRefs.Contains(issue.key, StringComparer.InvariantCultureIgnoreCase))
                         {
                             WorkLogs logs;
-                            if (workLogCache.ContainsKey(issue.key))
+                            if (workLogCache.TryGetValue(issue.key, out var value))
                             {
-                                logs = workLogCache[issue.key];
+                                logs = value;
                             }
                             else
                             {
@@ -209,16 +227,11 @@ namespace Gallifrey.Jira
             }
 
             var transitions = GetIssueTransitions(issueRef);
-            var transition = transitions.transitions.FirstOrDefault(t => t.name == transitionName);
-
-            if (transition == null)
-            {
-                throw new ClientException($"Unable to locate transition '{transitionName}'");
-            }
+            var transition = transitions.transitions.FirstOrDefault(t => t.name == transitionName) ?? throw new ClientException($"Unable to locate transition '{transitionName}'");
 
             var postData = new Dictionary<string, object>
             {
-                { "transition", new {transition.id } }
+                { "transition", new { transition.id } }
             };
 
             jiraClient.Post(HttpStatusCode.NoContent, $"issue/{issueRef}/transitions", postData);
@@ -240,11 +253,12 @@ namespace Gallifrey.Jira
                     comment = "N/A";
                 }
 
+                var issue = GetIssue(issueRef);
                 var remaining = 0d;
                 switch (workLogStrategy)
                 {
                     case WorkLogStrategy.Automatic:
-                        remaining = GetIssue(issueRef).fields.timetracking.remainingEstimateSeconds - timeSpent.TotalSeconds;
+                        remaining = issue.fields.timetracking.remainingEstimateSeconds - timeSpent.TotalSeconds;
                         if (remaining < 0)
                         {
                             remaining = 0;
@@ -252,7 +266,7 @@ namespace Gallifrey.Jira
                         break;
 
                     case WorkLogStrategy.LeaveRemaining:
-                        remaining = GetIssue(issueRef).fields.timetracking.remainingEstimateSeconds;
+                        remaining = issue.fields.timetracking.remainingEstimateSeconds;
                         break;
 
                     case WorkLogStrategy.SetValue:
@@ -260,7 +274,7 @@ namespace Gallifrey.Jira
                         break;
                 }
 
-                var tempoWorkLog = new TempoWorkLogUpload { issueKey = issueRef, timeSpentSeconds = timeSpent.TotalSeconds, startDate = $"{logDate:yyyy-MM-dd}", startTime = $"{logDate:hh:mm:ss}", description = comment, authorAccountId = myUser.accountId, remainingEstimateSeconds = remaining };
+                var tempoWorkLog = new TempoWorkLogUpload { issueId = issue.id, timeSpentSeconds = timeSpent.TotalSeconds, startDate = $"{logDate:yyyy-MM-dd}", startTime = $"{logDate:hh:mm:ss}", description = comment, authorAccountId = myUser.accountId, remainingEstimateSeconds = remaining };
                 tempoClient.Post(HttpStatusCode.OK, "worklogs", tempoWorkLog);
             }
             else

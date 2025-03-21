@@ -887,6 +887,17 @@
       <Other>Only bump the version</Other>
     </Others>
   </Version>
+  <Version Number="0.0.0.0">
+    <Features>
+      <Feature>Update to Tempo V4</Feature>
+    </Features>
+    <Bugs>
+      <Bug>Fix for when a default Jira doesn't exist</Bug>
+    </Bugs>
+    <Others>
+      <Other>Dependencies update</Other>
+    </Others>
+  </Version>
   <!--
   Template for VNext if not present above
   <Version Number="0.0.0.0" Name="Pre-Release">

@@ -1,11 +1,9 @@
 ﻿using Gallifrey.ExtensionMethods;
 using Gallifrey.JiraTimers;
 using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Gallifrey.UI.Modern.Models
 {
-    [SuppressMessage("ReSharper", "UnusedMember.Global")]
     public class TimerModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;

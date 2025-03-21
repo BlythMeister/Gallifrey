@@ -81,7 +81,7 @@ namespace Gallifrey.JiraTimers
             get
             {
                 var timeToExport = ExactCurrentTime.Subtract(ExportedTime);
-                return timeToExport.TotalSeconds > 0 ? timeToExport : new TimeSpan();
+                return timeToExport.TotalSeconds > 0 ? timeToExport : TimeSpan.Zero;
             }
         }
 

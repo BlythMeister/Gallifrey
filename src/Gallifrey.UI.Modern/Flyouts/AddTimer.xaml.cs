@@ -54,7 +54,7 @@ namespace Gallifrey.UI.Modern.Flyouts
                 return;
             }
 
-            var seedTime = DataModel.TimeEditable ? new TimeSpan(DataModel.StartHours ?? 0, DataModel.StartMinutes ?? 0, 0) : new TimeSpan();
+            var seedTime = DataModel.TimeEditable ? new TimeSpan(DataModel.StartHours ?? 0, DataModel.StartMinutes ?? 0, 0) : TimeSpan.Zero;
 
             Issue jiraIssue = null;
             var jiraRef = string.Empty;

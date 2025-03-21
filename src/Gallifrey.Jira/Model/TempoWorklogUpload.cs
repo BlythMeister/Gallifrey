@@ -5,7 +5,7 @@ namespace Gallifrey.Jira.Model
     [SuppressMessage("ReSharper", "InconsistentNaming")]
     public class TempoWorkLogUpload
     {
-        public string issueKey { get; set; }
+        public long issueId { get; set; }
         public double timeSpentSeconds { get; set; }
         public string startDate { get; set; }
         public string startTime { get; set; }

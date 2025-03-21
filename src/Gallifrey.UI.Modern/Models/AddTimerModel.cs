@@ -177,7 +177,7 @@ namespace Gallifrey.UI.Modern.Models
 
             if (idleTimers != null && idleTimers.Any())
             {
-                var preloadTime = new TimeSpan();
+                var preloadTime = TimeSpan.Zero;
                 preloadTime = idleTimers.Aggregate(preloadTime, (current, idleTimer) => current.Add(idleTimer.IdleTimeValue));
                 StartHours = preloadTime.Hours > 9 ? 9 : preloadTime.Hours;
                 StartMinutes = preloadTime.Minutes;
