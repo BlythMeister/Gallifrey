@@ -101,7 +101,7 @@ namespace Gallifrey.Jira
 
             while (moreToGet)
             {
-                var searchResult = jiraClient.Get<SearchResult>(HttpStatusCode.OK, $"search?jql={jql}&maxResults=999&startAt={startAt}&fields=summary,project,parent");
+                var searchResult = jiraClient.Get<SearchResult>(HttpStatusCode.OK, $"search/jql?jql={jql}&maxResults=999&startAt={startAt}&fields=summary,project,parent");
 
                 returnIssues.AddRange(searchResult.issues);
 
