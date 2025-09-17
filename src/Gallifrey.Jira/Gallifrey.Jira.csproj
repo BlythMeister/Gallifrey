@@ -53,6 +53,7 @@
     <Compile Include="Model\Filter.cs" />
     <Compile Include="Model\Issue.cs" />
     <Compile Include="Model\Project.cs" />
+    <Compile Include="Model\ProjectSearchResult.cs" />
     <Compile Include="Model\StandardWorkLog.cs" />
     <Compile Include="Model\TempoError.cs" />
     <Compile Include="Model\TempoErrorMessage.cs" />

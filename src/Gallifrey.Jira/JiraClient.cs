@@ -19,7 +19,7 @@ namespace Gallifrey.Jira
 
         public JiraClient(string baseUrl, string username, string password, bool useTempo, string tempoToken)
         {
-            var url = baseUrl + (baseUrl.EndsWith("/") ? "" : "/") + "rest/api/2";
+            var url = baseUrl + (baseUrl.EndsWith("/") ? "" : "/") + "rest/api/3";
             jiraClient = SimpleRestClient.WithBasicAuthentication(url, username, password, GetJiraErrorMessages);
 
             try
@@ -120,7 +120,21 @@ namespace Gallifrey.Jira
 
         public IEnumerable<Project> GetProjects()
         {
-            return jiraClient.Get<List<Project>>(HttpStatusCode.OK, "project");
+            // Updated to use paginated projects endpoint instead of deprecated GET /project
+            var projects = new List<Project>();
+            var startAt = 0;
+            const int maxResults = 50;
+            bool hasMore;
+
+            do
+            {
+                var response = jiraClient.Get<ProjectSearchResult>(HttpStatusCode.OK, $"project/search?startAt={startAt}&maxResults={maxResults}");
+                projects.AddRange(response.values);
+                startAt += maxResults;
+                hasMore = !response.isLast;
+            } while (hasMore);
+
+            return projects;
         }
 
         public IEnumerable<Filter> GetFilters()

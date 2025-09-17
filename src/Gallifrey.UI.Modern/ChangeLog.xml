@@ -905,6 +905,13 @@
     </Bugs>
     <Others />
   </Version>
+  <Version Number="3.28.0.0">
+    <Features>
+      <Feature>Update to Jira API v3</Feature>
+    </Features>
+    <Bugs />
+    <Others />
+  </Version>
   <!--
   Template for VNext if not present above
   <Version Number="0.0.0.0" Name="Pre-Release">
