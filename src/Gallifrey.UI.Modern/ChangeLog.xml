@@ -912,6 +912,13 @@
     <Bugs />
     <Others />
   </Version>
+  <Version Number="3.28.1.0">
+    <Features />
+    <Bugs>
+      <Bug>Fix worklog and comment format for Jira API v3 compatibility</Bug>
+    </Bugs>
+    <Others />
+  </Version>
   <!--
   Template for VNext if not present above
   <Version Number="0.0.0.0" Name="Pre-Release">

@@ -296,7 +296,7 @@ namespace Gallifrey.Jira
                 var postData = new Dictionary<string, object>
                 {
                     { "started", $"{logDate:yyyy-MM-ddTHH:mm:ss.fff}{logDate.ToString("zzz").Replace(":", "")}"},
-                    { "comment", comment },
+                    { "comment", CreateDocumentFormat(comment) },
                     { "timeSpent", $"{timeSpent.Hours}h {timeSpent.Minutes}m"},
                 };
                 var adjustmentMethod = string.Empty;
@@ -340,10 +340,39 @@ namespace Gallifrey.Jira
         {
             var postData = new Dictionary<string, object>
             {
-                { "body", comment }
+                { "body", CreateDocumentFormat(comment) }
             };
 
             jiraClient.Post(HttpStatusCode.Created, $"issue/{issueRef}/comment", postData);
+        }
+
+        private static object CreateDocumentFormat(string text)
+        {
+            if (string.IsNullOrWhiteSpace(text))
+            {
+                text = "";
+            }
+
+            return new
+            {
+                type = "doc",
+                version = 1,
+                content = new[]
+                {
+                    new
+                    {
+                        type = "paragraph",
+                        content = new[]
+                        {
+                            new
+                            {
+                                type = "text",
+                                text = text
+                            }
+                        }
+                    }
+                }
+            };
         }
 
         private static WorkLogs FilterWorklogsToUser(string rawJson, User user)

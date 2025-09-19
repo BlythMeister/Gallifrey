@@ -6,7 +6,7 @@
     - docs/**/*
     - '**/*.html'
     - '**/*.md'
-version: '3.28.0.{build}'
+version: '3.28.1.{build}'
 skip_tags: true
 image: Visual Studio 2019
 clone_folder: c:\project\gallifrey
