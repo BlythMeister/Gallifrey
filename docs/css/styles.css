@@ -205,7 +205,7 @@ a.fa-regular:hover {
 }
 
 .fa-regular.fa-envelope {
-    background: #FF7F8C;
+    background: #000000;
     color: #FFFFFF;
 }
 
@@ -215,7 +215,7 @@ a.fa-regular:hover {
 }
 
 .fa-brands.fa-slack {
-    background: #000000;
+    background: #4A154B;
     color: #FFFFFF;
 }
 
