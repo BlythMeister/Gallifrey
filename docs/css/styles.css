@@ -146,7 +146,7 @@ body {
     padding-left: 10px;
 }
 
-.fab {
+.fa-brands {
     padding-top: 6px;
     font-size: 18px;
     width: 30px;
@@ -157,7 +157,7 @@ body {
     vertical-align: middle;
 }
 
-.far {
+.fa-regular {
     padding-top: 6px;
     font-size: 18px;
     width: 30px;
@@ -168,7 +168,7 @@ body {
     vertical-align: middle;
 }
 
-.fas {
+.fa-solid {
     padding-top: 6px;
     font-size: 18px;
     width: 30px;
@@ -179,52 +179,52 @@ body {
     vertical-align: middle;
 }
 
-a.fab:hover {
+a.fa-brands:hover {
     opacity: 0.7;
     text-decoration: none;
 }
 
-a.fas:hover {
+a.fa-solid:hover {
     opacity: 0.7;
     text-decoration: none;
 }
 
-a.far:hover {
+a.fa-regular:hover {
     opacity: 0.7;
     text-decoration: none;
 }
 
-.fab.fa-twitter {
-    background: #1DA1F2;
-    color: #FFFFFF;
-}
-
-.fab.fa-github {
+.fa-brands.fa-x-twitter {
     background: #000000;
     color: #FFFFFF;
 }
 
-.far.fa-envelope {
+.fa-brands.fa-github {
+    background: #000000;
+    color: #FFFFFF;
+}
+
+.fa-regular.fa-envelope {
     background: #FF7F8C;
     color: #FFFFFF;
 }
 
-.fas.fa-rss {
+.fa-solid.fa-rss {
     background: #FF6600;
     color: #FFFFFF;
 }
 
-.fab.fa-slack {
+.fa-brands.fa-slack {
     background: #000000;
     color: #FFFFFF;
 }
 
-.fab.fa-product-hunt{
+.fa-brands.fa-product-hunt{
     background: #DA552F;
     color: #FFFFFF;
 }
 
-.fab.fa-atlassian{
+.fa-brands.fa-atlassian{
     background: #0052CC;
     color: #FFFFFF;
 }
