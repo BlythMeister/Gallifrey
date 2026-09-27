@@ -204,6 +204,21 @@ a.fa-regular:hover {
     color: #FFFFFF;
 }
 
+.fa-brands.fa-linkedin {
+    background: #007BB5;
+    color: #FFFFFF;
+}
+
+.fa-brands.fa-facebook-f {
+    background: #1778F2;
+    color: #FFFFFF;
+}
+
+.fa-brands.fa-whatsapp {
+    background: #25D366;
+    color: #FFFFFF;
+}
+
 .fa-regular.fa-envelope {
     background: #000000;
     color: #FFFFFF;
